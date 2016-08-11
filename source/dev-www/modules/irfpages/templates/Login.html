@@ -1,0 +1,54 @@
+<br/><br/>
+
+<div class="center-box login-box">
+    <div class="box box-widget widget-user-2 animat effect7" ng-class="{anim:showLoading}">
+        <!-- Add the bg color to the header using any of the bg-* classes -->
+        <div class="widget-user-header bg-theme">
+            <div class="widget-user-image">
+                <img class="img-circle" src="img/logo.png" alt="User Avatar">
+            </div><!-- /.widget-user-image -->
+            <h3 class="widget-user-username">Perdix</h3>
+            <h5 class="widget-user-desc">Sign in to Perdix</h5>
+        </div>
+        <div class="box-body animat error-body" ng-class="{anim:errorMessage}">{{errorMessage|translate}}</div>
+        <div class="box-footer animat">
+            <form ng-show="isOnline" class="form-horizontal">
+                <div ng-show="isOnline" class="box-body pass-form">
+                    <input type="text" ng-model="c.username" class="form-control" id="inputEmail3" placeholder="Username" autocomplete="off" required>
+                    <br/>
+                    <input type="password" ng-model="c.password" class="form-control" id="inputPassword3" placeholder="Password" autocomplete="off" required>
+                </div>
+            </form>
+            <form ng-hide="isOnline" class="form-horizontal">
+                <div ng-hide="isOnline" class="box-body pin-form">
+                    <div style="padding:6px 12px;text-align:center">{{offlineUserName}}</div>
+                    <br/>
+                    <input type="password" pattern="[0-9]*" ng-model="c.pin" class="form-control" id="inputPassword4" placeholder="4 Digit PIN" required minLength="4" maxLength="4" autocomplete="off" onClick="this.select();">
+                </div>
+            </form>
+                <div class="box-footer">
+                    <irf-flipswitch sg-model="isOnline" before="ONLINE" after="OFFLINE" ng-hide="onlyOnline" class="pull-left"></irf-flipswitch>
+                    <button type="button"
+                        ng-click="isOnline ? c.onlineLogin(c.username, c.password) : c.offlineLogin(c.pin)"
+                        class="btn btn-theme pull-right login-button">&nbsp;Sign in&nbsp;</button>
+                        <!-- ng-disabled="isOnline ? (!c.username || !c.password) : (!c.pin)" -->
+                    <button type="reset" ng-click="c.username=c.password=c.pin=null" class="btn btn-default pull-right login-button">&nbsp;Clear&nbsp;</button>
+                </div>
+        </div>
+    </div>
+    <center><div class="cantina-loader animat" ng-class="{anim:showLoading,cc:showLoading==='cc'}" style="left:35px;top:-160px;"></div></center>
+</div>
+
+<br/><br/><br/><br/>
+<div class="footer-wrapper">
+    <div class="imgborder">&nbsp;</div>
+    <footer class="footer">
+        <img class="brand-logo" src="img/company_small.png" ng-click="showLoading=(showLoading==='cc'?true:(showLoading===true?false:'cc'))"/>
+        <div class="copy-content">
+            <strong>Copyright &copy; IFMR Rural Finance Services Private Limited, 2016.</strong> All rights reserved.
+        </div>
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 0.1.4 | Alpha
+        </div>
+    </footer>
+</div>
