@@ -1,0 +1,358 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Comment",
+    "required": ["name"],
+    "properties": {
+        "name":  {
+            "title": "Name",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+        },
+        "father_name":  {
+            "title": "Father's Name",
+            "type": "string"
+        },
+        "gender": {
+            "title": "Gender",
+            "type": "string"
+        },
+        "dob": {
+            "title": "DOB",
+            "type": "string",
+            "format": "date"
+        },
+        "religion": {
+            "title": "Religion",
+            "type": "string"
+        },
+        "caste": {
+            "title": "Caste",
+            "type": "string"
+        },
+        "language": {
+            "title": "Language",
+            "type": "string"
+        },
+        "marital_status": {
+            "title": "Marital Status",
+            "type": "string"
+        },
+        "pan_no": {
+            "title": "PAN",
+            "type": "string"
+        },
+        "aadhaar_no": {
+            "title": "Aadhaar Number",
+            "type": "string",
+            "x-schema-form":{
+                "type":"aadhar",
+                "aadharFieldMap":{
+                    "uid" :"aadhaar_no",
+                    "name":"name",
+                    "gender":"gender",
+                    "yob":"yob",
+                    "co":"co",
+                    "house":"house",
+                    "street":"street",
+                    "lm":"lm",
+                    "loc":"town",
+                    "vtc":"vtc",
+                    "dist":"dist",
+                    "state":"state",
+                    "pc":"pin_code"
+                }
+            }
+        },
+        "flat_no": {
+            "title": "Flat No",
+            "type": "string"
+        },
+        "street": {
+            "title": "street",
+            "type": "string"
+        },
+        "village_name": {
+            "title": "Village Name",
+            "type": "string"
+        },
+        "area": {
+            "title": "Area / Taluk / Village",
+            "type": "string"
+        },
+        "post_office": {
+            "title": "Post Office",
+            "type": "string"
+        },
+        "town": {
+            "title": "Town / City / District",
+            "type": "string"
+        },
+        "pin_code": {
+            "title": "PIN Code",
+            "type": "number",
+            "max": 6
+        },
+        "state": {
+            "title": "State",
+            "type": "string"
+        },
+        "landline_no": {
+            "title": "Landline No",
+            "type": "number"
+        },
+        "mobile_no": {
+            "title": "Mobile No",
+            "type": "string"
+        },
+        "mailing_address_same_as_residential": {
+            "title": "Mailing Address Same as Residential Address",
+            "type": "boolean"
+        },
+        "height": {
+            "title": "Height",
+            "type": "number"
+        },
+        "weight": {
+            "title": "Weight",
+            "type": "number"
+        },
+        "smoking": {
+            "title": "Tobacco / Smoking",
+            "type": "boolean"
+        },
+        "alcohol": {
+            "title": "Alcohol / Drinking",
+            "type": "boolean"
+        },
+        "narcotics": {
+            "title": "Narcotics / Drugs",
+            "type": "boolean"
+        },
+        "kyc_proof_document_type": {
+            "title": "Document Type",
+            "type": "string"
+        },
+        "kyc_proof_document": {
+            "title": "Document",
+            "type": "string",
+            "x-schema-form":{
+                "type":"file",
+                "subType":"image/*"
+            }
+        },
+        "kyc_proof_document_number": {
+            "title": "Document Number",
+            "type": "string"
+        },
+        "kyc_proof_issued_date": {
+            "title": "Issued Date",
+            "type": "string"
+        },
+        "kyc_proof_valid_upto": {
+            "title": "Valid Upto",
+            "type": "string"
+        },
+        "id_proof_document_type": {
+            "title": "Document Type",
+            "type": "string"
+        },
+        "id_proof_document": {
+            "title": "Document",
+            "type": "string",
+            "x-schema-form":{
+                "type":"file"
+            }
+        },
+        "id_proof_document_number": {
+            "title": "Document Number",
+            "type": "string"
+        },
+        "id_proof_issued_date": {
+            "title": "Issued Date",
+            "type": "string"
+        },
+        "id_proof_valid_upto": {
+            "title": "Valid Upto",
+            "type": "string"
+        },
+        "family_details": {
+            "title": "Family Details",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["urn"],
+                "properties": {
+                    "urn": {
+                        "title": "URN",
+                        "type": "string"
+                    },
+                    "relationship": {
+                        "title": "Relationship",
+                        "type": "string"
+                    },
+                    "age": {
+                        "title": "Age",
+                        "type": "string"
+                    },
+                    "education": {
+                        "title": "Education",
+                        "type": "string"
+                    },
+                    "cash_inflow_details": {
+                        "title": "Cash Inflow Details",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["activity", "cash_inflow"],
+                            "properties": {
+                                "activity": {
+                                    "title": "Activity",
+                                    "type": "string"
+                                },
+                                "cash_inflow": {
+                                    "title": "Cash Inflow",
+                                    "type": "string"
+                                },
+                                "frequency": {
+                                    "title": "Frequency",
+                                    "type": "string"
+                                },
+                                "duration": {
+                                    "title": "Duration",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "house_details": {
+            "title": "House Details",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["build_type", "roof_type"],
+                "properties": {
+                    "build_type": {
+                        "title": "Build Type",
+                        "type": "string"
+                    },
+                    "roof_type": {
+                        "title": "Roof Type",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "shop_details": {
+            "title": "Shop Details",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "shop": {
+                        "title": "Shop",
+                        "type": "string"
+                    },
+                    "build_type": {
+                        "title": "Build Type",
+                        "type": "string"
+                    },
+                    "roof_type": {
+                        "title": "Roof Type",
+                        "type": "string"
+                    },
+                    "address": {
+                        "title": "Address",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "financial_assets_outside_kgfs": {
+            "title": "Financial Assets outside KGFS",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "instrument_type": {
+                        "title": "Instrument Type",
+                        "type": "string"
+                    },
+                    "institute_type": {
+                        "title": "Institute Type",
+                        "type": "string"
+                    },
+                    "institute_name": {
+                        "title": "Institute Name",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "type": "number"
+                    },
+                    "frequency": {
+                        "title": "Frequency",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "title": "Start Date",
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "title": "End Date",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "financial_liabilities_outside_kgfs": {
+            "title": "Financial Liabilities outside KGFS",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "loan_type": {
+                        "title": "Loan Type",
+                        "type": "string"
+                    },
+                    "institute_type": {
+                        "title": "Institute Type",
+                        "type": "string"
+                    },
+                    "institute_name": {
+                        "title": "Institute Name",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "type": "number"
+                    },
+                    "installment_amount": {
+                        "title": "Installment Amount",
+                        "type": "number"
+                    },
+                    "loan_purpose": {
+                        "title": "Loan Purpose",
+                        "type": "string"
+                    },
+                    "frequency": {
+                        "title": "Frequency",
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "title": "Start Date",
+                        "type": "string"
+                    },
+                    "end_date": {
+                        "title": "End Date",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

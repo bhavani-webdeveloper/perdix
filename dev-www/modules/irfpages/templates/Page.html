@@ -1,0 +1,38 @@
+<div class="wrapper">
+    <irf-header theme="theme"></irf-header>
+    <irf-main-menu></irf-main-menu>
+
+
+
+    <div class="content-wrapper bg-tint-theme">
+        <div id="errors-wrapper">
+            <div class="errors-container" ng-show="errors.length>0">
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" ng-click="clearErrors()" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Errors</h4>
+                    <ol>
+                        <li ng-repeat="error in errors">
+                            <span ng-bind-html="error.message"></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="spinner-wrapper spinner-section-far-wrapper" ng-show="showSectionFarLoader">
+            <div class="spinner-section-far"></div>
+            <!--<div class="spinner-jovey-timer"></div>-->
+        </div>
+
+        <ui-view onload="" ng-class="slide">
+            <div class="cantina-loader-wrapper"><div classs="cantina-loader"></div></div>
+        </ui-view>
+        <div class="content-mask" data-toggle="offcanvas"></div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 0.1.4 | Alpha
+        </div>
+        <strong>Copyright &copy; 2016 IFMR Rural Finance.</strong> All rights reserved.
+    </footer>
+</div>

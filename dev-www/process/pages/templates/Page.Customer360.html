@@ -1,0 +1,25 @@
+<div>
+  <section class="content-header">
+    <h1>
+      {{'CUSTOMER_360'|translate}}
+    </h1>
+  </section>
+
+  <section class="content">
+    <div class="row">
+      <irf-dashboard-box ng-if="model" definition="dashboardDefinition"></irf-dashboard-box>
+    </div>
+    <div class="row">
+      <irf-sf
+        initialize="initializeSF(model, form, formCtrl)"
+        irf-schema="customerSchema"
+        irf-form="introForm"
+        irf-actions="actions"
+        irf-model="model"
+        irf-helper="formHelper"
+        irf-form-name="introFormName">
+        <div class="360-loader cantina-loader-wrapper"><div classs="cantina-loader"></div></div>
+      </irf-sf>
+    </div>
+  </section>
+</div>

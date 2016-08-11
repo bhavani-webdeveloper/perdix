@@ -1,0 +1,346 @@
+{
+	"fieldsets": {
+		"CustomerContact": {
+			"id": "CustomerContact",
+			"label": "Contact Information",
+			"isMultiple": false,
+			"fields": [{
+				"id": "email",
+				"model": "Customer",
+				"label": "Email",
+				"mode":"edit",
+				"type": "text",
+				"subType": "email",
+				"value": "",
+				"mandatory": true,
+				"validation": {}
+			},{
+				"id": "aadharUid",
+				"model": "Customer",
+				"label": "Scan Aadhar QR",
+				"mode":"edit",
+				"type": "qrAadhar",
+				"subType": "text",
+				"element": "QRReader",
+				"value": "",
+				"mandatory": true,
+				"validation": {},
+				"aadharFieldMap":{
+					"uid" :"aadharUid",
+					"name":"aadharName",
+					"gender":"aadharGender",
+					"yob":"aadharYob",
+					"co":"aadharCo",
+					"house":"aadharHouse",
+					"street":"aadharStreet",
+					"lm":"aadharLandMark",
+					"loc":"aadharLoc",
+					"vtc":"aadharVtc",
+					"dist":"aadharDist",
+					"state":"aadharState",
+					"pc":"aadharPin"
+				}
+			},{
+				"id": "aadharName",
+				"model": "Customer",
+				"label": "Name",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharGender",
+				"model": "Customer",
+				"label": "Gender",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharYob",
+				"model": "Customer",
+				"label": "YOB",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharCo",
+				"model": "Customer",
+				"label": "C/o",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharHouse",
+				"model": "Customer",
+				"label": "House",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharStreet",
+				"model": "Customer",
+				"label": "Name",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharLandMark",
+				"model": "Customer",
+				"label": "Land Mark",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharLoc",
+				"model": "Customer",
+				"label": "Location",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharVtc",
+				"model": "Customer",
+				"label": "VTC",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharDist",
+				"model": "Customer",
+				"label": "District",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharState",
+				"model": "Customer",
+				"label": "State",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "aadharPin",
+				"model": "Customer",
+				"label": "PIN",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false,
+				"validation": {}
+			},{
+				"id": "age",
+				"model": "Customer",
+				"label": "Age",
+				"mode":"edit",
+				"type": "text",
+				"subType": "number",
+				"value": "",
+				"mandatory": false,
+				"validation": {"min":18,"max":64}
+			},{
+				"id": "dob",
+				"model": "Customer",
+				"label": "Date of birth",
+				"mode":"edit",
+				"type": "text",
+				"subType": "date",
+				"value": "",
+				"mandatory": true,
+				"validation": {"min": "1986-01-15", "max": "2016-02-22"}
+			},{
+				"id": "photo",
+				"model": "Customer",
+				"label": "Customer Photo",
+				"mode":"view",
+				"type": "file",
+				"subType": "image/*",
+				"value": "",
+				"mandatory": true
+			},{
+				"id": "photo1",
+				"model": "Customer",
+				"label": "Customer Photo 2",
+				"mode":"edit",
+				"type": "file",
+				"subType": "image/*",
+				"value": "",
+				"mandatory": true
+			},{
+				"id": "doc1",
+				"model": "Customer",
+				"label": "Document",
+				"mode":"edit",
+				"type": "file",
+				"subType": "application/pdf",
+				"value": "",
+				"mandatory": false
+			},{
+				"id": "doc2",
+				"model": "Customer",
+				"label": "Text file",
+				"mode":"edit",
+				"type": "file",
+				"subType": "text/plain",
+				"value": "",
+				"mandatory": false
+			},{
+				"id": "religion",
+				"model": "Customer",
+				"label": "Religion",
+				"mode":"view",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"H", "value":"Hinduism"}, {"key":"C", "value":"Christianism"}, {"key":"M", "value":"Islam"}],
+				"mandatory": true
+			},{
+				"id": "enrolled_as",
+				"model": "Customer",
+				"label": "Enrolled as",
+				"mode":"view",
+				"type": "select",
+				"subType": "radio",
+				"value": [{"key":"C", "value":"Customer"}, {"key":"A", "value":"Agent"}, {"key":"E", "value":"Employee"}],
+				"mandatory": true
+			},{
+				"id": "enrolled_as2",
+				"model": "Customer",
+				"label": "Enrolled as",
+				"mode":"edit",
+				"type": "select",
+				"subType": "radio",
+				"value": [{"key":"C", "value":"Customer"}, {"key":"A", "value":"Agent"}, {"key":"E", "value":"Employee"}],
+				"mandatory": true
+			},{
+				"id": "purpose",
+				"model": "Customer",
+				"label": "Purpose",
+				"mode":"edit",
+				"type": "select",
+				"subType": "lov",
+				"value": "entity.PURPOSE",
+				"mandatory": true
+			},{
+				"id": "alcohol_drinking",
+				"model": "Customer",
+				"label": "Alcohol/Drinking",
+				"mode":"edit",
+				"type": "select",
+				"subType": "check",
+				"value": "Do you have Alcohol/Drinking habbit?",
+				"mandatory": false
+			}]
+		},
+		"House": {
+			"id": "House",
+			"label": "House",
+			"model": "House",
+			"isMultiple": true,
+			"fields": [{
+				"id": "build_type",
+				"model": "House",
+				"label": "Build Type",
+				"mode":"edit",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"CONCRETE", "value":"Concrete"}, {"key":"MUD", "value":"Mud"}, {"key":"BRICK", "value":"Brick"}],
+				"mandatory": false
+			},{
+				"id": "roof_type",
+				"model": "House",
+				"label": "Roof Type",
+				"mode":"edit",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"THATCHED", "value":"Thatched"}, {"key":"TILES", "value":"Tiles"}, {"key":"STONE", "value":"Stone"}, {"key":"SHEETS", "value":"Sheets"}, {"key":"RCC", "value":"RCC"}],
+				"mandatory": false
+			}]
+		},
+		"Shop": {
+			"id": "Shop",
+			"label": "Shop",
+			"isMultiple": true,
+			"fields": [{
+				"id": "shop_type",
+				"model": "Shop",
+				"label": "Shop Type",
+				"mode":"edit",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"Lodge", "value":"Lodge"}, {"key":"Shop", "value":"Shop"}],
+				"mandatory": false
+			},{
+				"id": "build_type",
+				"model": "Shop",
+				"label": "Build Type",
+				"mode":"edit",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"CONCRETE", "value":"Concrete"}, {"key":"MUD", "value":"Mud"}, {"key":"BRICK", "value":"Brick"}],
+				"mandatory": false
+			},{
+				"id": "roof_type",
+				"model": "Shop",
+				"label": "Roof Type",
+				"mode":"edit",
+				"type": "select",
+				"subType": "enum",
+				"value": [{"key":"THATCHED", "value":"Thatched"}, {"key":"TILES", "value":"Tiles"}, {"key":"STONE", "value":"Stone"}, {"key":"SHEETS", "value":"Sheets"}, {"key":"RCC", "value":"RCC"}],
+				"mandatory": false
+			},{
+				"id": "shop_address",
+				"model": "Shop",
+				"label": "Shop Address",
+				"mode":"edit",
+				"type": "text",
+				"subType": "text",
+				"value": "",
+				"mandatory": false
+			}]
+		}
+	},
+	"blocks": {
+		"CustomerBasic": {
+			"id": "CustomerBasic",
+			"label": "Customer Enrollment - Basic",
+			"fieldsets": ["CustomerContact"]
+		},
+		"Assets": {
+			"id": "Assets",
+			"label": "Asset Details",
+			"fieldsets": ["House", "Shop"]
+		}
+	}
+}
