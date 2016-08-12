@@ -11,7 +11,7 @@ irf.pageCollection.factory("Pages__CBCheck",
 		"uri":"",
 		initialize: function (model, form, formCtrl) {
 			model.branchName = branch;
-			$log.info("search-CustomerCBCheck got initialized");
+			$log.info("search-list sample got initialized");
 		},
 		definition: {
 			title: "SEARCH_CUSTOMERS",
@@ -22,6 +22,10 @@ irf.pageCollection.factory("Pages__CBCheck",
 				"title": 'SearchOptions',
 				"required": ["branchName"],
 				"properties": {
+					"kycNumber": {
+						"title": "KYC_NO",
+						"type": "string"
+					},
 					"firstName": {
 						"title": "FULL_NAME",
 						"type": "string"
@@ -29,24 +33,15 @@ irf.pageCollection.factory("Pages__CBCheck",
 					"lastName": {
 						"title": "LASTNAME",
 						"type": "string"
-					},
-					"kycNumber": {
-						"title": "KYC_NO",
-						"type": "string"
-					},
-					"urnNo": {
-						"title": "URN_NO",
-						"type": "number"
-					},
+					},/*
 					"branchName": {
 						"title": "BRANCH_NAME",
 						"type": "string",
 						"enumCode": "branch",
 						"x-schema-form": {
-							"type": "select",
-							"screenFilter": true,
+							"type": "select"
 						}
-					},
+					},*/
 					"centreCode": {
 						"title": "CENTRE_CODE",
 						"type": "string",
@@ -69,11 +64,9 @@ irf.pageCollection.factory("Pages__CBCheck",
 					'branchName': searchOptions.branchName,
 					'firstName': searchOptions.firstName,
 					'centreCode': searchOptions.centreCode,
-					'kycNumber': searchOptions.kycNumber,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
-					'lastName': searchOptions.lastName,
-					'urnNo': searchOptions.urnNo
+					'lastName': searchOptions.lastName
 				}).$promise;
 
 				return promise;

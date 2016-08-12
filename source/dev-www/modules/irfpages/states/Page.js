@@ -65,7 +65,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                             return false;
                         }
                         var userData = authService.getUserData();
-                        if (username.toLowerCase() !== userData.login.toLowerCase()) {
+                        if (username !== userData.login) {
                             $scope.errorMessage = "Only current user can login";
                             return false;
                         }

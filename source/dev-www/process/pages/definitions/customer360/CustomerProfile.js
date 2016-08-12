@@ -1,17 +1,10 @@
 irf.pageCollection.factory(irf.page("customer360.CustomerProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService",
+"PageHelper", "Utils",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService){
+    PageHelper, Utils){
 
     var branch = SessionStore.getBranch();
-
-    var initData = function(model) {
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-    };
 
     return {
         "id": "ProfileBasic",
@@ -21,7 +14,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
-            initData(model);
+            
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -38,8 +31,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
                     } else {
                         irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
-                        initData(model);
-                        //$log.info(model);
                         deferred.resolve(model);
                     }
                     PageHelper.hideLoader();
@@ -67,30 +58,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             "title": "CUSTOMER_INFORMATION",
             "items": [
                 {
-                    key: "customer.idAndBcCustId",
-                    title: "Id & BC Id",
-                    titleExpr: "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)",
-                    readonly: true
-                },
-                {
-                    key: "customer.urnNo",
-                    title: "URN_NO",
-                    readonly: true
-                },
-                {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
-                    readonly: true
+                    readonly: "true"
                 },
                 {
                     key:"customer.photoImageId",
                     type:"file",
                     fileType:"image/*",
-                    "viewParams": function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
-                    },
                     readonly: true
                 },
                 {
@@ -103,13 +78,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 },
                 {
                     key:"customer.enrolledAs",
-                    type:"radios",
-                    readonly: true
+                    type:"radios"
                 },
                 {
                     key:"customer.gender",
-                    type:"radios",
-                    readonly: true
+                    type:"radios"
                 },
                 {
                     key:"customer.age",
@@ -120,17 +93,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.dateOfBirth",
                     type:"date",
-                    /*onChange: function(modelValue, form, model) {
+                    "onChange": function(modelValue, form, model) {
                         if (model.customer.dateOfBirth) {
                             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
-                    },*/
-                    readonly: true
+                    }
                 },
                 {
-                    key: "customer.fatherFullName",
-                    title: "FATHER_FULL_NAME",
-                    readonly: true
+                    key: "customer.fatherFirstName",
+                    title: "FATHER_FULL_NAME"
                 },
                 {
                     key:"customer.maritalStatus",
@@ -183,6 +154,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.udf.userDefinedFieldValues.udf1",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     title:"SPOUSE_LOAN_CONSENT"
+
                 },
                 {
                     key:"customer.isBiometricValidated",
@@ -200,13 +172,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         rightMiddle: "model.customer.rightHandMiddleImageId",
                         rightRing: "model.customer.rightHandRingImageId",
                         rightLittle: "model.customer.rightHandSmallImageId"
-                    },
-                    viewParams: function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
                     }
                 }
+
             ]
         },{
             "type": "box",
@@ -241,10 +209,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         "customer.stdCode",
                         "customer.landLineNo",
-                        {
-                            "key": "customer.mobilePhone",
-                            "readonly": true
-                        },
+                        "customer.mobilePhone",
                         "customer.mailSameAsResidence"
                     ]
                 },{
@@ -292,22 +257,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.identityProofImageId",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf30",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -347,22 +302,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.udf.userDefinedFieldValues.udf34",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf35",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -405,22 +350,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.addressProofImageId",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf29",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -443,86 +378,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 }
 
             ]
-        },
-        {
-            "type":"box",
-            "title":"ADDITIONAL_KYC",
-            "items":[
-                {
-                    "key":"customer.additionalKYCs",
-                    "type":"array",
-                    "add":null,
-                    "remove":null,
-                    "title":"ADDITIONAL_KYC",
-                    "items":[
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
-                            }
-
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-                            type:"date"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
+        },{
             "type": "box",
             "title": "T_FAMILY_DETAILS",
             "items": [{
                 key:"customer.familyMembers",
                 type:"array",
-                startEmpty: true,
                 items: [
                     {
                         key:"customer.familyMembers[].customerId",
-                        readonly: true,
                         type:"lov",
                         "inputMap": {
                             "firstName": {
@@ -561,8 +425,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                         key:"customer.familyMembers[].familyMemberFirstName",
-                        title:"FAMILY_MEMBER_FULL_NAME",
-                        readonly: true
+                        title:"FAMILY_MEMBER_FULL_NAME"
                     },
                     {
                         key:"customer.familyMembers[].relationShip",
@@ -572,8 +435,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.familyMembers[].gender",
                         type: "radios",
-                        title: "T_GENDER",
-                        readonly: true
+                        title: "T_GENDER"
                     },
                     {
                         key:"customer.familyMembers[].age",
@@ -587,8 +449,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
                                 }
                             }
-                        },
-                        readonly: true
+                        }
                     },
                     {
                         key: "customer.familyMembers[].dateOfBirth",
@@ -598,8 +459,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
                                 model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
-                        },
-                        readonly: true
+                        }
                     },
                     {
                         key:"customer.familyMembers[].educationStatus",
@@ -611,6 +471,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type:"select",
                         title: "T_MARITAL_STATUS"
                     },
+
                     "customer.familyMembers[].mobilePhone",
                     {
                         key:"customer.familyMembers[].healthStatus",
@@ -618,12 +479,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         titleMap:{
                             "GOOD":"GOOD",
                             "BAD":"BAD"
-                        }
+                        },
+
                     },
                     {
                         key:"customer.familyMembers[].incomes",
                         type:"array",
-                        startEmpty: true,
                         items:[
                             {
                                 key: "customer.familyMembers[].incomes[].incomeSource",
@@ -633,46 +494,45 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.familyMembers[].incomes[].frequency",
                                 type: "select"
-                            },
-                            {
-                                key: "customer.familyMembers[].incomes[].monthsPerYear"
                             }
+
                         ]
+
                     }
                 ]
-            }]
-        },
-        {
-            "type": "box",
-            "title": "EXPENDITURES",
-            "items": [{
-                key:"customer.expenditures",
-                type:"array",
-                remove: null,
-                view: "fixed",
-                titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                items:[{
-                    type: 'section',
-                    htmlClass: 'row',
-                    items: [{
-                        type: 'section',
-                        htmlClass: 'col-xs-6',
-                        items: [{
-                            key:"customer.expenditures[].frequency",
-                            type:"select",
-                            notitle: true
-                        }]
-                    },{
-                        type: 'section',
-                        htmlClass: 'col-xs-6',
-                        items: [{
-                            key: "customer.expenditures[].annualExpenses",
-                            type:"amount",
-                            notitle: true
+            },
+                {
+                    "type": "fieldset",
+                    "title": "EXPENDITURES",
+                    "items": [{
+                        key:"customer.expenditures",
+                        type:"array",
+                        remove: null,
+                        view: "fixed",
+                        titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+                        items:[{
+                            type: 'section',
+                            htmlClass: 'row',
+                            items: [{
+                                type: 'section',
+                                htmlClass: 'col-xs-6',
+                                items: [{
+                                    key:"customer.expenditures[].frequency",
+                                    type:"select",
+                                    notitle: true
+                                }]
+                            },{
+                                type: 'section',
+                                htmlClass: 'col-xs-6',
+                                items: [{
+                                    key: "customer.expenditures[].annualExpenses",
+                                    type:"amount",
+                                    notitle: true
+                                }]
+                            }]
                         }]
                     }]
                 }]
-            }]
         },
         {
             "type":"box",
@@ -681,6 +541,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.udf.userDefinedFieldValues.udf13",
                     type:"select"
+
+
                 },
                 {
                     type:"fieldset",
@@ -689,6 +551,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf14",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf7"
@@ -711,10 +574,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf12"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf23",
                             type:"radios"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf17"
                         },
@@ -722,6 +587,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.udf.userDefinedFieldValues.udf16",
                             type:"select"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf18",
                             type:"select"
@@ -733,6 +599,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf20",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf21",
@@ -762,38 +629,38 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf27",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf28"
                         }
                     ]
                 }
+
             ]
         },
         {
             "type": "box",
             "title": "T_ASSETS",
-            "items": [
-                {
-                    key: "customer.physicalAssets",
-                    type: "array",
-                    startEmpty: true,
-                    items: [
-                        {
-                            key:"customer.physicalAssets[].ownedAssetDetails",
-                            type:"select"
-                        },
-                        "customer.physicalAssets[].numberOfOwnedAsset",
-                        {
-                            key:"customer.physicalAssets[].ownedAssetValue",
-                        }
-                    ]
-                },
+            "items": [{
+                key: "customer.physicalAssets",
+                type: "array",
+                items: [
+                    {
+                        key:"customer.physicalAssets[].ownedAssetDetails",
+                        type:"select"
+
+                    },
+                    "customer.physicalAssets[].numberOfOwnedAsset",
+                    {
+                        key:"customer.physicalAssets[].ownedAssetValue",
+                    }
+                ]
+            },
                 {
                     key: "customer.financialAssets",
                     title:"FINANCIAL_ASSETS",
                     type: "array",
-                    startEmpty: true,
                     items: [
                         {
                             key:"customer.financialAssets[].instrumentType",
@@ -821,8 +688,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             type:"date"
                         }
                     ]
-                }
-            ]
+                }]
+
         },
         {
             type:"box",
@@ -831,7 +698,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.liabilities",
                     type:"array",
-                    startEmpty: true,
                     title:"FINANCIAL_LIABILITIES",
                     items:[
                         {
@@ -867,6 +733,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.liabilities[].liabilityLoanPurpose",
                             type:"select"
                         }
+
                     ]
                 }
             ]
@@ -887,6 +754,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.addressInLocalLanguage",
                     type:"textarea"
                 },
+
                 {
                     key:"customer.religion",
                     type:"select"
@@ -906,6 +774,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf3",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf2",
@@ -913,17 +782,21 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf4",
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf5",
                             type:"radios"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf31",
                             "type":"select"
+                            
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf32"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf6"
@@ -935,56 +808,31 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     "title": "HOUSE_LOCATION",
                     "type": "geotag",
                     "latitude": "customer.latitude",
-                    "longitude": "customer.longitude",
-                    "readonly": true
+                    "longitude": "customer.longitude"
                 },
-                {
-                    "key": "customer.nameOfRo",
-                    "readonly": true
-                },
+                "customer.nameOfRo",
                 {
                     key:"customer.houseVerificationPhoto",
                     offline: true,
                     type:"file",
-                    fileType:"image/*",
-                    "viewParams": function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
-                    },
-                    "readonly": true
-                },
-                {
-                    "key":"customer.verifications",
-                    "title":"VERIFICATION",
-                    "add":null,
-                    "remove":null,
-                    "readonly": true,
-                    "items":[
-                        {
-                            key:"customer.verifications[].houseNo"
-                        },
-                        {
-                            key:"customer.verifications[].houseNoIsVerified"
-                        },
-                        {
-                            key:"customer.verifications[].referenceFirstName"
-                        },
-                        {
-                            key:"customer.verifications[].relationship",
-                            type:"select"
-                        }
-
-                    ]
+                    fileType:"image/*"
                 },
                 {
                     key: "customer.date",
-                    type:"date",
-                    "readonly": true
+                    type:"date"
                 },
+                "customer.place",
                 {
-                    "key": "customer.place",
-                    "readonly": true
+                    type:"fieldset",
+                    title:"BIOMETRIC",
+                    items:[
+                        {
+                            key:"customer.leftThumpIndexId",
+                            type:"file",
+                            fileType:"biometric/*",
+                            offline: true
+                        }
+                    ]
                 }
             ]
         },{
@@ -1006,8 +854,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
-                        if (res.customer)
-                            model.customer = res.customer;
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                     }, function (res, headers) {

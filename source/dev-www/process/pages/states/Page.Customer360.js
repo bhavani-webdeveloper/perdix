@@ -41,8 +41,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory",
-			"Page/Engine/customer360.Recapture"
+			"Page/CustomerHistory"
 		]
 	};
 
@@ -66,7 +65,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		$scope.model = {};
 		$scope.model.customer = data;
 
-		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
 
 		$scope.dashboardDefinition.title = (data.urnNo ? (data.urnNo + ": ") : "")
@@ -100,11 +98,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
-		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Recapture'].onClick = function(event, menu) {
-			menu.stateParams.pageId = $scope.model.customer.id + ':FINGERPRINT';
-			entityManager.setModel(menu.stateParams.pageName, $scope.model);
-			return $q.resolve(menu);
-		};
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
@@ -125,11 +118,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 						"key": "customer.photoImageId",
 						"type": "file",
 						"fileType": "image/*",
-						"viewParams": function(modelValue, form, model) {
-							return {
-								customerId: model.customer.id
-							};
-						},
 						"readonly": true,
 						"notitle": true
 					}]
@@ -150,12 +138,9 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 						"key": "customer.identityProofNo",
 						"titleExpr": "model.customer.identityProof | translate"
 					},{
-						"key": "customer.idAndBcCustId",
-						"title": "Id & Legacy Cust Id",
-						"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
-					},{
-						"key": "customer.urnNo",
-						"title": "URN_NO"
+						"key": "customer.idAndUrn",
+						"titleExpr": "('ID'|translate) + ' & ' + ('URN_NO'|translate)",
+						"title": "Customer Id | URN No"
 					}]
 				},{
 					"type": "section",

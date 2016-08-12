@@ -374,10 +374,9 @@
                                         },
                                         "monthsPerYear": {
                                             "type": "integer",
-                                            "title": "DURATION_IN_MONTHS",
+                                            "title": "PER_YEAR",
                                             "minimum": 1,
-                                            "maximum": 12,
-                                            "default": 12,
+                                            "maximum": 366,
                                             "captureStages":[
                                                 "Stage02"
                                             ]
@@ -1524,6 +1523,10 @@
                         ]
                     }
                 },
+                "verified":{
+                    "type":"boolean",
+                    "title":"House Number Verified"
+                },
 
                 "villageName": {
                     "type": "string",
@@ -1564,7 +1567,8 @@
                 "religion",
                 "state",
                 "villageName",
-                "houseVerificationPhoto"
+                "verifications",
+                "verified"
             ]
         },
         "enrollmentAction": {

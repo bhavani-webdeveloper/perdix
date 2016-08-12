@@ -8,8 +8,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         /* Fix to make additionalKYCs as an array */
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
 
-        /* Fix to add atleast one fingerprint */
-        model['customer']['leftHandIndexImageId'] = "232";
 
         if (model['customer']['mailSameAsResidence'] === true){
             model['customer']['mailingDoorNo'] = model['customer']['doorNo'];
@@ -51,54 +49,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                     PageHelper.setError({message:'Spouse ID Proof type is mandatory when Spouse ID Details are given'});
                     return false;
                 }
-            }
-        }
-        if (model.customer.additionalKYCs[0]
-            && (model.customer.additionalKYCs[0].kyc1ProofNumber
-            || model.customer.additionalKYCs[0].kyc1ProofType
-            || model.customer.additionalKYCs[0].kyc1ImagePath
-            || model.customer.additionalKYCs[0].kyc1IssueDate
-            || model.customer.additionalKYCs[0].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[0].kyc1ProofNumber
-                && model.customer.additionalKYCs[0].kyc1ProofType
-                && model.customer.additionalKYCs[0].kyc1ImagePath
-                && model.customer.additionalKYCs[0].kyc1IssueDate
-                && model.customer.additionalKYCs[0].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[0].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 1'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[0].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 1'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 1'});
-                return false;
-            }
-        }
-        if (model.customer.additionalKYCs[1]
-            && (model.customer.additionalKYCs[1].kyc1ProofNumber
-            || model.customer.additionalKYCs[1].kyc1ProofType
-            || model.customer.additionalKYCs[1].kyc1ImagePath
-            || model.customer.additionalKYCs[1].kyc1IssueDate
-            || model.customer.additionalKYCs[1].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[1].kyc1ProofNumber
-                && model.customer.additionalKYCs[1].kyc1ProofType
-                && model.customer.additionalKYCs[1].kyc1ImagePath
-                && model.customer.additionalKYCs[1].kyc1IssueDate
-                && model.customer.additionalKYCs[1].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[1].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 2'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[1].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 2'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 2'});
-                return false;
             }
         }
         return true;
@@ -218,10 +168,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.pincode = aadhaarData.pc;
         if (aadhaarData.dob) {
             $log.debug('aadhaarData dob: ' + aadhaarData.dob);
-            if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+            if (_.isNumber(aadhaarData.dob.substring(3, 4))) {
                 model.customer.dateOfBirth = aadhaarData.dob;
             } else {
-                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
             }
             $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -270,9 +220,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "STAGE_1",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
-            $log.info(formHelper.enum('bank'));
-            $log.info("ProfileInformation page got initialized:"+model.branchId);
+            model.customer.kgfsName = branch;
+            $log.info("ProfileInformation page got initialized");
         },
         modelPromise: function(pageId, _model) {
             var deferred = $q.defer();
@@ -330,7 +279,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     key:"customer.centreCode",
                     type:"select",
                     filter: {
-                        "parentCode": "model.branchId"
+                        "parentCode as branch": "model.customer.kgfsName"
                     },
                     screenFilter: true
                 },
@@ -439,7 +388,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             key:"customer.villageName",
                             type:"select",
                             filter: {
-                                'parentCode': 'model.branchId'
+                                'parentCode as branch': 'model.customer.kgfsName'
                             },
                             screenFilter: true
                         },
@@ -649,6 +598,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc1ProofType",
                             type:"select"
+
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ImagePath",
@@ -659,11 +610,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                            type:"date"
+                            type:"select"
+
                         },
+
                         {
                             key:"customer.additionalKYCs[].kyc2ProofNumber",
                             type:"barcode",
@@ -671,10 +625,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 $log.info(result);
                                 model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
                             }
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ProofType",
                             type:"select"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
@@ -685,12 +641,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc2IssueDate",
                             type:"date"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-                            type:"date"
+                            type:"select"
+
                         }
+
+
+                        
                     ]
+
                 }
             ]
         },{
@@ -751,11 +713,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                $log.warn(model);
-                if (!EnrollmentHelper.validateData(model)) {
-                    $log.warn("Invalid Data, returning false");
+                console.warn(model);
+                if (!EnrollmentHelper.validateData(model))
                     return false;
-                }
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {

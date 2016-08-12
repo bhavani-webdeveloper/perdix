@@ -80,6 +80,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         }
 
                         model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+
                         try {
                             if (model.customer.verifications.length < 1) {
                                 model.customer.verifications = [
@@ -101,8 +102,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 }
                             ];
                         }
-                        model = Utils.removeNulls(model,true);
 
+                        model = Utils.removeNulls(model,true);
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
 
@@ -156,7 +157,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
-                    startEmpty: true,
                     items: [
                         {
                             key:"customer.familyMembers[].customerId",
@@ -244,6 +244,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             type:"select",
                             title: "T_MARITAL_STATUS"
                         },
+
                         "customer.familyMembers[].mobilePhone",
                         {
                             key:"customer.familyMembers[].healthStatus",
@@ -252,11 +253,11 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 "GOOD":"GOOD",
                                 "BAD":"BAD"
                             },
+
                         },
                         {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
-                            startEmpty: true,
                             items:[
                                 {
                                     key: "customer.familyMembers[].incomes[].incomeSource",
@@ -266,46 +267,45 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 {
                                     key: "customer.familyMembers[].incomes[].frequency",
                                     type: "select"
-                                },
-                                {
-                                    key: "customer.familyMembers[].incomes[].monthsPerYear"
                                 }
+
                             ]
+
                         }
                     ]
-                }]
-            },
-            {
-                "type": "box",
-                "title": "EXPENDITURES",
-                "items": [{
-                    key:"customer.expenditures",
-                    type:"array",
-                    remove: null,
-                    view: "fixed",
-                    titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                    items:[{
-                        type: 'section',
-                        htmlClass: 'row',
-                        items: [{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key:"customer.expenditures[].frequency",
-                                type:"select",
-                                notitle: true
-                            }]
-                        },{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key: "customer.expenditures[].annualExpenses",
-                                type:"amount",
-                                notitle: true
+                },
+                    {
+                        "type": "fieldset",
+                        "title": "EXPENDITURES",
+                        "items": [{
+                            key:"customer.expenditures",
+                            type:"array",
+                            remove: null,
+                            view: "fixed",
+                            titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+                            items:[{
+                                type: 'section',
+                                htmlClass: 'row',
+                                items: [{
+                                    type: 'section',
+                                    htmlClass: 'col-xs-6',
+                                    items: [{
+                                        key:"customer.expenditures[].frequency",
+                                        type:"select",
+                                        notitle: true
+                                    }]
+                                },{
+                                    type: 'section',
+                                    htmlClass: 'col-xs-6',
+                                    items: [{
+                                        key: "customer.expenditures[].annualExpenses",
+                                        type:"amount",
+                                        notitle: true
+                                    }]
+                                }]
                             }]
                         }]
                     }]
-                }]
             },
             {
                 "type":"box",
@@ -314,6 +314,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         key:"customer.udf.userDefinedFieldValues.udf13",
                         type:"select"
+
+
                     },
                     {
                         type:"fieldset",
@@ -322,6 +324,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf14",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf7"
@@ -344,10 +347,12 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf12"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf23",
                                 type:"radios"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf17"
                             },
@@ -355,6 +360,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 key:"customer.udf.userDefinedFieldValues.udf16",
                                 type:"select"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf18",
                                 type:"select"
@@ -366,6 +372,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf20",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf21",
@@ -395,38 +402,38 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf27",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf28"
                             }
                         ]
                     }
+
                 ]
             },
             {
                 "type": "box",
                 "title": "T_ASSETS",
-                "items": [
-                    {
-                        key: "customer.physicalAssets",
-                        type: "array",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key:"customer.physicalAssets[].ownedAssetDetails",
-                                type:"select"
-                            },
-                            "customer.physicalAssets[].numberOfOwnedAsset",
-                            {
-                                key:"customer.physicalAssets[].ownedAssetValue",
-                            }
-                        ]
-                    },
+                "items": [{
+                    key: "customer.physicalAssets",
+                    type: "array",
+                    items: [
+                        {
+                            key:"customer.physicalAssets[].ownedAssetDetails",
+                            type:"select"
+
+                        },
+                        "customer.physicalAssets[].numberOfOwnedAsset",
+                        {
+                            key:"customer.physicalAssets[].ownedAssetValue",
+                        }
+                    ]
+                },
                     {
                         key: "customer.financialAssets",
                         title:"FINANCIAL_ASSETS",
                         type: "array",
-                        startEmpty: true,
                         items: [
                             {
                                 key:"customer.financialAssets[].instrumentType",
@@ -455,6 +462,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             }
                         ]
                     }]
+
             },
             {
                 type:"box",
@@ -463,7 +471,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         key:"customer.liabilities",
                         type:"array",
-                        startEmpty: true,
                         title:"FINANCIAL_LIABILITIES",
                         items:[
                             {
@@ -499,6 +506,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 key:"customer.liabilities[].liabilityLoanPurpose",
                                 type:"select"
                             }
+
                         ]
                     }
                 ]
@@ -510,8 +518,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         type: "button",
                         title: "CAPTURE_FINGERPRINT",
-                        notitle: true,
-                        fieldHtmlClass: "btn-block",
                         onClick: function(model, form, formName){
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
@@ -697,28 +703,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
 
                     var reqData = _.cloneDeep(model);
 
-                    /** Valid check whether the user have enrolled or fingerprints or not **/
-                    if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                        _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                        _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                        _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                        _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                        _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                        _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                        _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                        _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                        _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                    )) {
-                        PageHelper.showErrors({
-                            "data": {
-                                "error": "Fingerprints are not enrolled. Please check"
-                            }
-                        });
-                        PageHelper.hideLoader();
-
-                        return;
-                    }
-
                     if (reqData['customer']['miscellaneous']){
                         var misc = reqData['customer']['miscellaneous'];
                         if (misc['alcoholConsumption']){
@@ -764,14 +748,12 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     reqData['enrollmentAction'] = 'PROCEED';
 
                     irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.');
-
-                    reqData.customer.kycFurnishedCopyEnclosed = true;
-                    reqData.customer.verified = true;
-                    reqData.customer.verifiedUserId = reqData.customer.nameOfRo;
+                    reqData.customer.verified = false;
                     if (reqData.customer.hasOwnProperty('verifications')){
                         var verifications = reqData.customer['verifications'];
                         for (var i=0; i<verifications.length; i++){
                             if (verifications[i].houseNoIsVerified){
+                                reqData.customer.verified = true;
                                 verifications[i].houseNoIsVerified=1;
                             }
                             else{
@@ -779,6 +761,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             }
                         }
                     }
+
                     try{
                         for(var i=0;i<reqData.customer.familyMembers.length;i++){
                             var incomes = reqData.customer.familyMembers[i].incomes;

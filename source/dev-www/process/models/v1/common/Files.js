@@ -14,9 +14,9 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
     });
 
     var getDataUrl = function(fileId, params) {
-        if ((fileId+'').indexOf('-') > 1) {
+        if ((fileId+'').indexOf('-') != -1) {
             return endpoint+'/stream/' + fileId;
-        } else {
+        } else if (_.isNumber(fileId)) {
             return endpoint+'/stream/' + '?' + $httpParamSerializer(params);
         }
         return null;

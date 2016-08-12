@@ -12,18 +12,6 @@ irf.pageCollection.factory("Pages__Demo",
                 $log.info("Demo Customer Page got initialized");
 
 
-
-                Files.getBase64DataFromFileId(
-                    '482acbaf-0090-4168-adca-76aaba818d5a',
-                    true
-                ).then(function(base64String){
-                    console.log(base64String);
-                },function(err){
-
-                });
-
-
-
             },
             form: [
                 {
@@ -40,7 +28,16 @@ irf.pageCollection.factory("Pages__Demo",
                             }
 
                         },
-                        "phoneNumber"
+                        "phoneNumber",
+                        {
+                            "key":"name",
+                            "type":"radios",
+                            "titleMap":{
+                                "value1":"name1",
+                                "value2":"name2"
+                            },
+                            "title":"Name"
+                        }
                     ]
                 }
 

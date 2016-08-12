@@ -92,10 +92,6 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		return session.branchId;
 	};
 
-	self.getBankName = function() {
-		return session.bankName;
-	};
-
 	self.getPhoto = function() {
 		return session.photo;
 	};

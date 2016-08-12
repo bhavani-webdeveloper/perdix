@@ -91,9 +91,8 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 				navigator.notification.confirm(
 					message,
 					function(buttonText){
-						$log.debug('User Responded for confirm:'+buttonText);
+						$log.debug('User Responded for login change:'+buttonText);
 						if(buttonText===1) deferred.resolve();
-						else deferred.reject();
 					},
 					(typeof title === 'undefined' || !title) ? 'Confirm' : title, // title
 					['Yes', 'No']

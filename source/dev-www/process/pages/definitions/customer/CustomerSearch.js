@@ -34,10 +34,6 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 						"title": "KYC_NO",
 						"type": "string"
 					},
-					"urnNo": {
-						"title": "URN_NO",
-						"type": "number"
-					},
 					"branch": {
 						"title": "BRANCH_NAME",
 						"type": "string",
@@ -53,9 +49,6 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
 							"screenFilter": true
 						}
 					}
@@ -75,8 +68,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
 					'kycNumber': searchOptions.kyc_no,
-					'lastName': searchOptions.lastName,
-					'urnNo': searchOptions.urnNo
+					'lastName': searchOptions.lastName
 				}).$promise;
 
 				return promise;
@@ -114,7 +106,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 					return [
 						item.firstName + " " + (item.lastName!=null?item.lastName:""),
 						'Customer ID : ' + item.id,
-						'URN: <strong>'+ item.urnNo + '</strong>'
+						null
 					]
 				},
 				getActions: function(){

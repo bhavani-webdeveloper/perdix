@@ -28,7 +28,7 @@ select[disabled] {
   border-bottom: none;
 }
 .form-control.read-only .radio-label {
-  font-weight: bold !important;
+  font-weight: bold;
 }
 .control-label.required::after,
 .control-indicator + .required::after {

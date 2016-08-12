@@ -11,7 +11,7 @@
 				"Page/Engine/CBCheck",
 				"Page/Engine/CBCheckStatusQueue",
 				"Page/Engine/EnrollmentHouseVerificationQueue",
-				"Page/Offline/AssetsLiabilitiesAndHealth",
+				"Page/EngineOffline/AssetsLiabilitiesAndHealth",
 				"Page/Engine/CustomerFormDownloads",
 				"Page/Engine/customer360.RecaptureQueue"
 			]
@@ -27,16 +27,6 @@
 				"Page/Engine/Cgt2Queue",
 				"Page/Engine/Cgt3Queue",
 				"Page/Engine/GrtQueue",
-				{
-					"title": "OFFLINE",
-					"iconClass": "fa fa-save",
-					"items":[
-						"Page/Offline/Cgt1",
-						"Page/Offline/Cgt2",
-						"Page/Offline/Cgt3",
-						"Page/Offline/Grt"
-					]
-				},
 				"Page/Engine/DscOverrideQueue",
 				"Page/Engine/ApplicationPendingQueue",
 				"Page/Engine/JLGDisbursementQueue",
@@ -45,6 +35,7 @@
 
 			]
 		},
-		"Page/Engine/CentrePaymentCollection"
+		"Page/Engine/CentrePaymentCollection",
+		"Page/ManagementDashboard"
 	]
 }

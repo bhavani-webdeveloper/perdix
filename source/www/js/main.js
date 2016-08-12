@@ -117,7 +117,7 @@ $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body for
     "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
-    "          <a ng-click=\"$emit('irfSfDeleteFromArray', [$index, (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate))])\"><i class=\"fa fa-close\"></i></a>\n" +
+    "          <a ng-click=\"deleteFromArray($index)\"><i class=\"fa fa-close\"></i></a>\n" +
     "        </span>\n" +
     "      </span>\n" +
     "    </h4>\n" +
@@ -196,7 +196,7 @@ $templateCache.put("irf/template/adminlte/date.html","<div class=\"form-group fo
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label {{form.labelHtmlClass}}\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model=\"replaceAll\"\n" +
+    "    <input sf-field-model\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
@@ -213,12 +213,6 @@ $templateCache.put("irf/template/adminlte/date.html","<div class=\"form-group fo
     "      + (form.maxlength ?\n" +
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
-    "    <div ng-if=\"$$value$$ && !form.readonly\" style=\"position:absolute;top:0;right:0;margin-right:15px\">\n" +
-    "      <button ng-click=\"$$value$$ = ''\"\n" +
-    "        onClick=\"$($(event.target).parents('.form-group')[0]).find('input.form-control').val(null)\"\n" +
-    "        class=\"btn btn-box-tool btn-xs\"\n" +
-    "        style=\"padding-left:5px;padding-right:7px;outline:none\"><i class=\"fa fa-times\"></i></button>\n" +
-    "    </div>\n" +
     "  </div>\n" +
     "\n" +
     "</div>\n" +
@@ -469,15 +463,17 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
     "      ng-disabled=\"form.readonly\"\n" +
-    "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
+    "      ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "      id=\"{{form.id}}\" name=\"{{form.id}}\"\n" +
     "      ng-init=\"form.enumCode = form.enumCode ? form.enumCode : form.schema.enumCode; evalExpr('registerForTitleMap(form)', {form:form}); form.id=form.key.slice(-1)[0]\"\n" +
-    "      irf-options-builder=\"form\"\n" +
-    "      ng-options=\"item.value as item.name for item in form.filteredTitleMap\"\n" +
+    "      sg-select-filter=\"form.screenFilter && !form.readonly\"\n" +
+    "      sg-select-model=\"form._screenFilter\"\n" +
     "    >\n" +
     "      <option value=\"\">{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option>\n" +
+    "      <option value=\"{{ item.value }}\"\n" +
+    "        ng-repeat=\"item in (form.titleMap | filter:form._filters:true | filter:{name:form._screenFilter})\">{{ item.name | translate }}</option>\n" +
     "    </select>\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -1456,25 +1452,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 				);
 			}
 		},
-		confirm: function(message, title) {
-			var deferred = $q.defer();
-			if (typeof cordova === 'undefined') {
-				if (window.confirm(message))
-					deferred.resolve();
-			} else {
-				navigator.notification.confirm(
-					message,
-					function(buttonText){
-						$log.debug('User Responded for confirm:'+buttonText);
-						if(buttonText===1) deferred.resolve();
-						else deferred.reject();
-					},
-					(typeof title === 'undefined' || !title) ? 'Confirm' : title, // title
-					['Yes', 'No']
-				);
-			}
-			return deferred.promise;
-		},
 		jicCompress: function(sourceImg, options) {
 			var deferred = $q.defer();
 			var sourceImgObj = $('<img>').get(0);
@@ -1679,62 +1656,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 			});
 		}
 	};
-})
-.directive('irfOptionsBuilder', function(){
-
-	var matchParentKey = function(myKey, myParentKey){
-		var myKeysArr = _.sortBy(_.keys(myKey), function(o){ return parseInt(o)}) ;
-		var myParentKeysArr = _.sortBy(_.keys(myParentKey), function(o){ return parseInt(o)}) ;
-
-		if (myKeysArr.length !== myParentKeysArr.length){
-			return false;
-		}
-
-		for (var i=0, tLength = myKeysArr.length-1; i<tLength; i++){
-			if (myKey[myKeysArr[i]]!= myParentKey[myParentKeysArr[i]]){
-				return false;
-			}
-		}
-		return true;
-	}
-	return {
-		restrict: "A",
-		scope: {
-			"form":"=irfOptionsBuilder"
-		},
-		link: function(scope, element, attrs){
-			if (scope.form.parentEnumCode){
-				scope.form.finalTitleMap = [];
-			} else {
-				scope.form.filteredTitleMap = scope.form.titleMap;
-			}
-			scope.$on('selectbox-value-changed', function(event, args){
-				var parentForm = args[1];
-				if (scope.form.parentEnumCode && scope.form.parentEnumCode==args[1].enumCode && matchParentKey(scope.form.key, parentForm.key)){
-					var value = args[2];
-					var parentItem = null;
-					var finalTitleMap = [];
-					for (var i=0, tLength = parentForm.filteredTitleMap.length;i<tLength;i++){
-						var item = parentForm.filteredTitleMap[i];
-						if (item.value == value){
-							parentItem = item;
-							break;
-						}
-					}
-					if (parentItem){
-						for (var i=0, tLength=scope.form.titleMap.length; i<tLength; i++){
-							var item = scope.form.titleMap[i];
-							if (item.parentCode == parentItem.code) {
-								finalTitleMap.push(item);
-							}
-						}
-						scope.form.filteredTitleMap = finalTitleMap;
-					}
-
-				}
-			})
-		}
-	}
 })
 /*
 .directive('sgParse', ['$log', '$parse', function($log, $parse){
@@ -2048,9 +1969,6 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 	var self = this;
 
-	var category = $scope.form.category || $scope.form.schema.category;
-	var subCategory = $scope.form.subCategory || $scope.form.schema.subCategory;
-
 	self.fileUpload = function(file) {
 		var deferred = $q.defer();
 		$scope.inputFileName = $scope.inputFileName || file.name;
@@ -2060,8 +1978,8 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 		self.upload = Upload.upload({
 			url: FILE_UPLOAD_URL + $httpParamSerializer({
-				category: category,
-				subCategory: subCategory,
+				category: $scope.form.category || $scope.form.schema.category,
+				subCategory: $scope.form.subCategory || $scope.form.schema.subCategory,
 			}),
 			data: {
 				file: file
@@ -2191,8 +2109,8 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 		var defaultOptions = {
 			quality: 50,
 			sourceType: options.captureMode == 'gallery'? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA,
-			destinationType: Camera.DestinationType.DATA_URL,
-			allowEdit: true/*,
+			destinationType: Camera.DestinationType.DATA_URL/*,
+			allowEdit: true,
 			targetWidth: 75,
 			targetHeight: 75*/
 		};
@@ -2267,33 +2185,31 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 	$scope.removeUpload = function($event) {
 		$event.preventDefault();
-		Utils.confirm("Do you really want to remove the " + ($scope.isImage? "image?":"file?"), "Alert").then(function(){
-			if (self.upload) {
-				try {
-					self.upload.abort();
-					$scope.uploadAborted = true;
-				} catch (e) {
-					$scope.fileError = e.message;
-				}
+		if (self.upload) {
+			try {
+				self.upload.abort();
+				$scope.uploadAborted = true;
+			} catch (e) {
+				$scope.fileError = e.message;
 			}
-			self.upload = null;
+		}
+		self.upload = null;
 
-			if ($scope.offlineFile) {
-				$scope.offlineFile.filename = null;
-				$scope.offlineFile.data = null;
-			} else if ($scope.modelValue) {
-				$http.get(DELETE_URL + "file=" + $scope.modelValue);
-			}
+		if ($scope.offlineFile) {
+			$scope.offlineFile.filename = null;
+			$scope.offlineFile.data = null;
+		} else if ($scope.modelValue) {
+			$http.get(DELETE_URL + "file=" + $scope.modelValue);
+		}
 
-			$scope.modelValue = "";
-			$scope.inputFileName = null;
-			$scope.inputImageDataURL = null;
-			$scope.uploadProgress = 0;
-			$scope.showUploadProgress = false;
-			$scope.fileError = false;
+		$scope.modelValue = "";
+		$scope.inputFileName = null;
+		$scope.inputImageDataURL = null;
+		$scope.uploadProgress = 0;
+		$scope.showUploadProgress = false;
+		$scope.fileError = false;
 
-			document.getElementById($scope.id).value = '';
-		});
+		document.getElementById($scope.id).value = '';
 	};
 /*
 	$scope.showError = function() {
@@ -2326,16 +2242,16 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 		$scope.isBiometric = $scope.form.fileType && $scope.form.fileType.substr(0, 10) == 'biometric/';
 
 		var getDataUrl = function(fileId) {
-			if ((fileId+'').indexOf('-') > 1) {
+			if ((fileId+'').indexOf('-') != -1) {
 				return STREAM_URL + fileId;
-			} else {
+			} else if (_.isNumber(fileId)) {
 				var httpParams = {
-					category: category,
-					subCategory: subCategory,
+					category: $scope.form.category || $scope.form.schema.category,
+					subCategory: $scope.form.subCategory || $scope.form.schema.subCategory,
 					accountNumber: fileId
 				};
 				if (angular.isFunction($scope.form.viewParams)) {
-					var viewParams = $scope.form.viewParams($scope.modelValue, $scope.form, $scope.model);
+					var viewParams = $scope.form.viewParams();
 					angular.extend(httpParams, viewParams);
 				}
 				return STREAM_URL + '?' + $httpParamSerializer(httpParams);
@@ -2358,8 +2274,8 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 			$scope.offlineFile = $scope.model['$$OFFLINE_FILES$$'][fileKey] = $scope.model['$$OFFLINE_FILES$$'][fileKey] || {
 				data: null,
 				filename: null,
-				category: category,
-				subCategory: subCategory
+				category: $scope.form.schema.category,
+				subCategory: $scope.form.schema.subCategory
 			};
 
 			$scope.$watch('offlineFile.data', function(n,o) {
@@ -2941,11 +2857,6 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 					$scope.$emit('box-destroy');
 				};
 			};
-			
-			$scope.callSelectOnChange = function(event, form, modelValue){
-				$scope.$broadcast('selectbox-value-changed', [event, form, modelValue])
-				$scope.callOnChange(event, form, modelValue);
-			}
 
 			$scope.callOnChange = function(event, form, modelValue) {
 				var arrayIndex = elementsUtils.getArrayIndex(form.key);
@@ -2970,14 +2881,6 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 					$scope.$eval(form.onClick, {model:$scope.model, formCtrl: $scope.schemaForm, form:form, $event:event});
 				}
 			}
-
-			$scope.$on('irfSfDeleteFromArray', function($event, args) {
-				var index = args[0];
-				var title = args[1];
-				elementsUtils.confirm("Do you really want to remove " + (index+1) + ". " + title + " ?", "Alert").then(function(){
-					$event.targetScope.deleteFromArray(index);
-				});
-			});
 
 			$scope.save = function() {
 				if (!$scope.model.$$STORAGE_KEY$$) {
@@ -3015,9 +2918,8 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			var selectsUnderFilter = {};
 			var filtersUnderWatch = {};
 			$scope.registerForTitleMap = function(form) {
-				if (form && form.enumCode/* && (!form.titleMap || form.titleMap.length==0)*/) {
+				if (form && form.enumCode && (!form.titleMap || form.titleMap.length==0)) {
 					var r = $scope.helper.enum(form.enumCode);
-					// debugger;
 					if (r) {
 						var titleMap = r.data;
 	/*					var key = r.parentClassifier;
@@ -3069,17 +2971,12 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			};
 
 			$scope.code = function(value, classifier) {
-				if (value) {
-					$log.debug(value+" as "+classifier);
-					var r = $scope.helper.enum(classifier);
-					if (r) {
-						var d = $filter('filter')(r.data, {value:value});
-						if (d && d.length == 1 && _.isObject(d[0])) {
-							return d[0].code;
-						} else if (d.length > 1) {
-							$log.debug('TOO MANY parent REFCODES for '+classifier+' value:'+value);
-							$log.debug(d);
-						}
+				$log.debug(value+" as "+classifier);
+				var r = $scope.helper.enum(classifier);
+				if (r) {
+					var d = $filter('filter')(r.data, {value:value});
+					if (d && d.length == 1 && _.isObject(d[0])) {
+						return d[0].code;
 					}
 				}
 				return null;
@@ -3439,7 +3336,7 @@ angular.module('irf.validateBiometric', ['irf.elements.commons'])
 function($log, $q, $scope, elementsUtils, $parse){
 	var self = this;
 
-	$scope.buttonText = 'VALIDATE_FINGERPRINT';
+	$scope.buttonText = 'VALIDATE_BIOMETRIC';
 
 	$scope.buttonTitle = $scope.buttonText;
 
@@ -3508,7 +3405,7 @@ function($log, $q, $scope, elementsUtils, $parse){
 				accountNumber: fingerId
 			};
 			if (angular.isFunction($scope.form.viewParams)) {
-				var viewParams = $scope.form.viewParams($scope.modelValue, $scope.form, $scope.model);
+				var viewParams = $scope.form.viewParams();
 				angular.extend(params, viewParams);
 			}
 
@@ -3729,9 +3626,8 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 				navigator.notification.confirm(
 					message,
 					function(buttonText){
-						$log.debug('User Responded for confirm:'+buttonText);
+						$log.debug('User Responded for login change:'+buttonText);
 						if(buttonText===1) deferred.resolve();
-						else deferred.reject();
 					},
 					(typeof title === 'undefined' || !title) ? 'Confirm' : title, // title
 					['Yes', 'No']
@@ -4065,10 +3961,6 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		return session.branchId;
 	};
 
-	self.getBankName = function() {
-		return session.bankName;
-	};
-
 	self.getPhoto = function() {
 		return session.photo;
 	};
@@ -4278,8 +4170,8 @@ irf.commons.value('RefCodeCache',{
 });
 
 irf.commons.factory("irfStorageService",
-["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter",
-function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
+["$log","$q","ReferenceCodeResource","RefCodeCache",
+function($log,$q,rcResource,RefCodeCache){
 	var retrieveItem = function(key) {
 		return localStorage.getItem(key);
 	};
@@ -4415,30 +4307,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 						}
 						$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
 
-						/** removing other bank branches, district **/
-						var bankId = null;
-						try {
-							var bankName = SessionStore.getBankName();
-							var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
-							if (bankId) {
-								classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
-								classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
-							}
-						} catch (e) {
-							$log.error('removing other bank branches FAILED after master fetch');
-							$log.error(e);
-						}
-						/** sort branches, centre **/
-						try {
-							classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
-							classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
-						} catch (e) {
-							$log.error('Branch,centre SORT FAILED after master fetch');
-						}
-
 						classifiers._timestamp = new Date().getTime();
 						masters = classifiers;
-						$log.info(masters);
 						storeItem('irfMasters', JSON.stringify(classifiers));
 						deferred.resolve("masters download complete");
 					});
@@ -4483,7 +4353,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 							if (ret.data[i].parentCode == branchId)
 								ret.data[i].value = ret.data[i].code;
 						}
-                        // console.warn(ret);
+                        console.warn(ret);
 						break;
                     case 'village':
                         console.log("branchid:"+branchId);
@@ -4495,7 +4365,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						for(var i = 0; i < ret.data.length; i++) {
 								ret.data[i].value = ret.data[i].code;
 						}
-						// console.warn(ret);
+						console.warn(ret);
 						break;
 					default:
 						ret.data = r.data; // value <-- name
@@ -4890,7 +4760,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                             return false;
                         }
                         var userData = authService.getUserData();
-                        if (username.toLowerCase() !== userData.login.toLowerCase()) {
+                        if (username !== userData.login) {
                             $scope.errorMessage = "Only current user can login";
                             return false;
                         }
@@ -5784,8 +5654,7 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
+irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 //UAT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
@@ -5856,23 +5725,15 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 	return resource;
 });
 
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries",
-    function($resource, $log, BASE_URL, $q, Queries){
+irf.models.factory('PagesDefinition', ["$resource", "BASE_URL", "$q", function($resource, BASE_URL, $q){
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
-        getPagesJson: {
+        getRoleAllowedPageList: {
             method:'GET',
             url:'process/pages.json'
         },
     });
-
-    pDef.getRoleAllowedPageList = function(userid) {
-        //var deferred = $q.defer();
-        //return Queries.getPagesDefinition(userid);
-        return pDef.getPagesJson().$promise;
-        //return deferred.promise;
-    };
 
     var userAllowedPages = null;
 
@@ -5914,8 +5775,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
             deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
         } else {
             // TODO: get role for the user & get real role allowed list
-            pDef.getRoleAllowedPageList(userid).then(function(response){
-                //$log.info(response);
+            pDef.getRoleAllowedPageList().$promise.then(function(response){
                 delete response.$promise;
                 delete response.$resolved;
                 userAllowedPages = response;
@@ -5946,9 +5806,9 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
     });
 
     var getDataUrl = function(fileId, params) {
-        if ((fileId+'').indexOf('-') > 1) {
+        if ((fileId+'').indexOf('-') != -1) {
             return endpoint+'/stream/' + fileId;
-        } else {
+        } else if (_.isNumber(fileId)) {
             return endpoint+'/stream/' + '?' + $httpParamSerializer(params);
         }
         return null;
@@ -5991,56 +5851,6 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
     };
 
     return resource;
-});
-
-irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $q){
-	var endpoint = BASE_URL + '/api';
-
-	var resource =  $resource(endpoint, null, {
-		query:{
-			method:'POST',
-			url:endpoint+'/query'
-		}
-	});
-
-	resource.getResult = function(id, params, limit, offset) {
-		var deferred = $q.defer();
-		resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise.then(deferred.resolve, deferred.reject);
-		return deferred.promise;
-	};
-
-	resource.getPagesDefinition = function(userId) {
-		var deferred = $q.defer();
-		resource.getResult('userpages.list', {user_id:userId}).then(function(records){
-			if (records && records.results) {
-				var def = {};
-				_.each(records.results, function(v, k){
-					def[v.uri] = {
-						"offline": v.offline,
-						"directAccess": v.directAccess,
-						"title": v.title,
-						"shortTitle": v.shortTitle,
-						"iconClass": v.iconClass,
-						"state": v.state,
-						"stateParams": {
-							"pageName": v.pageName,
-							"pageId": v.pageId
-						}
-					};
-					if (v.addlParams) {
-						try {
-							var ap = JSON.parse(v.addlParams);
-							angular.extend(def[v.uri].stateParams, ap);
-						} catch (e) {}
-					}
-				});
-				deferred.resolve(def);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-	};
-
-	return resource;
 });
 
 irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializer,BASE_URL){
@@ -6557,8 +6367,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory",
-			"Page/Engine/customer360.Recapture"
+			"Page/CustomerHistory"
 		]
 	};
 
@@ -6582,7 +6391,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		$scope.model = {};
 		$scope.model.customer = data;
 
-		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
 
 		$scope.dashboardDefinition.title = (data.urnNo ? (data.urnNo + ": ") : "")
@@ -6616,11 +6424,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
-		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Recapture'].onClick = function(event, menu) {
-			menu.stateParams.pageId = $scope.model.customer.id + ':FINGERPRINT';
-			entityManager.setModel(menu.stateParams.pageName, $scope.model);
-			return $q.resolve(menu);
-		};
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
@@ -6641,11 +6444,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 						"key": "customer.photoImageId",
 						"type": "file",
 						"fileType": "image/*",
-						"viewParams": function(modelValue, form, model) {
-							return {
-								customerId: model.customer.id
-							};
-						},
 						"readonly": true,
 						"notitle": true
 					}]
@@ -6666,12 +6464,9 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 						"key": "customer.identityProofNo",
 						"titleExpr": "model.customer.identityProof | translate"
 					},{
-						"key": "customer.idAndBcCustId",
-						"title": "Id & Legacy Cust Id",
-						"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
-					},{
-						"key": "customer.urnNo",
-						"title": "URN_NO"
+						"key": "customer.idAndUrn",
+						"titleExpr": "('ID'|translate) + ' & ' + ('URN_NO'|translate)",
+						"title": "Customer Id | URN No"
 					}]
 				},{
 					"type": "section",
@@ -7119,18 +6914,6 @@ irf.pageCollection.factory("Pages__Demo",
                 $log.info("Demo Customer Page got initialized");
 
 
-
-                Files.getBase64DataFromFileId(
-                    '482acbaf-0090-4168-adca-76aaba818d5a',
-                    true
-                ).then(function(base64String){
-                    console.log(base64String);
-                },function(err){
-
-                });
-
-
-
             },
             form: [
                 {
@@ -7147,7 +6930,16 @@ irf.pageCollection.factory("Pages__Demo",
                             }
 
                         },
-                        "phoneNumber"
+                        "phoneNumber",
+                        {
+                            "key":"name",
+                            "type":"radios",
+                            "titleMap":{
+                                "value1":"name1",
+                                "value2":"name2"
+                            },
+                            "title":"Name"
+                        }
                     ]
                 }
 
@@ -7397,10 +7189,6 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 						"title": "KYC_NO",
 						"type": "string"
 					},
-					"urnNo": {
-						"title": "URN_NO",
-						"type": "number"
-					},
 					"branch": {
 						"title": "BRANCH_NAME",
 						"type": "string",
@@ -7416,9 +7204,6 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
 							"screenFilter": true
 						}
 					}
@@ -7438,8 +7223,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
 					'kycNumber': searchOptions.kyc_no,
-					'lastName': searchOptions.lastName,
-					'urnNo': searchOptions.urnNo
+					'lastName': searchOptions.lastName
 				}).$promise;
 
 				return promise;
@@ -7477,7 +7261,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 					return [
 						item.firstName + " " + (item.lastName!=null?item.lastName:""),
 						'Customer ID : ' + item.id,
-						'URN: <strong>'+ item.urnNo + '</strong>'
+						null
 					]
 				},
 				getActions: function(){
@@ -7536,8 +7320,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         /* Fix to make additionalKYCs as an array */
         //reqData['customer']['additionalKYCs'] = [reqData['customer']['additionalKYCs']];
 
-        /* Fix to add atleast one fingerprint */
-        model['customer']['leftHandIndexImageId'] = "232";
 
         if (model['customer']['mailSameAsResidence'] === true){
             model['customer']['mailingDoorNo'] = model['customer']['doorNo'];
@@ -7579,54 +7361,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                     PageHelper.setError({message:'Spouse ID Proof type is mandatory when Spouse ID Details are given'});
                     return false;
                 }
-            }
-        }
-        if (model.customer.additionalKYCs[0]
-            && (model.customer.additionalKYCs[0].kyc1ProofNumber
-            || model.customer.additionalKYCs[0].kyc1ProofType
-            || model.customer.additionalKYCs[0].kyc1ImagePath
-            || model.customer.additionalKYCs[0].kyc1IssueDate
-            || model.customer.additionalKYCs[0].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[0].kyc1ProofNumber
-                && model.customer.additionalKYCs[0].kyc1ProofType
-                && model.customer.additionalKYCs[0].kyc1ImagePath
-                && model.customer.additionalKYCs[0].kyc1IssueDate
-                && model.customer.additionalKYCs[0].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[0].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 1'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[0].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 1'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 1'});
-                return false;
-            }
-        }
-        if (model.customer.additionalKYCs[1]
-            && (model.customer.additionalKYCs[1].kyc1ProofNumber
-            || model.customer.additionalKYCs[1].kyc1ProofType
-            || model.customer.additionalKYCs[1].kyc1ImagePath
-            || model.customer.additionalKYCs[1].kyc1IssueDate
-            || model.customer.additionalKYCs[1].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[1].kyc1ProofNumber
-                && model.customer.additionalKYCs[1].kyc1ProofType
-                && model.customer.additionalKYCs[1].kyc1ImagePath
-                && model.customer.additionalKYCs[1].kyc1IssueDate
-                && model.customer.additionalKYCs[1].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[1].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 2'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[1].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 2'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 2'});
-                return false;
             }
         }
         return true;
@@ -7746,10 +7480,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.pincode = aadhaarData.pc;
         if (aadhaarData.dob) {
             $log.debug('aadhaarData dob: ' + aadhaarData.dob);
-            if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+            if (_.isNumber(aadhaarData.dob.substring(3, 4))) {
                 model.customer.dateOfBirth = aadhaarData.dob;
             } else {
-                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
             }
             $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -7798,9 +7532,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "STAGE_1",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
-            $log.info(formHelper.enum('bank'));
-            $log.info("ProfileInformation page got initialized:"+model.branchId);
+            model.customer.kgfsName = branch;
+            $log.info("ProfileInformation page got initialized");
         },
         modelPromise: function(pageId, _model) {
             var deferred = $q.defer();
@@ -7858,7 +7591,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     key:"customer.centreCode",
                     type:"select",
                     filter: {
-                        "parentCode": "model.branchId"
+                        "parentCode as branch": "model.customer.kgfsName"
                     },
                     screenFilter: true
                 },
@@ -7967,7 +7700,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             key:"customer.villageName",
                             type:"select",
                             filter: {
-                                'parentCode': 'model.branchId'
+                                'parentCode as branch': 'model.customer.kgfsName'
                             },
                             screenFilter: true
                         },
@@ -8177,6 +7910,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc1ProofType",
                             type:"select"
+
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ImagePath",
@@ -8187,11 +7922,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                            type:"date"
+                            type:"select"
+
                         },
+
                         {
                             key:"customer.additionalKYCs[].kyc2ProofNumber",
                             type:"barcode",
@@ -8199,10 +7937,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 $log.info(result);
                                 model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
                             }
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ProofType",
                             type:"select"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
@@ -8213,12 +7953,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.additionalKYCs[].kyc2IssueDate",
                             type:"date"
+
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-                            type:"date"
+                            type:"select"
+
                         }
+
+
+                        
                     ]
+
                 }
             ]
         },{
@@ -8279,11 +8025,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                $log.warn(model);
-                if (!EnrollmentHelper.validateData(model)) {
-                    $log.warn("Invalid Data, returning false");
+                console.warn(model);
+                if (!EnrollmentHelper.validateData(model))
                     return false;
-                }
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -8412,6 +8156,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         }
 
                         model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+
                         try {
                             if (model.customer.verifications.length < 1) {
                                 model.customer.verifications = [
@@ -8433,8 +8178,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 }
                             ];
                         }
-                        model = Utils.removeNulls(model,true);
 
+                        model = Utils.removeNulls(model,true);
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
 
@@ -8488,7 +8233,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
-                    startEmpty: true,
                     items: [
                         {
                             key:"customer.familyMembers[].customerId",
@@ -8576,6 +8320,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             type:"select",
                             title: "T_MARITAL_STATUS"
                         },
+
                         "customer.familyMembers[].mobilePhone",
                         {
                             key:"customer.familyMembers[].healthStatus",
@@ -8584,11 +8329,11 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 "GOOD":"GOOD",
                                 "BAD":"BAD"
                             },
+
                         },
                         {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
-                            startEmpty: true,
                             items:[
                                 {
                                     key: "customer.familyMembers[].incomes[].incomeSource",
@@ -8598,46 +8343,45 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 {
                                     key: "customer.familyMembers[].incomes[].frequency",
                                     type: "select"
-                                },
-                                {
-                                    key: "customer.familyMembers[].incomes[].monthsPerYear"
                                 }
+
                             ]
+
                         }
                     ]
-                }]
-            },
-            {
-                "type": "box",
-                "title": "EXPENDITURES",
-                "items": [{
-                    key:"customer.expenditures",
-                    type:"array",
-                    remove: null,
-                    view: "fixed",
-                    titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                    items:[{
-                        type: 'section',
-                        htmlClass: 'row',
-                        items: [{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key:"customer.expenditures[].frequency",
-                                type:"select",
-                                notitle: true
-                            }]
-                        },{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key: "customer.expenditures[].annualExpenses",
-                                type:"amount",
-                                notitle: true
+                },
+                    {
+                        "type": "fieldset",
+                        "title": "EXPENDITURES",
+                        "items": [{
+                            key:"customer.expenditures",
+                            type:"array",
+                            remove: null,
+                            view: "fixed",
+                            titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+                            items:[{
+                                type: 'section',
+                                htmlClass: 'row',
+                                items: [{
+                                    type: 'section',
+                                    htmlClass: 'col-xs-6',
+                                    items: [{
+                                        key:"customer.expenditures[].frequency",
+                                        type:"select",
+                                        notitle: true
+                                    }]
+                                },{
+                                    type: 'section',
+                                    htmlClass: 'col-xs-6',
+                                    items: [{
+                                        key: "customer.expenditures[].annualExpenses",
+                                        type:"amount",
+                                        notitle: true
+                                    }]
+                                }]
                             }]
                         }]
                     }]
-                }]
             },
             {
                 "type":"box",
@@ -8646,6 +8390,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         key:"customer.udf.userDefinedFieldValues.udf13",
                         type:"select"
+
+
                     },
                     {
                         type:"fieldset",
@@ -8654,6 +8400,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf14",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf7"
@@ -8676,10 +8423,12 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf12"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf23",
                                 type:"radios"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf17"
                             },
@@ -8687,6 +8436,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 key:"customer.udf.userDefinedFieldValues.udf16",
                                 type:"select"
                             },
+
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf18",
                                 type:"select"
@@ -8698,6 +8448,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf20",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf21",
@@ -8727,38 +8478,38 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf27",
                                 type:"select"
+
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf28"
                             }
                         ]
                     }
+
                 ]
             },
             {
                 "type": "box",
                 "title": "T_ASSETS",
-                "items": [
-                    {
-                        key: "customer.physicalAssets",
-                        type: "array",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key:"customer.physicalAssets[].ownedAssetDetails",
-                                type:"select"
-                            },
-                            "customer.physicalAssets[].numberOfOwnedAsset",
-                            {
-                                key:"customer.physicalAssets[].ownedAssetValue",
-                            }
-                        ]
-                    },
+                "items": [{
+                    key: "customer.physicalAssets",
+                    type: "array",
+                    items: [
+                        {
+                            key:"customer.physicalAssets[].ownedAssetDetails",
+                            type:"select"
+
+                        },
+                        "customer.physicalAssets[].numberOfOwnedAsset",
+                        {
+                            key:"customer.physicalAssets[].ownedAssetValue",
+                        }
+                    ]
+                },
                     {
                         key: "customer.financialAssets",
                         title:"FINANCIAL_ASSETS",
                         type: "array",
-                        startEmpty: true,
                         items: [
                             {
                                 key:"customer.financialAssets[].instrumentType",
@@ -8787,6 +8538,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             }
                         ]
                     }]
+
             },
             {
                 type:"box",
@@ -8795,7 +8547,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         key:"customer.liabilities",
                         type:"array",
-                        startEmpty: true,
                         title:"FINANCIAL_LIABILITIES",
                         items:[
                             {
@@ -8831,6 +8582,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 key:"customer.liabilities[].liabilityLoanPurpose",
                                 type:"select"
                             }
+
                         ]
                     }
                 ]
@@ -8842,8 +8594,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         type: "button",
                         title: "CAPTURE_FINGERPRINT",
-                        notitle: true,
-                        fieldHtmlClass: "btn-block",
                         onClick: function(model, form, formName){
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
@@ -9029,28 +8779,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
 
                     var reqData = _.cloneDeep(model);
 
-                    /** Valid check whether the user have enrolled or fingerprints or not **/
-                    if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                        _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                        _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                        _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                        _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                        _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                        _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                        _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                        _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                        _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                    )) {
-                        PageHelper.showErrors({
-                            "data": {
-                                "error": "Fingerprints are not enrolled. Please check"
-                            }
-                        });
-                        PageHelper.hideLoader();
-
-                        return;
-                    }
-
                     if (reqData['customer']['miscellaneous']){
                         var misc = reqData['customer']['miscellaneous'];
                         if (misc['alcoholConsumption']){
@@ -9096,14 +8824,12 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     reqData['enrollmentAction'] = 'PROCEED';
 
                     irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.');
-
-                    reqData.customer.kycFurnishedCopyEnclosed = true;
-                    reqData.customer.verified = true;
-                    reqData.customer.verifiedUserId = reqData.customer.nameOfRo;
+                    reqData.customer.verified = false;
                     if (reqData.customer.hasOwnProperty('verifications')){
                         var verifications = reqData.customer['verifications'];
                         for (var i=0; i<verifications.length; i++){
                             if (verifications[i].houseNoIsVerified){
+                                reqData.customer.verified = true;
                                 verifications[i].houseNoIsVerified=1;
                             }
                             else{
@@ -9111,6 +8837,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             }
                         }
                     }
+
                     try{
                         for(var i=0;i<reqData.customer.familyMembers.length;i++){
                             var incomes = reqData.customer.familyMembers[i].incomes;
@@ -9169,7 +8896,7 @@ irf.pageCollection.factory("Pages__CBCheck",
 		"uri":"",
 		initialize: function (model, form, formCtrl) {
 			model.branchName = branch;
-			$log.info("search-CustomerCBCheck got initialized");
+			$log.info("search-list sample got initialized");
 		},
 		definition: {
 			title: "SEARCH_CUSTOMERS",
@@ -9180,6 +8907,10 @@ irf.pageCollection.factory("Pages__CBCheck",
 				"title": 'SearchOptions',
 				"required": ["branchName"],
 				"properties": {
+					"kycNumber": {
+						"title": "KYC_NO",
+						"type": "string"
+					},
 					"firstName": {
 						"title": "FULL_NAME",
 						"type": "string"
@@ -9187,24 +8918,15 @@ irf.pageCollection.factory("Pages__CBCheck",
 					"lastName": {
 						"title": "LASTNAME",
 						"type": "string"
-					},
-					"kycNumber": {
-						"title": "KYC_NO",
-						"type": "string"
-					},
-					"urnNo": {
-						"title": "URN_NO",
-						"type": "number"
-					},
+					},/*
 					"branchName": {
 						"title": "BRANCH_NAME",
 						"type": "string",
 						"enumCode": "branch",
 						"x-schema-form": {
-							"type": "select",
-							"screenFilter": true,
+							"type": "select"
 						}
-					},
+					},*/
 					"centreCode": {
 						"title": "CENTRE_CODE",
 						"type": "string",
@@ -9227,11 +8949,9 @@ irf.pageCollection.factory("Pages__CBCheck",
 					'branchName': searchOptions.branchName,
 					'firstName': searchOptions.firstName,
 					'centreCode': searchOptions.centreCode,
-					'kycNumber': searchOptions.kycNumber,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
-					'lastName': searchOptions.lastName,
-					'urnNo': searchOptions.urnNo
+					'lastName': searchOptions.lastName
 				}).$promise;
 
 				return promise;
@@ -9311,6 +9031,7 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "LOAN_DATA_CAPTURE",
 		initialize: function (model, form, formCtrl) {
+			model.partner = 'SAIJA';
 			model.creditBureau = "AOR";
 			if (model._request) {
 				model.customerName = model._request.firstName;
@@ -10451,18 +10172,11 @@ irf.pageCollection.factory("Pages__CustomerRUD",
 
 irf.pageCollection.factory(irf.page("customer360.CustomerProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService",
+"PageHelper", "Utils",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService){
+    PageHelper, Utils){
 
     var branch = SessionStore.getBranch();
-
-    var initData = function(model) {
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-    };
 
     return {
         "id": "ProfileBasic",
@@ -10472,7 +10186,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
-            initData(model);
+            
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -10489,8 +10203,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
                     } else {
                         irfProgressMessage.pop("enrollment-save","Load Complete", 2000);
-                        initData(model);
-                        //$log.info(model);
                         deferred.resolve(model);
                     }
                     PageHelper.hideLoader();
@@ -10518,30 +10230,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             "title": "CUSTOMER_INFORMATION",
             "items": [
                 {
-                    key: "customer.idAndBcCustId",
-                    title: "Id & BC Id",
-                    titleExpr: "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)",
-                    readonly: true
-                },
-                {
-                    key: "customer.urnNo",
-                    title: "URN_NO",
-                    readonly: true
-                },
-                {
-                    key: "customer.fullName",
+                    key: "customer.firstName",
                     title: "FULL_NAME",
-                    readonly: true
+                    readonly: "true"
                 },
                 {
                     key:"customer.photoImageId",
                     type:"file",
                     fileType:"image/*",
-                    "viewParams": function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
-                    },
                     readonly: true
                 },
                 {
@@ -10554,13 +10250,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 },
                 {
                     key:"customer.enrolledAs",
-                    type:"radios",
-                    readonly: true
+                    type:"radios"
                 },
                 {
                     key:"customer.gender",
-                    type:"radios",
-                    readonly: true
+                    type:"radios"
                 },
                 {
                     key:"customer.age",
@@ -10571,17 +10265,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.dateOfBirth",
                     type:"date",
-                    /*onChange: function(modelValue, form, model) {
+                    "onChange": function(modelValue, form, model) {
                         if (model.customer.dateOfBirth) {
                             model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
-                    },*/
-                    readonly: true
+                    }
                 },
                 {
-                    key: "customer.fatherFullName",
-                    title: "FATHER_FULL_NAME",
-                    readonly: true
+                    key: "customer.fatherFirstName",
+                    title: "FATHER_FULL_NAME"
                 },
                 {
                     key:"customer.maritalStatus",
@@ -10634,6 +10326,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.udf.userDefinedFieldValues.udf1",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     title:"SPOUSE_LOAN_CONSENT"
+
                 },
                 {
                     key:"customer.isBiometricValidated",
@@ -10651,13 +10344,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         rightMiddle: "model.customer.rightHandMiddleImageId",
                         rightRing: "model.customer.rightHandRingImageId",
                         rightLittle: "model.customer.rightHandSmallImageId"
-                    },
-                    viewParams: function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
                     }
                 }
+
             ]
         },{
             "type": "box",
@@ -10692,10 +10381,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         "customer.stdCode",
                         "customer.landLineNo",
-                        {
-                            "key": "customer.mobilePhone",
-                            "readonly": true
-                        },
+                        "customer.mobilePhone",
                         "customer.mailSameAsResidence"
                     ]
                 },{
@@ -10743,22 +10429,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.identityProofImageId",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf30",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -10798,22 +10474,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.udf.userDefinedFieldValues.udf34",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf35",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -10856,22 +10522,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.addressProofImageId",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf29",
                             type:"file",
                             fileType:"image/*",
-                            "viewParams": function(modelValue, form, model) {
-                                return {
-                                    customerId: model.customer.id
-                                };
-                            },
                             "offline": true
                         },
                         {
@@ -10894,86 +10550,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 }
 
             ]
-        },
-        {
-            "type":"box",
-            "title":"ADDITIONAL_KYC",
-            "items":[
-                {
-                    "key":"customer.additionalKYCs",
-                    "type":"array",
-                    "add":null,
-                    "remove":null,
-                    "title":"ADDITIONAL_KYC",
-                    "items":[
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
-                            }
-
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-                            type:"date"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
+        },{
             "type": "box",
             "title": "T_FAMILY_DETAILS",
             "items": [{
                 key:"customer.familyMembers",
                 type:"array",
-                startEmpty: true,
                 items: [
                     {
                         key:"customer.familyMembers[].customerId",
-                        readonly: true,
                         type:"lov",
                         "inputMap": {
                             "firstName": {
@@ -11012,8 +10597,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                         key:"customer.familyMembers[].familyMemberFirstName",
-                        title:"FAMILY_MEMBER_FULL_NAME",
-                        readonly: true
+                        title:"FAMILY_MEMBER_FULL_NAME"
                     },
                     {
                         key:"customer.familyMembers[].relationShip",
@@ -11023,8 +10607,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.familyMembers[].gender",
                         type: "radios",
-                        title: "T_GENDER",
-                        readonly: true
+                        title: "T_GENDER"
                     },
                     {
                         key:"customer.familyMembers[].age",
@@ -11038,8 +10621,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
                                 }
                             }
-                        },
-                        readonly: true
+                        }
                     },
                     {
                         key: "customer.familyMembers[].dateOfBirth",
@@ -11049,8 +10631,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
                                 model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
-                        },
-                        readonly: true
+                        }
                     },
                     {
                         key:"customer.familyMembers[].educationStatus",
@@ -11062,6 +10643,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type:"select",
                         title: "T_MARITAL_STATUS"
                     },
+
                     "customer.familyMembers[].mobilePhone",
                     {
                         key:"customer.familyMembers[].healthStatus",
@@ -11069,12 +10651,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         titleMap:{
                             "GOOD":"GOOD",
                             "BAD":"BAD"
-                        }
+                        },
+
                     },
                     {
                         key:"customer.familyMembers[].incomes",
                         type:"array",
-                        startEmpty: true,
                         items:[
                             {
                                 key: "customer.familyMembers[].incomes[].incomeSource",
@@ -11084,46 +10666,45 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.familyMembers[].incomes[].frequency",
                                 type: "select"
-                            },
-                            {
-                                key: "customer.familyMembers[].incomes[].monthsPerYear"
                             }
+
                         ]
+
                     }
                 ]
-            }]
-        },
-        {
-            "type": "box",
-            "title": "EXPENDITURES",
-            "items": [{
-                key:"customer.expenditures",
-                type:"array",
-                remove: null,
-                view: "fixed",
-                titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                items:[{
-                    type: 'section',
-                    htmlClass: 'row',
-                    items: [{
-                        type: 'section',
-                        htmlClass: 'col-xs-6',
-                        items: [{
-                            key:"customer.expenditures[].frequency",
-                            type:"select",
-                            notitle: true
-                        }]
-                    },{
-                        type: 'section',
-                        htmlClass: 'col-xs-6',
-                        items: [{
-                            key: "customer.expenditures[].annualExpenses",
-                            type:"amount",
-                            notitle: true
+            },
+                {
+                    "type": "fieldset",
+                    "title": "EXPENDITURES",
+                    "items": [{
+                        key:"customer.expenditures",
+                        type:"array",
+                        remove: null,
+                        view: "fixed",
+                        titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+                        items:[{
+                            type: 'section',
+                            htmlClass: 'row',
+                            items: [{
+                                type: 'section',
+                                htmlClass: 'col-xs-6',
+                                items: [{
+                                    key:"customer.expenditures[].frequency",
+                                    type:"select",
+                                    notitle: true
+                                }]
+                            },{
+                                type: 'section',
+                                htmlClass: 'col-xs-6',
+                                items: [{
+                                    key: "customer.expenditures[].annualExpenses",
+                                    type:"amount",
+                                    notitle: true
+                                }]
+                            }]
                         }]
                     }]
                 }]
-            }]
         },
         {
             "type":"box",
@@ -11132,6 +10713,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.udf.userDefinedFieldValues.udf13",
                     type:"select"
+
+
                 },
                 {
                     type:"fieldset",
@@ -11140,6 +10723,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf14",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf7"
@@ -11162,10 +10746,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf12"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf23",
                             type:"radios"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf17"
                         },
@@ -11173,6 +10759,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.udf.userDefinedFieldValues.udf16",
                             type:"select"
                         },
+
                         {
                             key:"customer.udf.userDefinedFieldValues.udf18",
                             type:"select"
@@ -11184,6 +10771,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf20",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf21",
@@ -11213,38 +10801,38 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf27",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf28"
                         }
                     ]
                 }
+
             ]
         },
         {
             "type": "box",
             "title": "T_ASSETS",
-            "items": [
-                {
-                    key: "customer.physicalAssets",
-                    type: "array",
-                    startEmpty: true,
-                    items: [
-                        {
-                            key:"customer.physicalAssets[].ownedAssetDetails",
-                            type:"select"
-                        },
-                        "customer.physicalAssets[].numberOfOwnedAsset",
-                        {
-                            key:"customer.physicalAssets[].ownedAssetValue",
-                        }
-                    ]
-                },
+            "items": [{
+                key: "customer.physicalAssets",
+                type: "array",
+                items: [
+                    {
+                        key:"customer.physicalAssets[].ownedAssetDetails",
+                        type:"select"
+
+                    },
+                    "customer.physicalAssets[].numberOfOwnedAsset",
+                    {
+                        key:"customer.physicalAssets[].ownedAssetValue",
+                    }
+                ]
+            },
                 {
                     key: "customer.financialAssets",
                     title:"FINANCIAL_ASSETS",
                     type: "array",
-                    startEmpty: true,
                     items: [
                         {
                             key:"customer.financialAssets[].instrumentType",
@@ -11272,8 +10860,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             type:"date"
                         }
                     ]
-                }
-            ]
+                }]
+
         },
         {
             type:"box",
@@ -11282,7 +10870,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 {
                     key:"customer.liabilities",
                     type:"array",
-                    startEmpty: true,
                     title:"FINANCIAL_LIABILITIES",
                     items:[
                         {
@@ -11318,6 +10905,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             key:"customer.liabilities[].liabilityLoanPurpose",
                             type:"select"
                         }
+
                     ]
                 }
             ]
@@ -11338,6 +10926,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.addressInLocalLanguage",
                     type:"textarea"
                 },
+
                 {
                     key:"customer.religion",
                     type:"select"
@@ -11357,6 +10946,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf3",
                             type:"select"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf2",
@@ -11364,17 +10954,21 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf4",
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf5",
                             type:"radios"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf31",
                             "type":"select"
+                            
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf32"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf6"
@@ -11386,56 +10980,31 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     "title": "HOUSE_LOCATION",
                     "type": "geotag",
                     "latitude": "customer.latitude",
-                    "longitude": "customer.longitude",
-                    "readonly": true
+                    "longitude": "customer.longitude"
                 },
-                {
-                    "key": "customer.nameOfRo",
-                    "readonly": true
-                },
+                "customer.nameOfRo",
                 {
                     key:"customer.houseVerificationPhoto",
                     offline: true,
                     type:"file",
-                    fileType:"image/*",
-                    "viewParams": function(modelValue, form, model) {
-                        return {
-                            customerId: model.customer.id
-                        };
-                    },
-                    "readonly": true
-                },
-                {
-                    "key":"customer.verifications",
-                    "title":"VERIFICATION",
-                    "add":null,
-                    "remove":null,
-                    "readonly": true,
-                    "items":[
-                        {
-                            key:"customer.verifications[].houseNo"
-                        },
-                        {
-                            key:"customer.verifications[].houseNoIsVerified"
-                        },
-                        {
-                            key:"customer.verifications[].referenceFirstName"
-                        },
-                        {
-                            key:"customer.verifications[].relationship",
-                            type:"select"
-                        }
-
-                    ]
+                    fileType:"image/*"
                 },
                 {
                     key: "customer.date",
-                    type:"date",
-                    "readonly": true
+                    type:"date"
                 },
+                "customer.place",
                 {
-                    "key": "customer.place",
-                    "readonly": true
+                    type:"fieldset",
+                    title:"BIOMETRIC",
+                    items:[
+                        {
+                            key:"customer.leftThumpIndexId",
+                            type:"file",
+                            fileType:"biometric/*",
+                            offline: true
+                        }
+                    ]
                 }
             ]
         },{
@@ -11457,8 +11026,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
-                        if (res.customer)
-                            model.customer = res.customer;
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                     }, function (res, headers) {
@@ -11628,31 +11195,9 @@ irf.pageCollection.factory(irf.page("customer360.RecaptureQueue"),
 
 irf.pageCollection.factory(irf.page("customer360.Recapture"),
 ["$log", "$q", "Enrollment", "SessionStore", "$state", "entityManager", "formHelper",
-"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper", "BiometricService", "Files",
+"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper",
 function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
-    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper, BiometricService, Files){
-
-    var submit = function(model) {
-        $log.debug("REQUEST_TYPE: " + model.recaptureType);
-        PageHelper.showLoader();
-        irfProgressMessage.pop('RECAPTURE', 'Working...');
-        model.enrollmentAction = "SAVE";
-        $log.info(model);
-        var reqData = _.cloneDeep(model);
-        Enrollment.updateEnrollment(reqData, function (res, headers) {
-            PageHelper.hideLoader();
-            irfProgressMessage.pop('RECAPTURE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
-            $state.go("Page.Customer360", {
-                pageId: model.customer.id
-            });
-        }, function (res, headers) {
-            PageHelper.hideLoader();
-            irfProgressMessage.pop('RECAPTURE', 'Oops. Some error.', 2000);
-            $window.scrollTo(0, 0);
-            PageHelper.showErrors(res);
-        })
-    };
-
+    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper){
     return {
         "type": "schema-form",
         "title": "RECAPTURE",
@@ -11665,26 +11210,10 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
                 $log.info("data not there, redirecting...");
 
                 irfProgressMessage.pop("RECAPTURE","An Error Occurred. Failed to fetch Data", 5000);
-                $state.go("Page.Customer360",{
+                $state.go("Page.Engine",{
+                    pageName:"Customer360",
                     pageId:customerId
                 });
-            } else {
-                if (model.recaptureType === 'FINGERPRINT') {
-                    /* TODO to be removed */
-                    model.isFPEnrolled = function(fingerId){
-                        //$log.info("Inside isFPEnrolled: " + BiometricService.getFingerTF(fingerId) + " :"  + fingerId);
-                        if (model.customer[BiometricService.getFingerTF(fingerId)]!=null || (typeof(model.customer.$fingerprint)!='undefined' && typeof(model.customer.$fingerprint[fingerId])!='undefined' && model.customer.$fingerprint[fingerId].data!=null )) {
-                            //$log.info("Inside isFPEnrolled: :true");
-                            return "fa-check text-success";
-                        }
-                        //$log.info("Inside isFPEnrolled: false");
-                        return "fa-close text-danger";
-                    }
-
-                    model.getFingerLabel = function(fingerId){
-                        return BiometricService.getLabel(fingerId);
-                    }
-                }
             }
             $log.info("I got initialized");
         },
@@ -11713,47 +11242,11 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
                     "condition": "model.recaptureType === 'PHOTO'"
                 },
                 {
-                    "condition": "model.recaptureType === 'FINGERPRINT'",
-                    type: "button",
-                    title: "CAPTURE_FINGERPRINT",
-                    notitle: true,
-                    fieldHtmlClass: "btn-block",
-                    onClick: function(model, form, formName){
-                        var promise = BiometricService.capture(model);
-                        promise.then(function(data){
-                            model.customer.rightHandIndexImageId = null;
-                            model.customer.rightHandMiddleImageId = null;
-                            model.customer.rightHandRingImageId = null;
-                            model.customer.rightHandSmallImageId = null;
-                            model.customer.rightHandThumpImageId = null;
-                            model.customer.leftHandIndexImageId = null;
-                            model.customer.leftHandMiddleImageId = null;
-                            model.customer.leftHandRingImageId = null;
-                            model.customer.leftHandSmallImageId = null;
-                            model.customer.leftHandThumpImageId = null;
-
-                            model.customer.$fingerprint = data;
-                        }, function(reason){
-                            console.log(reason);
-                        })
-                    }
-                },
-                {
-                    "condition": "model.recaptureType === 'FINGERPRINT'",
-                    "type": "section",
-                    "html": '<div class="row"> <div class="col-xs-6">' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftIndex\')"></i> {{ model.getFingerLabel(\'LeftIndex\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftMiddle\')"></i> {{ model.getFingerLabel(\'LeftMiddle\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftRing\')"></i> {{ model.getFingerLabel(\'LeftRing\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftLittle\')"></i> {{ model.getFingerLabel(\'LeftLittle\') }}</span><br>' +
-                    '</div> <div class="col-xs-6">' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightThumb\')"></i> {{ model.getFingerLabel(\'RightThumb\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightIndex\')"></i> {{ model.getFingerLabel(\'RightIndex\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightMiddle\')"></i> {{ model.getFingerLabel(\'RightMiddle\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightRing\')"></i> {{ model.getFingerLabel(\'RightRing\') }}</span><br>' +
-                    '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightLittle\')"></i> {{ model.getFingerLabel(\'RightLittle\') }}</span><br>' +
-                    '</div></div>'
+                    "key":"customer.leftThumpIndexId",
+                    "type":"file",
+                    "fileType":"biometric/*",
+                    "offline": true,
+                    "condition": "model.recaptureType === 'FINGERPRINT'"
                 }
             ]
         },{
@@ -11769,32 +11262,25 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
         },
         actions: {
             submit: function(model, form, formName) {
-                if (model.recaptureType === 'FINGERPRINT') {
-                    PageHelper.showLoader();
-                    var out = model.customer.$fingerprint;
-                    var fpPromisesArr = [];
-                    for (var key in out) {
-                        if (out.hasOwnProperty(key) && out[key].data!=null) {
-                            (function(obj){
-                                var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
-                                promise.then(function(data){
-                                    model.customer[obj.table_field] = data.fileId;
-                                    delete model.customer.$fingerprint[obj.fingerId];
-                                });
-                                fpPromisesArr.push(promise);
-                            })(out[key]);
-                        } else {
-                            if (out[key].data == null){
-                                delete out[key];
-                            }
-                        }
-                    }
-                    $q.all(fpPromisesArr).then(function(){
-                        submit(model);
+                $log.debug("REQUEST_TYPE: " + model.recaptureType);
+                PageHelper.showLoader();
+                irfProgressMessage.pop('RECAPTURE', 'Working...');
+                model.enrollmentAction = "SAVE";
+                $log.info(model);
+                var reqData = _.cloneDeep(model);
+                Enrollment.updateEnrollment(reqData, function (res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('RECAPTURE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
+                    $state.go("Page.Engine", {
+                        pageName: "Customer360",
+                        pageId: model.customer.id
                     });
-                } else {
-                    submit(model);
-                }
+                }, function (res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('RECAPTURE', 'Oops. Some error.', 2000);
+                    $window.scrollTo(0, 0);
+                    PageHelper.showErrors(res);
+                })
             }
         }
     };
@@ -11843,7 +11329,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 }
             }
         };
-
+        
         /*Group CRUD stuffs*/
         function showDscData(dscId){
             PageHelper.showLoader();
@@ -11861,7 +11347,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 PageHelper.hideLoader();
             });
         }
-
+        
         return {
             /*Search Page Stuffs*/
             getDefaultPaginationOptions:function(){
@@ -11878,7 +11364,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         "type": 'object',
                             "title": 'SearchOptions',
                             "properties": {
-
+    
                                 "partner": {
                                         "title": "PARTNER",
                                         "default":defaultPartner,
@@ -11896,7 +11382,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-
+    
                         var params = {
                             'branchId': branchId,
                             'partner':searchOptions.partner,
@@ -11907,20 +11393,20 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         if(stage) {
                             params.currentStage = stage
                         }
-
+    
                         var promise = Groups.search(params).$promise;
-
+    
                         return promise;
                     },
                     paginationOptions: pageOptions || defaultPaginationOptions,
                     listOptions: listOptions || defaultListOptions
-
-
+    
+    
                 };
-
+    
                 return definition;
-
-
+    
+    
             },
             getOfflineDisplayItem: function() {
                return  function (item, index) {
@@ -11939,11 +11425,11 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         'page': 1,
                         'per_page': 100
                     }).$promise;
-
+    
                     return promise;
                 }
             },
-
+            
             /*Group CRUD stuffs*/
             /*
             * modes available = CREATE,DSC_CHECK,VIEW,EDIT(not enabled),DELETE,APP_DWNLD
@@ -12020,7 +11506,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].relation",
                                     "readonly":readonly,
-                                    "type":"select",
+                                    "type":"radios",
                                     "titleMap":{
                                         "Father":"Father",
                                         "Husband":"Husband"
@@ -12035,27 +11521,6 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].loanPurpose1",
                                     "type":"select",
-                                    onChange: function(modelValue, form, model) {
-                                        $log.info(modelValue);
-                                    },
-                                    readonly:readonly
-                                },
-                                {
-                                    "key":"group.jlgGroupMembers[].loanPurpose2",
-                                    "type":"select",
-                                    "parentEnumCode": "loan_purpose_1",
-                                    /*"filter": {
-                                        "parentCode as loan_purpose_1": "model.jlgGroupMembers[arrayIndex].loanPurpose1"
-                                    },*/
-                                    readonly:readonly
-                                },
-                                {
-                                    "key":"group.jlgGroupMembers[].loanPurpose3",
-                                    "type":"select",
-                                    "parentEnumCode": "loan_purpose_2",
-                                    /*"filter": {
-                                        "parentCode as loan_purpose_2": "model.jlgGroupMembers[arrayIndex].loanPurpose2"
-                                    },*/
                                     readonly:readonly
                                 },
                                 {
@@ -12094,7 +11559,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
 
                 return retDefinition;
 
-
+                
             },
             addCreateElements:function(retDefinition){
                 retDefinition[0].items.push({
@@ -12147,14 +11612,10 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             angular.forEach(items,function(value,key){
                                 var fatherName = "";
                                 var familyMembers = [];
-                                var maritalStatus = null;
-                                var spouseFirstName = null;;
                                 Enrollment.getCustomerById({id:value.customerId},function(resp,head){
 
                                     fatherName = resp.fatherFirstName;
                                     familyMembers = resp.familyMembers;
-                                    maritalStatus = resp.maritalStatus;
-                                    spouseFirstName = resp.spouseFirstName;
                                 },function(resp){}).$promise.finally(function(){
 
                                     var uname = value.firstName;
@@ -12176,9 +11637,9 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                         firstName:uname,
                                         husbandOrFatherFirstName:fatherName,
                                         relation:"Father",
-                                        _familyMembers:familyMembers,
-                                        maritalStatus: maritalStatus,
-                                        spouseFirstName:spouseFirstName
+                                        _familyMembers:familyMembers
+
+
                                     });
                                     console.log(key);
                                     if(key >= (items.length-1)){
@@ -12484,10 +11945,9 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 }
                 return deferred.promise;
             }
-
+    
         }
 }]);
-
 irf.pageCollection.factory("Pages__GroupCRUD",
     ["$log","$q",'Enrollment', 'Groups','CreditBureau','LoanProducts','formHelper','PageHelper','$state',
     '$stateParams','irfProgressMessage', "irfModalQueue","SessionStore","Utils",
@@ -12557,10 +12017,10 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                 delete reqData.group.screenMode;
                 reqData.group.frequency = reqData.group.frequency[0];
 
-                /*for(var i=0; i<reqData.group.jlgGroupMembers.length; i++){
+                for(var i=0; i<reqData.group.jlgGroupMembers.length; i++){
                     reqData.group.jlgGroupMembers[i].loanPurpose2 = reqData.group.jlgGroupMembers[i].loanPurpose1;
                     reqData.group.jlgGroupMembers[i].loanPurpose3 = reqData.group.jlgGroupMembers[i].loanPurpose1;
-                }*/
+                }
 
                 PageHelper.clearErrors();
                 Utils.removeNulls(reqData,true);
@@ -12601,10 +12061,10 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                 }
                 res.group.frequency = res.group.frequency[0];
 
-                /*for(var i=0; i<res.group.jlgGroupMembers.length; i++){
+                for(var i=0; i<res.group.jlgGroupMembers.length; i++){
                     res.group.jlgGroupMembers[i].loanPurpose2 = res.group.jlgGroupMembers[i].loanPurpose1;
                     res.group.jlgGroupMembers[i].loanPurpose3 = res.group.jlgGroupMembers[i].loanPurpose1;
-                }*/
+                }
 
                 Utils.removeNulls(res,true);
                 Groups.update(res, function (res, headers) {
@@ -15910,24 +15370,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     });
                 }catch(err){
                     console.log(err);
-                    // @TODO : Where to redirect if no page params present
+                    //@TODO : Where to redirect if no page params present
                 }
-            }
-
-            function deriveAmount(txnType, repaymentObj){
-                var amount = 0;
-                switch(txnType){
-                    case 'Pre-closure':
-                        amount = parseFloat(repaymentObj.payOffAndDueAmount);
-                        break;
-                    case 'Scheduled Demand':
-                        amount = parseFloat(repaymentObj.totalDemandDue);
-                        break;
-                    default:
-                        amount = 0;
-                        break;
-                }
-                return amount;
             }
 
             return {
@@ -15945,11 +15389,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     promise.then(function (data) { /* SUCCESS */
                         model.loanAccount = data;
                         console.log(data);
-                        model.repayment = {
-                            'accountId': data.accountId,
-                            'totalDemandDue': data.totalDemandDue,
-                            'payOffAndDueAmount': data.payOffAndDueAmount
-                        };
+                        model.repayment = {};
+                        model.repayment.accountId = data.accountId;
+                        model.repayment.amount = data.totalDemandDue;
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
@@ -15974,6 +15416,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.accountId",
                                 readonly:true
                             },
+                            "repayment.amount",
+                            "repayment.repaymentDate",
+                            "repayment.cashCollectionRemark",
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
@@ -15983,14 +15428,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment"
-                                },
-                                onChange: function(value, form, model){
-                                    model.repayment.amount = deriveAmount(value, model.repayment);
                                 }
                             },
-                            "repayment.amount",
-                            "repayment.repaymentDate",
-                            "repayment.cashCollectionRemark",
                             "additional.override_fp",
                             {
                                 "key": "repayment.authorizationRemark",
@@ -16236,34 +15675,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                 });
             }
 
-            function deriveAmount(txnType, repaymentObj){
-                var amount = 0;
-                switch(txnType){
-                    case 'Pre-closure':
-                        amount = parseFloat(repaymentObj.payOffAndDueAmount);
-                        break;
-                    case 'Scheduled Demand':
-                        amount = parseFloat(repaymentObj.demandAmount);
-                        break;
-                    default:
-                        amount = 0;
-                        break;
-                }
-                return amount;
-            }
-
-            function updateTotal(model){
-                try {
-                    model.total=0;
-                    for(var i=0;i<model.repayments.length;i++){
-                        model.total +=  model.repayments[i].amount;
-                    }
-
-                }catch(err){
-                    console.error(err);
-                }
-            }
-
             var cashCollectionRemarks = {
                 "Cash received at the branch":"Cash received at the branch",
                 "Cash collected at field by WM":"Cash collected at field by WM",
@@ -16294,50 +15705,43 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         isLegacy:isLegacy
                     }).$promise;
                     promise.then(function (data) { /* SUCCESS */
-                        delete data.$promise;
-                        delete data.$resolved;
+                            delete data.$promise;
+                            delete data.$resolved;
 
-                        console.warn(data);
-                        model.ui = { submissionDone: false};
+                            console.warn(data);
+                            model.repayments = Array();
+                            model.total=0;
+                            model.groupCode = groupParams[1];
+                            for(var i=0;i<data.length;i++){
 
-                        model.repayments = Array();
-                        model.total=0;
-                        model.groupCode = groupParams[1];
-                        for(var i=0;i<data.length;i++){
+                                var repData = data[i];
 
-                            var repData = data[i];
+                                var totalDemandDue = Number(repData.totalDemandDue);
+                                var txName = (totalDemandDue==0)?"Advance Repayment":"Scheduled Demand";
+                                model.repayments.push({
 
-                            var totalDemandDue = Number(repData.totalDemandDue);
-                            var txName = (totalDemandDue==0)?"Advance Repayment":"Scheduled Demand";
+                                    accountId:repData.accountId,
+                                    amount:parseInt(Number(repData.equatedInstallment)),
+                                    groupCode:repData.groupCode,
+                                    productCode:repData.productCode,
+                                    urnNo:repData.urnNo,
+                                    transactionName:txName,
+                                    repaymentDate:Utils.getCurrentDate(),
+                                    additional:{
+                                        name:Utils.getFullName(repData.firstName,repData.middleName,repData.lastName),
+                                        accountBalance:Number(repData.accountBalance)
 
-                            var aRepayment = {
-                                accountId:repData.accountId,
-                                demandAmount: parseInt(Number(repData.equatedInstallment)),
-                                payOffAmount: repData.payOffAmount,
-                                payOffAndDueAmount: repData.payOffAndDueAmount,
-                                accountName: repData.accountName,
-                                numSatisifiedDemands: repData.numSatisifiedDemands,
-                                numDemands: repData.numDemands,
-                                groupCode:repData.groupCode,
-                                productCode:repData.productCode,
-                                customerName: repData.customerName,
-                                urnNo:repData.urnNo,
-                                transactionName:txName,
-                                repaymentDate:Utils.getCurrentDate(),
-                                additional:{
-                                    name:Utils.getFullName(repData.firstName,repData.middleName,repData.lastName),
-                                    accountBalance:Number(repData.accountBalance)
-                                }
-                            };
-                            aRepayment.amount = deriveAmount(txName, aRepayment);
-                            model.repayments.push(aRepayment);
+                                    }
 
-                            model.total += parseInt(Number(repData.equatedInstallment));
-                        }
-                        if(model.repayments.length<1){
-                            PageHelper.showProgress("group-repayment","No Records",3000);
-                            backToQueue();
-                        }
+                                });
+                                model.total += parseInt(Number(repData.equatedInstallment));
+
+
+                            }
+                            if(model.repayments.length<1){
+                                PageHelper.showProgress("group-repayment","No Records",3000);
+                                backToQueue();
+                            }
 
 
                         }, function (resData) {
@@ -16372,6 +15776,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repayment.cashCollectionRemark  = value;
                                     }
                                 }
+
+
                             },
                             {
                                 "key":"_remarks",
@@ -16384,6 +15790,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         repayment.remarks  = value;
                                     }
                                 }
+
+
                             },
                             {
                                 key:"repayments",
@@ -16395,10 +15803,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         key:"repayments[].accountId",
                                         readonly:true
 
-                                    },
-                                    {
-                                        key: "repayments[].customerName",
-                                        readonly: true
                                     },
                                     {
                                         key:"repayments[].additional.name",
@@ -16420,30 +15824,30 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                                     },
                                     {
-                                        key:"repayments[].transactionName",
-                                        "type":"select",
-                                        "titleMap":{
-                                            "Advance Repayment":"Advance Repayment",
-                                            "Scheduled Demand":"Scheduled Demand",
-                                            "Fee Payment":"Fee Payment",
-                                            "Pre-closure":"Pre-closure",
-                                            "Prepayment":"Prepayment"
-                                        },
-                                        onChange: function(value, form, model){
-                                            var ai = form.arrayIndex;
-                                            model.repayments[ai].amount = deriveAmount(value, model.repayments[ai]);
-                                            updateTotal(model);
-                                        }
-                                    },
-                                    {
                                         key:"repayments[].amount",
                                         type:"amount",
                                         validationMessage: {
                                             'invalidAmount': 'Should be Less than Account Balance'
                                         },
                                         onChange:function(value,form,model,schemaForm){
-                                            updateTotal(model);
+
+                                            try {
+                                                var i = form["arrayIndex"];
+                                                if (value > model.repayments[i].additional.accountBalance) {
+                                                    Utils.alert("Amount should be Less than Account Balance");
+                                                }
+                                                model.total=0;
+                                                for(var i=0;i<model.repayments.length;i++){
+                                                    model.total +=  model.repayments[i].amount;
+                                                }
+
+                                            }catch(err){
+                                                console.error(err);
+                                            }
+
                                         }
+
+
                                     },
                                     {
                                         key:"repayments[].cashCollectionRemark",
@@ -16455,7 +15859,20 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     {
                                         key:"repayments[].repaymentDate",
                                         type:"date"
+                                    },
+                                    {
+                                        key:"repayments[].transactionName",
+                                        "type":"select",
+                                        "titleMap":{
+                                            "Advance Repayment":"Advance Repayment",
+                                            "Scheduled Demand":"Scheduled Demand",
+                                            "Fee Payment":"Fee Payment",
+                                            "Pre-closure":"Pre-closure",
+                                            "Prepayment":"Prepayment"
+                                        }
                                     }
+
+
                                 ]
                             },
                             {
@@ -16469,191 +15886,12 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     },
                     {
                         "type":"actionbox",
-                        "condition": "model.ui.submissionDone==false",
                         "items": [
                             {
                                 "type":"submit",
                                 "style":"btn-theme",
                                 "title":"SUBMIT"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "actionbox",
-                        "condition": "model.ui.submissionDone==true",
-                        "items": [
-                            {
-                                "type": "button",
-                                "style": "btn-theme",
-                                "title": "BACK",
-                                "onClick": function(model, formCtrl, formName){
-                                    backToQueue();
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "style": "btn-theme",
-                                "title": "PRINT",
-                                "onClick": function(model, formCtrl, formName){
-                                    function PrinterConstants(){
 
-                                    }
-                                    PrinterConstants.FONT_LARGE_BOLD = 2;
-                                    PrinterConstants.FONT_LARGE_NORMAL = 1;
-                                    PrinterConstants.FONT_SMALL_NORMAL = 3;
-                                    PrinterConstants.FONT_SMALL_BOLD = 4;
-
-                                    function PrinterData(){
-                                        this.lines = [];
-                                    }
-
-                                    PrinterData.prototype.getLineLength = function(font){
-                                        if (font == PrinterConstants.FONT_LARGE_BOLD || font == PrinterConstants.FONT_LARGE_NORMAL){
-                                            return 24;
-                                        } else {
-                                            return 42;
-                                        }
-                                    }
-
-                                    PrinterData.prototype.addLine = function(text, opts){
-                                        opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                        opts['center'] = _.has(opts,'center') && _.isBoolean(opts['center'])? opts['center']: false;
-                                        var obj = {
-                                            "bFont": opts['font'],
-                                            "text": text,
-                                            "style": {
-                                                "center": opts['center']
-                                            }
-                                        };
-                                        this.lines.push(obj);
-                                        return this;
-                                    }
-
-                                    PrinterData.prototype.addKeyValueLine = function(key, value, opts){
-                                        opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                        var keyLength = parseInt(this.getLineLength(opts['font'])/2)-1;
-                                        var line = _.padEnd(key, keyLength, ' ') + ': ' + value;
-                                        var obj = {
-                                            "bFont": opts['font'],
-                                            "text": line,
-                                            "style": {
-                                                "center": false
-                                            }
-                                        };
-                                        this.lines.push(obj);
-                                        return this;
-                                    }
-
-                                    PrinterData.prototype.addStrRepeatingLine = function(str, opts){
-                                        opts['font'] = opts['font'] || PrinterConstants.FONT_SMALL_NORMAL;
-                                        var lineLength = this.getLineLength(opts['font']);
-                                        var line = _.padEnd("", lineLength, '-')
-                                        var obj = {
-                                            "bFont": opts['font'],
-                                            "text": line,
-                                            "style": {
-                                                "center": false
-                                            }
-                                        };
-                                        this.lines.push(obj);
-                                        return this;
-                                    }
-
-
-
-                                    PrinterData.prototype.addLines = function(lines){
-                                        this.lines = this.lines.concat(lines);
-                                    }
-
-                                    PrinterData.prototype.getLines = function(){
-                                        return this.lines;
-                                    }
-
-                                    var getPrintReceipt = function(repaymentInfo, opts){
-                                        opts['duplicate'] = opts['duplicate'] || false;
-                                        var pData = new PrinterData();
-                                        if(opts['duplicate']){
-                                            pData.addLine('DUPLICATE', {'center': true, font: PrinterConstants.FONT_SMALL_BOLD});
-                                        } else {
-                                            pData.addLine('RECEIPT', {'center': true, font: PrinterConstants.FONT_SMALL_BOLD});
-                                        }
-
-                                        var curTime = moment();
-                                        var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
-                                        pData.addLine(opts['entity_name'], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
-                                            .addLine(opts['branch'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("Date : " + curTimeStr, {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("LOAN REPAYMENT", {'center': true, font: PrinterConstants.FONT_LARGE_BOLD})
-                                            .addLine("", {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine(repaymentInfo['accountName'], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Loan A/C No", repaymentInfo['accountNumber'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Transaction Type", repaymentInfo['transactionType'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Transaction ID", repaymentInfo['transactionID'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Amount Paid", repaymentInfo['amountPaid'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Total Payoff Amount", repaymentInfo['payOffAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addStrRepeatingLine("-", {font: PrinterConstants.FONT_LARGE_BOLD})
-                                            .addLine(opts['company_name'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("CIN :" + opts['cin'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine(opts['address1'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine(opts['address2'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine(opts['address3'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("Website :" + opts['website'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("Helpline No :" + opts['helpline'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("", {})
-                                            .addLine("", {})
-                                            .addLine("Signature not required as this is an", {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("electronically generated receipt.", {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL});
-
-                                        return pData;
-                                    }
-
-                                    var fullPrintData = new PrinterData();
-
-                                    for (var i=0; i<model.repayments.length; i++){
-                                        var r = model.repayments[i];
-                                        var repaymentInfo = {
-                                            'repaymentDate': r.repaymentDate,
-                                            'customerURN': r.urnNo,
-                                            'accountNumber': r.accountId,
-                                            'transactionType': r.transactionName,
-                                            'customerName': r.customerName,
-                                            'transactionID': "",
-                                            'demandAmount': r.demandAmount,
-                                            'amountPaid': r.amount,
-                                            'payOffAmount': r.payOffAmount,
-                                            'accountName': r.accountName,
-                                            'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
-                                        };
-                                        var opts = {
-                                            'entity_name': "Pudhuaaru KGFS",
-                                            'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                            'cin': 'U74990TN2011PTC081729',
-                                            'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                            'address2': 'Kanagam Village, Taramani',
-                                            'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                            'website': "http://ruralchannels.kgfs.co.in",
-                                            'helpline': '18001029370'
-                                        }
-
-                                        var pData = getPrintReceipt(repaymentInfo, opts);
-                                        pData.addLine("", {});
-                                        pData.addLine("", {});
-                                        fullPrintData.addLines(pData.getLines());
-                                    }
-
-                                    cordova.plugins.irfBluetooth.print(function(){
-                                        console.log("succc callback");
-                                    }, function(err){
-                                        console.error(err);
-                                        console.log("errr collback");
-                                    }, fullPrintData.getLines());
-                                }
                             }
                         ]
                     }
@@ -16675,10 +15913,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     "accountId": {
                                         "type": "string",
                                         "title":"ACCOUNT_ID"
-                                    },
-                                    "customerName": {
-                                        "type": "string",
-                                        "title": "NAME"
                                     },
                                     "amount": {
                                         "type": "integer",
@@ -16757,21 +15991,19 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         var reqData = _.cloneDeep(model);
                         var msg="";
                         for(var i=0;i<reqData.repayments.length;i++) {
-                            if(reqData.repayments[i].transactionName=="Advance Repayment" || reqData.repayments[i].transactionName=="Scheduled Demand") {
-                                //Check for advance repayments
-                                if(reqData.repayments[i].transactionName=="Advance Repayment") {
-                                    reqData.advanceRepayment = true;
-                                    msg = "There are Advance Repayments - ";
-                                }
 
-                                //check for larger amounts
+                            //Check for advance repayments
+                            if(reqData.repayments[i].transactionName=="Advance Repayment") {
+                                reqData.advanceRepayment = true;
+                                msg = "There are Advance Repayments - ";
+                            }
 
-                                if(Number(reqData.repayments[i].amount)>reqData.repayments[i].additional.accountBalance) {
-                                    msg = "For URN "+reqData.repayments[i].urnNo;
-                                    msg+=" Payable amount is larger than account balance."
-                                    Utils.alert(msg);
-                                    return;
-                                }
+                            //check for larger amounts
+                            if(Number(reqData.repayments[i].amount)>reqData.repayments[i].additional.accountBalance) {
+                                msg = "For URN "+reqData.repayments[i].urnNo;
+                                msg+=" Payable amount is larger than account balance."
+                                Utils.alert(msg);
+                                return;
                             }
                         }
 
@@ -16779,12 +16011,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             PageHelper.showLoader();
 
 
-                            LoanAccount.groupRepayment(reqData, function(resp, headers){
+                            LoanAccount.groupRepayment(reqData,function(resp,headers){
                                 console.log(resp);
                                 try {
                                     alert(resp.response);
-                                    model.repaymentResponse = resp;
-                                    model.ui.submissionDone = true;
+                                    backToQueue();
                                 }catch(err){
                                     console.error(err);
                                     PageHelper.showProgress("group-repay","Oops. An Error Occurred",3000);

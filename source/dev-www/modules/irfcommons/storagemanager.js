@@ -4,8 +4,8 @@ irf.commons.value('RefCodeCache',{
 });
 
 irf.commons.factory("irfStorageService",
-["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter",
-function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
+["$log","$q","ReferenceCodeResource","RefCodeCache",
+function($log,$q,rcResource,RefCodeCache){
 	var retrieveItem = function(key) {
 		return localStorage.getItem(key);
 	};
@@ -141,30 +141,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 						}
 						$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
 
-						/** removing other bank branches, district **/
-						var bankId = null;
-						try {
-							var bankName = SessionStore.getBankName();
-							var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
-							if (bankId) {
-								classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
-								classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
-							}
-						} catch (e) {
-							$log.error('removing other bank branches FAILED after master fetch');
-							$log.error(e);
-						}
-						/** sort branches, centre **/
-						try {
-							classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
-							classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
-						} catch (e) {
-							$log.error('Branch,centre SORT FAILED after master fetch');
-						}
-
 						classifiers._timestamp = new Date().getTime();
 						masters = classifiers;
-						$log.info(masters);
 						storeItem('irfMasters', JSON.stringify(classifiers));
 						deferred.resolve("masters download complete");
 					});
@@ -209,7 +187,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 							if (ret.data[i].parentCode == branchId)
 								ret.data[i].value = ret.data[i].code;
 						}
-                        // console.warn(ret);
+                        console.warn(ret);
 						break;
                     case 'village':
                         console.log("branchid:"+branchId);
@@ -221,7 +199,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						for(var i = 0; i < ret.data.length; i++) {
 								ret.data[i].value = ret.data[i].code;
 						}
-						// console.warn(ret);
+						console.warn(ret);
 						break;
 					default:
 						ret.data = r.data; // value <-- name
