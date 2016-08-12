@@ -13,8 +13,24 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     });
                 }catch(err){
                     console.log(err);
-                    //@TODO : Where to redirect if no page params present
+                    // @TODO : Where to redirect if no page params present
                 }
+            }
+
+            function deriveAmount(txnType, repaymentObj){
+                var amount = 0;
+                switch(txnType){
+                    case 'Pre-closure':
+                        amount = parseFloat(repaymentObj.payOffAndDueAmount);
+                        break;
+                    case 'Scheduled Demand':
+                        amount = parseFloat(repaymentObj.totalDemandDue);
+                        break;
+                    default:
+                        amount = 0;
+                        break;
+                }
+                return amount;
             }
 
             return {
@@ -32,9 +48,11 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     promise.then(function (data) { /* SUCCESS */
                         model.loanAccount = data;
                         console.log(data);
-                        model.repayment = {};
-                        model.repayment.accountId = data.accountId;
-                        model.repayment.amount = data.totalDemandDue;
+                        model.repayment = {
+                            'accountId': data.accountId,
+                            'totalDemandDue': data.totalDemandDue,
+                            'payOffAndDueAmount': data.payOffAndDueAmount
+                        };
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
@@ -59,9 +77,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.accountId",
                                 readonly:true
                             },
-                            "repayment.amount",
-                            "repayment.repaymentDate",
-                            "repayment.cashCollectionRemark",
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
@@ -71,8 +86,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment"
+                                },
+                                onChange: function(value, form, model){
+                                    model.repayment.amount = deriveAmount(value, model.repayment);
                                 }
                             },
+                            "repayment.amount",
+                            "repayment.repaymentDate",
+                            "repayment.cashCollectionRemark",
                             "additional.override_fp",
                             {
                                 "key": "repayment.authorizationRemark",

@@ -17,7 +17,6 @@
     - Navigate to the **irf-elements** directory (`cd irf-elements`)
         - run `npm install` and wait for the process to complete
         - run `bower link` and note the link name (if done like above, it will be `irf-elements`)
-
 ##Setting up Perdix
 1. Navigate to **ir-perdix-view** directory (`cd ../ir-perdix-view` from **irf-elements** directory or `cd ir-perdix-view` from perdix directory)
     - run `npm install`

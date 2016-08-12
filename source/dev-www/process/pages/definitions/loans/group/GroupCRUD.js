@@ -67,10 +67,10 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                 delete reqData.group.screenMode;
                 reqData.group.frequency = reqData.group.frequency[0];
 
-                for(var i=0; i<reqData.group.jlgGroupMembers.length; i++){
+                /*for(var i=0; i<reqData.group.jlgGroupMembers.length; i++){
                     reqData.group.jlgGroupMembers[i].loanPurpose2 = reqData.group.jlgGroupMembers[i].loanPurpose1;
                     reqData.group.jlgGroupMembers[i].loanPurpose3 = reqData.group.jlgGroupMembers[i].loanPurpose1;
-                }
+                }*/
 
                 PageHelper.clearErrors();
                 Utils.removeNulls(reqData,true);
@@ -111,10 +111,10 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                 }
                 res.group.frequency = res.group.frequency[0];
 
-                for(var i=0; i<res.group.jlgGroupMembers.length; i++){
+                /*for(var i=0; i<res.group.jlgGroupMembers.length; i++){
                     res.group.jlgGroupMembers[i].loanPurpose2 = res.group.jlgGroupMembers[i].loanPurpose1;
                     res.group.jlgGroupMembers[i].loanPurpose3 = res.group.jlgGroupMembers[i].loanPurpose1;
-                }
+                }*/
 
                 Utils.removeNulls(res,true);
                 Groups.update(res, function (res, headers) {
