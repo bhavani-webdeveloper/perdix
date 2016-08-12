@@ -47,10 +47,10 @@
                                 <a ng-if="subsubMenu.offline" ng-click="loadOfflinePage($event, subsubMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
                             </li>
                         </ul>
-                        <a ng-if="subMenu.offline" ng-click="loadOfflinePage($event, subMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
+                        <a ng-if="!subMenu.items && subMenu.offline" ng-click="loadOfflinePage($event, subMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
                     </li>
                 </ul>
-                <a ng-if="menu.offline" ng-click="loadOfflinePage($event, menu)" href="#" class="offline-link pull-right"><i class="fa fa-save"></i></a>
+                <a ng-if="!menu.items && menu.offline" ng-click="loadOfflinePage($event, menu)" href="#" class="offline-link pull-right"><i class="fa fa-save"></i></a>
             </li>
         </ul>
     </section>

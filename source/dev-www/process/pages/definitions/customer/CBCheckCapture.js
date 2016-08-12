@@ -8,7 +8,6 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "LOAN_DATA_CAPTURE",
 		initialize: function (model, form, formCtrl) {
-			model.partner = 'SAIJA';
 			model.creditBureau = "AOR";
 			if (model._request) {
 				model.customerName = model._request.firstName;

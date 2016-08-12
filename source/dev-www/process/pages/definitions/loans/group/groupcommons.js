@@ -41,7 +41,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 }
             }
         };
-        
+
         /*Group CRUD stuffs*/
         function showDscData(dscId){
             PageHelper.showLoader();
@@ -59,7 +59,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 PageHelper.hideLoader();
             });
         }
-        
+
         return {
             /*Search Page Stuffs*/
             getDefaultPaginationOptions:function(){
@@ -76,7 +76,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         "type": 'object',
                             "title": 'SearchOptions',
                             "properties": {
-    
+
                                 "partner": {
                                         "title": "PARTNER",
                                         "default":defaultPartner,
@@ -94,7 +94,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-    
+
                         var params = {
                             'branchId': branchId,
                             'partner':searchOptions.partner,
@@ -105,20 +105,20 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         if(stage) {
                             params.currentStage = stage
                         }
-    
+
                         var promise = Groups.search(params).$promise;
-    
+
                         return promise;
                     },
                     paginationOptions: pageOptions || defaultPaginationOptions,
                     listOptions: listOptions || defaultListOptions
-    
-    
+
+
                 };
-    
+
                 return definition;
-    
-    
+
+
             },
             getOfflineDisplayItem: function() {
                return  function (item, index) {
@@ -137,11 +137,11 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         'page': 1,
                         'per_page': 100
                     }).$promise;
-    
+
                     return promise;
                 }
             },
-            
+
             /*Group CRUD stuffs*/
             /*
             * modes available = CREATE,DSC_CHECK,VIEW,EDIT(not enabled),DELETE,APP_DWNLD
@@ -218,7 +218,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].relation",
                                     "readonly":readonly,
-                                    "type":"radios",
+                                    "type":"select",
                                     "titleMap":{
                                         "Father":"Father",
                                         "Husband":"Husband"
@@ -233,6 +233,27 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].loanPurpose1",
                                     "type":"select",
+                                    onChange: function(modelValue, form, model) {
+                                        $log.info(modelValue);
+                                    },
+                                    readonly:readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].loanPurpose2",
+                                    "type":"select",
+                                    "parentEnumCode": "loan_purpose_1",
+                                    /*"filter": {
+                                        "parentCode as loan_purpose_1": "model.jlgGroupMembers[arrayIndex].loanPurpose1"
+                                    },*/
+                                    readonly:readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].loanPurpose3",
+                                    "type":"select",
+                                    "parentEnumCode": "loan_purpose_2",
+                                    /*"filter": {
+                                        "parentCode as loan_purpose_2": "model.jlgGroupMembers[arrayIndex].loanPurpose2"
+                                    },*/
                                     readonly:readonly
                                 },
                                 {
@@ -271,7 +292,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
 
                 return retDefinition;
 
-                
+
             },
             addCreateElements:function(retDefinition){
                 retDefinition[0].items.push({
@@ -324,10 +345,14 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             angular.forEach(items,function(value,key){
                                 var fatherName = "";
                                 var familyMembers = [];
+                                var maritalStatus = null;
+                                var spouseFirstName = null;;
                                 Enrollment.getCustomerById({id:value.customerId},function(resp,head){
 
                                     fatherName = resp.fatherFirstName;
                                     familyMembers = resp.familyMembers;
+                                    maritalStatus = resp.maritalStatus;
+                                    spouseFirstName = resp.spouseFirstName;
                                 },function(resp){}).$promise.finally(function(){
 
                                     var uname = value.firstName;
@@ -349,9 +374,9 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                         firstName:uname,
                                         husbandOrFatherFirstName:fatherName,
                                         relation:"Father",
-                                        _familyMembers:familyMembers
-
-
+                                        _familyMembers:familyMembers,
+                                        maritalStatus: maritalStatus,
+                                        spouseFirstName:spouseFirstName
                                     });
                                     console.log(key);
                                     if(key >= (items.length-1)){
@@ -657,6 +682,6 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                 }
                 return deferred.promise;
             }
-    
+
         }
 }]);

@@ -46,7 +46,7 @@
 			"pageId": null
 		}
 	},
-	"Page/EngineOffline/AssetsLiabilitiesAndHealth": {
+	"Page/Offline/AssetsLiabilitiesAndHealth": {
 		"title": "HOUSE_VERIFICATION_OFFLINE",
 		"iconClass": "fa fa-save",
 		"directAccess": true,
@@ -303,6 +303,17 @@
 			"pageId": null
 		}
 	},
+	"Page/Engine/customer360.Recapture": {
+		"title": "RECAPTURE_FINGERPRINT",
+		"shortTitle": "RECAPTURE",
+		"iconClass": "fa fa-hand-pointer-o",
+		"directAccess": true,
+		"state": "Page.Engine",
+		"stateParams": {
+			"pageName": "customer360.Recapture",
+			"pageId": null
+		}
+	},
 	"Page/CustomerHistory": {
 		"title": "CUSTOMER_HISTORY",
 		"shortTitle": "HISTORY",
@@ -335,5 +346,45 @@
 			"pageId": null
 		}
 
+	},
+	"Page/Offline/Cgt1": {
+		"title": "CGT_1_OFFLINE",
+		"iconClass": "fa fa-tasks",
+		"directAccess": true,
+		"state": "Page.EngineOffline",
+		"stateParams": {
+			"pageName": "Cgt1",
+			"pageId": null
+		}
+	},
+	"Page/Offline/Cgt2": {
+		"title": "CGT_2_OFFLINE",
+		"iconClass": "fa fa-tasks",
+		"directAccess": true,
+		"state": "Page.EngineOffline",
+		"stateParams": {
+			"pageName": "Cgt2",
+			"pageId": null
+		}
+	},
+	"Page/Offline/Cgt3": {
+		"title": "CGT_3_OFFLINE",
+		"iconClass": "fa fa-tasks",
+		"directAccess": true,
+		"state": "Page.EngineOffline",
+		"stateParams": {
+			"pageName": "Cgt3",
+			"pageId": null
+		}
+	},
+	"Page/Offline/Grt": {
+		"title": "GRT_OFFLINE",
+		"iconClass": "fa fa-tasks",
+		"directAccess": true,
+		"state": "Page.EngineOffline",
+		"stateParams": {
+			"pageName": "Grt",
+			"pageId": null
+		}
 	}
 }
