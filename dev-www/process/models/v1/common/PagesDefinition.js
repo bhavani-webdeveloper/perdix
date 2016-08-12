@@ -1,12 +1,20 @@
-irf.models.factory('PagesDefinition', ["$resource", "BASE_URL", "$q", function($resource, BASE_URL, $q){
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries",
+    function($resource, $log, BASE_URL, $q, Queries){
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
-        getRoleAllowedPageList: {
+        getPagesJson: {
             method:'GET',
             url:'process/pages.json'
         },
     });
+
+    pDef.getRoleAllowedPageList = function(userid) {
+        //var deferred = $q.defer();
+        //return Queries.getPagesDefinition(userid);
+        return pDef.getPagesJson().$promise;
+        //return deferred.promise;
+    };
 
     var userAllowedPages = null;
 
@@ -48,7 +56,8 @@ irf.models.factory('PagesDefinition', ["$resource", "BASE_URL", "$q", function($
             deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
         } else {
             // TODO: get role for the user & get real role allowed list
-            pDef.getRoleAllowedPageList().$promise.then(function(response){
+            pDef.getRoleAllowedPageList(userid).then(function(response){
+                //$log.info(response);
                 delete response.$promise;
                 delete response.$resolved;
                 userAllowedPages = response;

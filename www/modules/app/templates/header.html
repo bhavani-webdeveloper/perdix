@@ -20,6 +20,12 @@
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <!-- TODO to be removed. for perdix 7 compatibility -->
+                    <li class="dropdown notifications-menu">
+                        <a href="" class="dropdown-toggle" onclick="parent.switchApp()">
+                            <strong>7</strong>
+                        </a>
+                    </li>
                     <!-- Colors: style cannot ;) be found in dropdown.less -->
                     <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">

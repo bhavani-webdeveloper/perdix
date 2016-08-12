@@ -10,11 +10,9 @@ irf.pages.controller("PageLandingCtrl",
 		"title": "FAVORITES",
 		"items": [
 			"Page/Engine/CustomerSearch",
-			"Page/Engine/ProfileInformation",
-			"Page/Engine/CBCheckStatusQueue",
-			"Page/Engine/EnrollmentHouseVerificationQueue",
-			"Page/Engine/CentrePaymentCollection",
-			"Page/GroupDashboard"
+			"Page/Engine/loans.individual.PendingClearingQueue",
+			"Page/Engine/loans.individual.PendingCashQueue",
+			"Page/Engine/loans.individual.BounceQueue"
 		]
 	};
 

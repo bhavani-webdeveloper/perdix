@@ -1,7 +1,8 @@
 irf.pageCollection.factory("Pages__UserProfile",
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper",
-function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, irfElementsConfig,PageHelper) {
+	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal",
+function($log, $q, SessionStore, languages, $translate, PM,
+	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -41,10 +42,20 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 		form: [{
 			type: "box",
 			title: "PROFILE_INFORMATION",
-			readonly: true,
 			items: [
-				"profile.login",
-				"profile.firstName"
+				{
+					key: "profile.login",
+					readonly: true
+				},
+				{
+					key: "profile.firstName",
+					readonly: true
+				},
+				{
+					title: "EDIT_FAVORITES",
+					type: "button",
+					onClick: "actions.editFavorites(model, formCtrl, form)"
+				}
 			]
 		},{
 			type: "box",
@@ -119,6 +130,23 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 				}
 				// deferred.reject();
 				return deferred.promise;
+			},
+			editFavorites: function(model, formCtrl, form) {
+				var titleHtml = '<i class="fa fa-heart">&nbsp;</i>Choose Favorites';
+				var bodyHtml = '\
+<div class="row">\
+	<div class="small-box bg-theme" style="cursor:pointer;">\
+		<div class="inner">\
+			<h3><i class="fa fa-tasks"></i></h3>\
+			<p>title</p>\
+		</div>\
+		<div class="icon"><i class="fa fa-tasks"></i></div>\
+	</div>\
+</div>\
+				';
+				irfSimpleModal(titleHtml, bodyHtml).opened.then(function(){
+					
+				});
 			}
 		},
 		schema: {

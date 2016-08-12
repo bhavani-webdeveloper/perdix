@@ -12,7 +12,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		var opened = $('.page-row>.page-form .box-col.opened');
 		// opened.css('top', opened.attr('boxtop'));
 		// opened.css({'position':'absolute', 'top':opened.attr('boxtop')});
-		opened.find('.box-body').removeClass('in');
+		opened.find('.box-body').collapse("hide");
 		opened.find('.box-header').css('height', '60px');
 		opened.addClass('closed').removeClass('opened');
 
@@ -45,7 +45,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 		box.css({'position':'static', 'top':'0'});
 		box.find('.box-header').css('height', 'auto');
-		box.find('.box-body').addClass('in');
+		box.find('.box-body').collapse("show");
 		box.addClass('opened').removeClass('closed');
 		var closed = $('.page-row>.page-form .box-col.closed');
 		var closedTitles = [];
@@ -81,7 +81,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		var actionboxcols = $('.page-row>.page-form .action-box-col');
 		// boxcols.find('.btn-box-tool').attr('data-widget', '').hide();
 		boxcols.addClass('closed');
-		boxcols.find('.box-body').removeClass('in');
+		boxcols.find('.box-body').collapse("hide");
 		boxcols.find('.box-header').css('height', '60px').removeAttr('data-toggle');
 		/*var top = 0;
 		boxcols.each(function(item){
@@ -123,7 +123,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		var boxcols = $('.page-row>.page-form .box-col');
 		var actionboxcols = $('.page-row>.page-form .action-box-col');
 		boxcols.removeClass('opened closed minimized').css({'position':'static', 'top':'', 'bottom':'', 'z-index':''});
-		boxcols.find('.box-body:not(.in)').addClass('in');
+		boxcols.find('.box-body:not(.in)').collapse("show");
 		boxcols.find('.box-header').attr('data-toggle', 'collapse').css('height', 'auto').off('click');
 		boxcols.show();
 
@@ -131,6 +131,8 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 		$('#bottom-card-selector').remove();
 		$('section.content').css('min-height', '250px');
+
+		$scope.$apply(function(){$scope.collapsedView = false;});
 	};
 
 	var isBoxLayout = false;
@@ -150,19 +152,14 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				}
 				isBoxLayout = true;
 			}
-			if ($scope.showCollapsedViewButton) {
-				$timeout(function(){$scope.collapsedView = false; $scope.showCollapsedViewButton = false;});
-			}
 		} else {
-			if (!$scope.showCollapsedViewButton) {
-				$timeout(function(){$scope.collapsedView = false; $scope.showCollapsedViewButton = true;});
-			}
 			$('.content-wrapper').css({'height':'', 'overflow':''});
 			if (isBoxLayout) {
 				removeBoxLayout();
 				isBoxLayout = false;
 			}
 		}
+		$scope.$apply(function(){$scope.showCollapsedViewButton = !isBoxLayout;});
 	};
 
 	$scope.showCollapsedViewButton = true;
@@ -187,19 +184,19 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		});
 	};
 
-	var expandCollapseView = function() {
-		if (!$scope.showCollapsedViewButton)
-			return;
-		$scope.collapsedView = !$scope.collapsedView;
-		if ($scope.collapsedView) {
-			var boxes = $('.page-row>.page-form .box-col');
-			boxes.find('.box-body').collapse("hide");
+	$scope.$watch('collapsedView', function(n, o){
+		if (n) {
+			$('.page-row>.page-form .box-col').find('.box-body').collapse("hide");
 		} else {
 			$('.page-row>.page-form .box-col .box-body').collapse("show");
 		}
-	};
+	});
 
-	$scope.expandCollapseView = expandCollapseView;
+	$scope.expandCollapseView = function() {
+		if (!$scope.showCollapsedViewButton)
+			return;
+		$scope.collapsedView = !$scope.collapsedView;
+	};
 
 	/* =================================================================================== */
 	$log.info("Page.Engine.html loaded");
@@ -241,7 +238,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			});
 			$scope.$on('sf-render-finished', function(event){
 				$log.warn("on sf-render-finished on page, rendering layout");
-				//setTimeout(renderLayout);
+				setTimeout(renderLayout);
 			});
 		} else if ($scope.page.type == 'search-list') {
 			$scope.model = entityManager.getModel($scope.pageName);

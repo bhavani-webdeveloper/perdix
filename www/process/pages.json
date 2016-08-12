@@ -303,6 +303,17 @@
 			"pageId": null
 		}
 	},
+	"Page/Engine/customer360.Recapture": {
+		"title": "RECAPTURE_FINGERPRINT",
+		"shortTitle": "RECAPTURE",
+		"iconClass": "fa fa-hand-pointer-o",
+		"directAccess": true,
+		"state": "Page.Engine",
+		"stateParams": {
+			"pageName": "customer360.Recapture",
+			"pageId": null
+		}
+	},
 	"Page/CustomerHistory": {
 		"title": "CUSTOMER_HISTORY",
 		"shortTitle": "HISTORY",

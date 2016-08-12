@@ -1523,10 +1523,6 @@
                         ]
                     }
                 },
-                "verified":{
-                    "type":"boolean",
-                    "title":"House Number Verified"
-                },
 
                 "villageName": {
                     "type": "string",
@@ -1566,9 +1562,7 @@
                 "place",
                 "religion",
                 "state",
-                "villageName",
-                "verifications",
-                "verified"
+                "villageName"
             ]
         },
         "enrollmentAction": {

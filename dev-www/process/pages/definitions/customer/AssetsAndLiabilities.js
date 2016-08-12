@@ -80,7 +80,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         }
 
                         model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-
                         try {
                             if (model.customer.verifications.length < 1) {
                                 model.customer.verifications = [
@@ -102,8 +101,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                 }
                             ];
                         }
-
                         model = Utils.removeNulls(model,true);
+
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
 
@@ -157,6 +156,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
+                    startEmpty: true,
                     items: [
                         {
                             key:"customer.familyMembers[].customerId",
@@ -258,6 +258,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
+                            startEmpty: true,
                             items:[
                                 {
                                     key: "customer.familyMembers[].incomes[].incomeSource",
@@ -415,25 +416,28 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             {
                 "type": "box",
                 "title": "T_ASSETS",
-                "items": [{
-                    key: "customer.physicalAssets",
-                    type: "array",
-                    items: [
-                        {
-                            key:"customer.physicalAssets[].ownedAssetDetails",
-                            type:"select"
+                "items": [
+                    {
+                        key: "customer.physicalAssets",
+                        type: "array",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key:"customer.physicalAssets[].ownedAssetDetails",
+                                type:"select"
 
-                        },
-                        "customer.physicalAssets[].numberOfOwnedAsset",
-                        {
-                            key:"customer.physicalAssets[].ownedAssetValue",
-                        }
-                    ]
-                },
+                            },
+                            "customer.physicalAssets[].numberOfOwnedAsset",
+                            {
+                                key:"customer.physicalAssets[].ownedAssetValue",
+                            }
+                        ]
+                    },
                     {
                         key: "customer.financialAssets",
                         title:"FINANCIAL_ASSETS",
                         type: "array",
+                        startEmpty: true,
                         items: [
                             {
                                 key:"customer.financialAssets[].instrumentType",
@@ -471,6 +475,7 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         key:"customer.liabilities",
                         type:"array",
+                        startEmpty: true,
                         title:"FINANCIAL_LIABILITIES",
                         items:[
                             {
@@ -518,6 +523,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     {
                         type: "button",
                         title: "CAPTURE_FINGERPRINT",
+                        notitle: true,
+                        fieldHtmlClass: "btn-block",
                         onClick: function(model, form, formName){
                             var promise = BiometricService.capture(model);
                             promise.then(function(data){
@@ -748,12 +755,12 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                     reqData['enrollmentAction'] = 'PROCEED';
 
                     irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.');
-                    reqData.customer.verified = false;
+
+                    reqData.customer.verified = true;
                     if (reqData.customer.hasOwnProperty('verifications')){
                         var verifications = reqData.customer['verifications'];
                         for (var i=0; i<verifications.length; i++){
                             if (verifications[i].houseNoIsVerified){
-                                reqData.customer.verified = true;
                                 verifications[i].houseNoIsVerified=1;
                             }
                             else{
@@ -761,7 +768,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                             }
                         }
                     }
-
                     try{
                         for(var i=0;i<reqData.customer.familyMembers.length;i++){
                             var incomes = reqData.customer.familyMembers[i].incomes;

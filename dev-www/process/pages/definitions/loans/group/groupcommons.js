@@ -218,7 +218,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].relation",
                                     "readonly":readonly,
-                                    "type":"radios",
+                                    "type":"select",
                                     "titleMap":{
                                         "Father":"Father",
                                         "Husband":"Husband"
@@ -233,6 +233,27 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].loanPurpose1",
                                     "type":"select",
+                                    onChange: function(modelValue, form, model) {
+                                        $log.info(modelValue);
+                                    },
+                                    readonly:readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].loanPurpose2",
+                                    "type":"select",
+                                    "parentEnumCode": "loan_purpose_1",
+                                    /*"filter": {
+                                        "parentCode as loan_purpose_1": "model.jlgGroupMembers[arrayIndex].loanPurpose1"
+                                    },*/
+                                    readonly:readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].loanPurpose3",
+                                    "type":"select",
+                                    "parentEnumCode": "loan_purpose_2",
+                                    /*"filter": {
+                                        "parentCode as loan_purpose_2": "model.jlgGroupMembers[arrayIndex].loanPurpose2"
+                                    },*/
                                     readonly:readonly
                                 },
                                 {
