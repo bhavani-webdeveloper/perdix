@@ -1,6 +1,6 @@
-irf.pageCollection.factory("Pages__CustomerSearch",
-["$log", "formHelper", "Enrollment","$state", "SessionStore",
-function($log, formHelper, Enrollment,$state, SessionStore){
+irf.pageCollection.factory(irf.page("CustomerSearch"),
+["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
+function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"id": "CustomerSearch",
@@ -91,18 +91,9 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 				}
 			},
 			listOptions: {
+				selectable: true,
+				expandable: true,
 				itemCallback: function(item, index) {
-					$log.info(item);
-					if (item.currentStage==='Stage01') {
-						$state.go("Page.Engine",{
-							pageName:"ProfileInformation",
-							pageId:item.id
-						});
-					} else {
-						$state.go("Page.Customer360",{
-							pageId:item.id
-						});
-					}
 				},
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0){
@@ -112,15 +103,19 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 				},
 				getListItem: function(item){
 					return [
-						item.firstName + " " + (item.lastName!=null?item.lastName:""),
+						Utils.getFullName(item.firstName, item.middleName, item.lastName),
 						'Customer ID : ' + item.id,
-						null
+						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
+							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
+						"{{'BRANCH'|translate}} : " + item.kgfsName,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
 					]
 				},
 				getActions: function(){
 					return [
 						{
-							name: "Edit/Enroll Customer",
+							name: "Enroll Customer",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
@@ -132,33 +127,43 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 							isApplicable: function(item, index){
 								if (item.currentStage==='Stage01')
 									return true;
-								else return false;
+								return false;
 							}
 						},
 						{
-							name: "Edit Enrollment",
+							name: "Do House Verification",
 							desc: "",
-							icon: "fa fa-pencil",
+							icon: "fa fa-house",
 							fn: function(item, index){
 								$state.go("Page.Engine",{
-									pageName:"CustomerRUD",
-									pageId:item.id,
-									pageData:{
-										intent:'EDIT'
-									}
+									pageName:"AssetsLiabilitiesAndHealth",
+									pageId:item.id
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage01')
-									return false;
-								else return true;
+								if (item.currentStage==='Stage02')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Customer 360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, index){
+								$state.go("Page.Customer360",{
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								return false;
 							}
 						}
 					];
 				}
 			}
-
-
 		}
 	};
 }]);
