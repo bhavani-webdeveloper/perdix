@@ -7,7 +7,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
         "id": "RejectedDisburse",
         "type": "schema-form",
         "name": "RejectedDisburse",
-        "title": "Reject Loan Application",
+        "title": "Update Acccount Details",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
@@ -23,7 +23,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
         },
         form: [{
             "type": "box",
-            "title": "REJECTION DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
@@ -60,7 +60,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Record Rejection For Account"
+                        "title": "Submit"
                     }]
                 }
             ]

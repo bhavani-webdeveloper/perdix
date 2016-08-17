@@ -5,7 +5,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "id": "DisbursementQueue",
         "type": "search-list",
         "name": "Disbursement Queue",
-        "title": "DISBURSEMENT QUEUE",
+        "title": "TRANCHE DISBURSEMENT QUEUE",
         "subTitle": "",
         //"uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
@@ -35,15 +35,8 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
             return promise;
         },
         definition: {
-            title: "Filter Loan List",
+            title: "Filter Tranche List",
             autoSearch: true,
-            sorting:true,
-            sortByColumns:{
-                "sanction_date":"Sanction Date",
-                "disbursement_date":"Disbursement Date",
-                "branch":"Branch",
-                "centre":"Centre"
-            },
             searchForm: [
                 "*"
             ],
@@ -167,7 +160,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 getActions: function(){
                     return [
                         {
-                            name: "Disburse",
+                            name: "Update Details",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");

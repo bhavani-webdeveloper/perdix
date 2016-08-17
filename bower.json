@@ -38,8 +38,8 @@
     "pikaday": "~1.4.0",
     "Swipe": "swipe#~2.0.0",
     "angular-ladda": "~0.3.4",
-    "irf-elements": "dev",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "irf-elements": "svn+http://115.113.193.106/svn/perdix/irf-common-elements#v8.1.x-kinara_dev"
   },
   "overrides": {
     "admin-lte": {
@@ -51,7 +51,7 @@
       ]
     },
     "irf-elements": {
-        "main": []
+      "main": []
     },
     "datatables": {
       "main": [

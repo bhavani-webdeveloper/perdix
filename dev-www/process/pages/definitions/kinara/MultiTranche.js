@@ -7,12 +7,10 @@ irf.pageCollection.factory("Pages__MultiTranche",
         "id": "MultiTranche",
         "type": "schema-form",
         "name": "MultiTranche",
-        "title": "Multi Tranche Disbursement",
+        "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
-
-            model.tranche_no="3";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -20,25 +18,24 @@ irf.pageCollection.factory("Pages__MultiTranche",
         },
         form: [{
             "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "TRANCHE 3 | DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "tranche_no",
-                    "title": "Tranche Number",
+                    "key": "bank_name",
+                    "title": "Tranche Details",
+                    "type": "textarea"
                 },
                 {
-                    "key": "sign_date",
-                    "title": "Cust Sign Date",
-                    "type": "date",
-                    "required": true
-                },
-                {
-                    "key": "disbursement_date",
+                    "key": "branch_name",
                     "title": "Disbursement Date",
-                    "type": "date",
-                    "required": true
+                    "type": "date"
+                },
+                {
+                    "key": "branch_name",
+                    "title": "Customer Sign Date",
+                    "type": "date"
                 },
                 {
                     "key": "branch_name",
@@ -49,6 +46,9 @@ irf.pageCollection.factory("Pages__MultiTranche",
                     "items": [{
                         "type": "submit",
                         "title": "Send For FRO Verification"
+                    },{
+                        "type": "submit",
+                        "title": "Reset"
                     }]
                 }
             ]
