@@ -37,6 +37,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         definition: {
             title: "Filter Loan List",
             autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "sanction_date":"Sanction Date",
+                "disbursement_date":"Disbursement Date",
+                "branch":"Branch",
+                "centre":"Centre"
+            },
             searchForm: [
                 "*"
             ],

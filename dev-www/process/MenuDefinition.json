@@ -35,6 +35,17 @@
 
 			]
 		},
+		{
+			"title": "LOANS",
+			"iconClass": "fa fa-users",
+			"items":[
+				"Page/LoansDashboard",
+				"Page/Engine/loans.individual.LoanBookingQueue",
+				"Page/Engine/loans.individual.PendingClearingQueue",
+				"Page/Engine/loans.individual.PendingCashQueue",
+				"Page/Engine/loans.individual.BounceQueue"
+			]
+		},
 		"Page/Engine/CentrePaymentCollection"
 	]
 }

@@ -5,7 +5,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "id": "PendingDocumentGeneration",
         "type": "search-list",
         "name": "PendingDocumentGeneration",
-        "title": "Pending Document Generation",
+        "title": "Pending Document Execution",
         "subTitle": "",
         "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
@@ -37,6 +37,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         definition: {
             title: "Choose Loan Type",
             autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "sanction_date":"Sanction Date",
+                "disbursement_date":"Disbursement Date",
+                "branch":"Branch",
+                "centre":"Centre"
+            },
             searchForm: [
                 "*"
             ],

@@ -23,8 +23,8 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "sign_off_date",
-                    "title": "Cust SignOff Date",
+                    "key": "sign_date",
+                    "title": "Cust Sign Date",
                     "type": "date",
                     "required": true
                 },
@@ -45,7 +45,7 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
                 },
                 {
                     "type": "submit",
-                    "title": "Create Loan Account"
+                    "title": "Submit"
                 }
             ]
         }],

@@ -11,8 +11,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
 
     pDef.getRoleAllowedPageList = function(userid) {
         //var deferred = $q.defer();
-        //return Queries.getPagesDefinition(userid);
-        return pDef.getPagesJson().$promise;
+        return Queries.getPagesDefinition(userid);
+        //return pDef.getPagesJson().$promise;
         //return deferred.promise;
     };
 

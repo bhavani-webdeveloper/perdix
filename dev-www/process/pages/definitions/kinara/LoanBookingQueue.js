@@ -37,6 +37,12 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         definition: {
             title: "Choose Loan Type",
             autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
             searchForm: [
                 "*"
             ],
@@ -90,6 +96,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     "branch_name": {
                         "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"

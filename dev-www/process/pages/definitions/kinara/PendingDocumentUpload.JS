@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("PendingDocumentUpload"),
         "id": "PendingDocumentUpload",
         "type": "schema-form",
         "name": "PendingDocumentUpload",
-        "title": "Document Generation & Upload | Ravi S | Key Metals Pvt. Ltd.",
+        "title": "Document Execution | Ravi S | Key Metals Pvt. Ltd.",
         "subTitle": " Loan ID:8725678 | Hubli branch | Rs. 20,00,00",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");

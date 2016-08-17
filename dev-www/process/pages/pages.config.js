@@ -39,6 +39,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.GroupDashboard.html",
 		controller: "PageGroupDashboardCtrl"
 	},{
+		name: "Page.LoansDashboard",
+		url: "/LoansDashboard",
+		templateUrl: "process/pages/templates/Page.LoansDashboard.html",
+		controller: "LoansDashboardCtrl"
+	},{
 		name: "Page.ManagementDashboard",
 		url: "/ManagementDashboard",
 		templateUrl: "process/pages/templates/Page.ManagementDashboard.html",

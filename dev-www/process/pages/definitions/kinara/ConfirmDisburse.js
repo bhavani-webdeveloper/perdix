@@ -12,8 +12,11 @@ irf.pageCollection.factory("Pages__ConfirmDisburse",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
 
-            model.branch_name="Confirmed";
-            model.account_number="05/08/2016";
+            model.confirmation_status="Rejected";
+            model.disbursement_date="05-Aug-2016";
+            model.reject_remarks="Capture IFSC code from the customer";
+            model.reject_reason="Incorrect IFSC code";
+            model.rejected_date="07-Aug-2016";
 
         },
         offline: false,
@@ -22,36 +25,36 @@ irf.pageCollection.factory("Pages__ConfirmDisburse",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Disbursement Details | 508640108845 | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 
                 {
-                    "key": "branch_name",
+                    "key": "confirmation_status",
                     "title": "Confirmation Status"
                 },
                 {
-                    "key": "account_number",
+                    "key": "disbursement_date",
                     "title": "Disbursement Date"
                 },
                 {
-                    "key": "account_number2",
-                    "title": "Finance Team Rejection Remarks"
+                    "key": "reject_reason",
+                    "title": "Rejection Reasons"
                 },
                 {
-                    "key": "account_number3",
-                    "title": "Finance Team Rejection Reasons"
+                    "key": "reject_remarks",
+                    "title": "Rejection Remarks"
                 },
                 {
-                    "key": "account_number3",
-                    "title": "Finance Team Rejected Date"
+                    "key": "rejected_date",
+                    "title": "Rejected Date"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm Disbursement"
+                        "title": "Update Status"
                     }]
                 }
             ]

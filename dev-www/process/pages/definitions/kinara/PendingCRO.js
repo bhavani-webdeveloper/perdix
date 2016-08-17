@@ -7,10 +7,13 @@ irf.pageCollection.factory("Pages__PendingCRO",
         "id": "PendingCRO",
         "type": "schema-form",
         "name": "PendingCRO",
-        "title": "PENDING FOR CRO (CENTRAL RISK OFFICER) APPROVAL",
+        "title": "CRO Approval",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("CRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.cro_requested_date="08-Aug-2016";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -18,26 +21,29 @@ irf.pageCollection.factory("Pages__PendingCRO",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
-                    "type": "textarea"
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
                 },
                 {
-                    "key": "branch_name",
-                    "title": "FRO Remarks"
+                    "key": "FRO_remarks",
+                    "title": "Remarks"
                 },
                 {
-                    "key": "account_number",
-                    "title": "Verification Date",
+                    "key": "CRO_remarks",
+                    "title": "Remarks"
+                },
+                {
+                    "key": "cro_requested_date",
+                    "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "status",
+                    "key": "cro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -46,22 +52,36 @@ irf.pageCollection.factory("Pages__PendingCRO",
                             }
                 },
                 {
-                    "key": "reject_reason",
+                    "key": "cro_reject_reason",
                     "title": "CRO Approve Remarks",
                     "type": "select"
                 },
                 {
-                    "key": "reject_remarks",
-                    "title": "CRO Rejection Remarks"
+                    "key": "cro_reject_remarks",
+                    "title": "CRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "fro.latitude",
+                    "longitude": "fro.longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm CRO Approval/Rejection"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
+                        "title": "Submit"
                     }]
                 }
             ]

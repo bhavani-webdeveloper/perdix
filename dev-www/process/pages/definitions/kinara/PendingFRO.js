@@ -7,10 +7,13 @@ irf.pageCollection.factory("Pages__PendingFRO",
         "id": "PendingFRO",
         "type": "schema-form",
         "name": "PendingFRO",
-        "title": "PENDING FOR FRO(FIELD RISK OFFICER) APPROVAL",
+        "title": "FRO Approval",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("FRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.fro_requested_date="08-Aug-2016";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -18,31 +21,25 @@ irf.pageCollection.factory("Pages__PendingFRO",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
-                    "type": "textarea"
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
                 },
                 {
-                    "key": "branch_name",
+                    "key": "FRO_remarks",
                     "title": "Remarks"
                 },
                 {
-                    "key": "account_number",
-                    "title": "Hub Manager Verification Date",
+                    "key": "fro_requested_date",
+                    "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "account_number",
-                    "title": "FRO Verification Date",
-                    "type": "date"
-                },
-                {
-                    "key": "status",
+                    "key": "fro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -51,22 +48,36 @@ irf.pageCollection.factory("Pages__PendingFRO",
                             }
                 },
                 {
-                    "key": "reject_reason",
+                    "key": "fro_reject_reason",
                     "title": "FRO Approve Remarks",
                     "type": "select"
                 },
                 {
-                    "key": "reject_remarks",
-                    "title": "FRO Rejection Remarks"
+                    "key": "fro_reject_remarks",
+                    "title": "FRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "latitude",
+                    "longitude": "longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm FRO Approval/Rejection"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
+                        "title": "Submit"
                     }]
                 }
             ]
