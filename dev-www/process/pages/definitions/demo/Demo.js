@@ -1,4 +1,4 @@
-irf.pageCollection.factory("Pages__Demo",
+irf.pageCollection.factory(irf.page("Demo"),
 ["$log", "Enrollment", "SessionStore","Files",
     function($log, Enrollment, SessionStore,Files){
 
@@ -11,7 +11,8 @@ irf.pageCollection.factory("Pages__Demo",
             initialize: function (model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
 
-
+                model.address = model.address || {};
+                model.address.streetAddress = "Stt";
 
                 Files.getBase64DataFromFileId(
                     '482acbaf-0090-4168-adca-76aaba818d5a',
