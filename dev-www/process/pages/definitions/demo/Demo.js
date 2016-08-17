@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("Demo"),
+irf.pageCollection.factory(irf.page("demo.Demo"),
 ["$log", "Enrollment", "SessionStore","Files",
     function($log, Enrollment, SessionStore,Files){
 
