@@ -41,7 +41,11 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                             }
 
                         },
-                        "phoneNumber"
+                        "phoneNumber",
+                        {
+                            type: "section",
+                            html: "<i>asdf</i>{{model.address.streetAddress}}"
+                        }
                     ]
                 }
 
