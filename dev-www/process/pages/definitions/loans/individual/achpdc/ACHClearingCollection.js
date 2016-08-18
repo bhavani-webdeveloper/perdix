@@ -1,12 +1,7 @@
-irf.pageCollection.factory(irf.page("ACHCollections"),
-["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
-
-    
-
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
+["$log", "SessionStore",'Utils', function($log, SessionStore, Utils) {
     return {
-        "id": "ACHCollections",
         "type": "schema-form",
-        "name": "ACHCollections",
         "title": "ACH Collections",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
