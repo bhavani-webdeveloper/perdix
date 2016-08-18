@@ -1,5 +1,5 @@
 irf.pageCollection.factory("Pages__LoanBookingScreen",
-["$log", "Enrollment", "SessionStore", function($log, Enrollment, SessionStore){
+["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
 
     var branch = SessionStore.getBranch();
 
@@ -23,14 +23,14 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "sign_date",
-                    "title": "Cust Sign Date",
+                    "key": "loanAccount.customerSignatureDate",
+                                    "title": "Cust Sign Date",
                     "type": "date",
                     "required": true
                 },
                 {
-                    "key": "disbursement_date",
-                    "title": "Disbursement Date",
+                    "key": "loanAccount.scheduledDisbursementDate",
+                    "title": "DISBURSEMENT_DATE",
                     "type": "date",
                     "required": true
                 }/*,
@@ -40,12 +40,12 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
                     "type": "date"
                 }*/,
                 {
-                    "key": "acct_no",
-                    "title": "Account Number"
+                    "key": "loanAccount.accountNumber",
+                    "title": "ACCOUNT_NUMBER"
                 },
                 {
                     "type": "submit",
-                    "title": "Submit"
+                    "title": "SUBMIT"
                 }
             ]
         }],
@@ -54,7 +54,8 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
         },
         actions: {
             submit: function(model, form, formName){
-
+                $log.info("Redirecting");
+                $state.go('Page.Engine', {pageName: 'PendingDocumentUpload', pageId: 'PendingDocumentUpload'});
             }
         }
     };

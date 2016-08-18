@@ -7,7 +7,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "name": "Loan Booking Queue",
         "title": "LOAN BOOKING QUEUE",
         "subTitle": "",
-        "uri":"Customer Enrollment/Stage 2",
+        "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
@@ -35,7 +35,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
             return promise;
         },
         definition: {
-            title: "Choose Loan Type",
+            title: "LOAN_TYPE",
             autoSearch: true,
             sorting:true,
             sortByColumns:{
@@ -48,7 +48,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
             ],
             searchSchema: {
                 "type": 'object',
-                "title": 'SearchOptions',
+                "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
                     /*
@@ -74,35 +74,35 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     */
                     "customer_name": {
-                        "title": "Customer Name",
+                        "title": "CUSTOMER_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
                         }
                     },
                     "entity_name": {
-                        "title": "Entity Name",
+                                        "title": "INSTITUTE_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
                         }
                     },
                     "sanction_date": {
-                        "title": "Sanction Date",
+                                        "title": "Sanction Date",
                         "type": "string",
                         "x-schema-form": {
                             "type": "date"
                         }
                     },
                     "branch_name": {
-                        "title": "Branch Name",
+                        "title": "BRANCH_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
                         }
                     },
                     "centre_name": {
-                        "title": "Centre Name",
+                                        "title": "Centre Name",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
@@ -155,7 +155,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 itemCallback: function(item, index) {
                     $log.info(item);
                     $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                    $state.go('Page.Engine', {pageName: 'LoanBookingScreen', pageId: item.id});
                 },
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -177,12 +177,9 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'LoanBookingScreen', pageId: item.id});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }
