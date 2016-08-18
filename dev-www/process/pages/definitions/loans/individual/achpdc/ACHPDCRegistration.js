@@ -1,4 +1,4 @@
-irf.pageCollection.factory("Pages__ACH_PDC",
+irf.pageCollection.factory(irf.Page("loans.individual.ACHPDCRegistration"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
