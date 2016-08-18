@@ -1,187 +1,173 @@
-irf.pageCollection.factory(irf.page("loans.individual.DepositQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+irf.pageCollection.factory("Pages__DepositQueue",
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig", function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig){
+
+    var branch = SessionStore.getBranch();
+
     return {
         "id": "DepositQueue",
-        "type": "search-list",
-        "name": "Deposit Cash",
-        "title": "Deposit Cash Collected",
-        //"subTitle": "T_ENROLLMENTS_PENDING",
+        "type": "schema-form",
+        "name": "DepositQueue",
+        "title": "Deposit Stage",
+        "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            $log.info("Individual Loan Booking Page got initialized");
+            model.loggedInUser = SessionStore.getUsername();
+
+            model.pendingCashDeposits = [{
+                "loan_ac_no":"5010001229342345",
+                "customer_name":"Srilakshmi",
+                "amount_collected":1200
+            },
+            {
+                "loan_ac_no":"5010001229342322",
+                "customer_name":"Janardhan",
+                "amount_collected":1100
+            },
+            {
+                "loan_ac_no":"5010001229347869",
+                "customer_name":"Krishna",
+                "amount_collected":800
+            },
+            {
+                "loan_ac_no":"5010001229341122",
+                "customer_name":"Raju",
+                "amount_collected":2000
+            }];
+            //this.form[0].items=[];
+
+            /*this.form[0].items.push({
+                "type":"section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-xs-8",
+                    "items": [{
+                        "type": "section",
+                        "html": "<H4>{{'Loan Account Number' | translate}}</H4>"
+                    }]
+                },
+                {
+                    "type": "section",
+                    "htmlClass": "col-xs-4",
+                    "items": [{
+                        "type": "section",
+                        "html": "<H4>{{'Amount collected' | translate}}</H4>"
+                    }]
+                }]
+            });*/
+            var totalAmount=0;
+            for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
+                totalAmount+=model.pendingCashDeposits[i].amount_collected;
+
+            }
+            this.form[0].items.push({
+                "type":"section",
+                "html":"<hr>"
+            },
+            {
+                "type":"section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-xs-8",
+                    "items": [{
+                        "type": "section",
+                        "html": "<strong>{{'Total' | translate}}</strong>"
+                    }]
+                },
+                {
+                    "type": "section",
+                    "htmlClass": "col-xs-4",
+                    "items": [{
+                        "type": "section",
+                        "html": "<strong>" + irfElementsConfig.currency.iconHtml + "&nbsp;" + totalAmount + "</strong>"
+                    }]
+                }]
+            },
+            {
+                "type":"section",
+                "html":"<hr>"
+            },
+            {
+                "type":"submit",
+                "title":"Submit"
+            });
+
         },
-        /*offline: true,
+        offline: false,
         getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
+            
         },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },*/
-        definition: {
-            title: "Search Cash Payments to be deposited",
-            searchForm: [
-                "*"
-            ],
-            autoSearch:true,
-            searchSchema: {
-                "type": 'object',
-                "title": 'SearchOptions',
-                "required":["branch"],
-                "properties": {
-                    "loan_no": {
-                        "title": "Loan Account Number",
-                        "type": "string"
-                    },
-                    "amount_collected": {
-                        "title": "Amount Collected",
-                        "type": "string"
-                    },
-                    /*"kyc_no": {
-                        "title": "KYC_NO",
-                        "type": "string"
-                    },
-                    "branch": {
-                        "title": "BRANCH_NAME",
-                        "type": "string",
-                        "enumCode": "branch",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },*/
-                    "centre": {
-                        "title": "CENTRE",
-                        "type": "string",
-                        "enumCode": "centre",
-                        "x-schema-form": {
-                            "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
-                        }
-                    }
-                }
-            },
-            getSearchFormHelper: function() {
-                return formHelper;
-            },
-            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
-                    'branchName': searchOptions.branch,
-                    'centreCode': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
-                    'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
-                }).$promise;
-
-
-                return $q.resolve({
-                    headers: {
-                        'x-total-count': 3
-                    },
-                    body:[
-                        {
-                            custname:"Kanimozhi",
-                            loanacno:"508640101335",
-                            paymenttype:"Cash",
-                            amountdue:"1232",
-                            installmentdate:"03-03-2016",
-                            p2pdate:"15-03-2016"
-                        },
-                        {
-                            custname:"Sudha",
-                            loanacno:"508640108276",
-                            paymenttype:"Cash",
-                            amountdue:"1176",
-                            installmentdate:"02-03-2016",
-                            p2pdate:""
-                        },
-                        {
-                            custname:"Rajesh",
-                            loanacno:"508651508978",
-                            paymenttype:"Cash",
-                            amountdue:"3683",
-                            installmentdate:"05-03-2016",
-                            p2pdate:""
-                        }
-                    ]
-                });
-            },
-            paginationOptions: {
-                "viewMode": "page",
-                "getItemsPerPage": function(response, headers){
-                    return 3;
+        form: [{
+            "type": "box",
+            "titleExpr": "'Cash to be deposited by '+ model.loggedInUser", // sample label code
+            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "items": [
+            {
+                "type":"section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-xs-8",
+                    "items": [{
+                        "type": "section",
+                        "html": "<H4>{{'Loan Account Number' | translate}}</H4>"
+                    }]
                 },
-                "getTotalItemsCount": function(response, headers){
-                    return headers['x-total-count']
-                }
+                {
+                    "type": "section",
+                    "htmlClass": "col-xs-4",
+                    "items": [{
+                        "type": "section",
+                        "html": "<H4>{{'Amount collected' | translate}}</H4>"
+                    }]
+                }]
             },
-            listOptions: {
-                /*itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },*/
-                getItems: function(response, headers){
-                    if (response!=null && response.length && response.length!=0){
-                        return response;
-                    }
-                    return [];
-                },
-                getListItem: function(item){
-                    return [
-                        item.custname,
-                        'Loan Number : ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue
-                    ]
-                },
-                getActions: function(){
-                    return [
-                        {
-                            name: "Pay Cash",
-                            desc: "",
-                            fn: function(item, index){
-                                $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'Repayment', pageId: item.loanacno});
-                            },
-                            isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
-                                return true;
-                            }
-                        },
-                        {
-                            name: "Promise to Pay",
-                            desc: "",
-                            fn: function(item, index){
-                                $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'Promise2Pay', pageId: item.loanacno});
-                            },
-                            isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
-                                return true;
-                            }
-                        }
-                    ];
-                }
+            {
+                "type":"array",
+                "key":"pendingCashDeposits",
+                "add":null,
+                "remove":null,
+                "view": "fixed",
+                "readonly":true,
+                "notitle":true,
+                "items":[{
+                    "type":"section",
+                    "htmlClass": "row",
+                    "items": [{
+                        "type": "section",
+                        "htmlClass": "col-xs-8",
+                        "items": [{
+                            "key":"pendingCashDeposits[].loan_ac_no",
+                            "notitle":true
+                        },{
+                            "key":"pendingCashDeposits[].customer_name",
+                            "notitle":true
+                        }]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "col-xs-4",
+                        "items": [{
+                            "key": "pendingCashDeposits[].amount_collected",
+                            "type":"amount",
+                            "notitle":true
+                        }]
+                    }]
+                }]
+            }
+            ]
+        }],
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                    $state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });
             }
         }
     };
