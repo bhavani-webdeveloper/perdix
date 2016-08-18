@@ -1,6 +1,6 @@
 irf.pageCollection.factory("Pages__LoanBookingQueue",
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoanProcess",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanProcess){
     return {
         "id": "LoanBookingQueue",
         "type": "search-list",
@@ -10,8 +10,9 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
-            model.stage = 'Stage02';
+            model.branchName = SessionStore.getBranch();
+            model.stage = 'LoanBooking';
+            console.log(model);
         },
 
         offline: false,
@@ -36,7 +37,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         },
         definition: {
             title: "LOAN_TYPE",
-            autoSearch: true,
+            autoSearch: false,
             sorting:true,
             sortByColumns:{
                 "name":"Customer Name",
@@ -94,14 +95,14 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             "type": "date"
                         }
                     },
-                    "branch_name": {
+                    "branchName": {
                         "title": "BRANCH_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
                         }
                     },
-                    "centre_name": {
+                    "centreCode": {
                                         "title": "Centre Name",
                         "type": "string",
                         "x-schema-form": {
@@ -114,33 +115,39 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                var out = {
-                    body: [
-                        {
-                            "name": "Ajay Karthik | GKB Industries Ltd.",
-                            "loan_amount": "7,50,000",
-                            "cycle": "5607891 | Belgaum branch",
-                            "sanction_date": "12/07/2016"
-                        },
-                        {
-                            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                            "loan_amount": "20,00,00",
-                            "cycle": "8725678 | Hubli branch",
-                            "sanction_date": "17/07/2016"
-                        },
-                        {
-                            "name":"Kaushik G | HPL",
-                            "loan_amount": "30,00,000",
-                            "cycle": "9057328 | Trichy branch",
-                            "sanction_date": "01/07/2016"
-                        }
-                    ],
-                    headers: {
-                        "method": "GET",
-                        "x-total-count": 20
-                    }
-                }
-                return $q.resolve(out)
+                return IndividualLoanProcess.search({
+                    'stage': 'LoanBooking',
+                    'branchName': searchOptions.branchName,
+                    'centreCode': searchOptions.centreCode,
+                    'customerId': searchOptions.customerId
+                }).$promise;
+                //var out = {
+                //    body: [
+                //        {
+                //            "name": "Ajay Karthik | GKB Industries Ltd.",
+                //            "loan_amount": "7,50,000",
+                //            "cycle": "5607891 | Belgaum branch",
+                //            "sanction_date": "12/07/2016"
+                //        },
+                //        {
+                //            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                //            "loan_amount": "20,00,00",
+                //            "cycle": "8725678 | Hubli branch",
+                //            "sanction_date": "17/07/2016"
+                //        },
+                //        {
+                //            "name":"Kaushik G | HPL",
+                //            "loan_amount": "30,00,000",
+                //            "cycle": "9057328 | Trichy branch",
+                //            "sanction_date": "01/07/2016"
+                //        }
+                //    ],
+                //    headers: {
+                //        "method": "GET",
+                //        "x-total-count": 20
+                //    }
+                //}
+                //return $q.resolve(out)
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -167,7 +174,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     return [
                         item.name,
                         "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.cycle                        
+                        item.cycle
                     ]
                 },
                 getActions: function(){
