@@ -22,18 +22,13 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
             "colClass":"col-xs-12",
             // sample label code
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [   {
-                         "type": "fieldset",
-                         
-                             "items": [
-                            {
-                            "type": "tabs", 
-                            "tabs": [
-                       {
+            "items": [{
+                "type": "fieldset",
+                "items": [{
+                    "type": "tabs", 
+                    "tabs": [{
                         "title": "ACH Registration",
-                    "type": "fieldset",
-                   "key": "instrument",
-                    items: [{
+                        "items": [{
                             "key": "ach.accountHolderName",
                             "title": "Account Holder Name"
                         },
@@ -163,10 +158,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
                 },
                 
                 {
-                    "type": "fieldset",
+                    
                     "title": "PDC Registration",
-                      "key": "instrument",
-                    items: [{
+                     
+                    "items": [{
                             "key": "branch_id",
                             "title": "Branch ID"
                         },
