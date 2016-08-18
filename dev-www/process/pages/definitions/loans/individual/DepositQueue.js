@@ -55,12 +55,12 @@ irf.pageCollection.factory("Pages__DepositQueue",
                     }]
                 }]
             });*/
-            var totalAmount=0;
+            model.totalAmount=0;
             for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-                totalAmount+=model.pendingCashDeposits[i].amount_collected;
+                model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
 
             }
-            this.form[0].items.push({
+            /*this.form[0].items.push({
                 "type":"section",
                 "html":"<hr>"
             },
@@ -79,7 +79,7 @@ irf.pageCollection.factory("Pages__DepositQueue",
                     "type": "section",
                     "htmlClass": "col-xs-4",
                     "items": [{
-                        "type": "section",
+                        "type": "amount",
                         "html": "<strong>" + irfElementsConfig.currency.iconHtml + "&nbsp;" + totalAmount + "</strong>"
                     }]
                 }]
@@ -91,7 +91,7 @@ irf.pageCollection.factory("Pages__DepositQueue",
             {
                 "type":"submit",
                 "title":"Submit"
-            });
+            });*/
 
         },
         offline: false,
@@ -101,29 +101,9 @@ irf.pageCollection.factory("Pages__DepositQueue",
         form: [{
             "type": "box",
             "titleExpr": "'Cash to be deposited by '+ model.loggedInUser", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
-            {
-                "type":"section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-xs-8",
-                    "items": [{
-                        "type": "section",
-                        "html": "<H4>{{'Loan Account Number' | translate}}</H4>"
-                    }]
-                },
-                {
-                    "type": "section",
-                    "htmlClass": "col-xs-4",
-                    "items": [{
-                        "type": "section",
-                        "html": "<H4>{{'Amount collected' | translate}}</H4>"
-                    }]
-                }]
-            },
             {
                 "type":"array",
                 "key":"pendingCashDeposits",
@@ -137,25 +117,62 @@ irf.pageCollection.factory("Pages__DepositQueue",
                     "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "col-xs-8",
+                        "htmlClass": "col-xs-8 col-md-8",
                         "items": [{
-                            "key":"pendingCashDeposits[].loan_ac_no",
-                            "notitle":true
-                        },{
                             "key":"pendingCashDeposits[].customer_name",
-                            "notitle":true
+                            "titleExpr":"model.pendingCashDeposits[arrayIndex].loan_ac_no",
+                            "title":" "
                         }]
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-4",
+                        "htmlClass": "col-xs-4 col-md-4",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
                             "type":"amount",
-                            "notitle":true
+                            "title": " "
                         }]
                     }]
                 }]
+            },
+            {
+                "type":"section",
+                "html":"<hr>"
+            },
+            {
+                "type":"section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-12",
+                    "items": [{
+                        "type": "amount",
+                        "key": "totalAmount",
+                        "title":"Total to be Deposited",
+                        "readonly":true
+                    }]
+                }]
+            },
+            {
+                "key":"amountDeposited",
+                "type":"amount",
+                "title":"Amount Deposited"
+            },
+            {
+                "key":"depositBank",
+                "title":"Deposited Bank"
+            },
+            {
+                "key":"depositBranch",
+                "title":"Deposited Branch"
+            },
+            {
+                "type":"section",
+                "html":"<hr>"
+            },
+            {
+                "type":"submit",
+                "title":"Submit"
             }
             ]
         }],
