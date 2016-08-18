@@ -149,7 +149,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 itemCallback: function(item, index) {
                     $log.info(item);
                     $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                    $state.go('Page.Engine', {pageName: 'DocumentVerification', pageId: item.id});
                 },
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -185,7 +185,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'DocumentVerification', pageId: item.id});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){

@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("PendingDocumentUpload"),
-["$log", "Enrollment", "SessionStore", function($log, Enrollment, SessionStore){
+["$log", "Enrollment", "SessionStore", "$state", function($log, Enrollment, SessionStore, $state){
 
     
 
@@ -86,6 +86,8 @@ irf.pageCollection.factory(irf.page("PendingDocumentUpload"),
         },
         actions: {
             submit: function(model, form, formName){
+                $log.info("Redirecting");
+                $state.go('Page.Engine', {pageName: 'PendingDocumentVerification', pageId: ''});
             },
             approve:function(model,form){
                 alert("Approved");

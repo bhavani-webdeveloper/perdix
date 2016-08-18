@@ -50,7 +50,7 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
             ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return SchemaResource.getGlobalSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
