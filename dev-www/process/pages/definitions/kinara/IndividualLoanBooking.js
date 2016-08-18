@@ -1,5 +1,5 @@
 irf.pageCollection.factory("Pages__IndividualLoanBooking",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", "SchemaResource", function($log, Enrollment, SessionStore,$state,$stateParams, SchemaResource){
 
     var branch = SessionStore.getBranch();
 
@@ -10,12 +10,12 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
         "title": "Loan Booking Page",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
-            model.customer.urnNo="1234567890";
+            //$log.info("Individual Loan Booking Page got initialized");
+            //model.customer.urnNo="1234567890";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
+
         },
         form: [{
             "type": "box",
@@ -26,7 +26,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
             {
                 "type": "fieldset",
                 "title": "Product Details",
-                
+
 
             "items": [
                 {
@@ -74,8 +74,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
                 "title": "Account Details",
                 "items": [
                 {
-                    "key": "customer.firstName",
-                    "title": "Loan Amount"
+                    "key": "loanAccount.loanAmount"
                 },
                 {
                     "key": "customer.lastName",
@@ -262,7 +261,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
                 ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return SchemaResource.getGlobalSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
