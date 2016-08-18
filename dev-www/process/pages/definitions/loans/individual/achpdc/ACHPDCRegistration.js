@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.Page("loans.individual.ACHPDCRegistration"),
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
@@ -19,113 +19,153 @@ irf.pageCollection.factory(irf.Page("loans.individual.ACHPDCRegistration"),
         },
         form: [{
             "type": "box",
-            "title": "LOAN ACCOUNT DETAILS", // sample label code
-            "colClass": "col-sm-8", // col-sm-6 is default, optional
+            "colClass":"col-xs-12",
+            // sample label code
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "instrument",
-                    "title": "Repayment instrument",
-                    "type": "select",
-                    "titleMap": {
-                        "1": "ACH",
-                        "2": "PDC"
-                    }
-                },
-                {
+            "items": [   {
+                         "type": "fieldset",
+                         
+                             "items": [
+                            {
+                            "type": "tabs", 
+                            "tabs": [
+                       {
+                        "title": "ACH Registration",
                     "type": "fieldset",
-                    "condition": "model.instrument == '2'",
+                   "key": "instrument",
                     items: [{
-                            "key": "branch_id",
-                            "title": "Branch ID"
+                            "key": "ach.accountHolderName",
+                            "title": "Account Holder Name"
                         },
                         {
-                            "key": "frequency",
-                            "title": "Account ID"
+                            "key": "ach.accountType",
+                            "title": "Account Type"
                         },
                         {
-                            "key": "customer.name",
-                            "title": "Repayment Frequency ",
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Monthly",
-                                "2": "Quarterly"
-                            }   
+                            "key": "ach.amount",
+                            "title": "Amount",
+                            "type": "Number"
+                          
                         },
                         {
-                            "key": "entity.name",
-                            "title": "Loan Booking date",
+                            "key": "ach.consumerReferenceNumber",
+                            "title": "Consumer Reference Number"
+                        },
+                        {
+                            "key": "ach.customerAdditionalInformation",
+                            "title": "Customer Additional Information"
+                       },
+                        {
+                            "key": "ach.debitAmtOF",
+                            "title": "Debit Amount OF"
+                        },
+                        {
+                            "key": "ach.emailId",
+                            "title": "E-mail Id"
+                        },
+                        {
+                            "key": "ach.endDate",
+                            "title": "End Date",
                             "type": "date"
                         },
                         {
-                            "key": "customer.urnNo",
-                            "title": "Bank Name",
-                            "type": "select"
+                            "key": "ach.frequency",
+                            "title": "Cheque Date"
                         },
                         {
-                            "key": "loan.repayment",
-                            "title": "Branch ID",
-                            "type": "select"
+                            "key": "ach.id",
+                            "title": "Id",
+                            "type":"Number"
                         },
                         {
-                            "key": "customer.firstName",
-                            "title": "Bank account No"
+                            "key": "ach.ifscCode",
+                            "title": "IFSC Code"
                         },
                         {
-                            "key": "customer.lastName",
-                            "title": "Cheque No"
+                            "key": "ach.initialRejectReason",
+                            "title": "Initial Reject Reason"
                         },
                         {
-                            "key": "loan.amount",
-                            "title": "Cheque Date",
-                            "type": "date"
+                            "key": "ach.legalAccountNumber",
+                            "title": "Legal Account Number"
                         },
                         {
-                            "key": "loan_purpose",
-                            "title": "Instalment Number"
+                            "key": "ach.loanAccountNumber",
+                            "title": "Loan Account Number"
                         },
                         {
-                            "key": "loan_purpose2",
-                            "title": "Number of Cheques"
+                            "key": "ach.mandateDate",
+                            "title": "Mandate Date"
                         },
                         {
-                            "key": "center.name",
-                            "title": "Cheque Amount"
+                            "key": "ach.micrCode",
+                            "title": "Micro Code"
                         },
                         {
-                            "key": "loan_tenure",
-                            "title": "Instrument Type",
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Normal PDC",
-                                "2": "Pre- EMI PDC",
-                                "3": "Security PDC"
-                            }
+                            "key": "ach.mobilNumber",
+                            "title": "Mobil Number"
                         },
                         {
-                            "key": "loan_tenure",
-                            "title": "Data Created By",
-                            "type": "date"
+                            "key": "ach.nameOfTheDestinationBankWithBranch",
+                            "title": "Name Of The Destination Bank With Branch"
                         },
                         {
-                            "key": "loan_tenure",
-                            "title": "Created On",
-                            "type": "date"
+                            "key": "ach.nameOfUtilityBillerBankCompany",
+                            "title": "Name Of Utility Biller Bank Company"
                         },
                         {
-                            "key": "loan_tenure",
-                            "title": "Data Edited By"
+                            "key": "ach.processedOnWithUmrn",
+                            "title": "Processed On With UMRN"
                         },
                         {
-                            "key": "loan_tenure",
-                            "title": "Edited Date ",
-                            "type": "date"
+                            "key": "ach.rejectionCode",
+                            "title": "Rejection Code"
+                        },
+                        {
+                            "key": "ach.rejectionReason",
+                            "title": "Rejection Reason"
+                        },
+                        {
+                            "key": "ach.schemPlanReferenceNo",
+                            "title": "Scheme Plan Reference Number"
+                        },
+                        {
+                            "key": "ach.sponsorBankCode",
+                            "title": "Sponsor Bank Code"
+                        },
+                        {
+                            "key": "ach.startDate",
+                            "title": "Start Data",
+                            "type":"date"
+                        },
+                        {
+                            "key": "ach.telephoneNo",
+                            "title": "Telephone Number"
+                        },
+                        {
+                            "key": "ach.umnrNo",
+                            "title": "UMNR Number"
+                        },
+                        {
+                            "key": "ach.uptoMaximumAmt",
+                            "title": "Upto Maximum Amount",
+                            "type": "Number"
+                        },
+                        {
+                            "key": "ach.utilityCode",
+                            "title": "Utility Code"
+                        },
+                        {
+                            "key": "ach.version",
+                            "title": "Version",
+                            "type": "Number"
                         }]
                 },
                 
                 {
                     "type": "fieldset",
-                    "condition": "model.instrument == '1'",
+                    "title": "PDC Registration",
+                      "key": "instrument",
                     items: [{
                             "key": "branch_id",
                             "title": "Branch ID"
@@ -204,16 +244,20 @@ irf.pageCollection.factory(irf.Page("loans.individual.ACHPDCRegistration"),
                             "title": "Last Instalment Date",
                             "type": "date"
                         }]
-                },
-                {
+                }
+                
+            ]
+        }]
+    }]
+        },
+     
+        {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
                         "title": "Save Details",
                     }]
-                }
-            ]
-        }],
+                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
