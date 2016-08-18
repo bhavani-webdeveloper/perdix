@@ -111,10 +111,26 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
+$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
+    "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
+    "        <a class=\"{{ item.style ? item.style : 'color-theme' }} {{form.fieldHtmlClass}}\"\n" +
+    "            href=\"\"\n" +
+    "            ng-href=\"{{form.href}}\"\n" +
+    "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
+    "            ng-disabled=\"form.readonly\">\n" +
+    "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
+    "            {{form.title | translate}}\n" +
+    "        </a>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body form-horizontal array-box\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\" id=\"{{pid}}\" ng-init=\"pid=form.key.join('_')\">\n" +
     "  <div schema-form-array-items sf-field-model=\"ng-repeat\" ng-repeat=\"item in $$value$$ track by $index\" class=\"array-box-theme panel {{form.fieldHtmlClass}}\" ng-init=\"id=pid+'_'+($index+1)\" ng-class=\"{'array-box-last':$last}\">\n" +
     "    <h4 class=\"box-title box-title-theme\">\n" +
-    "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
+    "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ form.notitle ? \"\": ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
     "          <a ng-click=\"$emit('irfSfDeleteFromArray', [$index, (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate))])\"><i class=\"fa fa-close\"></i></a>\n" +
@@ -140,7 +156,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "      <h3 class=\"box-title\">{{form.title | translate}}</h3>\n" +
+    "      <h3 class=\"box-title\">{{form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate)}}</h3>\n" +
     "    </div>\n" +
     "    <div class=\"box-body form-horizontal collapse in\" id=\"{{id}}\">\n" +
     "      <sf-decorator ng-repeat=\"item in form.items\" form=\"item\" class=\"ng-scope\"></sf-decorator>\n" +
@@ -149,7 +165,8 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "</div>")
 
 $templateCache.put("irf/template/adminlte/button.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"></label>\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
     "        <button class=\"btn {{ item.style ? item.style : 'btn-theme' }} {{form.fieldHtmlClass}}\"\n" +
     "                type=\"submit\"\n" +
@@ -567,22 +584,6 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -611,6 +612,22 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -679,22 +696,59 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "  <input type=\"file\" id=\"{{::id}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
     "</div>")
 
+$templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\">{{ 'Pick' | translate }} - {{ form.title | translate }}</h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\">\n" +
+    "        <irf-sf\n" +
+    "          ng-if=\"inputForm.length\"\n" +
+    "          irf-form-name=\"formName\"\n" +
+    "          irf-schema=\"inputSchema\"\n" +
+    "          irf-form=\"inputForm\"\n" +
+    "          irf-actions=\"inputActions\"\n" +
+    "          irf-model=\"inputModel\"\n" +
+    "          irf-helper=\"inputFormHelper\"\n" +
+    "        ></irf-sf>\n" +
+    "        <h4 ng-if=\"inputForm.length && listDisplayItems.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
+    "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
+    "        </h4>\n" +
+    "        <irf-list-view\n" +
+    "          list-style=\"basic\"\n" +
+    "          list-info=\"listViewOptions\"\n" +
+    "          irf-list-items=\"listDisplayItems\"\n" +
+    "          irf-list-actual-items=\"listResponseItems\"\n" +
+    "          callback=\"callback(item)\"></irf-list-view>\n" +
+    "      </div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "        <!-- <button type=\"button\" class=\"btn btn-theme\" ng-click=\"$close()\">Save changes</button> -->\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
     "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
-    "            ng-click=\"selectable ? (actualItem.selected = !actualItem.selected) : (expandable ? expand($event) : cb({item:actualItem,index:itemIndex}))\">\n" +
+    "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
     "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
-    "            <p ng-if=\"item.length > 1\" ng-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
-    "            <p ng-if=\"item.length > 2\" ng-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "        </div>\n" +
-    "        <div class=\"checkbox\" ng-if=\"selectable\">\n" +
+    "        <div class=\"checkbox\" ng-if=\"selectable\" ng-click=\"actualItem.selected = !actualItem.selected\">\n" +
     "            <label class=\"checkbox-inline checkbox-theme\">\n" +
     "                <input type=\"checkbox\"\n" +
     "                       ng-model=\"actualItem.selected\">\n" +
     "                <span class=\"control-indicator\"></span>\n" +
     "            </label>\n" +
     "        </div>\n" +
-    "        <div class=\"list-context-menu\" ng-if=\"actions.length && !selectable\">\n" +
+    "        <div class=\"list-context-menu\" ng-if=\"actions.length\">\n" +
     "            <div class=\"dropdown irf-action-dropdown\">\n" +
     "                <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
     "                    <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
@@ -798,42 +852,6 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "            expandable=\"listInfo.expandable\"\n" +
     "        ></irf-list-view-item>\n" +
     "    </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\">{{ 'Pick' | translate }} - {{ form.title | translate }}</h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\">\n" +
-    "        <irf-sf\n" +
-    "          ng-if=\"inputForm.length\"\n" +
-    "          irf-form-name=\"formName\"\n" +
-    "          irf-schema=\"inputSchema\"\n" +
-    "          irf-form=\"inputForm\"\n" +
-    "          irf-actions=\"inputActions\"\n" +
-    "          irf-model=\"inputModel\"\n" +
-    "          irf-helper=\"inputFormHelper\"\n" +
-    "        ></irf-sf>\n" +
-    "        <h4 ng-if=\"inputForm.length && listDisplayItems.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
-    "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
-    "        </h4>\n" +
-    "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
-    "          list-info=\"listViewOptions\"\n" +
-    "          irf-list-items=\"listDisplayItems\"\n" +
-    "          irf-list-actual-items=\"listResponseItems\"\n" +
-    "          callback=\"callback(item)\"></irf-list-view>\n" +
-    "      </div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "        <!-- <button type=\"button\" class=\"btn btn-theme\" ng-click=\"$close()\">Save changes</button> -->\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
     "</div>")
 
 $templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
@@ -1186,7 +1204,8 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "biometric": "biometric.html",
         "qrcode": "qrcode.html",
         "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html"
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
     };
 
     angular.forEach(irfAdminlteUI, function(value, key){
@@ -2584,8 +2603,12 @@ angular.module('irf.listView', ['irf.elements.commons'])
 		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
 	}
 
+	$scope.expanded = false;
 	$scope.expand = function($event) {
-
+		if ($scope.item && $scope.item.length > 3) {
+			$scope.expandItems = $scope.item.slice(3);
+			$scope.expanded = !$scope.expanded;
+		}
 	}
 }])
 ;
@@ -3281,7 +3304,51 @@ function($log, $q, $scope){
 			sfc.push({
 				"type": "section",
 				"html": "<hr/>"
-			},{
+			});
+			if ($scope.definition.sorting && $scope.definition.sortByColumns) {
+				sfc.push({
+					"type": "section",
+					"htmlClass": "row",
+					"items": [{
+						"type": "section",
+						"htmlClass": "col-xs-10",
+						"items": [{
+							"key": "sortBy",
+							"type":"select",
+							"title": "SORT_BY",
+							"titleMap": $scope.definition.sortByColumns
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "col-xs-2",
+						"items": [{
+							"type":"anchor",
+							"notitle":true,
+							"title": "",
+							"icon": "fa fa-sort-amount-asc",
+							"onClick": function (model, formCtrl, form, event) {
+								if (form.icon == "fa fa-sort-amount-asc") {
+									form.icon = "fa fa-sort-amount-desc";
+									if (model.sortBy && !_.startsWith(model.sortBy, '-')) {
+										try {
+											//$scope.searchForm[0].
+										} catch (e) {}
+										var v = $scope.definition.sortByColumns[model.sortBy];
+										model.sortBy = '-' + model.sortBy;
+										$scope.definition.sortByColumns[model.sortBy] = v;
+									}
+								} else {
+									form.icon = "fa fa-sort-amount-asc";
+									if (model.sortBy && _.startsWith(model.sortBy, '-')) {
+										model.sortBy = model.sortBy.slice(1);
+									}
+								}
+							}
+						}]
+					}]
+				});
+			}
+			sfc.push({
 				"type": "actions",
 				"notitle": true,
 				"items": actions
@@ -5865,8 +5932,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
 
     pDef.getRoleAllowedPageList = function(userid) {
         //var deferred = $q.defer();
-        //return Queries.getPagesDefinition(userid);
-        return pDef.getPagesJson().$promise;
+        return Queries.getPagesDefinition(userid);
+        //return pDef.getPagesJson().$promise;
         //return deferred.promise;
     };
 
@@ -6006,7 +6073,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	};
 
 	/*
-		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
+		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, p.allow_edit allowEdit from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
 	*/
 
 	resource.getPagesDefinition = function(userId) {
@@ -6025,6 +6092,9 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 						"stateParams": {
 							"pageName": v.pageName,
 							"pageId": v.pageId
+						},
+						"config": {
+							"allowEdit": v.allowEdit
 						}
 					};
 					if (v.addlParams) {
@@ -6468,6 +6538,11 @@ irf.pages.config([
 		url: "/GroupDashboard",
 		templateUrl: "process/pages/templates/Page.GroupDashboard.html",
 		controller: "PageGroupDashboardCtrl"
+	},{
+		name: "Page.LoansDashboard",
+		url: "/LoansDashboard",
+		templateUrl: "process/pages/templates/Page.LoansDashboard.html",
+		controller: "LoansDashboardCtrl"
 	},{
 		name: "Page.ManagementDashboard",
 		url: "/ManagementDashboard",
@@ -6920,8 +6995,9 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
 
 irf.pageCollection.factory("Pages__UserProfile",
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper",
-function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, irfElementsConfig,PageHelper) {
+	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal",
+function($log, $q, SessionStore, languages, $translate, PM,
+	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -6961,10 +7037,20 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 		form: [{
 			type: "box",
 			title: "PROFILE_INFORMATION",
-			readonly: true,
 			items: [
-				"profile.login",
-				"profile.firstName"
+				{
+					key: "profile.login",
+					readonly: true
+				},
+				{
+					key: "profile.firstName",
+					readonly: true
+				},
+				{
+					title: "EDIT_FAVORITES",
+					type: "button",
+					onClick: "actions.editFavorites(model, formCtrl, form)"
+				}
 			]
 		},{
 			type: "box",
@@ -7039,6 +7125,23 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 				}
 				// deferred.reject();
 				return deferred.promise;
+			},
+			editFavorites: function(model, formCtrl, form) {
+				var titleHtml = '<i class="fa fa-heart">&nbsp;</i>Choose Favorites';
+				var bodyHtml = '\
+<div class="row">\
+	<div class="small-box bg-theme" style="cursor:pointer;">\
+		<div class="inner">\
+			<h3><i class="fa fa-tasks"></i></h3>\
+			<p>title</p>\
+		</div>\
+		<div class="icon"><i class="fa fa-tasks"></i></div>\
+	</div>\
+</div>\
+				';
+				irfSimpleModal(titleHtml, bodyHtml).opened.then(function(){
+					
+				});
 			}
 		},
 		schema: {
@@ -7126,7 +7229,7 @@ function($log, $q, SessionStore, languages, $translate, PM, irfStorageService, i
 	}
 }]);
 
-irf.pageCollection.factory("Pages__Demo",
+irf.pageCollection.factory(irf.page("demo.Demo"),
 ["$log", "Enrollment", "SessionStore","Files",
     function($log, Enrollment, SessionStore,Files){
 
@@ -7139,7 +7242,8 @@ irf.pageCollection.factory("Pages__Demo",
             initialize: function (model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
 
-
+                model.address = model.address || {};
+                model.address.streetAddress = "Stt";
 
                 Files.getBase64DataFromFileId(
                     '482acbaf-0090-4168-adca-76aaba818d5a',
@@ -7382,9 +7486,9 @@ function($log, formHelper, Enrollment, $state, SessionStore){
 	};
 }]);
 
-irf.pageCollection.factory("Pages__CustomerSearch",
-["$log", "formHelper", "Enrollment","$state", "SessionStore",
-function($log, formHelper, Enrollment,$state, SessionStore){
+irf.pageCollection.factory(irf.page("CustomerSearch"),
+["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
+function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"id": "CustomerSearch",
@@ -7475,18 +7579,9 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 				}
 			},
 			listOptions: {
+				selectable: true,
+				expandable: true,
 				itemCallback: function(item, index) {
-					$log.info(item);
-					if (item.currentStage==='Stage01') {
-						$state.go("Page.Engine",{
-							pageName:"ProfileInformation",
-							pageId:item.id
-						});
-					} else {
-						$state.go("Page.Customer360",{
-							pageId:item.id
-						});
-					}
 				},
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0){
@@ -7496,15 +7591,19 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 				},
 				getListItem: function(item){
 					return [
-						item.firstName + " " + (item.lastName!=null?item.lastName:""),
+						Utils.getFullName(item.firstName, item.middleName, item.lastName),
 						'Customer ID : ' + item.id,
-						null
+						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
+							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
+						"{{'BRANCH'|translate}} : " + item.kgfsName,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
 					]
 				},
 				getActions: function(){
 					return [
 						{
-							name: "Edit/Enroll Customer",
+							name: "Enroll Customer",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
@@ -7516,33 +7615,43 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 							isApplicable: function(item, index){
 								if (item.currentStage==='Stage01')
 									return true;
-								else return false;
+								return false;
 							}
 						},
 						{
-							name: "Edit Enrollment",
+							name: "Do House Verification",
 							desc: "",
-							icon: "fa fa-pencil",
+							icon: "fa fa-house",
 							fn: function(item, index){
 								$state.go("Page.Engine",{
-									pageName:"CustomerRUD",
-									pageId:item.id,
-									pageData:{
-										intent:'EDIT'
-									}
+									pageName:"AssetsLiabilitiesAndHealth",
+									pageId:item.id
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage01')
-									return false;
-								else return true;
+								if (item.currentStage==='Stage02')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Customer 360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, index){
+								$state.go("Page.Customer360",{
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								return false;
 							}
 						}
 					];
 				}
 			}
-
-
 		}
 	};
 }]);
@@ -16826,6 +16935,786 @@ function($log, formHelper, Enrollment, $state, SessionStore){
     };
 }]);
 
+irf.pageCollection.factory("Pages__MultiTrancheQueue",
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "LoanBookingQueue",
+        "type": "search-list",
+        "name": "MultiTranche Queue",
+        "title": "Multi Tranche Queue",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                        {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "Tranche": "2 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "Tranche": "3 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "Tranche": "2 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.Tranche                        
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Book Loan",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory("Pages__PendingFROQueue",
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "PendingFROQueue",
+        "type": "search-list",
+        "name": "FRO Queue",
+        "title": "FRO Queue",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                        {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "Tranche": "2 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "Tranche": "3 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "Tranche": "2 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.Tranche                        
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Update Status",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'PendingFRO', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory("Pages__PendingCROQueue",
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "PendingCROQueue",
+        "type": "search-list",
+        "name": "CRO Queue",
+        "title": "CRO Queue",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                        {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "Tranche": "2 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "Tranche": "3 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "Tranche": "2 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'PendingCRO', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.Tranche                        
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Update Status",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'PendingCRO', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory("Pages__EMIScheduleGenQueue",
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "EMIScheduleGenQueue",
+        "type": "search-list",
+        "name": "EMI Schedule Generation Queue",
+        "title": "EMI Schedule Generation Queue",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                        {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "Tranche": "2 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "Tranche": "3 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "Tranche": "2 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'GenerateEMISchedule', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.Tranche                        
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Generate EMI",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'GenerateEMISchedule', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
 irf.pageCollection.factory(irf.page("loans.individual.PendingClearingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
@@ -17644,6 +18533,195 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 			}
 		}
 	};
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.DepositQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "DepositQueue",
+        "type": "search-list",
+        "name": "Deposit Cash",
+        "title": "Deposit Cash Collected",
+        //"subTitle": "T_ENROLLMENTS_PENDING",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+        },
+        /*offline: true,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },*/
+        definition: {
+            title: "Search Cash Payments to be deposited",
+            searchForm: [
+                "*"
+            ],
+            autoSearch:true,
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    "loan_no": {
+                        "title": "Loan Account Number",
+                        "type": "string"
+                    },
+                    "amount_collected": {
+                        "title": "Amount Collected",
+                        "type": "string"
+                    },
+                    /*"kyc_no": {
+                        "title": "KYC_NO",
+                        "type": "string"
+                    },
+                    "branch": {
+                        "title": "BRANCH_NAME",
+                        "type": "string",
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },*/
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": "string",
+                        "enumCode": "centre",
+                        "x-schema-form": {
+                            "type": "select",
+                            "filter": {
+                                "parentCode as branch": "model.branch"
+                            }
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+                var promise = Enrollment.search({
+                    'branchName': searchOptions.branch,
+                    'centreCode': searchOptions.centre,
+                    'firstName': searchOptions.first_name,
+                    'lastName': searchOptions.last_name,
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,
+                    'stage': "Stage02"
+                }).$promise;
+
+
+                return $q.resolve({
+                    headers: {
+                        'x-total-count': 3
+                    },
+                    body:[
+                        {
+                            custname:"Kanimozhi",
+                            loanacno:"508640101335",
+                            paymenttype:"Cash",
+                            amountdue:"1232",
+                            installmentdate:"03-03-2016",
+                            p2pdate:"15-03-2016"
+                        },
+                        {
+                            custname:"Sudha",
+                            loanacno:"508640108276",
+                            paymenttype:"Cash",
+                            amountdue:"1176",
+                            installmentdate:"02-03-2016",
+                            p2pdate:""
+                        },
+                        {
+                            custname:"Rajesh",
+                            loanacno:"508651508978",
+                            paymenttype:"Cash",
+                            amountdue:"3683",
+                            installmentdate:"05-03-2016",
+                            p2pdate:""
+                        }
+                    ]
+                });
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 3;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                /*itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },*/
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.custname,
+                        'Loan Number : ' + item.loanacno,
+                        'Amount Due: ' + item.amountdue
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Pay Cash",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'Repayment', pageId: item.loanacno});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        },
+                        {
+                            name: "Promise to Pay",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'Promise2Pay', pageId: item.loanacno});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
 }]);
 
 irf.pageCollection.factory('Pages_ManagementHelper', ["$state", "$q",function($state, $q){
@@ -18876,6 +19954,12 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         definition: {
             title: "Choose Loan Type",
             autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
             searchForm: [
                 "*"
             ],
@@ -18929,6 +20013,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     "branch_name": {
                         "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "centre_name": {
+                        "title": "Centre Name",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
@@ -19026,7 +20117,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "id": "DisbursementQueue",
         "type": "search-list",
         "name": "Disbursement Queue",
-        "title": "DISBURSEMENT QUEUE",
+        "title": "TRANCHE DISBURSEMENT QUEUE",
         "subTitle": "",
         //"uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
@@ -19056,7 +20147,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
             return promise;
         },
         definition: {
-            title: "Filter Loan List",
+            title: "Filter Tranche List",
             autoSearch: true,
             searchForm: [
                 "*"
@@ -19181,7 +20272,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 getActions: function(){
                     return [
                         {
-                            name: "Disburse",
+                            name: "Update Details",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
@@ -19298,7 +20389,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
         "id": "RejectedDisburse",
         "type": "schema-form",
         "name": "RejectedDisburse",
-        "title": "Reject Loan Application",
+        "title": "Update Acccount Details",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
@@ -19314,7 +20405,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
         },
         form: [{
             "type": "box",
-            "title": "REJECTION DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
@@ -19351,7 +20442,7 @@ irf.pageCollection.factory("Pages__RejectedDisburse",
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Record Rejection For Account"
+                        "title": "Submit"
                     }]
                 }
             ]
@@ -19383,8 +20474,11 @@ irf.pageCollection.factory("Pages__ConfirmDisburse",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
 
-            model.branch_name="Confirmed";
-            model.account_number="05/08/2016";
+            model.confirmation_status="Rejected";
+            model.disbursement_date="05-Aug-2016";
+            model.reject_remarks="Capture IFSC code from the customer";
+            model.reject_reason="Incorrect IFSC code";
+            model.rejected_date="07-Aug-2016";
 
         },
         offline: false,
@@ -19393,36 +20487,36 @@ irf.pageCollection.factory("Pages__ConfirmDisburse",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Disbursement Details | 508640108845 | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 
                 {
-                    "key": "branch_name",
+                    "key": "confirmation_status",
                     "title": "Confirmation Status"
                 },
                 {
-                    "key": "account_number",
+                    "key": "disbursement_date",
                     "title": "Disbursement Date"
                 },
                 {
-                    "key": "account_number2",
-                    "title": "Finance Team Rejection Remarks"
+                    "key": "reject_reason",
+                    "title": "Rejection Reasons"
                 },
                 {
-                    "key": "account_number3",
-                    "title": "Finance Team Rejection Reasons"
+                    "key": "reject_remarks",
+                    "title": "Rejection Remarks"
                 },
                 {
-                    "key": "account_number3",
-                    "title": "Finance Team Rejected Date"
+                    "key": "rejected_date",
+                    "title": "Rejected Date"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm Disbursement"
+                        "title": "Update Status"
                     }]
                 }
             ]
@@ -19465,8 +20559,8 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "sign_off_date",
-                    "title": "Cust SignOff Date",
+                    "key": "sign_date",
+                    "title": "Cust Sign Date",
                     "type": "date",
                     "required": true
                 },
@@ -19487,7 +20581,7 @@ irf.pageCollection.factory("Pages__LoanBookingScreen",
                 },
                 {
                     "type": "submit",
-                    "title": "Create Loan Account"
+                    "title": "Submit"
                 }
             ]
         }],
@@ -19508,7 +20602,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         "id": "PendingDocumentGeneration",
         "type": "search-list",
         "name": "PendingDocumentGeneration",
-        "title": "Pending Document Generation",
+        "title": "Pending Document Execution",
         "subTitle": "",
         "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
@@ -19540,6 +20634,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
         definition: {
             title: "Choose Loan Type",
             autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "sanction_date":"Sanction Date",
+                "disbursement_date":"Disbursement Date",
+                "branch":"Branch",
+                "centre":"Centre"
+            },
             searchForm: [
                 "*"
             ],
@@ -19905,7 +21006,7 @@ irf.pageCollection.factory(irf.page("PendingDocumentUpload"),
         "id": "PendingDocumentUpload",
         "type": "schema-form",
         "name": "PendingDocumentUpload",
-        "title": "Document Generation & Upload | Ravi S | Key Metals Pvt. Ltd.",
+        "title": "Document Execution | Ravi S | Key Metals Pvt. Ltd.",
         "subTitle": " Loan ID:8725678 | Hubli branch | Rs. 20,00,00",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
@@ -19996,15 +21097,218 @@ irf.pageCollection.factory(irf.page("PendingDocumentUpload"),
 }]);
 
 irf.pageCollection.factory(irf.page("PendingDocumentVerification"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "PendingDocumentVerification",
+        "type": "search-list",
+        "name": "PendingDocumentVerification",
+        "title": "Pending Document Verification",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "sanction_date":"Sanction Date",
+                "disbursement_date":"Disbursement Date",
+                "branch":"Branch",
+                "centre":"Centre"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                         {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "cycle": "5607891 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "cycle": "8725678 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "cycle": "9057328 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.cycle                      
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        /*{
+                            name: "Upload Documents",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        },*/
+                        {
+                            name: "Verify Documents",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("DocumentVerification"),
 ["$log", "Enrollment", "SessionStore", function($log, Enrollment, SessionStore){
 
     
 
     return {
-        "id": "PendingDocumentVerification",
+        "id": "DocumentVerification",
         "type": "schema-form",
-        "name": "PendingDocumentVerification",
-        "title": "Pending Document Verification | Ravi S | Key Metals Pvt. Ltd.",
+        "name": "DocumentVerification",
+        "title": "Document Verification | Ravi S | Key Metals Pvt. Ltd.",
         "subTitle": " Loan ID:8725678 | Hubli branch | Rs. 20,00,00",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
@@ -20032,12 +21336,14 @@ irf.pageCollection.factory(irf.page("PendingDocumentVerification"),
         },
         
         form: [
-
                 {
                     "type":"box",
                     "title":"Documents",
                     "items":[
-                                    
+                                    {
+                                        "key": "loan_type",
+                                        "title": "Loan Type"
+                                    },
                                     {
                                         "titleExpr":"model.loanDocs[arrayIndex].title",
                                         "type":"array",
@@ -20045,34 +21351,31 @@ irf.pageCollection.factory(irf.page("PendingDocumentVerification"),
                                         "add":null,
                                         "remove":null,
                                         "items":[
-
                                                     {
-                                                        "title":"View",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        "type":"button",
-                                                        "readonly":false
-
-                                                    },
-                                                
-                                                    {
-                                                        "title":"Approve",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-thumbs-o-up",
-                                                        "type":"button",
-                                                        "readonly":false
-
-                                                    },
-                                                   
-                                                    {
-                                                        "title":"Reject",
-                                                        // "condition": "model.document[arrayIndex].",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-thumbs-o-down",
-                                                        "type":"button",
-                                                        "readonly":false
-
-                                                    },
+                                                        "type": "section",
+                                                        "htmlClass": "row",
+                                                        "items":[{
+                                                            "type": "section",
+                                                            "htmlClass": "col-xs-4",
+                                                            "items": [{
+                                                                        "title":"View",
+                                                                        "htmlClass":"btn-block",
+                                                                        "icon":"fa fa-download",
+                                                                        "type":"button",
+                                                                        "readonly":false
+                                                                    }]},
+                                                                    {
+                                                            "type": "section",
+                                                            "htmlClass": "col-xs-8",
+                                                            "items": [{
+                                                                        "title": "",
+                                                                        "type": "radios",
+                                                                        "titleMap": {
+                                                                                    "1": "Approve",
+                                                                                    "2": "Reject"
+                                                                                }
+                                                                        
+                                                                    }]}]},
 
                                                     {
                                                         "title": "Rejection Reason",
@@ -20090,6 +21393,13 @@ irf.pageCollection.factory(irf.page("PendingDocumentVerification"),
                                     }
                             ]
 
+                },
+                {
+                "type": "actionbox",
+                "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
                 }
            
               ],
@@ -20104,6 +21414,208 @@ irf.pageCollection.factory(irf.page("PendingDocumentVerification"),
             },
             reject:function(model,form){
                 alert("Rejected");
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory("Pages__RejectedDisbursementQueue",
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
+    return {
+        "id": "RejectedDisbursementQueue",
+        "type": "search-list",
+        "name": "RejectedDisbursementQueue",
+        "title": "Rejected Disbursement",
+        "subTitle": "",
+        "uri":"Customer Enrollment/Stage 2",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Choose Loan Type",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "rejected_date":"Rejected Date",
+                "disbursement_date":"Disbursement Date",
+                "centre":"Centre"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "rejected_date": {
+                        "title": "Rejected Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                         {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "cycle": "5607891 | Belgaum branch",
+                            "rejected_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "cycle": "8725678 | Hubli branch",
+                            "rejected_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "cycle": "9057328 | Trichy branch",
+                            "rejected_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.cycle                      
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        /*{
+                            name: "Upload Documents",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        },*/
+                        {
+                            name: "Update Details",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
             }
         }
     };
@@ -20743,9 +22255,10 @@ irf.pageCollection.factory("Pages__GenerateEMISchedule",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
 
-            model.rejected_reason="PDC errors";
-            model.rejected_remarks="Overwritten on cheques";
-            model.remarks_hub_manager="Getting new PDC";
+            model.customer_sign_date="05-Aug-2016";
+            model.expected_disbursement_date="08-Aug-2016";
+            model.fro_remarks="New Machinery arrived and verified";
+            model.cro_remarks="verified and approved";
 
         },
         offline: false,
@@ -20754,35 +22267,50 @@ irf.pageCollection.factory("Pages__GenerateEMISchedule",
         },
         form: [{
             "type": "box",
-            "title": "GENERATE EMI SCHEDULE - TRANCHE 2 | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 
                 {
-                    "key": "rejected_reason",
-                    "title": "Tranche details",
-                    "type": "textarea"
-                },
-                {
-                    "key": "rejected_remarks",
+                    "key": "customer_sign_date",
                     "title": "Customer Sign Date",
                     "type": "date"
                 },
                 {
-                    "key": "remarks_hub_manager",
+                    "key": "expected_disbursement_date",
                     "title": "Expected Disbursement Date",
                     "type": "date"
+                },
+                {
+                    "key": "fro_remarks",
+                    "title": "FRO Approve Remarks"
+                },
+                {
+                    "key": "cro_remarks",
+                    "title": "CRO Approve Remarks"
+                },
+                {
+                    "title":"EMI Schedule",
+                    "htmlClass":"btn-block",
+                    "icon":"fa fa-download",
+                    "type":"button",
+                    "readonly":false
+
+                },
+                {
+                    title:"Upload",
+                    key:"fileid",
+                    type:"file",
+                    fileType:"*/*",
+                    category: "Loan",
+                    subCategory: "DOC1"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Generate EMI Schedule"
-                    },{
-                        "type": "button",
-                        "icon": "fa fa-upload",
-                        "title": "Upload EMI Schedule"
+                        "title": "Submit"
                     }]
                 }
             ]
@@ -20809,10 +22337,13 @@ irf.pageCollection.factory("Pages__PendingCRO",
         "id": "PendingCRO",
         "type": "schema-form",
         "name": "PendingCRO",
-        "title": "PENDING FOR CRO (CENTRAL RISK OFFICER) APPROVAL",
+        "title": "CRO Approval",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("CRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.cro_requested_date="08-Aug-2016";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -20820,26 +22351,29 @@ irf.pageCollection.factory("Pages__PendingCRO",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
-                    "type": "textarea"
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
                 },
                 {
-                    "key": "branch_name",
-                    "title": "FRO Remarks"
+                    "key": "FRO_remarks",
+                    "title": "Remarks"
                 },
                 {
-                    "key": "account_number",
-                    "title": "Verification Date",
+                    "key": "CRO_remarks",
+                    "title": "Remarks"
+                },
+                {
+                    "key": "cro_requested_date",
+                    "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "status",
+                    "key": "cro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -20848,22 +22382,36 @@ irf.pageCollection.factory("Pages__PendingCRO",
                             }
                 },
                 {
-                    "key": "reject_reason",
+                    "key": "cro_reject_reason",
                     "title": "CRO Approve Remarks",
                     "type": "select"
                 },
                 {
-                    "key": "reject_remarks",
-                    "title": "CRO Rejection Remarks"
+                    "key": "cro_reject_remarks",
+                    "title": "CRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "fro.latitude",
+                    "longitude": "fro.longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm CRO Approval/Rejection"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
+                        "title": "Submit"
                     }]
                 }
             ]
@@ -20890,10 +22438,13 @@ irf.pageCollection.factory("Pages__PendingFRO",
         "id": "PendingFRO",
         "type": "schema-form",
         "name": "PendingFRO",
-        "title": "PENDING FOR FRO(FIELD RISK OFFICER) APPROVAL",
+        "title": "FRO Approval",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("FRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.fro_requested_date="08-Aug-2016";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -20901,31 +22452,25 @@ irf.pageCollection.factory("Pages__PendingFRO",
         },
         form: [{
             "type": "box",
-            "title": "DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
             "colClass": "col-sm-6", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
-                    "type": "textarea"
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
                 },
                 {
-                    "key": "branch_name",
+                    "key": "FRO_remarks",
                     "title": "Remarks"
                 },
                 {
-                    "key": "account_number",
-                    "title": "Hub Manager Verification Date",
+                    "key": "fro_requested_date",
+                    "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "account_number",
-                    "title": "FRO Verification Date",
-                    "type": "date"
-                },
-                {
-                    "key": "status",
+                    "key": "fro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -20934,22 +22479,36 @@ irf.pageCollection.factory("Pages__PendingFRO",
                             }
                 },
                 {
-                    "key": "reject_reason",
+                    "key": "fro_reject_reason",
                     "title": "FRO Approve Remarks",
                     "type": "select"
                 },
                 {
-                    "key": "reject_remarks",
-                    "title": "FRO Rejection Remarks"
+                    "key": "fro_reject_remarks",
+                    "title": "FRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "latitude",
+                    "longitude": "longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Confirm FRO Approval/Rejection"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
+                        "title": "Submit"
                     }]
                 }
             ]
@@ -20998,6 +22557,16 @@ irf.pageCollection.factory("Pages__MultiTranche",
                 },
                 {
                     "key": "branch_name",
+                    "title": "Disbursement Date",
+                    "type": "date"
+                },
+                {
+                    "key": "branch_name",
+                    "title": "Customer Sign Date",
+                    "type": "date"
+                },
+                {
+                    "key": "branch_name",
                     "title": "Remarks For Tranche Disbursement"
                 },
                 {
@@ -21026,78 +22595,194 @@ irf.pageCollection.factory("Pages__MultiTranche",
     };
 }]);
 irf.pageCollection.factory("Pages__DisbursementConfirmQueue",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
+function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
         "id": "DisbursementConfirmQueue",
-        "type": "schema-form",
+        "type": "search-list",
         "name": "DisbursementConfirmQueue",
-        "title": "DISBURSEMENT CONFIRMATION QUEUE",
+        "title": "Disbursement Confirmation Queue",
         "subTitle": "",
+        //"uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+            model.stage = 'Stage02';
         },
+
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "title": "Select Loans To Disburse OR Upload File", // sample label code
-            "colClass": "col-sm-12", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "loan_acc_1",
-                    "title": "Ajay Karthik | GKB Industries Ltd.",
-                    "type": "checkbox",
-                    "schema": {
-                        "default": false
-                    }
-                },
-                {
-                    "key": "loan_acc_2",
-                    "title": "Ravi S | Key Metals Pvt. Ltd.",
-                    "type": "checkbox",
-                    "schema": {
-                        "default": false
-                    }
-                },
-                {
-                    "key": "loan_acc_3",
-                    "title": "Kaushik G | HPL",
-                    "type": "checkbox",
-                    "schema": {
-                        "default": false
-                    }
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Upload Confirmation Excel"
-                    },{
-                        "type": "submit",
-                        "title": "Confirm Selected Accounts"
-                    }]
-                }
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
             ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
         },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "Filter Loan List",
+            autoSearch: true,
+            sorting:true,
+            sortByColumns:{
+                "sanction_date":"Sanction Date",
+                "disbursement_date":"Disbursement Date",
+                "branch":"Branch",
+                "centre":"Centre"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": 'SearchOptions',
+                "required":["branch"],
+                "properties": {
+                    /*
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }
+                        }
+                    },
+                    */
+                    "customer_name": {
+                        "title": "Customer Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "Entity Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "Sanction Date",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branch_name": {
+                        "title": "Branch Name",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                var out = {
+                    body: [
+                        {
+                            "name": "Ajay Karthik | GKB Industries Ltd.",
+                            "loan_amount": "7,50,000",
+                            "cycle": "5607891 | Belgaum branch",
+                            "sanction_date": "12/07/2016"
+                        },
+                        {
+                            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                            "loan_amount": "20,00,00",
+                            "cycle": "8725678 | Hubli branch",
+                            "sanction_date": "17/07/2016"
+                        },
+                        {
+                            "name":"Kaushik G | HPL",
+                            "loan_amount": "30,00,000",
+                            "cycle": "9057328 | Trichy branch",
+                            "sanction_date": "01/07/2016"
+                        }
+                    ],
+                    headers: {
+                        "method": "GET",
+                        "x-total-count": 20
+                    }
+                }
+                return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.cycle                        
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Update confirmation Status",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        }
+                    ];
+                }
             }
         }
     };
 }]);
+
 irf.pageCollection.factory("Pages__RejectConfirmQueue",
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
