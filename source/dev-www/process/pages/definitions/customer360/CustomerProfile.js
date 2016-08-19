@@ -150,22 +150,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         model.customer.spouseFirstName = aadhaarData.name;
                         if (aadhaarData.yob) {
                             model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
-                },
-                {
-                    key:"customer.spouseAge",
-                    title: "SPOUSE_AGE",
-                    type:"number",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseAge > 0) {
-                            if (model.customer.spouseDateOfBirth) {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                            }
                         }
                     }
                 },
@@ -175,7 +159,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseDateOfBirth) {
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
                     }
                 },
@@ -188,6 +171,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.isBiometricValidated",
                     title: "Validate Fingerprint",
                     type:"validatebiometric",
+                    category: 'CustomerEnrollment',
+                    subCategory: 'FINGERPRINT',
                     helper: formHelper,
                     biometricMap: {
                         leftThumb: "model.customer.leftHandThumpImageId",
@@ -386,7 +371,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 model.customer.spouseFirstName = aadhaarData.name;
                                 if (aadhaarData.yob) {
                                     model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                 }
                             }
                         }
@@ -576,29 +560,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         readonly: true
                     },
                     {
-                        key:"customer.familyMembers[].age",
-                        title: "AGE",
-                        type:"number",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                } else {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                }
-                            }
-                        },
-                        readonly: true
-                    },
-                    {
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
                         title: "T_DATEOFBIRTH",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                            }
-                        },
                         readonly: true
                     },
                     {

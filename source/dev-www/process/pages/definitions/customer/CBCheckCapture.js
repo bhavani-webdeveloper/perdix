@@ -135,7 +135,7 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
 					CreditBureau.creditBureauCheck({
 						customerId: model.customerId,
-						highMarkType: model.creditBureau,
+                        highmarkType: model.creditBureau,
 						purpose: model.loanPurpose1,
 						loanAmount: model.loanAmount
 					}, function(response){

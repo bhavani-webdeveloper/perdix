@@ -199,6 +199,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             "condition":"model.group.jlgGroupMembers.length>0",
                             "add":null,
                             "remove":null,
+                            "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                             "items":[
                                 {
                                     "key":"group.jlgGroupMembers[].urnNo",
@@ -264,6 +265,22 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                     "key":"group.jlgGroupMembers[].witnessRelationship",
                                     "type":"select",
                                     "readonly":readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].getDSCData",
+                                    "type":"button",
+                                    "title":"VIEW_DSC_RESPONSE",
+                                    "icon":"fa fa-eye",
+                                    "style": "btn-primary",
+                                    //"condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                    "onClick":function(model, formCtrl, form, event){
+                                        console.log(form);
+                                        console.warn(event);
+                                        var i = event['arrayIndex'];
+                                        console.warn("dscid :"+model.group.jlgGroupMembers[i].dscId);
+                                        var dscId = model.group.jlgGroupMembers[i].dscId;
+                                        showDscData(dscId);
+                                    }
                                 }
 
                             ]
@@ -513,7 +530,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         "title":"VIEW_DSC_RESPONSE",
                         "icon":"fa fa-eye",
                         "style": "btn-primary",
-                        "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                        //"condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                         "onClick":function(model, formCtrl, form, event){
                             console.log(form);
                             console.warn(event);
