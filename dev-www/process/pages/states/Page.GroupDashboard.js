@@ -102,7 +102,7 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
         });
     };
 
-    PagesDefinition.getUserAllowedDefinition(SessionStore.getLoginname(), fullDefinition).then(function(resp){
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         getDashboardCounts();
     });

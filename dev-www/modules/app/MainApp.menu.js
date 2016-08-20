@@ -24,7 +24,7 @@ MainApp.controller("irfMainMenuController", [
 
 	$http.get("process/MenuDefinition.json").then(function(response){
 		PagesDefinition
-		.getUserAllowedDefinition($scope.ss.getLoginname(), response.data)
+		.getUserAllowedDefinition(response.data)
 		.then(function(resp){
 			$scope.definition = resp;
 			$.AdminLTE.layout.activate();

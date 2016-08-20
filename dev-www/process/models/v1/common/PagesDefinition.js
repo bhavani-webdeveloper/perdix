@@ -1,5 +1,5 @@
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries",
-    function($resource, $log, BASE_URL, $q, Queries){
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore",
+    function($resource, $log, BASE_URL, $q, Queries, SessionStore){
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
@@ -9,14 +9,22 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         },
     });
 
-    pDef.getRoleAllowedPageList = function(userid) {
-        //var deferred = $q.defer();
-        return Queries.getPagesDefinition(userid);
-        //return pDef.getPagesJson().$promise;
-        //return deferred.promise;
-    };
-
     var userAllowedPages = null;
+
+    pDef.getRoleAllowedPageList = function() {
+        var deferred = $q.defer();
+        //pDef.getPagesJson().$promise
+        Queries.getPagesDefinition(SessionStore.getLoginname())
+        .then(function(response){
+            delete response.$promise;
+            delete response.$resolved;
+            userAllowedPages = response;
+            deferred.resolve(response);
+        }, function(error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
 
     var __parseMenuDefinition = function(allowedPages, menuMap, md) {
         for (var i = md.length - 1; i >= 0; i--) {
@@ -50,18 +58,37 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
 
     pDef.parseMenuDefinition = parseMenuDefinition;
 
-    pDef.getUserAllowedDefinition = function(userid, menuDef) {
+    pDef.getUserAllowedDefinition = function(menuDef) {
         var deferred = $q.defer();
         if (userAllowedPages) {
             deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
         } else {
-            // TODO: get role for the user & get real role allowed list
-            pDef.getRoleAllowedPageList(userid).then(function(response){
-                //$log.info(response);
-                delete response.$promise;
-                delete response.$resolved;
-                userAllowedPages = response;
+            pDef.getRoleAllowedPageList().then(function(response){
                 deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
+    pDef.getPageConfig = function(pageUri) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = userAllowedPages[pageUri];
+            if (p) {
+                deferred.resolve(p.config);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = userAllowedPages[pageUri];
+                if (p) {
+                    deferred.resolve(p.config);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
             }, function(errorResponse){
                 deferred.reject(errorResponse);
             });

@@ -15,7 +15,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	};
 
 	/*
-		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, p.allow_edit allowEdit from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
+		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, rpa.page_config pageConfig from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
 	*/
 
 	resource.getPagesDefinition = function(userId) {
@@ -24,7 +24,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 			if (records && records.results) {
 				var def = {};
 				_.each(records.results, function(v, k){
-					def[v.uri] = {
+					var d = {
 						"offline": v.offline,
 						"directAccess": v.directAccess,
 						"title": v.title,
@@ -35,16 +35,21 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 							"pageName": v.pageName,
 							"pageId": v.pageId
 						},
-						"config": {
-							"allowEdit": v.allowEdit
-						}
+						"config": v.pageConfig
 					};
 					if (v.addlParams) {
 						try {
 							var ap = JSON.parse(v.addlParams);
-							angular.extend(def[v.uri].stateParams, ap);
+							angular.extend(d.stateParams, ap);
 						} catch (e) {}
 					}
+					if (v.pageConfig) {
+						try {
+							var pc = JSON.parse(v.pageConfig);
+							d.config = pc;
+						} catch (e) {}
+					}
+					def[v.uri] = d;
 				});
 				deferred.resolve(def);
 			}

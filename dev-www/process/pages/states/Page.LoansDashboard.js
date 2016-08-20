@@ -1,6 +1,6 @@
 irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$stateParams',
-    'irfStorageService','SessionStore', 'PagesDefinition',
-    function($log, $scope,PageHelper, $stateParams, irfStorageService, SessionStore, PagesDefinition){
+    'irfStorageService', 'PagesDefinition',
+    function($log, $scope,PageHelper, $stateParams, irfStorageService, PagesDefinition){
     $log.info("Page.LoansDashboard.html loaded");
     PageHelper.clearErrors();
     var fullDefinition = {
@@ -13,7 +13,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
         ]
     };
 
-    PagesDefinition.getUserAllowedDefinition(SessionStore.getLoginname(), fullDefinition).then(function(resp){
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
         $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.LoanBookingQueue'].data=10;

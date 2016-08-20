@@ -16,7 +16,7 @@ irf.pages.controller("PageLandingCtrl",
 		]
 	};
 
-    PagesDefinition.getUserAllowedDefinition(SessionStore.getLoginname(), fullDefinition).then(function(resp){
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
     });
 

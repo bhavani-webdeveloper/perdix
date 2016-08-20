@@ -6,7 +6,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
-	$scope.userid = SessionStore.getLoginname();
 	$scope.role = SessionStore.getRole();
 	$scope.customerId = $stateParams.pageId;
 	$scope.formHelper = formHelper;
@@ -46,7 +45,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		]
 	};
 
-	PagesDefinition.getUserAllowedDefinition($scope.userid, fullDefinition).then(function(resp){
+	PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
 		$scope.dashboardDefinition = resp;
 
 		Enrollment.getSchema().$promise.then(function(response){
