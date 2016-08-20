@@ -8,16 +8,18 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 
 	return {
 		"type": "schema-form",
-		"title": "REPAYMENT_FOR_LOAN : " + $stateParams.pageId,
-		initialize: function (model, form, formCtrl) {},
-		
+		"title": "REPAYMENT_FOR_LOAN",
+		initialize: function (model, form, formCtrl) {
+            model.repayment = {};
+            model.repayment.repaymentType = "Cash";
+        },
 		form: [
 			{
 				"type":"box",
 				"title":"Repayment",
 				"items":[
                     {
-                        key:"repaymentMode",
+                        key:"repayment.repaymentType",
                         title:"REPAYMENT_MODE",
                         type:"select",
                         titleMap: [{
@@ -38,7 +40,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         }]
                     },
                     {
-                        key:"AmountDue",
+                        key:"repayment.amount",
                         title:"AMOUNT_DUE",
                         default:"1000",
                         readonly:false,
@@ -54,73 +56,73 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 						key:"ChecqueNumber",
                         title:"CHEQUE_NUMBER",
 						type:"text",
-                        condition:"model.repaymentMode=='Cheque'"
+                        condition:"model.repayment.repaymentType=='Cheque'"
 					},
                     {
                         key:"ChequeDate",
                         title:"CHEQUE_DATE",
                         type:"date",
-                        condition:"model.repaymentMode=='Cheque'"
+                        condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
                         key:"ChequeBank",
                         title:"ISSUING_BANK",
                         type:"text",
-                        condition:"model.repaymentMode=='Cheque'"
+                        condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
                         key:"ChequeBranch",
                         title:"ISSUING_BRANCH",
                         type:"text",
-                        condition:"model.repaymentMode=='Cheque'"
+                        condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
                         key:"NEFTReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
-                        condition:"model.repaymentMode=='NEFT'"
+                        condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
                         key:"NEFTDate",
                         title:"Date",
                         type:"text",
-                        condition:"model.repaymentMode=='NEFT'"
+                        condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
                         key:"NEFTBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repaymentMode=='NEFT'"
+                        condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
                         key:"NEFTBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repaymentMode=='NEFT'"
+                        condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
                         key:"RTGSReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
-                        condition:"model.repaymentMode=='RTGS'"
+                        condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
                         key:"RTGSDate",
                         title:"Date",
                         type:"text",
-                        condition:"model.repaymentMode=='RTGS'"
+                        condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
                         key:"RTGSBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repaymentMode=='RTGS'"
+                        condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
                         key:"RTGSBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repaymentMode=='RTGS'"
+                        condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
                         key:"Remarks",
@@ -137,42 +139,32 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 					"title": "SAVE"
 			}]
 		}],
-		schema: function() {
-			return ManagementHelper.getVillageSchemaPromise();
-		},
+		schema: {
+            type: "object",
+            properties: {
+                "repayment": {
+                    type: "object",
+                    properties: {
+                        "repaymentType": {
+                            type: "string",
+                            enum: ["Cash", "NEFT"]
+                        }
+                    }
+                }
+            }
+        },
 		actions: {
-            generateFregCode:function(model,form){
-                console.log(model);
-                if(model.village.pincode>100000){
-                    model.village.fregcode = Number(model.village.pincode+"001");
-                }
-                else {
-                    model.village.fregcode="";
-                }
-
-            },
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
-				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-				}
+                PageHelper.showLoader();
+
+                LoanProcess.repay(model.repayment, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
 			}
 		}
 	};
