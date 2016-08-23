@@ -1,9 +1,9 @@
 
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.CollectPayment"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'LoanProcess','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
@@ -18,6 +18,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"type":"box",
 				"title":"Repayment",
 				"items":[
+                    {
+                        type:"section",
+                        html:"{{model.repayment}}"
+
+                    },
                     {
                         key:"repayment.repaymentType",
                         title:"REPAYMENT_MODE",
@@ -42,90 +47,92 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"repayment.amount",
                         title:"AMOUNT_DUE",
-                        default:"1000",
                         readonly:false,
+                        required:true,
                         type:"amount",
                     },
                     {
-                        key:"AmountPaid",
+                        key:"repayment.amountPaid",
                         title:"AMOUNT_PAID",
                         readonly:false,
+                        required:true,
                         type:"amount"
                     },
 					{
-						key:"ChecqueNumber",
+						key:"repayment.checqueNumber",
                         title:"CHEQUE_NUMBER",
 						type:"text",
+                        required:true,
                         condition:"model.repayment.repaymentType=='Cheque'"
 					},
                     {
-                        key:"ChequeDate",
+                        key:"repayment.chequeDate",
                         title:"CHEQUE_DATE",
                         type:"date",
                         condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
-                        key:"ChequeBank",
+                        key:"repayment.chequeBank",
                         title:"ISSUING_BANK",
                         type:"text",
                         condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
-                        key:"ChequeBranch",
+                        key:"repayment.chequeBranch",
                         title:"ISSUING_BRANCH",
                         type:"text",
                         condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
-                        key:"NEFTReferenceNumber",
+                        key:"repayment.NEFTReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
-                        key:"NEFTDate",
+                        key:"repayment.NEFTDate",
                         title:"Date",
                         type:"text",
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
-                        key:"NEFTBankDetails",
+                        key:"repayment.NEFTBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
-                        key:"NEFTBranchDetails",
+                        key:"repayment.NEFTBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
-                        key:"RTGSReferenceNumber",
+                        key:"repayment.RTGSReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
                         condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
-                        key:"RTGSDate",
+                        key:"repayment.RTGSDate",
                         title:"Date",
                         type:"text",
                         condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
-                        key:"RTGSBankDetails",
+                        key:"repayment.RTGSBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
                         condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
-                        key:"RTGSBranchDetails",
+                        key:"repayment.RTGSBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
                         condition:"model.repayment.repaymentType=='RTGS'"
                     },
                     {
-                        key:"Remarks",
+                        key:"repayment.remarks",
                         title:"Remarks",
                         type:"textarea"
                     }
@@ -147,7 +154,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     properties: {
                         "repaymentType": {
                             type: "string",
-                            enum: ["Cash", "NEFT"]
+                            enum: ["Cash","Cheque","NEFT","RTGS"]
                         }
                     }
                 }
