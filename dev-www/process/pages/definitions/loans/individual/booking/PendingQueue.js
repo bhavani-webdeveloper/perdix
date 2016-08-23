@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoanProcess",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanProcess){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
         "type": "search-list",
         "title": "LOAN_BOOKING_QUEUE",
@@ -116,7 +116,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanP
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                return IndividualLoanProcess.search({
+                return IndividualLoan.search({
                     'stage': 'LoanBooking',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
