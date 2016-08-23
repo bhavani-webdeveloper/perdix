@@ -21,6 +21,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
+                    "key": "loanAccount.customer_sign_date",
+                    "title": "CUSTOMER_SIGN_DATE",
+                    "type": "date"
+                },
+                {
+                    "key": "loanAccount.disbursement_date",
+                    "title": "DISBURSEMENT_DATE",
+                    "type": "date"
+                },
+                {
                     "key": "loanAccount.partner.name",
                     "title": "PARTNER_NAME",
                     "readonly": true
@@ -33,7 +43,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                 {
                     "key": "loanAccount.frequency",
                     "title": "FREQUENCY",
-                    "readonly": true
+                    "readonly": true,
+                    "type": "select",
+                    "enumCode": "frequency"
                 },
                 {
                     "key": "loanAccount.customer.name",
@@ -185,21 +197,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "title": "SANCTION_DATE",
                     "readonly": true
                 },
-                {
-                    "key": "loanAccount.customer_sign_date",
-                    "title": "CUSTOMER_SIGN_DATE",
-                    "type": "date"
-                },
-                {
-                    "key": "loanAccount.disbursement_date",
-                    "title": "DISBURSEMENT_DATE",
-                    "type": "date"
-                },
+                
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "button",
-                        "title": "Back",
+                        "title": "BACK",
                         "onClick": "actions.reenter(model, formCtrl, form, $event)"
                     },{
                         "type": "submit",

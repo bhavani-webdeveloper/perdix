@@ -24,8 +24,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                 }
 
             }
+            /*
+            // Test reject remarks
             model.loanDocs[4].status = "Rejected";
             model.loanDocs[4].rejectReason = "Overwriting on Cheque";
+            */
         },
         
         form: [
@@ -33,7 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                 {
                     "type":"box",
                     "colClass": "col-sm-12",
-                    "title":"Pick Documents to Generate & Upload",
+                    "title":"DOCUMENT_EXECUTION",
                     "htmlClass": "text-danger",
                     "items":[
                         {

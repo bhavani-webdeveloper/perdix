@@ -50,14 +50,14 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanP
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    /*
+                    
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
                         "default": "1",
                         "x-schema-form": {
                             "type": "select",
-                            "titleMap": {
+                            /*"titleMap": {
                                 "1": "Asset Purchase- Secured",
                                 "2": "Working Capital - Secured",
                                 "3": "Working Capital -Unsecured",
@@ -68,10 +68,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanP
                                 "8": "LOC- RFD-Unsecured",
                                 "9": "LOC RFID- Secured",
                                 "10": "LOC- RFID- Unsecured"
-                            }
+                            }*/
+                            "enumCode": "loan_product"
                         }
                     },
-                    */
+                    
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -98,14 +99,16 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoanP
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
-                        }
+                        },
+                        "enumCode": "branch"
                     },
                     "centreCode": {
                         "title": "CENTER_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
-                        }
+                        },
+                        "enumCode": "centre"
                     }
                 }
             },

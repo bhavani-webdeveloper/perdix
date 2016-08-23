@@ -24,8 +24,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 }
 
             }
+
+            /*
+            // Test rejection remarks
             model.loanDocs[4].status = "Rejected";
             model.loanDocs[4].rejectReason = "Overwriting on Cheque";
+            */
         },
         
         form: [
@@ -80,10 +84,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                             "htmlClass":"btn-block",
                                             "type":"radios",
                                             "readonly":false,
+                                            "enumCode": "action_approval",
+                                            /*
                                             "titleMap": {
                                                     "1": "Approve",
                                                     "2": "Reject"
                                                 },
+                                            */
                                             "key": "loanDocs[].docStatus"
                                         }]
                                     },{

@@ -21,14 +21,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.Disburse"),
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "bank_name",
+                    
                     "title": "BANK_NAME",
                     "key": "loanAccount.bank_name",
                     "type": "select",
-                    "titleMap": {
+                    "enumCode": "bank"
+                    /*"titleMap": {
                                 "1": "ICICI Bank",
                                 "2": "Kotak Mahindra Bank"
-                            }
+                            }*/
                 },
                 {
                     "key": "loanAccount.branch_name",
@@ -44,16 +45,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.Disburse"),
                     "title": "STATUS",
                     "key": "loanAccount.status",
                     "type": "select",
-                    "titleMap": {
+                    "enumCode": "status"
+                    /*"titleMap": {
                                 "1": "Sent To Bank",
                                 "2": "Reject"
-                            }
+                            }*/
                 },
                 {
 
                     "key": "loanAccount.reject_reason",
                     "title": "REJECTED_REASON",
-                    "type": "select"
+                    "type": "select",
+                    "enumCode": "reject_reason"
                 },
                 {
 
