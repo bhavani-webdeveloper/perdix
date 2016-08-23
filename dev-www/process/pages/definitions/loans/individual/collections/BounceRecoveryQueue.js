@@ -154,7 +154,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.Collections.CollectPayment', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -168,7 +168,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.Collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
