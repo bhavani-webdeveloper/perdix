@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
-["$log", "ACHPDC", "SessionStore","$state", "$stateParams", function($log, ACHPDC, SessionStore,$state,$stateParams){
+["$log", "ACHPDC","PageHelper", "SessionStore","$state", "$stateParams", function($log, ACHPDC,PageHelper, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
@@ -11,8 +11,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH selection Page got initialized");
-             model.ach = {};
+             model.ach = model.ach||{};
          //   model.customer.urnNo="1234567890";
+        },
+        modelPromise: function(pageId,model){
+
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -139,15 +142,25 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
                             {
                                 "key": "ach.utilityCode",
                                 "title": "UTILITY_CODE"
-                            }]
+                            }
+                        ]
                        
                 },
              
                 {
                     "type": "actionbox",
+                    "condition":"!model.ach.id",
                     "items": [{
                         "type": "submit",
-                        "title": "Save Details",
+                        "title": "Submit",
+                              }]
+                },
+                {
+                    "type": "actionbox",
+                    "condition":"model.ach.id",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Update",
                               }]
                 }],
                     schema: {
@@ -157,16 +170,33 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
                         type: "object",
                         required: [
                             "accountHolderName",
-                            "accountType","amount",
-                            "consumerReferenceNumber","customerAdditionalInformation",
-                            "debitAmtOF","emailId","endDate","frequency",
-                            "ifscCode","initialRejectReason","legalAccountNumber",
-                            "loanAccountNumber","mandateDate","micrCode",
-                            "mobilNumber","nameOfTheDestinationBankWithBranch",
-                            "nameOfUtilityBillerBankCompany","processedOnWithUmrn",
-                            "rejectionCode","rejectionReason","schemPlanReferenceNo",
-                            "sponsorBankCode","startDate","telephoneNo","umnrNo",
-                            "uptoMaximumAmt","utilityCode"
+                            "accountType",
+                            "amount",
+                            "consumerReferenceNumber",
+                            "customerAdditionalInformation",
+                            "debitAmtOF",
+                            "emailId",
+                            "endDate",
+                            "frequency",
+                            "ifscCode",
+                            "initialRejectReason",
+                            "legalAccountNumber",
+                            "loanAccountNumber",
+                            "mandateDate",
+                            "micrCode",
+                            "mobilNumber",
+                            "nameOfTheDestinationBankWithBranch",
+                            "nameOfUtilityBillerBankCompany",
+                            "processedOnWithUmrn",
+                            "rejectionCode",
+                            "rejectionReason",
+                            "schemPlanReferenceNo",
+                            "sponsorBankCode",
+                            "startDate",
+                            "telephoneNo",
+                            "umnrNo",
+                            "uptoMaximumAmt",
+                            "utilityCode"
                         ],
                         properties: {
                              "accountHolderName":{
@@ -281,6 +311,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
                              "utilityCode":{
                                   type: "string",
                                   "title": "UTILITY_CODE"
+                             },
+                             "id":{
+                                  type: "Number",
+                                  "title": "ID"
+                             },
+                             "version":{
+                                  type: "Number",
+                                  "title": "version"
                              }
                                 
                         }
@@ -290,17 +328,25 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
             actions: {
                 submit: function(model, form, formName){
 
-            $log.info("Inside submit()");
+                    $log.info("Inside submit()");
                     PageHelper.showLoader();
-
-                    ACHPDC.create(model.ach, function(response){
-                        PageHelper.hideLoader();
-
-                    }, function(errorResponse){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(errorResponse);
-                    });
-
+                    if (model.ach.id) {
+                        ACHPDC.update(model.ach, function(response){
+                            PageHelper.hideLoader();
+                            model.ach=response;
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    } else {
+                        ACHPDC.create(model.ach, function(response){
+                            PageHelper.hideLoader();
+                            model.ach=response;
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    }
                         // $state.go("Page.Engine", {
                         //     pageName: 'IndividualLoanBookingConfirmation',
                         //     pageId: model.customer.id
