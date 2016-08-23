@@ -4,31 +4,11 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
-        //"subTitle": "T_ENROLLMENTS_PENDING",
+        "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
         },
-        /*offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },*/
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
             searchForm: [

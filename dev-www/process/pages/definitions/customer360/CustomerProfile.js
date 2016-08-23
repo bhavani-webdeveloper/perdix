@@ -16,9 +16,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
     };
 
     return {
-        "id": "ProfileBasic",
         "type": "schema-form",
-        "name": "ProfileBasic",
         "title": "PROFILE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {

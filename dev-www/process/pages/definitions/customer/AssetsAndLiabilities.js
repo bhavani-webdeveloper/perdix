@@ -621,10 +621,8 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                         "key": "customer.latitude",
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
-                        //readonly: true,
                         "latitude": "customer.latitude",
-                        "longitude": "customer.longitude",
-                        "onChange": "fillGeolocation(modelValue, form)"
+                        "longitude": "customer.longitude"
                     },
                     "customer.nameOfRo",
                     {
