@@ -29,7 +29,7 @@ frisby.create('Check Login Returns Token for Correct')
         frisby.globalSetup({
             request: {
                 headers: {
-                    'Auhorization': "Bearer " + response.access_token
+                    'Authorization': "Bearer " + response.access_token
                 }
             }
         })
@@ -38,6 +38,16 @@ frisby.create('Check Login Returns Token for Correct')
          * FURTHER TESTS HERE, OAUTH information will automatically go
          * ------------------------------------------------------------
          */
+
+        frisby.create('Check Enrolment Definition exists')
+            .get(config['base_url'] + "/api/enrollments/definition")
+            .expectStatus(200)
+            .expectJSONTypes({
+                "stages": Object,
+                "schema": Object,
+                "schema.properties": Object
+            })
+            .toss()
 
 
 
