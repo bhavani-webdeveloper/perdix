@@ -1,12 +1,10 @@
-irf.pageCollection.factory(irf.page("loans.individual.collections.DepositQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig", function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig){
 
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "DepositQueue",
         "type": "schema-form",
-        "name": "DepositQueue",
         "title": "DEPOSIT_STAGE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {

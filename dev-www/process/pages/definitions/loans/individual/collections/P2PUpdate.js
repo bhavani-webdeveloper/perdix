@@ -8,8 +8,8 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
-            model = model._bounce;
-            if (!model.loanacno) {
+            model.promise = model._bounce;
+            if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             }
         },
@@ -19,27 +19,33 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"title":"PROMISE_TO_PAY",
 				"items":[
                     {
-                        key:"custname",
+                        key:"promise.custname",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
                     {
-                        key:"applicant",
+                        key:"promise.applicant",
                         title:"APPLICANT",
                         readonly:true
                     },
                     {
-                        key:"coApplicant",
+                        key:"promise.coApplicant",
                         title:"CO_APPLICANT",
                         readonly:true
                     },
                     {
-                        key: "loanacno",
+                        key: "promise.loanacno",
                         title: "LOAN_ACCOUNT_NUMBER",
                         readonly: true
                     },
                     {
-                        key: "customerNotAvailable",
+                        key:"promise.amountdue",
+                        title:"AMOUNT_DUE",
+                        type:"amount",
+                        readonly:true
+                    },
+                    {
+                        key: "promise.customerNotAvailable",
                         title: "CUSTOMER_NOT_AVAILABLE",
                         type: "checkbox",
                         schema: {
@@ -47,13 +53,13 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         }
                     },
                     {
-                        key:"Promise2PayDate",
+                        key:"promise.Promise2PayDate",
                         title:"PROMISE_TO_PAY_DATE",
                         readonly:false,
                         type:"date",
                     },
                     {
-                        key: "customerCategory",
+                        key: "promise.customerCategory",
                         title: "CUSTOMER_CATEGORY",
                         type: "select",
                         titleMap: {
@@ -64,7 +70,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         }
                     },
                     {
-                        key:"Reason",
+                        key:"promise.reason",
                         title:"REASON",
                         type:"select",
                         titleMap: [{
@@ -85,13 +91,13 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         }]
                     },
 					{
-						key:"ReasonforOthers",
+						key:"promise.reasonforOthers",
                         title:"OTHER_REASON",
 						type:"textarea",
                         condition:"model.Reason=='Others'"
 					},
                     {
-                        key:"Remarks",
+                        key:"promise.remarks",
                         title:"REMARKS",
                         type:"textarea"
                     }

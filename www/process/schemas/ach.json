@@ -1,0 +1,137 @@
+{
+	"$schema":"http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"ach": {
+			"type": "object",
+			"required": [
+				"loanAccountNumber",
+				"mandateDate"
+			],
+			"properties": {
+				 "accountHolderName":{
+					  "type": "string",
+					  "title": "ACCOUNT_HOLDER_NAME"
+				 },
+				 "accountType":{
+					  "type": "string",
+					  "title": "ACCOUNT_TYPE"
+
+				 },
+				 "amount":{
+					  "type": "Number",
+					  "title": "AMOUNT"
+				 },
+				 "consumerReferenceNumber":{
+					  "type": "string",
+					  "title": "CONSUMER_REFERENCE_NUMBER"
+				 },
+				 "customerAdditionalInformation":{
+					  "type": "string",
+					  "title": "DEBIT_AMOUNT_OF"
+				 },
+				 "debitAmtOF":{
+					  "type": "string",
+					  "title": "DEBIT_AMOUNT_OF"
+				 },
+				 "emailId":{
+					  "type": "string",
+					   "title": "E-mail_Id"                                
+				 },
+				 "endDate":{
+					  "type": "date",
+					  "title": "END_DATE"
+				 },
+				 "frequency":{
+					  "type": "string",
+					  "title": "frequency"
+				 },
+				 "ifscCode":{
+					  "type": "string",
+					  "title": "IFSC_Code"
+				 },
+				"initialRejectReason":{
+					  "type": "string",
+					  "title": "INITIAL_REJECT_REASON"
+				},
+				"legalAccountNumber":{
+					  "type": "string",
+					  "title": "LEGAL_ACCOUNT_NUMBER"
+				},
+				"loanAccountNumber":{
+					  "type": "string",
+					  "title": "LOAN_ACCOUNT_NUMBER"
+				},
+				 "mandateDate":{
+					  "type": "string",
+					   "title": "MANDATE_DATE"
+				 },
+				 "micrCode":{
+					  "type": "string",
+					  "title": "MICRO_CODE"
+				 },
+				 "mobilNumber":{
+					  "type": "string",
+					  "title": "MOBIL_NUMBER"
+				 },
+				 "nameOfTheDestinationBankWithBranch":{
+					  "type": "string",
+					  "title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
+				 },
+				 "nameOfUtilityBillerBankCompany":{
+					  "type": "string",
+					  "title": "NAME_OF_UTILITY_BILLER_BANK_COMPANY"
+				 },
+				 "processedOnWithUmrn":{
+					  "type": "string",
+					  "title": "PROCESSED_ON_WITH_UMRN"
+				 },
+				 "rejectionCode":{
+					  "type": "string",
+					  "title": "REJECTION_CODE"
+				 },
+				 "rejectionReason":{
+					  "type": "string",
+					  "title": "REJECTION_REASON"
+				 },
+				 "schemPlanReferenceNo":{
+					  "type": "string",
+					  "title": "SCHEME_PLAN_REFERENCE_NUMBER"
+				 },
+				 "sponsorBankCode":{
+					  "type": "string",
+					  "title": "SPONSOR_BANK_CODE"
+				 },
+				 "startDate":{
+					  "type": "date",
+					  "title": "START_DATA"
+				 },
+				 "telephoneNo":{
+					  "type": "string",
+					  "title": "TELEPHONE_NUMBER"
+				 },
+				 "umnrNo":{
+					  "type": "string",
+					  "title": "UMNR_NUMBER"
+				 },
+				 "uptoMaximumAmt":{
+					  "type": "Number",
+					  "title": "UPTO_MAXIMUM_AMOUNT"
+				 },
+				 "utilityCode":{
+					  "type": "string",
+					  "title": "UTILITY_CODE"
+				 },
+				 "id":{
+					  "type": "Number",
+					  "title": "ID"
+				 },
+				 "version":{
+					  "type": "Number",
+					  "title": "version"
+				 }
+					
+			}
+		}
+	}
+}

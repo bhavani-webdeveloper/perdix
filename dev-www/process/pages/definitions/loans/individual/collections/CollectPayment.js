@@ -1,5 +1,3 @@
-
-
 irf.pageCollection.factory(irf.page("loans.individual.collections.CollectPayment"),
 ["$log","$q", 'LoanProcess','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
@@ -42,6 +40,12 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         readonly: true
                     },
                     {
+                        key:"_bounce.amountdue",
+                        title:"AMOUNT_DUE",
+                        type:"amount",
+                        readonly:true
+                    },
+                    {
                         key:"repayment.repaymentType",
                         title:"REPAYMENT_MODE",
                         type:"select",
@@ -64,13 +68,6 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"repayment.amount",
-                        title:"AMOUNT_DUE",
-                        readonly:false,
-                        required:true,
-                        type:"amount",
-                    },
-                    {
-                        key:"repayment.amountPaid",
                         title:"AMOUNT_PAID",
                         readonly:false,
                         required:true,
@@ -87,6 +84,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         key:"repayment.chequeDate",
                         title:"CHEQUE_DATE",
                         type:"date",
+                        required:true,
                         condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
@@ -102,9 +100,19 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         condition:"model.repayment.repaymentType=='Cheque'"
                     },
                     {
+                        key: "repayment.chequePhoto",
+                        title: "CHEQUE_PHOTO",
+                        condition:"model.repayment.repaymentType=='Cheque'",
+                        type: "file",
+                        fileType: "image/*",
+                        category: "noidea",
+                        subCategory: "absolutlynoidea"
+                    },
+                    {
                         key:"repayment.NEFTReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
+                        required: true,
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
                     {
@@ -161,7 +169,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 				"type": "actionbox",
 				"items": [{
 					"type": "submit",
-					"title": "SAVE"
+					"title": "SUBMIT"
 			}]
 		}],
 		schema: {

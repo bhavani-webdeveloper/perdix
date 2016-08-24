@@ -210,14 +210,226 @@
                         "Stage01"
                     ]
                 },
-
+                "enrollmentCheckerApprovedDate": {
+                    "type": "string"
+                },
+                "enrollmentCheckerApprover": {
+                    "type": "integer"
+                },
+                "enrollmentCheckerRemarks": {
+                    "type": "string"
+                },
+                "enrollmentCheckerStatus": {
+                    "type": "string"
+                },
+                "enrollmentId": {
+                    "type": "string"
+                },
                 "enrolledAs": {
                     "type": "string",
                     "title": "ENROLLED_AS",
                     "enumCode": "enrolled_as",
                     "default":"CUSTOMER"
                 },
-
+                "enterprise": {
+                    "type": "object",
+                    "properties": {
+                        "businessAddress1": {
+                            "type": "string"
+                        },
+                        "businessAddress2": {
+                            "type": "string"
+                        },
+                        "businessConstitution": {
+                            "type": "string"
+                        },
+                        "businessDescription": {
+                            "type": "string"
+                        },
+                        "businessLandline1": {
+                            "type": "string"
+                        },
+                        "businessName": {
+                            "type": "string"
+                        },
+                        "businessType": {
+                            "type": "string"
+                        },
+                        "companyWebsite": {
+                            "type": "string"
+                        },
+                        "corporateName": {
+                            "type": "string"
+                        },
+                        "customerNumber": {
+                            "type": "string"
+                        },
+                        "district": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "pincode": {
+                            "type": "integer"
+                        },
+                        "registeredAt": {
+                            "type": "string"
+                        },
+                        "registeredOffice": {
+                            "type": "string"
+                        },
+                        "registrationDate": {
+                            "type": "string"
+                        },
+                        "registrationNumber": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "businessAddress1",
+                        "businessAddress2",
+                        "businessConstitution",
+                        "businessDescription",
+                        "businessLandline1",
+                        "businessName",
+                        "businessType",
+                        "companyWebsite",
+                        "corporateName",
+                        "customerNumber",
+                        "district",
+                        "id",
+                        "pincode",
+                        "registeredAt",
+                        "registeredOffice",
+                        "registrationDate",
+                        "registrationNumber",
+                        "state",
+                        "version"
+                    ]
+                },
+                "enterpriseCustomerRelations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "customerId": {
+                                "type": "integer"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "linkedToCustomerId": {
+                                "type": "integer"
+                            },
+                            "relationshipType": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "customerId",
+                            "id",
+                            "linkedToCustomerId",
+                            "relationshipType",
+                            "version"
+                        ]
+                    }
+                },
+                "enterpriseId": {
+                    "type": "integer"
+                },
+                "enterprises": {
+                    "type": "object",
+                    "properties": {
+                        "businessAddress1": {
+                            "type": "string"
+                        },
+                        "businessAddress2": {
+                            "type": "string"
+                        },
+                        "businessConstitution": {
+                            "type": "string"
+                        },
+                        "businessDescription": {
+                            "type": "string"
+                        },
+                        "businessLandline1": {
+                            "type": "string"
+                        },
+                        "businessName": {
+                            "type": "string"
+                        },
+                        "businessType": {
+                            "type": "string"
+                        },
+                        "companyWebsite": {
+                            "type": "string"
+                        },
+                        "corporateName": {
+                            "type": "string"
+                        },
+                        "customerNumber": {
+                            "type": "string"
+                        },
+                        "district": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "pincode": {
+                            "type": "integer"
+                        },
+                        "registeredAt": {
+                            "type": "string"
+                        },
+                        "registeredOffice": {
+                            "type": "string"
+                        },
+                        "registrationDate": {
+                            "type": "string"
+                        },
+                        "registrationNumber": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "businessAddress1",
+                        "businessAddress2",
+                        "businessConstitution",
+                        "businessDescription",
+                        "businessLandline1",
+                        "businessName",
+                        "businessType",
+                        "companyWebsite",
+                        "corporateName",
+                        "customerNumber",
+                        "district",
+                        "id",
+                        "pincode",
+                        "registeredAt",
+                        "registeredOffice",
+                        "registrationDate",
+                        "registrationNumber",
+                        "state",
+                        "version"
+                    ]
+                },
                 "expenditures": {
                     "type": "array",
                     "title": "EXPENDITURES",
