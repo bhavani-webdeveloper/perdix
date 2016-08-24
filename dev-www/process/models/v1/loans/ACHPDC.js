@@ -7,7 +7,10 @@
          * $post will send data as form data, save will send it as request payload
          */
         return $resource(endpoint, null, {
-
+            getSchema:{
+            method:'GET',
+            url:'process/schemas/ach.json'
+             },
             create:{
                 method:'POST',
                 url:endpoint+'/create'
