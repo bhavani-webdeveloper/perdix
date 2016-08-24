@@ -30,7 +30,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
             return promise;
         },*/
         definition: {
-            title: "SEARCH_DEPOSIT_STAGE",
+            title: "SEARCH_DEPOSITS",
             searchForm: [
                 "*"
             ],

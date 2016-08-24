@@ -19379,13 +19379,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             coApplicant: "Raja",
                             loanacno:"508640101335",
                             paymenttype:"PDC",
-                            amountdue:"19548",
-                            principal: "14872.36",
-                            interest: "4235.64",
-                            penalInterest: "200",
-                            charges: "200",
-                            fees: "40",
-                            numberOfDues: "2",
+                            amountdue: 19548,
+                            principal: 14872.36,
+                            interest: 4235.64,
+                            penalInterest: 200,
+                            charges: 200,
+                            fees: 40,
+                            numberOfDues: 2,
                             installmentdate:"03-03-2016",
                             p2pdate:"15-03-2016"
                         },
@@ -19395,13 +19395,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             coApplicant: "Ragunath",
                             loanacno:"508640108276",
                             paymenttype:"PDC",
-                            amountdue:"19397",
-                            principal: "14844.7",
-                            interest: "4262.3",
-                            penalInterest: "150",
-                            charges: "100",
-                            fees: "40",
-                            numberOfDues: "1",
+                            amountdue: 19397,
+                            principal: 14844.7,
+                            interest: 4262.3,
+                            penalInterest: 150,
+                            charges: 100,
+                            fees: 40,
+                            numberOfDues: 1,
                             installmentdate:"02-03-2016",
                             p2pdate:""
                         },
@@ -19411,13 +19411,13 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             coApplicant: "Selvam",
                             loanacno:"508651508978",
                             paymenttype:"ACH",
-                            amountdue:"49816",
-                            principal: "37110.26",
-                            interest: "10655.74",
-                            penalInterest: "1200",
-                            charges: "750",
-                            fees: "100",
-                            numberOfDues: "1",
+                            amountdue: 49816,
+                            principal: 37110.26,
+                            interest: 10655.74,
+                            penalInterest: 1200,
+                            charges: 750,
+                            fees: 100,
+                            numberOfDues: 1,
                             installmentdate:"05-03-2016",
                             p2pdate:""
                         }
@@ -19434,11 +19434,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 }
             },
             listOptions: {
-                /*itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },*/
+                expandable: true,
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -19933,8 +19929,6 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
     };
 }]);
 
-
-
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
 ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
@@ -19943,17 +19937,30 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 
 	return {
 		"type": "schema-form",
-		"title": "PAYMENT_DETAILS_FOR_LOAN : " + $stateParams.pageId,
+		"title": "Payment Details for loan : " + $stateParams.pageId,
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
-
-            model.customer_name = "Suresh";
-            model.principal = 1000;
-            model.interest = 90;
-            model.fee = 50;
-            model.penal_interest = 15;
-            model.amountDue = 1155;
-            model.amountCollected = 1155;
+            if (model._credit) {
+                model.creditValidation = model.creditValidation || {};
+                model.creditValidation.enterprise_name = model._credit.custname;
+                model.creditValidation.applicant_name = model._credit.applicant;
+                model.creditValidation.co_applicant_name = model._credit.coApplicant;
+                model.creditValidation.principal = model._credit.principal;
+                model.creditValidation.interest = model._credit.interest;
+                model.creditValidation.fee = model._credit.fees;
+                model.creditValidation.penal_interest = model._credit.penalInterest;
+                model.creditValidation.amountDue = model._credit.amountdue;
+                model.creditValidation.amountCollected = 10000;
+            } else {
+                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
+            }/*
+            model.creditValidation.customer_name = "Suresh";
+            model.creditValidation.principal = 1000;
+            model.creditValidation.interest = 90;
+            model.creditValidation.fee = 50;
+            model.creditValidation.penal_interest = 15;
+            model.creditValidation.amountDue = 1155;
+            model.creditValidation.amountCollected = 1155;*/
         },
 		
 		form: [
@@ -19962,58 +19969,58 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"title":"Payment",
 				"items":[
                     {
-                        key:"enterprise_name",
+                        key:"creditValidation.enterprise_name",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
                     {
-                        key:"applicant_name",
-                        title:"APPLICANT_NAME",
+                        key:"creditValidation.applicant_name",
+                        title:"APPLICANT",
                         readonly:true,
                     },
                     {
-                        key:"co_applicant_name",
-                        title:"CO_APPLICANT_NAME",
+                        key:"creditValidation.co_applicant_name",
+                        title:"CO_APPLICANT",
                         readonly:true,
                     },
                     {
-                        key:"principal",
+                        key:"creditValidation.principal",
                         title:"PRINCIPAL",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"interest",
+                        key:"creditValidation.interest",
                         title:"INTEREST",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"penal_interest",
+                        key:"creditValidation.penal_interest",
                         title:"PENAL_INTEREST",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"fee",
+                        key:"creditValidation.fee",
                         title:"FEES_AND_OTHER_CHARGES",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"amountDue",
+                        key:"creditValidation.amountDue",
                         title:"TOTAL_AMOUNT_DUE",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"amountCollected",
+                        key:"creditValidation.amountCollected",
                         title:"AMOUNT_COLLECTED",
                         readonly:true,
                         type:"amount"
                     },
                     {
-                        key:"status",
+                        key:"creditValidation.status",
                         title:"",
                         type:"radios",
                         titleMap:{
@@ -20023,45 +20030,35 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         }
                     },
                     {
-                        key:"reject_reason",
+                        key:"creditValidation.reject_reason",
                         title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
                             "name":"Amount not creditted in account",
                             "value":"1"
                         }],
-                        condition:"model.status=='3'"
+                        condition:"model.creditValidation.status=='3'"
                     },
                     {
-                        key:"reject_remarks",
+                        key:"creditValidation.reject_remarks",
                         title:"REJECT_REMARKS",
                         readonly:false,
-                        condition:"model.status=='3'"
+                        type: "textarea",
+                        condition:"model.creditValidation.status=='3'"
                     }
 				]
-			}
-			,
+			},
 			{
 				"type": "actionbox",
 				"items": [{
 					"type": "submit",
-					"title": "SAVE"
+					"title": "SUBMIT"
 			}]
 		}],
 		schema: function() {
 			return ManagementHelper.getVillageSchemaPromise();
 		},
 		actions: {
-            generateFregCode:function(model,form){
-                console.log(model);
-                if(model.village.pincode>100000){
-                    model.village.fregcode = Number(model.village.pincode+"001");
-                }
-                else {
-                    model.village.fregcode="";
-                }
-
-            },
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
@@ -20448,13 +20445,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 	};
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.CreditValidationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidationQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, entityManager){
     return {
-        "id": "CreditValidationQueue",
         "type": "search-list",
-        "name": "CreditValidationQueue",
         "title": "Credit Validation Queue",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
@@ -20546,26 +20541,50 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     body:[
                         {
-                            custname:"Kanimozhi",
+                            custname:"GeeKay Industries",
+                            applicant: "Kanimozhi",
+                            coApplicant: "Raja",
                             loanacno:"508640101335",
                             paymenttype:"PDC",
-                            amountdue:"1232",
+                            amountdue: 19548,
+                            principal: 14872.36,
+                            interest: 4235.64,
+                            penalInterest: 200,
+                            charges: 200,
+                            fees: 40,
+                            numberOfDues: 2,
                             installmentdate:"03-03-2016",
                             p2pdate:"15-03-2016"
                         },
                         {
-                            custname:"Sudha",
+                            custname:"Manjunatha Hydroflexibles",
+                            applicant: "Sudha",
+                            coApplicant: "Ragunath",
                             loanacno:"508640108276",
                             paymenttype:"PDC",
-                            amountdue:"1176",
+                            amountdue: 19397,
+                            principal: 14844.7,
+                            interest: 4262.3,
+                            penalInterest: 150,
+                            charges: 100,
+                            fees: 40,
+                            numberOfDues: 1,
                             installmentdate:"02-03-2016",
                             p2pdate:""
                         },
                         {
-                            custname:"Rajesh",
+                            custname:"VSR Engineering",
+                            applicant: "Rajesh",
+                            coApplicant: "Selvam",
                             loanacno:"508651508978",
                             paymenttype:"ACH",
-                            amountdue:"3683",
+                            amountdue: 49816,
+                            principal: 37110.26,
+                            interest: 10655.74,
+                            penalInterest: 1200,
+                            charges: 750,
+                            fees: 100,
+                            numberOfDues: 1,
                             installmentdate:"05-03-2016",
                             p2pdate:""
                         }
@@ -20582,11 +20601,6 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 }
             },
             listOptions: {
-                /*itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },*/
                 expandable:true,
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -20608,13 +20622,10 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             name: "Credit Validation",
                             desc: "",
                             fn: function(item, index){
-                                $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.CreditValidation', pageId: item.loanacno});
+                                entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }
@@ -21054,7 +21065,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.TransactionAuthorization', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -21076,28 +21087,30 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
 ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
 function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+    SessionStore,$state,$stateParams,Masters,authService){
 
-	return {
-		"type": "schema-form",
-		"title": "PAYMENT_DETAILS_FOR_LOAN",
-		initialize: function (model, form, formCtrl) {
+    return {
+        "type": "schema-form",
+        "title": "Payment Details for Loan : " + $stateParams.pageId,
+        initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
 
-            model.customer_name = "Suresh";
-            model.principal = 1000;
-            model.interest = 90;
-            model.fee = 50;
-            model.penal_interest = 15;
-            model.amountDue = 1155;
-            model.amountCollected = 1140;
+            model.customer_name = "GeeKay Industries";
+            model.applicant_name = "Kanimozhi";
+            model.co_applicant_name = "Raja";
+            model.principal = 14872.36;
+            model.interest = 4235.64;
+            model.fee = 40;
+            model.penal_interest = 200;
+            model.amountDue = 19548;
+            model.amountCollected = 10000;
         },
-		
-		form: [
-			{
-				"type":"box",
-				"title":"PAYMENT",
-				"items":[
+        
+        form: [
+            {
+                "type":"box",
+                "title":"Payment",
+                "items":[
                     {
                         type:"section",
                         "htmlClass": "row",
@@ -21106,8 +21119,18 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"customer_name",
-                                        title:"CUSTOMER_NAME",
+                                        title:"ENTERPRISE_NAME",
                                         readonly:true
+                                    },
+                                    {
+                                        key:"applicant_name",
+                                        title:"APPLICANT",
+                                        readonly:true,
+                                    },
+                                    {
+                                        key:"co_applicant_name",
+                                        title:"CO_APPLICANT",
+                                        readonly:true,
                                     }]
                                 },
                                 {
@@ -21123,7 +21146,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"principal",
-                                        title:"PRINCIPAL",
+                                        title:"Principal",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21141,7 +21164,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"interest",
-                                        title:"INTEREST",
+                                        title:"Interest",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21151,7 +21174,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "int_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -21168,7 +21191,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"penal_interest",
-                                        title:"PENAL_INTEREST",
+                                        title:"Penal Interest",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21178,7 +21201,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "p_int_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -21195,7 +21218,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"fee",
-                                        title:"FEES_AND_OTHER_CHARGES",
+                                        title:"Fees & Other Charges",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21205,7 +21228,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "fee_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -21222,7 +21245,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountDue",
-                                        title:"AMOUNT_DUE",
+                                        title:"Amount due",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21240,7 +21263,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountCollected",
-                                        title:"AMOUNT_COLLECTED",
+                                        title:"Amount Collected",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -21273,7 +21296,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_reason",
-                        title:"REJECT_REASON",
+                        title:"Reject Reason",
                         type:"select",
                         titleMap: [{
                             "name":"Amount not creditted in account",
@@ -21283,24 +21306,23 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_remarks",
-                        title:"REJECT_REMARKS",
+                        title:"Reject Remarks",
                         readonly:false,
                         condition:"model.status=='2'"
                     }
-				]
-			}
-			,
-			{
-				"type": "actionbox",
-				"items": [{
-					"type": "submit",
-					"title": "SAVE"
-			}]
-		}],
-		schema: function() {
-			return ManagementHelper.getVillageSchemaPromise();
-		},
-		actions: {
+                ]
+            },
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "submit",
+                    "title": "SUBMIT"
+            }]
+        }],
+        schema: function() {
+            return ManagementHelper.getVillageSchemaPromise();
+        },
+        actions: {
             generateFregCode:function(model,form){
                 console.log(model);
                 if(model.village.pincode>100000){
@@ -21311,11 +21333,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                 }
 
             },
-			submit: function(model, form, formName){
-				$log.info("Inside submit()");
-				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
+            submit: function(model, form, formName){
+                $log.info("Inside submit()");
+                console.warn(model);
+                if (window.confirm("Save?") && model.village) {
+                    PageHelper.showLoader();
                     if(isNaN(model.village.version)) model.village.version=0;
                     model.village.version = Number(model.village.version)+1;
                     Masters.post({
@@ -21332,10 +21354,10 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         ManagementHelper.backToDashboard();
                         PageHelper.showProgress('error',"Oops. An error occurred.",2000);
                     });
-				}
-			}
-		}
-	};
+                }
+            }
+        }
+    };
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
@@ -21468,6 +21490,190 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage")
         }
     };
 }]);
+irf.pageCollection.factory(irf.page("loans.individual.collections.DepositQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
+    return {
+        "type": "search-list",
+        "title": "DEPOSIT_QUEUE",
+        //"subTitle": "T_ENROLLMENTS_PENDING",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branch = SessionStore.getBranch();
+        },
+        /*offline: true,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage02"
+            }).$promise;
+
+            return promise;
+        },*/
+        definition: {
+            title: "SEARCH_DEPOSITS",
+            searchForm: [
+                "*"
+            ],
+            autoSearch:true,
+            searchSchema: {
+                "type": 'object',
+                "required":["branch"],
+                "properties": {
+                    "loan_no": {
+                        "title": "LOAN_ACCOUNT_NUMBER",
+                        "type": "string"
+                    },
+                   /* "first_name": {
+                        "title": "CUSTOMER_NAME",
+                        "type": "string"
+                    },*/
+                    /*"kyc_no": {
+                        "title": "KYC_NO",
+                        "type": "string"
+                    },
+                    "branch": {
+                        "title": "BRANCH_NAME",
+                        "type": "string",
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },*/
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": "string",
+                        "enumCode": "centre",
+                        "x-schema-form": {
+                            "type": "select",
+                            "filter": {
+                                "parentCode as branch": "model.branch"
+                            }
+                        }
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+                var promise = Enrollment.search({
+                    'branchName': searchOptions.branch,
+                    'centreCode': searchOptions.centre,
+                    'firstName': searchOptions.first_name,
+                    'lastName': searchOptions.last_name,
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,
+                    'stage': "Stage02"
+                }).$promise;
+
+
+                return $q.resolve({
+                    headers: {
+                        'x-total-count': 3
+                    },
+                    body:[
+                        {
+                            loanofficer:"Karthikeyan",
+                            custname:"GeeKay Industries",
+                            applicant: "Kanimozhi",
+                            coApplicant: "Raja",
+                            loanacno:"508640101335",
+                            paymenttype:"PDC",
+                            amountdue: 19548,
+                            principal: 14872.36,
+                            interest: 4235.64,
+                            penalInterest: 200,
+                            charges: 200,
+                            fees: 40,
+                            numberOfDues: 2,
+                            installmentdate:"03-03-2016",
+                            p2pdate:"15-03-2016"
+                        },
+                        {
+                            loanofficer:"Krithika",
+                            custname:"Manjunatha Hydroflexibles",
+                            applicant: "Sudha",
+                            coApplicant: "Ragunath",
+                            loanacno:"508640108276",
+                            paymenttype:"PDC",
+                            amountdue: 19397,
+                            principal: 14844.7,
+                            interest: 4262.3,
+                            penalInterest: 150,
+                            charges: 100,
+                            fees: 40,
+                            numberOfDues: 1,
+                            installmentdate:"02-03-2016",
+                            p2pdate:""
+                        },
+                        {
+                            loanofficer:"Manoj",
+                            custname:"VSR Engineering",
+                            applicant: "Rajesh",
+                            coApplicant: "Selvam",
+                            loanacno:"508651508978",
+                            paymenttype:"ACH",
+                            amountdue: 49816,
+                            principal: 37110.26,
+                            interest: 10655.74,
+                            penalInterest: 1200,
+                            charges: 750,
+                            fees: 100,
+                            numberOfDues: 1,
+                            installmentdate:"05-03-2016",
+                            p2pdate:""
+                        }
+                    ]
+                });
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 3;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                expandable: true,
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.custname,
+                        // "{{'APPLICANT'|translate}}: " + item.applicant,
+                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
+                        "{{'LOAN_OFFICER'|translate}}: " + item.loanofficer,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
+                        "{{'Amount Paid'|translate}}: " + item.amountdue
+                    ]
+                },
+                getActions: function(){
+                    return [
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
 ["$log", "SessionStore",'Utils', function($log, SessionStore, Utils) {
     return {

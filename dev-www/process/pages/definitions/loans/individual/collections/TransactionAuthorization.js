@@ -12,13 +12,15 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
         initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
 
-            model.customer_name = "Suresh";
-            model.principal = 1000;
-            model.interest = 90;
-            model.fee = 50;
-            model.penal_interest = 15;
-            model.amountDue = 1155;
-            model.amountCollected = 1140;
+            model.customer_name = "GeeKay Industries";
+            model.applicant_name = "Kanimozhi";
+            model.co_applicant_name = "Raja";
+            model.principal = 14872.36;
+            model.interest = 4235.64;
+            model.fee = 40;
+            model.penal_interest = 200;
+            model.amountDue = 19548;
+            model.amountCollected = 10000;
         },
         
         form: [
@@ -39,12 +41,12 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                     },
                                     {
                                         key:"applicant_name",
-                                        title:"APPLICANT_NAME",
+                                        title:"APPLICANT",
                                         readonly:true,
                                     },
                                     {
                                         key:"co_applicant_name",
-                                        title:"CO_APPLICANT_NAME",
+                                        title:"CO_APPLICANT",
                                         readonly:true,
                                     }]
                                 },
@@ -226,13 +228,12 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         condition:"model.status=='2'"
                     }
                 ]
-            }
-            ,
+            },
             {
                 "type": "actionbox",
                 "items": [{
                     "type": "submit",
-                    "title": "SAVE"
+                    "title": "SUBMIT"
             }]
         }],
         schema: function() {
