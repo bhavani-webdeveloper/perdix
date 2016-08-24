@@ -178,10 +178,10 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
                 getActions: function(){
                     return [
                         {
-                            name: "PAY_CASH",
+                            name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.collections.CollectPayment', item);
+                                entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -195,7 +195,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
                             name: "PROMISE_TO_PAY",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.collections.P2PUpdate', item);
+                                entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){

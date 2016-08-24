@@ -8,6 +8,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
+            model = model._bounce;
             if (!model.loanacno) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             }

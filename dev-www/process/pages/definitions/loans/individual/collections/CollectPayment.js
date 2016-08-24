@@ -10,7 +10,10 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		"type": "schema-form",
 		"title": "REPAYMENT_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
-            model.repayment = {};
+            model.repayment = model.repayment || {};
+            if (!model._bounce) {
+                $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+            }
             model.repayment.repaymentType = "Cash";
         },
 		form: [
@@ -19,9 +22,24 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 				"title":"Repayment",
 				"items":[
                     {
-                        type:"section",
-                        html:"{{model.repayment}}"
-
+                        key:"_bounce.custname",
+                        title:"ENTERPRISE_NAME",
+                        readonly:true
+                    },
+                    {
+                        key:"_bounce.applicant",
+                        title:"APPLICANT",
+                        readonly:true
+                    },
+                    {
+                        key:"_bounce.coApplicant",
+                        title:"CO_APPLICANT",
+                        readonly:true
+                    },
+                    {
+                        key: "_bounce.loanacno",
+                        title: "LOAN_ACCOUNT_NUMBER",
+                        readonly: true
                     },
                     {
                         key:"repayment.repaymentType",
