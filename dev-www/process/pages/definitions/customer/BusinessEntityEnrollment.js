@@ -14,6 +14,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.customerType = "Business";
         },
         modelPromise: function(pageId, _model) {
         },

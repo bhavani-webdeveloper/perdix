@@ -1,12 +1,12 @@
 irf.pageCollection.factory(irf.page("customer360.CustomerProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PageDefinition",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PageDefinition){
+    PageHelper, Utils, BiometricService, PagesDefinition){
 
     var branch = SessionStore.getBranch();
 
-    var config = PageDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
+    var config = PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
 
     var initData = function(model) {
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
