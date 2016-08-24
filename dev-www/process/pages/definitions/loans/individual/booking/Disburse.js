@@ -32,18 +32,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.Disburse"),
                             }*/
                 },
                 {
-                    "key": "loanAccount.branch_name",
-                    "title": "BRANCH_NAME"
+                    "key": "loanAccount.customerBranch"
                 },
                 {
 
-                    "key": "loanAccount.account_number",
-                    "title": "ACCOUNT_NUMBER"
+                    "key": "loanAccount.accountNumber"
                 },
                 {
 
-                    "title": "STATUS",
-                    "key": "loanAccount.status",
+                    
+                    "key": "loanAccount.applicationStatus",
                     "type": "select",
                     "enumCode": "status"
                     /*"titleMap": {

@@ -21,28 +21,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "loanAccount.customer_sign_date",
-                    "title": "CUSTOMER_SIGN_DATE",
+                    "key": "loanAccount.disbursementSchedules.customerSignatureDate",
+                    
                     "type": "date"
                 },
                 {
-                    "key": "loanAccount.disbursement_date",
+                    "key": "loanAccount.disbursementSchedules.scheduledDisbursementDate",
                     "title": "DISBURSEMENT_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "loanAccount.partner.name",
+                    "key": "loanAccount.partnerName",
                     "title": "PARTNER_NAME",
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.type",
-                    "title": "LOAN_TYPE",
+                    "key": "loanAccount.loanType",
+                    
                     "readonly": true
                 },
                 {
                     "key": "loanAccount.frequency",
-                    "title": "FREQUENCY",
+                    
                     "readonly": true,
                     "type": "select",
                     "enumCode": "frequency"
@@ -78,88 +78,88 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.amount",
-                    "title": "LOAN_PURPOSE_LEVEL_1",
+                    "key": "loanAccount.loanPurpose1",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.purpose",
-                    "title": "LOAN_PURPOSE_LEVEL_2",
+                    "key": "loanAccount.loanPurpose2",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.purpose2",
-                    "title": "LOAN_PURPOSE_LEVEL_3",
+                    "key": "loanAccount.loanPurpose3",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.center.name",
-                    "title": "CENTER_NAME",
+                    "key": "loanAccount.loanCentre",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_urn",
-                    "title": "GUARTANTOR_URN",
+                    "key": "loanAccount.guarantors.guaUrnNo",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_first_name",
-                    "title": "FIRST_NAME",
+                    "key": "loanAccount.guarantors.guaFirstName",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_middle_name",
-                    "title": "MIDDLE_NAME",
+                    "key": "loanAccount.guarantors.guaMiddleName",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_dob",
-                    "title": "DATE_OF_BIRTH",
+                    "key": "loanAccount.guarantors.guaDob",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_address",
-                    "title": "ADDRESS",
+                    "key": "loanAccount.guarantors.address",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.assets",
-                    "title": "ASSETS",
+                    "key": "loanAccount.guarantors.assetDetails",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.liabilities",
-                    "title": "LIABILITIES",
+                    "key": "loanAccount.guarantors.totalLiabilities",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_type",
-                    "title": "COLLATERAL_TYPE",
+                    "key": "loanAccount.collateral.collateralType",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_desc",
-                    "title": "COLLATERAL_DESCRIPTION",
+                    "key": "loanAccount.collateral.collateralDescription",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_value",
-                    "title": "COLLATERAL_VALUE",
+                    "key": "loanAccount.collateral.collateralValue",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.loanDocuments.document1",
+                    "key": "loanAccount.loanDocuments[1].document",
                     "title": "DOCUMENT_1",
                     "readonly": true
                 },
                 {
                     "title": "DOCUMENT_2",
-                    "key": "loanAccount.loanDocuments.document2",
+                    "key": "loanAccount.loanDocuments[2].document",
                     "readonly": true
                 },
                 {
                     "title": "DOCUMENT_3",
-                    "key": "loanAccount.loanDocuments.document3",
+                    "key": "loanAccount.loanDocuments[3].document",
                     "readonly": true
                 },
                 {
@@ -168,17 +168,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.interest",
-                    "title": "INTEREST_RATE",
+                    "key": "loanAccount.interestRate",
+                    
                     "readonly": true
                 },
                 {
                     "key": "loanAccount.processingFeeInPaisa",
-                    "title": "PROCESSING_FEES",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.cibil_charges",
+                    "key": "loanAccount.cibilCharges",
                     "title": "CIBIL_CHARGES",
                     "readonly": true
                 },
@@ -193,8 +193,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.sanction_date",
-                    "title": "SANCTION_DATE",
+                    "key": "loanAccount.sanctionDate",
+                    
                     "readonly": true
                 },
                 

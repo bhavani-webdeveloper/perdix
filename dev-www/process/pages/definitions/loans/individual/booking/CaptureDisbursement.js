@@ -21,13 +21,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
             "items": [
                 {
                     "key": "loanAccount.accountNumber",
-                    "title": "ACCOUNT_NUMBER",
+                    
                     "readonly": true,
                     "type": "number"
                 },
                 {
-                    "key": "loanAccount.customerSignatureDate",
-                    "title": "CUSTOMER_SIGN_DATE",
+                    "key": "loanAccount.disbursementSchedules.customerSignatureDate",
+                    
                     "type": "date",
                     "required": true,
                     "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -35,8 +35,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
                     }
                 },
                 {
-                    "key": "loanAccount.scheduledDisbursementDate",
-                    "title": "DISBURSEMENT_DATE",
+                    "key": "loanAccount.disbursementSchedules.scheduledDisbursementDate",
+                    
                     "type": "date"
                 },
                 {
