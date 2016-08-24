@@ -4,12 +4,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
 ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
 function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+    SessionStore,$state,$stateParams,Masters,authService){
 
-	return {
-		"type": "schema-form",
-		"title": "PAYMENT_DETAILS_FOR_LOAN",
-		initialize: function (model, form, formCtrl) {
+    return {
+        "type": "schema-form",
+        "title": "Payment Details for Loan : " + $stateParams.pageId,
+        initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
 
             model.customer_name = "Suresh";
@@ -20,12 +20,12 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
             model.amountDue = 1155;
             model.amountCollected = 1140;
         },
-		
-		form: [
-			{
-				"type":"box",
-				"title":"PAYMENT",
-				"items":[
+        
+        form: [
+            {
+                "type":"box",
+                "title":"Payment",
+                "items":[
                     {
                         type:"section",
                         "htmlClass": "row",
@@ -34,8 +34,18 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"customer_name",
-                                        title:"CUSTOMER_NAME",
+                                        title:"ENTERPRISE_NAME",
                                         readonly:true
+                                    },
+                                    {
+                                        key:"applicant_name",
+                                        title:"APPLICANT_NAME",
+                                        readonly:true,
+                                    },
+                                    {
+                                        key:"co_applicant_name",
+                                        title:"CO_APPLICANT_NAME",
+                                        readonly:true,
                                     }]
                                 },
                                 {
@@ -51,7 +61,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"principal",
-                                        title:"PRINCIPAL",
+                                        title:"Principal",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -69,7 +79,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"interest",
-                                        title:"INTEREST",
+                                        title:"Interest",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -79,7 +89,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "int_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -96,7 +106,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"penal_interest",
-                                        title:"PENAL_INTEREST",
+                                        title:"Penal Interest",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -106,7 +116,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "p_int_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -123,7 +133,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"fee",
-                                        title:"FEES_AND_OTHER_CHARGES",
+                                        title:"Fees & Other Charges",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -133,7 +143,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "fee_waived_off",
-                                        title: "WAIVED",
+                                        title: "Waived",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -150,7 +160,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountDue",
-                                        title:"AMOUNT_DUE",
+                                        title:"Amount due",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -168,7 +178,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountCollected",
-                                        title:"AMOUNT_COLLECTED",
+                                        title:"Amount Collected",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -201,7 +211,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_reason",
-                        title:"REJECT_REASON",
+                        title:"Reject Reason",
                         type:"select",
                         titleMap: [{
                             "name":"Amount not creditted in account",
@@ -211,24 +221,24 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_remarks",
-                        title:"REJECT_REMARKS",
+                        title:"Reject Remarks",
                         readonly:false,
                         condition:"model.status=='2'"
                     }
-				]
-			}
-			,
-			{
-				"type": "actionbox",
-				"items": [{
-					"type": "submit",
-					"title": "SAVE"
-			}]
-		}],
-		schema: function() {
-			return ManagementHelper.getVillageSchemaPromise();
-		},
-		actions: {
+                ]
+            }
+            ,
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "submit",
+                    "title": "SAVE"
+            }]
+        }],
+        schema: function() {
+            return ManagementHelper.getVillageSchemaPromise();
+        },
+        actions: {
             generateFregCode:function(model,form){
                 console.log(model);
                 if(model.village.pincode>100000){
@@ -239,11 +249,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                 }
 
             },
-			submit: function(model, form, formName){
-				$log.info("Inside submit()");
-				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
+            submit: function(model, form, formName){
+                $log.info("Inside submit()");
+                console.warn(model);
+                if (window.confirm("Save?") && model.village) {
+                    PageHelper.showLoader();
                     if(isNaN(model.village.version)) model.village.version=0;
                     model.village.version = Number(model.village.version)+1;
                     Masters.post({
@@ -260,8 +270,8 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         ManagementHelper.backToDashboard();
                         PageHelper.showProgress('error',"Oops. An error occurred.",2000);
                     });
-				}
-			}
-		}
-	};
+                }
+            }
+        }
+    };
 }]);
