@@ -4,7 +4,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
-        "subTitle": "",
+        //"subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
@@ -73,26 +73,50 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     body:[
                         {
-                            custname:"Kanimozhi",
+                            custname:"GeeKay Industries",
+                            applicant: "Kanimozhi",
+                            coApplicant: "Raja",
                             loanacno:"508640101335",
                             paymenttype:"PDC",
-                            amountdue:"1232",
+                            amountdue:"19548",
+                            principal: "14872.36",
+                            interest: "4235.64",
+                            penalInterest: "200",
+                            charges: "200",
+                            fees: "40",
+                            numberOfDues: "2",
                             installmentdate:"03-03-2016",
                             p2pdate:"15-03-2016"
                         },
                         {
-                            custname:"Sudha",
+                            custname:"Manjunatha Hydroflexibles",
+                            applicant: "Sudha",
+                            coApplicant: "Ragunath",
                             loanacno:"508640108276",
                             paymenttype:"PDC",
-                            amountdue:"1176",
+                            amountdue:"19397",
+                            principal: "14844.7",
+                            interest: "4262.3",
+                            penalInterest: "150",
+                            charges: "100",
+                            fees: "40",
+                            numberOfDues: "1",
                             installmentdate:"02-03-2016",
                             p2pdate:""
                         },
                         {
-                            custname:"Rajesh",
+                            custname:"VSR Engineering",
+                            applicant: "Rajesh",
+                            coApplicant: "Selvam",
                             loanacno:"508651508978",
                             paymenttype:"ACH",
-                            amountdue:"3683",
+                            amountdue:"49816",
+                            principal: "37110.26",
+                            interest: "10655.74",
+                            penalInterest: "1200",
+                            charges: "750",
+                            fees: "100",
+                            numberOfDues: "1",
                             installmentdate:"05-03-2016",
                             p2pdate:""
                         }
@@ -123,8 +147,16 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.custname,
-                        '{{"LOAN_ACCOUNT_NUMBER"|translate}} : ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue
+                        // "{{'APPLICANT'|translate}}: " + item.applicant,
+                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
+                        "{{'Total Amount Due'|translate}}: " + item.amountdue,
+                        "{{'PRINCIPAL'|translate}}: " + item.principal,
+                        "{{'INTEREST'|translate}}: " + item.interest,
+                        "{{'Penal interest'|translate}}: " + item.penalInterest,
+                        "{{'Charges'|translate}}: " + item.charges,
+                        "{{'FEES'|translate}}: " + item.fees,
+                        "{{'Number of dues'|translate}}: " + item.numberOfDues
                     ]
                 },
                 getActions: function(){
@@ -134,6 +166,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -148,6 +181,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
