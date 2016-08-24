@@ -185,7 +185,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 					if (model.ach.id) {
 						ACHPDC.update(model.ach, function(response){
 							PageHelper.hideLoader();
-							model.ach=Utils.removeNulls(response,true);							
+							model.ach=Utils.removeNulls(model.ach,true);
 						}, function(errorResponse){
 							PageHelper.hideLoader();
 							PageHelper.showErrors(errorResponse);
