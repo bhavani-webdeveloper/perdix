@@ -34,9 +34,19 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"customer_name",
-                                        title:"Customer Name",
+                                        title:"ENTERPRISE_NAME",
                                         readonly:true
-                                    }]
+                                    },
+                                    {
+                                        key:"applicant_name",
+                                        title:"APPLICANT_NAME",
+                                        readonly:true,
+                                    },
+                                    {
+                                        key:"co_applicant_name",
+                                        title:"CO_APPLICANT_NAME",
+                                        readonly:true,
+                                    },]
                                 },
                                 {
                                 "type": "section",

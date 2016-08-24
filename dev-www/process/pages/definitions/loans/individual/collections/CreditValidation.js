@@ -27,9 +27,19 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"title":"Payment",
 				"items":[
                     {
-                        key:"customer_name",
-                        title:"Customer Name",
+                        key:"enterprise_name",
+                        title:"ENTERPRISE_NAME",
                         readonly:true
+                    },
+                    {
+                        key:"applicant_name",
+                        title:"APPLICANT_NAME",
+                        readonly:true,
+                    },
+                    {
+                        key:"co_applicant_name",
+                        title:"CO_APPLICANT_NAME",
+                        readonly:true,
                     },
                     {
                         key:"principal",
