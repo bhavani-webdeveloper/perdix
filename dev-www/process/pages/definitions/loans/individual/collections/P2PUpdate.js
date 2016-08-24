@@ -15,10 +15,49 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"title":"PROMISE_TO_PAY",
 				"items":[
                     {
+                        key:"custname",
+                        title:"ENTERPRISE_NAME",
+                        readonly:true
+                    },
+                    {
+                        key:"applicant",
+                        title:"APPLICANT",
+                        readonly:true
+                    },
+                    {
+                        key:"coApplicant",
+                        title:"CO_APPLICANT",
+                        readonly:true
+                    },
+                    {
+                        key: "loanacno",
+                        title: "LOAN_ACCOUNT_NUMBER",
+                        readonly: true
+                    },
+                    {
+                        key: "customerNotAvailable",
+                        title: "CUSTOMER_NOT_AVAILABLE",
+                        type: "checkbox",
+                        schema: {
+                            default: false
+                        }
+                    },
+                    {
                         key:"Promise2PayDate",
                         title:"PROMISE_TO_PAY_DATE",
                         readonly:false,
                         type:"date",
+                    },
+                    {
+                        key: "customerCategory",
+                        title: "CUSTOMER_CATEGORY",
+                        type: "select",
+                        titleMap: {
+                            "A": "A",
+                            "B": "B",
+                            "C": "C",
+                            "D": "D"
+                        }
                     },
                     {
                         key:"Reason",
