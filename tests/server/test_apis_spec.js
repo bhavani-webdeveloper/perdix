@@ -45,11 +45,10 @@ frisby.create('Check Login Returns Token for Correct')
             .expectJSONTypes({
                 "stages": Object,
                 "schema": Object,
-                "schema.properties": Object
+            })
+            .expectJSONTypes('schema.properties', {
+                "customerHealth": Object
             })
             .toss()
-
-
-
     })
     .toss();

@@ -261,7 +261,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
                 ]
         }],
         schema: function() {
-            return SchemaResource.getGlobalSchema().$promise;
+            return SchemaResource.getLoanAccountSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){

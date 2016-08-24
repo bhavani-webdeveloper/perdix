@@ -11,13 +11,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
+
         },
         form: [{
             "type": "box",
             "title": "LOAN_ACCOUNT", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
-            
+
             "items": [
                 {
                     "key": "loanAccount.accountNumber",
@@ -46,7 +46,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
             ]
         }],
         schema: function() {
-            return SchemaResource.getGlobalSchema().$promise;
+            return SchemaResource.getLoanAccountSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){

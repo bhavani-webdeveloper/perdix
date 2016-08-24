@@ -189,7 +189,7 @@
                 "coApplicant": {
                     "type": "string"
                 },
-                "coBorrowerUrnNo": {
+                    "coBorrowerUrnNo": {
                     "type": "string"
                 },
                 "collateral": {
