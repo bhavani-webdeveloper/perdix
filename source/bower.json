@@ -38,7 +38,6 @@
     "pikaday": "~1.4.0",
     "Swipe": "swipe#~2.0.0",
     "angular-ladda": "~0.3.4",
-    "irf-elements": "dev",
     "moment": "^2.13.0"
   },
   "overrides": {
