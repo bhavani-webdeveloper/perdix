@@ -19305,7 +19305,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
-        "subTitle": "",
+        //"subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
@@ -19374,26 +19374,50 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     body:[
                         {
-                            custname:"Kanimozhi",
+                            custname:"GeeKay Industries",
+                            applicant: "Kanimozhi",
+                            coApplicant: "Raja",
                             loanacno:"508640101335",
                             paymenttype:"PDC",
-                            amountdue:"1232",
+                            amountdue:"19548",
+                            principal: "14872.36",
+                            interest: "4235.64",
+                            penalInterest: "200",
+                            charges: "200",
+                            fees: "40",
+                            numberOfDues: "2",
                             installmentdate:"03-03-2016",
                             p2pdate:"15-03-2016"
                         },
                         {
-                            custname:"Sudha",
+                            custname:"Manjunatha Hydroflexibles",
+                            applicant: "Sudha",
+                            coApplicant: "Ragunath",
                             loanacno:"508640108276",
                             paymenttype:"PDC",
-                            amountdue:"1176",
+                            amountdue:"19397",
+                            principal: "14844.7",
+                            interest: "4262.3",
+                            penalInterest: "150",
+                            charges: "100",
+                            fees: "40",
+                            numberOfDues: "1",
                             installmentdate:"02-03-2016",
                             p2pdate:""
                         },
                         {
-                            custname:"Rajesh",
+                            custname:"VSR Engineering",
+                            applicant: "Rajesh",
+                            coApplicant: "Selvam",
                             loanacno:"508651508978",
                             paymenttype:"ACH",
-                            amountdue:"3683",
+                            amountdue:"49816",
+                            principal: "37110.26",
+                            interest: "10655.74",
+                            penalInterest: "1200",
+                            charges: "750",
+                            fees: "100",
+                            numberOfDues: "1",
                             installmentdate:"05-03-2016",
                             p2pdate:""
                         }
@@ -19424,8 +19448,16 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.custname,
-                        '{{"LOAN_ACCOUNT_NUMBER"|translate}} : ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue
+                        // "{{'APPLICANT'|translate}}: " + item.applicant,
+                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
+                        "{{'Total Amount Due'|translate}}: " + item.amountdue,
+                        "{{'PRINCIPAL'|translate}}: " + item.principal,
+                        "{{'INTEREST'|translate}}: " + item.interest,
+                        "{{'Penal interest'|translate}}: " + item.penalInterest,
+                        "{{'Charges'|translate}}: " + item.charges,
+                        "{{'FEES'|translate}}: " + item.fees,
+                        "{{'Number of dues'|translate}}: " + item.numberOfDues
                     ]
                 },
                 getActions: function(){
@@ -19435,6 +19467,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -19449,6 +19482,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -19560,26 +19594,50 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     },
                     body:[
                         {
-                            custname:"Kanimozhi",
+                            custname:"GeeKay Industries",
+                            applicant: "Kanimozhi",
+                            coApplicant: "Raja",
                             loanacno:"508640101335",
                             paymenttype:"PDC",
-                            amountdue:"1232",
+                            amountdue:"19548",
+                            principal: "14872.36",
+                            interest: "4235.64",
+                            penalInterest: "200",
+                            charges: "200",
+                            fees: "40",
+                            numberOfDues: "2",
                             installmentdate:"03-03-2016",
                             p2pdate:"15-03-2016"
                         },
                         {
-                            custname:"Sudha",
+                            custname:"Manjunatha Hydroflexibles",
+                            applicant: "Sudha",
+                            coApplicant: "Ragunath",
                             loanacno:"508640108276",
                             paymenttype:"PDC",
-                            amountdue:"1176",
+                            amountdue:"19397",
+                            principal: "14844.7",
+                            interest: "4262.3",
+                            penalInterest: "150",
+                            charges: "100",
+                            fees: "40",
+                            numberOfDues: "1",
                             installmentdate:"02-03-2016",
                             p2pdate:""
                         },
                         {
-                            custname:"Rajesh",
+                            custname:"VSR Engineering",
+                            applicant: "Rajesh",
+                            coApplicant: "Selvam",
                             loanacno:"508651508978",
                             paymenttype:"ACH",
-                            amountdue:"3683",
+                            amountdue:"49816",
+                            principal: "37110.26",
+                            interest: "10655.74",
+                            penalInterest: "1200",
+                            charges: "750",
+                            fees: "100",
+                            numberOfDues: "1",
                             installmentdate:"05-03-2016",
                             p2pdate:""
                         }
@@ -19610,17 +19668,26 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.custname,
-                        '{{"LOAN_ACCOUNT_NUMBER"|translate}} : ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue
+                        // "{{'APPLICANT'|translate}}: " + item.applicant,
+                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
+                        "{{'Total Amount Due'|translate}}: " + item.amountdue,
+                        "{{'PRINCIPAL'|translate}}: " + item.principal,
+                        "{{'INTEREST'|translate}}: " + item.interest,
+                        "{{'Penal interest'|translate}}: " + item.penalInterest,
+                        "{{'Charges'|translate}}: " + item.charges,
+                        "{{'FEES'|translate}}: " + item.fees,
+                        "{{'Number of dues'|translate}}: " + item.numberOfDues
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "PAY_CASH",
+                            name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -19635,6 +19702,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -19894,9 +19962,19 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				"title":"Payment",
 				"items":[
                     {
-                        key:"customer_name",
-                        title:"Customer Name",
+                        key:"enterprise_name",
+                        title:"ENTERPRISE_NAME",
                         readonly:true
+                    },
+                    {
+                        key:"applicant_name",
+                        title:"APPLICANT_NAME",
+                        readonly:true,
+                    },
+                    {
+                        key:"co_applicant_name",
+                        title:"CO_APPLICANT_NAME",
+                        readonly:true,
                     },
                     {
                         key:"principal",
@@ -21274,85 +21352,28 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage")
             model.loggedInUser = SessionStore.getUsername();
 
             model.pendingCashDeposits = [{
-                "loan_ac_no":"5010001229342345",
-                "customer_name":"Srilakshmi",
-                "amount_collected":1200
+                "loan_ac_no":"508640101335",
+                "customer_name":"GeeKay Industries",
+                "amount_collected": 10000
             },
             {
-                "loan_ac_no":"5010001229342322",
-                "customer_name":"Janardhan",
-                "amount_collected":1100
+                "loan_ac_no":"508640108276",
+                "customer_name":"Manjunatha Hydroflexibles",
+                "amount_collected":6000
             },
             {
                 "loan_ac_no":"5010001229347869",
-                "customer_name":"Krishna",
-                "amount_collected":800
-            },
-            {
-                "loan_ac_no":"5010001229341122",
-                "customer_name":"Raju",
-                "amount_collected":2000
+                "customer_name":"VSR Engineering",
+                "amount_collected":49816
             }];
-            //this.form[0].items=[];
+            model.depositBank = "HDFC Bank";
+            model.depositBranch = "Nungambakkam";
 
-            /*this.form[0].items.push({
-                "type":"section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-xs-8",
-                    "items": [{
-                        "type": "section",
-                        "html": "<H4>{{'Loan Account Number' | translate}}</H4>"
-                    }]
-                },
-                {
-                    "type": "section",
-                    "htmlClass": "col-xs-4",
-                    "items": [{
-                        "type": "section",
-                        "html": "<H4>{{'Amount collected' | translate}}</H4>"
-                    }]
-                }]
-            });*/
             model.totalAmount=0;
             for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
                 model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
-
             }
-            /*this.form[0].items.push({
-                "type":"section",
-                "html":"<hr>"
-            },
-            {
-                "type":"section",
-                "htmlClass": "row",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-xs-8",
-                    "items": [{
-                        "type": "section",
-                        "html": "<strong>{{'Total' | translate}}</strong>"
-                    }]
-                },
-                {
-                    "type": "section",
-                    "htmlClass": "col-xs-4",
-                    "items": [{
-                        "type": "amount",
-                        "html": "<strong>" + irfElementsConfig.currency.iconHtml + "&nbsp;" + totalAmount + "</strong>"
-                    }]
-                }]
-            },
-            {
-                "type":"section",
-                "html":"<hr>"
-            },
-            {
-                "type":"submit",
-                "title":"SUBMIT"
-            });*/
-
+            model.amountDeposited = model.totalAmount;
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -21425,16 +21446,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage")
             {
                 "key":"depositBranch",
                 "title":"DEPOSITED_BRANCH"
-            },
-            {
-                "type":"section",
-                "html":"<hr>"
-            },
-            {
-                "type":"submit",
-                "title":"SUBMIT"
             }
             ]
+        },{
+            "type": "actionbox",
+            "items": [{
+                "type": "submit",
+                "title": "SUBMIT"
+            }]
         }],
         schema: function() {
             return Enrollment.getSchema().$promise;
@@ -22022,7 +22041,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 					if (model.ach.id) {
 						ACHPDC.update(model.ach, function(response){
 							PageHelper.hideLoader();
-							model.ach=Utils.removeNulls(response,true);							
+							model.ach=Utils.removeNulls(model.ach,true);
 						}, function(errorResponse){
 							PageHelper.hideLoader();
 							PageHelper.showErrors(errorResponse);
