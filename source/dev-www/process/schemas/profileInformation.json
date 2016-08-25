@@ -42,6 +42,15 @@
                                     "Stage01"
                                 ]
                             },
+                            "kyc1ReverseImagePath":{
+                                "type": "string",
+                                "title": "KYC1_PROOF_DOCUMENT_BACKSIDE",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1",
+                                "captureStages": [
+                                    "Stage01"
+                                ]
+                            },
                             "kyc1IssueDate": {
                                 "type": "string",
                                 "title": "KYC1_ISSUE_DATE",
@@ -76,6 +85,15 @@
                             "kyc2ImagePath": {
                                 "type": "string",
                                 "title": "KYC2_PROOF_DOCUMENT",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC2",
+                                "captureStages": [
+                                    "Stage01"
+                                ]
+                            },
+                            "kyc2ReverseImagePath":{
+                                "type": "string",
+                                "title": "KYC2_PROOF_DOCUMENT_BACKSIDE",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC2",
                                 "captureStages": [
@@ -127,6 +145,15 @@
                 "addressProofImageId": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_IMAGE_ID",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "ADDRESSPROOF",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+                },
+                "addressProofReverseImageId":{
+                    "type": "string",
+                    "title": "ADDRESS_PROOF_BACK_SIDE",
                     "category": "CustomerEnrollment",
                     "subCategory": "ADDRESSPROOF",
                     "captureStages":[
@@ -579,6 +606,16 @@
                     "captureStages":[
                         "Stage01"
                     ]
+                },
+                "identityProofReverseImageId":{
+                    "title": "ID_PROOF_BACK_SIDE",
+                    "type": "string",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "IDENTITYPROOF",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+
                 },
                 "identityProofNo": {
                     "type": "string",

@@ -28,7 +28,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
-            model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            //model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
             && model.customer.udf.userDefinedFieldValues.udf1) {
@@ -508,7 +509,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -550,7 +551,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -657,6 +658,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
+                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
                         },
@@ -678,6 +685,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
+                            key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
                             "offline": true

@@ -285,7 +285,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "viewParams": function(modelValue, form, model) {
@@ -397,7 +397,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "viewParams": function(modelValue, form, model) {
@@ -459,6 +459,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
+                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
                         },
@@ -480,6 +486,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
+                            key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
