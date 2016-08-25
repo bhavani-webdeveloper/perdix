@@ -6,8 +6,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
     var branch = SessionStore.getBranch();
 
-    var config = PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
-
     var initData = function(model) {
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
@@ -20,8 +18,23 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "title": "PROFILE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Profile Page got initialized");
-            initData(model);
+            var self = this;
+            self.formBkp = self.form;
+            PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile").then(function(config){
+                if (config) {
+                    $log.info("config:");
+                    $log.info(config);
+                    var f1 = _.cloneDeep(self.form);
+                    for (var i = f1.length - 1; i >= 0; i--) {
+                        f1[i].readonly = config.readonly;
+                    };
+                    self.form = f1;
+                } else {
+                    self.form = self.formBkp;
+                }
+                $log.info("Profile Page got initialized");
+                initData(model);
+            });
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {

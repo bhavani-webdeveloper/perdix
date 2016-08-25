@@ -42,7 +42,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.entityId",
                         title:"ENTITY_ID",
                         type: "lov",
-                        lovonly: true,
+                        autoLov: true,
                         inputMap: {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -58,22 +58,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
-                            "id": "customer.entityId",
+                            "urnNo": "customer.entityId",
                             "firstName": "customer.firstName"
                         },
                         searchHelper: formHelper,
-                        search: function(inputModel, form) {
+                        search: function(inputModel, form, model) {
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var promise = Enrollment.search({
                                 'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                'firstName': inputModel.first_name,
+                                'firstName': inputModel.firstName,
+                                'urnNo': model.customer.entityId
                             }).$promise;
                             return promise;
                         },
-                        getListDisplayItem: function(data, index) {
+                        getListDisplayItem: function(item, index) {
                             return [
-                                [data.firstName, data.fatherFirstName].join(' '),
-                                data.id
+                                [item.firstName, item.fatherFirstName].join(' '),
+                                item.id,
+                                item.urnNo
                             ];
                         }
                     },

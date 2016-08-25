@@ -15,6 +15,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Business";
+            model.customer.centreCode = "Demo";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -34,13 +35,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key:"customer.centreCode",
-                        type:"select",
-                        title: "SPOKE",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        screenFilter: true
+                        key:"customer.centreCode"
                     },
                     {
                         key: "customer.entityId",
@@ -87,39 +82,31 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
+                        key: "customer.enterprise.businessName",
+                        title:"ENTITY_NAME"
+                    },
+                    {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
-                    }/*,
-                    {
-                        key:"customer.photoImageId",
-                        title: "ENTITY_PHOTO",
-                        type:"file",
-                        fileType:"image/*"
-                    }*/
-                ]
-            },
-            {
-                type:"box",
-                title:"BUSINESS",
-                items:[
+                    },
                     {
                         key: "customer.enterprise.referredBy",
                         title:"REFERRED_BY",
                         type: "select",
                         titleMap: {
-                            "a":"Cold call",
-                            "b": "Existing customer reference",
-                            "c": "Referral partner"
+                            "cold_call":"Cold call",
+                            "existing_customer_reference": "Existing customer reference",
+                            "referral_partner": "Referral partner"
                         }
                     },
                     {
                         key: "customer.enterprise.referredName",
                         title:"REFERRED_NAME"
-                    },
+                    },/*
                     {
                         key: "customer.enterprise.businessName",
                         title:"COMPANY_NAME"
-                    },
+                    },*/
                     {
                         key: "customer.enterprise.companyOperatingSince",
                         title:"OPERATING_SINCE",
@@ -130,12 +117,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         title: "YEARS_OF_BUSINESS_PRESENT_AREA",
                         titleMap: {
-                            a: "Less Than 1 Year",
-                            b: "1 to 2 Years",
-                            c: "2 to 3 Years",
-                            d: "3 to 5 Years",
-                            e: "5 to 10 Years",
-                            f: "Greater Than 10 Years"
+                            "less_than_1_year": "Less Than 1 Year",
+                            "_1_to_2_years": "1 to 2 Years",
+                            "_2_to_3_years": "2 to 3 Years",
+                            "_3_to_5_years": "3 to 5 Years",
+                            "_5_to_10_years": "5 to 10 Years",
+                            "greater_than_10_years": "Greater Than 10 Years"
                         }
                     },
                     {
@@ -143,11 +130,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
                         titleMap: {
-                            a: "Less Than 1 Year",
-                            b: "1 to 3 Years",
-                            c: "4 to 6 Years",
-                            d: "6 to 10 Years",
-                            f: "Greater Than 10 Years"
+                            "less_than_1_year": "Less Than 1 Year",
+                            "_1_to_3_years": "1 to 3 Years",
+                            "_3_to_6_years": "3 to 6 Years",
+                            "_6_to_10_years": "6 to 10 Years",
+                            "greater_than_10_years": "Greater Than 10 Years"
                         }
                     },
                     {
@@ -159,76 +146,81 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.ownership",
-                        title: "Ownership",
+                        title: "OWNERSHIP",
                         type: "select",
                         titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
+                            "owned": "Owned",
+                            "rental": "Rental",
+                            "lease": "Lease"
                         }
                     },
                     {
-                        key: "customer.enterprise.constitution",
+                        key: "customer.enterprise.businessConstitution",
                         title: "CONSTITUTION",
                         type: "select",
                         titleMap: {
-                            a: "Proprietorship",
-                            b: "Partnership",
-                            c: "Private Ltd"
+                            "proprietorship": "Proprietorship",
+                            "partnership": "Partnership",
+                            "private_ltd": "Private Ltd"
                         }
                     },
                     {
-                        key: "customer.enterprise.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
+                        key: "customer.enterprise.companyRegistered",
+                        type: "date",
                         title: "IS_REGISTERED"
                     },
                     {
                         key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered",
                         title: "REGISTRATION_TYPE",
                         type: "select",
                         titleMap: {
-                            a: "TIN",
-                            b: "SSI number",
-                            c: "VAT number",
-                            d: "Business PAN number",
-                            e: "Service tax number",
-                            f: "DIC",
-                            g: "MSME",
-                            h: "S&E"
+                            "tin": "TIN",
+                            "ssi_number": "SSI number",
+                            "vat_number": "VAT number",
+                            "business_pan_number": "Business PAN number",
+                            "service_tax_number": "Service tax number",
+                            "dic": "DIC",
+                            "msme": "MSME",
+                            "s_and_e": "S&E"
                         }
                     },
                     {
                         key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered",
                         title: "REGISTRATION_NUMBER"
                     },
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
-                        key: "customer.enterprise.businessSubsector",
+                        key: "customer.enterprise.businessSubType",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                 ]
             },
@@ -255,9 +247,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     "customer.pincode",
                     {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key:"customer.state"
                     },
                     "customer.stdCode",
                     "customer.landLineNo",
@@ -396,17 +386,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             return Enrollment.getSchema().$promise;
         },
         actions: {
-
-            setProofs: function(model) {
-                model.customer.addressProofNo=model.customer.aadhaarNo;
-                model.customer.identityProofNo=model.customer.aadhaarNo;
-                model.customer.identityProof='Aadhar card';
-                model.customer.addressProof='Aadhar card';
-                model.customer.addressProofSameAsIdProof = true;
-                if (model.customer.yearOfBirth) {
-                    model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                }
-            },
             preSave: function(model, form, formName) {
                 var deferred = $q.defer();
                 if (model.customer.firstName) {
@@ -420,10 +399,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-                if (!EnrollmentHelper.validateData(model)) {
-                    $log.warn("Invalid Data, returning false");
-                    return false;
-                }
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -433,7 +408,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                $log.info(JSON.stringify(sortFn(reqData)));
+                //reqData.customer.enterprise.companyRegistered = "Yes";
+                //$log.info(JSON.stringify(sortFn(reqData)));
                 EnrollmentHelper.saveData(reqData).then(function(res){
                     model.customer = _.clone(res.customer);
                     model = EnrollmentHelper.fixData(model);
