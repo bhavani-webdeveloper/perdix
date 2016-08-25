@@ -12,7 +12,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
         },
         form: [{
             "type": "box",
@@ -197,7 +196,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     
                     "readonly": true
                 },
-                
+
                 {
                     "type": "actionbox",
                     "items": [{

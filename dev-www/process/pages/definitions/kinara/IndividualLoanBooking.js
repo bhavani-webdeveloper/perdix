@@ -30,7 +30,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
 
             "items": [
                 {
-                    "key": "partner.name",
+                    "key": "loanAccount.partnerCode",
                     "title": "Partner Name",
                     "type": "select"
                 },
