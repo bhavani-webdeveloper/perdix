@@ -14,6 +14,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.centreCode = "Basti";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -30,6 +31,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
+                        readonly: true
+                    },
+                    {
+                        key:"customer.centreCode",
+                        title: "SPOKE",
                         readonly: true
                     },
                     {
@@ -122,196 +128,208 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         }
                     },
                     {
-                        key:"customer.gender",
-                        type:"radios"
+                        key:"customer.gender1",
+                        title: "Gender",
+                        type:"radios",
+                        titleMap: {
+                            a:"Male",
+                            b:"Female",
+                            c:"Unspecified"
+                        }
                     },
                     {
-                        key: "customer.religion",
-                        type: "select"
-                    },
-                    {
-                        key:"customer.centreCode",
-                        type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        screenFilter: true
+                        key: "customer.religion1",
+                        title: "Religion",
+                        type: "select",
+                        titleMap: {
+                            a:"Hindu",
+                            b:"Muslim",
+                            c:"Chirstian",
+                            d:"Jain",
+                            e:"Buddhism",
+                            f:"Others"
+                        }
                     },
                     {
                         key: "customer.educationLevel",
-                        title: "Education Level"
+                        title: "Education Level",
+                        type: "select",
+                        titleMap: {
+                            a:"Below SSLC",
+                            b:"SSLC",
+                            c:"HSC",
+                            d:"Graduate/Diploma/ITI",
+                            e:"Professional Degree",
+                            f:"Others"
+                        }
                     },
                     {
                         key: "customer.relationshipToBusiness",
-                        title: "Relationship to Business"
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "KYC",
-                "items":[
-                    "customer.mobilePhone",
-                    {
-                        key: "customer.mobilePhone2",
-                        title: "MOBILE_PHONE_2"
+                        title: "Relationship to Business",
+                        type: "select",
+                        titleMap: {
+                            a:"Proprietor",
+                            b:"Partner",
+                            c:"Director",
+                            d:"Others"
+                        }
                     },
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.locality",
                     {
-                        key:"customer.villageName",
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true
-                    },
-                    "customer.postOffice",
-                    {
-                        key:"customer.district",
-                        type:"select",
-                        screenFilter: true
-                    },
-                    "customer.pincode",
-                    {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key: "customer.enterpriseCustomerRelations.linkedToCustomerId",
+                        type: "lov",
+                        title: "BUSINESS"
                     }
                 ]
             },
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "items":[
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.locality",
-                    {
-                        key:"customer.villageName",
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true
+                "items":[{
+                    type: "fieldset",
+                    title: "CUSTOMER_PRESENT_ADDRESS",
+                    items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            },
+                            "customer.mailSameAsResidence",
+                            {
+                                key: "customer.latitude",
+                                title: "HOUSE_LOCATION",
+                                type: "geotag",
+                                latitude: "customer.latitude",
+                                longitude: "customer.longitude"
+                            }
+                        ]
+                    },{
+                        type: "fieldset",
+                        title: "CUSTOMER_PERMANENT_ADDRESS",
+                        condition:"!model.customer.mailSameAsResidence",
+                        items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            }
+                        ]
                     },
-                    "customer.postOffice",
                     {
-                        key:"customer.district",
-                        type:"select",
-                        screenFilter: true
+                        key: "c",
+                        title: "Years in current address",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.pincode",
                     {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key: "cc",
+                        title: "Years in current area",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.stdCode",
-                    "customer.landLineNo",
-                    "customer.mobilePhone"
+                    {
+                        key: "d",
+                        title: "Ownership",
+                        type: "select",
+                        titleMap: {
+                            a:"Owned",
+                            b: "Rented",
+                            c:"Leased"
+                        }
+                    }
                 ]
             },
             {
                 type:"box",
-                title:"BUSINESS",
+                title:"KYC",
                 items:[
                     {
-                        key: "business.referredBy",
-                        title:"REFERRED_BY"
-                    },
-                    {
-                        key: "business.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                        key: "business.companyName",
-                        title:"COMPANY_NAME"
-                    },
-                    {
-                        key: "business.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date",
-                        onChange: function(modelValue, form, model) {
-                            model.business.yearsInArea = model.business.yearsInAddress = moment().diff(moment(modelValue), 'years');
-                        }
-                    },
-                    {
-                        key: "business.yearsInArea",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "business.yearsInAddress",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "business.ownership",
-                        title: "Ownership",
-                        type: "select",
-                        titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
-                        }
-                    },
-                    {
-                        key: "business.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
-                        title: "IS_REGISTERED"
-                    },
-                    {
-                        key: "business.registrationType",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_TYPE"
-                    },
-                    {
-                        key: "business.registrationNumber",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "business.constitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessLine",
-                        title: "BUSINESS_LINE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
+                        type:"fieldset",
+                        title:"IDENTITY_PROOF",
+                        items:[
+                            {
+                                key:"customer.identityProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.identityProofImageId",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf30",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.identityProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.idProofIssueDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.idProofValidUptoDate",
+                                type:"date"
+                            }
+                        ]
+                    }
                 ]
             },
             {

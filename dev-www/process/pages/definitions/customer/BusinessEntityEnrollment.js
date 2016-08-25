@@ -34,6 +34,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
+                        key:"customer.centreCode",
+                        type:"select",
+                        title: "SPOKE",
+                        filter: {
+                            "parentCode": "model.branchId"
+                        },
+                        screenFilter: true
+                    },
+                    {
                         key: "customer.entityId",
                         title:"ENTITY_ID",
                         type: "lov",
@@ -80,21 +89,147 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
-                    },
+                    }/*,
                     {
                         key:"customer.photoImageId",
                         title: "ENTITY_PHOTO",
                         type:"file",
                         fileType:"image/*"
+                    }*/
+                ]
+            },
+            {
+                type:"box",
+                title:"BUSINESS",
+                items:[
+                    {
+                        key: "customer.enterprise.referredBy",
+                        title:"REFERRED_BY",
+                        type: "select",
+                        titleMap: {
+                            "a":"Cold call",
+                            "b": "Existing customer reference",
+                            "c": "Referral partner"
+                        }
                     },
                     {
-                        key:"customer.centreCode",
-                        type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
+                        key: "customer.enterprise.referredName",
+                        title:"REFERRED_NAME"
+                    },
+                    {
+                        key: "customer.enterprise.businessName",
+                        title:"COMPANY_NAME"
+                    },
+                    {
+                        key: "customer.enterprise.companyOperatingSince",
+                        title:"OPERATING_SINCE",
+                        type: "date"
+                    },
+                    {
+                        key: "customer.enterprise.businessInPresentAreaSince",
+                        type: "select",
+                        title: "YEARS_OF_BUSINESS_PRESENT_AREA",
+                        titleMap: {
+                            a: "Less Than 1 Year",
+                            b: "1 to 2 Years",
+                            c: "2 to 3 Years",
+                            d: "3 to 5 Years",
+                            e: "5 to 10 Years",
+                            f: "Greater Than 10 Years"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.businessInCurrentAddressSince",
+                        type: "select",
+                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                        titleMap: {
+                            a: "Less Than 1 Year",
+                            b: "1 to 3 Years",
+                            c: "4 to 6 Years",
+                            d: "6 to 10 Years",
+                            f: "Greater Than 10 Years"
+                        }
+                    },
+                    {
+                        "key": "customer.latitude",
+                        "title": "BUSINESS_LOCATION",
+                        "type": "geotag",
+                        "latitude": "customer.latitude",
+                        "longitude": "customer.longitude"
+                    },
+                    {
+                        key: "customer.enterprise.ownership",
+                        title: "Ownership",
+                        type: "select",
+                        titleMap: {
+                            "Owned": "Owned",
+                            "Rent": "Rent",
+                            "Lease": "Lease"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.constitution",
+                        title: "CONSTITUTION",
+                        type: "select",
+                        titleMap: {
+                            a: "Proprietorship",
+                            b: "Partnership",
+                            c: "Private Ltd"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.isCompanyRegistered",
+                        type: "checkbox",
+                        schema: {
+                            default: false
                         },
-                        screenFilter: true
-                    }
+                        title: "IS_REGISTERED"
+                    },
+                    {
+                        key: "customer.enterprise.registrationType",
+                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        title: "REGISTRATION_TYPE",
+                        type: "select",
+                        titleMap: {
+                            a: "TIN",
+                            b: "SSI number",
+                            c: "VAT number",
+                            d: "Business PAN number",
+                            e: "Service tax number",
+                            f: "DIC",
+                            g: "MSME",
+                            h: "S&E"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.registrationNumber",
+                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        title: "REGISTRATION_NUMBER"
+                    },
+                    {
+                        key: "customer.enterprise.businessType",
+                        title: "BUSINESS_TYPE",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessLine",
+                        title: "BUSINESS_LINE",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessSector",
+                        title: "BUSINESS_SECTOR",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessSubsector",
+                        title: "BUSINESS_SUBSECTOR",
+                        type: "select",
+                        titleMap: {}
+                    },
                 ]
             },
             {
@@ -112,7 +247,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         screenFilter: true
                     },
-                    "customer.postOffice",
+                    "customer.udf.userDefinedFieldValues.udf9",
                     {
                         key:"customer.district",
                         type:"select",
@@ -127,107 +262,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.stdCode",
                     "customer.landLineNo",
                     "customer.mobilePhone"
-                ]
-            },
-            {
-                type:"box",
-                title:"BUSINESS",
-                items:[
-                    {
-                        key: "business.referredBy",
-                        title:"REFERRED_BY"
-                    },
-                    {
-                        key: "business.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                        key: "business.companyName",
-                        title:"COMPANY_NAME"
-                    },
-                    {
-                        key: "business.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date",
-                        onChange: function(modelValue, form, model) {
-                            model.business.yearsInArea = model.business.yearsInAddress = moment().diff(moment(modelValue), 'years');
-                        }
-                    },
-                    {
-                        key: "business.yearsInArea",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "business.yearsInAddress",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "business.ownership",
-                        title: "Ownership",
-                        type: "select",
-                        titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
-                        }
-                    },
-                    {
-                        key: "business.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
-                        title: "IS_REGISTERED"
-                    },
-                    {
-                        key: "business.registrationType",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_TYPE"
-                    },
-                    {
-                        key: "business.registrationNumber",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "business.constitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessLine",
-                        title: "BUSINESS_LINE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
                 ]
             },
             {
@@ -297,15 +331,29 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.bankAccounts[].accountType",
-                                title: "ACCOUNT_TYPE"
+                                title: "ACCOUNT_TYPE",
+                                type: "select",
+                                titleMap: {
+                                    a:"Current",
+                                    b:"Savings",
+                                    c:"OD",
+                                    d:"CC"
+                                }
                             },
                             {
                                 key: "customer.bankAccounts[].isDisbursementAccount",
-                                type: "checkbox",
+                                type: "radios",
                                 schema: {
                                     default: false
                                 },
-                                title: "DISBURSEMENT_ACCOUNT"
+                                title: "DISBURSEMENT_ACCOUNT",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                },{
+                                    value: false,
+                                    name: "No"
+                                }]
                             }
                         ]
                     }

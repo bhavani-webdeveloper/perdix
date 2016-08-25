@@ -10741,6 +10741,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.customerType = "Business";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -10758,6 +10759,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
                         readonly: true
+                    },
+                    {
+                        key:"customer.centreCode",
+                        type:"select",
+                        title: "SPOKE",
+                        filter: {
+                            "parentCode": "model.branchId"
+                        },
+                        screenFilter: true
                     },
                     {
                         key: "customer.entityId",
@@ -10806,21 +10816,147 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
-                    },
+                    }/*,
                     {
                         key:"customer.photoImageId",
                         title: "ENTITY_PHOTO",
                         type:"file",
                         fileType:"image/*"
+                    }*/
+                ]
+            },
+            {
+                type:"box",
+                title:"BUSINESS",
+                items:[
+                    {
+                        key: "customer.enterprise.referredBy",
+                        title:"REFERRED_BY",
+                        type: "select",
+                        titleMap: {
+                            "a":"Cold call",
+                            "b": "Existing customer reference",
+                            "c": "Referral partner"
+                        }
                     },
                     {
-                        key:"customer.centreCode",
-                        type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
+                        key: "customer.enterprise.referredName",
+                        title:"REFERRED_NAME"
+                    },
+                    {
+                        key: "customer.enterprise.businessName",
+                        title:"COMPANY_NAME"
+                    },
+                    {
+                        key: "customer.enterprise.companyOperatingSince",
+                        title:"OPERATING_SINCE",
+                        type: "date"
+                    },
+                    {
+                        key: "customer.enterprise.businessInPresentAreaSince",
+                        type: "select",
+                        title: "YEARS_OF_BUSINESS_PRESENT_AREA",
+                        titleMap: {
+                            a: "Less Than 1 Year",
+                            b: "1 to 2 Years",
+                            c: "2 to 3 Years",
+                            d: "3 to 5 Years",
+                            e: "5 to 10 Years",
+                            f: "Greater Than 10 Years"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.businessInCurrentAddressSince",
+                        type: "select",
+                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                        titleMap: {
+                            a: "Less Than 1 Year",
+                            b: "1 to 3 Years",
+                            c: "4 to 6 Years",
+                            d: "6 to 10 Years",
+                            f: "Greater Than 10 Years"
+                        }
+                    },
+                    {
+                        "key": "customer.latitude",
+                        "title": "BUSINESS_LOCATION",
+                        "type": "geotag",
+                        "latitude": "customer.latitude",
+                        "longitude": "customer.longitude"
+                    },
+                    {
+                        key: "customer.enterprise.ownership",
+                        title: "Ownership",
+                        type: "select",
+                        titleMap: {
+                            "Owned": "Owned",
+                            "Rent": "Rent",
+                            "Lease": "Lease"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.constitution",
+                        title: "CONSTITUTION",
+                        type: "select",
+                        titleMap: {
+                            a: "Proprietorship",
+                            b: "Partnership",
+                            c: "Private Ltd"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.isCompanyRegistered",
+                        type: "checkbox",
+                        schema: {
+                            default: false
                         },
-                        screenFilter: true
-                    }
+                        title: "IS_REGISTERED"
+                    },
+                    {
+                        key: "customer.enterprise.registrationType",
+                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        title: "REGISTRATION_TYPE",
+                        type: "select",
+                        titleMap: {
+                            a: "TIN",
+                            b: "SSI number",
+                            c: "VAT number",
+                            d: "Business PAN number",
+                            e: "Service tax number",
+                            f: "DIC",
+                            g: "MSME",
+                            h: "S&E"
+                        }
+                    },
+                    {
+                        key: "customer.enterprise.registrationNumber",
+                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        title: "REGISTRATION_NUMBER"
+                    },
+                    {
+                        key: "customer.enterprise.businessType",
+                        title: "BUSINESS_TYPE",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessLine",
+                        title: "BUSINESS_LINE",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessSector",
+                        title: "BUSINESS_SECTOR",
+                        type: "select",
+                        titleMap: {}
+                    },
+                    {
+                        key: "customer.enterprise.businessSubsector",
+                        title: "BUSINESS_SUBSECTOR",
+                        type: "select",
+                        titleMap: {}
+                    },
                 ]
             },
             {
@@ -10838,7 +10974,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         screenFilter: true
                     },
-                    "customer.postOffice",
+                    "customer.udf.userDefinedFieldValues.udf9",
                     {
                         key:"customer.district",
                         type:"select",
@@ -10853,107 +10989,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.stdCode",
                     "customer.landLineNo",
                     "customer.mobilePhone"
-                ]
-            },
-            {
-                type:"box",
-                title:"BUSINESS",
-                items:[
-                    {
-                        key: "business.referredBy",
-                        title:"REFERRED_BY"
-                    },
-                    {
-                        key: "business.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                        key: "business.companyName",
-                        title:"COMPANY_NAME"
-                    },
-                    {
-                        key: "business.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date",
-                        onChange: function(modelValue, form, model) {
-                            model.business.yearsInArea = model.business.yearsInAddress = moment().diff(moment(modelValue), 'years');
-                        }
-                    },
-                    {
-                        key: "business.yearsInArea",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "business.yearsInAddress",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "business.ownership",
-                        title: "Ownership",
-                        type: "select",
-                        titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
-                        }
-                    },
-                    {
-                        key: "business.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
-                        title: "IS_REGISTERED"
-                    },
-                    {
-                        key: "business.registrationType",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_TYPE"
-                    },
-                    {
-                        key: "business.registrationNumber",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "business.constitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessLine",
-                        title: "BUSINESS_LINE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
                 ]
             },
             {
@@ -11023,15 +11058,29 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.bankAccounts[].accountType",
-                                title: "ACCOUNT_TYPE"
+                                title: "ACCOUNT_TYPE",
+                                type: "select",
+                                titleMap: {
+                                    a:"Current",
+                                    b:"Savings",
+                                    c:"OD",
+                                    d:"CC"
+                                }
                             },
                             {
                                 key: "customer.bankAccounts[].isDisbursementAccount",
-                                type: "checkbox",
+                                type: "radios",
                                 schema: {
                                     default: false
                                 },
-                                title: "DISBURSEMENT_ACCOUNT"
+                                title: "DISBURSEMENT_ACCOUNT",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                },{
+                                    value: false,
+                                    name: "No"
+                                }]
                             }
                         ]
                     }
@@ -11164,6 +11213,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.centreCode = "Basti";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -11180,6 +11230,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
+                        readonly: true
+                    },
+                    {
+                        key:"customer.centreCode",
+                        title: "SPOKE",
                         readonly: true
                     },
                     {
@@ -11272,196 +11327,208 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         }
                     },
                     {
-                        key:"customer.gender",
-                        type:"radios"
+                        key:"customer.gender1",
+                        title: "Gender",
+                        type:"radios",
+                        titleMap: {
+                            a:"Male",
+                            b:"Female",
+                            c:"Unspecified"
+                        }
                     },
                     {
-                        key: "customer.religion",
-                        type: "select"
-                    },
-                    {
-                        key:"customer.centreCode",
-                        type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        screenFilter: true
+                        key: "customer.religion1",
+                        title: "Religion",
+                        type: "select",
+                        titleMap: {
+                            a:"Hindu",
+                            b:"Muslim",
+                            c:"Chirstian",
+                            d:"Jain",
+                            e:"Buddhism",
+                            f:"Others"
+                        }
                     },
                     {
                         key: "customer.educationLevel",
-                        title: "Education Level"
+                        title: "Education Level",
+                        type: "select",
+                        titleMap: {
+                            a:"Below SSLC",
+                            b:"SSLC",
+                            c:"HSC",
+                            d:"Graduate/Diploma/ITI",
+                            e:"Professional Degree",
+                            f:"Others"
+                        }
                     },
                     {
                         key: "customer.relationshipToBusiness",
-                        title: "Relationship to Business"
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "KYC",
-                "items":[
-                    "customer.mobilePhone",
-                    {
-                        key: "customer.mobilePhone2",
-                        title: "MOBILE_PHONE_2"
+                        title: "Relationship to Business",
+                        type: "select",
+                        titleMap: {
+                            a:"Proprietor",
+                            b:"Partner",
+                            c:"Director",
+                            d:"Others"
+                        }
                     },
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.locality",
                     {
-                        key:"customer.villageName",
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true
-                    },
-                    "customer.postOffice",
-                    {
-                        key:"customer.district",
-                        type:"select",
-                        screenFilter: true
-                    },
-                    "customer.pincode",
-                    {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key: "customer.enterpriseCustomerRelations.linkedToCustomerId",
+                        type: "lov",
+                        title: "BUSINESS"
                     }
                 ]
             },
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "items":[
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.locality",
-                    {
-                        key:"customer.villageName",
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true
+                "items":[{
+                    type: "fieldset",
+                    title: "CUSTOMER_PRESENT_ADDRESS",
+                    items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            },
+                            "customer.mailSameAsResidence",
+                            {
+                                key: "customer.latitude",
+                                title: "HOUSE_LOCATION",
+                                type: "geotag",
+                                latitude: "customer.latitude",
+                                longitude: "customer.longitude"
+                            }
+                        ]
+                    },{
+                        type: "fieldset",
+                        title: "CUSTOMER_PERMANENT_ADDRESS",
+                        condition:"!model.customer.mailSameAsResidence",
+                        items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            }
+                        ]
                     },
-                    "customer.postOffice",
                     {
-                        key:"customer.district",
-                        type:"select",
-                        screenFilter: true
+                        key: "c",
+                        title: "Years in current address",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.pincode",
                     {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key: "cc",
+                        title: "Years in current area",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.stdCode",
-                    "customer.landLineNo",
-                    "customer.mobilePhone"
+                    {
+                        key: "d",
+                        title: "Ownership",
+                        type: "select",
+                        titleMap: {
+                            a:"Owned",
+                            b: "Rented",
+                            c:"Leased"
+                        }
+                    }
                 ]
             },
             {
                 type:"box",
-                title:"BUSINESS",
+                title:"KYC",
                 items:[
                     {
-                        key: "business.referredBy",
-                        title:"REFERRED_BY"
-                    },
-                    {
-                        key: "business.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                        key: "business.companyName",
-                        title:"COMPANY_NAME"
-                    },
-                    {
-                        key: "business.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date",
-                        onChange: function(modelValue, form, model) {
-                            model.business.yearsInArea = model.business.yearsInAddress = moment().diff(moment(modelValue), 'years');
-                        }
-                    },
-                    {
-                        key: "business.yearsInArea",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "business.yearsInAddress",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "business.ownership",
-                        title: "Ownership",
-                        type: "select",
-                        titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
-                        }
-                    },
-                    {
-                        key: "business.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
-                        title: "IS_REGISTERED"
-                    },
-                    {
-                        key: "business.registrationType",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_TYPE"
-                    },
-                    {
-                        key: "business.registrationNumber",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "business.constitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessLine",
-                        title: "BUSINESS_LINE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
+                        type:"fieldset",
+                        title:"IDENTITY_PROOF",
+                        items:[
+                            {
+                                key:"customer.identityProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.identityProofImageId",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf30",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.identityProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.idProofIssueDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.idProofValidUptoDate",
+                                type:"date"
+                            }
+                        ]
+                    }
                 ]
             },
             {
@@ -11658,13 +11725,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
 irf.pageCollection.factory(irf.page("customer360.CustomerProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PageDefinition",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PageDefinition){
+    PageHelper, Utils, BiometricService, PagesDefinition){
 
     var branch = SessionStore.getBranch();
 
-    var config = PageDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
+    var config = PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
 
     var initData = function(model) {
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
@@ -24295,13 +24362,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
             "items": [
                 {
                     "key": "loanAccount.accountNumber",
-                    "title": "ACCOUNT_NUMBER",
+                    
                     "readonly": true,
                     "type": "number"
                 },
                 {
-                    "key": "loanAccount.customerSignatureDate",
-                    "title": "CUSTOMER_SIGN_DATE",
+                    "key": "loanAccount.disbursementSchedules.customerSignatureDate",
+                    
                     "type": "date",
                     "required": true,
                     "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -24309,8 +24376,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
                     }
                 },
                 {
-                    "key": "loanAccount.scheduledDisbursementDate",
-                    "title": "DISBURSEMENT_DATE",
+                    "key": "loanAccount.disbursementSchedules.scheduledDisbursementDate",
+                    
                     "type": "date"
                 },
                 {
@@ -25431,18 +25498,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.Disburse"),
                             }*/
                 },
                 {
-                    "key": "loanAccount.branch_name",
-                    "title": "BRANCH_NAME"
+                    "key": "loanAccount.customerBranch"
                 },
                 {
 
-                    "key": "loanAccount.account_number",
-                    "title": "ACCOUNT_NUMBER"
+                    "key": "loanAccount.accountNumber"
                 },
                 {
 
-                    "title": "STATUS",
-                    "key": "loanAccount.status",
+                    
+                    "key": "loanAccount.applicationStatus",
                     "type": "select",
                     "enumCode": "status"
                     /*"titleMap": {
@@ -25510,28 +25575,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
                 {
-                    "key": "loanAccount.customer_sign_date",
-                    "title": "CUSTOMER_SIGN_DATE",
+                    "key": "loanAccount.disbursementSchedules.customerSignatureDate",
+                    
                     "type": "date"
                 },
                 {
-                    "key": "loanAccount.disbursement_date",
+                    "key": "loanAccount.disbursementSchedules.scheduledDisbursementDate",
                     "title": "DISBURSEMENT_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "loanAccount.partner.name",
+                    "key": "loanAccount.partnerName",
                     "title": "PARTNER_NAME",
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.type",
-                    "title": "LOAN_TYPE",
+                    "key": "loanAccount.loanType",
+                    
                     "readonly": true
                 },
                 {
                     "key": "loanAccount.frequency",
-                    "title": "FREQUENCY",
+                    
                     "readonly": true,
                     "type": "select",
                     "enumCode": "frequency"
@@ -25567,88 +25632,88 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.amount",
-                    "title": "LOAN_PURPOSE_LEVEL_1",
+                    "key": "loanAccount.loanPurpose1",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.purpose",
-                    "title": "LOAN_PURPOSE_LEVEL_2",
+                    "key": "loanAccount.loanPurpose2",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.purpose2",
-                    "title": "LOAN_PURPOSE_LEVEL_3",
+                    "key": "loanAccount.loanPurpose3",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.center.name",
-                    "title": "CENTER_NAME",
+                    "key": "loanAccount.loanCentre",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_urn",
-                    "title": "GUARTANTOR_URN",
+                    "key": "loanAccount.guarantors.guaUrnNo",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_first_name",
-                    "title": "FIRST_NAME",
+                    "key": "loanAccount.guarantors.guaFirstName",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_middle_name",
-                    "title": "MIDDLE_NAME",
+                    "key": "loanAccount.guarantors.guaMiddleName",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_dob",
-                    "title": "DATE_OF_BIRTH",
+                    "key": "loanAccount.guarantors.guaDob",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.gua_address",
-                    "title": "ADDRESS",
+                    "key": "loanAccount.guarantors.address",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.assets",
-                    "title": "ASSETS",
+                    "key": "loanAccount.guarantors.assetDetails",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.liabilities",
-                    "title": "LIABILITIES",
+                    "key": "loanAccount.guarantors.totalLiabilities",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_type",
-                    "title": "COLLATERAL_TYPE",
+                    "key": "loanAccount.collateral.collateralType",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_desc",
-                    "title": "COLLATERAL_DESCRIPTION",
+                    "key": "loanAccount.collateral.collateralDescription",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.collateral_value",
-                    "title": "COLLATERAL_VALUE",
+                    "key": "loanAccount.collateral.collateralValue",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.loanDocuments.document1",
+                    "key": "loanAccount.loanDocuments[1].document",
                     "title": "DOCUMENT_1",
                     "readonly": true
                 },
                 {
                     "title": "DOCUMENT_2",
-                    "key": "loanAccount.loanDocuments.document2",
+                    "key": "loanAccount.loanDocuments[2].document",
                     "readonly": true
                 },
                 {
                     "title": "DOCUMENT_3",
-                    "key": "loanAccount.loanDocuments.document3",
+                    "key": "loanAccount.loanDocuments[3].document",
                     "readonly": true
                 },
                 {
@@ -25657,17 +25722,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.interest",
-                    "title": "INTEREST_RATE",
+                    "key": "loanAccount.interestRate",
+                    
                     "readonly": true
                 },
                 {
                     "key": "loanAccount.processingFeeInPaisa",
-                    "title": "PROCESSING_FEES",
+                    
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.cibil_charges",
+                    "key": "loanAccount.cibilCharges",
                     "title": "CIBIL_CHARGES",
                     "readonly": true
                 },
@@ -25682,8 +25747,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.sanction_date",
-                    "title": "SANCTION_DATE",
+                    "key": "loanAccount.sanctionDate",
+                    
                     "readonly": true
                 },
                 

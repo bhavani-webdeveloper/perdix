@@ -6,6 +6,7 @@
             "type": "object",
             "properties": {
                 "accountNumber": {
+                    "title": "ACCOUNT_NUMBER",
                     "type": "string"
                 },
                 "accountUserDefinedFields": {
@@ -48,6 +49,7 @@
                     "type": "string"
                 },
                 "applicationStatus": {
+                    "title": "STATUS",
                     "type": "string"
                 },
                 "applicationStatusUpdatedBy": {
@@ -208,12 +210,15 @@
                             "type": "string"
                         },
                         "collateralDescription": {
+                            "title": "COLLATERAL_DESCRIPTION",
                             "type": "string"
                         },
                         "collateralType": {
+                            "title": "COLLATERAL_TYPE",
                             "type": "string"
                         },
                         "collateralValue": {
+                            "title": "COLLATERAL_VALUE",
                             "type": "integer"
                         },
                         "id": {
@@ -270,6 +275,7 @@
                     "type": "string"
                 },
                 "customerBranch": {
+                    "title": "BRANCH_NAME",
                     "type": "string"
                 },
                 "customerId": {
@@ -293,6 +299,7 @@
                                 "type": "string"
                             },
                             "customerSignatureDate": {
+                                "title": "CUSTOMER_SIGN_DATE",
                                 "type": "string"
                             },
                             "disbursedAmount": {
@@ -311,6 +318,7 @@
                                 "type": "integer"
                             },
                             "scheduledDisbursementDate": {
+                                "title": "DISBURSEMENT_DATE",
                                 "type": "string"
                             },
                             "trancheNumber": {
@@ -353,6 +361,7 @@
                     "type": "string"
                 },
                 "frequency": {
+                    "title": "FREQUENCY",
                     "type": "string"
                 },
                 "guarantors": {
@@ -364,9 +373,11 @@
                                 "type": "string"
                             },
                             "address": {
+                                "title": "ADDRESS",
                                 "type": "string"
                             },
                             "assetDetails": {
+                                "title": "ASSETS",
                                 "type": "string"
                             },
                             "dscIntegrationId": {
@@ -376,6 +387,7 @@
                                 "type": "integer"
                             },
                             "guaDob": {
+                                "title": "DATE_OF_BIRTH",
                                 "type": "string"
                             },
                             "guaDscOverride": {
@@ -385,15 +397,18 @@
                                 "type": "string"
                             },
                             "guaFirstName": {
+                                "title": "FIRST_NAME",
                                 "type": "string"
                             },
                             "guaLastName": {
                                 "type": "string"
                             },
                             "guaMiddleName": {
+                                "title": "MIDDLE_NAME",
                                 "type": "string"
                             },
                             "guaUrnNo": {
+                                "title": "GUARTANTOR_URN",
                                 "type": "string"
                             },
                             "id": {
@@ -415,6 +430,7 @@
                                 "type": "string"
                             },
                             "totalLiabilities": {
+                                "title": "LIABILITIES",
                                 "type": "integer"
                             },
                             "version": {
@@ -458,6 +474,7 @@
                     "type": "integer"
                 },
                 "interestRate": {
+                    "title": "INTEREST_RATE",
                     "type": "integer"
                 },
                 "isRestructure": {
@@ -549,6 +566,7 @@
                 },
                 "loanCentre": {
                     "type": "object",
+                    "title": "CENTER_NAME",
                     "properties": {
                         "centreId": {
                             "type": "integer"
@@ -675,15 +693,19 @@
                     ]
                 },
                 "loanPurpose1": {
+                    "title": "LOAN_PURPOSE_LEVEL_1",
                     "type": "string"
                 },
                 "loanPurpose2": {
+                    "title": "LOAN_PURPOSE_LEVEL_2",
                     "type": "string"
                 },
                 "loanPurpose3": {
+                    "title": "LOAN_PURPOSE_LEVEL_3",
                     "type": "string"
                 },
                 "loanType": {
+                    "title": "LOAN_TYPE",
                     "type": "string"
                 },
                 "nominees": {
@@ -913,6 +935,7 @@
                     "type": "string"
                 },
                 "processingFeeInPaisa": {
+                    "title": "PROCESSING_FEES",
                     "type": "integer"
                 },
                 "productCode": {
@@ -928,6 +951,7 @@
                     "type": "boolean"
                 },
                 "sanctionDate": {
+                    "title": "SANCTION_DATE",
                     "type": "string"
                 },
                 "sbAccountNo": {
