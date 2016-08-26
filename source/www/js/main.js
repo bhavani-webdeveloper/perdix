@@ -5784,8 +5784,8 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-//PRODirf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
+//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
 //PILOT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
@@ -16171,7 +16171,12 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
                             }
 
                         },
-                        "partner",
+                        {
+                            key:"partner",
+                            titleMap:{
+                                "KGFS":"KGFS"
+                            }
+                        },
                         "groupCode"
                     ]
                 },
@@ -16200,9 +16205,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
                     "partner": {
                         "title": "PARTNER",
                         "type": "string",
-                        "enumCode":"partner",
+                        //"enumCode":"partner",
                         "x-schema-form":{
                             "type":"select"
+
                         }
                     },
                     "groupCode":{
