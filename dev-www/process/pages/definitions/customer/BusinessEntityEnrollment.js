@@ -222,6 +222,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "manufacturing": "manufacturing"
                         }
                     },
+                   {
+                        key: "customer.enterpriseCustomerRelations",
+                        type: "array",
+                        title: "Relationship to Business",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.enterpriseCustomerRelations[].relationshipToBusiness",
+                                title: "Relationship to Business",
+                                type: "select",
+                                titleMap: {
+                                    a:"Proprietor",
+                                    b:"Partner",
+                                    c:"Director",
+                                    d:"Others"
+                                }
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
+                                type: "lov",
+                                title: "BUSINESS"
+                            }
+                        ]
+                    }
                 ]
             },
             {

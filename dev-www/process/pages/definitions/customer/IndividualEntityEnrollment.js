@@ -164,7 +164,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             e:"Professional Degree",
                             f:"Others"
                         }
-                    },
+                    }/*,
                     {
                         key: "customer.relationshipToBusiness",
                         title: "Relationship to Business",
@@ -180,7 +180,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterpriseCustomerRelations.linkedToCustomerId",
                         type: "lov",
                         title: "BUSINESS"
-                    }
+                    }*/
                 ]
             },
             {
