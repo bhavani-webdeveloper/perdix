@@ -32,8 +32,15 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
             function updateTotal(model){
                 try {
                     model.total=0;
-                    for(var i=0;i<model.repayments.length;i++){
-                        model.total +=  model.repayments[i].amount;
+                    if(model._partnerCode!="AXIS") {
+                        for (var i = 0; i < model.repayments.length; i++) {
+                            model.total += model.repayments[i].amount;
+                        }
+                    }
+                    else{
+                        for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
+                            model.total += model.loanDemandScheduleDto[i].amount;
+                        }
                     }
 
                 }catch(err){
@@ -70,50 +77,65 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         groupCode:groupParams[1],
                         isLegacy:isLegacy
                     }).$promise;
-                    promise.then(function (data) { /* SUCCESS */
-                        delete data.$promise;
-                        delete data.$resolved;
+                    promise.then(function (resp) { /* SUCCESS */
+                        delete resp.$promise;
+                        delete resp.$resolved;
 
-                        console.warn(data);
-                        model.ui = { submissionDone: false};
-
-                        model.repayments = Array();
-                        model.total=0;
+                        console.warn(resp);
+                        model._partnerCode = groupParams[0];
+                        var axisRepayment = (groupParams[0]=="AXIS");
+                        model.total = 0;
                         model.groupCode = groupParams[1];
-                        for(var i=0;i<data.length;i++){
+                        model.ui = {submissionDone: false};
+                        var data=[];
+                        if(!axisRepayment) {
+                            data = resp.summaries;
 
-                            var repData = data[i];
 
-                            var totalDemandDue = Number(repData.totalDemandDue);
-                            var txName = (totalDemandDue==0)?"Advance Repayment":"Scheduled Demand";
 
-                            var aRepayment = {
-                                accountId:repData.accountId,
-                                demandAmount: parseInt(Number(repData.equatedInstallment)),
-                                payOffAmount: repData.payOffAmount,
-                                payOffAndDueAmount: repData.payOffAndDueAmount,
-                                accountName: repData.accountName,
-                                numSatisifiedDemands: repData.numSatisifiedDemands,
-                                numDemands: repData.numDemands,
-                                groupCode:repData.groupCode,
-                                productCode:repData.productCode,
-                                customerName: repData.customerName,
-                                urnNo:repData.urnNo,
-                                transactionName:txName,
-                                repaymentDate:Utils.getCurrentDate(),
-                                additional:{
-                                    name:Utils.getFullName(repData.firstName,repData.middleName,repData.lastName),
-                                    accountBalance:Number(repData.accountBalance)
-                                }
-                            };
-                            aRepayment.amount = deriveAmount(txName, aRepayment);
-                            model.repayments.push(aRepayment);
+                            model.repayments = Array();
 
-                            model.total += parseInt(Number(repData.equatedInstallment));
+                            for (var i = 0; i < data.length; i++) {
+
+                                var repData = data[i];
+
+                                var totalDemandDue = Number(repData.totalDemandDue);
+                                var txName = (totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
+
+                                var aRepayment = {
+                                    accountId: repData.accountId,
+                                    demandAmount: parseInt(Number(repData.equatedInstallment)),
+                                    payOffAmount: repData.payOffAmount,
+                                    payOffAndDueAmount: repData.payOffAndDueAmount,
+                                    accountName: repData.accountName,
+                                    numSatisifiedDemands: repData.numSatisifiedDemands,
+                                    numDemands: repData.numDemands,
+                                    groupCode: repData.groupCode,
+                                    productCode: repData.productCode,
+                                    customerName: repData.customerName,
+                                    urnNo: repData.urnNo,
+                                    transactionName: txName,
+                                    repaymentDate: Utils.getCurrentDate(),
+                                    additional: {
+                                        name: Utils.getFullName(repData.firstName, repData.middleName, repData.lastName),
+                                        accountBalance: Number(repData.accountBalance)
+                                    }
+                                };
+                                aRepayment.amount = deriveAmount(txName, aRepayment);
+                                model.repayments.push(aRepayment);
+
+                                model.total += aRepayment.amount;//parseInt(Number(repData.equatedInstallment));
+
+                            }
+                            if (model.repayments.length < 1) {
+                                PageHelper.showProgress("group-repayment", "No Records", 3000);
+                                backToQueue();
+                            }
                         }
-                        if(model.repayments.length<1){
-                            PageHelper.showProgress("group-repayment","No Records",3000);
-                            backToQueue();
+                        else{
+                            model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
+
+
                         }
 
 
@@ -139,7 +161,12 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             },
                             {
+                                "key":"advanceRepayment",
+                                "condition":"model._partnerCode=='AXIS'"
+                            },
+                            {
                                 "key":"_cashCollectionRemark",
+                                condition:"model._partnerCode!='AXIS'",
                                 "title":"CASH_COLLECTION_REMARK",
                                 "titleMap":cashCollectionRemarks,
                                 "type":"select",
@@ -152,6 +179,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             },
                             {
                                 "key":"_remarks",
+                                condition:"model._partnerCode!='AXIS'",
                                 "title":"REMARKS",
                                 "onChange":function(value,form,model){
                                     console.warn(model);
@@ -164,6 +192,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             },
                             {
                                 key:"repayments",
+                                condition:"model._partnerCode!='AXIS'",
                                 add:null,
                                 remove:null,
                                 titleExpr:"model.repayments[arrayIndex].urnNo + ' : ' + model.repayments[arrayIndex].name",
@@ -234,6 +263,41 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         type:"date"
                                     }
                                 ]
+                            },
+                            {
+                                "key":"loanDemandScheduleDto",
+                                "condition":"model._partnerCode=='AXIS'",
+                                "add":null,
+                                "remove":null,
+                                "titleExpr":"model.loanDemandScheduleDto[arrayIndex].urnNo + ' : ' + model.loanDemandScheduleDto[arrayIndex].firstName",
+                                "items":[
+                                    {
+                                        "key":"loanDemandScheduleDto[].accountNumber",
+                                        readonly:true
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].urnNo",
+                                        readonly:true
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].firstName",
+                                        readonly:true
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].amount",
+                                        "type":"amount",
+                                        onChange:function(value,form,model,schemaForm){
+                                            updateTotal(model);
+                                        }
+
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].isAdvanceDemand"
+                                    }
+
+
+                                ]
+
                             },
                             {
                                 "key":"total",
@@ -391,39 +455,75 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     }
 
                                     var fullPrintData = new PrinterData();
+                                    if(model._partnerCode!="AXIS") {
+                                        for (var i = 0; i < model.repayments.length; i++) {
+                                            var r = model.repayments[i];
+                                            var repaymentInfo = {
+                                                'repaymentDate': r.repaymentDate,
+                                                'customerURN': r.urnNo,
+                                                'accountNumber': r.accountId,
+                                                'transactionType': r.transactionName,
+                                                'customerName': r.customerName,
+                                                'transactionID': "",
+                                                'demandAmount': r.demandAmount,
+                                                'amountPaid': r.amount,
+                                                'payOffAmount': r.payOffAmount,
+                                                'accountName': r.accountName,
+                                                'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
+                                            };
 
-                                    for (var i=0; i<model.repayments.length; i++){
-                                        var r = model.repayments[i];
-                                        var repaymentInfo = {
-                                            'repaymentDate': r.repaymentDate,
-                                            'customerURN': r.urnNo,
-                                            'accountNumber': r.accountId,
-                                            'transactionType': r.transactionName,
-                                            'customerName': r.customerName,
-                                            'transactionID': "",
-                                            'demandAmount': r.demandAmount,
-                                            'amountPaid': r.amount,
-                                            'payOffAmount': r.payOffAmount,
-                                            'accountName': r.accountName,
-                                            'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
-                                        };
-                                        var opts = {
-                                            'entity_name': "Pudhuaaru KGFS",
-                                            'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                            'cin': 'U74990TN2011PTC081729',
-                                            'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                            'address2': 'Kanagam Village, Taramani',
-                                            'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                            'website': "http://ruralchannels.kgfs.co.in",
-                                            'helpline': '18001029370'
+                                            var opts = {
+                                                'entity_name': "Pudhuaaru KGFS",
+                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                                'cin': 'U74990TN2011PTC081729',
+                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                                'address2': 'Kanagam Village, Taramani',
+                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                                'website': "http://ruralchannels.kgfs.co.in",
+                                                'helpline': '18001029370'
+                                            }
+
+                                            var pData = getPrintReceipt(repaymentInfo, opts);
+                                            pData.addLine("", {});
+                                            pData.addLine("", {});
+                                            fullPrintData.addLines(pData.getLines());
                                         }
-
-                                        var pData = getPrintReceipt(repaymentInfo, opts);
-                                        pData.addLine("", {});
-                                        pData.addLine("", {});
-                                        fullPrintData.addLines(pData.getLines());
                                     }
+                                    else{
+                                        for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
+                                            var r = model.repaymentResponse.loanDemandScheduleDto[i];
+                                            var repaymentInfo = {
+                                                'repaymentDate': Utils.getCurrentDate(),
+                                                'customerURN': r.urnNo,
+                                                'accountNumber': r.accountNumber,
+                                                'transactionType': r.transactionName,
+                                                'customerName': Utils.getFullName(r.firstName,r.middleName,r.lastName),
+                                                'transactionID': r.transactionId,
+                                                'demandAmount': "",
+                                                'amountPaid': r.amount,
+                                                'payOffAmount': "",
+                                                'accountName': r.accountName,
+                                                'demandsPaidAndPending': ""
+                                            };
 
+                                            var opts = {
+                                                'entity_name': "Pudhuaaru KGFS",
+                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                                'cin': 'U74990TN2011PTC081729',
+                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                                'address2': 'Kanagam Village, Taramani',
+                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                                'website': "http://ruralchannels.kgfs.co.in",
+                                                'helpline': '18001029370'
+                                            }
+
+                                            var pData = getPrintReceipt(repaymentInfo, opts);
+                                            pData.addLine("", {});
+                                            pData.addLine("", {});
+                                            fullPrintData.addLines(pData.getLines());
+                                        }
+                                    }
+                                    console.log(fullPrintData.getLines());
                                     cordova.plugins.irfBluetooth.print(function(){
                                         console.log("succc callback");
                                     }, function(err){
@@ -442,6 +542,112 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         "advanceRepayment": {
                             "title":"ADVANCE_REPAYMENT",
                             "type": "boolean"
+                        },
+                        "loanDemandScheduleDto":{
+                            "type":"array",
+                            "items":{
+                                "type":"object",
+                                "properties":{
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "accountNumber": {
+                                        "title":"ACCOUNT_ID",
+                                        "type": "string"
+                                    },
+                                    "firstName": {
+                                        "title":"NAME",
+                                        "type": "string"
+                                    },
+                                    "middleName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "urnNo": {
+                                        "type": "string",
+                                        "title":"URN_NO"
+                                    },
+                                    "product": {
+                                        "type": "string",
+                                        "title":"PRODUCT_CODE"
+                                    },
+                                    "groupCode": {
+                                        "type": "string",
+                                        "title":"GROUP_CODE"
+                                    },
+                                    "bcCustId": {
+                                        "type": "string"
+                                    },
+                                    "tenure": {
+                                        "type": "string",
+                                        "title":"TENURE"
+                                    },
+                                    "frequency": {
+                                        "type": "string",
+                                        "title":"FREQUENCY"
+                                    },
+                                    "loanAmount": {
+                                        "type": "integer",
+                                        "title":"LOAN_AMOUNT"
+                                    },
+                                    "repaid": {
+                                        "type": "boolean"
+                                    },
+                                    "installmentAmountInPaisa": {
+                                        "type": "integer",
+                                        "title":"INSTALLMENT_AMOUNT_IN_PAISA"
+                                    },
+                                    "scheduleDate": {
+                                        "type": "string"
+                                    },
+                                    "enrollmentId": {
+                                        "type": "string"
+                                    },
+                                    "branchId": {
+                                        "type": "integer"
+                                    },
+                                    "bankId": {
+                                        "type": "null"
+                                    },
+                                    "pendingAmountInPaisa": {
+                                        "type": "integer"
+                                    },
+                                    "encoreAccountNo": {
+                                        "type": "string"
+                                    },
+                                    "lastRepaymentFlag": {
+                                        "type": "boolean"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "title":"AMOUNT"
+                                    },
+                                    "transactionId": {
+                                        "type": "null"
+                                    },
+                                    "repaymentAmountInPaisa": {
+                                        "type": "integer"
+                                    },
+                                    "authorizationRemark": {
+                                        "type": "string"
+                                    },
+                                    "authorizationUsing": {
+                                        "type": "string"
+                                    },
+                                    "isAdvanceDemand": {
+                                        "title":"IS_ADVANCE_DEMAND",
+                                        "type": "boolean",
+                                        "default":false
+                                    }
+                                },
+                                "required":[
+                                    "amount",
+                                    "groupCode",
+                                    "accountNumber"
+                                ]
+                            }
                         },
                         "repayments": {
                             "type": "array",
@@ -518,7 +724,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         }
                     },
                     "required": [
-                        "repayments"
+                        "repayments",
+                        "loanDemandScheduleDto"
                     ]
                 },
                 actions: {
@@ -533,21 +740,29 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         console.log(formCtrl);
                         var reqData = _.cloneDeep(model);
                         var msg="";
-                        for(var i=0;i<reqData.repayments.length;i++) {
-                            if(reqData.repayments[i].transactionName=="Advance Repayment" || reqData.repayments[i].transactionName=="Scheduled Demand") {
-                                //Check for advance repayments
-                                if(reqData.repayments[i].transactionName=="Advance Repayment") {
-                                    reqData.advanceRepayment = true;
-                                    msg = "There are Advance Repayments - ";
-                                }
+                        if(model._partnerCode=="AXIS") {
+                            for (var i = 0; i < reqData.repayments.length; i++) {
+                                if (reqData.repayments[i].transactionName == "Advance Repayment" || reqData.repayments[i].transactionName == "Scheduled Demand") {
+                                    //Check for advance repayments
+                                    if (reqData.repayments[i].transactionName == "Advance Repayment") {
+                                        reqData.advanceRepayment = true;
+                                        msg = "There are Advance Repayments - ";
+                                    }
 
-                                //check for larger amounts
+                                    //check for larger amounts
+                                    try {
+                                        if (typeof reqData.repayments[i].additional.accountBalance !== "undefined") {
+                                            if (Number(reqData.repayments[i].amount) > reqData.repayments[i].additional.accountBalance) {
+                                                msg = "For URN " + reqData.repayments[i].urnNo;
+                                                msg += " Payable amount is larger than account balance."
+                                                Utils.alert(msg);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    catch (err) {
 
-                                if(Number(reqData.repayments[i].amount)>reqData.repayments[i].additional.accountBalance) {
-                                    msg = "For URN "+reqData.repayments[i].urnNo;
-                                    msg+=" Payable amount is larger than account balance."
-                                    Utils.alert(msg);
-                                    return;
+                                    }
                                 }
                             }
                         }
