@@ -5784,9 +5784,9 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
-//UAT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
+irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+//PRODirf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
+//PILOT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
 irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
@@ -6184,8 +6184,8 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
 
     var ret = $resource(endpoint, null, {
         creditBureauCheck: {
-            method:'GET',
-            url: endpoint + '/check/:customerId/:highMarkType/:purpose/:loanAmount'
+            method:'POST',
+            url: endpoint + '/check'
         },
         listCreditBureauStatus: searchResource({
             method: "GET",
@@ -6283,8 +6283,8 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         },
         getGroupRepaymentDetails:{
             method:'GET',
-            url:endpoint+'/grouprepayment/:partnerCode/:groupCode/:isLegacy',
-            isArray:true
+            url:endpoint+'/grouprepayment/:partnerCode/:groupCode/:isLegacy'
+
         },
         groupRepayment:{
             method:'POST',
@@ -7556,7 +7556,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
-            model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            //model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
             && model.customer.udf.userDefinedFieldValues.udf1) {
@@ -8036,7 +8037,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -8078,7 +8079,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -8185,6 +8186,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
+                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
                         },
@@ -8206,6 +8213,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
+                            key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -9438,7 +9451,7 @@ irf.pageCollection.factory("Pages__CBCheckCapture",
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
 					CreditBureau.creditBureauCheck({
 						customerId: model.customerId,
-						highMarkType: model.creditBureau,
+                        highmarkType: model.creditBureau,
 						purpose: model.loanPurpose1,
 						loanAmount: model.loanAmount
 					}, function(response){
@@ -10601,22 +10614,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         model.customer.spouseFirstName = aadhaarData.name;
                         if (aadhaarData.yob) {
                             model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
-                },
-                {
-                    key:"customer.spouseAge",
-                    title: "SPOUSE_AGE",
-                    type:"number",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseAge > 0) {
-                            if (model.customer.spouseDateOfBirth) {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                            }
                         }
                     }
                 },
@@ -10626,7 +10623,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseDateOfBirth) {
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
                     }
                 },
@@ -10639,6 +10635,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     key:"customer.isBiometricValidated",
                     title: "Validate Fingerprint",
                     type:"validatebiometric",
+                    category: 'CustomerEnrollment',
+                    subCategory: 'FINGERPRINT',
                     helper: formHelper,
                     biometricMap: {
                         leftThumb: "model.customer.leftHandThumpImageId",
@@ -10751,7 +10749,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "viewParams": function(modelValue, form, model) {
@@ -10837,7 +10835,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 model.customer.spouseFirstName = aadhaarData.name;
                                 if (aadhaarData.yob) {
                                     model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                 }
                             }
                         }
@@ -10864,7 +10861,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "viewParams": function(modelValue, form, model) {
@@ -10926,6 +10923,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "offline": true
                         },
                         {
+                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
                         },
@@ -10947,6 +10950,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
+                            key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -11027,29 +11036,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         readonly: true
                     },
                     {
-                        key:"customer.familyMembers[].age",
-                        title: "AGE",
-                        type:"number",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                } else {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                }
-                            }
-                        },
-                        readonly: true
-                    },
-                    {
                         key: "customer.familyMembers[].dateOfBirth",
                         type:"date",
                         title: "T_DATEOFBIRTH",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                            }
-                        },
                         readonly: true
                     },
                     {
@@ -12001,6 +11990,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             "condition":"model.group.jlgGroupMembers.length>0",
                             "add":null,
                             "remove":null,
+                            "titleExpr":"model.group.jlgGroupMembers[arrayIndex].urnNo + ' : ' + model.group.jlgGroupMembers[arrayIndex].firstName",
                             "items":[
                                 {
                                     "key":"group.jlgGroupMembers[].urnNo",
@@ -12066,6 +12056,22 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                     "key":"group.jlgGroupMembers[].witnessRelationship",
                                     "type":"select",
                                     "readonly":readonly
+                                },
+                                {
+                                    "key":"group.jlgGroupMembers[].getDSCData",
+                                    "type":"button",
+                                    "title":"VIEW_DSC_RESPONSE",
+                                    "icon":"fa fa-eye",
+                                    "style": "btn-primary",
+                                    //"condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                    "onClick":function(model, formCtrl, form, event){
+                                        console.log(form);
+                                        console.warn(event);
+                                        var i = event['arrayIndex'];
+                                        console.warn("dscid :"+model.group.jlgGroupMembers[i].dscId);
+                                        var dscId = model.group.jlgGroupMembers[i].dscId;
+                                        showDscData(dscId);
+                                    }
                                 }
 
                             ]
@@ -12315,7 +12321,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                         "title":"VIEW_DSC_RESPONSE",
                         "icon":"fa fa-eye",
                         "style": "btn-primary",
-                        "condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                        //"condition":"model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
                         "onClick":function(model, formCtrl, form, event){
                             console.log(form);
                             console.warn(event);
@@ -16255,8 +16261,15 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
             function updateTotal(model){
                 try {
                     model.total=0;
-                    for(var i=0;i<model.repayments.length;i++){
-                        model.total +=  model.repayments[i].amount;
+                    if(model._partnerCode!="AXIS") {
+                        for (var i = 0; i < model.repayments.length; i++) {
+                            model.total += model.repayments[i].amount;
+                        }
+                    }
+                    else{
+                        for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
+                            model.total += model.loanDemandScheduleDto[i].amount;
+                        }
                     }
 
                 }catch(err){
@@ -16293,50 +16306,65 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         groupCode:groupParams[1],
                         isLegacy:isLegacy
                     }).$promise;
-                    promise.then(function (data) { /* SUCCESS */
-                        delete data.$promise;
-                        delete data.$resolved;
+                    promise.then(function (resp) { /* SUCCESS */
+                        delete resp.$promise;
+                        delete resp.$resolved;
 
-                        console.warn(data);
-                        model.ui = { submissionDone: false};
-
-                        model.repayments = Array();
-                        model.total=0;
+                        console.warn(resp);
+                        model._partnerCode = groupParams[0];
+                        var axisRepayment = (groupParams[0]=="AXIS");
+                        model.total = 0;
                         model.groupCode = groupParams[1];
-                        for(var i=0;i<data.length;i++){
+                        model.ui = {submissionDone: false};
+                        var data=[];
+                        if(!axisRepayment) {
+                            data = resp.summaries;
 
-                            var repData = data[i];
 
-                            var totalDemandDue = Number(repData.totalDemandDue);
-                            var txName = (totalDemandDue==0)?"Advance Repayment":"Scheduled Demand";
 
-                            var aRepayment = {
-                                accountId:repData.accountId,
-                                demandAmount: parseInt(Number(repData.equatedInstallment)),
-                                payOffAmount: repData.payOffAmount,
-                                payOffAndDueAmount: repData.payOffAndDueAmount,
-                                accountName: repData.accountName,
-                                numSatisifiedDemands: repData.numSatisifiedDemands,
-                                numDemands: repData.numDemands,
-                                groupCode:repData.groupCode,
-                                productCode:repData.productCode,
-                                customerName: repData.customerName,
-                                urnNo:repData.urnNo,
-                                transactionName:txName,
-                                repaymentDate:Utils.getCurrentDate(),
-                                additional:{
-                                    name:Utils.getFullName(repData.firstName,repData.middleName,repData.lastName),
-                                    accountBalance:Number(repData.accountBalance)
-                                }
-                            };
-                            aRepayment.amount = deriveAmount(txName, aRepayment);
-                            model.repayments.push(aRepayment);
+                            model.repayments = Array();
 
-                            model.total += parseInt(Number(repData.equatedInstallment));
+                            for (var i = 0; i < data.length; i++) {
+
+                                var repData = data[i];
+
+                                var totalDemandDue = Number(repData.totalDemandDue);
+                                var txName = (totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
+
+                                var aRepayment = {
+                                    accountId: repData.accountId,
+                                    demandAmount: parseInt(Number(repData.equatedInstallment)),
+                                    payOffAmount: repData.payOffAmount,
+                                    payOffAndDueAmount: repData.payOffAndDueAmount,
+                                    accountName: repData.accountName,
+                                    numSatisifiedDemands: repData.numSatisifiedDemands,
+                                    numDemands: repData.numDemands,
+                                    groupCode: repData.groupCode,
+                                    productCode: repData.productCode,
+                                    customerName: repData.customerName,
+                                    urnNo: repData.urnNo,
+                                    transactionName: txName,
+                                    repaymentDate: Utils.getCurrentDate(),
+                                    additional: {
+                                        name: Utils.getFullName(repData.firstName, repData.middleName, repData.lastName),
+                                        accountBalance: Number(repData.accountBalance)
+                                    }
+                                };
+                                aRepayment.amount = deriveAmount(txName, aRepayment);
+                                model.repayments.push(aRepayment);
+
+                                model.total += aRepayment.amount;//parseInt(Number(repData.equatedInstallment));
+
+                            }
+                            if (model.repayments.length < 1) {
+                                PageHelper.showProgress("group-repayment", "No Records", 3000);
+                                backToQueue();
+                            }
                         }
-                        if(model.repayments.length<1){
-                            PageHelper.showProgress("group-repayment","No Records",3000);
-                            backToQueue();
+                        else{
+                            model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
+
+
                         }
 
 
@@ -16362,7 +16390,22 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                             },
                             {
+                                "key":"advanceRepayment",
+                                "condition":"model._partnerCode=='AXIS'",
+                                onChange: function(value, form, model){
+                                    if(value){
+                                        for(var i=0;i<model.loanDemandScheduleDto.length;i++){
+                                            model.loanDemandScheduleDto[i].transactionName="Advance Repayment";
+                                        }
+                                    }
+                                    else{
+                                        //model.loanDemandScheduleDto[i].transactionName="";
+                                    }
+                                }
+                            },
+                            {
                                 "key":"_cashCollectionRemark",
+                                condition:"model._partnerCode!='AXIS'",
                                 "title":"CASH_COLLECTION_REMARK",
                                 "titleMap":cashCollectionRemarks,
                                 "type":"select",
@@ -16375,6 +16418,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             },
                             {
                                 "key":"_remarks",
+                                condition:"model._partnerCode!='AXIS'",
                                 "title":"REMARKS",
                                 "onChange":function(value,form,model){
                                     console.warn(model);
@@ -16387,6 +16431,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             },
                             {
                                 key:"repayments",
+                                condition:"model._partnerCode!='AXIS'",
                                 add:null,
                                 remove:null,
                                 titleExpr:"model.repayments[arrayIndex].urnNo + ' : ' + model.repayments[arrayIndex].name",
@@ -16457,6 +16502,56 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         type:"date"
                                     }
                                 ]
+                            },
+                            {
+                                "key":"loanDemandScheduleDto",
+                                "condition":"model._partnerCode=='AXIS'",
+                                "add":null,
+                                "remove":null,
+                                "titleExpr":"model.loanDemandScheduleDto[arrayIndex].urnNo + ' : ' + model.loanDemandScheduleDto[arrayIndex].firstName",
+                                "items":[
+                                    {
+                                        "key":"loanDemandScheduleDto[].accountNumber",
+                                        readonly:true
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].urnNo",
+                                        readonly:true
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].firstName",
+                                        readonly:true
+                                    },
+                                    {
+                                        key:"loanDemandScheduleDto[].transactionName",
+                                        "type":"select",
+                                        "titleMap":{
+                                            "Advance Repayment":"Advance Repayment",
+                                            "Scheduled Demand":"Scheduled Demand",
+                                            "Fee Payment":"Fee Payment",
+                                            "Pre-closure":"Pre-closure",
+                                            "Prepayment":"Prepayment"
+                                        },
+                                        onChange: function(value, form, model){
+                                            var ai = form.arrayIndex;
+
+                                        }
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].amount",
+                                        "type":"amount",
+                                        onChange:function(value,form,model,schemaForm){
+                                            updateTotal(model);
+                                        }
+
+                                    },
+                                    {
+                                        "key":"loanDemandScheduleDto[].isAdvanceDemand"
+                                    }
+
+
+                                ]
+
                             },
                             {
                                 "key":"total",
@@ -16614,39 +16709,75 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     }
 
                                     var fullPrintData = new PrinterData();
+                                    if(model._partnerCode!="AXIS") {
+                                        for (var i = 0; i < model.repayments.length; i++) {
+                                            var r = model.repayments[i];
+                                            var repaymentInfo = {
+                                                'repaymentDate': r.repaymentDate,
+                                                'customerURN': r.urnNo,
+                                                'accountNumber': r.accountId,
+                                                'transactionType': r.transactionName,
+                                                'customerName': r.customerName,
+                                                'transactionID': "",
+                                                'demandAmount': r.demandAmount,
+                                                'amountPaid': r.amount,
+                                                'payOffAmount': r.payOffAmount,
+                                                'accountName': r.accountName,
+                                                'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
+                                            };
 
-                                    for (var i=0; i<model.repayments.length; i++){
-                                        var r = model.repayments[i];
-                                        var repaymentInfo = {
-                                            'repaymentDate': r.repaymentDate,
-                                            'customerURN': r.urnNo,
-                                            'accountNumber': r.accountId,
-                                            'transactionType': r.transactionName,
-                                            'customerName': r.customerName,
-                                            'transactionID': "",
-                                            'demandAmount': r.demandAmount,
-                                            'amountPaid': r.amount,
-                                            'payOffAmount': r.payOffAmount,
-                                            'accountName': r.accountName,
-                                            'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
-                                        };
-                                        var opts = {
-                                            'entity_name': "Pudhuaaru KGFS",
-                                            'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                            'cin': 'U74990TN2011PTC081729',
-                                            'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                            'address2': 'Kanagam Village, Taramani',
-                                            'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                            'website': "http://ruralchannels.kgfs.co.in",
-                                            'helpline': '18001029370'
+                                            var opts = {
+                                                'entity_name': "Pudhuaaru KGFS",
+                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                                'cin': 'U74990TN2011PTC081729',
+                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                                'address2': 'Kanagam Village, Taramani',
+                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                                'website': "http://ruralchannels.kgfs.co.in",
+                                                'helpline': '18001029370'
+                                            }
+
+                                            var pData = getPrintReceipt(repaymentInfo, opts);
+                                            pData.addLine("", {});
+                                            pData.addLine("", {});
+                                            fullPrintData.addLines(pData.getLines());
                                         }
-
-                                        var pData = getPrintReceipt(repaymentInfo, opts);
-                                        pData.addLine("", {});
-                                        pData.addLine("", {});
-                                        fullPrintData.addLines(pData.getLines());
                                     }
+                                    else{
+                                        for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
+                                            var r = model.repaymentResponse.loanDemandScheduleDto[i];
+                                            var repaymentInfo = {
+                                                'repaymentDate': Utils.getCurrentDate(),
+                                                'customerURN': r.urnNo,
+                                                'accountNumber': r.accountNumber,
+                                                'transactionType': r.transactionName,
+                                                'customerName': Utils.getFullName(r.firstName,r.middleName,r.lastName),
+                                                'transactionID': r.transactionId,
+                                                'demandAmount': "",
+                                                'amountPaid': r.amount,
+                                                'payOffAmount': "",
+                                                'accountName': r.accountName,
+                                                'demandsPaidAndPending': ""
+                                            };
 
+                                            var opts = {
+                                                'entity_name': "Pudhuaaru KGFS",
+                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                                'cin': 'U74990TN2011PTC081729',
+                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                                'address2': 'Kanagam Village, Taramani',
+                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                                'website': "http://ruralchannels.kgfs.co.in",
+                                                'helpline': '18001029370'
+                                            }
+
+                                            var pData = getPrintReceipt(repaymentInfo, opts);
+                                            pData.addLine("", {});
+                                            pData.addLine("", {});
+                                            fullPrintData.addLines(pData.getLines());
+                                        }
+                                    }
+                                    console.log(fullPrintData.getLines());
                                     cordova.plugins.irfBluetooth.print(function(){
                                         console.log("succc callback");
                                     }, function(err){
@@ -16665,6 +16796,120 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         "advanceRepayment": {
                             "title":"ADVANCE_REPAYMENT",
                             "type": "boolean"
+                        },
+                        "loanDemandScheduleDto":{
+                            "type":"array",
+                            "items":{
+                                "type":"object",
+                                "properties":{
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "accountNumber": {
+                                        "title":"ACCOUNT_ID",
+                                        "type": "string"
+                                    },
+                                    "firstName": {
+                                        "title":"NAME",
+                                        "type": "string"
+                                    },
+                                    "middleName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "urnNo": {
+                                        "type": "string",
+                                        "title":"URN_NO"
+                                    },
+                                    "product": {
+                                        "type": "string",
+                                        "title":"PRODUCT_CODE"
+                                    },
+                                    "groupCode": {
+                                        "type": "string",
+                                        "title":"GROUP_CODE"
+                                    },
+                                    "bcCustId": {
+                                        "type": "string"
+                                    },
+                                    "tenure": {
+                                        "type": "string",
+                                        "title":"TENURE"
+                                    },
+                                    "frequency": {
+                                        "type": "string",
+                                        "title":"FREQUENCY"
+                                    },
+                                    "loanAmount": {
+                                        "type": "integer",
+                                        "title":"LOAN_AMOUNT"
+                                    },
+                                    "repaid": {
+                                        "type": "boolean"
+                                    },
+                                    "installmentAmountInPaisa": {
+                                        "type": "integer",
+                                        "title":"INSTALLMENT_AMOUNT_IN_PAISA"
+                                    },
+                                    "scheduleDate": {
+                                        "type": "string"
+                                    },
+                                    "enrollmentId": {
+                                        "type": "string"
+                                    },
+                                    "branchId": {
+                                        "type": "integer"
+                                    },
+                                    "bankId": {
+                                        "type": "null"
+                                    },
+                                    "pendingAmountInPaisa": {
+                                        "type": "integer"
+                                    },
+                                    "encoreAccountNo": {
+                                        "type": "string"
+                                    },
+                                    "lastRepaymentFlag": {
+                                        "type": "boolean"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "title":"AMOUNT",
+                                        "default":0,
+                                        "minimum":0
+                                    },
+                                    "transactionId": {
+                                        "type": "null"
+                                    },
+                                    "repaymentAmountInPaisa": {
+                                        "type": "integer"
+                                    },
+                                    "authorizationRemark": {
+                                        "type": "string"
+                                    },
+                                    "authorizationUsing": {
+                                        "type": "string"
+                                    },
+                                    "isAdvanceDemand": {
+                                        "title":"IS_ADVANCE_DEMAND",
+                                        "type": "boolean",
+                                        "default":false
+                                    },
+                                    "transactionName": {
+                                        "type": "string",
+                                        "title":"TRANSACTION_NAME"
+
+
+                                    }
+                                },
+                                "required":[
+                                    "amount",
+                                    "groupCode",
+                                    "accountNumber"
+                                ]
+                            }
                         },
                         "repayments": {
                             "type": "array",
@@ -16741,7 +16986,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         }
                     },
                     "required": [
-                        "repayments"
+                        "repayments",
+                        "loanDemandScheduleDto"
                     ]
                 },
                 actions: {
@@ -16756,21 +17002,29 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         console.log(formCtrl);
                         var reqData = _.cloneDeep(model);
                         var msg="";
-                        for(var i=0;i<reqData.repayments.length;i++) {
-                            if(reqData.repayments[i].transactionName=="Advance Repayment" || reqData.repayments[i].transactionName=="Scheduled Demand") {
-                                //Check for advance repayments
-                                if(reqData.repayments[i].transactionName=="Advance Repayment") {
-                                    reqData.advanceRepayment = true;
-                                    msg = "There are Advance Repayments - ";
-                                }
+                        if(model._partnerCode=="AXIS") {
+                            for (var i = 0; i < reqData.repayments.length; i++) {
+                                if (reqData.repayments[i].transactionName == "Advance Repayment" || reqData.repayments[i].transactionName == "Scheduled Demand") {
+                                    //Check for advance repayments
+                                    if (reqData.repayments[i].transactionName == "Advance Repayment") {
+                                        reqData.advanceRepayment = true;
+                                        msg = "There are Advance Repayments - ";
+                                    }
 
-                                //check for larger amounts
+                                    //check for larger amounts
+                                    try {
+                                        if (typeof reqData.repayments[i].additional.accountBalance !== "undefined") {
+                                            if (Number(reqData.repayments[i].amount) > reqData.repayments[i].additional.accountBalance) {
+                                                msg = "For URN " + reqData.repayments[i].urnNo;
+                                                msg += " Payable amount is larger than account balance."
+                                                Utils.alert(msg);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    catch (err) {
 
-                                if(Number(reqData.repayments[i].amount)>reqData.repayments[i].additional.accountBalance) {
-                                    msg = "For URN "+reqData.repayments[i].urnNo;
-                                    msg+=" Payable amount is larger than account balance."
-                                    Utils.alert(msg);
-                                    return;
+                                    }
                                 }
                             }
                         }

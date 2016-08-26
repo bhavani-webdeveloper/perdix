@@ -162,7 +162,17 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                             },
                             {
                                 "key":"advanceRepayment",
-                                "condition":"model._partnerCode=='AXIS'"
+                                "condition":"model._partnerCode=='AXIS'",
+                                onChange: function(value, form, model){
+                                    if(value){
+                                        for(var i=0;i<model.loanDemandScheduleDto.length;i++){
+                                            model.loanDemandScheduleDto[i].transactionName="Advance Repayment";
+                                        }
+                                    }
+                                    else{
+                                        //model.loanDemandScheduleDto[i].transactionName="";
+                                    }
+                                }
                             },
                             {
                                 "key":"_cashCollectionRemark",
@@ -282,6 +292,21 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     {
                                         "key":"loanDemandScheduleDto[].firstName",
                                         readonly:true
+                                    },
+                                    {
+                                        key:"loanDemandScheduleDto[].transactionName",
+                                        "type":"select",
+                                        "titleMap":{
+                                            "Advance Repayment":"Advance Repayment",
+                                            "Scheduled Demand":"Scheduled Demand",
+                                            "Fee Payment":"Fee Payment",
+                                            "Pre-closure":"Pre-closure",
+                                            "Prepayment":"Prepayment"
+                                        },
+                                        onChange: function(value, form, model){
+                                            var ai = form.arrayIndex;
+
+                                        }
                                     },
                                     {
                                         "key":"loanDemandScheduleDto[].amount",
@@ -622,7 +647,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     },
                                     "amount": {
                                         "type": "integer",
-                                        "title":"AMOUNT"
+                                        "title":"AMOUNT",
+                                        "default":0,
+                                        "minimum":0
                                     },
                                     "transactionId": {
                                         "type": "null"
@@ -640,6 +667,12 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         "title":"IS_ADVANCE_DEMAND",
                                         "type": "boolean",
                                         "default":false
+                                    },
+                                    "transactionName": {
+                                        "type": "string",
+                                        "title":"TRANSACTION_NAME"
+
+
                                     }
                                 },
                                 "required":[
