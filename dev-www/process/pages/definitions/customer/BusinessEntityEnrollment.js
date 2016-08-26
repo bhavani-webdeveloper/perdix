@@ -351,34 +351,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "condition": "model._mode != 'EDIT'",
                 "items": [{
                     "type": "save",
                     "title": "SAVE_OFFLINE",
                 },{
                     "type": "submit",
                     "title": "SUBMIT"
-                }]
-            },
-            {
-                "type": "actionbox",
-                "condition": "model._mode == 'EDIT'",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                },{
-                    "type": "button",
-                    "icon": "fa fa-user-plus",
-                    "title": "ENROLL_CUSTOMER",
-                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                },{
-                    "type": "button",
-                    "icon": "fa fa-refresh",
-                    "title": "RELOAD",
-                    "onClick": "actions.reload(model, formCtrl, form, $event)"
                 }]
             }
         ],
@@ -413,33 +391,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.saveData(reqData).then(function(res){
                     model.customer = _.clone(res.customer);
                     model = EnrollmentHelper.fixData(model);
-                    /*reqData = _.cloneDeep(model);
-                    EnrollmentHelper.proceedData(reqData).then(function(res){
-                        $state.go("Page.Landing");
-                    });*/
+                    
                     $state.go("Page.Engine", {
                         pageName: 'ProfileInformation',
                         pageId: model.customer.id
                     });
-                });
-            },
-            proceed: function(model, formCtrl, form, $event) {
-                var reqData = _.cloneDeep(model);
-                if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
-                    $log.info("Customer id not null, skipping save");
-                    EnrollmentHelper.proceedData(reqData).then(function (res) {
-                        $state.go("Page.Landing");
-                    });
-                }
-            },
-            reload: function(model, formCtrl, form, $event) {
-                $state.go("Page.Engine", {
-                    pageName: 'ProfileInformation',
-                    pageId: model.customer.id
-                },{
-                    reload: true,
-                    inherit: false,
-                    notify: true
                 });
             }
         }

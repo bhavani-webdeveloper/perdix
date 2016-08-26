@@ -375,12 +375,12 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
@@ -395,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -845,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -2623,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2632,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2696,7 +2697,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autoLov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2716,22 +2732,30 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -4596,11 +4620,13 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 		},
 		submit: function(model, formCtrl, formName, actions) {
 			$log.info("on systemSubmit");
-			entityManager.setModel(formName, null);
+			// entityManager.setModel(formName, null);
+			$log.warn(formCtrl);
 			if (formCtrl && formCtrl.$invalid) {
 				irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 				return false;
 			}
+			$log.warn('Going TO submit');
 			actions.submit(model, formCtrl, formName);
 			return true;
 		},
@@ -5276,7 +5302,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	/* =================================================================================== */
 
 	$scope.pageName = $stateParams.pageName;
-	$scope.formName = $scope.pageName;//.replace(/\./g, '$');
+	$scope.formName = "Form__" + $scope.pageName.replace(/\./g, '$');
 	$scope.pageId = $stateParams.pageId;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
@@ -5307,7 +5333,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			$scope.formHelper = formHelper;
 
 			$scope.$on('irf-sf-init', function(event){
-				$scope.formCtrl = event.targetScope[$scope.pageName];
+				$scope.formCtrl = event.targetScope[$scope.formName];
 			});
 			$scope.$on('sf-render-finished', function(event){
 				$log.warn("on sf-render-finished on page, rendering layout");
@@ -5315,7 +5341,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			});
 		} else if ($scope.page.type == 'search-list') {
 			$scope.model = entityManager.getModel($scope.pageName);
-			$scope.page.definition.formName = $scope.pageName;
+			$scope.page.definition.formName = $scope.formName;
 			if ($scope.page.offline === true) {
 				$scope.page.definition.offline = true;
 				var acts = $scope.page.definition.actions = $scope.page.definition.actions || {};
@@ -7738,7 +7764,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}
 			},
 			listOptions: {
-				selectable: true,
+				selectable: false,
 				expandable: true,
 				itemCallback: function(item, index) {
 				},
@@ -10742,6 +10768,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Business";
+            model.customer.centreCode = "Demo";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -10761,13 +10788,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key:"customer.centreCode",
-                        type:"select",
-                        title: "SPOKE",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        screenFilter: true
+                        key:"customer.centreCode"
                     },
                     {
                         key: "customer.entityId",
@@ -10814,39 +10835,31 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
+                        key: "customer.enterprise.businessName",
+                        title:"ENTITY_NAME"
+                    },
+                    {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
-                    }/*,
-                    {
-                        key:"customer.photoImageId",
-                        title: "ENTITY_PHOTO",
-                        type:"file",
-                        fileType:"image/*"
-                    }*/
-                ]
-            },
-            {
-                type:"box",
-                title:"BUSINESS",
-                items:[
+                    },
                     {
                         key: "customer.enterprise.referredBy",
                         title:"REFERRED_BY",
                         type: "select",
                         titleMap: {
-                            "a":"Cold call",
-                            "b": "Existing customer reference",
-                            "c": "Referral partner"
+                            "cold_call":"Cold call",
+                            "existing_customer_reference": "Existing customer reference",
+                            "referral_partner": "Referral partner"
                         }
                     },
                     {
                         key: "customer.enterprise.referredName",
                         title:"REFERRED_NAME"
-                    },
+                    },/*
                     {
                         key: "customer.enterprise.businessName",
                         title:"COMPANY_NAME"
-                    },
+                    },*/
                     {
                         key: "customer.enterprise.companyOperatingSince",
                         title:"OPERATING_SINCE",
@@ -10857,12 +10870,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         title: "YEARS_OF_BUSINESS_PRESENT_AREA",
                         titleMap: {
-                            a: "Less Than 1 Year",
-                            b: "1 to 2 Years",
-                            c: "2 to 3 Years",
-                            d: "3 to 5 Years",
-                            e: "5 to 10 Years",
-                            f: "Greater Than 10 Years"
+                            "less_than_1_year": "Less Than 1 Year",
+                            "_1_to_2_years": "1 to 2 Years",
+                            "_2_to_3_years": "2 to 3 Years",
+                            "_3_to_5_years": "3 to 5 Years",
+                            "_5_to_10_years": "5 to 10 Years",
+                            "greater_than_10_years": "Greater Than 10 Years"
                         }
                     },
                     {
@@ -10870,11 +10883,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
                         titleMap: {
-                            a: "Less Than 1 Year",
-                            b: "1 to 3 Years",
-                            c: "4 to 6 Years",
-                            d: "6 to 10 Years",
-                            f: "Greater Than 10 Years"
+                            "less_than_1_year": "Less Than 1 Year",
+                            "_1_to_3_years": "1 to 3 Years",
+                            "_3_to_6_years": "3 to 6 Years",
+                            "_6_to_10_years": "6 to 10 Years",
+                            "greater_than_10_years": "Greater Than 10 Years"
                         }
                     },
                     {
@@ -10886,76 +10899,81 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.ownership",
-                        title: "Ownership",
+                        title: "OWNERSHIP",
                         type: "select",
                         titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
+                            "owned": "Owned",
+                            "rental": "Rental",
+                            "lease": "Lease"
                         }
                     },
                     {
-                        key: "customer.enterprise.constitution",
+                        key: "customer.enterprise.businessConstitution",
                         title: "CONSTITUTION",
                         type: "select",
                         titleMap: {
-                            a: "Proprietorship",
-                            b: "Partnership",
-                            c: "Private Ltd"
+                            "proprietorship": "Proprietorship",
+                            "partnership": "Partnership",
+                            "private_ltd": "Private Ltd"
                         }
                     },
                     {
-                        key: "customer.enterprise.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
+                        key: "customer.enterprise.companyRegistered",
+                        type: "date",
                         title: "IS_REGISTERED"
                     },
                     {
                         key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered",
                         title: "REGISTRATION_TYPE",
                         type: "select",
                         titleMap: {
-                            a: "TIN",
-                            b: "SSI number",
-                            c: "VAT number",
-                            d: "Business PAN number",
-                            e: "Service tax number",
-                            f: "DIC",
-                            g: "MSME",
-                            h: "S&E"
+                            "tin": "TIN",
+                            "ssi_number": "SSI number",
+                            "vat_number": "VAT number",
+                            "business_pan_number": "Business PAN number",
+                            "service_tax_number": "Service tax number",
+                            "dic": "DIC",
+                            "msme": "MSME",
+                            "s_and_e": "S&E"
                         }
                     },
                     {
                         key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.isCompanyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered",
                         title: "REGISTRATION_NUMBER"
                     },
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                     {
-                        key: "customer.enterprise.businessSubsector",
+                        key: "customer.enterprise.businessSubType",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
-                        titleMap: {}
+                        titleMap: {
+                            "manufacturing": "manufacturing"
+                        }
                     },
                 ]
             },
@@ -10982,9 +11000,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     "customer.pincode",
                     {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key:"customer.state"
                     },
                     "customer.stdCode",
                     "customer.landLineNo",
@@ -11088,34 +11104,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "condition": "model._mode != 'EDIT'",
                 "items": [{
                     "type": "save",
                     "title": "SAVE_OFFLINE",
                 },{
                     "type": "submit",
                     "title": "SUBMIT"
-                }]
-            },
-            {
-                "type": "actionbox",
-                "condition": "model._mode == 'EDIT'",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                },{
-                    "type": "button",
-                    "icon": "fa fa-user-plus",
-                    "title": "ENROLL_CUSTOMER",
-                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                },{
-                    "type": "button",
-                    "icon": "fa fa-refresh",
-                    "title": "RELOAD",
-                    "onClick": "actions.reload(model, formCtrl, form, $event)"
                 }]
             }
         ],
@@ -11123,17 +11117,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             return Enrollment.getSchema().$promise;
         },
         actions: {
-
-            setProofs: function(model) {
-                model.customer.addressProofNo=model.customer.aadhaarNo;
-                model.customer.identityProofNo=model.customer.aadhaarNo;
-                model.customer.identityProof='Aadhar card';
-                model.customer.addressProof='Aadhar card';
-                model.customer.addressProofSameAsIdProof = true;
-                if (model.customer.yearOfBirth) {
-                    model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
-                }
-            },
             preSave: function(model, form, formName) {
                 var deferred = $q.defer();
                 if (model.customer.firstName) {
@@ -11147,10 +11130,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-                if (!EnrollmentHelper.validateData(model)) {
-                    $log.warn("Invalid Data, returning false");
-                    return false;
-                }
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -11160,37 +11139,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                $log.info(JSON.stringify(sortFn(reqData)));
+                //reqData.customer.enterprise.companyRegistered = "Yes";
+                //$log.info(JSON.stringify(sortFn(reqData)));
                 EnrollmentHelper.saveData(reqData).then(function(res){
                     model.customer = _.clone(res.customer);
                     model = EnrollmentHelper.fixData(model);
-                    /*reqData = _.cloneDeep(model);
-                    EnrollmentHelper.proceedData(reqData).then(function(res){
-                        $state.go("Page.Landing");
-                    });*/
+                    
                     $state.go("Page.Engine", {
                         pageName: 'ProfileInformation',
                         pageId: model.customer.id
                     });
-                });
-            },
-            proceed: function(model, formCtrl, form, $event) {
-                var reqData = _.cloneDeep(model);
-                if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
-                    $log.info("Customer id not null, skipping save");
-                    EnrollmentHelper.proceedData(reqData).then(function (res) {
-                        $state.go("Page.Landing");
-                    });
-                }
-            },
-            reload: function(model, formCtrl, form, $event) {
-                $state.go("Page.Engine", {
-                    pageName: 'ProfileInformation',
-                    pageId: model.customer.id
-                },{
-                    reload: true,
-                    inherit: false,
-                    notify: true
                 });
             }
         }
@@ -11241,7 +11199,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.entityId",
                         title:"ENTITY_ID",
                         type: "lov",
-                        lovonly: true,
+                        autoLov: true,
                         inputMap: {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -11257,22 +11215,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
-                            "id": "customer.entityId",
+                            "urnNo": "customer.entityId",
                             "firstName": "customer.firstName"
                         },
                         searchHelper: formHelper,
-                        search: function(inputModel, form) {
+                        search: function(inputModel, form, model) {
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var promise = Enrollment.search({
                                 'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                'firstName': inputModel.first_name,
+                                'firstName': inputModel.firstName,
+                                'urnNo': model.customer.entityId
                             }).$promise;
                             return promise;
                         },
-                        getListDisplayItem: function(data, index) {
+                        getListDisplayItem: function(item, index) {
                             return [
-                                [data.firstName, data.fatherFirstName].join(' '),
-                                data.id
+                                [item.firstName, item.fatherFirstName].join(' '),
+                                item.id,
+                                item.urnNo
                             ];
                         }
                     },
@@ -11731,8 +11691,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
     var branch = SessionStore.getBranch();
 
-    var config = PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile");
-
     var initData = function(model) {
         model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
         model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
@@ -11745,8 +11703,23 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "title": "PROFILE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Profile Page got initialized");
-            initData(model);
+            var self = this;
+            self.formBkp = self.form;
+            PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile").then(function(config){
+                if (config) {
+                    $log.info("config:");
+                    $log.info(config);
+                    var f1 = _.cloneDeep(self.form);
+                    for (var i = f1.length - 1; i >= 0; i--) {
+                        f1[i].readonly = config.readonly;
+                    };
+                    self.form = f1;
+                } else {
+                    self.form = self.formBkp;
+                }
+                $log.info("Profile Page got initialized");
+                initData(model);
+            });
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {

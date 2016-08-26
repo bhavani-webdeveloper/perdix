@@ -250,11 +250,13 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 		},
 		submit: function(model, formCtrl, formName, actions) {
 			$log.info("on systemSubmit");
-			entityManager.setModel(formName, null);
+			// entityManager.setModel(formName, null);
+			$log.warn(formCtrl);
 			if (formCtrl && formCtrl.$invalid) {
 				irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 				return false;
 			}
+			$log.warn('Going TO submit');
 			actions.submit(model, formCtrl, formName);
 			return true;
 		},

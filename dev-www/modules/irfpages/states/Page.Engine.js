@@ -203,7 +203,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	/* =================================================================================== */
 
 	$scope.pageName = $stateParams.pageName;
-	$scope.formName = $scope.pageName;//.replace(/\./g, '$');
+	$scope.formName = "Form__" + $scope.pageName.replace(/\./g, '$');
 	$scope.pageId = $stateParams.pageId;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
@@ -234,7 +234,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			$scope.formHelper = formHelper;
 
 			$scope.$on('irf-sf-init', function(event){
-				$scope.formCtrl = event.targetScope[$scope.pageName];
+				$scope.formCtrl = event.targetScope[$scope.formName];
 			});
 			$scope.$on('sf-render-finished', function(event){
 				$log.warn("on sf-render-finished on page, rendering layout");
@@ -242,7 +242,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			});
 		} else if ($scope.page.type == 'search-list') {
 			$scope.model = entityManager.getModel($scope.pageName);
-			$scope.page.definition.formName = $scope.pageName;
+			$scope.page.definition.formName = $scope.formName;
 			if ($scope.page.offline === true) {
 				$scope.page.definition.offline = true;
 				var acts = $scope.page.definition.actions = $scope.page.definition.actions || {};
