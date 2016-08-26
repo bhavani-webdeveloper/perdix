@@ -10,7 +10,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 	$scope.customerId = $stateParams.pageId;
 	$scope.formHelper = formHelper;
 
-	var fullDefinition = {
+	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
 			"Page/Engine/customer360.CustomerProfile",
@@ -45,25 +45,180 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		]
 	};
 
-	PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
-		$scope.dashboardDefinition = resp;
+	var enterpriseDefinition = {
+		"title": "BUSINESS_360",
+		"items": [
+			"Page/Engine/customer360.BusinessProfile",
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					{
+						"title": "NEW_LOAN",
+						"iconClass": "fa fa-key",
+						"items": [
+							"Page/Engine/Loans.NewJewel",
+							"Page/Engine/Loans.NewMEL"
+						]
+					},
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/Loans.Service"
+				]
+			},
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/CustomerHistory",
+			"Page/Engine/customer360.Recapture"
+		]
+	};
 
-		Enrollment.getSchema().$promise.then(function(response){
-			$scope.customerSchema = response;
+	var customerPortfolioForm = [{
+		"type": "box",
+		"title": "PORTFOLIO",
+		"colClass": "col-sm-12",
+		"readonly": true,
+		"items": [{
+			"type": "section",
+			"htmlClass": "row",
+			"items": [{
+				"type": "section",
+				"htmlClass": "col-sm-4",
+				"items": [{
+					"key": "customer.photoImageId",
+					"type": "file",
+					"fileType": "image/*",
+					"viewParams": function(modelValue, form, model) {
+						return {
+							customerId: model.customer.id
+						};
+					},
+					"readonly": true,
+					"notitle": true
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-6",
+				"items": [{
+					"key": "customer.nameWithAge",
+					"title": "CUSTOMER_NAME"
+				},{
+					"key": "customer.dateOfBirth",
+					"title": "T_DATEOFBIRTH",
+					"type": "date"
+				},{
+					"key": "customer.mobilePhone",
+					"title": "MOBILE_PHONE"
+				},{
+					"key": "customer.identityProofNo",
+					"titleExpr": "model.customer.identityProof | translate"
+				},{
+					"key": "customer.idAndBcCustId",
+					"title": "Id & Legacy Cust Id",
+					"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
+				},{
+					"key": "customer.urnNo",
+					"title": "URN_NO"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-2 hidden-xs",
+				"items": []
+			}]
+		}]
+	}/*,{
+		"type": "box",
+		"title": "PRODUCT_SUMMARY",
+		"colClass": "col-sm-12",
+		"items": []
+	}*/];
 
-			Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
+	var enterprisePortfolioForm = [{
+		"type": "box",
+		"title": "PORTFOLIO",
+		"colClass": "col-sm-12",
+		"readonly": true,
+		"items": [{
+			"type": "section",
+			"htmlClass": "row",
+			"items": [/*{
+				"type": "section",
+				"htmlClass": "col-sm-4",
+				"items": [{
+					"key": "customer.photoImageId",
+					"type": "file",
+					"fileType": "image/*",
+					"viewParams": function(modelValue, form, model) {
+						return {
+							customerId: model.customer.id
+						};
+					},
+					"readonly": true,
+					"notitle": true
+				}]
+			},*/{
+				"type": "section",
+				"htmlClass": "col-sm-8",
+				"items": [{
+					"key": "customer.firstName",
+					"title": "ENTITY_NAME"
+				},{
+					"key": "customer.enterprise.companyOperatingSince",
+					"title": "OPERATING_SINCE",
+					"type": "date"
+				},{
+					"key": "customer.latitude",
+					"title": "BUSINESS_LOCATION",
+					"type": "geotag",
+					"latitude": "customer.latitude",
+					"longitude": "customer.longitude"
+				},{
+					"key": "customer.urnNo",
+					"title": "URN_NO"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-2 hidden-xs",
+				"items": []
+			}]
+		}]
+	}];
+
+	Enrollment.getSchema().$promise.then(function(customerSchemaResponse){
+		Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
+			var fullDefinition = customerDefinition;
+			if (response.customerType === 'Enterprise') {
+				fullDefinition = enterpriseDefinition;
+			}
+			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
+				$scope.dashboardDefinition = resp;
+				$scope.customerSchema = customerSchemaResponse;
 				$scope.initialize(response);
-			}, function(errorResponse){
-
 			});
-		});
+		}, function(errorResponse){
 
+		});
 	});
 
 	$scope.initialize = function(data) {
 		$log.info(data);
-		$scope.model = {};
-		$scope.model.customer = data;
+		$scope.model = {customer: data};
+		$scope.introFormName = "introForm";
+		if (data.customerType === 'Enterprise') {
+			$scope.introForm = enterprisePortfolioForm;
+			$scope.pageTitle = 'BUSINESS_360';
+		} else {
+			$scope.introForm = customerPortfolioForm;
+			$scope.pageTitle = 'CUSTOMER_360';
+		}
+		$log.info($scope.pageTitle);
 
 		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
@@ -107,67 +262,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
-		$scope.introFormName = "introForm";
-
-		$scope.introForm = [{
-			"type": "box",
-			"title": "PORTFOLIO",
-			"colClass": "col-sm-12",
-			"readonly": true,
-			"items": [{
-				"type": "section",
-				"htmlClass": "row",
-				"items": [{
-					"type": "section",
-					"htmlClass": "col-sm-4",
-					"items": [{
-						"key": "customer.photoImageId",
-						"type": "file",
-						"fileType": "image/*",
-						"viewParams": function(modelValue, form, model) {
-							return {
-								customerId: model.customer.id
-							};
-						},
-						"readonly": true,
-						"notitle": true
-					}]
-				},{
-					"type": "section",
-					"htmlClass": "col-sm-6",
-					"items": [{
-						"key": "customer.nameWithAge",
-						"title": "CUSTOMER_NAME"
-					},{
-						"key": "customer.dateOfBirth",
-						"title": "T_DATEOFBIRTH",
-						"type": "date"
-					},{
-						"key": "customer.mobilePhone",
-						"title": "MOBILE_PHONE"
-					},{
-						"key": "customer.identityProofNo",
-						"titleExpr": "model.customer.identityProof | translate"
-					},{
-						"key": "customer.idAndBcCustId",
-						"title": "Id & Legacy Cust Id",
-						"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
-					},{
-						"key": "customer.urnNo",
-						"title": "URN_NO"
-					}]
-				},{
-					"type": "section",
-					"htmlClass": "col-sm-2 hidden-xs",
-					"items": []
-				}]
-			}]
-		},{
-			"type": "box",
-			"title": "PRODUCT_SUMMARY",
-			"colClass": "col-sm-12",
-			"items": []
-		}];
 	};
 
 	$scope.actions = {};

@@ -926,7 +926,8 @@
                     }
                 },
                 "partnerCode": {
-                    "type": "string"
+                    "type": "string",
+                    "title": "PARTNER"
                 },
                 "pendingApproval": {
                     "type": "string"

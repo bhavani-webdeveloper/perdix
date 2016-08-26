@@ -82,10 +82,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key: "customer.enterprise.businessName",
-                        title:"ENTITY_NAME"
-                    },
-                    {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
                     },
@@ -166,7 +162,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "date",
+                        type: "checkbox",
+                        schema: {
+                            default: false
+                        },
                         title: "IS_REGISTERED"
                     },
                     {
@@ -225,12 +224,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                    {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
-                        title: "Relationship to Business",
-                        startEmpty: true,
+                        title: "RELATIONSHIP_TO_BUSINESS",
                         items: [
                             {
-                                key: "customer.enterpriseCustomerRelations[].relationshipToBusiness",
-                                title: "Relationship to Business",
+                                key: "customer.enterpriseCustomerRelations[].relationshipType",
+                                title: "RELATIONSHIP_TYPE",
                                 type: "select",
                                 titleMap: {
                                     a:"Proprietor",
@@ -242,7 +240,46 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
                                 type: "lov",
-                                title: "BUSINESS"
+                                title: "CUSTOMER_ID",
+                                inputMap: {
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.kgfsName",
+                                        "type": "select"
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select"
+                                    }
+                                },
+                                outputMap: {
+                                    "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
+                                    "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode': inputModel.centreCode
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
+                                readonly: true,
+                                title: "CUSTOMER_NAME"
                             }
                         ]
                     }

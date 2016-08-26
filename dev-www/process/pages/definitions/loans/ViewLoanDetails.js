@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('laons.ViewLoanDetails'),
+irf.pageCollection.factory(irf.page('loans.ViewLoanDetails'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter","Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
             return {

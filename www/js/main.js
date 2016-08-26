@@ -6781,7 +6781,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 	$scope.customerId = $stateParams.pageId;
 	$scope.formHelper = formHelper;
 
-	var fullDefinition = {
+	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
 			"Page/Engine/customer360.CustomerProfile",
@@ -6816,25 +6816,180 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		]
 	};
 
-	PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
-		$scope.dashboardDefinition = resp;
+	var enterpriseDefinition = {
+		"title": "BUSINESS_360",
+		"items": [
+			"Page/Engine/customer360.BusinessProfile",
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					{
+						"title": "NEW_LOAN",
+						"iconClass": "fa fa-key",
+						"items": [
+							"Page/Engine/Loans.NewJewel",
+							"Page/Engine/Loans.NewMEL"
+						]
+					},
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/Loans.Service"
+				]
+			},
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/CustomerHistory",
+			"Page/Engine/customer360.Recapture"
+		]
+	};
 
-		Enrollment.getSchema().$promise.then(function(response){
-			$scope.customerSchema = response;
+	var customerPortfolioForm = [{
+		"type": "box",
+		"title": "PORTFOLIO",
+		"colClass": "col-sm-12",
+		"readonly": true,
+		"items": [{
+			"type": "section",
+			"htmlClass": "row",
+			"items": [{
+				"type": "section",
+				"htmlClass": "col-sm-4",
+				"items": [{
+					"key": "customer.photoImageId",
+					"type": "file",
+					"fileType": "image/*",
+					"viewParams": function(modelValue, form, model) {
+						return {
+							customerId: model.customer.id
+						};
+					},
+					"readonly": true,
+					"notitle": true
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-6",
+				"items": [{
+					"key": "customer.nameWithAge",
+					"title": "CUSTOMER_NAME"
+				},{
+					"key": "customer.dateOfBirth",
+					"title": "T_DATEOFBIRTH",
+					"type": "date"
+				},{
+					"key": "customer.mobilePhone",
+					"title": "MOBILE_PHONE"
+				},{
+					"key": "customer.identityProofNo",
+					"titleExpr": "model.customer.identityProof | translate"
+				},{
+					"key": "customer.idAndBcCustId",
+					"title": "Id & Legacy Cust Id",
+					"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
+				},{
+					"key": "customer.urnNo",
+					"title": "URN_NO"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-2 hidden-xs",
+				"items": []
+			}]
+		}]
+	}/*,{
+		"type": "box",
+		"title": "PRODUCT_SUMMARY",
+		"colClass": "col-sm-12",
+		"items": []
+	}*/];
 
-			Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
+	var enterprisePortfolioForm = [{
+		"type": "box",
+		"title": "PORTFOLIO",
+		"colClass": "col-sm-12",
+		"readonly": true,
+		"items": [{
+			"type": "section",
+			"htmlClass": "row",
+			"items": [/*{
+				"type": "section",
+				"htmlClass": "col-sm-4",
+				"items": [{
+					"key": "customer.photoImageId",
+					"type": "file",
+					"fileType": "image/*",
+					"viewParams": function(modelValue, form, model) {
+						return {
+							customerId: model.customer.id
+						};
+					},
+					"readonly": true,
+					"notitle": true
+				}]
+			},*/{
+				"type": "section",
+				"htmlClass": "col-sm-8",
+				"items": [{
+					"key": "customer.firstName",
+					"title": "ENTITY_NAME"
+				},{
+					"key": "customer.enterprise.companyOperatingSince",
+					"title": "OPERATING_SINCE",
+					"type": "date"
+				},{
+					"key": "customer.latitude",
+					"title": "BUSINESS_LOCATION",
+					"type": "geotag",
+					"latitude": "customer.latitude",
+					"longitude": "customer.longitude"
+				},{
+					"key": "customer.urnNo",
+					"title": "URN_NO"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-2 hidden-xs",
+				"items": []
+			}]
+		}]
+	}];
+
+	Enrollment.getSchema().$promise.then(function(customerSchemaResponse){
+		Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
+			var fullDefinition = customerDefinition;
+			if (response.customerType === 'Enterprise') {
+				fullDefinition = enterpriseDefinition;
+			}
+			PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
+				$scope.dashboardDefinition = resp;
+				$scope.customerSchema = customerSchemaResponse;
 				$scope.initialize(response);
-			}, function(errorResponse){
-
 			});
-		});
+		}, function(errorResponse){
 
+		});
 	});
 
 	$scope.initialize = function(data) {
 		$log.info(data);
-		$scope.model = {};
-		$scope.model.customer = data;
+		$scope.model = {customer: data};
+		$scope.introFormName = "introForm";
+		if (data.customerType === 'Enterprise') {
+			$scope.introForm = enterprisePortfolioForm;
+			$scope.pageTitle = 'BUSINESS_360';
+		} else {
+			$scope.introForm = customerPortfolioForm;
+			$scope.pageTitle = 'CUSTOMER_360';
+		}
+		$log.info($scope.pageTitle);
 
 		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
@@ -6878,67 +7033,6 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
-		$scope.introFormName = "introForm";
-
-		$scope.introForm = [{
-			"type": "box",
-			"title": "PORTFOLIO",
-			"colClass": "col-sm-12",
-			"readonly": true,
-			"items": [{
-				"type": "section",
-				"htmlClass": "row",
-				"items": [{
-					"type": "section",
-					"htmlClass": "col-sm-4",
-					"items": [{
-						"key": "customer.photoImageId",
-						"type": "file",
-						"fileType": "image/*",
-						"viewParams": function(modelValue, form, model) {
-							return {
-								customerId: model.customer.id
-							};
-						},
-						"readonly": true,
-						"notitle": true
-					}]
-				},{
-					"type": "section",
-					"htmlClass": "col-sm-6",
-					"items": [{
-						"key": "customer.nameWithAge",
-						"title": "CUSTOMER_NAME"
-					},{
-						"key": "customer.dateOfBirth",
-						"title": "T_DATEOFBIRTH",
-						"type": "date"
-					},{
-						"key": "customer.mobilePhone",
-						"title": "MOBILE_PHONE"
-					},{
-						"key": "customer.identityProofNo",
-						"titleExpr": "model.customer.identityProof | translate"
-					},{
-						"key": "customer.idAndBcCustId",
-						"title": "Id & Legacy Cust Id",
-						"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
-					},{
-						"key": "customer.urnNo",
-						"title": "URN_NO"
-					}]
-				},{
-					"type": "section",
-					"htmlClass": "col-sm-2 hidden-xs",
-					"items": []
-				}]
-			}]
-		},{
-			"type": "box",
-			"title": "PRODUCT_SUMMARY",
-			"colClass": "col-sm-12",
-			"items": []
-		}];
 	};
 
 	$scope.actions = {};
@@ -10835,10 +10929,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key: "customer.enterprise.businessName",
-                        title:"ENTITY_NAME"
-                    },
-                    {
                         key: "customer.firstName",
                         title:"ENTITY_NAME"
                     },
@@ -10919,7 +11009,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "date",
+                        type: "checkbox",
+                        schema: {
+                            default: false
+                        },
                         title: "IS_REGISTERED"
                     },
                     {
@@ -10975,6 +11068,68 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "manufacturing": "manufacturing"
                         }
                     },
+                   {
+                        key: "customer.enterpriseCustomerRelations",
+                        type: "array",
+                        title: "RELATIONSHIP_TO_BUSINESS",
+                        items: [
+                            {
+                                key: "customer.enterpriseCustomerRelations[].relationshipType",
+                                title: "RELATIONSHIP_TYPE",
+                                type: "select",
+                                titleMap: {
+                                    a:"Proprietor",
+                                    b:"Partner",
+                                    c:"Director",
+                                    d:"Others"
+                                }
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
+                                type: "lov",
+                                title: "CUSTOMER_ID",
+                                inputMap: {
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.kgfsName",
+                                        "type": "select"
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select"
+                                    }
+                                },
+                                outputMap: {
+                                    "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
+                                    "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode': inputModel.centreCode
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
+                                readonly: true,
+                                title: "CUSTOMER_NAME"
+                            }
+                        ]
+                    }
                 ]
             },
             {
@@ -11321,7 +11476,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             e:"Professional Degree",
                             f:"Others"
                         }
-                    },
+                    }/*,
                     {
                         key: "customer.relationshipToBusiness",
                         title: "Relationship to Business",
@@ -11337,7 +11492,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterpriseCustomerRelations.linkedToCustomerId",
                         type: "lov",
                         title: "BUSINESS"
-                    }
+                    }*/
                 ]
             },
             {
@@ -23018,7 +23173,7 @@ irf.pageCollection.factory("Pages__IndividualLoanBooking",
 
             "items": [
                 {
-                    "key": "partner.name",
+                    "key": "loanAccount.partnerCode",
                     "title": "Partner Name",
                     "type": "select"
                 },
@@ -25539,7 +25694,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
         },
         form: [{
             "type": "box",
@@ -25724,7 +25878,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     
                     "readonly": true
                 },
-                
+
                 {
                     "type": "actionbox",
                     "items": [{
@@ -25753,6 +25907,206 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmati
                     pageName: 'IndividualLoanBooking',
                     pageId: model.customer.id
                 });
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.booking.UploadQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
+    return {
+        "type": "search-list",
+        "title": "DOCUMENT_UPLOAD_QUEUE",
+        "subTitle": "",
+        "uri":"Loan Booking/Stage 3",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branchName = SessionStore.getBranch();
+            model.stage = 'LoanBooking';
+            console.log(model);
+        },
+
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            return [
+                "Branch: " + item["branch"],
+                "Centre: " + item["centre"]
+            ]
+        },
+        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
+            var promise = Enrollment.search({
+                'branchName': searchOptions.branch,
+                'centreCode': searchOptions.centre,
+                'firstName': searchOptions.first_name,
+                'lastName': searchOptions.last_name,
+                'page': 1,
+                'per_page': 100,
+                'stage': "Stage03"
+            }).$promise;
+
+            return promise;
+        },
+        definition: {
+            title: "LOAN_TYPE",
+            autoSearch: false,
+            sorting:true,
+            sortByColumns:{
+                "name":"Customer Name",
+                "centre_name":"Centre",
+                "sanction_date":"Sanction Date"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": "VIEW_LOANS",
+                "required":["branch"],
+                "properties": {
+                    
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            /*"titleMap": {
+                                "1": "Asset Purchase- Secured",
+                                "2": "Working Capital - Secured",
+                                "3": "Working Capital -Unsecured",
+                                "4": "Machine Refinance- Secured",
+                                "5": "Business Development- Secured",
+                                "6": "Business Development- Unsecured",
+                                "7": "LOC- RFD-Secured",
+                                "8": "LOC- RFD-Unsecured",
+                                "9": "LOC RFID- Secured",
+                                "10": "LOC- RFID- Unsecured"
+                            }*/
+                            "enumCode": "loan_product"
+                        }
+                    },
+                    
+                    "customer_name": {
+                        "title": "CUSTOMER_NAME",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "entity_name": {
+                        "title": "ENTITY_NAME",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
+                    "sanction_date": {
+                        "title": "SANCTION_DATE",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "date"
+                        }
+                    },
+                    "branchName": {
+                        "title": "BRANCH_NAME",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        },
+                        "enumCode": "branch"
+                    },
+                    "centreCode": {
+                        "title": "CENTER_NAME",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        },
+                        "enumCode": "centre"
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                return IndividualLoan.search({
+                    'stage': 'LoanBooking',
+                    'branchName': searchOptions.branchName,
+                    'centreCode': searchOptions.centreCode,
+                    'customerId': searchOptions.customerId
+                }).$promise;
+                //var out = {
+                //    body: [
+                //        {
+                //            "name": "Ajay Karthik | GKB Industries Ltd.",
+                //            "loan_amount": "7,50,000",
+                //            "cycle": "5607891 | Belgaum branch",
+                //            "sanction_date": "12/07/2016"
+                //        },
+                //        {
+                //            "name":"Ravi S | Key Metals Pvt. Ltd.",
+                //            "loan_amount": "20,00,00",
+                //            "cycle": "8725678 | Hubli branch",
+                //            "sanction_date": "17/07/2016"
+                //        },
+                //        {
+                //            "name":"Kaushik G | HPL",
+                //            "loan_amount": "30,00,000",
+                //            "cycle": "9057328 | Trichy branch",
+                //            "sanction_date": "01/07/2016"
+                //        }
+                //    ],
+                //    headers: {
+                //        "method": "GET",
+                //        "x-total-count": 20
+                //    }
+                //}
+                //return $q.resolve(out)
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.name,
+                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        item.cycle
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "Book Loan",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
+                            },
+                            isApplicable: function(item, index){
+                                return true;
+                            }
+                        }
+                    ];
+                }
             }
         }
     };
