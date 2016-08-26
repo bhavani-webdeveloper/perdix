@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.UploadQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
@@ -50,7 +50,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    
+
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -72,7 +72,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "enumCode": "loan_product"
                         }
                     },
-                    
+
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -117,7 +117,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 return IndividualLoan.search({
-                    'stage': 'LoanBooking',
+                    'stage': 'DocumentUpload',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
                     'customerId': searchOptions.customerId
@@ -162,8 +162,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             listOptions: {
                 itemCallback: function(item, index) {
                     $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
                 },
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -173,19 +171,19 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.cycle
+                        item.customerName,
+                        "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                        "Cycle : " + item.cycle
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Book Loan",
+                            name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;

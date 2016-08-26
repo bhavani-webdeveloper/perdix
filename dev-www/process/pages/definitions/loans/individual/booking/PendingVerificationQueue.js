@@ -50,7 +50,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    
+
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -72,7 +72,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "enumCode": "loan_product"
                         }
                     },
-                    
+
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -174,7 +174,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 getListItem: function(item){
                     return [
                         item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        "<strong>Loan Amount</strong> Rs."+item.loan_amount+" | <strong>Sanction Date</strong>:"+item.sanction_date,
                         item.cycle
                     ]
                 },
