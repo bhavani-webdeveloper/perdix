@@ -766,7 +766,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         console.log(formCtrl);
                         var reqData = _.cloneDeep(model);
                         var msg="";
-                        if(model._partnerCode=="AXIS") {
+                        if(model._partnerCode!="AXIS") {
                             for (var i = 0; i < reqData.repayments.length; i++) {
                                 if (reqData.repayments[i].transactionName == "Advance Repayment" || reqData.repayments[i].transactionName == "Scheduled Demand") {
                                     //Check for advance repayments
@@ -774,6 +774,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         reqData.advanceRepayment = true;
                                         msg = "There are Advance Repayments - ";
                                     }
+
 
                                     //check for larger amounts
                                     try {
