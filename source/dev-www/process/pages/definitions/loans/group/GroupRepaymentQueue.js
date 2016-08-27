@@ -30,10 +30,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
 
                         },
                         {
-                            key:"partner",
-                            titleMap:{
-                                "KGFS":"KGFS"
-                            }
+                            key:"partner"
+
                         },
                         "groupCode"
                     ]
@@ -63,7 +61,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
                     "partner": {
                         "title": "PARTNER",
                         "type": "string",
-                        //"enumCode":"partner",
+                        "enumCode":"partner",
                         "x-schema-form":{
                             "type":"select"
 

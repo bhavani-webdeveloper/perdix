@@ -5784,8 +5784,8 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
+irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+//irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
 //PILOT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
@@ -16172,10 +16172,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
 
                         },
                         {
-                            key:"partner",
-                            titleMap:{
-                                "KGFS":"KGFS"
-                            }
+                            key:"partner"
+
                         },
                         "groupCode"
                     ]
@@ -16205,7 +16203,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
                     "partner": {
                         "title": "PARTNER",
                         "type": "string",
-                        //"enumCode":"partner",
+                        "enumCode":"partner",
                         "x-schema-form":{
                             "type":"select"
 
@@ -16352,10 +16350,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     transactionName: txName,
                                     repaymentDate: Utils.getCurrentDate(),
                                     additional: {
-                                        name: Utils.getFullName(repData.firstName, repData.middleName, repData.lastName),
+
                                         accountBalance: Number(repData.accountBalance)
                                     }
                                 };
+                                if(typeof repData.customerName !== "undefined" && repData.customerName.length>0) {
+                                    aRepayment.additional.name = customerName;
+                                }
+                                else{
+                                    aRepayment.additional.name = Utils.getFullName();
+                                }
                                 aRepayment.amount = deriveAmount(txName, aRepayment);
                                 model.repayments.push(aRepayment);
 
@@ -16369,7 +16373,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         }
                         else{
                             model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
-
+                            for(var i=0;i<model.loanDemandScheduleDto.length;i++){
+                                model.loanDemandScheduleDto[i].isAdvanceDemand = false;
+                                model.loanDemandScheduleDto[i].amount = 0;
+                            }
 
                         }
 
@@ -16401,11 +16408,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 onChange: function(value, form, model){
                                     if(value){
                                         for(var i=0;i<model.loanDemandScheduleDto.length;i++){
-                                            model.loanDemandScheduleDto[i].transactionName="Advance Repayment";
+                                            model.loanDemandScheduleDto[i].isAdvanceDemand = true;
                                         }
                                     }
                                     else{
-                                        //model.loanDemandScheduleDto[i].transactionName="";
+
+                                        for(var i=0;i<model.loanDemandScheduleDto.length;i++){
+                                            model.loanDemandScheduleDto[i].isAdvanceDemand = false;
+                                        }
                                     }
                                 }
                             },
@@ -16528,21 +16538,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         "key":"loanDemandScheduleDto[].firstName",
                                         readonly:true
                                     },
-                                    {
-                                        key:"loanDemandScheduleDto[].transactionName",
-                                        "type":"select",
-                                        "titleMap":{
-                                            "Advance Repayment":"Advance Repayment",
-                                            "Scheduled Demand":"Scheduled Demand",
-                                            "Fee Payment":"Fee Payment",
-                                            "Pre-closure":"Pre-closure",
-                                            "Prepayment":"Prepayment"
-                                        },
-                                        onChange: function(value, form, model){
-                                            var ai = form.arrayIndex;
 
-                                        }
-                                    },
                                     {
                                         "key":"loanDemandScheduleDto[].amount",
                                         "type":"amount",
@@ -16902,13 +16898,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         "title":"IS_ADVANCE_DEMAND",
                                         "type": "boolean",
                                         "default":false
-                                    },
-                                    "transactionName": {
-                                        "type": "string",
-                                        "title":"TRANSACTION_NAME"
-
-
                                     }
+
                                 },
                                 "required":[
                                     "amount",
