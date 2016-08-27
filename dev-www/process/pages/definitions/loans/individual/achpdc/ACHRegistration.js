@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 		"id": "ach",
 		"type": "schema-form",
 		"name": "ach_pdc",
-		"title": "ACH REGISTRATION",
+		"title": "ACH_REGISTRATION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			$log.info("ACH selection Page got initialized");
@@ -33,131 +33,90 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 		},
 		form: [{
 			"type": "box",
-			"title": "ACH REGISTRATION",
-			// sample label code
-			//"readonly": false, // default-false, optional, this & everything under items becomes readonly
+			"notitle": true ,
+			"colClass":"col-sm-8",
 				 "items": [{
-								"key": "ach.accountHolderName",
-								"title": "ACCOUNT_HOLDER_NAME"
+				 			"type":"fieldset",
+				 			"title": "LOAN_DETAILS",
+				 			"items":[{
+									"key": "ach.loanAccountNumber",
+									"title": "LOAN_ACCOUNT_NUMBER",
+									"readonly":true
+								},
+								{
+									"key": "ach.BranchCode",
+									"title": "BRANCH_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.entityName",
+									"title": "ENTITY_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.entityName",
+									"title": "APPLICANT_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.entityName",
+									"title": "COAPPLICANT_NAME",
+									"readonly":true
+								}]
 							},
 							{
-								"key": "ach.accountType",
-								"title": "ACCOUNT_TYPE"
-							},
-							{
-								"key": "ach.amount",
-								"title": "AMOUNT",
-								"type": "Number"
-							  
-							},
-							{
-								"key": "ach.consumerReferenceNumber",
-								"title": "CONSUMER_REFERENCE_NUMBER"
-							},
-							{
-								"key": "ach.customerAdditionalInformation",
-								"title": "CUSTOMER_ADDITIONAL_INFORMATION"
-							},
-							{
-								"key": "ach.debitAmtOF",
-								"title": "DEBIT_AMOUNT_OF"
-							},
-							{
-								"key": "ach.emailId",
-								"title": "E-mail_Id"
-							},
-							{
-								"key": "ach.endDate",
-								"title": "END_DATE",
-								"type": "date"
-							},
-							{
-								"key": "ach.frequency",
-								"title": "frequency"
-							},
-							{
-								"key": "ach.ifscCode",
-								"title": "IFSC_Code"
-							},
-							{
-								"key": "ach.initialRejectReason",
-								"title": "INITIAL_REJECT_REASON"
-							},
-							{
-								"key": "ach.legalAccountNumber",
-								"title": "LEGAL_ACCOUNT_NUMBER"
-							},
-							{
-								"key": "ach.loanAccountNumber",
-								"title": "LOAN_ACCOUNT_NUMBER"
-							},
-							{
-								"key": "ach.mandateDate",
-								"title": "MANDATE_DATE",
-								"type":"date"
-							},
-							{
-								"key": "ach.micrCode",
-								"title": "MICRO_CODE"
-							},
-							{
-								"key": "ach.mobilNumber",
-								"title": "MOBIL_NUMBER"
-							},
-							{
-								"key": "ach.nameOfTheDestinationBankWithBranch",
-								"title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
-							},
-							{
-								"key": "ach.nameOfUtilityBillerBankCompany",
-								"title": "NAME_OF_UTILITY_BILLER_BANK_COMPANY"
-							},
-							{
-								"key": "ach.processedOnWithUmrn",
-								"title": "PROCESSED_ON_WITH_UMRN"
-							},
-							{
-								"key": "ach.rejectionCode",
-								"title": "REJECTION_CODE"
-							},
-							{
-								"key": "ach.rejectionReason",
-								"title": "REJECTION_REASON"
-							},
-							{
-								"key": "ach.schemPlanReferenceNo",
-								"title": "SCHEME_PLAN_REFERENCE_NUMBER"
-							},
-							{
-								"key": "ach.sponsorBankCode",
-								"title": "SPONSOR_BANK_CODE"
-							},
-							{
-								"key": "ach.startDate",
-								"title": "START_DATA",
-								"type":"date"
-							},
-							{
-								"key": "ach.telephoneNo",
-								"title": "TELEPHONE_NUMBER"
-							},
-							{
-								"key": "ach.umnrNo",
-								"title": "UMNR_NUMBER"
-							},
-							{
-								"key": "ach.uptoMaximumAmt",
-								"title": "UPTO_MAXIMUM_AMOUNT",
-								"type": "Number"
-							},
-							{
-								"key": "ach.utilityCode",
-								"title": "UTILITY_CODE"
+								"type":"fieldset",
+								"title":"ACH_DETAILS",
+								"items":[{
+									"key": "ach.accountHolderName",
+									"title": "ACCOUNT_HOLDER_NAME"
+								},
+								{
+									"key": "ach.accountType",
+									"title": "ACCOUNT_TYPE"
+								},
+								{
+									"key": "ach.legalAccountNumber",
+									"title": "LEGAL_ACCOUNT_NUMBER"
+								},
+								{
+									"key": "ach.ifscCode",
+									"title": "IFSC_CODE"
+								},
+								{
+									"key": "ach.nameOfTheDestinationBankWithBranch",
+									"title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
+								},
+								{
+									"key": "ach.uptoMaximumAmt",
+									"title": "UPTO_MAXIMUM_AMOUNT",
+									"type": "Number"
+								},
+								{
+									"key": "ach.frequency",
+									"title": "FREQUENCY"
+								},
+								{
+									"key": "ach.startDate",
+									"title": "START_DATE",
+									"type":"date"
+								},
+								{
+									"key": "ach.endDate",
+									"title": "END_DATE",
+									"type": "date"
+								},
+								{
+									"key": "ach.mobilNumber",
+									"title": "MOBILE_PHONE"
+								},
+								{
+									"key": "ach.emailId",
+									"title": "EMAIL"
+								}]
 							}
 						]
-					   
 				},
-			 
 				{
 					"type": "actionbox",
 					"condition":"!model.ach.id",
