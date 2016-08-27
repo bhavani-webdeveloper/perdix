@@ -1,9 +1,10 @@
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
 //irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
-irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 //UAT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
+irf.BASE_URL = "http://works2.sen-sei.in:8080/perdix-server";
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
 irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
