@@ -10845,7 +10845,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
             };
         }]);
 
-irf.pageCollection.factory(irf.page("customer.BusinessEntityEnrollment"),
+irf.pageCollection.factory(irf.page("customer.EnterpriseEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
@@ -11310,7 +11310,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     };
 }]);
 
-irf.pageCollection.factory(irf.page("customer.IndividualEntityEnrollment"),
+irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
@@ -24008,195 +24008,6 @@ irf.pageCollection.factory("Pages__MultiTranche",
         }
     };
 }]);
-irf.pageCollection.factory("Pages__DisbursementConfirmQueue",
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
-    return {
-        "id": "DisbursementConfirmQueue",
-        "type": "search-list",
-        "name": "DisbursementConfirmQueue",
-        "title": "Disbursement Confirmation Queue",
-        "subTitle": "",
-        //"uri":"Customer Enrollment/Stage 2",
-        initialize: function (model, form, formCtrl) {
-            $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
-            model.stage = 'Stage02';
-        },
-
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },
-        definition: {
-            title: "Filter Loan List",
-            autoSearch: true,
-            sorting:true,
-            sortByColumns:{
-                "sanction_date":"Sanction Date",
-                "disbursement_date":"Disbursement Date",
-                "branch":"Branch",
-                "centre":"Centre"
-            },
-            searchForm: [
-                "*"
-            ],
-            searchSchema: {
-                "type": 'object',
-                "title": 'SearchOptions',
-                "required":["branch"],
-                "properties": {
-                    /*
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "default": "1",
-                        "x-schema-form": {
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }
-                        }
-                    },
-                    */
-                    "customer_name": {
-                        "title": "Customer Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "entity_name": {
-                        "title": "Entity Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "sanction_date": {
-                        "title": "Sanction Date",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "date"
-                        }
-                    },
-                    "branch_name": {
-                        "title": "Branch Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    }
-                }
-            },
-            getSearchFormHelper: function() {
-                return formHelper;
-            },
-            getResultsPromise: function(searchOptions, pageOpts){
-                var out = {
-                    body: [
-                        {
-                            "name": "Ajay Karthik | GKB Industries Ltd.",
-                            "loan_amount": "7,50,000",
-                            "cycle": "5607891 | Belgaum branch",
-                            "sanction_date": "12/07/2016"
-                        },
-                        {
-                            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                            "loan_amount": "20,00,00",
-                            "cycle": "8725678 | Hubli branch",
-                            "sanction_date": "17/07/2016"
-                        },
-                        {
-                            "name":"Kaushik G | HPL",
-                            "loan_amount": "30,00,000",
-                            "cycle": "9057328 | Trichy branch",
-                            "sanction_date": "01/07/2016"
-                        }
-                    ],
-                    headers: {
-                        "method": "GET",
-                        "x-total-count": 20
-                    }
-                }
-                return $q.resolve(out)
-            },
-            paginationOptions: {
-                "viewMode": "page",
-                "getItemsPerPage": function(response, headers){
-                    return 20;
-                },
-                "getTotalItemsCount": function(response, headers){
-                    return headers['x-total-count']
-                }
-            },
-            listOptions: {
-                itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },
-                getItems: function(response, headers){
-                    if (response!=null && response.length && response.length!=0){
-                        return response;
-                    }
-                    return [];
-                },
-                getListItem: function(item){
-                    return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.cycle                        
-                    ]
-                },
-                getActions: function(){
-                    return [
-                        {
-                            name: "Update confirmation Status",
-                            desc: "",
-                            fn: function(item, index){
-                                $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                            },
-                            isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
-                                return true;
-                            }
-                        }
-                    ];
-                }
-            }
-        }
-    };
-}]);
-
 irf.pageCollection.factory("Pages__RejectConfirmQueue",
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
@@ -24319,7 +24130,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    
+
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -24341,7 +24152,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "enumCode": "loan_product"
                         }
                     },
-                    
+
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -24431,8 +24242,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             listOptions: {
                 itemCallback: function(item, index) {
                     $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'LoanBookingScreen', pageId: item.id});
                 },
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -24442,9 +24251,9 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.cycle
+                        item.customerName,
+                        "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                        "Cycle : " + item.cycle
                     ]
                 },
                 getActions: function(){
@@ -24454,7 +24263,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'LoanBookingScreen', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;
@@ -24843,7 +24652,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    
+
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -24865,7 +24674,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "enumCode": "loan_product"
                         }
                     },
-                    
+
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -24967,7 +24776,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 getListItem: function(item){
                     return [
                         item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
+                        "<strong>Loan Amount</strong> Rs."+item.loan_amount+" | <strong>Sanction Date</strong>:"+item.sanction_date,
                         item.cycle
                     ]
                 },
@@ -25680,239 +25489,288 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.Disburse"),
         }
     };
 }]);
-irf.pageCollection.factory(irf.page("loans.individual.booking.DisburseConfirmation"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
+    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils", function ($log, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils) {
 
-    var branch = SessionStore.getBranch();
+        var branch = SessionStore.getBranch();
 
-    return {
-        "type": "schema-form",
-        "title": "CONFIRM_LOAN_BOOKING",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-        },
-        form: [{
-            "type": "box",
-            "title": "LOAN ACCOUNT DETAILS", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "loanAccount.disbursementSchedules.customerSignatureDate",
-                    
-                    "type": "date"
-                },
-                {
-                    "key": "loanAccount.disbursementSchedules.scheduledDisbursementDate",
-                    "title": "DISBURSEMENT_DATE",
-                    "type": "date"
-                },
-                {
-                    "key": "loanAccount.partnerName",
-                    "title": "PARTNER_NAME",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanType",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.frequency",
-                    
-                    "readonly": true,
-                    "type": "select",
-                    "enumCode": "frequency"
-                },
-                {
-                    "key": "loanAccount.customer.name",
-                    "title": "CUSTOMER_NAME",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.entity.name",
-                    "title": "ENTITY_NAME",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.customer.urnNo",
-                    "title": "CUSTOMER_URN",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.repayment",
-                    "title": "REPAYMENT_TENURE",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.customer.firstName",
-                    "title": "LOAN_AMOUNT",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.customer.lastName",
-                    "title": "LOAN_APPLICATION_DATE",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanPurpose1",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanPurpose2",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanPurpose3",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanCentre",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.guaUrnNo",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.guaFirstName",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.guaMiddleName",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.guaDob",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.address",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.assetDetails",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.guarantors.totalLiabilities",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.collateral.collateralType",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.collateral.collateralDescription",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.collateral.collateralValue",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanDocuments[1].document",
-                    "title": "DOCUMENT_1",
-                    "readonly": true
-                },
-                {
-                    "title": "DOCUMENT_2",
-                    "key": "loanAccount.loanDocuments[2].document",
-                    "readonly": true
-                },
-                {
-                    "title": "DOCUMENT_3",
-                    "key": "loanAccount.loanDocuments[3].document",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.loanDocuments.photo",
-                    "title": "PHOTO",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.interestRate",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.processingFeeInPaisa",
-                    
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.cibilCharges",
-                    "title": "CIBIL_CHARGES",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.repayment",
-                    "title": "REPAYMENT_MODE",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.sanction_amount",
-                    "title": "SANCTION_AMOUNT",
-                    "readonly": true
-                },
-                {
-                    "key": "loanAccount.sanctionDate",
-                    
-                    "readonly": true
-                },
+        return {
+            "type": "schema-form",
+            "title": "CONFIRM_LOAN_BOOKING",
+            "subTitle": "",
+            initialize: function (model, form, formCtrl) {
+                $log.info("Individual Loan Booking Page got initialized");
+                PageHelper.showProgress('load-loan', 'Loading loan account...');
+                IndividualLoan.get({id: $stateParams.pageId})
+                    .$promise
+                    .then(
+                        function (res) {
+                            /* DO BASIC VALIDATION */
+                            if (res.currentStage!= 'LoanBooking'){
+                                PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                return;
+                            }
 
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "button",
-                        "title": "BACK",
-                        "onClick": "actions.reenter(model, formCtrl, form, $event)"
-                    },{
-                        "type": "submit",
-                        "title": "CONFIRM_LOAN_CREATION"
-                    }]
-                }
-            ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
+                            if (_.has(res, 'disbursementSchedules') &&
+                                _.isArray(res.disbursementSchedules) &&
+                                res.disbursementSchedules.length > 0 &&
+                                res.numberOfDisbursed < res.disbursementSchedules.length){
+                                model._currentDisbursement = res.disbursementSchedules[res.numberOfDisbursed];
+                            } else {
+                                PageHelper.showProgress('load-loan', 'No disbursement schedules found for the loan', 2000);
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                return;
+                            }
+
+                            model.loanAccount = res;
+                            PageHelper.showProgress('load-loan', 'Almost Done...');
+
+                            /* Now load the customer */
+                            Enrollment.getCustomerById({id: model.loanAccount.customerId})
+                                .$promise
+                                .then(
+                                    function (res) {
+                                        model.loanAccount.customer = res;
+                                        PageHelper.showProgress('load-loan', 'Done.', 2000);
+                                    }, function (httpRes) {
+                                        PageHelper.showProgress('load-loan', "Error while loading customer details", 2000);
+                                    }
+                                )
+                        }, function (httpRes) {
+                            PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000)
+                        }
+                    )
+            },
+            offline: false,
+            getOfflineDisplayItem: function (item, index) {
+            },
+            form: [{
+                "type": "box",
+                "title": "LOAN BOOKING DETAILS", // sample label code
+                "colClass": "col-sm-6", // col-sm-6 is default, optional
+                //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+                "items": [
+                    {
+                        "key": "_currentDisbursement.customerSignatureDate",
+                        "title": "CUSTOMER_SIGNATURE_DATE",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        "key": "_currentDisbursement.scheduledDisbursementDate",
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        "type": "actionbox",
+                        "items": [{
+                            "type": "button",
+                            "title": "BACK",
+                            "onClick": "actions.reenter(model, formCtrl, form, $event)"
+                        }, {
+                            "type": "submit",
+                            "title": "CONFIRM_LOAN_CREATION"
+                        }]
+                    }
+                ]
+            }, {
+                "type": "box",
+                "title": "LOAN ACCOUNT DETAILS", // sample label code
+                "colClass": "col-sm-6", // col-sm-6 is default, optional
+                //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+                "items": [
+
+                    {
+                        "key": "loanAccount.partnerCode",
+                        "title": "PARTNER_NAME",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.loanType",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.frequency",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.customer.firstName",
+                        "title": "CUSTOMER_NAME",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.customer.urnNo",
+                        "title": "CUSTOMER_URN",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.repayment",
+                        "title": "REPAYMENT_TENURE",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.customer.firstName",
+                        "title": "LOAN_AMOUNT",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.loanApplicationDate",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.loanPurpose1",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.loanPurpose2",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.loanPurpose3",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.customer.centreCode",
+                        "title": "CENTRE",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.interestRate",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.processingFeeInPaisa",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.cibilCharges",
+                        "title": "CIBIL_CHARGES",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.repayment",
+                        "title": "REPAYMENT_MODE",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.sanction_amount",
+                        "title": "SANCTION_AMOUNT",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.sanctionDate",
+                        "readonly": true
+                    },
+                    {
+                        "type": "fieldset",
+                        "title": "GUARANTOR_DETAILS",
+                        "items": [
+                            {
+                                "key": "loanAccount.guarantors",
+                                "type": "array",
+                                "add": null,
+                                "remove": null,
+                                "items": [
+                                    {
+                                        "key": "loanAccount.guarantors[].guaUrnNo",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].guaFirstName",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].guaMiddleName",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].guaDob",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].address",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].assetDetails",
+
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "loanAccount.guarantors[].totalLiabilities",
+
+                                        "readonly": true
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "fieldset",
+                        "title": "COLLATERAL DETAILS",
+                        "items": [
+                            {
+                                "key": "loanAccount.collateral.collateralType",
+                                "readonly": true
+                            },
+                            {
+                                "key": "loanAccount.collateral.collateralDescription",
+                                "readonly": true
+                            },
+                            {
+                                "key": "loanAccount.collateral.collateralValue",
+                                "readonly": true
+                            }
+                        ]
+                    }
+                ]
+            }],
+            schema: function () {
+                return SchemaResource.getLoanAccountSchema().$promise;
+            },
+            actions: {
+                submit: function (model, form, formName) {
+                    Utils.confirm("Ready to book the loan?")
+                        .then(function(){
+                            model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
+                            model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
+
+                            var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED'};
+                            PageHelper.showProgress('update-loan', 'Working...');
+                            return IndividualLoan.update(reqData)
+                                .$promise
+                                .then(
+                                    function(res){
+                                        PageHelper.showProgress('update-loan', 'Done', 2000);
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        return;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                                        PageHelper.showErrors(httpRes);
+                                    }
+                                )
+                        }, function(){
+                            $log.info("User selected No");
+                        })
+                },
+                reenter: function (model, formCtrl, form, $event) {
                     $state.go("Page.Engine", {
-                        pageName: 'ViewIndividualLoan',
+                        pageName: 'IndividualLoanBooking',
                         pageId: model.customer.id
                     });
-            },
-            reenter: function(model, formCtrl, form, $event) {
-                $state.go("Page.Engine", {
-                    pageName: 'IndividualLoanBooking',
-                    pageId: model.customer.id
-                });
+                }
             }
-        }
-    };
-}]);
+        };
+    }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.booking.UploadQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
@@ -25964,7 +25822,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    
+
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -25986,7 +25844,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "enumCode": "loan_product"
                         }
                     },
-                    
+
                     "customer_name": {
                         "title": "CUSTOMER_NAME",
                         "type": "string",
@@ -26031,7 +25889,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 return IndividualLoan.search({
-                    'stage': 'LoanBooking',
+                    'stage': 'DocumentUpload',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
                     'customerId': searchOptions.customerId
@@ -26076,8 +25934,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             listOptions: {
                 itemCallback: function(item, index) {
                     $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
                 },
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
@@ -26087,19 +25943,19 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.cycle
+                        item.customerName,
+                        "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                        "Cycle : " + item.cycle
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Book Loan",
+                            name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'DocumentUpload', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;

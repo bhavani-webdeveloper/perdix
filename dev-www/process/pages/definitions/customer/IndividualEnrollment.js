@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("customer.EntityEnrollment"),
+irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
@@ -9,11 +9,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     return {
         "type": "schema-form",
         "title": "ENTITY_ENROLLMENT",
-        "subTitle": "BUSINESS",
+        "subTitle": "INDIVIDUAL",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.centreCode = "Basti";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -25,7 +26,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         form: [
             {
                 "type": "box",
-                "title": "ENTITY_INFORMATION",
+                "title": "CUSTOMER_INFORMATION",
                 "items": [
                     {
                         key: "customer.kgfsName",
@@ -33,10 +34,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
+                        key:"customer.centreCode",
+                        title: "SPOKE",
+                        readonly: true
+                    },
+                    {
                         key: "customer.entityId",
                         title:"ENTITY_ID",
                         type: "lov",
-                        lovonly: true,
+                        autoLov: true,
                         inputMap: {
                             "firstName": {
                                 "key": "customer.firstName",
@@ -52,22 +58,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
-                            "id": "customer.entityId",
+                            "urnNo": "customer.entityId",
                             "firstName": "customer.firstName"
                         },
                         searchHelper: formHelper,
-                        search: function(inputModel, form) {
+                        search: function(inputModel, form, model) {
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var promise = Enrollment.search({
                                 'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                'firstName': inputModel.first_name,
+                                'firstName': inputModel.firstName,
+                                'urnNo': model.customer.entityId
                             }).$promise;
                             return promise;
                         },
-                        getListDisplayItem: function(data, index) {
+                        getListDisplayItem: function(item, index) {
                             return [
-                                [data.firstName, data.fatherFirstName].join(' '),
-                                data.id
+                                [item.firstName, item.fatherFirstName].join(' '),
+                                item.id,
+                                item.urnNo
                             ];
                         }
                     },
@@ -77,156 +85,253 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key: "customer.firstName",
-                        title:"ENTITY_NAME"
-                    },
-                    {
                         key:"customer.photoImageId",
-                        title: "ENTITY_PHOTO",
                         type:"file",
                         fileType:"image/*"
                     },
                     {
-                        key:"customer.centreCode",
-                        type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        screenFilter: true
-                    }
+                        key: "customer.firstName",
+                        title:"FIRST_NAME",
+                        placeholder: "FIRST_NAME"
+                    },
+                    {
+                        key: "customer.middleName",
+                        title:"MIDDLE_NAME"
+                    },
+                    {
+                        key: "customer.lastName",
+                        title:"LAST_NAME"
+                    },
+                    {
+                        key: "customer.maritalStatus",
+                        type: "select"
+                    },
+                    {
+                        key:"customer.age",
+                        title: "AGE",
+                        type:"number",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.dateOfBirth",
+                        type:"date",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.gender1",
+                        title: "Gender",
+                        type:"radios",
+                        titleMap: {
+                            a:"Male",
+                            b:"Female",
+                            c:"Unspecified"
+                        }
+                    },
+                    {
+                        key: "customer.religion1",
+                        title: "Religion",
+                        type: "select",
+                        titleMap: {
+                            a:"Hindu",
+                            b:"Muslim",
+                            c:"Chirstian",
+                            d:"Jain",
+                            e:"Buddhism",
+                            f:"Others"
+                        }
+                    },
+                    {
+                        key: "customer.educationLevel",
+                        title: "Education Level",
+                        type: "select",
+                        titleMap: {
+                            a:"Below SSLC",
+                            b:"SSLC",
+                            c:"HSC",
+                            d:"Graduate/Diploma/ITI",
+                            e:"Professional Degree",
+                            f:"Others"
+                        }
+                    }/*,
+                    {
+                        key: "customer.relationshipToBusiness",
+                        title: "Relationship to Business",
+                        type: "select",
+                        titleMap: {
+                            a:"Proprietor",
+                            b:"Partner",
+                            c:"Director",
+                            d:"Others"
+                        }
+                    },
+                    {
+                        key: "customer.enterpriseCustomerRelations.linkedToCustomerId",
+                        type: "lov",
+                        title: "BUSINESS"
+                    }*/
                 ]
             },
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "items":[
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.locality",
-                    {
-                        key:"customer.villageName",
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true
+                "items":[{
+                    type: "fieldset",
+                    title: "CUSTOMER_PRESENT_ADDRESS",
+                    items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            },
+                            "customer.mailSameAsResidence",
+                            {
+                                key: "customer.latitude",
+                                title: "HOUSE_LOCATION",
+                                type: "geotag",
+                                latitude: "customer.latitude",
+                                longitude: "customer.longitude"
+                            }
+                        ]
+                    },{
+                        type: "fieldset",
+                        title: "CUSTOMER_PERMANENT_ADDRESS",
+                        condition:"!model.customer.mailSameAsResidence",
+                        items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            {
+                                key: "cu",
+                                title: "Landmark"
+                            },
+                            {
+                                key: "customer.pincode",
+                                type: "lov"
+                            },
+                            {
+                                key:"customer.state"
+                            },
+                            {
+                                key: "customer.district"
+                            },
+                            {
+                                key: "customer.city",
+                                title: "City"
+                            },
+                            {
+                                key: "customer.mobilePhone",
+                                required: true
+                            }
+                        ]
                     },
-                    "customer.postOffice",
                     {
-                        key:"customer.district",
-                        type:"select",
-                        screenFilter: true
+                        key: "c",
+                        title: "Years in current address",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.pincode",
                     {
-                        key:"customer.state",
-                        type:"select",
-                        screenFilter: true
+                        key: "cc",
+                        title: "Years in current area",
+                        type: "select",
+                        titleMap: {
+                            a: "Less than 1 year",
+                            b: "1 to 3 years",
+                            c: "4 to 6 years",
+                            d: "7 to 10 years",
+                            e: "Greater than 10 years"
+                        }
                     },
-                    "customer.stdCode",
-                    "customer.landLineNo",
-                    "customer.mobilePhone"
+                    {
+                        key: "d",
+                        title: "Ownership",
+                        type: "select",
+                        titleMap: {
+                            a:"Owned",
+                            b: "Rented",
+                            c:"Leased"
+                        }
+                    }
                 ]
             },
             {
                 type:"box",
-                title:"BUSINESS",
+                title:"KYC",
                 items:[
                     {
-                        key: "business.referredBy",
-                        title:"REFERRED_BY"
-                    },
-                    {
-                        key: "business.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                        key: "business.companyName",
-                        title:"COMPANY_NAME"
-                    },
-                    {
-                        key: "business.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date",
-                        onChange: function(modelValue, form, model) {
-                            model.business.yearsInArea = model.business.yearsInAddress = moment().diff(moment(modelValue), 'years');
-                        }
-                    },
-                    {
-                        key: "business.yearsInArea",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "business.yearsInAddress",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "business.ownership",
-                        title: "Ownership",
-                        type: "select",
-                        titleMap: {
-                            "Owned": "Owned",
-                            "Rent": "Rent",
-                            "Lease": "Lease"
-                        }
-                    },
-                    {
-                        key: "business.isCompanyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
-                        },
-                        title: "IS_REGISTERED"
-                    },
-                    {
-                        key: "business.registrationType",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_TYPE"
-                    },
-                    {
-                        key: "business.registrationNumber",
-                        condition: "model.business.isCompanyRegistered",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "business.constitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessLine",
-                        title: "BUSINESS_LINE",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
-                    {
-                        key: "business.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        titleMap: {}
-                    },
+                        type:"fieldset",
+                        title:"IDENTITY_PROOF",
+                        items:[
+                            {
+                                key:"customer.identityProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.identityProofImageId",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf30",
+                                type:"file",
+                                fileType:"image/*",
+                                "offline": true
+                            },
+                            {
+                                key:"customer.identityProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.idProofIssueDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.idProofValidUptoDate",
+                                type:"date"
+                            }
+                        ]
+                    }
                 ]
             },
             {

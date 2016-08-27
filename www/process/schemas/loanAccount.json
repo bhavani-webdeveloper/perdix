@@ -241,19 +241,7 @@
                         }
                     },
                     "required": [
-                        "accountNumber",
-                        "collateral1FilePath",
-                        "collateral2FilePath",
-                        "collateral3FilePath",
-                        "collateralDescription",
-                        "collateralType",
-                        "collateralValue",
-                        "id",
-                        "loanId",
-                        "loanToValue",
-                        "marginValue",
-                        "photoFilePath",
-                        "version"
+
                     ]
                 },
                 "createdAt": {
@@ -1057,7 +1045,6 @@
                 "partnerCode",
                 "pendingApproval",
                 "processType",
-                "processingFeeInPaisa",
                 "productCode",
                 "productType",
                 "relation",
