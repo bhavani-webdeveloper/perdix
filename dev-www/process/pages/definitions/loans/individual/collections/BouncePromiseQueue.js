@@ -1,13 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BouncePromiseQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+["$log", "entityManager", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
+function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         //"subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            model.branch = SessionStore.getBranchId();
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -56,8 +56,9 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
-                    'branchName': searchOptions.branch,
+                var promise = LoanProcess.bounceCollectionDemand({
+                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'firstName': searchOptions.first_name,
                     'lastName': searchOptions.last_name,
@@ -66,7 +67,8 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                     'stage': "Stage02"
                 }).$promise;
 
-
+                return promise;
+                /*
                 return $q.resolve({
                     headers: {
                         'x-total-count': 5
@@ -121,7 +123,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                             p2pdate:""
                         }
                     ]
-                });
+                }); */
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -142,17 +144,20 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 },
                 getListItem: function(item){
                     return [
-                        item.custname,
+                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
-                        "{{'Total Amount Due'|translate}}: " + item.amountdue,
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,
-                        "{{'INTEREST'|translate}}: " + item.interest,
-                        "{{'Penal interest'|translate}}: " + item.penalInterest,
-                        "{{'Charges'|translate}}: " + item.charges,
-                        "{{'FEES'|translate}}: " + item.fees,
-                        "{{'Number of dues'|translate}}: " + item.numberOfDues
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
+                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
+                        "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
+                        "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
+                        "{{'Cheque No'|translate}}: " + item.chequeNo,  /*Service is missing*/
+                        "{{'Issuing Bank'|translate}}: " + item.issuingBank,  /*Service is missing*/
+                        "{{'Issuing Branch'|translate}}: " + item.issuingBranch,  /*Service is missing*/
+                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
+                        "{{'PTP Date'|translate}}: " + item.PTPDate,              /*Service is missing*/
+                        "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
+                        "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
                     ]
                 },
                 getActions: function(){

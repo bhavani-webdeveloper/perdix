@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "entityManager",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, entityManager){
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager){
     return {
         "type": "search-list",
-        "title": "Credit Validation Queue",
+        "title": "CREDIT_VALIDATION_QUEUE",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
@@ -30,18 +30,18 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, entityManager){
             return promise;
         },*/
         definition: {
-            title: "Search Payments",
+            title: "SEARCH_PAYMENTS",
             searchForm: [
                 "*"
             ],
             autoSearch:true,
             searchSchema: {
                 "type": 'object',
-                "title": 'SearchOptions',
+                "title": 'SEARCH_OPTIONS',
                 "required":["branch"],
                 "properties": {
                     "loan_no": {
-                        "title": "Loan Account Number",
+                        "title": "LOAN_ACCOUNT_NUMBER",
                         "type": "string"
                     },
                     "first_name": {
@@ -77,17 +77,16 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, entityManager){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
+                var promise = LoanProcess.repaymentList({
                     'branchName': searchOptions.branch,
-                    'centreCode': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
+                    'centre': searchOptions.centre,
+                    'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
+                    'status': "PENDING"
                 }).$promise;
 
-
+                return promise;
                 return $q.resolve({
                     headers: {
                         'x-total-count': 5
@@ -163,10 +162,10 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, entityManager){
                 },
                 getListItem: function(item){
                     return [
-                        item.custname,
+                        item.customerName,
                         'Loan Number: ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue,
-                        'Payment Type:' + item.paymenttype
+                        'Amount Due: ' + item.installmentAmountInPaisa,
+                        'Payment Type:' + item.paymentType
                     ]
                 },
                 getActions: function(){

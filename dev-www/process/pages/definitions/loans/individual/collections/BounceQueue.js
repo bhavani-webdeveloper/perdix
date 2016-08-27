@@ -1,13 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "entityManager",
-function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            model.branchId = SessionStore.getBranchId();
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -76,17 +76,17 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
-                    'branchName': searchOptions.branch,
+                var promise = LoanProcess.bounceCollectionDemand({
+                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
+                    'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
+                    'per_page': pageOpts.itemsPerPage
                 }).$promise;
 
-
+                return promise;
+                /*
                 return $q.resolve({
                     headers: {
                         'x-total-count': 3
@@ -141,7 +141,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
                             p2pdate:""
                         }
                     ]
-                });
+                });*/
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -162,17 +162,17 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
                 },
                 getListItem: function(item){
                     return [
-                        item.custname,
+                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno,
-                        "{{'Total Amount Due'|translate}}: " + item.amountdue,
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,
-                        "{{'INTEREST'|translate}}: " + item.interest,
-                        "{{'Penal interest'|translate}}: " + item.penalInterest,
-                        "{{'Charges'|translate}}: " + item.charges,
-                        "{{'FEES'|translate}}: " + item.fees,
-                        "{{'Number of dues'|translate}}: " + item.numberOfDues
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
+                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
+                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
+                        "{{'INTEREST'|translate}}: " + item.interest,              /*Service is missing*/
+                        "{{'Penal interest'|translate}}: " + item.penalInterest,   /*Service is missing*/
+                        "{{'Charges'|translate}}: " + item.charges,                /*Service is missing*/
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
                 getActions: function(){

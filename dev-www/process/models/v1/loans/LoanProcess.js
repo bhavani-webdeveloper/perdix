@@ -38,6 +38,15 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:'process/schemas/pldc.json'
         },
+        /*bounceCollectionDemand will show all the loans which has some overdue amount*/
+        bounceCollectionDemand:searchResource({
+            method:'GET',
+            url:BASE_URL + '/api/scheduledemandlist'
+        }),
+        repaymentList:searchResource({
+            method:'GET',
+            url:endpoint+'/repaymentlist'
+        }),
         postArray:{
             method:'POST',
             url:endpoint+'/:action',

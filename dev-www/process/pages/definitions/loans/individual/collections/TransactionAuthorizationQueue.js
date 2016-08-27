@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
+function($log, formHelper, LoanProcess, $state, SessionStore,$q){
     return {
         "id": "TransactionAuthorizationQueue",
         "type": "search-list",
@@ -79,17 +79,16 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
+                var promise = LoanProcess.repaymentList({
                     'branchName': searchOptions.branch,
-                    'centreCode': searchOptions.centre,
+                    'centre': searchOptions.centre,
                     'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
+                    'status': "PENDING"
                 }).$promise;
 
-
+                return promise;
                 return $q.resolve({
                     headers: {
                         'x-total-count': 5
@@ -146,10 +145,10 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 },
                 getListItem: function(item){
                     return [
-                        item.custname,
+                        item.customerName,
                         'Loan Number: ' + item.loanacno,
-                        'Amount Due: ' + item.amountdue,
-                        'Payment Type:' + item.paymenttype
+                        'Amount Due: ' + item.installmentAmountInPaisa,
+                        'Payment Type:' + item.paymentType
                     ]
                 },
                 getActions: function(){
