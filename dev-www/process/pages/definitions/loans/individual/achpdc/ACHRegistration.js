@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 	return {
 		"id": "ach",
 		"type": "schema-form",
-		"name": "ach_pdc",
+		"name": "ach",
 		"title": "ACH_REGISTRATION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
@@ -49,17 +49,22 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 									"readonly":true
 								},
 								{
+									"key": "ach.CentreCode",
+									"title": "CENTRE_CODE",
+									"readonly":true
+								},
+								{
 									"key": "ach.entityName",
 									"title": "ENTITY_NAME",
 									"readonly":true
 								},
 								{
-									"key": "ach.entityName",
+									"key": "ach.applicantName",
 									"title": "APPLICANT_NAME",
 									"readonly":true
 								},
 								{
-									"key": "ach.entityName",
+									"key": "ach.coApplicantName",
 									"title": "COAPPLICANT_NAME",
 									"readonly":true
 								}]
@@ -81,7 +86,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 								},
 								{
 									"key": "ach.ifscCode",
-									"title": "IFSC_CODE"
+									"title": "IFSC_CODE",
+									"type": "lov",
+                                    "inputMap": {
+                                        "ifscCode": {
+                                            "key": "ifscCode",
+                                            "title": "IFSC_CODE"
+                                        }
+                                    }
 								},
 								{
 									"key": "ach.nameOfTheDestinationBankWithBranch",
@@ -94,7 +106,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 								},
 								{
 									"key": "ach.frequency",
-									"title": "FREQUENCY"
+									"title": "FREQUENCY",
+									"type":"select",
+									"enumCode":"frequency"
 								},
 								{
 									"key": "ach.startDate",

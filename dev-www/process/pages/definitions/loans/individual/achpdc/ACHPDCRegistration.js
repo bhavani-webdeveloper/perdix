@@ -17,18 +17,24 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
         getOfflineDisplayItem: function(item, index){
             
         },
-        form: [{
-            "type": "box",
-            "colClass":"col-xs-12",
-            // sample label code
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [{
-                "type": "fieldset",
+        form: [
+                {
+                    "type": "box",
+                    "title": "ACH Registration",
+                    "colClass":"col-sm-12 col-xs-12",
+                    "items": [{
+                            "key": "ach.loanAccountNumber",
+                            "title": "Loan Account Number"
+                        },
+                        {
+                            "key": "branch_id", 
+                            "title": "Branch ID"
+                        }]
+                },
+                {
+                "type": "box",
+                "title": "ACH Registration",
                 "items": [{
-                    "type": "tabs", 
-                    "tabs": [{
-                        "title": "ACH Registration",
-                        "items": [{
                             "key": "ach.accountHolderName",
                             "title": "Account Holder Name"
                         },
@@ -49,7 +55,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
                         {
                             "key": "ach.customerAdditionalInformation",
                             "title": "Customer Additional Information"
-                       },
+                        },
                         {
                             "key": "ach.debitAmtOF",
                             "title": "Debit Amount OF"
@@ -83,10 +89,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
                         {
                             "key": "ach.legalAccountNumber",
                             "title": "Legal Account Number"
-                        },
-                        {
-                            "key": "ach.loanAccountNumber",
-                            "title": "Loan Account Number"
                         },
                         {
                             "key": "ach.mandateDate",
@@ -155,17 +157,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
                             "title": "Version",
                             "type": "Number"
                         }]
-                },
-                
-                {
-                    
-                    "title": "PDC Registration",
-                     
-                    "items": [{
-                            "key": "branch_id",
-                            "title": "Branch ID"
-                        },
-                        {
+            },
+            {
+                "type": "box",
+                "title": "PDC Registration",
+                "items": [{
                             "key": "frequency",
                             "title": "Account ID"
                         },
@@ -239,20 +235,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCRegistration"
                             "title": "Last Instalment Date",
                             "type": "date"
                         }]
-                }
-                
-            ]
-        }]
-    }]
-        },
-     
-        {
+            },
+            {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Save Details",
+                        "title": "Save Details"
                     }]
-                }],
+            }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },

@@ -1,20 +1,20 @@
-irf.pageCollection.factory(irf.page("ACHSubmission"),
+irf.pageCollection.factory(irf.page("PDCSubmission"),
 ["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
 
     
 
     return {
-        "id": "ACHSubmission",
+        "id": "PDCSubmission",
         "type": "schema-form",
-        "name": "ACHSubmission",
-        "title": "ACH SUBMISSION",
+        "name": "PDCSubmission",
+        "title": "PDC SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
         },
         form:[{
                 "type":"box",
-                "title":"ACH Submission and Status Update",
+                "title":"PDC Submission and Status Update",
                 "htmlClass": "text-danger",
                 "items":[{
                             "type":"fieldset",
@@ -41,7 +41,7 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
                                     "type": "file",
                                     "category":"cat1",
                                     "subCategory":"cat2",
-                                    "title": "Upload ACH Status"
+                                    "title": "Upload PDC Status"
                                 },
                                 {
                                     "title":"Upload",
