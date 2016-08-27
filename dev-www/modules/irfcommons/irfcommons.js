@@ -67,6 +67,23 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 	var isCordovaFlag = typeof cordova !== 'undefined';
 	return {
 		isCordova: isCordovaFlag,
+
+		downloadFile:function(url){
+			try {
+
+				try {
+					cordova.InAppBrowser.open(url, '_system', 'location=yes');
+					return true;
+				} catch (err) {
+					window.open(url, '_blank', 'location=yes');
+					return true;
+				}
+			}catch(err){
+				console.error(err);
+			}
+			return false;
+		},
+
 		getFullName: function(f, m, l) {
 			return f + (m&l?' '+m:'') + (l?' '+l:'');
 		},
