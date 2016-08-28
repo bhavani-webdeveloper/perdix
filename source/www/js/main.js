@@ -16323,9 +16323,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         var data=[];
                         if(!axisRepayment) {
                             data = resp.summaries;
-
-
-
                             model.repayments = Array();
 
                             for (var i = 0; i < data.length; i++) {
@@ -16355,10 +16352,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     }
                                 };
                                 if(typeof repData.customerName !== "undefined" && repData.customerName.length>0) {
-                                    aRepayment.additional.name = customerName;
+                                    aRepayment.additional.name = repData.customerName;
                                 }
                                 else{
-                                    aRepayment.additional.name = Utils.getFullName();
+                                    aRepayment.additional.name = repData.firstName;
                                 }
                                 aRepayment.amount = deriveAmount(txName, aRepayment);
                                 model.repayments.push(aRepayment);
@@ -16450,7 +16447,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 condition:"model._partnerCode!='AXIS'",
                                 add:null,
                                 remove:null,
-                                titleExpr:"model.repayments[arrayIndex].urnNo + ' : ' + model.repayments[arrayIndex].name",
+                                titleExpr:"model.repayments[arrayIndex].urnNo + ' : ' + model.repayments[arrayIndex].additional.name",
                                 items:[
                                     {
                                         key:"repayments[].accountId",
@@ -16999,14 +16996,16 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         console.log(formCtrl);
                         var reqData = _.cloneDeep(model);
                         var msg="";
-                        if(model._partnerCode=="AXIS") {
+                        if(model._partnerCode!="AXIS") {
+                            reqData.advanceRepayment = false;
                             for (var i = 0; i < reqData.repayments.length; i++) {
                                 if (reqData.repayments[i].transactionName == "Advance Repayment" || reqData.repayments[i].transactionName == "Scheduled Demand") {
-                                    //Check for advance repayments
+                                    //Check for advance repayments, if any
                                     if (reqData.repayments[i].transactionName == "Advance Repayment") {
                                         reqData.advanceRepayment = true;
                                         msg = "There are Advance Repayments - ";
                                     }
+
 
                                     //check for larger amounts
                                     try {
@@ -17025,7 +17024,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                 }
                             }
                         }
-
+                        
                         if(window.confirm(msg+"Are you Sure?")){
                             PageHelper.showLoader();
 
