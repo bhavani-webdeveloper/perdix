@@ -1,20 +1,16 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
+irf.pageCollection.factory(irf.page("loans.individual.loaninput"),
     ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
     function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan){
 
         var branch = SessionStore.getBranch();
 
         return {
-            "id": "LoanBookingDataCapture",
+            "id": "LoanInput",
             "type": "schema-form",
-            "name": "LoanBookingDataCapturePage",
-            "title": "Loan Booking Data Capture Page",
+            "name": "LoanInput",
+            "title": "Loan Input",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
-
-
-
-
 
             },
             offline: false,
@@ -23,9 +19,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
             },
             form: [{
                 "type": "box",
-                "title": "LOAN ACCOUNT DETAILS", // sample label code
-                "colClass": "col-sm-6", // col-sm-6 is default, optional
-                //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+                "title": "LOAN_INPUT",
+                "colClass": "col-sm-6",
+
                 "items":[
                     {
                         "type": "fieldset",
@@ -44,11 +40,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                                 "type": "select"
                             },
 
-                            {
-                                "key": "loanAccount.frequency",
-                                "title": "FREQUENCY",
-                                "type": "select"
-                            },
+
                             {
                                 "key": "loanAccount.tenure"
                             },
@@ -203,6 +195,35 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                 "title": "",
                 "items":[
                     {
+                        "type":"fieldset",
+                        "title":"GUARANTORS",
+                        "items":[
+                            {
+                                key:"loanAccount.guarantors",
+                                titleExpr:"model.loanAccount.guarantors[arrayIndex].guaUrnNo",
+                                type:"array",
+                                items:[
+                                    {
+                                        key:"loanAccount.guarantors[].guaUrnNo",
+                                        title:"URN_NO"
+                                    },
+                                    {
+                                        key:"loanAccount.guarantors[].guaDscOverride",
+                                        title:"DSC_OVERRIDE"
+                                    },
+                                    {
+                                        key:"loanAccount.guarantors[].guaDscRemarks",
+                                        title:"DSC_OVERRIDE_REMARKS"
+                                    },
+                                    {
+                                        key:"loanAccount.guarantors[].totalLiabilities",
+                                        type:"amount"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         "type": "fieldset",
                         "title": "Disbursement Details",
                         "items": [
@@ -242,7 +263,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Create Loan Account",
+                        "title": "SUBMIT"
                     }
                     ]
                 }],
@@ -255,15 +276,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                     PageHelper.clearErrors();
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
-                    reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+
                     if(window.confirm("Are You Sure?")){
                         PageHelper.showLoader();
-                        IndividualLoan.create(reqData).$promise.then(function(resp,headers){
+                        IndividualLoan.create(reqData,function(resp,headers){
 
                             console.log(resp);
-                            resp.loanProcessAction="PROCEED";
+                            //resp.loanProcessAction="PROCEED";
+                            reqData.loanProcessAction="PROCEED";
                             PageHelper.showLoader();
-                            IndividualLoan.create(resp).$promise.then(function(resp,data){
+                            IndividualLoan.create(reqData,function(resp,headers){
                                 console.log(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
                             },function(resp){
@@ -271,7 +293,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                                 PageHelper.showErrors(resp);
                                 PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
-                            }).finally(function(){
+                            }).$promise.finally(function(){
                                 PageHelper.hideLoader();
                             });
 
@@ -281,7 +303,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DataCapture"),
                             PageHelper.showErrors(resp);
                             PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
-                        }).finally(function(){
+                        }).$promise.finally(function(){
                             PageHelper.hideLoader();
                         });
                     }

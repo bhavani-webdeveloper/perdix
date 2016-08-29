@@ -448,26 +448,7 @@
                             }
                         },
                         "required": [
-                            "accountNumber",
-                            "address",
-                            "assetDetails",
-                            "dscIntegrationId",
-                            "guaCustomerId",
-                            "guaDob",
-                            "guaDscOverride",
-                            "guaDscRemarks",
-                            "guaFirstName",
-                            "guaLastName",
-                            "guaMiddleName",
-                            "guaUrnNo",
-                            "id",
-                            "loanId",
-                            "relationFirstName",
-                            "relationLastName",
-                            "relationMiddleName",
-                            "relationship",
-                            "totalLiabilities",
-                            "version"
+
                         ]
                     }
                 },
@@ -1050,7 +1031,6 @@
                 "dscOverrideRemarks",
                 "endTime",
                 "frequency",
-                "guarantors",
                 "husbandOrFatherFirstName",
                 "husbandOrFatherLastName",
                 "husbandOrFatherMiddleName",
