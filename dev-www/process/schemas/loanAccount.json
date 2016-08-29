@@ -214,54 +214,69 @@
                     "type": "string"
                 },
                 "collateral": {
-                    "type": "object",
-                    "properties": {
-                        "accountNumber": {
-                            "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type":"object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string"
+                            },
+                            "collateral1FilePath": {
+                                "type": "string",
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL1"
+                            },
+                            "collateral2FilePath": {
+                                "type": "string",
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL2"
+                            },
+                            "collateral3FilePath": {
+                                "type": "string",
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL3"
+                            },
+                            "collateralDescription": {
+                                "title": "COLLATERAL_DESCRIPTION",
+                                "type": "string"
+                            },
+                            "collateralType": {
+                                "title": "COLLATERAL_TYPE",
+                                "type": "string"
+                            },
+                            "collateralValue": {
+                                "title": "COLLATERAL_VALUE",
+                                "type": "integer"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "loanToValue": {
+                                "type": "integer"
+                            },
+                            "marginValue": {
+                                "type": "integer"
+                            },
+                            "photoFilePath": {
+                                "type": "string",
+                                "category":"Loan",
+                                "subCategory":"COLLATERALPHOTO"
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
                         },
-                        "collateral1FilePath": {
-                            "type": "string"
-                        },
-                        "collateral2FilePath": {
-                            "type": "string"
-                        },
-                        "collateral3FilePath": {
-                            "type": "string"
-                        },
-                        "collateralDescription": {
-                            "title": "COLLATERAL_DESCRIPTION",
-                            "type": "string"
-                        },
-                        "collateralType": {
-                            "title": "COLLATERAL_TYPE",
-                            "type": "string"
-                        },
-                        "collateralValue": {
-                            "title": "COLLATERAL_VALUE",
-                            "type": "integer"
-                        },
-                        "id": {
-                            "type": "integer"
-                        },
-                        "loanId": {
-                            "type": "integer"
-                        },
-                        "loanToValue": {
-                            "type": "integer"
-                        },
-                        "marginValue": {
-                            "type": "integer"
-                        },
-                        "photoFilePath": {
-                            "type": "string"
-                        },
-                        "version": {
-                            "type": "integer"
-                        }
-                    },
-                    "required": [
-
-                    ]
+                        "required": [
+                            "collateral1FilePath",
+                            "collateral2FilePath",
+                            "collateral3FilePath",
+                            "collateralType",
+                            "collateralValue"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "type": "string"
