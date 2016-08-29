@@ -149,6 +149,12 @@
                         "outstandingLoanAmount": {
                             "type": "string"
                         },
+                        "writeOffAmount": {
+                            "type": "string"
+                        },
+                        "writeOffDate": {
+                            "type": "string"
+                        },
                         "spouseDateOfBirth": {
                             "type": "string"
                         },
