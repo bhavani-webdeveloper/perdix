@@ -17,7 +17,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		form: [
 			{
 				"type":"box",
-				"title":"Repayment",
+				"title":"REPAYMENT",
 				"items":[
                     {
                         key:"_bounce.custname",
@@ -117,7 +117,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"repayment.NEFTDate",
-                        title:"Date",
+                        title:"DATE",
                         type:"text",
                         condition:"model.repayment.repaymentType=='NEFT'"
                     },
@@ -141,7 +141,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"repayment.RTGSDate",
-                        title:"Date",
+                        title:"DATE",
                         type:"text",
                         condition:"model.repayment.repaymentType=='RTGS'"
                     },
@@ -159,7 +159,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"repayment.remarks",
-                        title:"Remarks",
+                        title:"REMARKS",
                         type:"textarea"
                     }
 				]

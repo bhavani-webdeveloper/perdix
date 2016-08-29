@@ -8,7 +8,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 
     return {
         "type": "schema-form",
-        "title": "Payment Details for Loan : " + $stateParams.pageId,
+        "title": "PAYMENT_DETAILS_FOR_LOAN",
         initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
 
@@ -26,7 +26,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
         form: [
             {
                 "type":"box",
-                "title":"Payment",
+                "title":"PAYMENT",
                 "items":[
                     {
                         type:"section",
@@ -63,7 +63,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"principal",
-                                        title:"Principal",
+                                        title:"PRINCIPAL",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -81,7 +81,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"interest",
-                                        title:"Interest",
+                                        title:"INTEREST",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -91,7 +91,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "int_waived_off",
-                                        title: "Waived",
+                                        title: "WAIVED",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -108,7 +108,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"penal_interest",
-                                        title:"Penal Interest",
+                                        title:"PENAL_INTEREST",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -118,7 +118,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "p_int_waived_off",
-                                        title: "Waived",
+                                        title: "WAIVED",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -135,7 +135,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"fee",
-                                        title:"Fees & Other Charges",
+                                        title:"FEES_AND_OTHER_CHARGES",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -145,7 +145,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
                                         key: "fee_waived_off",
-                                        title: "Waived",
+                                        title: "WAIVED",
                                         type: "checkbox",
                                         "fullwidth":true,
                                         schema: {
@@ -162,7 +162,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountDue",
-                                        title:"Amount due",
+                                        title:"AMOUNT_DUE",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -180,7 +180,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
                                         key:"amountCollected",
-                                        title:"Amount Collected",
+                                        title:"AMOUNT_COLLECTED",
                                         readonly:true,
                                         type:"amount"
                                     }]
@@ -213,7 +213,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_reason",
-                        title:"Reject Reason",
+                        title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
                             "name":"Amount not creditted in account",
@@ -223,7 +223,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     },
                     {
                         key:"reject_remarks",
-                        title:"Reject Remarks",
+                        title:"REJECT_REMARKS",
                         readonly:false,
                         condition:"model.status=='2'"
                     }
