@@ -14,6 +14,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             model.pdc = model.pdc||{};
             if (model._pdc.accountNumber) {
                 model.pdc.loanAccountNumber=model._pdc.accountNumber;
+                model.pdc.BranchCode = model._pdc.branchName,
+                model.pdc.CentreCode = model._pdc.centreCode,
+                model.pdc.applicantName = model._pdc.customerName
 
                 PDC.get({id: model._pdc.accountNumber},
                     function(res){
@@ -25,7 +28,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                         model.pdc.ifscCode = model.pdcGet.ifscCode,
                         model.pdc.bankName = model.pdcGet.bankName,
                         model.pdc.branchName = model.pdcGet.branchName
-                        model.pdc.firstInstallmentDate = model.pdcGet.achStartDate
+                        model.pdc.firstInstallmentDate = model.pdcGet.pdcStartDate
 
                     },
                     function(res){

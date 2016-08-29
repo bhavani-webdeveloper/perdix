@@ -89,19 +89,38 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						
 						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
 						"{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
-						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount
+						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
+						"{{'LOAN_TYPE'|translate}} : " + item.loanType,
+						"{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
+						"{{'PROCESS_TYPE'|translate}} : " + item.processType
 					]
 				},
 				getActions: function(){
 					return [
 						{
-							name: "Update",
+							name: "Update ACH",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
 								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
+									pageId:item.accountNumber
+								});
+							},
+							isApplicable: function(item, index){
+								
+								return true;
+							}
+						},
+						{
+							name: "Update PDC",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.achpdc.PDCRegistration",
 									pageId:item.accountNumber
 								});
 							},
