@@ -232,13 +232,14 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			return null;
 		},
 		save: function(model, formCtrl, formName, actions) {
+			var pageName = formName.substring(6).replace(/\$/g, '.');
 			var promise = true;
 			if (angular.isFunction(actions.preSave)) {
 				promise = actions.preSave(model, formCtrl, formName);
 				if (promise && _.isFunction(promise.then)) {
 					promise.then(function(){
-						irfStorageService.putJSON(formName, model);
-						$state.go('Page.EngineOffline', {pageName: formName});
+						irfStorageService.putJSON(pageName, model);
+						$state.go('Page.EngineOffline', {pageName: pageName});
 					}).catch(function(){
 						// nothing to do
 					});
