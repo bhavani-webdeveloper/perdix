@@ -12,27 +12,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             model.stage = 'LoanBooking';
             console.log(model);
         },
-
         offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },
         definition: {
             title: "LOAN_TYPE",
             autoSearch: false,

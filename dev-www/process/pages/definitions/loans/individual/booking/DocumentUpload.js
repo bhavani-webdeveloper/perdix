@@ -200,7 +200,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                         .then(
                             function(res){
                                 PageHelper.showProgress('update-loan', 'Done.', 2000);
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUploadQueue'});
                                 return;
                             }, function(httpRes){
                                 PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);

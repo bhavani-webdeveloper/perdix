@@ -9,30 +9,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();
-            model.stage = 'LoanBooking';
+            model.stage = 'DocumentVerification';
             console.log(model);
         },
 
         offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },
         definition: {
             title: "LOAN_TYPE",
             autoSearch: false,
@@ -117,38 +98,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 return IndividualLoan.search({
-                    'stage': 'LoanBooking',
+                    'stage': 'DocumentVerification',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
                     'customerId': searchOptions.customerId
                 }).$promise;
-                //var out = {
-                //    body: [
-                //        {
-                //            "name": "Ajay Karthik | GKB Industries Ltd.",
-                //            "loan_amount": "7,50,000",
-                //            "cycle": "5607891 | Belgaum branch",
-                //            "sanction_date": "12/07/2016"
-                //        },
-                //        {
-                //            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                //            "loan_amount": "20,00,00",
-                //            "cycle": "8725678 | Hubli branch",
-                //            "sanction_date": "17/07/2016"
-                //        },
-                //        {
-                //            "name":"Kaushik G | HPL",
-                //            "loan_amount": "30,00,000",
-                //            "cycle": "9057328 | Trichy branch",
-                //            "sanction_date": "01/07/2016"
-                //        }
-                //    ],
-                //    headers: {
-                //        "method": "GET",
-                //        "x-total-count": 20
-                //    }
-                //}
-                //return $q.resolve(out)
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -173,19 +127,19 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "<strong>Loan Amount</strong> Rs."+item.loan_amount+" | <strong>Sanction Date</strong>:"+item.sanction_date,
-                        item.cycle
+                        item.customerName,
+                        "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                        "Cycle : " + item.cycle
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Book Loan",
+                            name: "Proceed to verification",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'LoanBookingScreen', pageId: item.id});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentVerification', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;

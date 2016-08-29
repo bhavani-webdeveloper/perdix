@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"),
-["$log", "Enrollment", "SessionStore", "$state", function($log, Enrollment, SessionStore, $state){
+["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons){
 
     return {
         "type": "schema-form",
@@ -7,23 +8,47 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
         "subTitle": " ",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
-            
-            var docsTitles = [
-                "Loan Application",
-                "Legal Agreements ",
-                "Legal Schedule",
-                "Loan sanction documents",
-                "PDC/ACH",
-                "PHS",
-                "Supporting documents"
 
-            ];
-            for(var i=0;i<docsTitles.length;i++){
-                model.loanDocs[i]= {
-                    "title":docsTitles[i]
-                }
+            var loanId = $stateParams['pageId'];
+            PageHelper.showProgress('loan-load', 'Loading loan details...');
+            PageHelper.showLoader();
+            IndividualLoan.get({id: $stateParams.pageId})
+                .$promise
+                .then(
+                    function (res) {
+                        PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+                        model.loanAccount = res;
+                        var loanDocuments = model.loanAccount.loanDocuments;
+                        var availableDocCodes = [];
+                        var docsForProduct = LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode);
 
-            }
+                        for (var i=0; i<loanDocuments.length; i++){
+                            availableDocCodes.push(loanDocuments[i].document);
+                            var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
+                            if (documentObj!=null){
+                                loanDocuments[i].$title = documentObj.docTitle;
+                            } else {
+                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                            }
+
+                        }
+
+                        for (var i = 0; i < docsForProduct.length; i++) {
+                            if (_.indexOf(availableDocCodes, docsForProduct[i].docCode)==-1){
+                                loanDocuments.push({
+                                    document: docsForProduct[i].docCode,
+                                    $downloadRequired: docsForProduct[i].downloadRequired,
+                                    $title: docsForProduct[i].docTitle
+                                })
+                            }
+                        }
+
+                        PageHelper.hideLoader();
+                    }, function (httpRes) {
+                        PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                        PageHelper.showErrors(httpRes);
+                    }
+                )
 
             /*
             // Test rejection remarks
@@ -31,7 +56,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             model.loanDocs[4].rejectReason = "Overwriting on Cheque";
             */
         },
-        
+
         form: [
 
                 {
