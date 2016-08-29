@@ -129,7 +129,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             PageHelper.hideLoader();
             irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
             PageHelper.showErrors(res);
-            deferred.reject(false);
+            deferred.reject(res);
         });
         return deferred.promise;
 
@@ -254,7 +254,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
     };
 }]);
 
-irf.pageCollection.factory("Pages__ProfileInformation",
+irf.pageCollection.factory(irf.page("ProfileInformation"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
@@ -305,9 +305,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         offline: true,
         getOfflineDisplayItem: function(item, index){
             return [
-                item["customer"]["urnNo"],
-                item["customer"]["firstName"],
-                item["customer"]["villageName"]
+                item.customer.urnNo,
+                Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
+                item.customer.villageName
             ]
         },
         form: [{
@@ -424,7 +424,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
 
             ]
-        },{
+        },
+        {
             "type": "box",
             "title": "CONTACT_INFORMATION",
             "items":[{
@@ -483,7 +484,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     ]
                 }
             ]
-        },{
+        },
+        {
             type:"box",
             title:"KYC",
             items:[
@@ -728,7 +730,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             return Enrollment.getSchema().$promise;
         },
         actions: {
-
             setProofs:function(model){
                 model.customer.addressProofNo=model.customer.aadhaarNo;
                 model.customer.identityProofNo=model.customer.aadhaarNo;

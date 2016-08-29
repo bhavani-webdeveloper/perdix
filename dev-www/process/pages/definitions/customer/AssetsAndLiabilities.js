@@ -1,4 +1,4 @@
-irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
+irf.pageCollection.factory(irf.page("AssetsLiabilitiesAndHealth"),
 ["$log","formHelper","Enrollment", '$state','$stateParams', '$q', 'irfProgressMessage', 'PageHelper',
     'SessionStore','Utils','authService', 'BiometricService', 'Files',
 function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage, PageHelper,
@@ -149,7 +149,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
         //    return deferred.promise;
         //},
         form: [
-
             {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
@@ -676,9 +675,6 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
             return Enrollment.getSchema().$promise;
         },
         actions: {
-            captureBiometric: function(model, form, formName){
-
-            },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.info(model);
