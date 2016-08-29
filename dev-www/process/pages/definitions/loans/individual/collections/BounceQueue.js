@@ -165,13 +165,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'INTEREST'|translate}}: " + item.interest,              /*Service is missing*/
-                        "{{'Penal interest'|translate}}: " + item.penalInterest,   /*Service is missing*/
-                        "{{'Charges'|translate}}: " + item.charges,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'PRINCIPAL'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'INTEREST'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
+                        "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
+                        "{{'FEES'|translate}}: " + item.part5,                 /*amountt2 is TotalFeeDue*/     
                         "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
