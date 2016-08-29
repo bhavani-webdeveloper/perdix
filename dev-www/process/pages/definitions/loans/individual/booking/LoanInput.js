@@ -11,6 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.loaninput"),
             "title": "Loan Input",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+                model.loanAccount.disbursementSchedules=[];
 
             },
             offline: false,
@@ -234,11 +235,24 @@ irf.pageCollection.factory(irf.page("loans.individual.loaninput"),
                             },
                             {
                                 key:"loanAccount.numberOfDisbursements",
-                                title:"NUM_OF_DISBURSEMENTS"
+                                title:"NUM_OF_DISBURSEMENTS",
+                                onChange:function(value,form,model){
+                                    console.log(value);
+                                    console.log(model);
+
+                                    model.loanAccount.disbursementSchedules=[];
+                                    for(var i=0;i<value;i++){
+                                        model.loanAccount.disbursementSchedules.push({
+                                            disbursementAmount:0
+                                        });
+                                    }
+                                }
                             },
                             {
                                 key:"loanAccount.disbursementSchedules",
                                 title:"DISBURSEMENT_SCHEDULES",
+                                add:null,
+                                remove:null,
                                 items:[
                                     {
                                         key:"loanAccount.disbursementSchedules[].disbursementAmount",
@@ -280,12 +294,13 @@ irf.pageCollection.factory(irf.page("loans.individual.loaninput"),
                     if(window.confirm("Are You Sure?")){
                         PageHelper.showLoader();
                         IndividualLoan.create(reqData,function(resp,headers){
-
+                            delete resp.$promise;
+                            delete resp.$resolved;
                             console.log(resp);
-                            //resp.loanProcessAction="PROCEED";
-                            reqData.loanProcessAction="PROCEED";
+                            resp.loanProcessAction="PROCEED";
+                            //reqData.loanProcessAction="PROCEED";
                             PageHelper.showLoader();
-                            IndividualLoan.create(reqData,function(resp,headers){
+                            IndividualLoan.create(resp,function(resp,headers){
                                 console.log(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
                             },function(resp){
