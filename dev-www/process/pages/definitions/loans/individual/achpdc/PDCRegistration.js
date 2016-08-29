@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+["$log", "PDC", "SessionStore","$state", "$stateParams", function($log, PDC, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
@@ -14,6 +14,33 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             model.pdc = model.pdc||{};
             if (model._pdc.accountNumber) {
                 model.pdc.loanAccountNumber=model._pdc.accountNumber;
+
+                PDC.get({id: model._pdc.accountNumber},
+                    function(res){
+                        model.pdcGet = Utils.removeNulls(res,true);
+
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init","Done.",2000);
+                        model.pdc.securityCheckNo = model.pdcGet.accountHolderName,
+                        model.pdc.ifscCode = model.pdcGet.ifscCode,
+                        model.pdc.bankName = model.pdcGet.bankName,
+                        model.pdc.branchName = model.pdcGet.branchName
+                        model.pdc.firstInstallmentDate = model.pdcGet.achStartDate
+
+                    },
+                    function(res){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init","Error in loading customer.",2000);
+                        PageHelper.showErrors(res);
+                        
+                        
+                        /*$state.go("Page.Engine", {
+                            pageName: 'EnrollmentHouseVerificationQueue',
+                            pageId: null
+                        });*/
+                    }
+                );
+
              } else if ($stateParams.pageId) {
               model.pdc.loanAccountNumber=$stateParams.pageId;
              } else {
@@ -140,20 +167,48 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 },
             {
                     "type": "actionbox",
+                    "condition":"!model.pdc.id",
                     "items": [{
                         "type": "submit",
-                        "title": "Save Details"
-                    }]
-            }],
+                        "title": "Submit",
+                              }]
+                },
+                {
+                    "type": "actionbox",
+                    "condition":"model.pdc.id",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Update",
+                              }]
+                }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return PDC.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
+                $log.info("Inside submit()");
+                    PageHelper.showLoader();
+                    if (model.pdc.id) {
+                        PDC.update(model.pdc, function(response){
+                            PageHelper.hideLoader();
+                            model.pdc=Utils.removeNulls(model.pdc,true);
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    } else {
+                        PDC.create(model.pdc, function(response){
+                            PageHelper.hideLoader();
+                            model.pdc=response;
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    }
+                    /*$state.go("Page.Engine", {
                         pageName: 'IndividualLoanBookingConfirmation',
                         pageId: model.customer.id
-                    });
+                    });*/
             }
         }
     };

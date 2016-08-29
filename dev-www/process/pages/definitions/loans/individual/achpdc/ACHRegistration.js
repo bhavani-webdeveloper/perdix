@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
-["$log", "ACHPDC","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", function($log, ACHPDC,PageHelper,irfProgressMessage, SessionStore,$state,Utils,$stateParams){
+["$log", "ACH","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", 
+function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$stateParams){
 
 	var branch = SessionStore.getBranch();
 
@@ -12,11 +13,40 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 		initialize: function (model, form, formCtrl) {
 			$log.info("ACH selection Page got initialized");
 			 model.ach = model.ach||{};
+			 model.loanAccount= model.loanAccount||{};
 			 if (model._ach.accountNumber) {
 				model.ach.loanAccountNumber=model._ach.accountNumber;
+				model.ach.BranchCode = model._ach.branchName,
+				model.ach.CentreCode = model._ach.centreCode,
+				model.ach.applicantName = model._ach.customerName
+
 			 } else if ($stateParams.pageId) {
 			  model.ach.loanAccountNumber=$stateParams.pageId;
-			 } else {
+			  ACH.search({id: $stateParams.pageId})
+                    .$promise
+                    .then(
+                        function (res) {
+                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+                            model.achSearch = res;
+                            model.ach.accountHolderName = model.achSearch.accountHolderName,
+                            model.ach.accountType = model.achSearch.accountType,
+                            model.ach.legalAccountNumber = model.achSearch.bankAccountNumber,
+                            model.ach.ifscCode = model.achSearch.ifscCode,
+                            model.ach.nameOfTheDestinationBankWithBranch = model.achSearch.bankName + " && " +model.achSearch.branchName,
+                            model.ach.uptoMaximumAmt = model.achSearch.maximumAmount,
+                            model.ach.startDate = model.achSearch.achStartDate,
+                            model.ach.endDate = model.achSearch.achEndDate,
+                            model.ach.mobilNumber = model.achSearch.phoneNo,
+                            model.ach.emailId = model.achSearch.emailId,
+
+
+                            PageHelper.hideLoader();
+                        }, function (httpRes) {
+                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                            PageHelper.showErrors(httpRes);
+                        }
+                   		);
+			 }  else {
 			  $state.go("Page.Engine",{
 									pageName:"loans.individual.Queue",
 									pageId:null
@@ -148,7 +178,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 							  }]
 				}],
 			schema: function() {
-            return ACHPDC.getSchema().$promise;
+            return ACH.getSchema().$promise;
        		 },
 			actions: {
 				submit: function(model, form, formName){
@@ -156,7 +186,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 					$log.info("Inside submit()");
 					PageHelper.showLoader();
 					if (model.ach.id) {
-						ACHPDC.update(model.ach, function(response){
+						ACH.update(model.ach, function(response){
 							PageHelper.hideLoader();
 							model.ach=Utils.removeNulls(model.ach,true);
 						}, function(errorResponse){
@@ -164,7 +194,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 							PageHelper.showErrors(errorResponse);
 						});
 					} else {
-						ACHPDC.create(model.ach, function(response){
+						ACH.create(model.ach, function(response){
 							PageHelper.hideLoader();
 							model.ach=response;
 						}, function(errorResponse){
