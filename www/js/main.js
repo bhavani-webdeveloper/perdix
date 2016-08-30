@@ -375,12 +375,12 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
@@ -395,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -845,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -2623,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2632,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2696,7 +2697,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autoLov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2716,22 +2732,30 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -6169,6 +6193,16 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 					def[v.uri] = d;
 				});
 				deferred.resolve(def);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	resource.getPincodes = function(pincode, district, state) {
+		var deferred = $q.defer();
+		resource.getResult('pincode.list', {pincode:pincode, district:district, state:state}).then(function(records){
+			if (records && records.results) {
+				deferred.resolve(records.results);
 			}
 		}, deferred.reject);
 		return deferred.promise;
@@ -11370,9 +11404,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition){
+    PageHelper, Utils, BiometricService, PagesDefinition, Queries){
 
     var branch = SessionStore.getBranch();
 
@@ -11395,13 +11429,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
             $log.info('STORAGE_KEY: ' + model.$$STORAGE_KEY$$);
             if (!model.$$STORAGE_KEY$$) {
-                var expenditureSourcesTitlemap = formHelper.enum('expenditure').data;
-                model.customer.expenditures = [];
-                _.forEach(expenditureSourcesTitlemap, function(v){
-                    if (v.value !== 'Other') {
-                        model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
-                    }
-                });
+                var expenditure = formHelper.enum('expenditure');
+                if (expenditure) {
+                    var expenditureSourcesTitlemap = expenditure.data;
+                    model.customer.expenditures = [];
+                    _.forEach(expenditureSourcesTitlemap, function(v){
+                        if (v.value !== 'Other') {
+                            model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
+                        }
+                    });
+                }
             }
 
             model.customer.familyMembers = model.customer.familyMembers || [];
@@ -11602,24 +11639,48 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         "customer.street",
                         "customer.locality",
                         {
-                            key:"customer.villageName",
+                            key:"customer.villageName"/*,
                             type:"select",
                             filter: {
                                 'parentCode': 'model.branchId'
                             },
-                            screenFilter: true
+                            screenFilter: true*/
                         },
                         "customer.postOffice",
                         {
-                            key:"customer.district",
+                            key:"customer.district"/*,
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true*/
                         },
-                        "customer.pincode",
                         {
-                            key:"customer.state",
+                            key: "customer.pincode",
+                            type: "lov",
+                            autolov: true,
+                            inputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            outputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.getPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.pincode,
+                                    item.district + ', ' + item.state
+                                ];
+                            }
+                        },
+                        {
+                            key:"customer.state"/*,
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true*/
                         },
                         "customer.stdCode",
                         "customer.landLineNo",
@@ -21405,11 +21466,15 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		"type": "schema-form",
 		"title": "REPAYMENT_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
+            model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
             if (!model._bounce) {
+                model.collectPayment=model._bounce;
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+            } else {
+                model.collectPayment=model._bounce;
             }
-            model.repayment.repaymentType = "Cash";
+            model.repayment.repaymentType = "Choose Repayment Mode";
         },
 		form: [
 			{
@@ -21417,27 +21482,27 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 				"title":"REPAYMENT",
 				"items":[
                     {
-                        key:"_bounce.custname",
+                        key:"collectPayment.customerName",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
                     {
-                        key:"_bounce.applicant",
+                        key:"collectPayment.applicant", /*applicant-field is missing in scheduledemandlist*/
                         title:"APPLICANT",
                         readonly:true
                     },
                     {
-                        key:"_bounce.coApplicant",
+                        key:"collectPayment.coApplicant", /*coApplicant-field is missing in scheduledemandlist*/
                         title:"CO_APPLICANT",
                         readonly:true
                     },
                     {
-                        key: "_bounce.loanacno",
+                        key: "collectPayment.accountId", /*accountId is Loan Account Number*/
                         title: "LOAN_ACCOUNT_NUMBER",
                         readonly: true
                     },
                     {
-                        key:"_bounce.amountdue",
+                        key:"collectPayment.amountdue",
                         title:"AMOUNT_DUE",
                         type:"amount",
                         readonly:true

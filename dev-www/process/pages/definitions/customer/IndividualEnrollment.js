@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition){
+    PageHelper, Utils, BiometricService, PagesDefinition, Queries){
 
     var branch = SessionStore.getBranch();
 
@@ -25,13 +25,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
 
             $log.info('STORAGE_KEY: ' + model.$$STORAGE_KEY$$);
             if (!model.$$STORAGE_KEY$$) {
-                var expenditureSourcesTitlemap = formHelper.enum('expenditure').data;
-                model.customer.expenditures = [];
-                _.forEach(expenditureSourcesTitlemap, function(v){
-                    if (v.value !== 'Other') {
-                        model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
-                    }
-                });
+                var expenditure = formHelper.enum('expenditure');
+                if (expenditure) {
+                    var expenditureSourcesTitlemap = expenditure.data;
+                    model.customer.expenditures = [];
+                    _.forEach(expenditureSourcesTitlemap, function(v){
+                        if (v.value !== 'Other') {
+                            model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
+                        }
+                    });
+                }
             }
 
             model.customer.familyMembers = model.customer.familyMembers || [];
@@ -232,24 +235,48 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         "customer.street",
                         "customer.locality",
                         {
-                            key:"customer.villageName",
+                            key:"customer.villageName"/*,
                             type:"select",
                             filter: {
                                 'parentCode': 'model.branchId'
                             },
-                            screenFilter: true
+                            screenFilter: true*/
                         },
                         "customer.postOffice",
                         {
-                            key:"customer.district",
+                            key:"customer.district"/*,
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true*/
                         },
-                        "customer.pincode",
                         {
-                            key:"customer.state",
+                            key: "customer.pincode",
+                            type: "lov",
+                            autolov: true,
+                            inputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            outputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.getPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.pincode,
+                                    item.district + ', ' + item.state
+                                ];
+                            }
+                        },
+                        {
+                            key:"customer.state"/*,
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true*/
                         },
                         "customer.stdCode",
                         "customer.landLineNo",

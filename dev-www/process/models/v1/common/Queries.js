@@ -57,5 +57,15 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 		return deferred.promise;
 	};
 
+	resource.getPincodes = function(pincode, district, state) {
+		var deferred = $q.defer();
+		resource.getResult('pincode.list', {pincode:pincode, district:district, state:state}).then(function(records){
+			if (records && records.results) {
+				deferred.resolve(records.results);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+
 	return resource;
 });

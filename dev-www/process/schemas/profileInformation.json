@@ -228,7 +228,7 @@
                 "enrolledAs": {
                     "type": "string",
                     "title": "ENROLLED_AS",
-                    "enumCode": "enrolled_as",
+                    "enumCode": "enrolledAs",
                     "default":"CUSTOMER"
                 },
                 "enterprise": {
@@ -467,7 +467,6 @@
                             "annualExpenses",
                             "expenditureSource",
                             "frequency"
-
                         ]
                     }
                 },
@@ -1763,8 +1762,6 @@
                 "identityProofImageId",
                 "identityProofNo",
                 "language",
-                "latitude",
-                "longitude",
                 "mailingDistrict",
                 "mailingPincode",
                 "mailingState",
