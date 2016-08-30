@@ -632,7 +632,6 @@
                             }
                         },
                         "required": [
-                            "disbursementId",
                             "document",
                             "documentId",
                             "documentStatus",

@@ -2,6 +2,25 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
+        "customer":{
+            "type":"object",
+            "properties":{
+                "firstName":{
+                    "type":"string"
+                },
+                "branch":{
+                    "type":"string",
+                    "enumCode":"branch",
+                    "title":"BRANCH"
+                },
+                "centreCode":{
+                    "type":"string",
+                    "enumCode":"centre",
+                    "title":"CENTRE"
+
+                }
+            }
+        },
         "loanAccount": {
             "type": "object",
             "properties": {
@@ -294,7 +313,8 @@
                                 "type": "integer"
                             },
                             "disbursementAmount": {
-                                "type": "integer"
+                                "type": "integer",
+                                "minimum":0
                             },
                             "disbursementFromBankAccountNumber": {
                                 "type": "string"
@@ -350,7 +370,8 @@
                 },
                 "frequency": {
                     "title": "FREQUENCY",
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"frequency"
                 },
                 "guarantors": {
                     "type": "array",
@@ -415,7 +436,8 @@
                                 "type": "string"
                             },
                             "relationship": {
-                                "type": "string"
+                                "type": "string",
+                                "enumCode":"relation"
                             },
                             "totalLiabilities": {
                                 "title": "LIABILITIES",
@@ -426,26 +448,7 @@
                             }
                         },
                         "required": [
-                            "accountNumber",
-                            "address",
-                            "assetDetails",
-                            "dscIntegrationId",
-                            "guaCustomerId",
-                            "guaDob",
-                            "guaDscOverride",
-                            "guaDscRemarks",
-                            "guaFirstName",
-                            "guaLastName",
-                            "guaMiddleName",
-                            "guaUrnNo",
-                            "id",
-                            "loanId",
-                            "relationFirstName",
-                            "relationLastName",
-                            "relationMiddleName",
-                            "relationship",
-                            "totalLiabilities",
-                            "version"
+
                         ]
                     }
                 },
@@ -544,10 +547,12 @@
                 },
                 "loanAmount": {
                     "type": "integer",
-                    "title": "LOAN_AMOUNT"
+                    "title": "LOAN_AMOUNT",
+                    "minimum":0
                 },
                 "loanAmountRequested": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum":0
                 },
                 "loanApplicationDate": {
                     "type": "string"
@@ -682,19 +687,24 @@
                 },
                 "loanPurpose1": {
                     "title": "LOAN_PURPOSE_LEVEL_1",
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"loan_purpose_1"
                 },
                 "loanPurpose2": {
                     "title": "LOAN_PURPOSE_LEVEL_2",
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"loan_purpose_2"
+
                 },
                 "loanPurpose3": {
                     "title": "LOAN_PURPOSE_LEVEL_3",
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"loan_purpose_3"
                 },
                 "loanType": {
                     "title": "LOAN_TYPE",
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"loan_type"
                 },
                 "nominees": {
                     "type": "array",
@@ -842,7 +852,8 @@
                     "type": "integer"
                 },
                 "numberOfDisbursements": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum":0
                 },
                 "originalAccountNumber": {
                     "type": "string"
@@ -915,7 +926,8 @@
                 },
                 "partnerCode": {
                     "type": "string",
-                    "title": "PARTNER"
+                    "title": "PARTNER",
+                    "enumCode":"partner"
                 },
                 "pendingApproval": {
                     "type": "string"
@@ -928,13 +940,17 @@
                     "type": "integer"
                 },
                 "productCode": {
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"loan_product"
                 },
                 "productType": {
                     "type": "string"
                 },
                 "relation": {
-                    "type": "string"
+                    "type": "string",
+                    "enumCode":"relationship"
+
+
                 },
                 "restructure": {
                     "type": "boolean"
@@ -950,7 +966,9 @@
                     "type": "string"
                 },
                 "tenure": {
-                    "type": "string"
+                    "type": "integer",
+                    "title":"TENURE",
+                    "minimum":0
                 },
                 "tenureInYears": {
                     "type": "integer"
@@ -1013,13 +1031,11 @@
                 "dscOverrideRemarks",
                 "endTime",
                 "frequency",
-                "guarantors",
                 "husbandOrFatherFirstName",
                 "husbandOrFatherLastName",
                 "husbandOrFatherMiddleName",
                 "id",
                 "interestRate",
-                "isRestructure",
                 "jewelLoanDetails",
                 "lastEditedAt",
                 "lastEditedBy",

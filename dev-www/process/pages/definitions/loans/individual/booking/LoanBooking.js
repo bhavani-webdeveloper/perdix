@@ -14,6 +14,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     .$promise
                     .then(
                         function (res) {
+
+
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'LoanBooking'){
                                 PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);

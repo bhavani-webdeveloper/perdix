@@ -149,7 +149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.LoanInput"),
                             {
                                 key:"loanAccount.customerBankAccountNumber",
                                 title:"CUSTOMER_BANK_ACC_NO"
-                                
+
                             },
                             {
                                 key:"loanAccount.customerBankIfscCode",

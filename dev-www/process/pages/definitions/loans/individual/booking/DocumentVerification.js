@@ -59,87 +59,105 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
 
         form: [
 
-                {
-                    "type":"box",
-                    "colClass": "col-sm-12",
-                    "htmlClass": "text-danger",
-                    "items":[
-                        {
-                            "type":"array",
-                            "notitle": true,
-                            "view": "fixed",
-                            "key":"loanDocs",
-                            "add":null,
-                            "remove":null,
-                            "items":[
-                                {
-                                    "type": "section",
-                                    "htmlClass": "row",
-                                    "items": [{
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "key": "loanDocs[].title",
-                                            "notitle":true,
-                                            "title": " ",
-                                            "readonly": true
-                                        }]
-                                    },{
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "DOCUMENT_EXECUTION",
+                "htmlClass": "text-danger",
+                "items": [
+                    {
+                        "type": "array",
+                        "notitle": true,
+                        "view": "fixed",
+                        "key": "loanAccount.loanDocuments",
+                        "add": null,
+                        "remove": null,
+                        "items": [
+                            {
+                                "type": "section",
+                                "htmlClass": "row",
+                                "required": [
+                                    "status"
+                                ],
+                                "items": [
+                                    {
                                         "type": "section",
                                         "htmlClass": "col-sm-2",
-                                        "items": [{
-                                            "title":"REJECTION_REASON",
-                                            "notitle": true,
-                                            "type": "select",
-                                            "key": "loanDocs[].rejectReason"
-                                        }]
-                                    },{
+                                        "items": [
+                                            {
+                                                "key": "loanAccount.loanDocuments[].$title",
+                                                "notitle": true,
+                                                "title": " ",
+                                                "readonly": true
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-2",
+                                        "key": "loanDocs[].downloadRequired",
+                                        //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
+                                        "items": [
+                                            {
+                                                "title": "DOWNLOAD",
+                                                "htmlClass": "btn-block",
+                                                "icon": "fa fa-download",
+                                                "type": "button",
+                                                "readonly": false,
+                                                "onClick": function(model, form, schemaForm, event){
+                                                    console.log(model);
+                                                    console.log(form);
+                                                    console.log(event);
+                                                    //window.location =
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
                                         "type": "section",
                                         "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title":"REMARKS",
-                                            "key": "loanDocs[].rejectReason"
-                                        }]
-                                    },{
+                                        "items": [
+                                            {
+                                                "key": "loanAccount.loanDocuments[].documentStatus",
+                                                "title": "Status",
+                                                "type": "select",
+                                                "titleMap": [
+                                                    {
+                                                        value: "REJECTED",
+                                                        name: "Rejected"
+                                                    },
+                                                    {
+                                                        value: "APPROVED",
+                                                        name: "Approved"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
                                         "type": "section",
                                         "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title":"ACTION",
-                                            "notitle": true,
-                                            "htmlClass":"btn-block",
-                                            "type":"radios",
-                                            "readonly":false,
-                                            "enumCode": "action_approval",
-                                            /*
-                                            "titleMap": {
-                                                    "1": "Approve",
-                                                    "2": "Reject"
-                                                },
-                                            */
-                                            "key": "loanDocs[].docStatus"
-                                        }]
-                                    },{
-                                        "type": "section",
-                                        "htmlClass": "col-sm-1",
-                                        "items": [{
-                                            "title":"View",
-                                            "htmlClass":"btn-block",
-                                            "icon":"fa fa-download",
-                                            "type":"button",
-                                            "readonly":false
-                                        }]
-                                    }]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-            "type": "actionbox",
-            "items": [{
-                    "type": "submit",
-                    "title": "Submit"
-                }]
+                                        "items": [
+                                            {
+                                                title: "Remarks",
+                                                key: "loanAccount.loanDocuments[].remarks"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "items": [
+                    {
+                        "type": "submit",
+                        "title": "Submit"
+                    }
+                ]
             }
             ],
         schema: function() {
@@ -147,8 +165,47 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
         },
         actions: {
             submit: function(model, form, formName){
-                $log.info("Redirecting");
-                $state.go('Page.Engine', {pageName: 'PendingDocumentVerification', pageId: ''});
+                var reqData = {
+                    'loanAccount': _.cloneDeep(model.loanAccount),
+                    'loanProcessAction': 'PROCEED'
+                };
+                var docStatuses = [];
+                var allowedStatues = ['APPROVED', 'REJECTED'];
+                var redirectToUploadFlag = false;
+                for (var i=0; i<reqData.loanAccount.loanDocuments.length; i++){
+                    var doc = reqData.loanAccount.loanDocuments[i];
+                    if (_.indexOf(allowedStatues, doc.documentStatus) == -1){
+                        PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.');
+                        return;
+                    }
+
+                    if (doc.documentStatus == 'REJECTED'){
+                        redirectToUploadFlag = true;
+                    }
+                }
+
+                if (redirectToUploadFlag == true){
+                    reqData['stage'] = 'DocumentUpload';
+                }
+
+                PageHelper.showProgress('update-loan', 'Working...');
+                PageHelper.showLoader();
+                console.log(JSON.stringify(reqData));
+                return IndividualLoan.update(reqData)
+                    .$promise
+                    .then(
+                        function(res){
+                            PageHelper.showProgress('update-loan', 'Done.', 2000);
+                            $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingVerificationQueue'});
+                            return;
+                        }, function(httpRes){
+                            PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);
+                            PageHelper.showErrors(httpRes);
+                        }
+                    )
+                    .finally(function(){
+                        PageHelper.hideLoader();
+                    })
             },
             approve:function(model,form){
                 alert("Approved");
