@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
         function($log, formHelper,  $state, SessionStore, $q, IndividualLoan){
             return {
                 "type": "search-list",
-                "title": "READY_FOR_DISBURSEMET_QUEUE",
+                "title": "READY_FOR_DISBURSEMENT_QUEUE",
                 "subTitle": "",
                 "uri":"Loan Disbursement/Ready",
                 initialize: function (model, form, formCtrl) {

@@ -375,12 +375,12 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model=\"replaceAll\"\n" +
+    "    <input sf-field-model\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"{{form.fieldType||'text'}}\"\n" +
+    "           type=\"text\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
@@ -395,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -845,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"simple\"\n" +
+    "          list-style=\"basic\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -2623,7 +2623,6 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
-			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2633,8 +2632,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2697,22 +2696,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autoLov && $scope.modelValue) {
-			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			getSearchPromise().then(function(out){
-				if (out.body && out.body.length === 1) {
-					$scope.callback(out.body[0]);
-				} else {
-					displayListOfResponse(out);
-					self.launchLov();
-				}
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			}, function(){
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			});
-		} else {
-			self.launchLov();
-		}
+		self.launchLov();
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2732,30 +2716,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 
 	$scope.inputActions = {};
 
-	var getSearchPromise = function() {
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+			promise = $scope.form.search($scope.inputModel, $scope.form);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
 		}
-		return promise;
-	};
-
-	var displayListOfResponse = function(out) {
-		$scope.listResponseItems = out.body;
-		$scope.listDisplayItems  =[];
-		angular.forEach(out.body, function(value, key) {
-			c = $scope.form.getListDisplayItem(value, key);
-			this.push(c);
-		}, $scope.listDisplayItems);
-	};
-
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
-		getSearchPromise().then(function(out){
-			displayListOfResponse(out);
+		promise.then(function(out){
+			$scope.listResponseItems = out.body;
+			$scope.listDisplayItems  =[];
+			angular.forEach(out.body, function(value, key) {
+				c = $scope.form.getListDisplayItem(value, key);
+				this.push(c);
+			}, $scope.listDisplayItems);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -5897,9 +5873,9 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-//irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
+irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
+//irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
@@ -6101,7 +6077,7 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
         $http.get(getDataUrl(fileId, params)).then(deferred.resolve, deferred.reject);
         return deferred.promise;
     };
-    
+
     resource.getBase64DataFromFileId = function(fileId,params,stripDesctiptors){
         stripDesctiptors = stripDesctiptors || false;
         var url = getDataUrl(fileId,params);
@@ -6131,6 +6107,10 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
         return deferred.promise;
 
     };
+
+    resource.getFileDownloadURL = function(fileId){
+        return endpoint + "/stream/" + fileId;
+    }
 
     return resource;
 });
@@ -19146,13 +19126,11 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 	};
 }]);
 
-irf.pageCollection.factory("Pages__MultiTrancheQueue",
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTrancheQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "LoanBookingQueue",
         "type": "search-list",
-        "name": "MultiTranche Queue",
         "title": "Multi Tranche Queue",
         "subTitle": "",
         "uri":"Customer Enrollment/Stage 2",
@@ -19341,6 +19319,74 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     };
 }]);
 
+irf.pageCollection.factory("Pages__MultiTranche",
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "id": "MultiTranche",
+        "type": "schema-form",
+        "name": "MultiTranche",
+        "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
+        "subTitle": "",
+        initialize: function (model, form, formCtrl) {
+            $log.info("Individual Loan Booking Page got initialized");
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            
+        },
+        form: [{
+            "type": "box",
+            "title": "TRANCHE 3 | DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "items": [
+                {
+                    "key": "bank_name",
+                    "title": "Tranche Details",
+                    "type": "textarea"
+                },
+                {
+                    "key": "branch_name",
+                    "title": "Disbursement Date",
+                    "type": "date"
+                },
+                {
+                    "key": "branch_name",
+                    "title": "Customer Sign Date",
+                    "type": "date"
+                },
+                {
+                    "key": "branch_name",
+                    "title": "Remarks For Tranche Disbursement"
+                },
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Send For FRO Verification"
+                    },{
+                        "type": "submit",
+                        "title": "Reset"
+                    }]
+                }
+            ]
+        }],
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                    $state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });
+            }
+        }
+    };
+}]);
 irf.pageCollection.factory("Pages__PendingFROQueue",
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
@@ -19731,16 +19777,211 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     };
 }]);
 
-irf.pageCollection.factory("Pages__EMIScheduleGenQueue",
+irf.pageCollection.factory("Pages__PendingCRO",
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "id": "PendingCRO",
+        "type": "schema-form",
+        "name": "PendingCRO",
+        "title": "CRO Approval",
+        "subTitle": "",
+        initialize: function (model, form, formCtrl) {
+            $log.info("CRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.cro_requested_date="08-Aug-2016";
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            
+        },
+        form: [{
+            "type": "box",
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "items": [
+                {
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
+                },
+                {
+                    "key": "FRO_remarks",
+                    "title": "Remarks"
+                },
+                {
+                    "key": "CRO_remarks",
+                    "title": "Remarks"
+                },
+                {
+                    "key": "cro_requested_date",
+                    "title": "Hub Manager Requested Date",
+                    "type": "date"
+                },
+                {
+                    "key": "cro_status",
+                    "title": "Status",
+                    "type": "radios",
+                    "titleMap": {
+                                "1": "Approve",
+                                "2": "Reject"
+                            }
+                },
+                {
+                    "key": "cro_reject_reason",
+                    "title": "CRO Approve Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "cro_reject_remarks",
+                    "title": "CRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "fro.latitude",
+                    "longitude": "fro.longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
+                },
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
+                }
+            ]
+        }],
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                    $state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });
+            }
+        }
+    };
+}]);
+irf.pageCollection.factory("Pages__PendingFRO",
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "id": "PendingFRO",
+        "type": "schema-form",
+        "name": "PendingFRO",
+        "title": "FRO Approval",
+        "subTitle": "",
+        initialize: function (model, form, formCtrl) {
+            $log.info("FRO Approval Page got initialized");
+
+            model.tranche_no = "3";
+            model.fro_requested_date="08-Aug-2016";
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            
+        },
+        form: [{
+            "type": "box",
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "items": [
+                {
+                    "key": "tranche_no",
+                    "title": "Tranche Details"
+                },
+                {
+                    "key": "FRO_remarks",
+                    "title": "Remarks"
+                },
+                {
+                    "key": "fro_requested_date",
+                    "title": "Hub Manager Requested Date",
+                    "type": "date"
+                },
+                {
+                    "key": "fro_status",
+                    "title": "Status",
+                    "type": "radios",
+                    "titleMap": {
+                                "1": "Approve",
+                                "2": "Reject"
+                            }
+                },
+                {
+                    "key": "fro_reject_reason",
+                    "title": "FRO Approve Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "fro_reject_remarks",
+                    "title": "FRO Rejection Remarks",
+                    "type": "select"
+                },
+                {
+                    "key": "latitude",
+                    "title": "Location",
+                    "type": "geotag",
+                    "latitude": "latitude",
+                    "longitude": "longitude"
+                },
+                {
+                    key:"FROVerificationPhoto",
+                    "title":"Photo",
+                    "category":"customer",
+                    "subCategory":"customer",
+                    offline: false,
+                    type:"file",
+                    fileType:"image/*"
+                },
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
+                }
+            ]
+        }],
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                    $state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });
+            }
+        }
+    };
+}]);
+irf.pageCollection.factory(irf.page("loan.individual.booking.EMIScheduleGenQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "EMIScheduleGenQueue",
         "type": "search-list",
-        "name": "EMI Schedule Generation Queue",
         "title": "EMI Schedule Generation Queue",
         "subTitle": "",
-        "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
@@ -19926,6 +20167,93 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     };
 }]);
 
+irf.pageCollection.factory("Pages__GenerateEMISchedule",
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "id": "GenerateEMISchedule",
+        "type": "schema-form",
+        "name": "GenerateEMISchedule",
+        "title": "Generate EMI Schedule",
+        "subTitle": "",
+        initialize: function (model, form, formCtrl) {
+            $log.info("Individual Loan Booking Page got initialized");
+
+            model.customer_sign_date="05-Aug-2016";
+            model.expected_disbursement_date="08-Aug-2016";
+            model.fro_remarks="New Machinery arrived and verified";
+            model.cro_remarks="verified and approved";
+
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            
+        },
+        form: [{
+            "type": "box",
+            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
+            "colClass": "col-sm-6", // col-sm-6 is default, optional
+            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "items": [
+                
+                {
+                    "key": "customer_sign_date",
+                    "title": "Customer Sign Date",
+                    "type": "date"
+                },
+                {
+                    "key": "expected_disbursement_date",
+                    "title": "Expected Disbursement Date",
+                    "type": "date"
+                },
+                {
+                    "key": "fro_remarks",
+                    "title": "FRO Approve Remarks"
+                },
+                {
+                    "key": "cro_remarks",
+                    "title": "CRO Approve Remarks"
+                },
+                {
+                    "title":"EMI Schedule",
+                    "htmlClass":"btn-block",
+                    "icon":"fa fa-download",
+                    "type":"button",
+                    "readonly":false
+
+                },
+                {
+                    title:"Upload",
+                    key:"fileid",
+                    type:"file",
+                    fileType:"*/*",
+                    category: "Loan",
+                    subCategory: "DOC1"
+                },
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
+                }
+            ]
+        }],
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                    $state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });
+            }
+        }
+    };
+}]);
 irf.pageCollection.factory(irf.page("loans.individual.PendingClearingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
@@ -24534,359 +24862,6 @@ irf.pageCollection.factory("Pages__IndividualLoanBookingConfirmation",
         }
     };
 }]);
-irf.pageCollection.factory("Pages__GenerateEMISchedule",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
-    return {
-        "id": "GenerateEMISchedule",
-        "type": "schema-form",
-        "name": "GenerateEMISchedule",
-        "title": "Generate EMI Schedule",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
-
-            model.customer_sign_date="05-Aug-2016";
-            model.expected_disbursement_date="08-Aug-2016";
-            model.fro_remarks="New Machinery arrived and verified";
-            model.cro_remarks="verified and approved";
-
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                
-                {
-                    "key": "customer_sign_date",
-                    "title": "Customer Sign Date",
-                    "type": "date"
-                },
-                {
-                    "key": "expected_disbursement_date",
-                    "title": "Expected Disbursement Date",
-                    "type": "date"
-                },
-                {
-                    "key": "fro_remarks",
-                    "title": "FRO Approve Remarks"
-                },
-                {
-                    "key": "cro_remarks",
-                    "title": "CRO Approve Remarks"
-                },
-                {
-                    "title":"EMI Schedule",
-                    "htmlClass":"btn-block",
-                    "icon":"fa fa-download",
-                    "type":"button",
-                    "readonly":false
-
-                },
-                {
-                    title:"Upload",
-                    key:"fileid",
-                    type:"file",
-                    fileType:"*/*",
-                    category: "Loan",
-                    subCategory: "DOC1"
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Submit"
-                    }]
-                }
-            ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
-            }
-        }
-    };
-}]);
-irf.pageCollection.factory("Pages__PendingCRO",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
-    return {
-        "id": "PendingCRO",
-        "type": "schema-form",
-        "name": "PendingCRO",
-        "title": "CRO Approval",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("CRO Approval Page got initialized");
-
-            model.tranche_no = "3";
-            model.cro_requested_date="08-Aug-2016";
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "tranche_no",
-                    "title": "Tranche Details"
-                },
-                {
-                    "key": "FRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "CRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "cro_requested_date",
-                    "title": "Hub Manager Requested Date",
-                    "type": "date"
-                },
-                {
-                    "key": "cro_status",
-                    "title": "Status",
-                    "type": "radios",
-                    "titleMap": {
-                                "1": "Approve",
-                                "2": "Reject"
-                            }
-                },
-                {
-                    "key": "cro_reject_reason",
-                    "title": "CRO Approve Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "cro_reject_remarks",
-                    "title": "CRO Rejection Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "latitude",
-                    "title": "Location",
-                    "type": "geotag",
-                    "latitude": "fro.latitude",
-                    "longitude": "fro.longitude"
-                },
-                {
-                    key:"FROVerificationPhoto",
-                    "title":"Photo",
-                    "category":"customer",
-                    "subCategory":"customer",
-                    offline: false,
-                    type:"file",
-                    fileType:"image/*"
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Submit"
-                    }]
-                }
-            ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
-            }
-        }
-    };
-}]);
-irf.pageCollection.factory("Pages__PendingFRO",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
-    return {
-        "id": "PendingFRO",
-        "type": "schema-form",
-        "name": "PendingFRO",
-        "title": "FRO Approval",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("FRO Approval Page got initialized");
-
-            model.tranche_no = "3";
-            model.fro_requested_date="08-Aug-2016";
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "tranche_no",
-                    "title": "Tranche Details"
-                },
-                {
-                    "key": "FRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "fro_requested_date",
-                    "title": "Hub Manager Requested Date",
-                    "type": "date"
-                },
-                {
-                    "key": "fro_status",
-                    "title": "Status",
-                    "type": "radios",
-                    "titleMap": {
-                                "1": "Approve",
-                                "2": "Reject"
-                            }
-                },
-                {
-                    "key": "fro_reject_reason",
-                    "title": "FRO Approve Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "fro_reject_remarks",
-                    "title": "FRO Rejection Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "latitude",
-                    "title": "Location",
-                    "type": "geotag",
-                    "latitude": "latitude",
-                    "longitude": "longitude"
-                },
-                {
-                    key:"FROVerificationPhoto",
-                    "title":"Photo",
-                    "category":"customer",
-                    "subCategory":"customer",
-                    offline: false,
-                    type:"file",
-                    fileType:"image/*"
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Submit"
-                    }]
-                }
-            ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
-            }
-        }
-    };
-}]);
-irf.pageCollection.factory("Pages__MultiTranche",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
-    return {
-        "id": "MultiTranche",
-        "type": "schema-form",
-        "name": "MultiTranche",
-        "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "title": "TRANCHE 3 | DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
-            "items": [
-                {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
-                    "type": "textarea"
-                },
-                {
-                    "key": "branch_name",
-                    "title": "Disbursement Date",
-                    "type": "date"
-                },
-                {
-                    "key": "branch_name",
-                    "title": "Customer Sign Date",
-                    "type": "date"
-                },
-                {
-                    "key": "branch_name",
-                    "title": "Remarks For Tranche Disbursement"
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Send For FRO Verification"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
-                    }]
-                }
-            ]
-        }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
-            }
-        }
-    };
-}]);
 irf.pageCollection.factory("Pages__RejectConfirmQueue",
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
@@ -25466,8 +25441,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
     }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"),
-["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons){
+["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files){
 
     return {
         "type": "schema-form",
@@ -25571,10 +25546,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                                 "icon": "fa fa-download",
                                                 "type": "button",
                                                 "readonly": false,
+                                                "key": "loanAccount.loanDocs[].documentId",
                                                 "onClick": function(model, form, schemaForm, event){
-                                                    console.log(model);
-                                                    console.log(form);
-                                                    console.log(event);
+                                                    var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                                    Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                                     //window.location =
                                                 }
                                             }
@@ -26850,7 +26825,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title": "PRODUCT",
                                 "type": "select"
                             },
-
+                            {
+                                "key":"loanAccount.loanCentre.centreId",
+                                "title":"CENTRE_ID"
+                            },
 
                             {
                                 "key": "loanAccount.tenure"
@@ -26870,6 +26848,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title": "URN_NO",
                                 "type":"lov",
                                 "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
                                     "firstName": {
                                         "key": "customer.firstName",
                                         "title": "CUSTOMER_NAME"
@@ -26889,12 +26871,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
                                     "firstName":"customer.firstName",
-                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName"
+                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName",
+                                    "fatherMiddleName":"loanAccount.husbandOrFatherMiddleName",
+                                    "fatherLastName":"loanAccount.husbandOrFatherLastName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.first_name,
                                         'centreCode':inputModel.centreCode
@@ -26922,6 +26907,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"HUSBAND_OR_FATHER_NAME"
                             },
                             {
+                                "key":"loanAccount.husbandOrFatherMiddleName"
+
+                            },
+                            {
+                                "key":"loanAccount.husbandOrFatherLastName"
+
+                            },
+                            {
                                 "key":"loanAccount.relationFirstName",
                                 "title":"RELATIVE_NAME"
                             },
@@ -26930,6 +26923,53 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"select",
                                 "title":"T_RELATIONSHIP"
 
+                            },
+                            {
+                                "key": "loanAccount.coBorrowerUrnNo",
+                                "title": "CO_BORROWER_URN_NO",
+                                "type":"lov",
+                                "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branch": {
+                                        "key": "customer.branch",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    }
+                                },
+                                "outputMap": {
+
+                                    "urnNo": "loanAccount.coBorrowerUrnNo"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
+                                        'branchName': inputModel.branch ||SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode':inputModel.centreCode
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                }
                             }
 
 
@@ -26948,7 +26988,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.customerBankAccountNumber",
                                 title:"CUSTOMER_BANK_ACC_NO"
-                                
+
                             },
                             {
                                 key:"loanAccount.customerBankIfscCode",
@@ -27002,6 +27042,65 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                 ]
             },{
+                "type":"box",
+                "title":"COLLATERAL",
+                "items":[
+                    {
+                        "key":"loanAccount.collateral",
+                        "title":"COLLATERAL",
+                        "type":"array",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                "key":"loanAccount.collateral[].collateralType"
+                                
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralDescription"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralValue",
+                                "type":"amount"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].marginValue",
+                                "type":"amount",
+                                "title":"MARGIN_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].loanToValue",
+                                "type":"amount",
+                                "title":"LOAN_TO_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral1FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_1"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral2FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_2"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral3FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_3"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].photoFilePath",
+                                "type":"file",
+                                "fileType":"image/*",
+                                "title":"PHOTO"
+                            }
+                            
+                            
+                        ]
+                    }
+                ]
+            },
+                {
                 "type": "box",
                 "title": "",
                 "items":[
@@ -27053,6 +27152,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     model.loanAccount.disbursementSchedules=[];
                                     for(var i=0;i<value;i++){
                                         model.loanAccount.disbursementSchedules.push({
+                                            trancheNumber:""+(i+1),
                                             disbursementAmount:0
                                         });
                                     }
@@ -27064,6 +27164,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 add:null,
                                 remove:null,
                                 items:[
+                                    {
+                                        key:"loanAccount.disbursementSchedules[].trancheNumber",
+                                        title:"TRANCHE_NUMBER",
+                                        readonly:true
+                                    },
                                     {
                                         key:"loanAccount.disbursementSchedules[].disbursementAmount",
                                         title:"DISBURSEMENT_AMOUNT",
@@ -27136,7 +27241,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             }
         };
     }]);
-
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
@@ -27336,9 +27440,229 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.writeoff.AccountQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan){
+            return {
+                "type": "search-list",
+                "title": "READY_FOR_DISBURSEMENT_QUEUE",
+                "subTitle": "",
+                "uri":"Loan Disbursement/Ready",
+                initialize: function (model, form, formCtrl) {
+
+                    model.branchName = SessionStore.getBranch();
+                    model.stage = 'ReadyForDisbursement';
+                    console.log(model);
+                },
+                offline: false,
+                definition: {
+                    title: "ReadyForDisbursement",
+                    autoSearch: false,
+                    sorting:true,
+                    sortByColumns:{
+                        "customerSignatureDate":"Customer Signature Date",
+                        "scheduledDisbursementDate":"Scheduled Disbursement Date"
+
+                    },
+                    searchForm: [
+                        "*"
+                    ],
+                    searchSchema: {
+                        "type": 'object',
+                        "title": "VIEW_LOANS",
+                        "required":[],
+                        "properties": {
+
+                            "customerSignatureDate": {
+                                "title": "CUSTOMER_SIGNATURE_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+
+                                }
+                            },
+
+                            "scheduledDisbursementDate": {
+                                "title": "SCHEDULED_DISBURSEMENT_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+                                }
+                            }
+
+                        }
+                    },
+                    getSearchFormHelper: function() {
+                        return formHelper;
+                    },
+                    getResultsPromise: function(searchOptions, pageOpts){
+                        return IndividualLoan.searchDisbursement({
+                            'currentStage': 'ReadyForDisbursement',
+                            'customerSignatureDate': searchOptions.customerSignatureDate,
+                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate
+
+                        }).$promise;
+
+                    },
+                    paginationOptions: {
+                        "viewMode": "page",
+                        "getItemsPerPage": function(response, headers){
+                            return 20;
+                        },
+                        "getTotalItemsCount": function(response, headers){
+                            return headers['x-total-count']
+                        }
+                    },
+                    listOptions: {
+                        itemCallback: function(item, index) {
+                            $log.info(item);
+                        },
+                        getItems: function(response, headers){
+                            if (response!=null && response.length && response.length!=0){
+                                return response;
+                            }
+                            return [];
+                        },
+                        getListItem: function(item){
+                            return [
+                                item.customerName,
+                                "Disbursed Amount:  &#8377;"+item.disbursedAmount+", Disbursement Amount :  &#8377;"+item.disbursementAmount,
+                                "Customer Signature Date  : " + item.customerSignatureDate+", Scheduled Disbursement Date :"+item.scheduledDisbursementDate
+                            ]
+                        },
+                        getActions: function(){
+                            return [
+                                {
+                                    name: "Book Loan",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $log.info("Redirecting");
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
+                                }
+                            ];
+                        }
+                    }
+                }
+            };
+        }]);
+
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementConfirmationQueue"),
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan",
+        function($log, formHelper, $state, SessionStore, $q, IndividualLoan){
+            return {
+                "type": "search-list",
+                "title": "DISBURSEMENT_CONFIRMATION_QUEUE",
+                "subTitle": "",
+                "uri":"Loan Disbursement/Ready",
+                initialize: function (model, form, formCtrl) {
+
+                    model.branchName = SessionStore.getBranch();
+                    model.stage = 'DisbursementConfirmation';
+                    console.log(model);
+                },
+                offline: false,
+                definition: {
+                    title: "ReadyForDisbursement",
+                    autoSearch: false,
+                    sorting:true,
+                    sortByColumns:{
+                        "customerSignatureDate":"Customer Signature Date",
+                        "scheduledDisbursementDate":"Scheduled Disbursement Date"
+
+                    },
+                    searchForm: [
+                        "*"
+                    ],
+                    searchSchema: {
+                        "type": 'object',
+                        "title": "VIEW_LOANS",
+                        "required":[],
+                        "properties": {
+
+                            "customerSignatureDate": {
+                                "title": "CUSTOMER_SIGNATURE_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+
+                                }
+                            },
+
+                            "scheduledDisbursementDate": {
+                                "title": "SCHEDULED_DISBURSEMENT_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+                                }
+                            }
+
+                        }
+                    },
+                    getSearchFormHelper: function() {
+                        return formHelper;
+                    },
+                    getResultsPromise: function(searchOptions, pageOpts){
+                        return IndividualLoan.searchDisbursement({
+                            'currentStage': 'DisbursementConfirmation',
+                            'customerSignatureDate': searchOptions.customerSignatureDate,
+                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate
+
+                        }).$promise;
+
+                    },
+                    paginationOptions: {
+                        "viewMode": "page",
+                        "getItemsPerPage": function(response, headers){
+                            return 20;
+                        },
+                        "getTotalItemsCount": function(response, headers){
+                            return headers['x-total-count']
+                        }
+                    },
+                    listOptions: {
+                        itemCallback: function(item, index) {
+                            $log.info(item);
+                        },
+                        getItems: function(response, headers){
+                            if (response!=null && response.length && response.length!=0){
+                                return response;
+                            }
+                            return [];
+                        },
+                        getListItem: function(item){
+                            return [
+                                item.customerName,
+                                "Disbursed Amount:  &#8377;"+item.disbursedAmount+", Disbursement Amount :  &#8377;"+item.disbursementAmount,
+                                "Customer Signature Date  : " + item.customerSignatureDate+", Scheduled Disbursement Date :"+item.scheduledDisbursementDate
+                            ]
+                        },
+                        getActions: function(){
+                            return [
+                                {
+                                    name: "Book Loan",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $log.info("Redirecting");
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
+                                }
+                            ];
+                        }
+                    }
+                }
+            };
+        }]);
+
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "LoanAccount",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
     return {
         "type": "search-list",
         "title": "PENDING_WRITEOFF_QUEUE",
@@ -27372,7 +27696,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        "default": "1",
                         "x-schema-form": {
                             "type": "select",
                             "enumCode": "loan_product"
@@ -27392,11 +27715,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                return IndividualLoan.search({
-                    'stage': 'DocumentUpload',
-                    'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId
+                return LoanAccount.writeOffQueue({
+                    'Branches': searchOptions.branchName
                 }).$promise;
                 
             },
@@ -27433,7 +27753,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.execute', pageId: item.loanId});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffExecution', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;
@@ -27446,7 +27766,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.writeoff.execute"),
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution"),
 ["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
 
     var branch = SessionStore.getBranch();

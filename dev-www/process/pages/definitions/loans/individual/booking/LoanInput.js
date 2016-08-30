@@ -61,6 +61,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title": "URN_NO",
                                 "type":"lov",
                                 "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
                                     "firstName": {
                                         "key": "customer.firstName",
                                         "title": "CUSTOMER_NAME"
@@ -80,12 +84,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
                                     "firstName":"customer.firstName",
-                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName"
+                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName",
+                                    "fatherMiddleName":"loanAccount.husbandOrFatherMiddleName",
+                                    "fatherLastName":"loanAccount.husbandOrFatherLastName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.first_name,
                                         'centreCode':inputModel.centreCode
@@ -129,6 +136,53 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"select",
                                 "title":"T_RELATIONSHIP"
 
+                            },
+                            {
+                                "key": "loanAccount.coBorrowerUrnNo",
+                                "title": "CO_BORROWER_URN_NO",
+                                "type":"lov",
+                                "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branch": {
+                                        "key": "customer.branch",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    }
+                                },
+                                "outputMap": {
+
+                                    "urnNo": "loanAccount.coBorrowerUrnNo"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
+                                        'branchName': inputModel.branch ||SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode':inputModel.centreCode
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' | '),
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                }
                             }
 
 
@@ -213,6 +267,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralType"
+                                
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralDescription"
@@ -399,4 +454,3 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             }
         };
     }]);
-

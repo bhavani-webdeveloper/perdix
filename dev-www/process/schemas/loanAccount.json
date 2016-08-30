@@ -5,6 +5,9 @@
         "customer":{
             "type":"object",
             "properties":{
+                "customerId":{
+                    "type":"integer"
+                },
                 "firstName":{
                     "type":"string"
                 },
@@ -216,7 +219,7 @@
                 "coApplicant": {
                     "type": "string"
                 },
-                    "coBorrowerUrnNo": {
+                "coBorrowerUrnNo": {
                     "type": "string"
                 },
                 "collateral": {
@@ -249,6 +252,7 @@
                             "collateralType": {
                                 "title": "COLLATERAL_TYPE",
                                 "type": "string"
+
                             },
                             "collateralValue": {
                                 "title": "COLLATERAL_VALUE",
