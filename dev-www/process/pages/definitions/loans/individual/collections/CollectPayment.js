@@ -8,11 +8,15 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		"type": "schema-form",
 		"title": "REPAYMENT_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
+            model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
             if (!model._bounce) {
+                model.collectPayment=model._bounce;
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+            } else {
+                model.collectPayment=model._bounce;
             }
-            model.repayment.repaymentType = "Cash";
+            model.repayment.repaymentType = "Choose Repayment Mode";
         },
 		form: [
 			{
@@ -20,27 +24,27 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 				"title":"REPAYMENT",
 				"items":[
                     {
-                        key:"_bounce.custname",
+                        key:"collectPayment.customerName",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
                     {
-                        key:"_bounce.applicant",
+                        key:"collectPayment.applicant", /*applicant-field is missing in scheduledemandlist*/
                         title:"APPLICANT",
                         readonly:true
                     },
                     {
-                        key:"_bounce.coApplicant",
+                        key:"collectPayment.coApplicant", /*coApplicant-field is missing in scheduledemandlist*/
                         title:"CO_APPLICANT",
                         readonly:true
                     },
                     {
-                        key: "_bounce.loanacno",
+                        key: "collectPayment.accountId", /*accountId is Loan Account Number*/
                         title: "LOAN_ACCOUNT_NUMBER",
                         readonly: true
                     },
                     {
-                        key:"_bounce.amountdue",
+                        key:"collectPayment.amountdue",
                         title:"AMOUNT_DUE",
                         type:"amount",
                         readonly:true
