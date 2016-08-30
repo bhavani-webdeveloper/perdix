@@ -1,4 +1,6 @@
-irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $q){
+irf.models.factory('Queries',[
+"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log", 
+function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 	var endpoint = BASE_URL + '/api';
 
 	var resource =  $resource(endpoint, null, {
@@ -9,9 +11,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	});
 
 	resource.getResult = function(id, params, limit, offset) {
-		var deferred = $q.defer();
-		resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise.then(deferred.resolve, deferred.reject);
-		return deferred.promise;
+		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
 	/*
@@ -59,7 +59,8 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 
 	resource.getPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		resource.getResult('pincode.list', {pincode:pincode, district:district, state:state}).then(function(records){
+		resource.getResult("pincode.list", {"pincode":pincode, "district":district, "state":state}).then(function(records){
+			$log.info(records);
 			if (records && records.results) {
 				deferred.resolve(records.results);
 			}
@@ -68,4 +69,4 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	};
 
 	return resource;
-});
+}]);

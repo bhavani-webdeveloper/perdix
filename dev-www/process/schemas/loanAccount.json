@@ -972,7 +972,7 @@
                 },
                 "relation": {
                     "type": "string",
-                    "enumCode":"relationship"
+                    "enumCode":"relation"
 
 
                 },

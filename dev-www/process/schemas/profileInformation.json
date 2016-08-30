@@ -1728,9 +1728,6 @@
                             }
                         },
                         "required": [
-                            "houseNo",
-                            "houseNoIsVerified",
-                            "referenceFirstName"
                         ]
                     }
                 },
@@ -1750,10 +1747,8 @@
                 "addressProof",
                 "addressProofImageId",
                 "addressProofNo",
-                "caste",
                 "date",
                 "dateOfBirth",
-                "district",
                 "expenditures",
                 "fatherFirstName",
                 "firstName",
@@ -1761,7 +1756,6 @@
                 "identityProof",
                 "identityProofImageId",
                 "identityProofNo",
-                "language",
                 "mailingDistrict",
                 "mailingPincode",
                 "mailingState",
@@ -1770,8 +1764,7 @@
                 "pincode",
                 "place",
                 "religion",
-                "state",
-                "villageName"
+                "state"
             ]
         },
         "enrollmentAction": {

@@ -251,6 +251,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key: "customer.pincode",
                             type: "lov",
+                            fieldType: "number",
                             autolov: true,
                             inputMap: {
                                 "pincode": "customer.pincode",
@@ -1087,8 +1088,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             submit: function(model, form, formName){
                 var actions = this.actions;
                 $log.info("Inside submit()");
-                model.customer.centreCode = "Demo";
-                model.customer.state = "Tamilnadu";
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");

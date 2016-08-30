@@ -96,6 +96,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -256,6 +257,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -322,6 +324,7 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -372,13 +375,14 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -391,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -411,6 +415,7 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -549,7 +554,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder}}\"\n" +
+    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -697,10 +702,10 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
     "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
-    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
     "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
     "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
@@ -840,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -2618,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2627,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2691,7 +2697,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autoLov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2711,22 +2732,30 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -6110,7 +6139,9 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
     return resource;
 });
 
-irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $q){
+irf.models.factory('Queries',[
+"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log", 
+function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 	var endpoint = BASE_URL + '/api';
 
 	var resource =  $resource(endpoint, null, {
@@ -6121,9 +6152,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	});
 
 	resource.getResult = function(id, params, limit, offset) {
-		var deferred = $q.defer();
-		resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise.then(deferred.resolve, deferred.reject);
-		return deferred.promise;
+		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
 	/*
@@ -6171,7 +6200,8 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 
 	resource.getPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		resource.getResult('pincode.list', {pincode:pincode, district:district, state:state}).then(function(records){
+		resource.getResult("pincode.list", {"pincode":pincode, "district":district, "state":state}).then(function(records){
+			$log.info(records);
 			if (records && records.results) {
 				deferred.resolve(records.results);
 			}
@@ -6180,7 +6210,7 @@ irf.models.factory('Queries',function($resource,$httpParamSerializer,BASE_URL, $
 	};
 
 	return resource;
-});
+}]);
 
 irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializer,BASE_URL){
     var endpoint = BASE_URL + '/api/_refs/referencecodes';
@@ -6396,7 +6426,12 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'POST',
             url:endpoint+'/:action',
             isArray:true
-        }
+        },
+        p2pKGFSList:searchResource({
+            method:'GET',
+            url:BASE_URL + '/api/promisetopaykgfslist'
+        })
+
     });
 }]);
 
@@ -11203,18 +11238,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.street",
                     "customer.locality",
                     {
-                        key:"customer.villageName",
+                        key:"customer.villageName"/*,
                         type:"select",
                         filter: {
                             'parentCode': 'model.branchId'
                         },
-                        screenFilter: true
+                        screenFilter: true*/
                     },
                     "customer.udf.userDefinedFieldValues.udf9",
                     {
-                        key:"customer.district",
+                        key:"customer.district"/*,
                         type:"select",
-                        screenFilter: true
+                        screenFilter: true*/
                     },
                     "customer.pincode",
                     {
@@ -11626,6 +11661,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key: "customer.pincode",
                             type: "lov",
+                            fieldType: "number",
                             autolov: true,
                             inputMap: {
                                 "pincode": "customer.pincode",
@@ -12462,8 +12498,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             submit: function(model, form, formName){
                 var actions = this.actions;
                 $log.info("Inside submit()");
-                model.customer.centreCode = "Demo";
-                model.customer.state = "Tamilnadu";
                 $log.warn(model);
                 if (!EnrollmentHelper.validateData(model)) {
                     $log.warn("Invalid Data, returning false");
@@ -20690,15 +20724,13 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                var promise = LoanProcess.p2pKGFSList({
+                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
+                    'per_page': pageOpts.itemsPerPage
                 }).$promise;
 
                 return promise;
@@ -20779,25 +20811,21 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        // "{{'APPLICANT'|translate}}: " + item.applicant,
-                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
-                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
-                        "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
-                        "{{'Cheque No'|translate}}: " + item.chequeNo,  /*Service is missing*/
-                        "{{'Issuing Bank'|translate}}: " + item.issuingBank,  /*Service is missing*/
-                        "{{'Issuing Branch'|translate}}: " + item.issuingBranch,  /*Service is missing*/
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'PTP Date'|translate}}: " + item.PTPDate,              /*Service is missing*/
-                        "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
-                        "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
+                        "{{'CUSTOMER_NAME'|translate}} : " + searchOptions.customerName,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  searchOptions.accountNumber,  /*Service missing_27082016*/
+                        "{{'BANK'|translate}} : " + searchOptions.bankName,
+                        "{{'BRANCH_ID'|translate}} : " + searchOptions.branchName,
+                        "{{'CENTRE_CODE'|translate}} : " + searchOptions.centre,
+                        "{{'CUSTOMER_AVAILABLE'|translate }} : " + searchOptions.customerAvailable,
+                        "{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + searchOptions.customerCategoryLoanOfficer,
+                        "{{'OVERDUE_REASONS'|translate}} : " + searchOptions.overdueReasons,
+                        "{{'PROMISETOPAY_DATE'|translate}} : " + searchOptions.promiseToPayDate
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "ASIGN_TO_RECOVERY_AGENT",
+                            name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
@@ -20812,7 +20840,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             }
                         },
                         {
-                            name: "ASIGN_TO_LOAN_OFFICER",
+                            name: "PROMISE_TO_PAY",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
@@ -21000,6 +21028,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     return [];
                 },
                 getListItem: function(item){
+                    if(item.customerCategoryHubManager.localeCompare('C')||item.customerCategoryHubManager.localeCompare('D'))
+                    {
                     return [
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
@@ -21016,6 +21046,11 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
                         "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
                     ]
+                }
+                else
+                {
+                    return null;
+                }
                 },
                 getActions: function(){
                     return [
@@ -21223,13 +21258,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanacno, /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
                         "{{'PRINCIPAL'|translate}}: " + item.part1,          /*Service is missing*/
                         "{{'INTEREST'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.part5,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
                         "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
@@ -21278,20 +21313,20 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 
 	return {
 		"type": "schema-form",
-		"title": "Payment Details for loan : " + $stateParams.pageId,
+		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
             if (model._credit) {
                 model.creditValidation = model.creditValidation || {};
-                model.creditValidation.enterprise_name = model._credit.custname;
+                model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                model.creditValidation.principal = model._credit.principal;
+                model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa;
                 model.creditValidation.interest = model._credit.interest;
                 model.creditValidation.fee = model._credit.fees;
                 model.creditValidation.penal_interest = model._credit.penalInterest;
-                model.creditValidation.amountDue = model._credit.amountdue;
-                model.creditValidation.amountCollected = 10000;
+                model.creditValidation.amountDue = model._credit.demandAmountInPaisa;
+                model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa;
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
             }/*
@@ -21363,12 +21398,14 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"creditValidation.status",
                         title:"",
+                        notitle:true,
                         type:"radios",
                         titleMap:{
                             "1":"Fully Paid",
                             "2":"Partially Paid",
-                            "3":"Not Paid"
-                        }
+                            "3":"Not Paid",
+                            "4":"Incorrect Information"
+                                                  }
                     },
                     {
                         key:"creditValidation.reject_reason",
@@ -21378,14 +21415,14 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "name":"Amount not creditted in account",
                             "value":"1"
                         }],
-                        condition:"model.creditValidation.status=='3'"
+                        condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
                     },
                     {
                         key:"creditValidation.reject_remarks",
                         title:"REJECT_REMARKS",
                         readonly:false,
                         type: "textarea",
-                        condition:"model.creditValidation.status=='3'"
+                        condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
                     }
 				]
 			},
@@ -21445,7 +21482,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
             } else {
                 model.collectPayment=model._bounce;
             }
-            model.repayment.repaymentType = "Choose Repayment Mode";
+            model.repayment.repaymentType = "Cash";
         },
 		form: [
 			{
@@ -21879,7 +21916,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                 }).$promise;
 
                 return promise;
-                return $q.resolve({
+                /*return $q.resolve({
                     headers: {
                         'x-total-count': 5
                     },
@@ -21933,7 +21970,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                             p2pdate:""
                         }
                     ]
-                });
+                });*/
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -21955,7 +21992,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        'Loan Number: ' + item.loanacno,
+                        'Loan Number: ' + item.accountNumber,
                         'Amount Due: ' + item.installmentAmountInPaisa,
                         'Payment Type:' + item.paymentType
                     ]

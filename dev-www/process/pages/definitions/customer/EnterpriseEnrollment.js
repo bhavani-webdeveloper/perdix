@@ -293,18 +293,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.street",
                     "customer.locality",
                     {
-                        key:"customer.villageName",
+                        key:"customer.villageName"/*,
                         type:"select",
                         filter: {
                             'parentCode': 'model.branchId'
                         },
-                        screenFilter: true
+                        screenFilter: true*/
                     },
                     "customer.udf.userDefinedFieldValues.udf9",
                     {
-                        key:"customer.district",
+                        key:"customer.district"/*,
                         type:"select",
-                        screenFilter: true
+                        screenFilter: true*/
                     },
                     "customer.pincode",
                     {
