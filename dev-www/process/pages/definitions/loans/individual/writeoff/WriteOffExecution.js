@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.writeoff.execute"),
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution"),
 ["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
 
     var branch = SessionStore.getBranch();

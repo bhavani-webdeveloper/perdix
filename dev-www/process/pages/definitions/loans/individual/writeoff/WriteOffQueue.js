@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.writeoff.AccountQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
@@ -95,7 +95,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.execute', pageId: item.loanId});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffExecution', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;
