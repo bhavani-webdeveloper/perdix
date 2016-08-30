@@ -17,7 +17,7 @@
 			]
 		},
 		{
-			"title": "GROUPS",
+			"title": "GROUP_LOANS",
 			"iconClass": "fa fa-users",
 			"items":[
 				"Page/GroupDashboard",
@@ -32,15 +32,23 @@
 				"Page/Engine/JLGDisbursementQueue",
 				"Page/Engine/CloseGroup",
 				"Page/Engine/loans.groups.GroupLoanRepaymentQueue"
-
 			]
 		},
 		{
-			"title": "LOANS",
+			"title": "INDIVIDUAL_LOANS",
 			"iconClass": "fa fa-users",
 			"items":[
 				"Page/LoansDashboard",
-				"Page/Engine/loans.individual.LoanBookingQueue",
+				{
+					"title": "BOOKING",
+					"iconClass": "fa fa-book",
+					"items": [
+						"Page/Engine/loans.individual.booking.LoanInput",
+						"Page/Engine/loans.individual.booking.PendingQueue",
+						"Page/Engine/loans.individual.booking.DocumentUploadQueue",
+						"Page/Engine/loans.individual.booking.PendingVerificationQueue"
+					]
+				},
 				"Page/Engine/loans.individual.PendingClearingQueue",
 				"Page/Engine/loans.individual.PendingCashQueue",
 				"Page/Engine/loans.individual.BounceQueue"

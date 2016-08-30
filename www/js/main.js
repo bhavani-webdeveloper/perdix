@@ -96,6 +96,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -256,6 +257,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -322,6 +324,7 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -372,13 +375,14 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -391,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -411,6 +415,7 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -549,7 +554,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder}}\"\n" +
+    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -697,10 +702,10 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
     "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
-    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
     "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
     "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
@@ -840,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -2618,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2627,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2691,7 +2697,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autoLov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2711,22 +2732,30 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -5872,7 +5901,7 @@ $(document).ready(function(){
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
-//irf.BASE_URL = "http://works2.sen-sei.in:8080/perdix-server";
+
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
 irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
@@ -6423,7 +6452,16 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         groupRepayment:{
             method:'POST',
             url:endpoint+'/grouprepayment'
+        },
+        writeOffQueue:{
+            method:'POST',
+            url:endpoint+'/findwriteoffList'
+        },
+        writeOff:{
+            method:'POST',
+            url:endpoint+'/writeoff'
         }
+
     });
 });
 
@@ -6496,7 +6534,7 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
     });
 });
 
-    irf.models.factory('ACHPDC',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+    irf.models.factory('ACH',function($resource,$httpParamSerializer,BASE_URL, searchResource){
         var endpoint = BASE_URL + '/api/ach';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -6526,6 +6564,50 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
              update:{
                 method:'PUT',
                 url:endpoint+'/update'           
+            }
+        });
+    });
+
+    irf.models.factory('PDC',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+        var endpoint = BASE_URL + '/api/ach';
+        /*
+         * $get : /api/enrollments/{blank/withhistory/...}/{id}
+         *  eg: /enrollments/definitions -> $get({service:'definition'})
+         *      /enrollments/1           -> $get({id:1})
+         * $post will send data as form data, save will send it as request payload
+         */
+        return $resource(endpoint, null, {
+            getSchema:{
+            method:'GET',
+            url:'process/schemas/ach.json'
+             },
+            create:{
+                method:'POST',
+                url:endpoint+'/create'
+            },
+            get:{
+                method:'GET',
+                url:endpoint+'/FetchpdcAccount'
+            },
+            search: searchResource({
+                    method: 'GET',
+                    url: endpoint + '/search'
+            }),
+             update:{
+                method:'POST',
+                url:endpoint+'/updatepdcAccount'           
+            },
+            find:{
+                method:'GET',
+                url:endpoint+'/findAssignedpdc'           
+            },
+            demandList:{
+                method:'GET',
+                url:endpoint+'/pdcdemandList'           
+            },
+            securitycheque:{
+                method:'GET',
+                url:endpoint+'/securitychequelist'           
             }
         });
     });
@@ -7252,7 +7334,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     var fullDefinition = {
         "title": "Actions",
         "items": [
-            "Page/Engine/loans.individual.LoanBookingQueue",
+            "Page/Engine/loans.individual.booking.LoanBookingQueue",
             "Page/Engine/loans.individual.PendingClearingQueue",
             "Page/Engine/loans.individual.PendingCashQueue",
             "Page/Engine/loans.individual.BounceQueue"
@@ -7262,7 +7344,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
-        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.LoanBookingQueue'].data=10;
+        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10;
     });
 
 }]);
@@ -18752,7 +18834,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
             }
         }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.LoanBookingQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBookingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
     return {
@@ -18986,19 +19068,38 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						
 						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
 						"{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
-						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount
+						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
+						"{{'LOAN_TYPE'|translate}} : " + item.loanType,
+						"{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
+						"{{'PROCESS_TYPE'|translate}} : " + item.processType
 					]
 				},
 				getActions: function(){
 					return [
 						{
-							name: "Update",
+							name: "Update ACH",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
 								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
+									pageId:item.accountNumber
+								});
+							},
+							isApplicable: function(item, index){
+								
+								return true;
+							}
+						},
+						{
+							name: "Update PDC",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.achpdc.PDCRegistration",
 									pageId:item.accountNumber
 								});
 							},
@@ -21515,6 +21616,436 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
     };
 }]);
 
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
+["$log", "ACH","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", 
+function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$stateParams){
+
+	var branch = SessionStore.getBranch();
+
+	return {
+		"id": "ach",
+		"type": "schema-form",
+		"name": "ach",
+		"title": "ACH_REGISTRATION",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			$log.info("ACH selection Page got initialized");
+			 model.ach = model.ach||{};
+			 model.loanAccount= model.loanAccount||{};
+			 if (model._ach.accountNumber) {
+				model.ach.loanAccountNumber=model._ach.accountNumber;
+				model.ach.BranchCode = model._ach.branchName,
+				model.ach.CentreCode = model._ach.centreCode,
+				model.ach.applicantName = model._ach.customerName
+
+			 } else if ($stateParams.pageId) {
+			  model.ach.loanAccountNumber=$stateParams.pageId;
+			  ACH.search({id: $stateParams.pageId})
+                    .$promise
+                    .then(
+                        function (res) {
+                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+                            model.achSearch = res;
+                            model.ach.accountHolderName = model.achSearch.accountHolderName,
+                            model.ach.accountType = model.achSearch.accountType,
+                            model.ach.legalAccountNumber = model.achSearch.bankAccountNumber,
+                            model.ach.ifscCode = model.achSearch.ifscCode,
+                            model.ach.nameOfTheDestinationBankWithBranch = model.achSearch.bankName + " && " +model.achSearch.branchName,
+                            model.ach.uptoMaximumAmt = model.achSearch.maximumAmount,
+                            model.ach.startDate = model.achSearch.achStartDate,
+                            model.ach.endDate = model.achSearch.achEndDate,
+                            model.ach.mobilNumber = model.achSearch.phoneNo,
+                            model.ach.emailId = model.achSearch.emailId,
+
+
+                            PageHelper.hideLoader();
+                        }, function (httpRes) {
+                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                            PageHelper.showErrors(httpRes);
+                        }
+                   		);
+			 }  else {
+			  $state.go("Page.Engine",{
+									pageName:"loans.individual.Queue",
+									pageId:null
+								});
+			 }
+		 //   model.customer.urnNo="1234567890";
+		},
+		modelPromise: function(pageId,model){
+
+		},
+		offline: false,
+		getOfflineDisplayItem: function(item, index){
+			
+		},
+		form: [{
+			"type": "box",
+			"notitle": true ,
+			"colClass":"col-sm-8",
+				 "items": [{
+				 			"type":"fieldset",
+				 			"title": "LOAN_DETAILS",
+				 			"items":[{
+									"key": "ach.loanAccountNumber",
+									"title": "LOAN_ACCOUNT_NUMBER",
+									"readonly":true
+								},
+								{
+									"key": "ach.BranchCode",
+									"title": "BRANCH_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.CentreCode",
+									"title": "CENTRE_CODE",
+									"readonly":true
+								},
+								{
+									"key": "ach.entityName",
+									"title": "ENTITY_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.applicantName",
+									"title": "APPLICANT_NAME",
+									"readonly":true
+								},
+								{
+									"key": "ach.coApplicantName",
+									"title": "COAPPLICANT_NAME",
+									"readonly":true
+								}]
+							},
+							{
+								"type":"fieldset",
+								"title":"ACH_DETAILS",
+								"items":[{
+									"key": "ach.accountHolderName",
+									"title": "ACCOUNT_HOLDER_NAME"
+								},
+								{
+									"key": "ach.accountType",
+									"title": "ACCOUNT_TYPE"
+								},
+								{
+									"key": "ach.legalAccountNumber",
+									"title": "LEGAL_ACCOUNT_NUMBER"
+								},
+								{
+									"key": "ach.ifscCode",
+									"title": "IFSC_CODE",
+									"type": "lov",
+                                    "inputMap": {
+                                        "ifscCode": {
+                                            "key": "ifscCode",
+                                            "title": "IFSC_CODE"
+                                        }
+                                    }
+								},
+								{
+									"key": "ach.nameOfTheDestinationBankWithBranch",
+									"title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
+								},
+								{
+									"key": "ach.uptoMaximumAmt",
+									"title": "UPTO_MAXIMUM_AMOUNT",
+									"type": "Number"
+								},
+								{
+									"key": "ach.frequency",
+									"title": "FREQUENCY",
+									"type":"select",
+									"enumCode":"frequency"
+								},
+								{
+									"key": "ach.startDate",
+									"title": "START_DATE",
+									"type":"date"
+								},
+								{
+									"key": "ach.endDate",
+									"title": "END_DATE",
+									"type": "date"
+								},
+								{
+									"key": "ach.mobilNumber",
+									"title": "MOBILE_PHONE"
+								},
+								{
+									"key": "ach.emailId",
+									"title": "EMAIL"
+								}]
+							}
+						]
+				},
+				{
+					"type": "actionbox",
+					"condition":"!model.ach.id",
+					"items": [{
+						"type": "submit",
+						"title": "Submit",
+							  }]
+				},
+				{
+					"type": "actionbox",
+					"condition":"model.ach.id",
+					"items": [{
+						"type": "submit",
+						"title": "Update",
+							  }]
+				}],
+			schema: function() {
+            return ACH.getSchema().$promise;
+       		 },
+			actions: {
+				submit: function(model, form, formName){
+
+					$log.info("Inside submit()");
+					PageHelper.showLoader();
+					if (model.ach.id) {
+						ACH.update(model.ach, function(response){
+							PageHelper.hideLoader();
+							model.ach=Utils.removeNulls(model.ach,true);
+						}, function(errorResponse){
+							PageHelper.hideLoader();
+							PageHelper.showErrors(errorResponse);
+						});
+					} else {
+						ACH.create(model.ach, function(response){
+							PageHelper.hideLoader();
+							model.ach=response;
+						}, function(errorResponse){
+							PageHelper.hideLoader();
+							PageHelper.showErrors(errorResponse);
+						});
+					}
+						// $state.go("Page.Engine", {
+						//     pageName: 'IndividualLoanBookingConfirmation',
+						//     pageId: model.customer.id
+						// });
+				}
+			}
+	};
+}]);
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
+["$log", "PDC", "SessionStore","$state", "$stateParams", function($log, PDC, SessionStore,$state,$stateParams){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "id": "pdc",
+        "type": "schema-form",
+        "name": "pdc",
+        "title": "PDC_REGISTRATION",
+        "subTitle": "",
+        initialize: function (model, form, formCtrl) {
+            $log.info("PDC selection Page got initialized");
+            model.pdc = model.pdc||{};
+            if (model._pdc.accountNumber) {
+                model.pdc.loanAccountNumber=model._pdc.accountNumber;
+                model.pdc.BranchCode = model._pdc.branchName,
+                model.pdc.CentreCode = model._pdc.centreCode,
+                model.pdc.applicantName = model._pdc.customerName
+
+                PDC.get({id: model._pdc.accountNumber},
+                    function(res){
+                        model.pdcGet = Utils.removeNulls(res,true);
+
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init","Done.",2000);
+                        model.pdc.securityCheckNo = model.pdcGet.accountHolderName,
+                        model.pdc.ifscCode = model.pdcGet.ifscCode,
+                        model.pdc.bankName = model.pdcGet.bankName,
+                        model.pdc.branchName = model.pdcGet.branchName
+                        model.pdc.firstInstallmentDate = model.pdcGet.pdcStartDate
+
+                    },
+                    function(res){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init","Error in loading customer.",2000);
+                        PageHelper.showErrors(res);
+                        
+                        
+                        /*$state.go("Page.Engine", {
+                            pageName: 'EnrollmentHouseVerificationQueue',
+                            pageId: null
+                        });*/
+                    }
+                );
+
+             } else if ($stateParams.pageId) {
+              model.pdc.loanAccountNumber=$stateParams.pageId;
+             } else {
+              $state.go("Page.Engine",{
+                                    pageName:"loans.individual.Queue",
+                                    pageId:null
+                                });
+             }
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+            
+        },
+        form: [{
+            "type": "box",
+            "notitle": true ,
+            "colClass":"col-sm-8",
+                 "items": [{
+                            "type":"fieldset",
+                            "title": "LOAN_DETAILS",
+                            "items":[{
+                                    "key": "pdc.loanAccountNumber",
+                                    "title": "LOAN_ACCOUNT_NUMBER",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.BranchCode",
+                                    "title": "BRANCH_NAME",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.CentreCode",
+                                    "title": "CENTRE_CODE",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.entityName",
+                                    "title": "ENTITY_NAME",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.applicantName",
+                                    "title": "APPLICANT_NAME",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.coApplicantName",
+                                    "title": "COAPPLICANT_NAME",
+                                    "readonly":true
+                                }]
+                            },
+                            {
+                            "type":"fieldset",
+                            "title": "SECURITY_CHECK",
+                            "items":[{
+                                    "key": "pdc.securityCheckNo",
+                                    "title": "SECURITY_CHECK_NO"
+                                },
+                                {
+                                    "key": "pdc.ifscCode",
+                                    "title": "IFSC_CODE"
+                                },
+                                {
+                                    "key": "pdc.bankName",
+                                    "title": "BANK_NAME",
+                                    "readonly":true
+                                },
+                                {
+                                    "key": "pdc.branchName",
+                                    "title": "BRANCH_NAME",
+                                    "readonly":true
+                                }]
+                            },
+                            {
+                                "type":"fieldset",
+                                "title":"PDC_DETAILS",
+                                "items":[
+                                {
+                                    "key": "pdc.firstInstallmentDate",
+                                    "title": "First Instalment Date",
+                                    "type": "date"
+                                },
+                                {
+                                    "type":"array",
+                                    "key":"pdc.checkDetails",
+                                    "view": "fixed",
+                                    "title":"CHECK_DETAILS",
+                                    "items":[{
+                                            "key": "pdc.checkDetails[].checkStartNo",
+                                            "title": "CHECK_START_NO"
+                                        },
+                                        {
+                                            "key": "pdc.checkDetails[].noOfLeaves",
+                                            "title": "NO_OF_LEAVES"
+                                        },
+                                        {
+                                            "key": "pdc.checkDetails[].installmentAmount",
+                                            "title": "INSTALLMENT_AMOUNT"
+                                        },
+                                        {
+                                            "key": "pdc.checkDetails[].ifscCode",
+                                            "title": "IFSC_CODE",
+                                            "type": "lov",
+                                            "inputMap": {
+                                                "ifscCode": {
+                                                    "key": "ifscCode",
+                                                    "title": "IFSC_CODE"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "key": "pdc.checkDetails[].bankName",
+                                            "title": "BANK_NAME",
+                                            "readonly":true
+                                        },
+                                        {
+                                            "key": "pdc.checkDetails[].branchName",
+                                            "title": "BRANCH_NAME",
+                                            "readonly":true
+                                        }]
+                                }]
+                            }
+                        ]
+                },
+            {
+                    "type": "actionbox",
+                    "condition":"!model.pdc.id",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit",
+                              }]
+                },
+                {
+                    "type": "actionbox",
+                    "condition":"model.pdc.id",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Update",
+                              }]
+                }],
+        schema: function() {
+            return PDC.getSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                $log.info("Inside submit()");
+                    PageHelper.showLoader();
+                    if (model.pdc.id) {
+                        PDC.update(model.pdc, function(response){
+                            PageHelper.hideLoader();
+                            model.pdc=Utils.removeNulls(model.pdc,true);
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    } else {
+                        PDC.create(model.pdc, function(response){
+                            PageHelper.hideLoader();
+                            model.pdc=response;
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    }
+                    /*$state.go("Page.Engine", {
+                        pageName: 'IndividualLoanBookingConfirmation',
+                        pageId: model.customer.id
+                    });*/
+            }
+        }
+    };
+}]);
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
 ["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
 function($log, formHelper, LoanProcess, $state, SessionStore,$q){
@@ -22645,348 +23176,6 @@ irf.pageCollection.factory(irf.page("PDCCollections"),
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
-["$log", "ACHPDC","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", function($log, ACHPDC,PageHelper,irfProgressMessage, SessionStore,$state,Utils,$stateParams){
-
-	var branch = SessionStore.getBranch();
-
-	return {
-		"id": "ach",
-		"type": "schema-form",
-		"name": "ach",
-		"title": "ACH_REGISTRATION",
-		"subTitle": "",
-		initialize: function (model, form, formCtrl) {
-			$log.info("ACH selection Page got initialized");
-			 model.ach = model.ach||{};
-			 if (model._ach.accountNumber) {
-				model.ach.loanAccountNumber=model._ach.accountNumber;
-			 } else if ($stateParams.pageId) {
-			  model.ach.loanAccountNumber=$stateParams.pageId;
-			 } else {
-			  $state.go("Page.Engine",{
-									pageName:"loans.individual.Queue",
-									pageId:null
-								});
-			 }
-		 //   model.customer.urnNo="1234567890";
-		},
-		modelPromise: function(pageId,model){
-
-		},
-		offline: false,
-		getOfflineDisplayItem: function(item, index){
-			
-		},
-		form: [{
-			"type": "box",
-			"notitle": true ,
-			"colClass":"col-sm-8",
-				 "items": [{
-				 			"type":"fieldset",
-				 			"title": "LOAN_DETAILS",
-				 			"items":[{
-									"key": "ach.loanAccountNumber",
-									"title": "LOAN_ACCOUNT_NUMBER",
-									"readonly":true
-								},
-								{
-									"key": "ach.BranchCode",
-									"title": "BRANCH_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.CentreCode",
-									"title": "CENTRE_CODE",
-									"readonly":true
-								},
-								{
-									"key": "ach.entityName",
-									"title": "ENTITY_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.applicantName",
-									"title": "APPLICANT_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.coApplicantName",
-									"title": "COAPPLICANT_NAME",
-									"readonly":true
-								}]
-							},
-							{
-								"type":"fieldset",
-								"title":"ACH_DETAILS",
-								"items":[{
-									"key": "ach.accountHolderName",
-									"title": "ACCOUNT_HOLDER_NAME"
-								},
-								{
-									"key": "ach.accountType",
-									"title": "ACCOUNT_TYPE"
-								},
-								{
-									"key": "ach.legalAccountNumber",
-									"title": "LEGAL_ACCOUNT_NUMBER"
-								},
-								{
-									"key": "ach.ifscCode",
-									"title": "IFSC_CODE",
-									"type": "lov",
-                                    "inputMap": {
-                                        "ifscCode": {
-                                            "key": "ifscCode",
-                                            "title": "IFSC_CODE"
-                                        }
-                                    }
-								},
-								{
-									"key": "ach.nameOfTheDestinationBankWithBranch",
-									"title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
-								},
-								{
-									"key": "ach.uptoMaximumAmt",
-									"title": "UPTO_MAXIMUM_AMOUNT",
-									"type": "Number"
-								},
-								{
-									"key": "ach.frequency",
-									"title": "FREQUENCY",
-									"type":"select",
-									"enumCode":"frequency"
-								},
-								{
-									"key": "ach.startDate",
-									"title": "START_DATE",
-									"type":"date"
-								},
-								{
-									"key": "ach.endDate",
-									"title": "END_DATE",
-									"type": "date"
-								},
-								{
-									"key": "ach.mobilNumber",
-									"title": "MOBILE_PHONE"
-								},
-								{
-									"key": "ach.emailId",
-									"title": "EMAIL"
-								}]
-							}
-						]
-				},
-				{
-					"type": "actionbox",
-					"condition":"!model.ach.id",
-					"items": [{
-						"type": "submit",
-						"title": "Submit",
-							  }]
-				},
-				{
-					"type": "actionbox",
-					"condition":"model.ach.id",
-					"items": [{
-						"type": "submit",
-						"title": "Update",
-							  }]
-				}],
-			schema: function() {
-            return ACHPDC.getSchema().$promise;
-       		 },
-			actions: {
-				submit: function(model, form, formName){
-
-					$log.info("Inside submit()");
-					PageHelper.showLoader();
-					if (model.ach.id) {
-						ACHPDC.update(model.ach, function(response){
-							PageHelper.hideLoader();
-							model.ach=Utils.removeNulls(model.ach,true);
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					} else {
-						ACHPDC.create(model.ach, function(response){
-							PageHelper.hideLoader();
-							model.ach=response;
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					}
-						// $state.go("Page.Engine", {
-						//     pageName: 'IndividualLoanBookingConfirmation',
-						//     pageId: model.customer.id
-						// });
-				}
-			}
-	};
-}]);
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
-
-    var branch = SessionStore.getBranch();
-
-    return {
-        "id": "pdc",
-        "type": "schema-form",
-        "name": "pdc",
-        "title": "PDC_REGISTRATION",
-        "subTitle": "",
-        initialize: function (model, form, formCtrl) {
-            $log.info("PDC selection Page got initialized");
-            model.pdc = model.pdc||{};
-            if (model._pdc.accountNumber) {
-                model.pdc.loanAccountNumber=model._pdc.accountNumber;
-             } else if ($stateParams.pageId) {
-              model.pdc.loanAccountNumber=$stateParams.pageId;
-             } else {
-              $state.go("Page.Engine",{
-                                    pageName:"loans.individual.Queue",
-                                    pageId:null
-                                });
-             }
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            
-        },
-        form: [{
-            "type": "box",
-            "notitle": true ,
-            "colClass":"col-sm-8",
-                 "items": [{
-                            "type":"fieldset",
-                            "title": "LOAN_DETAILS",
-                            "items":[{
-                                    "key": "pdc.loanAccountNumber",
-                                    "title": "LOAN_ACCOUNT_NUMBER",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.BranchCode",
-                                    "title": "BRANCH_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.CentreCode",
-                                    "title": "CENTRE_CODE",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.entityName",
-                                    "title": "ENTITY_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.applicantName",
-                                    "title": "APPLICANT_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.coApplicantName",
-                                    "title": "COAPPLICANT_NAME",
-                                    "readonly":true
-                                }]
-                            },
-                            {
-                            "type":"fieldset",
-                            "title": "SECURITY_CHECK",
-                            "items":[{
-                                    "key": "pdc.securityCheckNo",
-                                    "title": "SECURITY_CHECK_NO"
-                                },
-                                {
-                                    "key": "pdc.ifscCode",
-                                    "title": "IFSC_CODE"
-                                },
-                                {
-                                    "key": "pdc.bankName",
-                                    "title": "BANK_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.branchName",
-                                    "title": "BRANCH_NAME",
-                                    "readonly":true
-                                }]
-                            },
-                            {
-                                "type":"fieldset",
-                                "title":"PDC_DETAILS",
-                                "items":[
-                                {
-                                    "key": "pdc.firstInstallmentDate",
-                                    "title": "First Instalment Date",
-                                    "type": "date"
-                                },
-                                {
-                                    "type":"array",
-                                    "key":"pdc.checkDetails",
-                                    "view": "fixed",
-                                    "title":"CHECK_DETAILS",
-                                    "items":[{
-                                            "key": "pdc.checkDetails[].checkStartNo",
-                                            "title": "CHECK_START_NO"
-                                        },
-                                        {
-                                            "key": "pdc.checkDetails[].noOfLeaves",
-                                            "title": "NO_OF_LEAVES"
-                                        },
-                                        {
-                                            "key": "pdc.checkDetails[].installmentAmount",
-                                            "title": "INSTALLMENT_AMOUNT"
-                                        },
-                                        {
-                                            "key": "pdc.checkDetails[].ifscCode",
-                                            "title": "IFSC_CODE",
-                                            "type": "lov",
-                                            "inputMap": {
-                                                "ifscCode": {
-                                                    "key": "ifscCode",
-                                                    "title": "IFSC_CODE"
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "key": "pdc.checkDetails[].bankName",
-                                            "title": "BANK_NAME",
-                                            "readonly":true
-                                        },
-                                        {
-                                            "key": "pdc.checkDetails[].branchName",
-                                            "title": "BRANCH_NAME",
-                                            "readonly":true
-                                        }]
-                                }]
-                            }
-                        ]
-                },
-            {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "submit",
-                        "title": "Save Details"
-                    }]
-            }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
-            }
-        }
-    };
-}]);
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
 
@@ -25354,22 +25543,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             {
                                 "type": "section",
                                 "htmlClass": "row",
+                                "required": [
+                                    "status"
+                                ],
                                 "items": [
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [
-                                            {
-                                                "key": "loanAccount.loanDocuments[].$title",
-                                                "notitle": true,
-                                                "title": " ",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
+                                        "htmlClass": "col-sm-2",
                                         "items": [
                                             {
                                                 "key": "loanAccount.loanDocuments[].$title",
@@ -25405,13 +25585,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "htmlClass": "col-sm-3",
                                         "items": [
                                             {
-                                                title: "Upload",
-                                                key: "loanAccount.loanDocuments[].documentId",
-                                                type: "file",
-                                                fileType: "*/*",
-                                                category: "Loan",
-                                                subCategory: "DOC1",
-                                                "notitle": true
+                                                "key": "loanAccount.loanDocuments[].documentStatus",
+                                                "title": "Status",
+                                                "type": "select",
+                                                "titleMap": [
+                                                    {
+                                                        value: "REJECTED",
+                                                        name: "Rejected"
+                                                    },
+                                                    {
+                                                        value: "APPROVED",
+                                                        name: "Approved"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-sm-3",
+                                        "items": [
+                                            {
+                                                title: "Remarks",
+                                                key: "loanAccount.loanDocuments[].remarks"
                                             }
                                         ]
                                     }
@@ -25436,8 +25632,47 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
         },
         actions: {
             submit: function(model, form, formName){
-                $log.info("Redirecting");
-                $state.go('Page.Engine', {pageName: 'PendingDocumentVerification', pageId: ''});
+                var reqData = {
+                    'loanAccount': _.cloneDeep(model.loanAccount),
+                    'loanProcessAction': 'PROCEED'
+                };
+                var docStatuses = [];
+                var allowedStatues = ['APPROVED', 'REJECTED'];
+                var redirectToUploadFlag = false;
+                for (var i=0; i<reqData.loanAccount.loanDocuments.length; i++){
+                    var doc = reqData.loanAccount.loanDocuments[i];
+                    if (_.indexOf(allowedStatues, doc.documentStatus) == -1){
+                        PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.');
+                        return;
+                    }
+
+                    if (doc.documentStatus == 'REJECTED'){
+                        redirectToUploadFlag = true;
+                    }
+                }
+
+                if (redirectToUploadFlag == true){
+                    reqData['stage'] = 'DocumentUpload';
+                }
+
+                PageHelper.showProgress('update-loan', 'Working...');
+                PageHelper.showLoader();
+                console.log(JSON.stringify(reqData));
+                return IndividualLoan.update(reqData)
+                    .$promise
+                    .then(
+                        function(res){
+                            PageHelper.showProgress('update-loan', 'Done.', 2000);
+                            $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingVerificationQueue'});
+                            return;
+                        }, function(httpRes){
+                            PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);
+                            PageHelper.showErrors(httpRes);
+                        }
+                    )
+                    .finally(function(){
+                        PageHelper.hideLoader();
+                    })
             },
             approve:function(model,form){
                 alert("Approved");
@@ -26308,6 +26543,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     .$promise
                     .then(
                         function (res) {
+
+
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'LoanBooking'){
                                 PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
@@ -26573,16 +26810,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         };
     }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
+irf.pageCollection.factory(irf.page("loans.individual.LoanInput"),
     ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
     function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan){
 
         var branch = SessionStore.getBranch();
 
         return {
-            "id": "LoanInput",
             "type": "schema-form",
-            "name": "LoanInput",
             "title": "Loan Input",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
@@ -26713,7 +26948,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.customerBankAccountNumber",
                                 title:"CUSTOMER_BANK_ACC_NO"
-
+                                
                             },
                             {
                                 key:"loanAccount.customerBankIfscCode",
@@ -27095,6 +27330,176 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             }
                         }
                     ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.AccountQueue"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
+    return {
+        "type": "search-list",
+        "title": "PENDING_WRITEOFF_QUEUE",
+        "subTitle": "",
+        "uri":"Loan WriteOff/Stage 1",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branchName = SessionStore.getBranch();
+            model.stage = 'WriteOff';
+            console.log(model);
+        },
+
+        offline: false,
+        
+        definition: {
+            title: "SEARCH",
+            autoSearch: false,
+            sorting:true,
+            sortByColumns:{
+                "days":"OD Days"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": "VIEW_LOANS",
+                "required":["branch"],
+                "properties": {
+
+                    "loan_product": {
+                        "title": "Loan Product",
+                        "type": "string",
+                        "default": "1",
+                        "x-schema-form": {
+                            "type": "select",
+                            "enumCode": "loan_product"
+                        }
+                    },
+                    "branchName": {
+                        "title": "BRANCH_NAME",
+                        "type": "string",
+                        "x-schema-form": {
+                            "type": "select"
+                        },
+                        "enumCode": "branch"
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                return IndividualLoan.search({
+                    'stage': 'DocumentUpload',
+                    'branchName': searchOptions.branchName,
+                    'centreCode': searchOptions.centreCode,
+                    'customerId': searchOptions.customerId
+                }).$promise;
+                
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.accountNumber,
+                        item.customerName,
+                        "<em>Write-off Amount: Rs."+item.writeOffAmount+", Write-off Date: "+item.writeOffDate + "</em>"
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "WRITE_OFF",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.execute', pageId: item.loanId});
+                            },
+                            isApplicable: function(item, index){
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.writeoff.execute"),
+["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "type": "schema-form",
+        "title": "WRITE_OFF",
+        initialize: function (model, form, formCtrl) {
+            $log.info("WriteOff Screen got initialized");
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+
+        },
+        form: [{
+            "type": "box",
+            "title": "WRITE_OFF", // sample label code
+            "colClass": "col-sm-12", // col-sm-6 is default, optional
+
+            "items": [
+                {
+                    "key": "loanAccount.accountNumber",
+                    "readonly": true,
+                    "type": "number"
+                },
+                {
+                    "key": "loanAccount.customerName",
+                    "required": true
+                },
+                {
+                    "key": "loanAccount.writeOffAmount",
+                    "required": true
+                },
+                {
+                    "key": "loanAccount.writeOffDate",
+                    "type": "date"
+                },
+                {
+                    "type": "submit",
+                    "title": "WRITE_OFF"
+                }
+            ]
+        }],
+        schema: function() {
+            return SchemaResource.getLoanAccountSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                // Disbursement Date should be >= Sanction Date + 30 days
+                // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
+                {
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.AccountQueue', pageId: ''});
                 }
             }
         }
