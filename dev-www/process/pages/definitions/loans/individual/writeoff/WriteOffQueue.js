@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "LoanAccount",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
     return {
         "type": "search-list",
         "title": "PENDING_WRITEOFF_QUEUE",
@@ -34,7 +34,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        "default": "1",
                         "x-schema-form": {
                             "type": "select",
                             "enumCode": "loan_product"
@@ -54,11 +53,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                return IndividualLoan.search({
-                    'stage': 'DocumentUpload',
-                    'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId
+                return LoanAccount.writeOffQueue({
+                    'Branches': searchOptions.branchName
                 }).$promise;
                 
             },
