@@ -251,7 +251,8 @@
                             },
                             "collateralType": {
                                 "title": "COLLATERAL_TYPE",
-                                "type": "string"
+                                "type": "string",
+                                "enumCode":"collateral_type"
 
                             },
                             "collateralValue": {
@@ -267,6 +268,10 @@
                             "loanToValue": {
                                 "type": "integer"
                             },
+                            "manufacturer":{
+                                "type":"string",
+                                "title":"MANUFACTURER"
+                            },
                             "marginValue": {
                                 "type": "integer"
                             },
@@ -275,18 +280,35 @@
                                 "category":"Loan",
                                 "subCategory":"COLLATERALPHOTO"
                             },
+                            "quantity":{
+                                "type":"integer",
+                                "minimum":0,
+                                "title":"QUANTITY"
+
+                            },
+                            "modelNo":{
+                                "type":"string",
+                                "title":"MODEL_NO"
+
+                            },
+                            "machineOld":{
+                                "type":"boolean",
+                                "title":"IS_MACHINE_OLD"
+                            },
                             "version": {
                                 "type": "integer"
                             }
                         },
                         "required": [
-                            "collateral1FilePath",
-                            "collateral2FilePath",
-                            "collateral3FilePath",
+
                             "collateralType",
                             "collateralValue"
                         ]
                     }
+                },
+                "commercialCibilCharge":{
+                    "type":"integer",
+                    "title":"COMMERCIAL_CIBIL_CHARGE"
                 },
                 "createdAt": {
                     "type": "string"
@@ -488,6 +510,11 @@
                 },
                 "id": {
                     "type": "integer"
+                },
+                "insuranceFee":{
+                    "type":"integer",
+                    "title":"INSURANCE_FEE"
+
                 },
                 "interestRate": {
                     "title": "INTEREST_RATE",
@@ -948,6 +975,10 @@
                         ]
                     }
                 },
+                "otherFee":{
+                    "type":"integer",
+                    "title":"OTHER_FEE"
+                },
                 "partnerCode": {
                     "type": "string",
                     "title": "PARTNER",
@@ -985,6 +1016,10 @@
                 },
                 "sbAccountNo": {
                     "type": "string"
+                },
+                "securityEmi":{
+                    "type":"integer",
+                    "title":"SECURITY_EMI"
                 },
                 "startTime": {
                     "type": "string"
@@ -1040,24 +1075,18 @@
                 "createdBy",
                 "currentStage",
                 "customerBank",
-                "customerBankAccountNumber",
-                "customerBankIfscCode",
                 "customerBranch",
                 "customerId",
                 "disbursedAmountInPaisa",
                 "disbursementFromBankAccountNumber",
                 "disbursementSchedules",
                 "dob",
-                "documentTracking",
                 "dscIntegrationId",
                 "dscLoanAmount",
                 "dscOverride",
                 "dscOverrideRemarks",
                 "endTime",
                 "frequency",
-                "husbandOrFatherFirstName",
-                "husbandOrFatherLastName",
-                "husbandOrFatherMiddleName",
                 "id",
                 "interestRate",
                 "jewelLoanDetails",
@@ -1067,15 +1096,12 @@
                 "literateWitnessLastName",
                 "literateWitnessMiddleName",
                 "loanAmount",
-                "loanAmountRequested",
                 "loanApplicationDate",
                 "loanCentre",
                 "loanDisbursementDate",
                 "loanDocuments",
                 "loanInsurance",
                 "loanPurpose1",
-                "loanPurpose2",
-                "loanPurpose3",
                 "loanType",
                 "nominees",
                 "numberOfDisbursed",
@@ -1087,7 +1113,6 @@
                 "processType",
                 "productCode",
                 "productType",
-                "relation",
                 "restructure",
                 "sanctionDate",
                 "sbAccountNo",
