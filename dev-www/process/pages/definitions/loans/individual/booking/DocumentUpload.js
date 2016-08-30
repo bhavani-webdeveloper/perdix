@@ -78,6 +78,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                         }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                             PageHelper.showErrors(httpRes);
+                            PageHelper.hideLoader();
                         }
                     )
 

@@ -896,12 +896,9 @@ span.htmlerror {
 }
 
 .list-view.list-group-item {
-  margin: 4px 0;
+  margin: 10px 5px;
   border: none !important;
-  border-radius: 2px !important;
-}
-.list-view.list-group-item:hover,
-.list-view.list-group-item.expanded {
+  border-radius: 0 !important;
   box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
 }
 .list-view.list-group-item .list-group-item-body {
