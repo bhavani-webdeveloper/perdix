@@ -6,20 +6,20 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 
 	return {
 		"type": "schema-form",
-		"title": "Payment Details for loan : " + $stateParams.pageId,
+		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
             if (model._credit) {
                 model.creditValidation = model.creditValidation || {};
-                model.creditValidation.enterprise_name = model._credit.custname;
+                model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                model.creditValidation.principal = model._credit.principal;
+                model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa;
                 model.creditValidation.interest = model._credit.interest;
                 model.creditValidation.fee = model._credit.fees;
                 model.creditValidation.penal_interest = model._credit.penalInterest;
-                model.creditValidation.amountDue = model._credit.amountdue;
-                model.creditValidation.amountCollected = 10000;
+                model.creditValidation.amountDue = model._credit.demandAmountInPaisa;
+                model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa;
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
             }/*
@@ -91,12 +91,14 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"creditValidation.status",
                         title:"",
+                        notitle:true,
                         type:"radios",
                         titleMap:{
                             "1":"Fully Paid",
                             "2":"Partially Paid",
-                            "3":"Not Paid"
-                        }
+                            "3":"Not Paid",
+                            "4":"Incorrect Information"
+                                                  }
                     },
                     {
                         key:"creditValidation.reject_reason",
@@ -106,14 +108,14 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "name":"Amount not creditted in account",
                             "value":"1"
                         }],
-                        condition:"model.creditValidation.status=='3'"
+                        condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
                     },
                     {
                         key:"creditValidation.reject_remarks",
                         title:"REJECT_REMARKS",
                         readonly:false,
                         type: "textarea",
-                        condition:"model.creditValidation.status=='3'"
+                        condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
                     }
 				]
 			},

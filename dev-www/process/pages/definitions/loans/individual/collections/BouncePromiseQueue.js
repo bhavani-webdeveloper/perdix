@@ -56,15 +56,13 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                var promise = LoanProcess.p2pKGFSList({
+                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
+                    'per_page': pageOpts.itemsPerPage
                 }).$promise;
 
                 return promise;
@@ -145,25 +143,21 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        // "{{'APPLICANT'|translate}}: " + item.applicant,
-                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
-                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
-                        "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
-                        "{{'Cheque No'|translate}}: " + item.chequeNo,  /*Service is missing*/
-                        "{{'Issuing Bank'|translate}}: " + item.issuingBank,  /*Service is missing*/
-                        "{{'Issuing Branch'|translate}}: " + item.issuingBranch,  /*Service is missing*/
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'PTP Date'|translate}}: " + item.PTPDate,              /*Service is missing*/
-                        "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
-                        "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
+                        "{{'CUSTOMER_NAME'|translate}} : " + searchOptions.customerName,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  searchOptions.accountNumber,  /*Service missing_27082016*/
+                        "{{'BANK'|translate}} : " + searchOptions.bankName,
+                        "{{'BRANCH_ID'|translate}} : " + searchOptions.branchName,
+                        "{{'CENTRE_CODE'|translate}} : " + searchOptions.centre,
+                        "{{'CUSTOMER_AVAILABLE'|translate }} : " + searchOptions.customerAvailable,
+                        "{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + searchOptions.customerCategoryLoanOfficer,
+                        "{{'OVERDUE_REASONS'|translate}} : " + searchOptions.overdueReasons,
+                        "{{'PROMISETOPAY_DATE'|translate}} : " + searchOptions.promiseToPayDate
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "ASIGN_TO_RECOVERY_AGENT",
+                            name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
@@ -178,7 +172,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             }
                         },
                         {
-                            name: "ASIGN_TO_LOAN_OFFICER",
+                            name: "PROMISE_TO_PAY",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");

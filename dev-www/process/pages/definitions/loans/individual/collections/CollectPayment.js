@@ -16,7 +16,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
             } else {
                 model.collectPayment=model._bounce;
             }
-            model.repayment.repaymentType = "Choose Repayment Mode";
+            model.repayment.repaymentType = "Cash";
         },
 		form: [
 			{

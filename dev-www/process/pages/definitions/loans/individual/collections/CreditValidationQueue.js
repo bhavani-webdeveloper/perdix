@@ -87,7 +87,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                 }).$promise;
 
                 return promise;
-                return $q.resolve({
+                /*return $q.resolve({
                     headers: {
                         'x-total-count': 5
                     },
@@ -141,7 +141,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                             p2pdate:""
                         }
                     ]
-                });
+                });*/
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -163,7 +163,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        'Loan Number: ' + item.loanacno,
+                        'Loan Number: ' + item.accountNumber,
                         'Amount Due: ' + item.installmentAmountInPaisa,
                         'Payment Type:' + item.paymentType
                     ]
