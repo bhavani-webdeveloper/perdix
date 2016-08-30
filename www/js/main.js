@@ -26810,7 +26810,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         };
     }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.LoanInput"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
     ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
     function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan){
 
