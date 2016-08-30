@@ -1,10 +1,8 @@
-irf.pageCollection.factory("Pages__MultiTrancheQueue",
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTrancheQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "LoanBookingQueue",
         "type": "search-list",
-        "name": "MultiTranche Queue",
         "title": "Multi Tranche Queue",
         "subTitle": "",
         "uri":"Customer Enrollment/Stage 2",
