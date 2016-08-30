@@ -27,7 +27,7 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
         $http.get(getDataUrl(fileId, params)).then(deferred.resolve, deferred.reject);
         return deferred.promise;
     };
-    
+
     resource.getBase64DataFromFileId = function(fileId,params,stripDesctiptors){
         stripDesctiptors = stripDesctiptors || false;
         var url = getDataUrl(fileId,params);
@@ -57,6 +57,10 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
         return deferred.promise;
 
     };
+
+    resource.getFileDownloadURL = function(fileId){
+        return endpoint + "/stream/" + fileId;
+    }
 
     return resource;
 });

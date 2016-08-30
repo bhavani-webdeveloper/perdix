@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"),
-["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons){
+["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files){
 
     return {
         "type": "schema-form",
@@ -104,10 +104,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                                 "icon": "fa fa-download",
                                                 "type": "button",
                                                 "readonly": false,
+                                                "key": "loanAccount.loanDocs[].documentId",
                                                 "onClick": function(model, form, schemaForm, event){
-                                                    console.log(model);
-                                                    console.log(form);
-                                                    console.log(event);
+                                                    var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                                    Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                                     //window.location =
                                                 }
                                             }
