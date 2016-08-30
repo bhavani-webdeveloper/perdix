@@ -38,7 +38,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title": "PRODUCT",
                                 "type": "select"
                             },
-
+                            {
+                                "key":"loanAccount.loanCentre.centreId",
+                                "title":"CENTRE_ID"
+                            },
 
                             {
                                 "key": "loanAccount.tenure"
@@ -110,6 +113,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"HUSBAND_OR_FATHER_NAME"
                             },
                             {
+                                "key":"loanAccount.husbandOrFatherMiddleName"
+
+                            },
+                            {
+                                "key":"loanAccount.husbandOrFatherLastName"
+
+                            },
+                            {
                                 "key":"loanAccount.relationFirstName",
                                 "title":"RELATIVE_NAME"
                             },
@@ -136,7 +147,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.customerBankAccountNumber",
                                 title:"CUSTOMER_BANK_ACC_NO"
-                                
+
                             },
                             {
                                 key:"loanAccount.customerBankIfscCode",
@@ -190,6 +201,64 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                 ]
             },{
+                "type":"box",
+                "title":"COLLATERAL",
+                "items":[
+                    {
+                        "key":"loanAccount.collateral",
+                        "title":"COLLATERAL",
+                        "type":"array",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                "key":"loanAccount.collateral[].collateralType"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralDescription"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralValue",
+                                "type":"amount"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].marginValue",
+                                "type":"amount",
+                                "title":"MARGIN_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].loanToValue",
+                                "type":"amount",
+                                "title":"LOAN_TO_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral1FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_1"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral2FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_2"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateral3FilePath",
+                                "type":"file",
+                                "title":"DOCUMENT_3"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].photoFilePath",
+                                "type":"file",
+                                "fileType":"image/*",
+                                "title":"PHOTO"
+                            }
+                            
+                            
+                        ]
+                    }
+                ]
+            },
+                {
                 "type": "box",
                 "title": "",
                 "items":[
@@ -241,6 +310,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     model.loanAccount.disbursementSchedules=[];
                                     for(var i=0;i<value;i++){
                                         model.loanAccount.disbursementSchedules.push({
+                                            trancheNumber:""+(i+1),
                                             disbursementAmount:0
                                         });
                                     }
@@ -252,6 +322,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 add:null,
                                 remove:null,
                                 items:[
+                                    {
+                                        key:"loanAccount.disbursementSchedules[].trancheNumber",
+                                        title:"TRANCHE_NUMBER",
+                                        readonly:true
+                                    },
                                     {
                                         key:"loanAccount.disbursementSchedules[].disbursementAmount",
                                         title:"DISBURSEMENT_AMOUNT",
