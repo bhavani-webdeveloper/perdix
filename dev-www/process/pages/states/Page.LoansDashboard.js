@@ -6,7 +6,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     var fullDefinition = {
         "title": "Actions",
         "items": [
-            "Page/Engine/loans.individual.LoanBookingQueue",
+            "Page/Engine/loans.individual.booking.LoanBookingQueue",
             "Page/Engine/loans.individual.PendingClearingQueue",
             "Page/Engine/loans.individual.PendingCashQueue",
             "Page/Engine/loans.individual.BounceQueue"
@@ -16,7 +16,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
-        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.LoanBookingQueue'].data=10;
+        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10;
     });
 
 }]);

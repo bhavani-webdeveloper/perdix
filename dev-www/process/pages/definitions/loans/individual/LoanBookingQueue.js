@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.LoanBookingQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBookingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
     return {
