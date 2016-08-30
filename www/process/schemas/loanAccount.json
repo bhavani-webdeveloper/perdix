@@ -1003,7 +1003,7 @@
                 },
                 "relation": {
                     "type": "string",
-                    "enumCode":"relation"
+                    "enumCode":"relationship"
 
 
                 },
@@ -1096,6 +1096,7 @@
                 "literateWitnessLastName",
                 "literateWitnessMiddleName",
                 "loanAmount",
+                "loanAmountRequested",
                 "loanApplicationDate",
                 "loanCentre",
                 "loanDisbursementDate",
@@ -1125,7 +1126,14 @@
                 "witnessLastName",
                 "witnessMiddleName",
                 "witnessRelationship",
-                "wmName"
+                "wmName",
+                "customerBankIfscCode",
+                "customerBankAccountNumber",
+                "documentTracking",
+                "relation",
+                "husbandOrFatherFirstName",
+                "husbandOrFatherMiddleName",
+                "husbandOrFatherLastName"
             ]
         }
     }

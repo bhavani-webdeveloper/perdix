@@ -328,7 +328,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 key:"loanAccount.guarantors",
-                                titleExpr:"GUARANTOR",
+                                title:"GUARANTOR",
                                 type:"array",
                                 add:null,
                                 remove:null,
