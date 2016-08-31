@@ -1,36 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTrancheQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+["$log", "formHelper", "IndividualLoan", "$state", "SessionStore", "$q",
+function($log, formHelper, IndividualLoan, $state, SessionStore,$q){
     return {
         "type": "search-list",
-        "title": "Multi Tranche Queue",
+        "title": "MULTI_TRANCHE_QUEUE",
         "subTitle": "",
-        "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
-            model.stage = 'Stage02';
-        },
-
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
+            model.stage = 'MTDisbursementDataCapture';
         },
         definition: {
             title: "Choose Loan Type",
@@ -49,28 +27,6 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 "title": 'SearchOptions',
                 "required":["branch"],
                 "properties": {
-                    /*
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "default": "1",
-                        "x-schema-form": {
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }
-                        }
-                    },
-                    */
                     "customer_name": {
                         "title": "Customer Name",
                         "type": "string",
@@ -112,33 +68,16 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                var out = {
-                    body: [
-                        {
-                            "name": "Ajay Karthik | GKB Industries Ltd.",
-                            "loan_amount": "7,50,000",
-                            "Tranche": "2 | Belgaum branch",
-                            "sanction_date": "12/07/2016"
-                        },
-                        {
-                            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                            "loan_amount": "20,00,00",
-                            "Tranche": "3 | Hubli branch",
-                            "sanction_date": "17/07/2016"
-                        },
-                        {
-                            "name":"Kaushik G | HPL",
-                            "loan_amount": "30,00,000",
-                            "Tranche": "2 | Trichy branch",
-                            "sanction_date": "01/07/2016"
-                        }
-                    ],
-                    headers: {
-                        "method": "GET",
-                        "x-total-count": 20
-                    }
-                }
-                return $q.resolve(out)
+                var promise = IndividualLoan.searchDisbursement({
+                    'currentStage': model.stage,
+                    'customerSignatureDate': null,
+                    'scheduledDisbursementDate': null,
+                    'page': 1,
+                    'per_page': 100,
+                    'sortBy':null
+                }).$promise;
+
+                return promise;
             },
             paginationOptions: {
                 "viewMode": "page",
