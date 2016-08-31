@@ -1,9 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.PendingDisbursementsConfirmationQueue"),
+irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedDisbursementsQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
         "type": "search-list",
-        "title": "PENDING_DISBURSEMENTS_CONFIRMATION_QUEUE",
+        "title": "REJECTED_DISBURSEMENTS_QUEUE",
         "subTitle": "",
         "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {
@@ -57,9 +57,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                         "default": "1",
                         "x-schema-form": {
                             "type": "select",
-                            "enumCode": "loan_product"
-                            /*
-                            "titleMap": {
+                            /*"titleMap": {
                                 "1": "Asset Purchase- Secured",
                                 "2": "Working Capital - Secured",
                                 "3": "Working Capital -Unsecured",
@@ -71,6 +69,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                                 "9": "LOC RFID- Secured",
                                 "10": "LOC- RFID- Unsecured"
                             }*/
+                            "enumCode": "loan_product"
                         }
                     },
                     
