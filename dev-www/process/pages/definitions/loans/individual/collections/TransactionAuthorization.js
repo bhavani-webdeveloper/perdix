@@ -1,9 +1,9 @@
 
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
     SessionStore,$state,$stateParams,Masters,authService){
 
     return {
@@ -11,16 +11,24 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
         "title": "PAYMENT_DETAILS_FOR_LOAN",
         initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
-
-            model.customer_name = "GeeKay Industries";
-            model.applicant_name = "Kanimozhi";
-            model.co_applicant_name = "Raja";
-            model.principal = 14872.36;
-            model.interest = 4235.64;
-            model.fee = 40;
-            model.penal_interest = 200;
-            model.amountDue = 19548;
-            model.amountCollected = 10000;
+             model.transAuth =  model.transAuth || {};
+            if(model._transAuth)
+            {
+                model.transAuth = model._transAuth;
+                model.transAuth.customer_name = model._transAuth.customerName;
+                model.transAuth.applicant_name = model._transAuth.applicantName;
+                model.transAuth.co_applicant_name = model._transAuth.coApplicantName;
+                model.transAuth.principal = model._transAuth.principalOutstandingAmtInPaisa;
+                model.transAuth.interest = model._transAuth.interest;
+                model.transAuth.fee = model._transAuth.fee;
+                model.transAuth.penal_interest = model._transAuth.penal_interest;
+                model.transAuth.amountDue = model._transAuth.demandAmountInPaisa;
+                model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa;
+            
+            } else {
+                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorizationQueue', pageId: null});
+            
+            }
         },
         
         form: [
@@ -35,17 +43,17 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"customer_name",
+                                        key:"transAuth.customer_name",
                                         title:"ENTERPRISE_NAME",
                                         readonly:true
                                     },
                                     {
-                                        key:"applicant_name",
+                                        key:"transAuth.applicant_name",
                                         title:"APPLICANT",
                                         readonly:true,
                                     },
                                     {
-                                        key:"co_applicant_name",
+                                        key:"transAuth.co_applicant_name",
                                         title:"CO_APPLICANT",
                                         readonly:true,
                                     }]
@@ -62,7 +70,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"principal",
+                                        key:"transAuth.principal",
                                         title:"PRINCIPAL",
                                         readonly:true,
                                         type:"amount"
@@ -80,7 +88,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"interest",
+                                        key:"transAuth.interest",
                                         title:"INTEREST",
                                         readonly:true,
                                         type:"amount"
@@ -107,7 +115,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"penal_interest",
+                                        key:"transAuth.penal_interest",
                                         title:"PENAL_INTEREST",
                                         readonly:true,
                                         type:"amount"
@@ -134,7 +142,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"fee",
+                                        key:"transAuth.fee",
                                         title:"FEES_AND_OTHER_CHARGES",
                                         readonly:true,
                                         type:"amount"
@@ -161,7 +169,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"amountDue",
+                                        key:"transAuth.amountDue",
                                         title:"AMOUNT_DUE",
                                         readonly:true,
                                         type:"amount"
@@ -179,7 +187,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"amountCollected",
+                                        key:"transAuth.amountCollected",
                                         title:"AMOUNT_COLLECTED",
                                         readonly:true,
                                         type:"amount"
@@ -197,7 +205,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"status",
+                                        key:"transAuth.status",
                                         title:"",
                                         type:"radios",
                                         titleMap:{
@@ -212,7 +220,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 }]
                     },
                     {
-                        key:"reject_reason",
+                        key:"transAuth.reject_reason",
                         title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
@@ -222,7 +230,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         condition:"model.status=='2'"
                     },
                     {
-                        key:"reject_remarks",
+                        key:"transAuth.reject_remarks",
                         title:"REJECT_REMARKS",
                         readonly:false,
                         condition:"model.status=='2'"
@@ -253,25 +261,13 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 console.warn(model);
-                if (window.confirm("Save?") && model.village) {
-                    PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-                }
+                LoanProcess.repay(model.repayment, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };

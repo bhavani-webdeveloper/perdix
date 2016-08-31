@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q){
+["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
+function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
     return {
         "id": "TransactionAuthorizationQueue",
         "type": "search-list",
@@ -89,37 +89,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                 }).$promise;
 
                 return promise;
-                return $q.resolve({
-                    headers: {
-                        'x-total-count': 5
-                    },
-                    body:[
-                        {
-                            custname:"Kanimozhi",
-                            loanacno:"508640101335",
-                            paymenttype:"PDC",
-                            amountdue:"1232",
-                            installmentdate:"03-03-2016",
-                            p2pdate:"15-03-2016"
-                        },
-                        {
-                            custname:"Sudha",
-                            loanacno:"508640108276",
-                            paymenttype:"PDC",
-                            amountdue:"1176",
-                            installmentdate:"02-03-2016",
-                            p2pdate:""
-                        },
-                        {
-                            custname:"Rajesh",
-                            loanacno:"508651508978",
-                            paymenttype:"ACH",
-                            amountdue:"3683",
-                            installmentdate:"05-03-2016",
-                            p2pdate:""
-                        }
-                    ]
-                });
+
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -146,8 +116,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        'Loan Number: ' + item.loanacno,
-                        'Amount Due: ' + item.installmentAmountInPaisa,
+                        'Loan Number: ' + item.accountNumber,
+                        'Amount Due: ' + item.demandAmountInPaisa,
                         'Payment Type:' + item.paymentType
                     ]
                 },
@@ -158,6 +128,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.TransactionAuthorization', {_transAuth:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){

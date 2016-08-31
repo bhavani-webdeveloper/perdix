@@ -10,11 +10,11 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		initialize: function (model, form, formCtrl) {
             model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
-            if (!model._bounce) {
-                model.collectPayment=model._bounce;
+            if (!model._bounce) {                
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                 model.collectPayment=model._bounce;
+                model.collectPayment.amountdue=model._bounce.amount1;
             }
             model.repayment.repaymentType = "Cash";
         },
@@ -46,7 +46,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"collectPayment.amountdue",
                         title:"AMOUNT_DUE",
-                        type:"amount",
+                        //type:"amount",
                         readonly:true
                     },
                     {

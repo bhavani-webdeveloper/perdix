@@ -55,7 +55,15 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         p2pKGFSList:searchResource({
             method:'GET',
             url:BASE_URL + '/api/promisetopaykgfslist'
-        })
+        }),
+        repay:{
+            method:'POST',
+            url:endpoint+'/repay'
+        },
+        p2pUpdate:{
+            method:'POST',
+            url:BASE_URL+ "/api/promisetopaykgfs"
+        }
 
     });
 }]);

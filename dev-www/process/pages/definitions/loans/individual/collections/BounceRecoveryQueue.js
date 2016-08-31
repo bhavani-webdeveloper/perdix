@@ -76,7 +76,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
+                var promise = LoanProcess.p2pKGFSList({
                     'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
@@ -165,8 +165,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     return [];
                 },
                 getListItem: function(item){
-                    if(item.customerCategoryHubManager.localeCompare('C')||item.customerCategoryHubManager.localeCompare('D'))
-                    {
                     return [
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
@@ -183,11 +181,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
                         "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
                     ]
-                }
-                else
-                {
-                    return null;
-                }
                 },
                 getActions: function(){
                     return [

@@ -56,7 +56,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.p2pKGFSList({
+                var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
@@ -143,15 +143,21 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        "{{'CUSTOMER_NAME'|translate}} : " + searchOptions.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  searchOptions.accountNumber,  /*Service missing_27082016*/
-                        "{{'BANK'|translate}} : " + searchOptions.bankName,
-                        "{{'BRANCH_ID'|translate}} : " + searchOptions.branchName,
-                        "{{'CENTRE_CODE'|translate}} : " + searchOptions.centre,
-                        "{{'CUSTOMER_AVAILABLE'|translate }} : " + searchOptions.customerAvailable,
-                        "{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + searchOptions.customerCategoryLoanOfficer,
-                        "{{'OVERDUE_REASONS'|translate}} : " + searchOptions.overdueReasons,
-                        "{{'PROMISETOPAY_DATE'|translate}} : " + searchOptions.promiseToPayDate
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  item.accountId,  /*Service missing_27082016*/
+                        // "{{'BANK'|translate}} : " + item.bankName,
+                        // "{{'BRANCH_ID'|translate}} : " + item.branchName,
+                        "{{'AMOUNT_DUE'|translate}} : " + item.amount1,
+                        "{{'PRINCIPAL'|translate}} : " + item.principal,
+                        "{{'INTEREST'|translate}} : " + item.interest,
+                        "{{'PENAL_INTEREST'|translate}} : " + item.penalInterest,
+                        "{{'CHARGES'|translate}} : " + item.charges,
+                        "{{'FEES'|translate}} : " + item.fees,
+                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues
+                        //"{{'CENTRE_CODE'|translate}} : " + item.centre,
+                        //"{{'CUSTOMER_AVAILABLE'|translate }} : " + item.customerAvailable,
+                        //"{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + item.customerCategoryLoanOfficer,
+                        //"{{'OVERDUE_REASONS'|translate}} : " + item.overdueReasons,
+                        //"{{'PROMISETOPAY_DATE'|translate}} : " + item.promiseToPayDate
                     ]
                 },
                 getActions: function(){
@@ -168,7 +174,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                                 //if (index%2==0){
                                 //  return false;
                                 //}
-                                return true;
+                                return false;
                             }
                         },
                         {

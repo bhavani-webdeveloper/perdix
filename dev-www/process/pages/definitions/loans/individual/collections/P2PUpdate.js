@@ -1,16 +1,22 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.P2PUpdate"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
-            model.promise = model._bounce;
+           
             if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+            } else {
+                 model.promise = model._bounce;
+                model.promise.amountdue = model._bounce.amount1;
+                model.promise.custname = model._bounce.customerName;
+                model.promise.loanacno = model._bounce.accountId;
+
             }
         },
 		form: [
@@ -41,7 +47,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"promise.amountdue",
                         title:"AMOUNT_DUE",
-                        type:"amount",
+                        //type:"amount",
                         readonly:true
                     },
                     {
@@ -117,36 +123,19 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		actions: {
             generateFregCode:function(model,form){
                 console.log(model);
-                if(model.village.pincode>100000){
-                    model.village.fregcode = Number(model.village.pincode+"001");
-                }
-                else {
-                    model.village.fregcode="";
-                }
-
             },
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-				}
+				PageHelper.showLoader();
+
+                LoanProcess.p2pUpdate(model.promise, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
 			}
 		}
 	};

@@ -133,25 +133,15 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-				}
+                PageHelper.showLoader();
+
+                LoanProcess.repay(model.repayment, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
 			}
 		}
 	};
