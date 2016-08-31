@@ -1,19 +1,23 @@
-irf.pageCollection.factory("Pages__PendingFRO",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingFRO"),
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "PendingFRO",
         "type": "schema-form",
-        "name": "PendingFRO",
-        "title": "FRO Approval",
+        "title": "FRO_APPROVAL",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("FRO Approval Page got initialized");
 
-            model.tranche_no = "3";
-            model.fro_requested_date="08-Aug-2016";
+            if (!model._FROQueue)
+            {
+                $log.info("Screen directly launched hence redirecting to queue screen");
+                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingFROQueue', pageId: null});
+                return;
+            }
+            model.tranche = {};
+            model.tranche = _.cloneDeep(model._FROQueue);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -21,25 +25,19 @@ irf.pageCollection.factory("Pages__PendingFRO",
         },
         form: [{
             "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
             "items": [
                 {
-                    "key": "tranche_no",
-                    "title": "Tranche Details"
+                    "key": "tranche.trancheNumber",
+                    "title": "TRANCHE_NUMBER"
                 },
                 {
-                    "key": "FRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "fro_requested_date",
+                    "key": "tranche.assigned_date",
                     "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "fro_status",
+                    "key": "tranche.fro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -48,24 +46,18 @@ irf.pageCollection.factory("Pages__PendingFRO",
                             }
                 },
                 {
-                    "key": "fro_reject_reason",
-                    "title": "FRO Approve Remarks",
-                    "type": "select"
+                    "key": "tranche.remarks1",
+                    "title": "REMARKS"
                 },
                 {
-                    "key": "fro_reject_remarks",
-                    "title": "FRO Rejection Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "latitude",
+                    "key": "tranche.latitude",
                     "title": "Location",
                     "type": "geotag",
-                    "latitude": "latitude",
-                    "longitude": "longitude"
+                    "latitude": "tranche.latitude",
+                    "longitude": "tranche.longitude"
                 },
                 {
-                    key:"FROVerificationPhoto",
+                    key:"tranche.photoId",
                     "title":"Photo",
                     "category":"customer",
                     "subCategory":"customer",
@@ -83,13 +75,13 @@ irf.pageCollection.factory("Pages__PendingFRO",
             ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return IndividualLoan.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
+                        pageName: 'loans.individual.disbursement.PendingFROQueue',
+                        pageId: null
                     });
             }
         }

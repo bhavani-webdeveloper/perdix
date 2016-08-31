@@ -24,12 +24,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
         },
         form: [{
             "type": "box",
-            "titleExpr":"{{'TRANCHE'|translate}}+' ' + model._MTQueue.trancheNumber + ' | '+{{'DISBURSEMENT_DETAILS'|translate}}+' | '+ model.customerName"
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
             "items": [
                 {
                     "key": "tranche.trancheNumber",
-                    "title": "TRANCHE_NUMBER",
-                    "type": "textarea"
+                    "title": "TRANCHE_NUMBER"
                 },
                 {
                     "key": "tranche.scheduledDisbursementDate",
