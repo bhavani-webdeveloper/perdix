@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTrancheQueue"),
-["$log", "formHelper", "IndividualLoan", "$state", "SessionStore", "$q",
-function($log, formHelper, IndividualLoan, $state, SessionStore,$q){
+["$log", "formHelper", "IndividualLoan", "$state", "SessionStore", "$q","entityManager",
+function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager){
     return {
         "type": "search-list",
         "title": "MULTI_TRANCHE_QUEUE",
@@ -69,7 +69,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q){
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 var promise = IndividualLoan.searchDisbursement({
-                    'currentStage': model.stage,
+                    'currentStage': 'MTDisbursementDataCapture',
                     'customerSignatureDate': null,
                     'scheduledDisbursementDate': null,
                     'page': 1,
@@ -89,11 +89,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q){
                 }
             },
             listOptions: {
-                itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },
+                expandable: true,
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -102,24 +98,23 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q){
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.Tranche                        
+                        item.customerName,
+                        'Customer ID : ' + item.id,
+                        item.disbursementAmount,
+                        "{{'SANCTION_DATE'|translate}} : " + item.scheduledDisbursementDate
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Book Loan",
+                            name: "{{'CAPTURE_DISBURSEMENT'|translate}}",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
+                                entityManager.setModel('loans.individual.disbursement.MultiTranche',{"_MTQueue":item});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.MultiTranche', pageId: item.id});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }

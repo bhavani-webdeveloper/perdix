@@ -1,16 +1,22 @@
-irf.pageCollection.factory("Pages__MultiTranche",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"),
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "MultiTranche",
         "type": "schema-form",
-        "name": "MultiTranche",
         "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
-            $log.info("Individual Loan Booking Page got initialized");
+            $log.info("Multi Tranche Page got initialized");
+            if (!model._MTQueue)
+            {
+                $log.info("Screen directly launched hence redirecting to queue screen");
+                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.MultiTrancheQueue', pageId: null});
+                return;
+            }
+            model.tranche = {};
+            model.tranche = _.cloneDeep(model._MTQueue);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -18,49 +24,44 @@ irf.pageCollection.factory("Pages__MultiTranche",
         },
         form: [{
             "type": "box",
-            "title": "TRANCHE 3 | DISBURSEMENT DETAILS | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "titleExpr":"{{'TRANCHE'|translate}}+' ' + model._MTQueue.trancheNumber + ' | '+{{'DISBURSEMENT_DETAILS'|translate}}+' | '+ model.customerName"
             "items": [
                 {
-                    "key": "bank_name",
-                    "title": "Tranche Details",
+                    "key": "tranche.trancheNumber",
+                    "title": "TRANCHE_NUMBER",
                     "type": "textarea"
                 },
                 {
-                    "key": "branch_name",
-                    "title": "Disbursement Date",
+                    "key": "tranche.scheduledDisbursementDate",
+                    "title": "DISBURSEMENT_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "branch_name",
-                    "title": "Customer Sign Date",
+                    "key": "tranche.customerSignatureDate",
+                    "title": "CUSTOMER_SIGN_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "branch_name",
-                    "title": "Remarks For Tranche Disbursement"
+                    "key": "tranche.remarks",
+                    "title": "REMARKS"
                 },
                 {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
-                        "title": "Send For FRO Verification"
-                    },{
-                        "type": "submit",
-                        "title": "Reset"
+                        "title": "SUBMIT"
                     }]
                 }
             ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return IndividualLoan.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
+                        pageName: 'loans.individual.disbursement.MultiTrancheQueue',
+                        pageId: null
                     });
             }
         }
