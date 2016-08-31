@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils){
 
     var branch = SessionStore.getBranch();
 
@@ -18,9 +18,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         },
         modelPromise: function(pageId, _model) {
         },
-        offline: false,
+        offline: true,
         getOfflineDisplayItem: function(item, index){
             return [
+                item.customer.firstName,
+                item.customer.centreCode,
+                item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
             ]
         },
         form: [
@@ -34,6 +37,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
+                        key: "customer.id",
+                        condition: "model.customer.id",
+                        title:"ENTITY_ID",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.urnNo",
+                        condition: "model.customer.urnNo",
+                        title:"URN_NO",
+                        readonly: true
+                    },
+                    {
                         key:"customer.centreCode",
                         type:"select",
                         filter: {
@@ -43,46 +58,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.entityId",
                         title:"ENTITY_ID",
-                        type: "lov",
-                        lovonly: true,
-                        inputMap: {
-                            "firstName": {
-                                "key": "customer.firstName",
-                                "title": "OLD_CUSTOMER_NAME"
-                            },
-                            "branchName": {
-                                "key": "customer.kgfsName",
-                                "type": "select"
-                            },
-                            "centreCode": {
-                                "key": "customer.centreCode",
-                                "type": "select"
-                            }
-                        },
-                        outputMap: {
-                            "id": "customer.entityId",
-                            "firstName": "customer.firstName"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form) {
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var promise = Enrollment.search({
-                                'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                'firstName': inputModel.first_name,
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                [data.firstName, data.fatherFirstName].join(' '),
-                                data.id
-                            ];
-                        }
-                    },
-                    {
-                        key: "customer.urnNo",
-                        title:"URN_NO",
-                        readonly: true
+                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'"
                     },
                     {
                         key: "customer.firstName",
@@ -92,11 +68,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.referredBy",
                         title:"REFERRED_BY",
                         type: "select",
-                        titleMap: {
-                            "cold_call":"Cold call",
-                            "existing_customer_reference": "Existing customer reference",
-                            "referral_partner": "Referral partner"
-                        }
+                        enumCode: "referredBy"
                     },
                     {
                         key: "customer.enterprise.referredName",
@@ -132,21 +104,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.ownership",
                         title: "OWNERSHIP",
                         type: "select",
-                        titleMap: {
-                            "owned": "Owned",
-                            "rental": "Rental",
-                            "lease": "Lease"
-                        }
+                        enumCode: "ownership"
                     },
                     {
                         key: "customer.enterprise.businessConstitution",
                         title: "CONSTITUTION",
                         type: "select",
-                        titleMap: {
-                            "proprietorship": "Proprietorship",
-                            "partnership": "Partnership",
-                            "private_ltd": "Private Ltd"
-                        }
+                        enumCode: "constitution"
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
@@ -161,16 +125,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         condition: "model.customer.enterprise.companyRegistered",
                         title: "REGISTRATION_TYPE",
                         type: "select",
-                        titleMap: {
-                            "tin": "TIN",
-                            "ssi_number": "SSI number",
-                            "vat_number": "VAT number",
-                            "business_pan_number": "Business PAN number",
-                            "service_tax_number": "Service tax number",
-                            "dic": "DIC",
-                            "msme": "MSME",
-                            "s_and_e": "S&E"
-                        }
+                        enumCode: "business_registration_type"
                     },
                     {
                         key: "customer.enterprise.registrationNumber",
@@ -181,33 +136,25 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
                         type: "select",
-                        titleMap: {
-                            "manufacturing": "manufacturing"
-                        }
+                        enumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        titleMap: {
-                            "manufacturing": "manufacturing"
-                        }
+                        enumCode: "businessLine"
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        titleMap: {
-                            "manufacturing": "manufacturing"
-                        }
+                        enumCode: "businessSector"
                     },
                     {
                         key: "customer.enterprise.businessSubType",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
-                        titleMap: {
-                            "manufacturing": "manufacturing"
-                        }
+                        enumCode: "businessSubSector"
                     },
                    {
                         key: "customer.enterpriseCustomerRelations",
@@ -289,7 +236,32 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type:"select",
                         screenFilter: true*/
                     },
-                    "customer.pincode",
+                    {
+                        key: "customer.pincode",
+                        type: "lov",
+                        fieldType: "number",
+                        autolov: true,
+                        inputMap: {
+                            "pincode": "customer.pincode",
+                            "district": "customer.district",
+                            "state": "customer.state"
+                        },
+                        outputMap: {
+                            "pincode": "customer.pincode",
+                            "district": "customer.district",
+                            "state": "customer.state"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },
                     {
                         key:"customer.state"
                     },
@@ -367,12 +339,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.bankAccounts[].accountType",
                                 title: "ACCOUNT_TYPE",
                                 type: "select",
-                                titleMap: {
-                                    a:"Current",
-                                    b:"Savings",
-                                    c:"OD",
-                                    d:"CC"
-                                }
+                                enumCode: "account_type"
                             },
                             {
                                 key: "customer.bankAccounts[].isDisbursementAccount",
@@ -432,22 +399,22 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.fixData(reqData);
                 //reqData.customer.enterprise.companyRegistered = "Yes";
                 //$log.info(JSON.stringify(sortFn(reqData)));
-                EnrollmentHelper.saveData(reqData).then(function(res){
-                    model.customer = _.clone(res.customer);
-                    model = EnrollmentHelper.fixData(model);
-                    res.enrollmentAction = "PROCEED";
-                    EnrollmentHelper.proceedData(res)
-                        .$promise
-                        .then(
-                            function(){
-                                $state.go("Page.Engine", {
-                                    pageName: 'ProfileInformation',
-                                    pageId: model.customer.id
-                                });
-
-                            }
-                        )
-                });
+                if (reqData.customer.id) {
+                    EnrollmentHelper.proceedData(reqData).then(function(resp){
+                        Utils.removeNulls(res.customer,true);
+                        model.customer = resp.customer;
+                    });
+                } else {
+                    EnrollmentHelper.saveData(reqData).then(function(res){
+                        EnrollmentHelper.proceedData(res).then(function(resp){
+                            Utils.removeNulls(resp.customer,true);
+                            model.customer = resp.customer;
+                        }, function(err) {
+                            Utils.removeNulls(res.customer,true);
+                            model.customer = res.customer;
+                        });
+                    });
+                }
             }
         }
     };

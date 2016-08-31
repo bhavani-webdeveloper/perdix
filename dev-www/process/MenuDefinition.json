@@ -8,6 +8,8 @@
 			"items": [
 				"Page/Engine/CustomerSearch",
 				"Page/Engine/ProfileInformation",
+				"Page/Engine/customer.IndividualEnrollment",
+				"Page/Engine/customer.EnterpriseEnrollment",
 				"Page/Engine/CBCheck",
 				"Page/Engine/CBCheckStatusQueue",
 				"Page/Engine/EnrollmentHouseVerificationQueue",

@@ -72,6 +72,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 ];
             }
             model = Utils.removeNulls(model,true);
+            model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
         },
         modelPromise: function(pageId, _model) {
@@ -114,6 +115,23 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
+                {
+                    key: "customer.kgfsName",
+                    title:"BRANCH_NAME",
+                    readonly: true
+                },
+                {
+                    key: "customer.id",
+                    condition: "model.customer.id",
+                    title:"CUSTOMER_ID",
+                    readonly: true
+                },
+                {
+                    key: "customer.urnNo",
+                    condition: "model.customer.urnNo",
+                    title:"URN_NO",
+                    readonly: true
+                },
                 {
                     key: "customer.firstName",
                     title:"FULL_NAME",
