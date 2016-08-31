@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper){
             return {
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                 offline: false,
                 definition: {
                     title: "ReadyForDisbursement",
-                    autoSearch: false,
+                    autoSearch: true,
                     sorting:true,
                     sortByColumns:{
                         "customerSignatureDate":"Customer Signature Date",
@@ -83,19 +83,19 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         },
                         getListItem: function(item){
                             return [
-                                item.customerName,
-                                "Disbursed Amount:  &#8377;"+item.disbursedAmount+", Disbursement Amount :  &#8377;"+item.disbursementAmount,
-                                "Customer Signature Date  : " + item.customerSignatureDate+", Scheduled Disbursement Date :"+item.scheduledDisbursementDate
+                                item.customerName + " ( Account #: "+item.accountNumber+")",
+                                "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
+                                "Customer Signature Date  : " + (_.isEmpty(item.customerSignatureDate)?" NA ":item.customerSignatureDate)+", Scheduled Disbursement Date :"+(_.isEmpty(item.scheduledDisbursementDate)?" NA ":item.scheduledDisbursementDate)
                             ]
                         },
                         getActions: function(){
                             return [
                                 {
-                                    name: "Book Loan",
+                                    name: "Request Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                        $log.info("Redirecting");
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                       
+
                                     },
                                     isApplicable: function(item, index){
                                         return true;

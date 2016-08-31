@@ -23,6 +23,32 @@
                 }
             }
         },
+        "additional":{
+            "type":"object",
+            "properties":{
+                "branchName":{
+                    "type":"string",
+                    "title":"BRANCH_NAME"
+                },
+                "entityId":{
+                    "type":"string",
+                    "title":"ENTITY_ID"
+                },
+                "entityName":{
+                    "type":"string",
+                    "title":"ENTITY_NAME"
+                },
+                "applicationIdArtoo":{
+                    "type":"string",
+                    "title":"APPLICATION_ID_ARTOO"
+                },
+                "applicationIdPerdix":{
+                    "type":"string",
+                    "title":"APPLICATION_ID_PERDIX"
+                }
+
+            }
+        },
         "loanAccount": {
             "type": "object",
             "properties": {
@@ -207,7 +233,8 @@
                     "type": "boolean"
                 },
                 "branchId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "title":"BRANCH_ID"
                 },
                 "chk1UploadFilePath": {
                     "type": "string"
@@ -249,13 +276,17 @@
                                 "type": "string"
                             },
                             "collateralType": {
-                                "title": "COLLATERAL_TYPE",
+                                "title": "MACHINE_TYPE",
                                 "type": "string",
                                 "enumCode":"collateral_type"
 
                             },
                             "collateralValue": {
                                 "title": "COLLATERAL_VALUE",
+                                "type": "integer"
+                            },
+                            "totalValue": {
+                                "title": "TOTAL_VALUE",
                                 "type": "integer"
                             },
                             "id": {
@@ -300,8 +331,8 @@
                         },
                         "required": [
 
-                            "collateralType",
-                            "collateralValue"
+                            "collateralType"
+
                         ]
                     }
                 },
@@ -993,6 +1024,7 @@
                     "title": "PROCESSING_FEES",
                     "type": "integer"
                 },
+
                 "productCode": {
                     "type": "string",
                     "enumCode":"loan_product"
@@ -1102,6 +1134,8 @@
                 "loanDocuments",
                 "loanInsurance",
                 "loanPurpose1",
+                "loanPurpose2",
+                "loanPurpose3",
                 "loanType",
                 "nominees",
                 "numberOfDisbursed",

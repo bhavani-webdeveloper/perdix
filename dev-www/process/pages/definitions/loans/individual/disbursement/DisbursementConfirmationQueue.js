@@ -74,6 +74,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     listOptions: {
                         itemCallback: function(item, index) {
                             $log.info(item);
+
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
@@ -91,11 +92,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         getActions: function(){
                             return [
                                 {
-                                    name: "Book Loan",
+                                    name: "Update Confirmation Status",
                                     desc: "",
                                     fn: function(item, index){
-                                        $log.info("Redirecting");
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.disbursement.DisbursementConfirmation",
+                                            pageId:item.loanId
+                                        });
+
+
                                     },
                                     isApplicable: function(item, index){
                                         return true;

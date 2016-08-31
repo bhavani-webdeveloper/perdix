@@ -1,16 +1,25 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
     ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan){
+        "Utils",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils){
 
         var branchId = SessionStore.getBranchId();
+        var branchName = SessionStore.getBranch();
 
         return {
             "type": "schema-form",
             "title": "Loan Input",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+
+                model.loanAccount = {branchId :branchId};
+                model.additional = {branchName : branchName};
                 model.loanAccount.disbursementSchedules=[];
-                model.loanAccount.branchId = branchId;
+                model.loanAccount.collateral=[{quantity:1}];
+                model.loanAccount.guarantors=[{guaFirstName:""}];
+                model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
+                model.loanAccount.commercialCibilCharge = 750;
+                console.log(model);
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -30,8 +39,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items": [
                             {
                                 "key": "loanAccount.branchId",
-                                "title": "BRANCH_ID",
-                                readonly:true
+                                "readonly":true
+                            },
+                            {
+                                "key": "additional.branchName",
+                                "readonly":true
+                            },
+                            {
+                                "key": "additional.entityId",
+
+                            },
+                            {
+                                "key": "additional.entityName",
 
                             },
                             {
@@ -50,7 +69,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
 
                             {
-                                "key": "loanAccount.tenure"
+                                "key": "loanAccount.tenure",
+                                "title":"TENURE_IN_MONTHS"
                             },
                             {
                                 "key": "loanAccount.frequency",
@@ -125,7 +145,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                             {
                                 "key": "loanAccount.coBorrowerUrnNo",
-                                "title": "CO_BORROWER_URN_NO",
+                                "title": "CO_APPLICANT_URN_NO",
                                 "type":"lov",
                                 "inputMap": {
                                     "customerId":{
@@ -173,7 +193,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"customer.coBorrowerName",
-                                "title":"Co Borrower Name"
+                                "title":"CO_APPLICANT_NAME"
                             }
 
 
@@ -191,7 +211,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"amount",
                                 "title":"LOAN_AMOUNT"
                             },
+                            {
+                                "key": "loanAccount.loanAmountRequested",
+                                "type":"amount",
+                                "title":"LOAN_AMOUNT_REQUESTED",
+                                "onChange":function(value,form,model){
+                                    model.loanAccount.processingFeeInPaisa = 0.02*value*100;
+                                    model.loanAccount.insuranceFee = 0.004*value;
 
+
+                                }
+                            },
                             {
                                 "key":"loanAccount.interestRate"
 
@@ -231,7 +261,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 key:"loanAccount.processingFeeInPaisa",
-                                type:"amount"
+                                type:"amount",
+                                title:"PROCESSING_FEE_IN_PAISA"
                             },
                             {
                                 key:"loanAccount.insuranceFee",
@@ -239,6 +270,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.commercialCibilCharge",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.otherFee",
                                 type:"amount"
                             },
                         ]
@@ -260,6 +295,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key":"loanAccount.collateral[].collateralType",
                                 "type":"select"
+
                                 
                             },
                             {
@@ -279,17 +315,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralValue",
-                                "type":"amount"
+                                "type":"amount",
+                                "title":"COLLATERAL_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].totalValue",
+                                "type":"amount",
+                                "title":"TOTAL_VALUE"
                             },
                             {
                                 "key":"loanAccount.collateral[].marginValue",
                                 "type":"amount",
-                                "title":"MARGIN_VALUE"
+                                "title":"PURCHASE_PRICE"
                             },
                             {
                                 "key":"loanAccount.collateral[].loanToValue",
                                 "type":"amount",
-                                "title":"LOAN_TO_VALUE"
+                                "title":"PRESENT_VALUE"
                             },
                             {
                                 "key":"loanAccount.collateral[].collateral1FilePath",
@@ -489,12 +531,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             key:"loanAccount.customerBankIfscCode",
                             title:"CUSTOMER_BANK_IFSC"
 
-                        },
-                        {
-                            "key": "loanAccount.loanAmountRequested",
-                            "type":"amount",
-                            "title":"LOAN_AMOUNT_REQUESTED"
-                        },
+                        }
+
 
 
                     ]
