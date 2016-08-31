@@ -22,7 +22,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             model.branchId = SessionStore.getBranchId() + '';
 
             model.customer.date = model.customer.date || Utils.getCurrentDate();
-
+/*
             $log.info('STORAGE_KEY: ' + model.$$STORAGE_KEY$$);
             if (!model.$$STORAGE_KEY$$) {
                 var expenditure = formHelper.enum('expenditure');
@@ -36,7 +36,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     });
                 }
             }
-
+*/
             model.customer.familyMembers = model.customer.familyMembers || [];
             var self = null;
             _.each(model.customer.familyMembers, function(v){
@@ -254,9 +254,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             fieldType: "number",
                             autolov: true,
                             inputMap: {
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
+                                "pincode": {
+                                    key: "customer.pincode"
+                                },
+                                "district": {
+                                    key: "customer.district"
+                                },
+                                "state": {
+                                    key: "customer.state"
+                                }
                             },
                             outputMap: {
                                 "pincode": "customer.pincode",
@@ -652,8 +658,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 "items": [{
                     key:"customer.expenditures",
                     type:"array",
-                    remove: null,
-                    view: "fixed",
+                    startEmpty: true,
+                    // remove: null,
+                    // view: "fixed",
                     titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
                     items:[{
                         type: 'section',
