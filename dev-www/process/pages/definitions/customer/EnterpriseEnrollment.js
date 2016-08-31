@@ -194,8 +194,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
                                         'branchName': inputModel.branchName || SessionStore.getBranch(),
-                                        'firstName': inputModel.first_name,
-                                        'centreCode': inputModel.centreCode
+                                        'firstName': inputModel.firstName,
+                                        'centreCode': inputModel.centreCode,
+                                        'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },

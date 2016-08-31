@@ -5898,9 +5898,9 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-//irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
+irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
+//irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
@@ -6437,7 +6437,15 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         p2pKGFSList:searchResource({
             method:'GET',
             url:BASE_URL + '/api/promisetopaykgfslist'
-        })
+        }),
+        repay:{
+            method:'POST',
+            url:endpoint+'/repay'
+        },
+        p2pUpdate:{
+            method:'POST',
+            url:BASE_URL+ "/api/promisetopaykgfs"
+        }
 
     });
 }]);
@@ -8179,6 +8187,11 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         PageHelper.showLoader();
         irfProgressMessage.pop('enrollment-save', 'Working...');
         reqData['enrollmentAction'] = 'SAVE';
+        /* TODO fix for KYC not saving **/
+        if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
+            reqData.additionalKYCs = [];
+            reqData.additionalKYCs.push({});
+        }
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
             irfProgressMessage.pop('enrollment-save', 'Data Saved', 2000);
@@ -11161,8 +11174,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
                                         'branchName': inputModel.branchName || SessionStore.getBranch(),
-                                        'firstName': inputModel.first_name,
-                                        'centreCode': inputModel.centreCode
+                                        'firstName': inputModel.firstName,
+                                        'centreCode': inputModel.centreCode,
+                                        'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },
@@ -20666,7 +20680,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
             model.stage = 'MTDisbursementDataCapture';
         },
         definition: {
-            title: "Choose Loan Type",
+            title: "SEARCH_CONDITION",
             autoSearch: true,
             sorting:true,
             sortByColumns:{
@@ -20810,8 +20824,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
             "items": [
                 {
                     "key": "tranche.trancheNumber",
-                    "title": "TRANCHE_NUMBER",
-                    "type": "textarea"
+                    "title": "TRANCHE_NUMBER"
                 },
                 {
                     "key": "tranche.scheduledDisbursementDate",
@@ -20849,44 +20862,20 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
         }
     };
 }]);
-irf.pageCollection.factory("Pages__PendingFROQueue",
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingFROQueue"),
+["$log", "formHelper", "IndividualLoan", "$state", "SessionStore", "$q","entityManager",
+function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager){
     return {
-        "id": "PendingFROQueue",
         "type": "search-list",
-        "name": "FRO Queue",
-        "title": "FRO Queue",
+        "title": "FRO_QUEUE",
         "subTitle": "",
-        "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
-            model.stage = 'Stage02';
-        },
-
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
+            model.stage = 'FROApproval';
         },
         definition: {
-            title: "Choose Loan Type",
+            title: "SEARCH_CONDITION",
             autoSearch: true,
             sorting:true,
             sortByColumns:{
@@ -20902,28 +20891,6 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 "title": 'SearchOptions',
                 "required":["branch"],
                 "properties": {
-                    /*
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "default": "1",
-                        "x-schema-form": {
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }
-                        }
-                    },
-                    */
                     "customer_name": {
                         "title": "Customer Name",
                         "type": "string",
@@ -20965,33 +20932,14 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                var out = {
-                    body: [
-                        {
-                            "name": "Ajay Karthik | GKB Industries Ltd.",
-                            "loan_amount": "7,50,000",
-                            "Tranche": "2 | Belgaum branch",
-                            "sanction_date": "12/07/2016"
-                        },
-                        {
-                            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                            "loan_amount": "20,00,00",
-                            "Tranche": "3 | Hubli branch",
-                            "sanction_date": "17/07/2016"
-                        },
-                        {
-                            "name":"Kaushik G | HPL",
-                            "loan_amount": "30,00,000",
-                            "Tranche": "2 | Trichy branch",
-                            "sanction_date": "01/07/2016"
-                        }
-                    ],
-                    headers: {
-                        "method": "GET",
-                        "x-total-count": 20
-                    }
-                }
-                return $q.resolve(out)
+                var promise = IndividualLoan.searchDisbursement({
+                    'currentStage': 'FROApproval',
+                    'customerSignatureDate': null,
+                    'scheduledDisbursementDate': null,
+                    'page': 1,
+                    'per_page': 100,
+                    'sortBy':null
+                }).$promise;
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -21003,11 +20951,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 }
             },
             listOptions: {
-                itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },
+                expandable: true,
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -21016,24 +20960,23 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.Tranche                        
+                        item.customerName,
+                        'Customer ID : ' + item.id,
+                        item.disbursementAmount,
+                        "{{'SANCTION_DATE'|translate}} : " + item.scheduledDisbursementDate
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Update Status",
+                            name: "{{'UPDATE_STATUS'|translate}}",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'PendingFRO', pageId: item.id});
+                                entityManager.setModel('loans.individual.disbursement.PendingFRO',{"_FROQueue":item});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingFRO', pageId: item.id});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }
@@ -21044,44 +20987,20 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     };
 }]);
 
-irf.pageCollection.factory("Pages__PendingCROQueue",
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
-function($log, formHelper, Enrollment, $state, SessionStore,$q){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCROQueue"),
+["$log", "formHelper", "IndividualLoan", "$state", "SessionStore", "$q", "entityManager",
+function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager){
     return {
-        "id": "PendingCROQueue",
         "type": "search-list",
-        "name": "CRO Queue",
         "title": "CRO Queue",
         "subTitle": "",
-        "uri":"Customer Enrollment/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
-            model.stage = 'Stage02';
-        },
-
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      /* Should return the Promise */
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
+            model.stage = 'CROApproval';
         },
         definition: {
-            title: "Choose Loan Type",
+            title: "SEARCH_CONDITION",
             autoSearch: true,
             sorting:true,
             sortByColumns:{
@@ -21097,28 +21016,6 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 "title": 'SearchOptions',
                 "required":["branch"],
                 "properties": {
-                    /*
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "default": "1",
-                        "x-schema-form": {
-                            "type": "select",
-                            "titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }
-                        }
-                    },
-                    */
                     "customer_name": {
                         "title": "Customer Name",
                         "type": "string",
@@ -21160,33 +21057,14 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                var out = {
-                    body: [
-                        {
-                            "name": "Ajay Karthik | GKB Industries Ltd.",
-                            "loan_amount": "7,50,000",
-                            "Tranche": "2 | Belgaum branch",
-                            "sanction_date": "12/07/2016"
-                        },
-                        {
-                            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                            "loan_amount": "20,00,00",
-                            "Tranche": "3 | Hubli branch",
-                            "sanction_date": "17/07/2016"
-                        },
-                        {
-                            "name":"Kaushik G | HPL",
-                            "loan_amount": "30,00,000",
-                            "Tranche": "2 | Trichy branch",
-                            "sanction_date": "01/07/2016"
-                        }
-                    ],
-                    headers: {
-                        "method": "GET",
-                        "x-total-count": 20
-                    }
-                }
-                return $q.resolve(out)
+                var promise = IndividualLoan.searchDisbursement({
+                    'currentStage': 'CROApproval',
+                    'customerSignatureDate': null,
+                    'scheduledDisbursementDate': null,
+                    'page': 1,
+                    'per_page': 100,
+                    'sortBy':null
+                }).$promise;
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -21198,11 +21076,7 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 }
             },
             listOptions: {
-                itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'PendingCRO', pageId: item.id});
-                },
+                expandable: true,
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -21211,24 +21085,23 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
                 },
                 getListItem: function(item){
                     return [
-                        item.name,
-                        "Rs."+item.loan_amount+" | Sanction Date:"+item.sanction_date,
-                        item.Tranche                        
+                        item.customerName,
+                        'Customer ID : ' + item.id,
+                        item.disbursementAmount,
+                        "{{'SANCTION_DATE'|translate}} : " + item.scheduledDisbursementDate
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "Update Status",
+                            name: "{{'UPDATE_STATUS'|translate}}",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
-                                $state.go('Page.Engine', {pageName: 'PendingCRO', pageId: item.id});
+                                entityManager.setModel('loans.individual.disbursement.PendingCRO',{"_CROQueue":item});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingCRO', pageId: item.id});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }
@@ -21239,22 +21112,26 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q){
     };
 }]);
 
-irf.pageCollection.factory("Pages__PendingCRO",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "PendingCRO",
         "type": "schema-form",
-        "name": "PendingCRO",
-        "title": "CRO Approval",
+        "title": "CRO_APPROVAL",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("CRO Approval Page got initialized");
 
-            model.tranche_no = "3";
-            model.cro_requested_date="08-Aug-2016";
+            if (!model._CROQueue)
+            {
+                $log.info("Screen directly launched hence redirecting to queue screen");
+                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingCROQueue', pageId: null});
+                return;
+            }
+            model.tranche = {};
+            model.tranche = _.cloneDeep(model._CROQueue);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -21262,29 +21139,23 @@ irf.pageCollection.factory("Pages__PendingCRO",
         },
         form: [{
             "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
             "items": [
                 {
-                    "key": "tranche_no",
-                    "title": "Tranche Details"
+                    "key": "tranche.trancheNumber",
+                    "title": "TRANCHE_NUMBER"
                 },
                 {
-                    "key": "FRO_remarks",
-                    "title": "Remarks"
+                    "key": "tranche.remarks1",
+                    "title": "FRO_REMARKS"
                 },
                 {
-                    "key": "CRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "cro_requested_date",
+                    "key": "tranche.assigned_date",
                     "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "cro_status",
+                    "key": "tranche.cro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -21292,25 +21163,19 @@ irf.pageCollection.factory("Pages__PendingCRO",
                                 "2": "Reject"
                             }
                 },
-                {
-                    "key": "cro_reject_reason",
-                    "title": "CRO Approve Remarks",
-                    "type": "select"
+                 {
+                    "key": "tranche.remarks2",
+                    "title": "REMARKS"
                 },
                 {
-                    "key": "cro_reject_remarks",
-                    "title": "CRO Rejection Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "latitude",
+                    "key": "tranche.latitude",
                     "title": "Location",
                     "type": "geotag",
-                    "latitude": "fro.latitude",
-                    "longitude": "fro.longitude"
+                    "latitude": "tranche.latitude",
+                    "longitude": "tranche.longitude"
                 },
                 {
-                    key:"FROVerificationPhoto",
+                    key:"tranche.photoId",
                     "title":"Photo",
                     "category":"customer",
                     "subCategory":"customer",
@@ -21328,34 +21193,38 @@ irf.pageCollection.factory("Pages__PendingCRO",
             ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return IndividualLoan.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
+                        pageName: 'loans.individual.disbursement.PendingCROQueue',
+                        pageId: null
                     });
             }
         }
     };
 }]);
-irf.pageCollection.factory("Pages__PendingFRO",
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingFRO"),
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
 
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "PendingFRO",
         "type": "schema-form",
-        "name": "PendingFRO",
-        "title": "FRO Approval",
+        "title": "FRO_APPROVAL",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("FRO Approval Page got initialized");
 
-            model.tranche_no = "3";
-            model.fro_requested_date="08-Aug-2016";
+            if (!model._FROQueue)
+            {
+                $log.info("Screen directly launched hence redirecting to queue screen");
+                $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingFROQueue', pageId: null});
+                return;
+            }
+            model.tranche = {};
+            model.tranche = _.cloneDeep(model._FROQueue);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -21363,25 +21232,19 @@ irf.pageCollection.factory("Pages__PendingFRO",
         },
         form: [{
             "type": "box",
-            "title": "Tranche #3 | Disbursement Details | Ravi S | Key Metals Pvt. Ltd.", // sample label code
-            "colClass": "col-sm-6", // col-sm-6 is default, optional
-            //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
             "items": [
                 {
-                    "key": "tranche_no",
-                    "title": "Tranche Details"
+                    "key": "tranche.trancheNumber",
+                    "title": "TRANCHE_NUMBER"
                 },
                 {
-                    "key": "FRO_remarks",
-                    "title": "Remarks"
-                },
-                {
-                    "key": "fro_requested_date",
+                    "key": "tranche.assigned_date",
                     "title": "Hub Manager Requested Date",
                     "type": "date"
                 },
                 {
-                    "key": "fro_status",
+                    "key": "tranche.fro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -21390,24 +21253,18 @@ irf.pageCollection.factory("Pages__PendingFRO",
                             }
                 },
                 {
-                    "key": "fro_reject_reason",
-                    "title": "FRO Approve Remarks",
-                    "type": "select"
+                    "key": "tranche.remarks1",
+                    "title": "REMARKS"
                 },
                 {
-                    "key": "fro_reject_remarks",
-                    "title": "FRO Rejection Remarks",
-                    "type": "select"
-                },
-                {
-                    "key": "latitude",
+                    "key": "tranche.latitude",
                     "title": "Location",
                     "type": "geotag",
-                    "latitude": "latitude",
-                    "longitude": "longitude"
+                    "latitude": "tranche.latitude",
+                    "longitude": "tranche.longitude"
                 },
                 {
-                    key:"FROVerificationPhoto",
+                    key:"tranche.photoId",
                     "title":"Photo",
                     "category":"customer",
                     "subCategory":"customer",
@@ -21425,13 +21282,13 @@ irf.pageCollection.factory("Pages__PendingFRO",
             ]
         }],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return IndividualLoan.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
+                        pageName: 'loans.individual.disbursement.PendingFROQueue',
+                        pageId: null
                     });
             }
         }
@@ -22320,7 +22177,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.p2pKGFSList({
+                var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
@@ -22407,15 +22264,21 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        "{{'CUSTOMER_NAME'|translate}} : " + searchOptions.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  searchOptions.accountNumber,  /*Service missing_27082016*/
-                        "{{'BANK'|translate}} : " + searchOptions.bankName,
-                        "{{'BRANCH_ID'|translate}} : " + searchOptions.branchName,
-                        "{{'CENTRE_CODE'|translate}} : " + searchOptions.centre,
-                        "{{'CUSTOMER_AVAILABLE'|translate }} : " + searchOptions.customerAvailable,
-                        "{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + searchOptions.customerCategoryLoanOfficer,
-                        "{{'OVERDUE_REASONS'|translate}} : " + searchOptions.overdueReasons,
-                        "{{'PROMISETOPAY_DATE'|translate}} : " + searchOptions.promiseToPayDate
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  item.accountId,  /*Service missing_27082016*/
+                        // "{{'BANK'|translate}} : " + item.bankName,
+                        // "{{'BRANCH_ID'|translate}} : " + item.branchName,
+                        "{{'AMOUNT_DUE'|translate}} : " + item.amount1,
+                        "{{'PRINCIPAL'|translate}} : " + item.principal,
+                        "{{'INTEREST'|translate}} : " + item.interest,
+                        "{{'PENAL_INTEREST'|translate}} : " + item.penalInterest,
+                        "{{'CHARGES'|translate}} : " + item.charges,
+                        "{{'FEES'|translate}} : " + item.fees,
+                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues
+                        //"{{'CENTRE_CODE'|translate}} : " + item.centre,
+                        //"{{'CUSTOMER_AVAILABLE'|translate }} : " + item.customerAvailable,
+                        //"{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + item.customerCategoryLoanOfficer,
+                        //"{{'OVERDUE_REASONS'|translate}} : " + item.overdueReasons,
+                        //"{{'PROMISETOPAY_DATE'|translate}} : " + item.promiseToPayDate
                     ]
                 },
                 getActions: function(){
@@ -22432,7 +22295,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                                 //if (index%2==0){
                                 //  return false;
                                 //}
-                                return true;
+                                return false;
                             }
                         },
                         {
@@ -22535,7 +22398,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.bounceCollectionDemand({
+                var promise = LoanProcess.p2pKGFSList({
                     'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
@@ -22624,8 +22487,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     return [];
                 },
                 getListItem: function(item){
-                    if(item.customerCategoryHubManager.localeCompare('C')||item.customerCategoryHubManager.localeCompare('D'))
-                    {
                     return [
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
@@ -22642,11 +22503,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
                         "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
                     ]
-                }
-                else
-                {
-                    return null;
-                }
                 },
                 getActions: function(){
                     return [
@@ -23036,25 +22892,15 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-				}
+                PageHelper.showLoader();
+
+                LoanProcess.repay(model.repayment, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
 			}
 		}
 	};
@@ -23072,11 +22918,11 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		initialize: function (model, form, formCtrl) {
             model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
-            if (!model._bounce) {
-                model.collectPayment=model._bounce;
+            if (!model._bounce) {                
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                 model.collectPayment=model._bounce;
+                model.collectPayment.amountdue=model._bounce.amount1;
             }
             model.repayment.repaymentType = "Cash";
         },
@@ -23108,7 +22954,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"collectPayment.amountdue",
                         title:"AMOUNT_DUE",
-                        type:"amount",
+                        //type:"amount",
                         readonly:true
                     },
                     {
@@ -23270,18 +23116,24 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.P2PUpdate"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
-            model.promise = model._bounce;
+           
             if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+            } else {
+                 model.promise = model._bounce;
+                model.promise.amountdue = model._bounce.amount1;
+                model.promise.custname = model._bounce.customerName;
+                model.promise.loanacno = model._bounce.accountId;
+
             }
         },
 		form: [
@@ -23312,7 +23164,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                     {
                         key:"promise.amountdue",
                         title:"AMOUNT_DUE",
-                        type:"amount",
+                        //type:"amount",
                         readonly:true
                     },
                     {
@@ -23388,36 +23240,19 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		actions: {
             generateFregCode:function(model,form){
                 console.log(model);
-                if(model.village.pincode>100000){
-                    model.village.fregcode = Number(model.village.pincode+"001");
-                }
-                else {
-                    model.village.fregcode="";
-                }
-
             },
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-				if (window.confirm("Save?") && model.village) {
-					PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-				}
+				PageHelper.showLoader();
+
+                LoanProcess.p2pUpdate(model.promise, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
 			}
 		}
 	};
@@ -24044,8 +23879,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
     };
 }]);
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q){
+["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
+function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
     return {
         "id": "TransactionAuthorizationQueue",
         "type": "search-list",
@@ -24134,37 +23969,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                 }).$promise;
 
                 return promise;
-                return $q.resolve({
-                    headers: {
-                        'x-total-count': 5
-                    },
-                    body:[
-                        {
-                            custname:"Kanimozhi",
-                            loanacno:"508640101335",
-                            paymenttype:"PDC",
-                            amountdue:"1232",
-                            installmentdate:"03-03-2016",
-                            p2pdate:"15-03-2016"
-                        },
-                        {
-                            custname:"Sudha",
-                            loanacno:"508640108276",
-                            paymenttype:"PDC",
-                            amountdue:"1176",
-                            installmentdate:"02-03-2016",
-                            p2pdate:""
-                        },
-                        {
-                            custname:"Rajesh",
-                            loanacno:"508651508978",
-                            paymenttype:"ACH",
-                            amountdue:"3683",
-                            installmentdate:"05-03-2016",
-                            p2pdate:""
-                        }
-                    ]
-                });
+
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -24191,8 +23996,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
-                        'Loan Number: ' + item.loanacno,
-                        'Amount Due: ' + item.installmentAmountInPaisa,
+                        'Loan Number: ' + item.accountNumber,
+                        'Amount Due: ' + item.demandAmountInPaisa,
                         'Payment Type:' + item.paymentType
                     ]
                 },
@@ -24203,6 +24008,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.collections.TransactionAuthorization', {_transAuth:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.loanacno});
                             },
                             isApplicable: function(item, index){
@@ -24222,9 +24028,9 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q){
 
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
     SessionStore,$state,$stateParams,Masters,authService){
 
     return {
@@ -24232,16 +24038,24 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
         "title": "PAYMENT_DETAILS_FOR_LOAN",
         initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
-
-            model.customer_name = "GeeKay Industries";
-            model.applicant_name = "Kanimozhi";
-            model.co_applicant_name = "Raja";
-            model.principal = 14872.36;
-            model.interest = 4235.64;
-            model.fee = 40;
-            model.penal_interest = 200;
-            model.amountDue = 19548;
-            model.amountCollected = 10000;
+             model.transAuth =  model.transAuth || {};
+            if(model._transAuth)
+            {
+                model.transAuth = model._transAuth;
+                model.transAuth.customer_name = model._transAuth.customerName;
+                model.transAuth.applicant_name = model._transAuth.applicantName;
+                model.transAuth.co_applicant_name = model._transAuth.coApplicantName;
+                model.transAuth.principal = model._transAuth.principalOutstandingAmtInPaisa;
+                model.transAuth.interest = model._transAuth.interest;
+                model.transAuth.fee = model._transAuth.fee;
+                model.transAuth.penal_interest = model._transAuth.penal_interest;
+                model.transAuth.amountDue = model._transAuth.demandAmountInPaisa;
+                model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa;
+            
+            } else {
+                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorizationQueue', pageId: null});
+            
+            }
         },
         
         form: [
@@ -24256,17 +24070,17 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"customer_name",
+                                        key:"transAuth.customer_name",
                                         title:"ENTERPRISE_NAME",
                                         readonly:true
                                     },
                                     {
-                                        key:"applicant_name",
+                                        key:"transAuth.applicant_name",
                                         title:"APPLICANT",
                                         readonly:true,
                                     },
                                     {
-                                        key:"co_applicant_name",
+                                        key:"transAuth.co_applicant_name",
                                         title:"CO_APPLICANT",
                                         readonly:true,
                                     }]
@@ -24283,7 +24097,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"principal",
+                                        key:"transAuth.principal",
                                         title:"PRINCIPAL",
                                         readonly:true,
                                         type:"amount"
@@ -24301,7 +24115,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"interest",
+                                        key:"transAuth.interest",
                                         title:"INTEREST",
                                         readonly:true,
                                         type:"amount"
@@ -24328,7 +24142,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"penal_interest",
+                                        key:"transAuth.penal_interest",
                                         title:"PENAL_INTEREST",
                                         readonly:true,
                                         type:"amount"
@@ -24355,7 +24169,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"fee",
+                                        key:"transAuth.fee",
                                         title:"FEES_AND_OTHER_CHARGES",
                                         readonly:true,
                                         type:"amount"
@@ -24382,7 +24196,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"amountDue",
+                                        key:"transAuth.amountDue",
                                         title:"AMOUNT_DUE",
                                         readonly:true,
                                         type:"amount"
@@ -24400,7 +24214,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"amountCollected",
+                                        key:"transAuth.amountCollected",
                                         title:"AMOUNT_COLLECTED",
                                         readonly:true,
                                         type:"amount"
@@ -24418,7 +24232,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                             "type": "section",
                             "htmlClass": "col-xs-8 col-md-8",
                             "items": [{
-                                        key:"status",
+                                        key:"transAuth.status",
                                         title:"",
                                         type:"radios",
                                         titleMap:{
@@ -24433,7 +24247,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                                 }]
                     },
                     {
-                        key:"reject_reason",
+                        key:"transAuth.reject_reason",
                         title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
@@ -24443,7 +24257,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         condition:"model.status=='2'"
                     },
                     {
-                        key:"reject_remarks",
+                        key:"transAuth.reject_remarks",
                         title:"REJECT_REMARKS",
                         readonly:false,
                         condition:"model.status=='2'"
@@ -24474,25 +24288,13 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 console.warn(model);
-                if (window.confirm("Save?") && model.village) {
-                    PageHelper.showLoader();
-                    if(isNaN(model.village.version)) model.village.version=0;
-                    model.village.version = Number(model.village.version)+1;
-                    Masters.post({
-                        action:"AddVillage",
-                        data:model.village
-                    },function(resp,head){
-                        PageHelper.hideLoader();
-                        PageHelper.showProgress("add-village","Done. Village ID :"+resp.id,2000);
-                        console.log(resp);
-                        ManagementHelper.backToDashboard();
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(resp);
-                        ManagementHelper.backToDashboard();
-                        PageHelper.showProgress('error',"Oops. An error occurred.",2000);
-                    });
-                }
+                LoanProcess.repay(model.repayment, function(response){
+                    PageHelper.hideLoader();
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };
