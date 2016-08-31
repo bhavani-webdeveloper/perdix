@@ -231,11 +231,20 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		$scope.model.customer.age = moment().diff(moment(data.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
 		$scope.model.customer.nameWithAge = $scope.model.customer.fullName + ' (' + data.age + ')';
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
 		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.BusinessProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.BusinessProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
 		var requestMenu = [$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecapturePhoto'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureFingerprint'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureGPS']];
@@ -246,14 +255,20 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 				return $q.resolve(menu);
 			};
 		});
+
+		if ($scope.dashboardDefinition.$menuMap['Page/CustomerHistory'])
 		$scope.dashboardDefinition.$menuMap['Page/CustomerHistory'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Recapture'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Recapture'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.id + ':FINGERPRINT';
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
