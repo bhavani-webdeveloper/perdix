@@ -42,7 +42,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.entityId",
                         title:"ENTITY_ID",
                         type: "lov",
-                        autoLov: true,
+                        autolov: true,
                         inputMap: {
                             "firstName": {
                                 "key": "customer.firstName",

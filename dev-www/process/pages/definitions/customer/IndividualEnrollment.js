@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
-["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries){
 
     var branch = SessionStore.getBranch();
@@ -254,15 +254,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             fieldType: "number",
                             autolov: true,
                             inputMap: {
-                                "pincode": {
-                                    key: "customer.pincode"
-                                },
-                                "district": {
-                                    key: "customer.district"
-                                },
-                                "state": {
-                                    key: "customer.state"
-                                }
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
                             },
                             outputMap: {
                                 "pincode": "customer.pincode",
@@ -271,7 +265,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
-                                return Queries.getPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
@@ -1217,20 +1211,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     Utils.removeNulls(reqData,true);
 
                     EnrollmentHelper.saveData(reqData).then(function(res){
-                        model.customer = _.clone(res.customer);
-                        model = EnrollmentHelper.fixData(model);
-                        
-                        Enrollment.updateEnrollment(reqData,
-                        function(res, headers){
+                        EnrollmentHelper.proceedData(res).then(function(resp){
                             PageHelper.hideLoader();
-                            irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN created : ' + res.customer.urnNo, 5000);
+                            irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN created : ' + resp.customer.urnNo, 5000);
                             $log.info("Inside updateEnrollment Success!");
                             $state.go("Page.Landing");
-                        },
-                        function(res, headers){
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('enrollment-submit', 'Oops. Some error.', 2000);
-                            PageHelper.showErrors(res);
                         });
                     });
                 });

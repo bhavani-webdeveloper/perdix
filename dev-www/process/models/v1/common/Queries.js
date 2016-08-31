@@ -57,12 +57,18 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return deferred.promise;
 	};
 
-	resource.getPincodes = function(pincode, district, state) {
+	resource.searchPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		resource.getResult("pincode.list", {"pincode":pincode, "district":district, "state":state}).then(function(records){
-			$log.info(records);
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
+		resource.getResult("pincode.list", request).then(function(records){
 			if (records && records.results) {
-				deferred.resolve(records.results);
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
 			}
 		}, deferred.reject);
 		return deferred.promise;

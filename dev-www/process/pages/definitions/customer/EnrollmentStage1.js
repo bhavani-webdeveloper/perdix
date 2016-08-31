@@ -163,7 +163,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
                 PageHelper.showErrors(res);
-                deferred.reject(null);
+                deferred.reject(res);
             });
         }
         return deferred.promise;
