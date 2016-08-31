@@ -14,8 +14,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = "Business";
-            model.customer.centreCode = "Demo";
+            model.customer.customerType = "Enterprise";
         },
         modelPromise: function(pageId, _model) {
         },
@@ -35,7 +34,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key:"customer.centreCode"
+                        key:"customer.centreCode",
+                        type:"select",
+                        filter: {
+                            "parentCode": "model.branchId"
+                        },
                     },
                     {
                         key: "customer.entityId",
@@ -103,35 +106,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessName",
                         title:"COMPANY_NAME"
                     },*/
-                    {
-                        key: "customer.enterprise.companyOperatingSince",
-                        title:"OPERATING_SINCE",
-                        type: "date"
-                    },
-                    {
-                        key: "customer.enterprise.businessInPresentAreaSince",
-                        type: "select",
-                        title: "YEARS_OF_BUSINESS_PRESENT_AREA",
-                        titleMap: {
-                            "less_than_1_year": "Less Than 1 Year",
-                            "_1_to_2_years": "1 to 2 Years",
-                            "_2_to_3_years": "2 to 3 Years",
-                            "_3_to_5_years": "3 to 5 Years",
-                            "_5_to_10_years": "5 to 10 Years",
-                            "greater_than_10_years": "Greater Than 10 Years"
-                        }
-                    },
+                    //{ /*TODO Not working when this is enabled */
+                    //    key: "customer.enterprise.companyOperatingSince",
+                    //    title:"OPERATING_SINCE",
+                    //    type: "date"
+                    //},
+                    //{
+                    //    key: "customer.enterprise.businessInPresentAreaSince",
+                    //    type: "number",
+                    //    title: "YEARS_OF_BUSINESS_PRESENT_AREA"
+                    //},
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince",
-                        type: "select",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-                        titleMap: {
-                            "less_than_1_year": "Less Than 1 Year",
-                            "_1_to_3_years": "1 to 3 Years",
-                            "_3_to_6_years": "3 to 6 Years",
-                            "_6_to_10_years": "6 to 10 Years",
-                            "greater_than_10_years": "Greater Than 10 Years"
-                        }
+                        type: "number",
+                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     },
                     {
                         "key": "customer.latitude",
@@ -230,12 +218,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.enterpriseCustomerRelations[].relationshipType",
                                 title: "RELATIONSHIP_TYPE",
                                 type: "select",
-                                titleMap: {
-                                    a:"Proprietor",
-                                    b:"Partner",
-                                    c:"Director",
-                                    d:"Others"
-                                }
+                                enumCode: "relationship_type"
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
@@ -452,11 +435,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.saveData(reqData).then(function(res){
                     model.customer = _.clone(res.customer);
                     model = EnrollmentHelper.fixData(model);
-                    
-                    $state.go("Page.Engine", {
-                        pageName: 'ProfileInformation',
-                        pageId: model.customer.id
-                    });
+                    res.enrollmentAction = "PROCEED";
+                    EnrollmentHelper.proceedData(res)
+                        .$promise
+                        .then(
+                            function(){
+                                $state.go("Page.Engine", {
+                                    pageName: 'ProfileInformation',
+                                    pageId: model.customer.id
+                                });
+
+                            }
+                        )
                 });
             }
         }
