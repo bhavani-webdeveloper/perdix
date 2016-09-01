@@ -43,6 +43,14 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         writeOff:{
             method:'POST',
             url:endpoint+'/writeoff'
+        },
+        reversalSearch:{
+            method:'POST',
+            url:endpoint+'/findtransactionforreversal'
+        },
+        writeOff:{
+            method:'POST',
+            url:endpoint+'/manualreversal'
         }
 
     });
