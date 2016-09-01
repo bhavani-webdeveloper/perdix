@@ -4639,7 +4639,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 					});
 				}
 			} else {
-				irfStorageService.putJSON(formName, model);
+				irfStorageService.putJSON(pageName, model);
 				$state.go('Page.EngineOffline', {pageName: pageName});
 			}
 		},
