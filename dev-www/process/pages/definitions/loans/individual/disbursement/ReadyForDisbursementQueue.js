@@ -94,8 +94,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     name: "Request Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                       
-
+                                        $log.info("Redirecting");
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.Disbursement', pageId: item.id});
                                     },
                                     isApplicable: function(item, index){
                                         return true;
