@@ -375,12 +375,12 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
@@ -395,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -845,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -894,11 +894,6 @@ $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<div ng-if=\"showLoading\" class=\"cantina-loader-wrapper\"><div class=\"cantina-loader\"></div></div>\n" +
     "	<div ng-if=\"maskSchemaForm\" class=\"spinner-section-far-wrapper\"><div class=\"spinner-section-far\"></div></div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
-    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
-    "</div>\n" +
-    "")
 
 $templateCache.put("irf/template/searchListWrapper/modal-resource-queue.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
@@ -1033,6 +1028,11 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
+    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
+    "</div>\n" +
+    "")
 
 $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
     "	<table class=\"table table-condensed\">\n" +
@@ -1175,100 +1175,6 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
-;
-
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1776,6 +1682,100 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 		}
 	};
 }])*/
+;
+
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
 ;
 
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
@@ -2623,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2632,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2696,7 +2697,23 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autolov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				self.launchLov();
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2709,29 +2726,37 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			templateUrl: "irf/template/lov/modal-lov.html",
 			controller: function($scope) {
 				$scope.$broadcast('schemaFormValidate');
-				$log.info($scope.locals);
+				//$log.info($scope.locals);
 			}
 		});
 	};
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -2746,7 +2771,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	};
 
 	self.close = function() {
-		$scope.modalWindow.close();
+		if ($scope.modalWindow) $scope.modalWindow.close();
 		$scope.listResponseItems = null;
 		$scope.listDisplayItems = null;
 	};
@@ -4615,7 +4640,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 				}
 			} else {
 				irfStorageService.putJSON(formName, model);
-				$state.go('Page.EngineOffline', {pageName: formName});
+				$state.go('Page.EngineOffline', {pageName: pageName});
 			}
 		},
 		submit: function(model, formCtrl, formName, actions) {
@@ -6182,8 +6207,8 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
 	resource.searchPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
-		resource.getResult("pincode.list", request).then(function(records){
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || '',};
+		resource.getResult("pincode.list", request, 10).then(function(records){
 			if (records && records.results) {
 				var result = {
 					headers: {
@@ -11676,7 +11701,36 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.district"
                         },
-                        "customer.pincode",
+                        {
+                            key: "customer.pincode",
+                            type: "lov",
+                            fieldType: "number",
+                            autolov: true,
+                            inputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            outputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.searchPincodes(
+                                    inputModel.pincode,
+                                    inputModel.district,
+                                    inputModel.state
+                                );
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.pincode,
+                                    item.district + ', ' + item.state
+                                ];
+                            }
+                        },
                         {
                             key:"customer.state"/*,
                             type:"select",
@@ -11703,6 +11757,36 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             //screenFilter: true
                         },
                         "customer.mailingPincode",
+                        {
+                            key: "customer.mailingPincode",
+                            type: "lov",
+                            fieldType: "number",
+                            autolov: true,
+                            inputMap: {
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": "customer.mailingDistrict",
+                                "mailingState": "customer.mailingState"
+                            },
+                            outputMap: {
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": "customer.mailingDistrict",
+                                "mailingState": "customer.mailingState"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.searchPincodes(
+                                    inputModel.mailingPincode,
+                                    inputModel.mailingDistrict,
+                                    inputModel.mailingState
+                                );
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.mailingPincode,
+                                    item.mailingDistrict + ', ' + item.mailingState
+                                ];
+                            }
+                        },
                         {
                             key:"customer.mailingState",
                             type:"select",
@@ -27669,9 +27753,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 getSanctionedAmount(model);
                 $log.info(model);
             },
-            offline: false,
+            offline: true,
             getOfflineDisplayItem: function(item, index){
-
+                return [
+                    item.customer.firstName,
+                    item.additional.branchName
+                ];
             },
             form: [{
                 "type": "box",
@@ -28361,15 +28448,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     ]
                 },
-
                 {
                     "type": "actionbox",
                     "items": [{
+                        "type": "save",
+                        "title": "SAVE"
+                    },{
                         "type": "submit",
                         "title": "SUBMIT"
-                    }
-                    ]
-                }],
+                    }]
+                }
+            ],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },

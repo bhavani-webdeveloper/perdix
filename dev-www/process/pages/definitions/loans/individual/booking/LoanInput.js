@@ -51,9 +51,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 getSanctionedAmount(model);
                 $log.info(model);
             },
-            offline: false,
+            offline: true,
             getOfflineDisplayItem: function(item, index){
-
+                return [
+                    item.customer.firstName,
+                    item.additional.branchName
+                ];
             },
             form: [{
                 "type": "box",
@@ -743,15 +746,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     ]
                 },
-
                 {
                     "type": "actionbox",
                     "items": [{
+                        "type": "save",
+                        "title": "SAVE"
+                    },{
                         "type": "submit",
                         "title": "SUBMIT"
-                    }
-                    ]
-                }],
+                    }]
+                }
+            ],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },

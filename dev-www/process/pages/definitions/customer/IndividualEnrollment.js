@@ -264,7 +264,36 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.district"
                         },
-                        "customer.pincode",
+                        {
+                            key: "customer.pincode",
+                            type: "lov",
+                            fieldType: "number",
+                            autolov: true,
+                            inputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            outputMap: {
+                                "pincode": "customer.pincode",
+                                "district": "customer.district",
+                                "state": "customer.state"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.searchPincodes(
+                                    inputModel.pincode,
+                                    inputModel.district,
+                                    inputModel.state
+                                );
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.pincode,
+                                    item.district + ', ' + item.state
+                                ];
+                            }
+                        },
                         {
                             key:"customer.state"/*,
                             type:"select",
@@ -291,6 +320,36 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             //screenFilter: true
                         },
                         "customer.mailingPincode",
+                        {
+                            key: "customer.mailingPincode",
+                            type: "lov",
+                            fieldType: "number",
+                            autolov: true,
+                            inputMap: {
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": "customer.mailingDistrict",
+                                "mailingState": "customer.mailingState"
+                            },
+                            outputMap: {
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": "customer.mailingDistrict",
+                                "mailingState": "customer.mailingState"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return Queries.searchPincodes(
+                                    inputModel.mailingPincode,
+                                    inputModel.mailingDistrict,
+                                    inputModel.mailingState
+                                );
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.mailingPincode,
+                                    item.mailingDistrict + ', ' + item.mailingState
+                                ];
+                            }
+                        },
                         {
                             key:"customer.mailingState",
                             type:"select",

@@ -59,8 +59,8 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
 	resource.searchPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
-		resource.getResult("pincode.list", request).then(function(records){
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || '',};
+		resource.getResult("pincode.list", request, 10).then(function(records){
 			if (records && records.results) {
 				var result = {
 					headers: {

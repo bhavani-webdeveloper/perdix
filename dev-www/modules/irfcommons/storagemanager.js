@@ -252,7 +252,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 				}
 			} else {
 				irfStorageService.putJSON(formName, model);
-				$state.go('Page.EngineOffline', {pageName: formName});
+				$state.go('Page.EngineOffline', {pageName: pageName});
 			}
 		},
 		submit: function(model, formCtrl, formName, actions) {
