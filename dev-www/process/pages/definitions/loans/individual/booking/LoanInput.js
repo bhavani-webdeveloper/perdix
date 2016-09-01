@@ -42,7 +42,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.nominees=[{nomineeFirstName:""}];
                 model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
                 model.loanAccount.commercialCibilCharge = 750;
+
+                model.loanAccount.documentTracking="PENDING";
+                model.loanAccount.isRestructure = false;
+
                 model.loanAccount.partnerCode = defaultPartner;
+
                 getSanctionedAmount(model);
                 $log.info(model);
             },
@@ -63,6 +68,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         "items": [
                             {
+
+                                "key": "loanAccount.bankId",
+                                "type":"select"
+                            },
+                            {
+
                                 "key": "additional.branchName",
                                 "readonly":true
                             },
@@ -78,6 +89,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.loanCentre.centreId",
+                                "type":"select",
+
                                 title:"CENTRE_ID",
                                 "type":"select"
                                 /*filter: {
@@ -532,6 +545,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "applicant":
                                             if(_.isEmpty(model.loanAccount.applicant)){
                                                 Utils.alert("Please Select an Applicant");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
@@ -539,6 +553,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "coapplicant":
                                             if(_.isEmpty(model.loanAccount.coBorrowerUrnNo)){
                                                 Utils.alert("Please Select a Co-Applicant");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
@@ -546,6 +561,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "guarantor":
                                             if(_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)){
                                                 Utils.alert("Please Select a Guarantor");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
@@ -601,7 +617,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDistrict",
-                                        type:"select"
+                                        type:"text"
 
                                     },
                                     {

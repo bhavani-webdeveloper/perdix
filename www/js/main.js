@@ -96,6 +96,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -111,9 +112,25 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
+$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
+    "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
+    "        <a class=\"{{ item.style ? item.style : 'color-theme' }} {{form.fieldHtmlClass}}\"\n" +
+    "            href=\"\"\n" +
+    "            ng-href=\"{{form.href}}\"\n" +
+    "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
+    "            ng-disabled=\"form.readonly\">\n" +
+    "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
+    "            {{form.title | translate}}\n" +
+    "        </a>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body form-horizontal array-box\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\" id=\"{{pid}}\" ng-init=\"pid=form.key.join('_')\">\n" +
     "  <div schema-form-array-items sf-field-model=\"ng-repeat\" ng-repeat=\"item in $$value$$ track by $index\" class=\"array-box-theme panel {{form.fieldHtmlClass}}\" ng-init=\"id=pid+'_'+($index+1)\" ng-class=\"{'array-box-last':$last}\">\n" +
-    "    <h4 class=\"box-title box-title-theme\">\n" +
+    "    <h4 ng-if=\"!form.notitle\" class=\"box-title box-title-theme\">\n" +
     "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
@@ -140,7 +157,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "      <h3 class=\"box-title\">{{form.title | translate}}</h3>\n" +
+    "      <h3 class=\"box-title\">{{form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate)}}</h3>\n" +
     "    </div>\n" +
     "    <div class=\"box-body form-horizontal collapse in\" id=\"{{id}}\">\n" +
     "      <sf-decorator ng-repeat=\"item in form.items\" form=\"item\" class=\"ng-scope\"></sf-decorator>\n" +
@@ -149,7 +166,8 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "</div>")
 
 $templateCache.put("irf/template/adminlte/button.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"></label>\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
     "        <button class=\"btn {{ item.style ? item.style : 'btn-theme' }} {{form.fieldHtmlClass}}\"\n" +
     "                type=\"submit\"\n" +
@@ -228,7 +246,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "  <label for=\"{{form.key.slice(-1)[0]}}\"\n" +
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label {{form.labelHtmlClass}}\">\n" +
-    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
+    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form, arrayIndex:arrayIndex}) : (form.title | translate) }}\n" +
     "  </label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
     "    <input sf-field-model\n" +
@@ -239,6 +257,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -305,6 +324,7 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -362,6 +382,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"text\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -394,6 +415,7 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -532,7 +554,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder}}\"\n" +
+    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -680,21 +702,22 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
-    "            ng-click=\"selectable ? (actualItem.selected = !actualItem.selected) : (expandable ? expand($event) : cb({item:actualItem,index:itemIndex}))\">\n" +
-    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
-    "            <p ng-if=\"item.length > 1\" ng-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
-    "            <p ng-if=\"item.length > 2\" ng-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
+    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "        </div>\n" +
-    "        <div class=\"checkbox\" ng-if=\"selectable\">\n" +
+    "        <div class=\"checkbox\" ng-if=\"selectable\" ng-click=\"actualItem.selected = !actualItem.selected\">\n" +
     "            <label class=\"checkbox-inline checkbox-theme\">\n" +
     "                <input type=\"checkbox\"\n" +
     "                       ng-model=\"actualItem.selected\">\n" +
     "                <span class=\"control-indicator\"></span>\n" +
     "            </label>\n" +
     "        </div>\n" +
-    "        <div class=\"list-context-menu\" ng-if=\"actions.length && !selectable\">\n" +
+    "        <div class=\"list-context-menu\" ng-if=\"actions.length\">\n" +
     "            <div class=\"dropdown irf-action-dropdown\">\n" +
     "                <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
     "                    <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
@@ -1186,7 +1209,8 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "biometric": "biometric.html",
         "qrcode": "qrcode.html",
         "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html"
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
     };
 
     angular.forEach(irfAdminlteUI, function(value, key){
@@ -2584,8 +2608,12 @@ angular.module('irf.listView', ['irf.elements.commons'])
 		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
 	}
 
+	$scope.expanded = false;
 	$scope.expand = function($event) {
-
+		if ($scope.item && $scope.item.length > 3) {
+			$scope.expandItems = $scope.item.slice(3);
+			$scope.expanded = !$scope.expanded;
+		}
 	}
 }])
 ;
@@ -3281,7 +3309,51 @@ function($log, $q, $scope){
 			sfc.push({
 				"type": "section",
 				"html": "<hr/>"
-			},{
+			});
+			if ($scope.definition.sorting && $scope.definition.sortByColumns) {
+				sfc.push({
+					"type": "section",
+					"htmlClass": "row",
+					"items": [{
+						"type": "section",
+						"htmlClass": "col-xs-10",
+						"items": [{
+							"key": "sortBy",
+							"type":"select",
+							"title": "SORT_BY",
+							"titleMap": $scope.definition.sortByColumns
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "col-xs-2",
+						"items": [{
+							"type":"anchor",
+							"notitle":true,
+							"title": "",
+							"icon": "fa fa-sort-amount-asc",
+							"onClick": function (model, formCtrl, form, event) {
+								if (form.icon == "fa fa-sort-amount-asc") {
+									form.icon = "fa fa-sort-amount-desc";
+									if (model.sortBy && !_.startsWith(model.sortBy, '-')) {
+										try {
+											//$scope.searchForm[0].
+										} catch (e) {}
+										var v = $scope.definition.sortByColumns[model.sortBy];
+										model.sortBy = '-' + model.sortBy;
+										$scope.definition.sortByColumns[model.sortBy] = v;
+									}
+								} else {
+									form.icon = "fa fa-sort-amount-asc";
+									if (model.sortBy && _.startsWith(model.sortBy, '-')) {
+										model.sortBy = model.sortBy.slice(1);
+									}
+								}
+							}
+						}]
+					}]
+				});
+			}
+			sfc.push({
 				"type": "actions",
 				"notitle": true,
 				"items": actions
@@ -4486,6 +4558,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 				var ret = {parentClassifier:r.parentClassifier,data:[]};
 				switch (key.toString().trim()) {
 					//Write custom cases for (name,value) pairs in enumCodes
+					case 'bank':
+						ret.data = _.clone(r.data);
+						for(var i = 0; i < ret.data.length; i++) {
+							ret.data[i].value = ret.data[i].code;
+						}
+						break;
 					case 'loan_product':
 						$log.debug(key);
 						ret.data = _.clone(r.data);
@@ -6414,6 +6492,14 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         writeOff:{
             method:'POST',
             url:endpoint+'/writeoff'
+        },
+        reversalSearch:{
+            method:'POST',
+            url:endpoint+'/findtransactionforreversal'
+        },
+        writeOff:{
+            method:'POST',
+            url:endpoint+'/manualreversal'
         }
 
     });
@@ -27548,14 +27634,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 fee+=model.loanAccount.commercialCibilCharge;
             if(!_.isNaN(model.loanAccount.securityEmi))
                 fee+=model.loanAccount.securityEmi;
-            console.log(parseInt(model.loanAccount.processingFeeInPaisa/100));
-            console.log(model.loanAccount.insuranceFee);
-            console.log(model.loanAccount.commercialCibilCharge);
-            console.log(model.loanAccount.securityEmi);
+            $log.info(parseInt(model.loanAccount.processingFeeInPaisa/100));
+            $log.info(model.loanAccount.insuranceFee);
+            $log.info(model.loanAccount.commercialCibilCharge);
+            $log.info(model.loanAccount.securityEmi);
 
             model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
 
         };
+        try{
+                    var defaultPartner = formHelper.enum("partner").data[0].value;
+                }catch(e){}
 
         return {
             "type": "schema-form",
@@ -27571,8 +27660,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.nominees=[{nomineeFirstName:""}];
                 model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
                 model.loanAccount.commercialCibilCharge = 750;
+
+                model.loanAccount.documentTracking="PENDING";
+                model.loanAccount.isRestructure = false;
+
+                model.loanAccount.partnerCode = defaultPartner;
+
                 getSanctionedAmount(model);
-                console.log(model);
+                $log.info(model);
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -27591,14 +27686,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         "items": [
                             {
-                                "key": "loanAccount.branchId",
-                                "readonly":true
+
+                                "key": "loanAccount.bankId",
+                                "type":"select"
                             },
                             {
+
                                 "key": "additional.branchName",
                                 "readonly":true
                             },
-
                             {
                                 "key": "loanAccount.partnerCode",
                                 "title": "PARTNER",
@@ -27611,8 +27707,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.loanCentre.centreId",
+                                "type":"select",
 
                                 title:"CENTRE_ID",
+                                "type":"select"
                                 /*filter: {
                                     "parentCode as branch": "model.branchId"
                                 },
@@ -27670,7 +27768,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     var promise = Enrollment.search({
                                         'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
-                                        'firstName': inputModel.first_name,
+                                        'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
                                         //'customerType':"Enterprise"
                                     }).$promise;
@@ -27727,7 +27825,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     var promise = Enrollment.search({
                                         'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
-                                        'firstName': inputModel.first_name,
+                                        'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode
                                     }).$promise;
                                     return promise;
@@ -27781,7 +27879,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     var promise = Enrollment.search({
                                         'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
-                                        'firstName': inputModel.first_name,
+                                        'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode
                                     }).$promise;
                                     return promise;
@@ -27831,44 +27929,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.processingFeeInPaisa",
-                                type:"amount",
-                                title:"PROCESSING_FEE_IN_PAISA",
-                                onChange:function(value,form,model){
-
-                                    getSanctionedAmount(model);
-
-
-                                }
-                            },
-                            {
                                 key:"loanAccount.insuranceFee",
                                 type:"amount",
                                 onChange:function(value,form,model){
-
                                     getSanctionedAmount(model);
-
-
                                 }
                             },
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
                                 onChange:function(value,form,model){
-
                                     getSanctionedAmount(model);
-
-
                                 }
                             },
                             {
                                 key:"loanAccount.securityEmi",
                                 type:"amount",
                                 onChange:function(value,form,model){
-
                                     getSanctionedAmount(model);
-
-
                                 }
                             },
                             {
@@ -28046,7 +28124,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             var promise = Enrollment.search({
                                                 'customerId':inputModel.customerId,
                                                 'branchName': inputModel.branch ||SessionStore.getBranch(),
-                                                'firstName': inputModel.first_name,
+                                                'firstName': inputModel.firstName,
                                                 'centreCode':inputModel.centreCode
                                             }).$promise;
                                             return promise;
@@ -28085,6 +28163,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "applicant":
                                             if(_.isEmpty(model.loanAccount.applicant)){
                                                 Utils.alert("Please Select an Applicant");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
@@ -28092,6 +28171,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "coapplicant":
                                             if(_.isEmpty(model.loanAccount.coBorrowerUrnNo)){
                                                 Utils.alert("Please Select a Co-Applicant");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
@@ -28099,6 +28179,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         case "guarantor":
                                             if(_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)){
                                                 Utils.alert("Please Select a Guarantor");
+                                                model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
@@ -28154,7 +28235,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDistrict",
-                                        type:"select"
+                                        type:"text"
 
                                     },
                                     {
@@ -28188,8 +28269,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.numberOfDisbursements",
                                 title:"NUM_OF_DISBURSEMENTS",
                                 onChange:function(value,form,model){
-                                    console.log(value);
-                                    console.log(model);
+                                    $log.info(value);
+                                    $log.info(model);
 
                                     model.loanAccount.disbursementSchedules=[];
                                     for(var i=0;i<value;i++){
@@ -28294,7 +28375,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             },
             actions: {
                 submit: function(model, form, formName){
-                    console.log(model);
+                    $log.info(model);
                     PageHelper.clearErrors();
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
@@ -28304,15 +28385,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         IndividualLoan.create(reqData,function(resp,headers){
                             delete resp.$promise;
                             delete resp.$resolved;
-                            console.log(resp);
+                            $log.info(resp);
                             resp.loanProcessAction="PROCEED";
                             //reqData.loanProcessAction="PROCEED";
                             PageHelper.showLoader();
                             IndividualLoan.create(resp,function(resp,headers){
-                                console.log(resp);
+                                $log.info(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
                             },function(resp){
-                                console.log(resp);
+                                $log.info(resp);
                                 PageHelper.showErrors(resp);
                                 PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
@@ -28322,7 +28403,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
 
                         },function(resp){
-                            console.log(resp);
+                            $log.info(resp);
                             PageHelper.showErrors(resp);
                             PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
@@ -29104,6 +29185,160 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution"),
+["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "type": "schema-form",
+        "title": "WRITE_OFF",
+        initialize: function (model, form, formCtrl) {
+            $log.info("WriteOff Screen got initialized");
+        },
+        offline: false,
+        getOfflineDisplayItem: function(item, index){
+
+        },
+        form: [{
+            "type": "box",
+            "title": "WRITE_OFF", // sample label code
+            "colClass": "col-sm-12", // col-sm-6 is default, optional
+
+            "items": [
+                {
+                    "key": "loanAccount.accountNumber",
+                    "readonly": true,
+                    "type": "number"
+                },
+                {
+                    "key": "loanAccount.customerName",
+                    "required": true
+                },
+                {
+                    "key": "loanAccount.writeOffAmount",
+                    "required": true
+                },
+                {
+                    "key": "loanAccount.writeOffDate",
+                    "type": "date"
+                },
+                {
+                    "type": "submit",
+                    "title": "WRITE_OFF"
+                }
+            ]
+        }],
+        schema: function() {
+            return SchemaResource.getLoanAccountSchema().$promise;
+        },
+        actions: {
+            submit: function(model, form, formName){
+                // Disbursement Date should be >= Sanction Date + 30 days
+                // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
+                {
+                    $log.info("Redirecting");
+                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.AccountQueue', pageId: ''});
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.reversal.Search"),
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "LoanAccount",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
+    return {
+        "type": "search-list",
+        "title": "SEARCH_TRANSACTIONS",
+        "subTitle": "",
+        "uri":"REVERSAL/Stage 1",
+        initialize: function (model, form, formCtrl) {
+            $log.info("search-list sample got initialized");
+            model.branchName = SessionStore.getBranch();
+            model.stage = 'WriteOff';
+            console.log(model);
+        },
+
+        offline: false,
+        
+        definition: {
+            title: "SEARCH",
+            autoSearch: false,
+            sorting:true,
+            sortByColumns:{
+                "account":"Account Number"
+            },
+            searchForm: [
+                "*"
+            ],
+            searchSchema: {
+                "type": 'object',
+                "title": "VIEW_TRANSACTIONS",
+                "required":["accountNumber"],
+                "properties": {
+
+                    "accountNumber": {
+                        "title": "ACCOUNT_NUMBER",
+                        "type": "string"
+                    }
+                }
+            },
+            getSearchFormHelper: function() {
+                return formHelper;
+            },
+            getResultsPromise: function(searchOptions, pageOpts){
+                return LoanAccount.reversalSearch({
+                    'Accounts': searchOptions.accountNumber
+                }).$promise;
+                
+            },
+            paginationOptions: {
+                "viewMode": "page",
+                "getItemsPerPage": function(response, headers){
+                    return 20;
+                },
+                "getTotalItemsCount": function(response, headers){
+                    return headers['x-total-count']
+                }
+            },
+            listOptions: {
+                itemCallback: function(item, index) {
+                    $log.info(item);
+                },
+                getItems: function(response, headers){
+                    if (response!=null && response.length && response.length!=0){
+                        return response;
+                    }
+                    return [];
+                },
+                getListItem: function(item){
+                    return [
+                        item.accountNumber,
+                        item.customerName,
+                        "<em>Transaction Amount: Rs."+item.writeOffAmount+", Transaction Date: "+item.writeOffDate + "</em>"
+                    ]
+                },
+                getActions: function(){
+                    return [
+                        {
+                            name: "REVERSE",
+                            desc: "",
+                            fn: function(item, index){
+                                $log.info("Redirecting");
+                                $state.go('Page.Engine', {pageName: 'loans.individual.reversal.reversalExecution', pageId: item.loanId});
+                            },
+                            isApplicable: function(item, index){
+                                return true;
+                            }
+                        }
+                    ];
+                }
+            }
+        }
+    };
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution"),
 ["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
 
     var branch = SessionStore.getBranch();

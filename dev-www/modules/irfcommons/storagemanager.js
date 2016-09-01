@@ -195,6 +195,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 				var ret = {parentClassifier:r.parentClassifier,data:[]};
 				switch (key.toString().trim()) {
 					//Write custom cases for (name,value) pairs in enumCodes
+					case 'bank':
+						ret.data = _.clone(r.data);
+						for(var i = 0; i < ret.data.length; i++) {
+							ret.data[i].value = ret.data[i].code;
+						}
+						break;
 					case 'loan_product':
 						$log.debug(key);
 						ret.data = _.clone(r.data);

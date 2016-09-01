@@ -104,7 +104,9 @@
                     "type": "string"
                 },
                 "bankId": {
-                    "type": "integer"
+                    "type": "string",
+                    "enumCode":"bank",
+                    "title":"BANK"
                 },
                 "bcAccount": {
                     "type": "object",
@@ -643,7 +645,8 @@
                     "title": "CENTER_NAME",
                     "properties": {
                         "centreId": {
-                            "type": "integer"
+                            "type": "string",
+                            "enumCode":"centre"
                         },
                         "id": {
                             "type": "integer"
