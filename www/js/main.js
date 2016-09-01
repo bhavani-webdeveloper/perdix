@@ -11258,8 +11258,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         autolov: true,
                         inputMap: {
                             "pincode": "customer.pincode",
-                            "district": "customer.district",
-                            "state": "customer.state"
+                            "district": {
+                                key: "customer.district"
+                            },
+                            "state": {
+                                key: "customer.state"
+                            }
                         },
                         outputMap: {
                             "pincode": "customer.pincode",
@@ -11710,8 +11714,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             autolov: true,
                             inputMap: {
                                 "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
+                                "district": {
+                                    key: "customer.district"
+                                },
+                                "state": {
+                                    "customer.state"
+                                }
                             },
                             outputMap: {
                                 "pincode": "customer.pincode",
@@ -11766,8 +11774,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             autolov: true,
                             inputMap: {
                                 "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                                "mailingDistrict": {
+                                    key: "customer.mailingDistrict"
+                                },
+                                "mailingState": {
+                                    key: "customer.mailingState"
+                                }
                             },
                             outputMap: {
                                 "mailingPincode": "customer.mailingPincode",
@@ -27685,24 +27697,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
     }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-    ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
+    ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
         "Utils",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils){
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
+        var bankName = SessionStore.getBankName();
+        var bankId;
+        bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
 
         var getSanctionedAmount = function(model){
             var fee = 0;
-            if(!_.isNaN(model.loanAccount.processingFeeInPaisa))
-                fee+= parseInt(model.loanAccount.processingFeeInPaisa/100);
-            if(!_.isNaN(model.loanAccount.insuranceFee))
-                fee+=model.loanAccount.insuranceFee;
-            if(!_.isNaN(model.loanAccount.commercialCibilCharge))
-                fee+=model.loanAccount.commercialCibilCharge;
-            if(!_.isNaN(model.loanAccount.securityEmi))
-                fee+=model.loanAccount.securityEmi;
-            $log.info(parseInt(model.loanAccount.processingFeeInPaisa/100));
+            if(model.loanAccount.insuranceFee)
+                if(!_.isNaN(model.loanAccount.insuranceFee))
+                    fee+=model.loanAccount.insuranceFee;
+            if(model.loanAccount.commercialCibilCharge)
+                if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                    fee+=model.loanAccount.commercialCibilCharge;
+            if(model.loanAccount.securityEmi)
+                if(!_.isNaN(model.loanAccount.securityEmi))
+                    fee+=model.loanAccount.securityEmi;
             $log.info(model.loanAccount.insuranceFee);
             $log.info(model.loanAccount.commercialCibilCharge);
             $log.info(model.loanAccount.securityEmi);
@@ -27711,8 +27726,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         };
         try{
-                    var defaultPartner = formHelper.enum("partner").data[0].value;
-                }catch(e){}
+            var defaultPartner = formHelper.enum("partner").data[0].value;
+        }catch(e){}
 
         return {
             "type": "schema-form",
@@ -27720,29 +27735,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
 
-                model.loanAccount = {branchId :branchId};
+                model.loanAccount = model.loanAccount || {branchId :branchId};
                 model.additional = {branchName : branchName};
-                model.loanAccount.disbursementSchedules=[];
-                model.loanAccount.collateral=[{quantity:1}];
-                model.loanAccount.guarantors=[{guaFirstName:""}];
-                model.loanAccount.nominees=[{nomineeFirstName:""}];
-                model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
+                model.loanAccount.bankId = bankId;
+                model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
+                model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
+                model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
+                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate;
                 model.loanAccount.commercialCibilCharge = 750;
-
                 model.loanAccount.documentTracking="PENDING";
                 model.loanAccount.isRestructure = false;
-
                 model.loanAccount.partnerCode = defaultPartner;
-
                 getSanctionedAmount(model);
                 $log.info(model);
             },
             offline: true,
             getOfflineDisplayItem: function(item, index){
                 return [
-                    item.customer.firstName,
-                    item.additional.branchName
-                ];
+                    item.loanAccount.productCode,
+                    item.loanAccount.centreCode,
+                    item.loanAccount.urnNo ? '{{"URN_NO"|translate}} :' + item.loanAccount.urnNo : ''
+                ]
             },
             form: [{
                 "type": "box",
@@ -27753,14 +27767,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "type": "fieldset",
                         "title": "PRODUCT_DETAILS",
-
-
                         "items": [
-                            {
-
-                                "key": "loanAccount.bankId",
-                                "type":"select"
-                            },
                             {
 
                                 "key": "additional.branchName",
@@ -27967,36 +27974,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"customer.coBorrowerName",
                                 "title":"CO_APPLICANT_NAME"
                             }
-
-
                         ]
                     },
-
                     {
                         "type": "fieldset",
                         "title": "Account Details",
                         "items": [
-
                             {
                                 "key": "loanAccount.loanAmountRequested",
                                 "type":"amount",
                                 "title":"LOAN_AMOUNT_REQUESTED",
                                 "onChange":function(value,form,model){
-
                                     model.loanAccount.insuranceFee = 0.004*value;
                                     getSanctionedAmount(model);
-
-                                }
-                            },
-                            {
-                                key:"additional.processingFeeMultiplier",
-
-                                title:"PROCESSING_FEE_MULTIPLIER",
-                                onChange:function(value,form,model){
-                                    model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
-                                    getSanctionedAmount(model);
-
-
                                 }
                             },
                             {
@@ -28062,9 +28052,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             }
                         ]
                     }
-
-
-
                 ]
             },{
                 "type":"box",
@@ -28080,8 +28067,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key":"loanAccount.collateral[].collateralType",
                                 "type":"select"
-
-                                
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralDescription"
@@ -28139,8 +28124,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "fileType":"image/*",
                                 "title":"PHOTO"
                             }
-                            
-                            
                         ]
                     }
                 ]
@@ -28432,21 +28415,33 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     ]
                 },
+
                 {
                     "type": "actionbox",
                     "items": [{
-                        "type": "save",
-                        "title": "SAVE"
-                    },{
+                    "type": "save",
+                    "title": "SAVE_OFFLINE",
+                },
+                {
                         "type": "submit",
                         "title": "SUBMIT"
-                    }]
-                }
-            ],
+                    }
+                    ]
+                }],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             actions: {
+                preSave: function(model, form, formName) {
+                    var deferred = $q.defer();
+                    if (model.loanAccount.urnNo) {
+                        deferred.resolve();
+                    } else {
+                        irfProgressMessage.pop('LoanInput-save', 'urnNo is required', 3000);
+                        deferred.reject();
+                    }
+                    return deferred.promise;
+                },
                 submit: function(model, form, formName){
                     $log.info(model);
                     PageHelper.clearErrors();

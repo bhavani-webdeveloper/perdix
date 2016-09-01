@@ -248,8 +248,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         autolov: true,
                         inputMap: {
                             "pincode": "customer.pincode",
-                            "district": "customer.district",
-                            "state": "customer.state"
+                            "district": {
+                                key: "customer.district"
+                            },
+                            "state": {
+                                key: "customer.state"
+                            }
                         },
                         outputMap: {
                             "pincode": "customer.pincode",

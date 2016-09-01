@@ -273,8 +273,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             autolov: true,
                             inputMap: {
                                 "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
+                                "district": {
+                                    key: "customer.district"
+                                },
+                                "state": {
+                                    "customer.state"
+                                }
                             },
                             outputMap: {
                                 "pincode": "customer.pincode",
@@ -329,8 +333,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             autolov: true,
                             inputMap: {
                                 "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                                "mailingDistrict": {
+                                    key: "customer.mailingDistrict"
+                                },
+                                "mailingState": {
+                                    key: "customer.mailingState"
+                                }
                             },
                             outputMap: {
                                 "mailingPincode": "customer.mailingPincode",
