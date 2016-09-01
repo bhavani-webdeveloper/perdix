@@ -148,7 +148,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     "offline": true
                 },
                 {
-                    key:"customer.centreCode",
+                    key:"customer.centreId",
                     type:"select",
                     filter: {
                         "parentCode": "model.branchId"
