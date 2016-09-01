@@ -91,8 +91,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     //},
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
+                        type: "date",
+                        title: "BUSINESS_IN_CURRENT_ADDRESS_SINCE"
                     },
                     {
                         "key": "customer.latitude",
