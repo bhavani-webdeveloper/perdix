@@ -643,7 +643,8 @@
                     "title": "CENTER_NAME",
                     "properties": {
                         "centreId": {
-                            "type": "integer"
+                            "type": "string",
+                            "enumCode":"centre"
                         },
                         "id": {
                             "type": "integer"
