@@ -5487,7 +5487,7 @@ function(
 		var idx = 0;
 		_.forEach(items, function(value, key) {
 			offlineItems[idx] = value;
-			displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);
+			try {displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);} catch (e) {displayItems[idx] = ['PARSING_ERROR', e.message];}
 			for (var i = 0; i < displayItems[idx].length; i++) {
 				if (angular.isNumber(displayItems[idx][i]))
 					displayItems[idx][i] = displayItems[idx][i].toString();
@@ -8126,7 +8126,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
-            model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
             && model.customer.udf.userDefinedFieldValues.udf1) {
@@ -8141,7 +8141,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
 
     var validateData = function(model) {
         PageHelper.clearErrors();
-        if (model.customer.udf && model.customer.udf.userDefinedFieldValues) {
+        if (_.hasIn(model.customer, 'udf') && model.customer.udf && model.customer.udf.userDefinedFieldValues) {
             if (model.customer.udf.userDefinedFieldValues.udf36
                 || model.customer.udf.userDefinedFieldValues.udf35
                 || model.customer.udf.userDefinedFieldValues.udf34) {
@@ -8151,7 +8151,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
-        if (model.customer.additionalKYCs[0]
+        if (_.hasIn(model.customer, 'additionalKYCs') && model.customer.additionalKYCs[0]
             && (model.customer.additionalKYCs[0].kyc1ProofNumber
             || model.customer.additionalKYCs[0].kyc1ProofType
             || model.customer.additionalKYCs[0].kyc1ImagePath
@@ -8175,7 +8175,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 return false;
             }
         }
-        if (model.customer.additionalKYCs[1]
+        if (_.hasIn(model.customer, 'additionalKYCs')  && model.customer.additionalKYCs[1]
             && (model.customer.additionalKYCs[1].kyc1ProofNumber
             || model.customer.additionalKYCs[1].kyc1ProofType
             || model.customer.additionalKYCs[1].kyc1ImagePath
@@ -11498,16 +11498,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             }
 
             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-            if (!model.customer.verifications || !model.customer.verifications.length) {
-                model.customer.verifications = [
-                    {
-                        "relationship": "Neighbour"
-                    },
-                    {
-                        "relationship": "Neighbour"
-                    }
-                ];
-            }
+            //if (!model.customer.verifications || !model.customer.verifications.length) {
+            //    model.customer.verifications = [
+            //        {
+            //            "relationship": "Neighbour"
+            //        },
+            //        {
+            //            "relationship": "Neighbour"
+            //        }
+            //    ];
+            //}
             model = Utils.removeNulls(model,true);
             model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
@@ -11556,6 +11556,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
                     readonly: true
+                },
+                {
+                    key: "customer.oldCustomerId"
                 },
                 {
                     key: "customer.id",
@@ -11621,6 +11624,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     }
                 },
                 {
+                    key:"customer.religion",
+                    type:"select"
+                },
+                {
                     key: "customer.fatherFirstName",
                     title: "FATHER_FULL_NAME"
                 },
@@ -11670,11 +11677,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
                     }
-                },
-                {
-                    key:"customer.udf.userDefinedFieldValues.udf1",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    title:"SPOUSE_LOAN_CONSENT"
                 }
             ]
         },
@@ -11821,7 +11823,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -11863,7 +11865,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -11939,74 +11941,75 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 }
 
             ]
-        },{
-            "type":"box",
-            "title":"ADDITIONAL_KYC",
-            "items":[
-                {
-                    "key":"customer.additionalKYCs",
-                    "type":"array",
-                    "add":null,
-                    "remove":null,
-                    "title":"ADDITIONAL_KYC",
-                    "items":[
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
-                            }
-
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofNumber",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ProofType",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ImagePath",
-                            type:"file",
-                            fileType:"image/*",
-                            "offline": true
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2IssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-                            type:"date"
-                        }
-                    ]
-                }
-            ]
         },
+            //{
+            //"type":"box",
+            //"title":"ADDITIONAL_KYC",
+            //"items":[
+            //    {
+            //        "key":"customer.additionalKYCs",
+            //        "type":"array",
+            //        "add":null,
+            //        "remove":null,
+            //        "title":"ADDITIONAL_KYC",
+            //        "items":[
+            //            {
+            //                key:"customer.additionalKYCs[].kyc1ProofNumber",
+            //                type:"barcode",
+            //                onCapture: function(result, model, form) {
+            //                    $log.info(result);
+            //                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+            //                }
+            //
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc1ProofType",
+            //                type:"select"
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc1ImagePath",
+            //                type:"file",
+            //                fileType:"image/*",
+            //                "offline": true
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc1IssueDate",
+            //                type:"date"
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc1ValidUptoDate",
+            //                type:"date"
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc2ProofNumber",
+            //                type:"barcode",
+            //                onCapture: function(result, model, form) {
+            //                    $log.info(result);
+            //                    model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
+            //                }
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc2ProofType",
+            //                type:"select"
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc2ImagePath",
+            //                type:"file",
+            //                fileType:"image/*",
+            //                "offline": true
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc2IssueDate",
+            //                type:"date"
+            //            },
+            //            {
+            //                key:"customer.additionalKYCs[].kyc2ValidUptoDate",
+            //                type:"date"
+            //            }
+            //        ]
+            //    }
+            //]
+            //},
         {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
@@ -12133,370 +12136,351 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     ]
                 }]
             },
-            {
-                "type": "box",
-                "title": "EXPENDITURES",
-                "items": [{
-                    key:"customer.expenditures",
-                    type:"array",
-                    startEmpty: true,
-                    // remove: null,
-                    // view: "fixed",
-                    titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                    items:[{
-                        type: 'section',
-                        htmlClass: 'row',
-                        items: [{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key:"customer.expenditures[].frequency",
-                                type:"select",
-                                notitle: true
-                            }]
-                        },{
-                            type: 'section',
-                            htmlClass: 'col-xs-6',
-                            items: [{
-                                key: "customer.expenditures[].annualExpenses",
-                                type:"amount",
-                                notitle: true
-                            }]
-                        }]
-                    }]
-                }]
-            },
-            {
-                "type":"box",
-                "title":"BUSINESS_OCCUPATION_DETAILS",
-                "items":[
-                    {
-                        key:"customer.udf.userDefinedFieldValues.udf13",
-                        type:"select"
-
-
-                    },
-                    {
-                        type:"fieldset",
-                        condition:"model.customer.udf.userDefinedFieldValues.udf13=='Business' || model.customer.udf.userDefinedFieldValues.udf13=='Employed'",
-                        items:[
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf14",
-                                type:"select"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf7"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf22"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf8"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf9"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf10"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf11"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf12"
-                            },
-
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf23",
-                                type:"radios"
-                            },
-
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf17"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf16",
-                                type:"select"
-                            },
-
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf18",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf19",
-                                type:"radios"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf20",
-                                type:"select"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf21",
-                                condition:"model.customer.udf.userDefinedFieldValues.udf20=='OTHERS'"
-                            }
-                        ]
-                    },
-                    {
-                        type:"fieldset",
-                        condition:"model.customer.udf.userDefinedFieldValues.udf13=='Agriculture'",
-                        title:"AGRICULTURE_DETAILS",
-                        items:[
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf24",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf25",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf15"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf26"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf27",
-                                type:"select"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf28"
-                            }
-                        ]
-                    }
-
-                ]
-            },
-            {
-                "type": "box",
-                "title": "T_ASSETS",
-                "items": [
-                    {
-                        key: "customer.physicalAssets",
-                        type: "array",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key:"customer.physicalAssets[].ownedAssetDetails",
-                                type:"select"
-
-                            },
-                            "customer.physicalAssets[].numberOfOwnedAsset",
-                            {
-                                key:"customer.physicalAssets[].ownedAssetValue",
-                            }
-                        ]
-                    },
-                    {
-                        key: "customer.financialAssets",
-                        title:"FINANCIAL_ASSETS",
-                        type: "array",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key:"customer.financialAssets[].instrumentType",
-                                type:"select"
-                            },
-                            "customer.financialAssets[].nameOfInstitution",
-                            {
-                                key:"customer.financialAssets[].instituteType",
-                                type:"select"
-                            },
-                            {
-                                key: "customer.financialAssets[].amountInPaisa",
-                                type: "amount"
-                            },
-                            {
-                                key:"customer.financialAssets[].frequencyOfDeposite",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.financialAssets[].startDate",
-                                type:"date"
-                            },
-                            {
-                                key:"customer.financialAssets[].maturityDate",
-                                type:"date"
-                            }
-                        ]
-                    }]
-
-            },
-            {
-                type:"box",
-                title:"T_LIABILITIES",
-                items:[
-                    {
-                        key:"customer.liabilities",
-                        type:"array",
-                        startEmpty: true,
-                        title:"FINANCIAL_LIABILITIES",
-                        items:[
-                            {
-                                key:"customer.liabilities[].loanType",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.liabilities[].loanSource",
-                                type:"select"
-                            },
-                            "customer.liabilities[].instituteName",
-                            {
-                                key: "customer.liabilities[].loanAmountInPaisa",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.liabilities[].installmentAmountInPaisa",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.liabilities[].startDate",
-                                type:"date"
-                            },
-                            {
-                                key:"customer.liabilities[].maturityDate",
-                                type:"date"
-                            },
-                            {
-                                key:"customer.liabilities[].frequencyOfInstallment",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.liabilities[].liabilityLoanPurpose",
-                                type:"select"
-                            }
-
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "BIOMETRIC",
-                "items": [
-                    {
-                        type: "button",
-                        title: "CAPTURE_FINGERPRINT",
-                        notitle: true,
-                        fieldHtmlClass: "btn-block",
-                        onClick: function(model, form, formName){
-                            var promise = BiometricService.capture(model);
-                            promise.then(function(data){
-                                model.customer.$fingerprint = data;
-                            }, function(reason){
-                                console.log(reason);
-                            })
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "html": '<div class="row"> <div class="col-xs-6">' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftIndex\')"></i> {{ model.getFingerLabel(\'LeftIndex\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftMiddle\')"></i> {{ model.getFingerLabel(\'LeftMiddle\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftRing\')"></i> {{ model.getFingerLabel(\'LeftRing\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftLittle\')"></i> {{ model.getFingerLabel(\'LeftLittle\') }}</span><br>' +
-                        '</div> <div class="col-xs-6">' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightThumb\')"></i> {{ model.getFingerLabel(\'RightThumb\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightIndex\')"></i> {{ model.getFingerLabel(\'RightIndex\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightMiddle\')"></i> {{ model.getFingerLabel(\'RightMiddle\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightRing\')"></i> {{ model.getFingerLabel(\'RightRing\') }}</span><br>' +
-                        '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightLittle\')"></i> {{ model.getFingerLabel(\'RightLittle\') }}</span><br>' +
-                        '</div></div>'
-                    }
-                ]
-            },
+            //{
+            //    "type": "box",
+            //    "title": "EXPENDITURES",
+            //    "items": [{
+            //        key:"customer.expenditures",
+            //        type:"array",
+            //        startEmpty: true,
+            //        // remove: null,
+            //        // view: "fixed",
+            //        titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+            //        items:[{
+            //            type: 'section',
+            //            htmlClass: 'row',
+            //            items: [{
+            //                type: 'section',
+            //                htmlClass: 'col-xs-6',
+            //                items: [{
+            //                    key:"customer.expenditures[].frequency",
+            //                    type:"select",
+            //                    notitle: true
+            //                }]
+            //            },{
+            //                type: 'section',
+            //                htmlClass: 'col-xs-6',
+            //                items: [{
+            //                    key: "customer.expenditures[].annualExpenses",
+            //                    type:"amount",
+            //                    notitle: true
+            //                }]
+            //            }]
+            //        }]
+            //    }]
+            //},
+            //{
+            //    "type":"box",
+            //    "title":"BUSINESS_OCCUPATION_DETAILS",
+            //    "items":[
+            //        {
+            //            key:"customer.udf.userDefinedFieldValues.udf13",
+            //            type:"select"
+            //
+            //
+            //        },
+            //        {
+            //            type:"fieldset",
+            //            condition:"model.customer.udf.userDefinedFieldValues.udf13=='Business' || model.customer.udf.userDefinedFieldValues.udf13=='Employed'",
+            //            items:[
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf14",
+            //                    type:"select"
+            //
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf7"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf22"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf8"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf9"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf10"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf11"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf12"
+            //                },
+            //
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf23",
+            //                    type:"radios"
+            //                },
+            //
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf17"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf16",
+            //                    type:"select"
+            //                },
+            //
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf18",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf19",
+            //                    type:"radios"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf20",
+            //                    type:"select"
+            //
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf21",
+            //                    condition:"model.customer.udf.userDefinedFieldValues.udf20=='OTHERS'"
+            //                }
+            //            ]
+            //        },
+            //        {
+            //            type:"fieldset",
+            //            condition:"model.customer.udf.userDefinedFieldValues.udf13=='Agriculture'",
+            //            title:"AGRICULTURE_DETAILS",
+            //            items:[
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf24",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf25",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf15"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf26"
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf27",
+            //                    type:"select"
+            //
+            //                },
+            //                {
+            //                    key:"customer.udf.userDefinedFieldValues.udf28"
+            //                }
+            //            ]
+            //        }
+            //
+            //    ]
+            //},
+            //{
+            //    "type": "box",
+            //    "title": "T_ASSETS",
+            //    "items": [
+            //        {
+            //            key: "customer.physicalAssets",
+            //            type: "array",
+            //            startEmpty: true,
+            //            items: [
+            //                {
+            //                    key:"customer.physicalAssets[].ownedAssetDetails",
+            //                    type:"select"
+            //
+            //                },
+            //                "customer.physicalAssets[].numberOfOwnedAsset",
+            //                {
+            //                    key:"customer.physicalAssets[].ownedAssetValue",
+            //                }
+            //            ]
+            //        },
+            //        {
+            //            key: "customer.financialAssets",
+            //            title:"FINANCIAL_ASSETS",
+            //            type: "array",
+            //            startEmpty: true,
+            //            items: [
+            //                {
+            //                    key:"customer.financialAssets[].instrumentType",
+            //                    type:"select"
+            //                },
+            //                "customer.financialAssets[].nameOfInstitution",
+            //                {
+            //                    key:"customer.financialAssets[].instituteType",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key: "customer.financialAssets[].amountInPaisa",
+            //                    type: "amount"
+            //                },
+            //                {
+            //                    key:"customer.financialAssets[].frequencyOfDeposite",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.financialAssets[].startDate",
+            //                    type:"date"
+            //                },
+            //                {
+            //                    key:"customer.financialAssets[].maturityDate",
+            //                    type:"date"
+            //                }
+            //            ]
+            //        }]
+            //
+            //},
+            //{
+            //    type:"box",
+            //    title:"T_LIABILITIES",
+            //    items:[
+            //        {
+            //            key:"customer.liabilities",
+            //            type:"array",
+            //            startEmpty: true,
+            //            title:"FINANCIAL_LIABILITIES",
+            //            items:[
+            //                {
+            //                    key:"customer.liabilities[].loanType",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.liabilities[].loanSource",
+            //                    type:"select"
+            //                },
+            //                "customer.liabilities[].instituteName",
+            //                {
+            //                    key: "customer.liabilities[].loanAmountInPaisa",
+            //                    type: "amount"
+            //                },
+            //                {
+            //                    key: "customer.liabilities[].installmentAmountInPaisa",
+            //                    type: "amount"
+            //                },
+            //                {
+            //                    key: "customer.liabilities[].startDate",
+            //                    type:"date"
+            //                },
+            //                {
+            //                    key:"customer.liabilities[].maturityDate",
+            //                    type:"date"
+            //                },
+            //                {
+            //                    key:"customer.liabilities[].frequencyOfInstallment",
+            //                    type:"select"
+            //                },
+            //                {
+            //                    key:"customer.liabilities[].liabilityLoanPurpose",
+            //                    type:"select"
+            //                }
+            //
+            //            ]
+            //        }
+            //    ]
+            //},
+            //{
+            //    "type": "box",
+            //    "title": "BIOMETRIC",
+            //    "items": [
+            //        {
+            //            type: "button",
+            //            title: "CAPTURE_FINGERPRINT",
+            //            notitle: true,
+            //            fieldHtmlClass: "btn-block",
+            //            onClick: function(model, form, formName){
+            //                var promise = BiometricService.capture(model);
+            //                promise.then(function(data){
+            //                    model.customer.$fingerprint = data;
+            //                }, function(reason){
+            //                    console.log(reason);
+            //                })
+            //            }
+            //        },
+            //        {
+            //            "type": "section",
+            //            "html": '<div class="row"> <div class="col-xs-6">' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftIndex\')"></i> {{ model.getFingerLabel(\'LeftIndex\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftMiddle\')"></i> {{ model.getFingerLabel(\'LeftMiddle\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftRing\')"></i> {{ model.getFingerLabel(\'LeftRing\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftLittle\')"></i> {{ model.getFingerLabel(\'LeftLittle\') }}</span><br>' +
+            //            '</div> <div class="col-xs-6">' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightThumb\')"></i> {{ model.getFingerLabel(\'RightThumb\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightIndex\')"></i> {{ model.getFingerLabel(\'RightIndex\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightMiddle\')"></i> {{ model.getFingerLabel(\'RightMiddle\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightRing\')"></i> {{ model.getFingerLabel(\'RightRing\') }}</span><br>' +
+            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightLittle\')"></i> {{ model.getFingerLabel(\'RightLittle\') }}</span><br>' +
+            //            '</div></div>'
+            //        }
+            //    ]
+            //},
             {
                 "type": "box",
                 "title": "T_HOUSE_VERIFICATION",
                 "items": [
-                    {
-                        "key": "customer.firstName",
-                        "title": "CUSTOMER_NAME",
-                        "readonly": true
-                    },
-                    {
-                        key:"customer.nameInLocalLanguage"
-                    },
-                    {
-                        key:"customer.addressInLocalLanguage",
-                        type:"textarea"
-                    },
+                    //{
+                    //    "key": "customer.firstName",
+                    //    "title": "CUSTOMER_NAME",
+                    //    "readonly": true
+                    //},
+                    //{
+                    //    key:"customer.nameInLocalLanguage"
+                    //},
+                    //{
+                    //    key:"customer.addressInLocalLanguage",
+                    //    type:"textarea"
+                    //},
 
-                    {
-                        key:"customer.religion",
-                        type:"select"
-                    },
-                    {
-                        key:"customer.caste",
-                        type:"select"
-                    },
-                    {
-                        key:"customer.language",
-                        type:"select"
-                    },
+
+                    //{
+                    //    key:"customer.caste",
+                    //    type:"select"
+                    //},
+                    //{
+                    //    key:"customer.language",
+                    //    type:"select"
+                    //},
                     {
                         type:"fieldset",
                         title:"HOUSE_DETAILS",
                         items:[
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf3",
+                                key:"customer.ownership",
                                 type:"select"
+                            },
+                            {
+                                key:"customer.inCurrentAddressSince",
+                                type: "date"
 
                             },
                             {
-                                key:"customer.udf.userDefinedFieldValues.udf2",
-                                condition:"model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf4",
+                                key:"customer.inCurrentAreaSince",
+                                type:"date"
 
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf5",
-                                type:"radios"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf31",
-                                "type":"select"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf32"
-
-                            },
-                            {
-                                key:"customer.udf.userDefinedFieldValues.udf6"
                             }
                         ]
                     },
-                    {
-                        "key": "customer.latitude",
-                        "title": "HOUSE_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        key: "customer.nameOfRo",
-                        readonly: true
-                    },
-                    {
-                        key:"customer.houseVerificationPhoto",
-                        offline: true,
-                        type:"file",
-                        fileType:"image/*"
-                    },
-                    {
-                        key: "customer.date",
-                        type:"date"
-                    },
-                    "customer.place"
+                    //{
+                    //    "key": "customer.latitude",
+                    //    "title": "HOUSE_LOCATION",
+                    //    "type": "geotag",
+                    //    "latitude": "customer.latitude",
+                    //    "longitude": "customer.longitude"
+                    //},
+                    //{
+                    //    key: "customer.nameOfRo",
+                    //    readonly: true
+                    //},
+                    //{
+                    //    key:"customer.houseVerificationPhoto",
+                    //    offline: true,
+                    //    type:"file",
+                    //    fileType:"image/*"
+                    //},
+                    //{
+                    //    key: "customer.date",
+                    //    type:"date"
+                    //},
+                    //"customer.place"
                 ]
             },{
             "type": "actionbox",

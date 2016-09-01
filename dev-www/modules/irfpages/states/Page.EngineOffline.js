@@ -46,7 +46,7 @@ function(
 		var idx = 0;
 		_.forEach(items, function(value, key) {
 			offlineItems[idx] = value;
-			displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);
+			try {displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);} catch (e) {displayItems[idx] = ['PARSING_ERROR', e.message];}
 			for (var i = 0; i < displayItems[idx].length; i++) {
 				if (angular.isNumber(displayItems[idx][i]))
 					displayItems[idx][i] = displayItems[idx][i].toString();
