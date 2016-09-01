@@ -79,16 +79,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessName",
                         title:"COMPANY_NAME"
                     },*/
-                    //{ /*TODO Not working when this is enabled */
-                    //    key: "customer.enterprise.companyOperatingSince",
-                    //    title:"OPERATING_SINCE",
-                    //    type: "date"
-                    //},
-                    //{
-                    //    key: "customer.enterprise.businessInPresentAreaSince",
-                    //    type: "number",
-                    //    title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    //},
+                    { /*TODO Not working when this is enabled */
+                       key: "customer.enterprise.companyOperatingSince",
+                       title:"OPERATING_SINCE",
+                       type: "date"
+                    },
+                    {
+                       key: "customer.enterprise.businessInPresentAreaSince",
+                       type: "date",
+                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
+                    },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince",
                         type: "date",
@@ -115,23 +115,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
+                        type: "radios",
+                        titleMap: {
+                            "YES": "Yes",
+                            "NO": "No"
                         },
                         title: "IS_REGISTERED"
                     },
                     {
                         key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_TYPE",
                         type: "select",
                         enumCode: "business_registration_type"
                     },
                     {
                         key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_NUMBER"
+                    },
+                    {
+                        key: "customer.enterprise.registrationDate",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        type: "date",
+                        title: "REGISTRATION_DATE"
                     },
                     {
                         key: "customer.enterprise.businessType",
@@ -152,7 +159,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessSector"
                     },
                     {
-                        key: "customer.enterprise.businessSubType",
+                        key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector"
@@ -406,8 +413,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                //reqData.customer.enterprise.companyRegistered = "Yes";
-                //$log.info(JSON.stringify(sortFn(reqData)));
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
                         Utils.removeNulls(res.customer,true);

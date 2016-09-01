@@ -396,7 +396,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "    }}&nbsp;</span>\n" +
     "\n" +
     "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -605,6 +605,12 @@ $templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\
     "  </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
+    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
+    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
+    "  <span class=\"switch-handle\"></span> \n" +
+    "</label>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -636,12 +642,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
-    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
-    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
-    "  <span class=\"switch-handle\"></span> \n" +
-    "</label>")
 
 $templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
     "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
@@ -895,6 +895,11 @@ $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<div ng-if=\"maskSchemaForm\" class=\"spinner-section-far-wrapper\"><div class=\"spinner-section-far\"></div></div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
+    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/searchListWrapper/modal-resource-queue.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
     "    <div class=\"modal-content\">\n" +
@@ -1028,11 +1033,6 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
-    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
-    "</div>\n" +
-    "")
 
 $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
     "	<table class=\"table table-condensed\">\n" +
@@ -1175,6 +1175,100 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1682,100 +1776,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 		}
 	};
 }])*/
-;
-
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
 ;
 
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
@@ -2976,6 +2976,9 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			$scope.schemaForm = $scope[$scope.formName];
 			if ($scope.schemaForm) {
 				$scope.schemaForm.scope = $scope;
+				$scope.schemaForm.submit = function() {
+					document.forms[$scope.formName].submit();
+				};
 			}
 			if (angular.isFunction($scope.initialize)) {
 				var start = new Date().getTime();
@@ -3163,32 +3166,6 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 	};
 }])
 ;
-angular.module('irf.searchBox', [])
-    .directive('irfSearchBox', function(){
-        return {
-            restrict: "E",
-            replace: true,
-            scope: {
-                def: "=irfSearchDefinition",
-                searchUrl: "=irfSearchUrl"
-            },
-            templateUrl: 'irf/template/searchBox/search-box.html',
-            controller: 'irfSearchBoxController',
-            controllerAs: 'c'
-        }
-    })
-    .controller('irfSearchBoxController', ["$log", "$scope", function($log, $scope){
-        $scope.searchOptions = {};
-        $scope.searchUrl = "";
-
-        $scope.startSearch = function(){
-            $log.info("Starting search");
-            $scope.searchUrl = $scope.def.urlBuilder($scope.searchOptions);
-            $log.info($scope.searchOptions);
-        }
-    }])
-;
-
 angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource'])
 .directive('irfResourceSearchWrapper', function(){
 	return {
@@ -3488,6 +3465,32 @@ angular.module('irf.searchListWrapper', ['irf.elements.commons', 'ngResource'])
 		response.headers = headersGetter();
 		return response;
 	})
+;
+
+angular.module('irf.searchBox', [])
+    .directive('irfSearchBox', function(){
+        return {
+            restrict: "E",
+            replace: true,
+            scope: {
+                def: "=irfSearchDefinition",
+                searchUrl: "=irfSearchUrl"
+            },
+            templateUrl: 'irf/template/searchBox/search-box.html',
+            controller: 'irfSearchBoxController',
+            controllerAs: 'c'
+        }
+    })
+    .controller('irfSearchBoxController', ["$log", "$scope", function($log, $scope){
+        $scope.searchOptions = {};
+        $scope.searchUrl = "";
+
+        $scope.startSearch = function(){
+            $log.info("Starting search");
+            $scope.searchUrl = $scope.def.urlBuilder($scope.searchOptions);
+            $log.info($scope.searchOptions);
+        }
+    }])
 ;
 
 angular.module('irf.table', ['irf.elements.commons'])
@@ -6467,6 +6470,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         p2pUpdate:{
             method:'POST',
             url:BASE_URL+ "/api/promisetopaykgfs"
+        },
+        approve:{
+            method:'POST',
+            url:endpoint+ "/approverepayment"
         }
 
     });
@@ -11089,16 +11096,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessName",
                         title:"COMPANY_NAME"
                     },*/
-                    //{ /*TODO Not working when this is enabled */
-                    //    key: "customer.enterprise.companyOperatingSince",
-                    //    title:"OPERATING_SINCE",
-                    //    type: "date"
-                    //},
-                    //{
-                    //    key: "customer.enterprise.businessInPresentAreaSince",
-                    //    type: "number",
-                    //    title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    //},
+                    { /*TODO Not working when this is enabled */
+                       key: "customer.enterprise.companyOperatingSince",
+                       title:"OPERATING_SINCE",
+                       type: "date"
+                    },
+                    {
+                       key: "customer.enterprise.businessInPresentAreaSince",
+                       type: "date",
+                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
+                    },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince",
                         type: "date",
@@ -11125,23 +11132,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "checkbox",
-                        schema: {
-                            default: false
+                        type: "radios",
+                        titleMap: {
+                            "YES": "Yes",
+                            "NO": "No"
                         },
                         title: "IS_REGISTERED"
                     },
                     {
                         key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_TYPE",
                         type: "select",
                         enumCode: "business_registration_type"
                     },
                     {
                         key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_NUMBER"
+                    },
+                    {
+                        key: "customer.enterprise.registrationDate",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        type: "date",
+                        title: "REGISTRATION_DATE"
                     },
                     {
                         key: "customer.enterprise.businessType",
@@ -11162,7 +11176,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessSector"
                     },
                     {
-                        key: "customer.enterprise.businessSubType",
+                        key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector"
@@ -11416,8 +11430,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                //reqData.customer.enterprise.companyRegistered = "Yes";
-                //$log.info(JSON.stringify(sortFn(reqData)));
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
                         Utils.removeNulls(res.customer,true);
@@ -11589,7 +11601,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     "offline": true
                 },
                 {
-                    key:"customer.centreCode",
+                    key:"customer.centreId",
                     type:"select",
                     filter: {
                         "parentCode": "model.branchId"
@@ -11718,7 +11730,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     key: "customer.district"
                                 },
                                 "state": {
-                                    "customer.state"
+                                    Key: "customer.state"
                                 }
                             },
                             outputMap: {
@@ -22439,7 +22451,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.p2pKGFSList({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,
@@ -22798,9 +22810,9 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
@@ -22808,8 +22820,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
+            model.creditValidation = model.creditValidation || {};
+
             if (model._credit) {
-                model.creditValidation = model.creditValidation || {};
+                model.creditValidation = model._credit;               
+                model.creditValidation.loanRepaymentDetailsId = model._credit.id;
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
@@ -22835,8 +22850,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 			{
 				"type":"box",
 				"title":"Payment",
-				"items":[
-                    {
+				"items":[{
                         key:"creditValidation.enterprise_name",
                         title:"ENTERPRISE_NAME",
                         readonly:true
@@ -22895,8 +22909,8 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         titleMap:{
                             "1":"Fully Paid",
                             "2":"Partially Paid",
-                            "3":"Not Paid",
-                            "4":"Incorrect Information"
+                            "3":"Not Paid"
+                            //"4":"Incorrect Information"
                                                   }
                     },
                     {
@@ -22933,14 +22947,29 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				$log.info("Inside submit()");
 				console.warn(model);
                 PageHelper.showLoader();
-
-                LoanProcess.repay(model.repayment, function(response){
+                if(model.creditValidation.status == "1")
+                {
+                    $log.info("Inside FullPayment()");
+                    LoanProcess.approve("loanRepaymentDetailsId: " + model.creditValidation.loanRepaymentDetailsId, function(response){
                     PageHelper.hideLoader();
 
-                }, function(errorResponse){
+                    }, function(errorResponse){
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
-                });
+                    });
+
+                } else {
+                    $log.info("Outside FullPayment()");
+                    LoanProcess.repay(model.creditValidation, function(response){
+                    PageHelper.hideLoader();
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
+                
 			}
 		}
 	};
@@ -23197,7 +23226,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly:true
                     },
                     {
-                        key: "promise.loanacno",
+                        key: "promise.accountNumber",
                         title: "LOAN_ACCOUNT_NUMBER",
                         readonly: true
                     },
@@ -23216,13 +23245,13 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }
                     },
                     {
-                        key:"promise.Promise2PayDate",
+                        key:"promise.promiseToPayDate",
                         title:"PROMISE_TO_PAY_DATE",
                         readonly:false,
                         type:"date",
                     },
                     {
-                        key: "promise.customerCategory",
+                        key: "promise.customerCategoryLoanOfficer",
                         title: "CUSTOMER_CATEGORY",
                         type: "select",
                         titleMap: {
@@ -23254,7 +23283,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }]
                     },
 					{
-						key:"promise.reasonforOthers",
+						key:"promise.overdueReasons",
                         title:"OTHER_REASON",
 						type:"textarea",
                         condition:"model.Reason=='Others'"
@@ -28778,8 +28807,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     name: "Request Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                       
-
+                                        $log.info("Redirecting");
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.Disbursement', pageId: item.id});
                                     },
                                     isApplicable: function(item, index){
                                         return true;
@@ -29413,9 +29442,9 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
 
     return {
         "type": "schema-form",
-        "title": "WRITE_OFF",
+        "title": "REVERSE",
         initialize: function (model, form, formCtrl) {
-            $log.info("WriteOff Screen got initialized");
+            $log.info("Reversale Screen got initialized");
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -29423,7 +29452,7 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
         },
         form: [{
             "type": "box",
-            "title": "WRITE_OFF", // sample label code
+            "title": "REVERSE", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
 
             "items": [
@@ -29434,19 +29463,22 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
                 },
                 {
                     "key": "loanAccount.customerName",
+                    "readonly": true,
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffAmount",
+                    "key": "loanAccount.lastTransactionAmount",
+                    "readonly": true,
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffDate",
+                    "key": "loanAccount.transactionDate",
+                    "readonly": true,
                     "type": "date"
                 },
                 {
                     "type": "submit",
-                    "title": "WRITE_OFF"
+                    "title": "REVERSE"
                 }
             ]
         }],
@@ -29459,7 +29491,7 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
                 // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
                 {
                     $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.AccountQueue', pageId: ''});
+                    $state.go('Page.Engine', {pageName: 'loans.individual.reversal.Search', pageId: ''});
                 }
             }
         }

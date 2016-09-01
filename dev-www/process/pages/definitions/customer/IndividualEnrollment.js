@@ -277,7 +277,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     key: "customer.district"
                                 },
                                 "state": {
-                                    "customer.state"
+                                    Key: "customer.state"
                                 }
                             },
                             outputMap: {
