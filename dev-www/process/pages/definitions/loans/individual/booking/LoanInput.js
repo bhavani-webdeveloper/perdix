@@ -6,6 +6,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
 
+        var getSanctionedAmount = function(model){
+            var fee = 0;
+            if(!_.isNaN(model.loanAccount.processingFeeInPaisa))
+                fee+= parseInt(model.loanAccount.processingFeeInPaisa/100);
+            if(!_.isNaN(model.loanAccount.insuranceFee))
+                fee+=model.loanAccount.insuranceFee;
+            if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                fee+=model.loanAccount.commercialCibilCharge;
+            if(!_.isNaN(model.loanAccount.securityEmi))
+                fee+=model.loanAccount.securityEmi;
+            console.log(parseInt(model.loanAccount.processingFeeInPaisa/100));
+            console.log(model.loanAccount.insuranceFee);
+            console.log(model.loanAccount.commercialCibilCharge);
+            console.log(model.loanAccount.securityEmi);
+
+            model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
+
+        };
+
         return {
             "type": "schema-form",
             "title": "Loan Input",
@@ -17,8 +36,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.disbursementSchedules=[];
                 model.loanAccount.collateral=[{quantity:1}];
                 model.loanAccount.guarantors=[{guaFirstName:""}];
+                model.loanAccount.nominees=[{nomineeFirstName:""}];
                 model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
                 model.loanAccount.commercialCibilCharge = 750;
+                getSanctionedAmount(model);
                 console.log(model);
             },
             offline: false,
@@ -45,14 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "additional.branchName",
                                 "readonly":true
                             },
-                            {
-                                "key": "additional.entityId",
 
-                            },
-                            {
-                                "key": "additional.entityName",
-
-                            },
                             {
                                 "key": "loanAccount.partnerCode",
                                 "title": "PARTNER",
@@ -65,12 +79,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.loanCentre.centreId",
-                                type:"text",
+
                                 title:"CENTRE_ID",
-                                filter: {
+                                /*filter: {
                                     "parentCode as branch": "model.branchId"
                                 },
-                                screenFilter: true
+                                screenFilter: true*/
                             },
 
                             {
@@ -86,7 +100,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         "type": "fieldset",
-                        "title": "CUSTOMER_DETAILS",
+                        "title": "ENTITY_DETAILS",
                         "items": [
                             {
                                 "key": "loanAccount.urnNo",
@@ -116,9 +130,64 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
                                     "firstName":"customer.firstName",
-                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName",
-                                    "fatherMiddleName":"loanAccount.husbandOrFatherMiddleName",
-                                    "fatherLastName":"loanAccount.husbandOrFatherLastName"
+
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
+                                        'branchName': inputModel.branch ||SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode':inputModel.centreCode,
+                                        //'customerType':"Enterprise"
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.firstName,
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                }
+                            },
+                            {
+                                "key":"loanAccount.customerId",
+                                "title":"ENTITY_ID"
+                            },
+                            {
+                                "key": "customer.firstName",
+                                "title": "ENTITY_NAME"
+                            },
+                            {
+                                "key": "loanAccount.applicant",
+                                "title": "APPLICANT_URN_NO",
+                                "type":"lov",
+                                "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branch": {
+                                        "key": "customer.branch",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    }
+                                },
+                                "outputMap": {
+
+                                    "urnNo": "loanAccount.applicant",
+                                    "firstName":"customer.applicantName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
@@ -140,12 +209,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                "key":"loanAccount.customerId",
-                                "title":"CUSTOMER_ID"
-                            },
-                            {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
+                                "key":"customer.applicantName",
+                                "title":"APPLICANT_NAME"
+
                             },
 
                             {
@@ -217,7 +283,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "onChange":function(value,form,model){
 
                                     model.loanAccount.insuranceFee = 0.004*value;
-
+                                    getSanctionedAmount(model);
 
                                 }
                             },
@@ -227,7 +293,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 title:"PROCESSING_FEE_MULTIPLIER",
                                 onChange:function(value,form,model){
                                     model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
-
+                                    getSanctionedAmount(model);
 
 
                                 }
@@ -235,19 +301,43 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.processingFeeInPaisa",
                                 type:"amount",
-                                title:"PROCESSING_FEE_IN_PAISA"
+                                title:"PROCESSING_FEE_IN_PAISA",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.insuranceFee",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.commercialCibilCharge",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.securityEmi",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -460,9 +550,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 onChange:function(value,form,model){
                                     switch(value){
-                                        case "applicant": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo; break;
-                                        case "coapplicant":model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo; break;
-                                        case "grarantor": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo; break;
+                                        case "applicant":
+                                            if(_.isEmpty(model.loanAccount.applicant)){
+                                                Utils.alert("Please Select an Applicant");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
+                                            break;
+                                        case "coapplicant":
+                                            if(_.isEmpty(model.loanAccount.coBorrowerUrnNo)){
+                                                Utils.alert("Please Select a Co-Applicant");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
+                                            break;
+                                        case "guarantor":
+                                            if(_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)){
+                                                Utils.alert("Please Select a Guarantor");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
+                                            break;
                                     }
                                 }
                                 
@@ -473,6 +581,67 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             }
                         ]
                         
+                    },
+                    {
+                        "type":"fieldset",
+                        "title":"NOMINEE",
+                        "items":[
+                            {
+                                "key":"loanAccount.nominees",
+                                "type":"array",
+                                "title":"NOMINEE",
+                                "add":null,
+                                "remove":null,
+                                "items":[
+                                    {
+                                        key:"loanAccount.nominees[].nomineeFirstName",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeGender",
+                                        type:"select"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDOB",
+                                        type:"date"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDoorNo",
+
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeLocality",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeStreet",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDistrict",
+                                        type:"select"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeState",
+
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineePincode",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeRelationship",
+                                        type:"select"
+
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         "type": "fieldset",

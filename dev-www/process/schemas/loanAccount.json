@@ -20,6 +20,10 @@
                     "type":"string",
                     "enumCode":"centre",
                     "title":"CENTRE"
+                },
+                "applicantName":{
+
+                    "type":"string"
                 }
             }
         },
@@ -30,14 +34,7 @@
                     "type":"string",
                     "title":"BRANCH_NAME"
                 },
-                "entityId":{
-                    "type":"string",
-                    "title":"ENTITY_ID"
-                },
-                "entityName":{
-                    "type":"string",
-                    "title":"ENTITY_NAME"
-                },
+
 
                 "processingFeeMultiplier":{
                     "type":"number"
@@ -854,7 +851,8 @@
                                 "type": "string"
                             },
                             "nomineeDistrict": {
-                                "type": "string"
+                                "type": "string",
+                                "enumCode":"district"
                             },
                             "nomineeDoorNo": {
                                 "type": "string"
@@ -863,7 +861,8 @@
                                 "type": "string"
                             },
                             "nomineeGender": {
-                                "type": "string"
+                                "type": "string",
+                                "enumCode":"gender"
                             },
                             "nomineeLastName": {
                                 "type": "string"
@@ -881,10 +880,12 @@
                                 "type": "string"
                             },
                             "nomineeRelationship": {
-                                "type": "string"
+                                "type": "string",
+                                "enumCode":"relationship"
                             },
                             "nomineeState": {
                                 "type": "string"
+
                             },
                             "nomineeStreet": {
                                 "type": "string"
@@ -912,20 +913,13 @@
                             "guardianTitle",
                             "id",
                             "loanId",
-                            "nomineeAddressSameAsCustomer",
                             "nomineeDOB",
                             "nomineeDistrict",
-                            "nomineeDoorNo",
                             "nomineeFirstName",
                             "nomineeGender",
-                            "nomineeLastName",
-                            "nomineeLocality",
-                            "nomineeMiddleName",
-                            "nomineeMinor",
                             "nomineePincode",
                             "nomineeRelationship",
                             "nomineeState",
-                            "nomineeStreet",
                             "version"
                         ]
                     }
@@ -1114,7 +1108,6 @@
                 "customerBranch",
                 "customerId",
                 "disbursedAmountInPaisa",
-                "disbursementFromBankAccountNumber",
                 "disbursementSchedules",
                 "dob",
                 "dscIntegrationId",
@@ -1145,7 +1138,6 @@
                 "nominees",
                 "numberOfDisbursed",
                 "numberOfDisbursements",
-                "originalAccountNumber",
                 "ornamentsAppraisals",
                 "partnerCode",
                 "pendingApproval",
@@ -1164,14 +1156,7 @@
                 "witnessLastName",
                 "witnessMiddleName",
                 "witnessRelationship",
-                "wmName",
-                "customerBankIfscCode",
-                "customerBankAccountNumber",
-                "documentTracking",
-                "relation",
-                "husbandOrFatherFirstName",
-                "husbandOrFatherMiddleName",
-                "husbandOrFatherLastName"
+                "wmName"
             ]
         }
     }

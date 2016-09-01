@@ -375,12 +375,12 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model=\"replaceAll\"\n" +
+    "    <input sf-field-model\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"{{form.fieldType||'text'}}\"\n" +
+    "           type=\"text\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
@@ -395,7 +395,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
     "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
@@ -845,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"simple\"\n" +
+    "          list-style=\"basic\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -894,6 +894,11 @@ $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<div ng-if=\"showLoading\" class=\"cantina-loader-wrapper\"><div class=\"cantina-loader\"></div></div>\n" +
     "	<div ng-if=\"maskSchemaForm\" class=\"spinner-section-far-wrapper\"><div class=\"spinner-section-far\"></div></div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
+    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
+    "</div>\n" +
+    "")
 
 $templateCache.put("irf/template/searchListWrapper/modal-resource-queue.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
@@ -1028,11 +1033,6 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
-    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
-    "</div>\n" +
-    "")
 
 $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
     "	<table class=\"table table-condensed\">\n" +
@@ -1175,6 +1175,100 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1682,100 +1776,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 		}
 	};
 }])*/
-;
-
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
 ;
 
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
@@ -2623,7 +2623,6 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
-			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2633,8 +2632,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2697,23 +2696,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autolov && $scope.modelValue) {
-			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			getSearchPromise().then(function(out){
-				if (out.body && out.body.length === 1) {
-					$scope.callback(out.body[0]);
-				} else {
-					displayListOfResponse(out);
-					self.launchLov();
-				}
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			}, function(){
-				self.launchLov();
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			});
-		} else {
-			self.launchLov();
-		}
+		self.launchLov();
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2726,37 +2709,29 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			templateUrl: "irf/template/lov/modal-lov.html",
 			controller: function($scope) {
 				$scope.$broadcast('schemaFormValidate');
-				//$log.info($scope.locals);
+				$log.info($scope.locals);
 			}
 		});
 	};
 
 	$scope.inputActions = {};
 
-	var getSearchPromise = function() {
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+			promise = $scope.form.search($scope.inputModel, $scope.form);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
 		}
-		return promise;
-	};
-
-	var displayListOfResponse = function(out) {
-		$scope.listResponseItems = out.body;
-		$scope.listDisplayItems  =[];
-		angular.forEach(out.body, function(value, key) {
-			c = $scope.form.getListDisplayItem(value, key);
-			this.push(c);
-		}, $scope.listDisplayItems);
-	};
-
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
-		getSearchPromise().then(function(out){
-			displayListOfResponse(out);
+		promise.then(function(out){
+			$scope.listResponseItems = out.body;
+			$scope.listDisplayItems  =[];
+			angular.forEach(out.body, function(value, key) {
+				c = $scope.form.getListDisplayItem(value, key);
+				this.push(c);
+			}, $scope.listDisplayItems);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -2771,7 +2746,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	self.close = function() {
-		if ($scope.modalWindow) $scope.modalWindow.close();
+		$scope.modalWindow.close();
 		$scope.listResponseItems = null;
 		$scope.listDisplayItems = null;
 	};
@@ -27621,6 +27596,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
 
+        var getSanctionedAmount = function(model){
+            var fee = 0;
+            if(!_.isNaN(model.loanAccount.processingFeeInPaisa))
+                fee+= parseInt(model.loanAccount.processingFeeInPaisa/100);
+            if(!_.isNaN(model.loanAccount.insuranceFee))
+                fee+=model.loanAccount.insuranceFee;
+            if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                fee+=model.loanAccount.commercialCibilCharge;
+            if(!_.isNaN(model.loanAccount.securityEmi))
+                fee+=model.loanAccount.securityEmi;
+            console.log(parseInt(model.loanAccount.processingFeeInPaisa/100));
+            console.log(model.loanAccount.insuranceFee);
+            console.log(model.loanAccount.commercialCibilCharge);
+            console.log(model.loanAccount.securityEmi);
+
+            model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
+
+        };
+
         return {
             "type": "schema-form",
             "title": "Loan Input",
@@ -27632,8 +27626,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.disbursementSchedules=[];
                 model.loanAccount.collateral=[{quantity:1}];
                 model.loanAccount.guarantors=[{guaFirstName:""}];
+                model.loanAccount.nominees=[{nomineeFirstName:""}];
                 model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
                 model.loanAccount.commercialCibilCharge = 750;
+                getSanctionedAmount(model);
                 console.log(model);
             },
             offline: false,
@@ -27660,14 +27656,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "additional.branchName",
                                 "readonly":true
                             },
-                            {
-                                "key": "additional.entityId",
 
-                            },
-                            {
-                                "key": "additional.entityName",
-
-                            },
                             {
                                 "key": "loanAccount.partnerCode",
                                 "title": "PARTNER",
@@ -27680,12 +27669,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.loanCentre.centreId",
-                                type:"text",
+
                                 title:"CENTRE_ID",
-                                filter: {
+                                /*filter: {
                                     "parentCode as branch": "model.branchId"
                                 },
-                                screenFilter: true
+                                screenFilter: true*/
                             },
 
                             {
@@ -27701,7 +27690,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         "type": "fieldset",
-                        "title": "CUSTOMER_DETAILS",
+                        "title": "ENTITY_DETAILS",
                         "items": [
                             {
                                 "key": "loanAccount.urnNo",
@@ -27731,9 +27720,64 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
                                     "firstName":"customer.firstName",
-                                    "fatherFirstName":"loanAccount.husbandOrFatherFirstName",
-                                    "fatherMiddleName":"loanAccount.husbandOrFatherMiddleName",
-                                    "fatherLastName":"loanAccount.husbandOrFatherLastName"
+
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'customerId':inputModel.customerId,
+                                        'branchName': inputModel.branch ||SessionStore.getBranch(),
+                                        'firstName': inputModel.first_name,
+                                        'centreCode':inputModel.centreCode,
+                                        //'customerType':"Enterprise"
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.firstName,
+                                        data.id,
+                                        data.urnNo
+                                    ];
+                                }
+                            },
+                            {
+                                "key":"loanAccount.customerId",
+                                "title":"ENTITY_ID"
+                            },
+                            {
+                                "key": "customer.firstName",
+                                "title": "ENTITY_NAME"
+                            },
+                            {
+                                "key": "loanAccount.applicant",
+                                "title": "APPLICANT_URN_NO",
+                                "type":"lov",
+                                "inputMap": {
+                                    "customerId":{
+                                        "key":"customer.customerId",
+                                        "title":"CUSTOMER_ID"
+                                    },
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "branch": {
+                                        "key": "customer.branch",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    },
+                                    "centreCode": {
+                                        "key": "customer.centreCode",
+                                        "type": "select",
+                                        "screenFilter": true
+                                    }
+                                },
+                                "outputMap": {
+
+                                    "urnNo": "loanAccount.applicant",
+                                    "firstName":"customer.applicantName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
@@ -27755,12 +27799,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                "key":"loanAccount.customerId",
-                                "title":"CUSTOMER_ID"
-                            },
-                            {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
+                                "key":"customer.applicantName",
+                                "title":"APPLICANT_NAME"
+
                             },
 
                             {
@@ -27832,7 +27873,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "onChange":function(value,form,model){
 
                                     model.loanAccount.insuranceFee = 0.004*value;
-
+                                    getSanctionedAmount(model);
 
                                 }
                             },
@@ -27842,7 +27883,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 title:"PROCESSING_FEE_MULTIPLIER",
                                 onChange:function(value,form,model){
                                     model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
-
+                                    getSanctionedAmount(model);
 
 
                                 }
@@ -27850,19 +27891,43 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.processingFeeInPaisa",
                                 type:"amount",
-                                title:"PROCESSING_FEE_IN_PAISA"
+                                title:"PROCESSING_FEE_IN_PAISA",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.insuranceFee",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.commercialCibilCharge",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.securityEmi",
-                                type:"amount"
+                                type:"amount",
+                                onChange:function(value,form,model){
+
+                                    getSanctionedAmount(model);
+
+
+                                }
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -28075,9 +28140,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 onChange:function(value,form,model){
                                     switch(value){
-                                        case "applicant": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo; break;
-                                        case "coapplicant":model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo; break;
-                                        case "grarantor": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo; break;
+                                        case "applicant":
+                                            if(_.isEmpty(model.loanAccount.applicant)){
+                                                Utils.alert("Please Select an Applicant");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
+                                            break;
+                                        case "coapplicant":
+                                            if(_.isEmpty(model.loanAccount.coBorrowerUrnNo)){
+                                                Utils.alert("Please Select a Co-Applicant");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
+                                            break;
+                                        case "guarantor":
+                                            if(_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)){
+                                                Utils.alert("Please Select a Guarantor");
+                                                break;
+                                            }
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
+                                            break;
                                     }
                                 }
                                 
@@ -28088,6 +28171,67 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             }
                         ]
                         
+                    },
+                    {
+                        "type":"fieldset",
+                        "title":"NOMINEE",
+                        "items":[
+                            {
+                                "key":"loanAccount.nominees",
+                                "type":"array",
+                                "title":"NOMINEE",
+                                "add":null,
+                                "remove":null,
+                                "items":[
+                                    {
+                                        key:"loanAccount.nominees[].nomineeFirstName",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeGender",
+                                        type:"select"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDOB",
+                                        type:"date"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDoorNo",
+
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeLocality",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeStreet",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeDistrict",
+                                        type:"select"
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeState",
+
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineePincode",
+
+                                    },
+                                    {
+                                        key:"loanAccount.nominees[].nomineeRelationship",
+                                        type:"select"
+
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         "type": "fieldset",
