@@ -58,7 +58,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.entityId",
                         title:"ENTITY_ID",
-                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'"
+                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
+                        readonly: true
                     },
                     {
                         key: "customer.firstName",
@@ -192,11 +193,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    $log.info("inputModel.centreCode: " + inputModel.centreCode);
+                                    if (!inputModel.branchName)
+                                        inputModel.branchName = SessionStore.getBranch();
                                     var promise = Enrollment.search({
-                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode,
-                                        'customerType': 'Individual'
+                                        'centreCode': inputModel.centreCode
+                                        //'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },
