@@ -133,6 +133,15 @@
                         "Stage01"
                     ]
                 },
+                "addressProofReverseImageId": {
+                    "type": "string",
+                    "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "ADDRESSPROOF",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+                },
                 "addressProofIssueDate": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_ISSUE_DATE",
@@ -790,6 +799,15 @@
                         "Stage01"
                     ]
                 },
+                "identityProofReverseImageId": {
+                    "type": "string",
+                    "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "IDENTITYPROOF",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+                },
                 "identityProofNo": {
                     "type": "string",
                     "title": "IDENTITY_PROOFNO",
@@ -802,6 +820,14 @@
                     "title": "CENTRE",
                     "enumCode": "centre",
                     "captureStages":[
+                        "Stage01"
+                    ]
+                },
+                "centreId": {
+                    "type": "string",
+                    "title": "CENTRE_ID",
+                    "enumCode": "centre",
+                    "captureStages": [
                         "Stage01"
                     ]
                 },
@@ -967,6 +993,17 @@
                     "captureStages": [
                         "Stage02"
                     ]
+                },
+                "oldCustomerId": {
+                    "type": "string",
+                    "title": "OLD_CUSTOMER_ID",
+                    "captureStages": [
+                        "Stage01"
+                    ]
+                },
+                "ownership": {
+                    "type": "string",
+                    "title": "OWNERSHIP"
                 },
                 "houseVerificationPhoto": {
                     "type": "string",
@@ -1731,7 +1768,20 @@
                         ]
                     }
                 },
-
+                "inCurrentAddressSince": {
+                    "type": "string",
+                    "title": "IN_CURRENT_ADDRESS_SINCE",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+                },
+                "inCurrentAreaSince": {
+                    "type": "string",
+                    "title": "IN_CURRENT_AREA_SINCE",
+                    "captureStages":[
+                        "Stage01"
+                    ]
+                },
                 "villageName": {
                     "type": "string",
                     "title": "VILLAGE_NAME",
@@ -1742,7 +1792,6 @@
                 }
             },
             "required": [
-                "aadhaarNo",
                 "enrolledAs",
                 "centreCode",
                 "addressProof",
@@ -1764,21 +1813,11 @@
                 "pincode",
                 "religion",
                 "state",
-                "doorNo",
-                "street",
-                "postOffice",
-                "locality",
                 "district",
-                "mailingDoorNo",
-                "mailingStreet",
-                "mailingLocality",
-                "mailingPostoffice",
                 "mailingDistrict",
                 "mailingState",
                 "mailingPincode",
-                "landLineNo",
-                "mobilePhone",
-                "stdCode"
+                "landLineNo"
             ]
         },
         "enrollmentAction": {

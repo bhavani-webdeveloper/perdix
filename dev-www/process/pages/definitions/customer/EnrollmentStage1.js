@@ -28,7 +28,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
-            model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
+            model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
             && model.customer.udf.userDefinedFieldValues.udf1) {
@@ -43,7 +43,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
 
     var validateData = function(model) {
         PageHelper.clearErrors();
-        if (model.customer.udf && model.customer.udf.userDefinedFieldValues) {
+        if (_.hasIn(model.customer, 'udf') && model.customer.udf && model.customer.udf.userDefinedFieldValues) {
             if (model.customer.udf.userDefinedFieldValues.udf36
                 || model.customer.udf.userDefinedFieldValues.udf35
                 || model.customer.udf.userDefinedFieldValues.udf34) {
@@ -53,7 +53,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
-        if (model.customer.additionalKYCs[0]
+        if (_.hasIn(model.customer, 'additionalKYCs') && model.customer.additionalKYCs[0]
             && (model.customer.additionalKYCs[0].kyc1ProofNumber
             || model.customer.additionalKYCs[0].kyc1ProofType
             || model.customer.additionalKYCs[0].kyc1ImagePath
@@ -77,7 +77,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 return false;
             }
         }
-        if (model.customer.additionalKYCs[1]
+        if (_.hasIn(model.customer, 'additionalKYCs')  && model.customer.additionalKYCs[1]
             && (model.customer.additionalKYCs[1].kyc1ProofNumber
             || model.customer.additionalKYCs[1].kyc1ProofType
             || model.customer.additionalKYCs[1].kyc1ImagePath
