@@ -26,19 +26,22 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
                 },
                 {
                     "key": "loanAccount.customerName",
+                    "readonly": true,
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffAmount",
+                    "key": "loanAccount.lastTransactionAmount",
+                    "readonly": true,
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffDate",
+                    "key": "loanAccount.transactionDate",
+                    "readonly": true,
                     "type": "date"
                 },
                 {
                     "type": "submit",
-                    "title": "WRITE_OFF"
+                    "title": "REVERSE"
                 }
             ]
         }],
