@@ -1747,7 +1747,6 @@
                 "addressProof",
                 "addressProofImageId",
                 "addressProofNo",
-                "date",
                 "dateOfBirth",
                 "expenditures",
                 "fatherFirstName",
@@ -1762,9 +1761,20 @@
                 "maritalStatus",
                 "photoImageId",
                 "pincode",
-                "place",
                 "religion",
-                "state"
+                "state",
+                "doorNo",
+                "street",
+                "postOffice",
+                "locality",
+                "district",
+                "mailingDoorNo",
+                "mailingStreet",
+                "mailingLocality",
+                "mailingPostoffice",
+                "mailingDistrict",
+                "mailingState",
+                "mailingPincode"
             ]
         },
         "enrollmentAction": {

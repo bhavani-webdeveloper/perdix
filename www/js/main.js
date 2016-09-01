@@ -8189,8 +8189,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         reqData['enrollmentAction'] = 'SAVE';
         /* TODO fix for KYC not saving **/
         if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
-            reqData.additionalKYCs = [];
-            reqData.additionalKYCs.push({});
+            reqData.customer.additionalKYCs = [];
+            reqData.customer.additionalKYCs.push({});
         }
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
@@ -11038,7 +11038,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.entityId",
                         title:"ENTITY_ID",
-                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'"
+                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
+                        readonly: true
                     },
                     {
                         key: "customer.firstName",
@@ -11070,8 +11071,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     //},
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince",
-                        type: "number",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
+                        type: "date",
+                        title: "BUSINESS_IN_CURRENT_ADDRESS_SINCE"
                     },
                     {
                         "key": "customer.latitude",
@@ -11172,11 +11173,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    $log.info("inputModel.centreCode: " + inputModel.centreCode);
+                                    if (!inputModel.branchName)
+                                        inputModel.branchName = SessionStore.getBranch();
                                     var promise = Enrollment.search({
-                                        'branchName': inputModel.branchName || SessionStore.getBranch(),
+                                        'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode,
-                                        'customerType': 'Individual'
+                                        'centreCode': inputModel.centreCode
+                                        //'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },
@@ -11669,32 +11673,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             type:"select",
                             screenFilter: true*/
                         },
-                        {
-                            key: "customer.pincode",
-                            type: "lov",
-                            fieldType: "number",
-                            autolov: true,
-                            inputMap: {
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
-                            },
-                            outputMap: {
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
-                            },
-                            searchHelper: formHelper,
-                            search: function(inputModel, form, model) {
-                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            }
-                        },
+                        "customer.pincode",
                         {
                             key:"customer.state"/*,
                             type:"select",
@@ -12425,28 +12404,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         offline: true,
                         type:"file",
                         fileType:"image/*"
-                    },
-                    {
-                        "key":"customer.verifications",
-                        "title":"VERIFICATION",
-                        "add":null,
-                        "remove":null,
-                        "items":[
-                            {
-                                key:"customer.verifications[].houseNo"
-                            },
-                            {
-                                key:"customer.verifications[].houseNoIsVerified"
-                            },
-                            {
-                                key:"customer.verifications[].referenceFirstName"
-                            },
-                            {
-                                key:"customer.verifications[].relationship",
-                                type:"select"
-                            }
-
-                        ]
                     },
                     {
                         key: "customer.date",
@@ -27658,17 +27615,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
     ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan){
+        "Utils",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils){
 
         var branchId = SessionStore.getBranchId();
+        var branchName = SessionStore.getBranch();
 
         return {
             "type": "schema-form",
             "title": "Loan Input",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+
+                model.loanAccount = {branchId :branchId};
+                model.additional = {branchName : branchName};
                 model.loanAccount.disbursementSchedules=[];
-                model.loanAccount.branchId = branchId;
+                model.loanAccount.collateral=[{quantity:1}];
+                model.loanAccount.guarantors=[{guaFirstName:""}];
+                model.loanAccount.loanApplicationDate = Utils.getCurrentDate();
+                model.loanAccount.commercialCibilCharge = 750;
+                console.log(model);
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -27688,8 +27654,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items": [
                             {
                                 "key": "loanAccount.branchId",
-                                "title": "BRANCH_ID",
-                                readonly:true
+                                "readonly":true
+                            },
+                            {
+                                "key": "additional.branchName",
+                                "readonly":true
+                            },
+                            {
+                                "key": "additional.entityId",
+
+                            },
+                            {
+                                "key": "additional.entityName",
 
                             },
                             {
@@ -27703,12 +27679,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type": "select"
                             },
                             {
-                                "key":"loanAccount.loanCentre.centreId",
-                                "title":"CENTRE_ID"
+                                key:"loanAccount.loanCentre.centreId",
+                                type:"text",
+                                title:"CENTRE_ID",
+                                filter: {
+                                    "parentCode as branch": "model.branchId"
+                                },
+                                screenFilter: true
                             },
 
                             {
-                                "key": "loanAccount.tenure"
+                                "key": "loanAccount.tenure",
+                                "title":"TENURE_IN_MONTHS"
                             },
                             {
                                 "key": "loanAccount.frequency",
@@ -27783,7 +27765,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                             {
                                 "key": "loanAccount.coBorrowerUrnNo",
-                                "title": "CO_BORROWER_URN_NO",
+                                "title": "CO_APPLICANT_URN_NO",
                                 "type":"lov",
                                 "inputMap": {
                                     "customerId":{
@@ -27831,7 +27813,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"customer.coBorrowerName",
-                                "title":"Co Borrower Name"
+                                "title":"CO_APPLICANT_NAME"
                             }
 
 
@@ -27843,13 +27825,54 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title": "Account Details",
                         "items": [
 
+                            {
+                                "key": "loanAccount.loanAmountRequested",
+                                "type":"amount",
+                                "title":"LOAN_AMOUNT_REQUESTED",
+                                "onChange":function(value,form,model){
 
+                                    model.loanAccount.insuranceFee = 0.004*value;
+
+
+                                }
+                            },
+                            {
+                                key:"additional.processingFeeMultiplier",
+
+                                title:"PROCESSING_FEE_MULTIPLIER",
+                                onChange:function(value,form,model){
+                                    model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
+
+
+
+                                }
+                            },
+                            {
+                                key:"loanAccount.processingFeeInPaisa",
+                                type:"amount",
+                                title:"PROCESSING_FEE_IN_PAISA"
+                            },
+                            {
+                                key:"loanAccount.insuranceFee",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.commercialCibilCharge",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.securityEmi",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.otherFee",
+                                type:"amount"
+                            },
                             {
                                 "key": "loanAccount.loanAmount",
                                 "type":"amount",
-                                "title":"LOAN_AMOUNT"
+                                "title":"SANCTIONED_AMOUNT"
                             },
-
                             {
                                 "key":"loanAccount.interestRate"
 
@@ -27882,25 +27905,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                             }
                         ]
-                    },
-                    {
-                        "type":"fieldset",
-                        "title":"Fee",
-                        "items":[
-                            {
-                                key:"loanAccount.processingFeeInPaisa",
-                                type:"amount"
-                            },
-                            {
-                                key:"loanAccount.insuranceFee",
-                                type:"amount"
-                            },
-                            {
-                                key:"loanAccount.commercialCibilCharge",
-                                type:"amount"
-                            },
-                        ]
                     }
+
 
 
                 ]
@@ -27918,6 +27924,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key":"loanAccount.collateral[].collateralType",
                                 "type":"select"
+
                                 
                             },
                             {
@@ -27937,17 +27944,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralValue",
-                                "type":"amount"
+                                "type":"amount",
+                                "title":"COLLATERAL_VALUE"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].totalValue",
+                                "type":"amount",
+                                "title":"TOTAL_VALUE"
                             },
                             {
                                 "key":"loanAccount.collateral[].marginValue",
                                 "type":"amount",
-                                "title":"MARGIN_VALUE"
+                                "title":"PURCHASE_PRICE"
                             },
                             {
                                 "key":"loanAccount.collateral[].loanToValue",
                                 "type":"amount",
-                                "title":"LOAN_TO_VALUE"
+                                "title":"PRESENT_VALUE"
                             },
                             {
                                 "key":"loanAccount.collateral[].collateral1FilePath",
@@ -28049,6 +28062,34 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         ]
                     },
                     {
+                        "type":"fieldset",
+                        "title":"PORTFOLIO_URN",
+                        "items":[
+                            {
+                                "key":"additional.portfolioUrnSelector",
+                                "type":"select",
+                                "titleMap":{
+                                    "applicant":"Applicant",
+                                    "coapplicant":"Co-Applicant",
+                                    "guarantor":"Guarantor"
+                                },
+                                onChange:function(value,form,model){
+                                    switch(value){
+                                        case "applicant": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo; break;
+                                        case "coapplicant":model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo; break;
+                                        case "grarantor": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo; break;
+                                    }
+                                }
+                                
+                            },
+                            {
+                                key:"loanAccount.portfolioInsuranceUrn"
+                                
+                            }
+                        ]
+                        
+                    },
+                    {
                         "type": "fieldset",
                         "title": "Disbursement Details",
                         "items": [
@@ -28147,12 +28188,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             key:"loanAccount.customerBankIfscCode",
                             title:"CUSTOMER_BANK_IFSC"
 
-                        },
-                        {
-                            "key": "loanAccount.loanAmountRequested",
-                            "type":"amount",
-                            "title":"LOAN_AMOUNT_REQUESTED"
-                        },
+                        }
+
 
 
                     ]
@@ -28411,8 +28448,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper){
             return {
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
@@ -28427,7 +28464,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                 offline: false,
                 definition: {
                     title: "ReadyForDisbursement",
-                    autoSearch: false,
+                    autoSearch: true,
                     sorting:true,
                     sortByColumns:{
                         "customerSignatureDate":"Customer Signature Date",
@@ -28495,19 +28532,19 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         },
                         getListItem: function(item){
                             return [
-                                item.customerName,
-                                "Disbursed Amount:  &#8377;"+item.disbursedAmount+", Disbursement Amount :  &#8377;"+item.disbursementAmount,
-                                "Customer Signature Date  : " + item.customerSignatureDate+", Scheduled Disbursement Date :"+item.scheduledDisbursementDate
+                                item.customerName + " ( Account #: "+item.accountNumber+")",
+                                "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
+                                "Customer Signature Date  : " + (_.isEmpty(item.customerSignatureDate)?" NA ":item.customerSignatureDate)+", Scheduled Disbursement Date :"+(_.isEmpty(item.scheduledDisbursementDate)?" NA ":item.scheduledDisbursementDate)
                             ]
                         },
                         getActions: function(){
                             return [
                                 {
-                                    name: "Book Loan",
+                                    name: "Request Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                        $log.info("Redirecting");
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                       
+
                                     },
                                     isApplicable: function(item, index){
                                         return true;
@@ -28596,6 +28633,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     listOptions: {
                         itemCallback: function(item, index) {
                             $log.info(item);
+
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
@@ -28613,11 +28651,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         getActions: function(){
                             return [
                                 {
-                                    name: "Book Loan",
+                                    name: "Update Confirmation Status",
                                     desc: "",
                                     fn: function(item, index){
-                                        $log.info("Redirecting");
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.LoanBooking', pageId: item.loanId});
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.disbursement.DisbursementConfirmation",
+                                            pageId:item.loanId
+                                        });
+
+
                                     },
                                     isApplicable: function(item, index){
                                         return true;
@@ -28732,6 +28774,91 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         pageName: 'IndividualLoanBookingConfirmation',
                         pageId: model.customer.id
                     });
+                }
+            }
+        };
+    }]);
+
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementConfirmation"),
+    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource",
+        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource){
+
+        var branch = SessionStore.getBranch();
+
+        return {
+            "type": "schema-form",
+            "title": "DISBURSEMENT_CONFIRMATION",
+            "subTitle": "",
+            initialize: function (model, form, formCtrl) {
+
+                var loanId = $stateParams['pageId'];
+                PageHelper.showLoader();
+                PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
+                IndividualLoan.get({id: $stateParams.pageId},function (resp,head) {
+                        PageHelper.showProgress('loan-fetch', 'Done.', 5000);
+                        model.loanAccount = resp;
+
+                    },
+                    function(resp){
+                        PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
+                        PageHelper.showErrors(resp);
+
+                }).$promise.finally(function(){
+                        PageHelper.hideLoader();
+                });
+            },
+            offline: false,
+            getOfflineDisplayItem: function(item, index){
+
+            },
+            form: [{
+                "type": "box",
+                "title": "DISBURSEMENT_DETAILS",
+                "colClass": "col-sm-8",
+                "items": [
+
+                    {
+                        "key":"loanAccount.confirmationStatus",
+                        "type":"select",
+                        "titleMap":{
+                            "Confirmed":"Confirmed",
+                            "Rejected":"Rejected"
+                        },
+                        "title":"CONFIRMATION_STATUS"
+                    },
+                    {
+                        "key":"loanAccount.loanDisbursementDate",
+                        "type":"date",
+                        "title":"DISBURSEMENT_DATE"
+                    },
+                    {
+                        "key":"loanAccount.rejectionRemarks",
+                        "title":"FINANCE_TEAM_REJECTION_REMARKS"
+                    },
+                    {
+                        "key":"loanAccount.rejectionReason",
+                        title:"FINANCE_TEAM_REJECTION_REASON"
+                    },
+                    {
+                        "key":"loanAccount.rejectionDate",
+                        "type":"date",
+                        "title":"REJECTION_DATE"
+                    },
+                    {
+                        "type": "actionbox",
+                        "items": [{
+                            "type": "submit",
+                            "title": "Update"
+                        }]
+                    }
+                ]
+            }],
+            schema: function() {
+                return SchemaResource.getLoanAccountSchema().$promise;
+            },
+            actions: {
+                submit: function(model, form, formName){
+                    alert("submit");
                 }
             }
         };
