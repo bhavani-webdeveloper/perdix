@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-    ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q",
+    ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
         "Utils",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q){
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -11,15 +11,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         var getSanctionedAmount = function(model){
             var fee = 0;
-            if(!_.isNaN(model.loanAccount.processingFeeInPaisa))
-                fee+= parseInt(model.loanAccount.processingFeeInPaisa/100);
-            if(!_.isNaN(model.loanAccount.insuranceFee))
-                fee+=model.loanAccount.insuranceFee;
-            if(!_.isNaN(model.loanAccount.commercialCibilCharge))
-                fee+=model.loanAccount.commercialCibilCharge;
-            if(!_.isNaN(model.loanAccount.securityEmi))
-                fee+=model.loanAccount.securityEmi;
-            $log.info(parseInt(model.loanAccount.processingFeeInPaisa/100));
+            if(model.loanAccount.insuranceFee)
+                if(!_.isNaN(model.loanAccount.insuranceFee))
+                    fee+=model.loanAccount.insuranceFee;
+            if(model.loanAccount.commercialCibilCharge)
+                if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                    fee+=model.loanAccount.commercialCibilCharge;
+            if(model.loanAccount.securityEmi)
+                if(!_.isNaN(model.loanAccount.securityEmi))
+                    fee+=model.loanAccount.securityEmi;
             $log.info(model.loanAccount.insuranceFee);
             $log.info(model.loanAccount.commercialCibilCharge);
             $log.info(model.loanAccount.securityEmi);
@@ -40,11 +40,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount = model.loanAccount || {branchId :branchId};
                 model.additional = {branchName : branchName};
                 model.loanAccount.bankId = bankId;
-                model.loanAccount.disbursementSchedules=[];
-                model.loanAccount.collateral=[{quantity:1}];
-                model.loanAccount.guarantors=[{guaFirstName:""}];
-                model.loanAccount.nominees=[{nomineeFirstName:""}];
-                model.loanAccount.loanApplicationDate = Utils.getCurrentDate;
+                model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
+                model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
+                model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
+                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate;
                 model.loanAccount.commercialCibilCharge = 750;
                 model.loanAccount.documentTracking="PENDING";
                 model.loanAccount.isRestructure = false;
@@ -288,14 +288,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"LOAN_AMOUNT_REQUESTED",
                                 "onChange":function(value,form,model){
                                     model.loanAccount.insuranceFee = 0.004*value;
-                                    getSanctionedAmount(model);
-                                }
-                            },
-                            {
-                                key:"additional.processingFeeMultiplier",
-                                title:"PROCESSING_FEE_MULTIPLIER",
-                                onChange:function(value,form,model){
-                                    model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
                                     getSanctionedAmount(model);
                                 }
                             },
