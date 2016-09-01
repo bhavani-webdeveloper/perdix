@@ -5,9 +5,9 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
 
     return {
         "type": "schema-form",
-        "title": "WRITE_OFF",
+        "title": "REVERSE",
         initialize: function (model, form, formCtrl) {
-            $log.info("WriteOff Screen got initialized");
+            $log.info("Reversale Screen got initialized");
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
         },
         form: [{
             "type": "box",
-            "title": "WRITE_OFF", // sample label code
+            "title": "REVERSE", // sample label code
             "colClass": "col-sm-12", // col-sm-6 is default, optional
 
             "items": [
@@ -54,7 +54,7 @@ irf.pageCollection.factory(irf.page("loans.individual.reversal.reversalExecution
                 // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
                 {
                     $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.AccountQueue', pageId: ''});
+                    $state.go('Page.Engine', {pageName: 'loans.individual.reversal.Search', pageId: ''});
                 }
             }
         }
