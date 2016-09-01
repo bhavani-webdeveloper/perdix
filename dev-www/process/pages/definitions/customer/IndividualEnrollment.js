@@ -266,32 +266,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             type:"select",
                             screenFilter: true*/
                         },
-                        {
-                            key: "customer.pincode",
-                            type: "lov",
-                            fieldType: "number",
-                            autolov: true,
-                            inputMap: {
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
-                            },
-                            outputMap: {
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
-                            },
-                            searchHelper: formHelper,
-                            search: function(inputModel, form, model) {
-                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            }
-                        },
+                        "customer.pincode",
                         {
                             key:"customer.state"/*,
                             type:"select",
@@ -1022,28 +997,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         offline: true,
                         type:"file",
                         fileType:"image/*"
-                    },
-                    {
-                        "key":"customer.verifications",
-                        "title":"VERIFICATION",
-                        "add":null,
-                        "remove":null,
-                        "items":[
-                            {
-                                key:"customer.verifications[].houseNo"
-                            },
-                            {
-                                key:"customer.verifications[].houseNoIsVerified"
-                            },
-                            {
-                                key:"customer.verifications[].referenceFirstName"
-                            },
-                            {
-                                key:"customer.verifications[].relationship",
-                                type:"select"
-                            }
-
-                        ]
                     },
                     {
                         key: "customer.date",
