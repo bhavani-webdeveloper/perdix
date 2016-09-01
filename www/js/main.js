@@ -3871,14 +3871,14 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 		},
 		getCurrentDate:function(){
             //TODO : format date
-            var date = new Date();
-            var y = date.getFullYear();
-            var m = (date.getMonth()+1);
-            var d = date.getDate();
-            m = (m.toString().length<2)?("0"+m):m;
-            d = (d.toString().length<2)?("0"+d):d;
+            // var date = new Date();
+            // var y = date.getFullYear();
+            // var m = (date.getMonth()+1);
+            // var d = date.getDate();
+            // m = (m.toString().length<2)?("0"+m):m;
+            // d = (d.toString().length<2)?("0"+d):d;
 
-            return y+"-"+m+"-"+d;
+            return moment().format('YYYY-MM-DD');
         },
 		removeNulls:function(obj, recurse) {
 
