@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
-["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
@@ -9,8 +9,11 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
+            model.creditValidation = model.creditValidation || {};
+
             if (model._credit) {
-                model.creditValidation = model.creditValidation || {};
+                model.creditValidation = model._credit;               
+                model.creditValidation.loanRepaymentDetailsId = model._credit.id;
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
@@ -36,8 +39,7 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 			{
 				"type":"box",
 				"title":"Payment",
-				"items":[
-                    {
+				"items":[{
                         key:"creditValidation.enterprise_name",
                         title:"ENTERPRISE_NAME",
                         readonly:true
@@ -96,8 +98,8 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
                         titleMap:{
                             "1":"Fully Paid",
                             "2":"Partially Paid",
-                            "3":"Not Paid",
-                            "4":"Incorrect Information"
+                            "3":"Not Paid"
+                            //"4":"Incorrect Information"
                                                   }
                     },
                     {
@@ -134,14 +136,29 @@ function($log, $q, ManagementHelper, PageHelper,formHelper,irfProgressMessage,
 				$log.info("Inside submit()");
 				console.warn(model);
                 PageHelper.showLoader();
-
-                LoanProcess.repay(model.repayment, function(response){
+                if(model.creditValidation.status == "1")
+                {
+                    $log.info("Inside FullPayment()");
+                    LoanProcess.approve("loanRepaymentDetailsId: " + model.creditValidation.loanRepaymentDetailsId, function(response){
                     PageHelper.hideLoader();
 
-                }, function(errorResponse){
+                    }, function(errorResponse){
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
-                });
+                    });
+
+                } else {
+                    $log.info("Outside FullPayment()");
+                    LoanProcess.repay(model.creditValidation, function(response){
+                    PageHelper.hideLoader();
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
+                
 			}
 		}
 	};

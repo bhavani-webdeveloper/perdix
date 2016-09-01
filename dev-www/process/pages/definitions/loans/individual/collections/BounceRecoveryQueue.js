@@ -77,7 +77,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.p2pKGFSList({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,

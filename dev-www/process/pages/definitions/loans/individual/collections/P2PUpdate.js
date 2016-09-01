@@ -40,7 +40,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly:true
                     },
                     {
-                        key: "promise.loanacno",
+                        key: "promise.accountNumber",
                         title: "LOAN_ACCOUNT_NUMBER",
                         readonly: true
                     },
@@ -59,13 +59,13 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }
                     },
                     {
-                        key:"promise.Promise2PayDate",
+                        key:"promise.promiseToPayDate",
                         title:"PROMISE_TO_PAY_DATE",
                         readonly:false,
                         type:"date",
                     },
                     {
-                        key: "promise.customerCategory",
+                        key: "promise.customerCategoryLoanOfficer",
                         title: "CUSTOMER_CATEGORY",
                         type: "select",
                         titleMap: {
@@ -97,7 +97,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }]
                     },
 					{
-						key:"promise.reasonforOthers",
+						key:"promise.overdueReasons",
                         title:"OTHER_REASON",
 						type:"textarea",
                         condition:"model.Reason=='Others'"

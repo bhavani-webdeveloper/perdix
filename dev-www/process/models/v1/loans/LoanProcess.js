@@ -63,6 +63,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         p2pUpdate:{
             method:'POST',
             url:BASE_URL+ "/api/promisetopaykgfs"
+        },
+        approve:{
+            method:'POST',
+            url:endpoint+ "/approverepayment"
         }
 
     });
