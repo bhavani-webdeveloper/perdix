@@ -262,9 +262,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         "customer.postOffice",
                         {
-                            key:"customer.district"/*,
-                            type:"select",
-                            screenFilter: true*/
+                            key:"customer.district"
                         },
                         "customer.pincode",
                         {
@@ -288,9 +286,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.mailingLocality",
                         "customer.mailingPostoffice",
                         {
-                            key:"customer.mailingDistrict",
-                            type:"select",
-                            screenFilter: true
+                            key:"customer.mailingDistrict"
+                            //type:"select",
+                            //screenFilter: true
                         },
                         "customer.mailingPincode",
                         {

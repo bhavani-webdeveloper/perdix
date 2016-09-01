@@ -1,8 +1,18 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource",
-        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource){
+    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Bank",
+        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Bank){
 
         var branch = SessionStore.getBranch();
+
+        var banks = [];
+        var getBankById = function(banks, id){
+            for (var i=0;i<banks.length;i++){
+                if (banks[i].obj.id == id){
+                    return banks[i];
+                }
+            }
+            return null;
+        }
 
         return {
             "type": "schema-form",
@@ -11,23 +21,51 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
                 $log.info("Demo Customer Page got initialized");
+                model._more = {};
 
                 var loanId = $stateParams['pageId'];
-                PageHelper.showProgress('loan-load', 'Loading loan details...');
+
+                PageHelper.showProgress('loan-load', 'Loading bank details...');
                 PageHelper.showLoader();
-                IndividualLoan.get({id: $stateParams.pageId})
+
+                Bank.getBankAccounts()
                     .$promise
                     .then(
-                        function (res) {
-                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-                            model.loanAccount = res;
+                        function(res){
+                            if (res.length==0){
+                                PageHelper.showProgress('loan-load', 'No bank details found', 2000);
+                                PageHelper.hideLoader();
+                                return;
+                            }
+                            for (var i=0; i<res.length; i++){
+                                var bank = res[i];
+                                banks.push({
+                                    name: bank.bankName + " - " + bank.branchName,
+                                    value: bank.id,
+                                    obj: bank
+                                })
+                            }
+                            model._more.banks = banks;
+                            PageHelper.showProgress('loan-load', 'Loading loan details');
+                            IndividualLoan.get({id: $stateParams.pageId})
+                                .$promise
+                                .then(
+                                    function (res) {
+                                        PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+                                        model.loanAccount = res;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
                         }, function(httpRes){
-                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-                            PageHelper.showErrors(httpRes);
-                        })
-                    .finally(function(){
-                        PageHelper.hideLoader();
-                    })
+
+                        }
+                    )
+
+
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -40,25 +78,34 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
                     {
-
                         "title": "BANK_NAME",
-                        "key": "loanAccount.bank_name",
+                        "key": "_more.bankId",
                         "type": "select",
-                        "enumCode": "bank"
-                        /*"titleMap": {
-                         "1": "ICICI Bank",
-                         "2": "Kotak Mahindra Bank"
-                         }*/
+                        "titleMap": banks,
+                        "onChange": function(a,b,c,d){
+                            var bank = getBankById(c._more.banks, a);
+                            if (bank!=null){
+                                c.loanAccount.disbursementFromBankAccountNumber = bank.obj.accountNumber;
+                                c._more.disbursementFromBankBranch = bank.obj.branchName + " - " + bank.obj.ifscCode;
+                            } else {
+                                c.loanAccount.disbursementFromBankAccountNumber = null;
+                                c._more.disbursementFromBankBranch = null;
+                            }
+
+                            //b.loanAccount.disbursementFromBankAccountNumber
+                        }
                     },
                     {
-                        "key": "loanAccount.accountNumber"
+                        "key": "loanAccount.disbursementFromBankAccountNumber"
+                    },
+                    {
+                        "key": "_more.disbursementFromBankBranch",
+                        "title": "DISBURSEMENT_FROM_BRANCH"
                     },
                     {
                         "key": "loanAccount.customerBranch"
                     },
                     {
-
-
                         "key": "loanAccount.applicationStatus",
                         "type": "select",
                         "enumCode": "status"

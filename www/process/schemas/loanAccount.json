@@ -367,7 +367,8 @@
                     "type": "integer"
                 },
                 "disbursementFromBankAccountNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "title": "DISBURSEMENT_FROM_ACCOUNT_NUMBER"
                 },
                 "disbursementSchedules": {
                     "type": "array",

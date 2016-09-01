@@ -1742,6 +1742,7 @@
                 }
             },
             "required": [
+                "aadhaarNo",
                 "enrolledAs",
                 "centreCode",
                 "addressProof",
@@ -1774,7 +1775,10 @@
                 "mailingPostoffice",
                 "mailingDistrict",
                 "mailingState",
-                "mailingPincode"
+                "mailingPincode",
+                "landLineNo",
+                "mobilePhone",
+                "stdCode"
             ]
         },
         "enrollmentAction": {
