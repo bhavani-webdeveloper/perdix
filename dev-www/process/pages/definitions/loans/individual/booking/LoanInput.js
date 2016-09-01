@@ -64,8 +64,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type": "select"
                             },
                             {
-                                "key":"loanAccount.loanCentre.centreId",
-                                "title":"CENTRE_ID"
+                                key:"loanAccount.loanCentre.centreId",
+                                type:"text",
+                                title:"CENTRE_ID",
+                                filter: {
+                                    "parentCode as branch": "model.branchId"
+                                },
+                                screenFilter: true
                             },
 
                             {
@@ -205,22 +210,53 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title": "Account Details",
                         "items": [
 
-
-                            {
-                                "key": "loanAccount.loanAmount",
-                                "type":"amount",
-                                "title":"LOAN_AMOUNT"
-                            },
                             {
                                 "key": "loanAccount.loanAmountRequested",
                                 "type":"amount",
                                 "title":"LOAN_AMOUNT_REQUESTED",
                                 "onChange":function(value,form,model){
-                                    model.loanAccount.processingFeeInPaisa = 0.02*value*100;
+
                                     model.loanAccount.insuranceFee = 0.004*value;
 
 
                                 }
+                            },
+                            {
+                                key:"additional.processingFeeMultiplier",
+
+                                title:"PROCESSING_FEE_MULTIPLIER",
+                                onChange:function(value,form,model){
+                                    model.loanAccount.processingFeeInPaisa = value*model.loanAccount.loanAmountRequested*100;
+
+
+
+                                }
+                            },
+                            {
+                                key:"loanAccount.processingFeeInPaisa",
+                                type:"amount",
+                                title:"PROCESSING_FEE_IN_PAISA"
+                            },
+                            {
+                                key:"loanAccount.insuranceFee",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.commercialCibilCharge",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.securityEmi",
+                                type:"amount"
+                            },
+                            {
+                                key:"loanAccount.otherFee",
+                                type:"amount"
+                            },
+                            {
+                                "key": "loanAccount.loanAmount",
+                                "type":"amount",
+                                "title":"SANCTIONED_AMOUNT"
                             },
                             {
                                 "key":"loanAccount.interestRate"
@@ -254,30 +290,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                             }
                         ]
-                    },
-                    {
-                        "type":"fieldset",
-                        "title":"Fee",
-                        "items":[
-                            {
-                                key:"loanAccount.processingFeeInPaisa",
-                                type:"amount",
-                                title:"PROCESSING_FEE_IN_PAISA"
-                            },
-                            {
-                                key:"loanAccount.insuranceFee",
-                                type:"amount"
-                            },
-                            {
-                                key:"loanAccount.commercialCibilCharge",
-                                type:"amount"
-                            },
-                            {
-                                key:"loanAccount.otherFee",
-                                type:"amount"
-                            },
-                        ]
                     }
+
 
 
                 ]
@@ -431,6 +445,34 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 ]
                             }
                         ]
+                    },
+                    {
+                        "type":"fieldset",
+                        "title":"PORTFOLIO_URN",
+                        "items":[
+                            {
+                                "key":"additional.portfolioUrnSelector",
+                                "type":"select",
+                                "titleMap":{
+                                    "applicant":"Applicant",
+                                    "coapplicant":"Co-Applicant",
+                                    "guarantor":"Guarantor"
+                                },
+                                onChange:function(value,form,model){
+                                    switch(value){
+                                        case "applicant": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo; break;
+                                        case "coapplicant":model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo; break;
+                                        case "grarantor": model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo; break;
+                                    }
+                                }
+                                
+                            },
+                            {
+                                key:"loanAccount.portfolioInsuranceUrn"
+                                
+                            }
+                        ]
+                        
                     },
                     {
                         "type": "fieldset",

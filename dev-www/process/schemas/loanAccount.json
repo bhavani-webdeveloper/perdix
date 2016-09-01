@@ -38,13 +38,14 @@
                     "type":"string",
                     "title":"ENTITY_NAME"
                 },
-                "applicationIdArtoo":{
-                    "type":"string",
-                    "title":"APPLICATION_ID_ARTOO"
+
+                "processingFeeMultiplier":{
+                    "type":"number"
+
                 },
-                "applicationIdPerdix":{
+                "portfolioUrnSelector":{
                     "type":"string",
-                    "title":"APPLICATION_ID_PERDIX"
+                    "title":"PORTFOLIO_INSURANCE_URN_SELECT"
                 }
 
             }
@@ -1016,6 +1017,10 @@
                 },
                 "pendingApproval": {
                     "type": "string"
+                },
+                "portfolioInsuranceUrn":{
+                    "type":"string"
+
                 },
                 "processType": {
                     "type": "string"
