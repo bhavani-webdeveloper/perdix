@@ -15,7 +15,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                  model.promise = model._bounce;
                 model.promise.amountdue = model._bounce.amount1;
                 model.promise.custname = model._bounce.customerName;
-                model.promise.loanacno = model._bounce.accountId;
+                model.promise.accountNumber = model._bounce.accountId;
 
             }
         },
