@@ -1142,7 +1142,6 @@
                         "weightInKg"
                     ]
                 },
-
                 "mobilePhone": {
                     "type": "string",
                     "title": "MOBILE_PHONE",

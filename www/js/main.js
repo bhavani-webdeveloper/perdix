@@ -11228,7 +11228,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
                                         'centreCode': inputModel.centreCode
-                                        //'customerType': 'Individual'
+                                        'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },
@@ -11436,7 +11436,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.fixData(reqData);
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(res.customer,true);
+                        Utils.removeNulls(resp.customer,true);
                         model.customer = resp.customer;
                     });
                 } else {
@@ -12582,15 +12582,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 EnrollmentHelper.fixData(reqData);
 
 
-                var out = model.customer.$fingerprint;
+                var out = reqData.customer.$fingerprint;
                 var fpPromisesArr = [];
                 for (var key in out) {
                     if (out.hasOwnProperty(key) && out[key].data!=null) {
                         (function(obj){
                             var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
                             promise.then(function(data){
-                                model.customer[obj.table_field] = data.fileId;
-                                delete model.customer.$fingerprint[obj.fingerId];
+                                reqData.customer[obj.table_field] = data.fileId;
+                                delete reqData.customer.$fingerprint[obj.fingerId];
                             });
                             fpPromisesArr.push(promise);
                         })(out[key]);
@@ -12603,8 +12603,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
                 // $q.all start
                 $q.all(fpPromisesArr).then(function(){
-
-                    var reqData = _.cloneDeep(model);
 
                     if (reqData['customer']['miscellaneous']){
                         var misc = reqData['customer']['miscellaneous'];
@@ -12685,6 +12683,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     }catch(err){
                         console.error(err);
                     }
+                    /*
                     Utils.removeNulls(reqData,true);
 
                     EnrollmentHelper.saveData(reqData).then(function(res){
@@ -12694,7 +12693,24 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             $log.info("Inside updateEnrollment Success!");
                             $state.go("Page.Landing");
                         });
-                    });
+                    });*/
+                    EnrollmentHelper.fixData(reqData);
+                    if (reqData.customer.id) {
+                        EnrollmentHelper.proceedData(reqData).then(function(resp){
+                            Utils.removeNulls(resp.customer,true);
+                            model.customer = resp.customer;
+                        });
+                    } else {
+                        EnrollmentHelper.saveData(reqData).then(function(res){
+                            EnrollmentHelper.proceedData(res).then(function(resp){
+                                Utils.removeNulls(resp.customer,true);
+                                model.customer = resp.customer;
+                            }, function(err) {
+                                Utils.removeNulls(res.customer,true);
+                                model.customer = res.customer;
+                            });
+                        });
+                    }
                 });
                 // $q.all end
             }

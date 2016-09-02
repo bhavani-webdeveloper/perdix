@@ -207,7 +207,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
                                         'centreCode': inputModel.centreCode
-                                        //'customerType': 'Individual'
+                                        'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
                                 },
@@ -415,7 +415,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.fixData(reqData);
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(res.customer,true);
+                        Utils.removeNulls(resp.customer,true);
                         model.customer = resp.customer;
                     });
                 } else {
