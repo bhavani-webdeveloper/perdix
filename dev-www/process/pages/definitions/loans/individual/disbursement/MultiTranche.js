@@ -62,6 +62,32 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
                         pageName: 'loans.individual.disbursement.MultiTrancheQueue',
                         pageId: null
                     });
+                    if(window.confirm("Are you sure?")){
+                        PageHelper.showLoader();
+                        var reqData = _.cloneDeep(model);
+                        reqData.disbursementProcessAction = "SAVE";
+                        IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                            reqData = _.cloneDeep(resp);
+                            delete reqData.$promise;
+                            delete reqData.$resolved;
+                            reqData.disbursementProcessAction = "PROCEED";
+                            IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                                PageHelper.showProgress("upd-disb","Done.","5000");
+                                backToQueue();
+                            },function(resp){
+                                PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                                PageHelper.showErrors(resp);
+
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
+
+                        },function(resp){
+                            PageHelper.showErrors(resp);
+                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                            PageHelper.hideLoader();
+                        });
+                    }
             }
         }
     };

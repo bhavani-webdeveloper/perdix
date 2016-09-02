@@ -78,7 +78,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
                     'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
-                    'branchId': searchOptions.branchId,
+                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
