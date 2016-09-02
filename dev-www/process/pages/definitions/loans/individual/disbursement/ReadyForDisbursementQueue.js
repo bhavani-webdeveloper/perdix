@@ -91,12 +91,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         getActions: function(){
                             return [
                                 {
-                                    name: "Request Disbursement",
+                                    name: "Proceed to Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                        $log.info("Redirecting");
-                                        $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.Disbursement', pageId: item.id});
-                                    },
+
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.disbursement.Disbursement",
+                                            pageId:[item.loanId,item.id].join(".")
+                                        });
+
+                                      },
                                     isApplicable: function(item, index){
                                         return true;
                                     }

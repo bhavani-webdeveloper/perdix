@@ -4,6 +4,10 @@ irf.models.factory('SchemaResource',function($resource,$httpParamSerializer,BASE
         getLoanAccountSchema: {
             method: 'GET',
             url: 'process/schemas/loanAccount.json'
+        },
+        getDisbursementSchema:{
+            method:'GET',
+            url:'process/schemas/disbursement.json'
         }
     });
 });
