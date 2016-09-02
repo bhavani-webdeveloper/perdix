@@ -37,6 +37,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 }
             }
 */
+/*
             model.customer.familyMembers = model.customer.familyMembers || [];
             var self = null;
             _.each(model.customer.familyMembers, function(v){
@@ -59,7 +60,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             } else {
                 // TODO already self available, can verify here
             }
-
+*/
             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
             //if (!model.customer.verifications || !model.customer.verifications.length) {
             //    model.customer.verifications = [
@@ -634,6 +635,17 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.familyMembers[].relationShip",
                             type:"select",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                if (modelValue && modelValue.toLowerCase() === 'self') {
+                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                }
+                            }
                             title: "T_RELATIONSHIP"
                         },
                         {

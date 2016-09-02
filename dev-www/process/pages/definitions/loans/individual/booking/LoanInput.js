@@ -1,6 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-    ["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
-        "Utils",
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
     function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage){
 
         var branchId = SessionStore.getBranchId();
@@ -49,7 +48,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                 model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
                 model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
-                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate;
+                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
                 model.loanAccount.commercialCibilCharge = 750;
                 model.loanAccount.documentTracking="PENDING";
                 model.loanAccount.isRestructure = false;
@@ -60,9 +59,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             offline: true,
             getOfflineDisplayItem: function(item, index){
                 return [
-                    item.loanAccount.productCode,
-                    item.loanAccount.centreCode,
-                    item.loanAccount.urnNo ? '{{"URN_NO"|translate}} :' + item.loanAccount.urnNo : ''
+                    '{{"ENTITY_NAME"|translate}}: ' + item.customer.firstName + (item.loanAccount.urnNo ? ' <small>{{"URN_NO"|translate}}:' + item.loanAccount.urnNo + '</small>' : ''),
+                    '{{"PRODUCT_CODE"|translate}}: ' + item.loanAccount.productCode,
+                    '{{"CENTRE_ID"|translate}}: ' + item.loanAccount.loanCentre.centreId
                 ]
             },
             form: [{
@@ -117,6 +116,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "loanAccount.urnNo",
                                 "title": "URN_NO",
                                 "type":"lov",
+                                "lovonly": true,
                                 "inputMap": {
                                     "customerId":{
                                         "key":"customer.customerId",
@@ -151,7 +151,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
-                                        //'customerType':"Enterprise"
+                                        'customerType':"Enterprise",
+                                        'stage': "Completed"
                                     }).$promise;
                                     return promise;
                                 },
@@ -165,16 +166,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.customerId",
-                                "title":"ENTITY_ID"
+                                "title":"ENTITY_ID",
+                                "readonly": true
                             },
                             {
                                 "key": "customer.firstName",
-                                "title": "ENTITY_NAME"
+                                "title": "ENTITY_NAME",
+                                "readonly": true
                             },
                             {
                                 "key": "loanAccount.applicant",
                                 "title": "APPLICANT_URN_NO",
                                 "type":"lov",
+                                "lovonly": true,
                                 "inputMap": {
                                     "customerId":{
                                         "key":"customer.customerId",
@@ -196,7 +200,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     }
                                 },
                                 "outputMap": {
-
                                     "urnNo": "loanAccount.applicant",
                                     "firstName":"customer.applicantName"
                                 },
@@ -207,7 +210,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
-                                        'centreCode':inputModel.centreCode
+                                        'centreCode':inputModel.centreCode,
+                                        'customerType':"individual",
+                                        'stage': "Completed"
                                     }).$promise;
                                     return promise;
                                 },
@@ -221,14 +226,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"customer.applicantName",
-                                "title":"APPLICANT_NAME"
-
+                                "title":"APPLICANT_NAME",
+                                "readonly": true
                             },
-
                             {
                                 "key": "loanAccount.coBorrowerUrnNo",
                                 "title": "CO_APPLICANT_URN_NO",
                                 "type":"lov",
+                                "lovonly": true,
                                 "inputMap": {
                                     "customerId":{
                                         "key":"customer.customerId",
@@ -261,7 +266,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'customerId':inputModel.customerId,
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
-                                        'centreCode':inputModel.centreCode
+                                        'centreCode':inputModel.centreCode,
+                                        'customerType':"individual",
+                                        'stage': "Completed"
                                     }).$promise;
                                     return promise;
                                 },
@@ -275,7 +282,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"customer.coBorrowerName",
-                                "title":"COAPPLICANT_NAME"
+                                "title":"COAPPLICANT_NAME",
+                                "readonly": true
                             }
                         ]
                     },
@@ -320,11 +328,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.loanAmount",
                                 "type":"amount",
-                                "title":"SANCTIONED_AMOUNT"
+                                "title":"NET_DISBURSEMENT_AMOUNT"
                             },
                             {
                                 "key":"loanAccount.interestRate"
-
                             },
                             {
                                 "key": "loanAccount.loanApplicationDate",
@@ -333,9 +340,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key": "loanAccount.loanPurpose1",
-                                "title": "LOAN_PURPOSE_1",
+                                "title": "LOAN_PURPOSE",
                                 "type":"select"
-                            },
+                            }/*,
                             {
                                 "key": "loanAccount.loanPurpose2",
                                 "title": "LOAN_PURPOSE_2",
@@ -351,8 +358,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "filter":{
                                     "parentCode as loan_purpose_2":"model.loanAccount.loanPurpose2"
                                 }
-
-                            }
+                            }*/
                         ]
                     }
                 ]
@@ -451,6 +457,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "key": "loanAccount.guarantors[].guaUrnNo",
                                         "title": "URN_NO",
                                         "type":"lov",
+                                        "lovonly": true,
                                         "inputMap": {
                                             "customerId":{
                                                 "key":"customer.customerId",
@@ -472,7 +479,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             }
                                         },
                                         "outputMap": {
-
                                             "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
                                             "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName"
                                         },
@@ -483,7 +489,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                 'customerId':inputModel.customerId,
                                                 'branchName': inputModel.branch ||SessionStore.getBranch(),
                                                 'firstName': inputModel.firstName,
-                                                'centreCode':inputModel.centreCode
+                                                'centreCode':inputModel.centreCode,
+                                                'customerType': "individual",
+                                                'stage': "Completed"
                                             }).$promise;
                                             return promise;
                                         },
@@ -495,10 +503,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             ];
                                         }
                                     },
-
                                     {
                                         key:"loanAccount.guarantors[].guaFirstName",
-                                        title:"NAME"
+                                        title:"NAME",
+                                        "readonly": true
                                     }
                                 ]
                             }
@@ -693,11 +701,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         },
                         {
                             "key":"loanAccount.husbandOrFatherMiddleName"
-
                         },
                         {
                             "key":"loanAccount.husbandOrFatherLastName"
-
                         },
                         {
                             "key":"loanAccount.relationFirstName",
@@ -707,40 +713,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             "key":"loanAccount.relation",
                             "type":"select",
                             "title":"T_RELATIONSHIP"
-
                         },
                         {
                             key:"loanAccount.documentTracking",
                             "title":"DOCUMENT_TRACKING"
-
                         },
                         {
                             key:"loanAccount.customerBankAccountNumber",
                             title:"CUSTOMER_BANK_ACC_NO"
-
                         },
                         {
                             key:"loanAccount.customerBankIfscCode",
                             title:"CUSTOMER_BANK_IFSC"
-
                         }
-
-
-
                     ]
                 },
-
                 {
                     "type": "actionbox",
                     "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },
-                {
+                        "type": "save",
+                        "title": "SAVE_OFFLINE",
+                    },
+                    {
                         "type": "submit",
                         "title": "SUBMIT"
-                    }
-                    ]
+                    }]
                 }],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
@@ -756,13 +753,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     return deferred.promise;
                 },
-                submit: function(model, form, formName){
+                submit: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
+
+                    model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2 = model.loanAccount.loanPurpose1;
+                    if (model.loanAccount.applicant === model.loanAccount.coBorrowerUrnNo) {
+                        PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
+                        return false;
+                    }
+
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
-                    if(window.confirm("Are You Sure?")){
+                    Utils.confirm("Are You Sure?").then(function(){
                         PageHelper.showLoader();
                         IndividualLoan.create(reqData,function(resp,headers){
                             delete resp.$promise;
@@ -792,7 +796,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }).$promise.finally(function(){
                             PageHelper.hideLoader();
                         });
-                    }
+                    });
                 }
             }
         };
