@@ -5,6 +5,22 @@ catch(err) { app = angular.module("irf.elements.tpls", []); }
 app.run(["$templateCache", function($templateCache) {
 "use strict";
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/adminlte/actionbox.html","<div class=\"col-xs-12 action-box-col\">\n" +
     "  <div class=\"box no-border\" ng-init=\"$emit('box-init')\">\n" +
     "    <div class=\"box-body\">\n" +
@@ -96,6 +112,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -111,9 +128,25 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
+$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
+    "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
+    "        <a class=\"{{ item.style ? item.style : 'color-theme' }} {{form.fieldHtmlClass}}\"\n" +
+    "            href=\"\"\n" +
+    "            ng-href=\"{{form.href}}\"\n" +
+    "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
+    "            ng-disabled=\"form.readonly\">\n" +
+    "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
+    "            {{form.title | translate}}\n" +
+    "        </a>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body form-horizontal array-box\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\" id=\"{{pid}}\" ng-init=\"pid=form.key.join('_')\">\n" +
     "  <div schema-form-array-items sf-field-model=\"ng-repeat\" ng-repeat=\"item in $$value$$ track by $index\" class=\"array-box-theme panel {{form.fieldHtmlClass}}\" ng-init=\"id=pid+'_'+($index+1)\" ng-class=\"{'array-box-last':$last}\">\n" +
-    "    <h4 class=\"box-title box-title-theme\">\n" +
+    "    <h4 ng-if=\"!form.notitle\" class=\"box-title box-title-theme\">\n" +
     "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
@@ -140,7 +173,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "      <h3 class=\"box-title\">{{form.title | translate}}</h3>\n" +
+    "      <h3 class=\"box-title\">{{form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate)}}</h3>\n" +
     "    </div>\n" +
     "    <div class=\"box-body form-horizontal collapse in\" id=\"{{id}}\">\n" +
     "      <sf-decorator ng-repeat=\"item in form.items\" form=\"item\" class=\"ng-scope\"></sf-decorator>\n" +
@@ -149,7 +182,8 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "</div>")
 
 $templateCache.put("irf/template/adminlte/button.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"></label>\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
     "        <button class=\"btn {{ item.style ? item.style : 'btn-theme' }} {{form.fieldHtmlClass}}\"\n" +
     "                type=\"submit\"\n" +
@@ -228,7 +262,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "  <label for=\"{{form.key.slice(-1)[0]}}\"\n" +
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label {{form.labelHtmlClass}}\">\n" +
-    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
+    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form, arrayIndex:arrayIndex}) : (form.title | translate) }}\n" +
     "  </label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
     "    <input sf-field-model\n" +
@@ -239,6 +273,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -305,6 +340,7 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -355,13 +391,14 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -374,8 +411,8 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -394,6 +431,7 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -532,7 +570,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder}}\"\n" +
+    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -565,22 +603,6 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "		<irf-validate-biometric irf-form=\"form\" irf-model=\"model\" irf-model-value=\"$$value$$\"></irf-validate-biometric>\n" +
     "		<span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\"></span>\n" +
     "	</div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
     "</div>")
 
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
@@ -680,21 +702,22 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
-    "            ng-click=\"selectable ? (actualItem.selected = !actualItem.selected) : (expandable ? expand($event) : cb({item:actualItem,index:itemIndex}))\">\n" +
-    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
-    "            <p ng-if=\"item.length > 1\" ng-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
-    "            <p ng-if=\"item.length > 2\" ng-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
+    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "        </div>\n" +
-    "        <div class=\"checkbox\" ng-if=\"selectable\">\n" +
+    "        <div class=\"checkbox\" ng-if=\"selectable\" ng-click=\"actualItem.selected = !actualItem.selected\">\n" +
     "            <label class=\"checkbox-inline checkbox-theme\">\n" +
     "                <input type=\"checkbox\"\n" +
     "                       ng-model=\"actualItem.selected\">\n" +
     "                <span class=\"control-indicator\"></span>\n" +
     "            </label>\n" +
     "        </div>\n" +
-    "        <div class=\"list-context-menu\" ng-if=\"actions.length && !selectable\">\n" +
+    "        <div class=\"list-context-menu\" ng-if=\"actions.length\">\n" +
     "            <div class=\"dropdown irf-action-dropdown\">\n" +
     "                <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
     "                    <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
@@ -822,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -1186,7 +1209,8 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "biometric": "biometric.html",
         "qrcode": "qrcode.html",
         "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html"
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
     };
 
     angular.forEach(irfAdminlteUI, function(value, key){
@@ -2584,8 +2608,12 @@ angular.module('irf.listView', ['irf.elements.commons'])
 		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
 	}
 
+	$scope.expanded = false;
 	$scope.expand = function($event) {
-
+		if ($scope.item && $scope.item.length > 3) {
+			$scope.expandItems = $scope.item.slice(3);
+			$scope.expanded = !$scope.expanded;
+		}
 	}
 }])
 ;
@@ -2595,6 +2623,7 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2604,8 +2633,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2668,7 +2697,23 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autolov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				self.launchLov();
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2681,29 +2726,37 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			templateUrl: "irf/template/lov/modal-lov.html",
 			controller: function($scope) {
 				$scope.$broadcast('schemaFormValidate');
-				$log.info($scope.locals);
+				//$log.info($scope.locals);
 			}
 		});
 	};
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -2718,7 +2771,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	};
 
 	self.close = function() {
-		$scope.modalWindow.close();
+		if ($scope.modalWindow) $scope.modalWindow.close();
 		$scope.listResponseItems = null;
 		$scope.listDisplayItems = null;
 	};
@@ -2773,9 +2826,9 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
 				if (n) {
 					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n).format(pikadayOptions.dateDisplayFormat));
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
 					} else {
-						$(elem).next().val(moment(n).format('DD-MM-YYYY'));
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
 					}
 				}
 			});
@@ -2923,6 +2976,9 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			$scope.schemaForm = $scope[$scope.formName];
 			if ($scope.schemaForm) {
 				$scope.schemaForm.scope = $scope;
+				$scope.schemaForm.submit = function() {
+					document.forms[$scope.formName].submit();
+				};
 			}
 			if (angular.isFunction($scope.initialize)) {
 				var start = new Date().getTime();
@@ -3281,7 +3337,51 @@ function($log, $q, $scope){
 			sfc.push({
 				"type": "section",
 				"html": "<hr/>"
-			},{
+			});
+			if ($scope.definition.sorting && $scope.definition.sortByColumns) {
+				sfc.push({
+					"type": "section",
+					"htmlClass": "row",
+					"items": [{
+						"type": "section",
+						"htmlClass": "col-xs-10",
+						"items": [{
+							"key": "sortBy",
+							"type":"select",
+							"title": "SORT_BY",
+							"titleMap": $scope.definition.sortByColumns
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "col-xs-2",
+						"items": [{
+							"type":"anchor",
+							"notitle":true,
+							"title": "",
+							"icon": "fa fa-sort-amount-asc",
+							"onClick": function (model, formCtrl, form, event) {
+								if (form.icon == "fa fa-sort-amount-asc") {
+									form.icon = "fa fa-sort-amount-desc";
+									if (model.sortBy && !_.startsWith(model.sortBy, '-')) {
+										try {
+											//$scope.searchForm[0].
+										} catch (e) {}
+										var v = $scope.definition.sortByColumns[model.sortBy];
+										model.sortBy = '-' + model.sortBy;
+										$scope.definition.sortByColumns[model.sortBy] = v;
+									}
+								} else {
+									form.icon = "fa fa-sort-amount-asc";
+									if (model.sortBy && _.startsWith(model.sortBy, '-')) {
+										model.sortBy = model.sortBy.slice(1);
+									}
+								}
+							}
+						}]
+					}]
+				});
+			}
+			sfc.push({
 				"type": "actions",
 				"notitle": true,
 				"items": actions
