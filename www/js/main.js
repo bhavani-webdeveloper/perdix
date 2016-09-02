@@ -11227,7 +11227,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     var promise = Enrollment.search({
                                         'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode
+                                        'centreCode': inputModel.centreCode,
                                         'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
@@ -23135,7 +23135,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                  model.promise = model._bounce;
                 model.promise.amountdue = model._bounce.amount1;
                 model.promise.custname = model._bounce.customerName;
-                model.promise.loanacno = model._bounce.accountId;
+                model.promise.accountNumber = model._bounce.accountId;
 
             }
         },

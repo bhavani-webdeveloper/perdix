@@ -206,7 +206,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     var promise = Enrollment.search({
                                         'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode
+                                        'centreCode': inputModel.centreCode,
                                         'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
