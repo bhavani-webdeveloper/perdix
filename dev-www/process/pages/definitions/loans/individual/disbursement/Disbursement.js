@@ -5,7 +5,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
         var branch = SessionStore.getBranch();
         var backToQueue = function(){
             $state.go("Page.Engine",{
-                pageName:"loans.individual.disbursement.ReadyForDisbursementQueue"
+                pageName:"loans.individual.disbursement.ReadyForDisbursementQueue",
+                pageId:null
             });
         };
         /*var banks = [];

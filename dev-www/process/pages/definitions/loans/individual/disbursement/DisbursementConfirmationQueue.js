@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 offline: false,
                 definition: {
                     title: "ReadyForDisbursement",
-                    autoSearch: false,
+                    autoSearch: true,
                     sorting:true,
                     sortByColumns:{
                         "customerSignatureDate":"Customer Signature Date",
@@ -84,20 +84,20 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         },
                         getListItem: function(item){
                             return [
-                                item.customerName,
-                                "Disbursed Amount:  &#8377;"+item.disbursedAmount+", Disbursement Amount :  &#8377;"+item.disbursementAmount,
-                                "Customer Signature Date  : " + item.customerSignatureDate+", Scheduled Disbursement Date :"+item.scheduledDisbursementDate
+                                item.customerName + " ( Account #: "+item.accountNumber+")",
+                                "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
+                                "Customer Signature Date  : " + (_.isEmpty(item.customerSignatureDate)?" NA ":item.customerSignatureDate)+", Scheduled Disbursement Date :"+(_.isEmpty(item.scheduledDisbursementDate)?" NA ":item.scheduledDisbursementDate)
                             ]
                         },
                         getActions: function(){
                             return [
                                 {
-                                    name: "Update Confirmation Status",
+                                    name: "Confirm Disbursement",
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go("Page.Engine",{
                                             pageName:"loans.individual.disbursement.DisbursementConfirmation",
-                                            pageId:item.loanId
+                                            pageId:[item.loanId,item.id].join(".")
                                         });
 
 

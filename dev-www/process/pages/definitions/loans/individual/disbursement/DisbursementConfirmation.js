@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementConfirmation"),
-    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource",
-        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource){
+    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource","Utils",
+        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource,Utils){
 
         var branch = SessionStore.getBranch();
 
@@ -22,6 +22,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             console.log(disbSchedule);
                             if (disbSchedule.id == disbursementId) {
                                 model.loanAccountDisbursementSchedule = disbSchedule;
+                                Utils.removeNulls(model,true);
                                 disbExistFlag = true;
                                 break;
                             }
@@ -59,7 +60,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 "items": [
 
                     {
-                        "key":"loanAccountDisbursementSchedule.udf1",
+                        "key":"loanAccountDisbursementSchedule.udf4",
                         "type":"select",
                         "titleMap":{
                             "Confirmed":"Confirmed",
@@ -72,11 +73,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "title":"ACTUAL_DISBURSEMENT_DATE"
                     },
                     {
-                        "key":"loanAccountDisbursementSchedule.udf4",
+                        "key":"loanAccountDisbursementSchedule.udf5",
                         "title":"FINANCE_TEAM_REJECTION_REMARKS"
                     },
                     {
-                        "key":"loanAccountDisbursementSchedule.udf5",
+                        "key":"loanAccountDisbursementSchedule.udf6",
                         title:"FINANCE_TEAM_REJECTION_REASON"
                     },
                     {
@@ -98,7 +99,33 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
             },
             actions: {
                 submit: function(model, form, formName){
-                    alert("submit");
+                    if(window.confirm("Are you sure?")){
+                        PageHelper.showLoader();
+                        var reqData = _.cloneDeep(model);
+                        reqData.disbursementProcessAction = "SAVE";
+                        IndividualLoan.updateDisbursement(reqData,function(resp,header){
+
+                            reqData = _.cloneDeep(resp);
+                            delete reqData.$promise;
+                            delete reqData.$resolved;
+                            reqData.disbursementProcessAction = "PROCEED";
+                            IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                                PageHelper.showProgress("upd-disb","Done.","5000");
+                                backToQueue();
+                            },function(resp){
+                                PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                                PageHelper.showErrors(resp);
+
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
+
+                        },function(resp){
+                            PageHelper.showErrors(resp);
+                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                            PageHelper.hideLoader();
+                        });
+                    }
                 }
             }
         };

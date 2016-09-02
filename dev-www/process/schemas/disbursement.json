@@ -123,10 +123,16 @@
           "type": "string"
         },
         "udf4": {
-          "type": "string"
+          "title": "DISBURSEMENT_CONFIRMATION_STATUS",
+          "type":"string"
         },
         "udf5": {
-          "type": "string"
+          "type": "string",
+          "title":"FINANCE_TEAM_REJECTION_REMARKS"
+        },
+        "udf6": {
+          "type": "string",
+          "title":"FINANCE_TEAM_REJECTION_REASON"
         },
         "udfDate1": {
           "type": "string",
@@ -164,8 +170,7 @@
         "udf1",
 
         "udf4",
-        "udf5",
-        "udfDate1",
+
         "udfDate2",
         "udfDate3",
         "udfDate4",
