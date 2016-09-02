@@ -98,6 +98,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 return SchemaResource.getDisbursementSchema().$promise;
             },
             actions: {
+
                 submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();

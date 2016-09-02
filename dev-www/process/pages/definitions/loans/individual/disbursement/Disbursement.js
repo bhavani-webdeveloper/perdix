@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils",
-        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils){
+    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount",
+        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount){
 
         var branch = SessionStore.getBranch();
         var backToQueue = function(){
@@ -76,34 +76,41 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
                     IndividualLoan.get({id: loanId}, function (resp, head) {
+                        model.additional.accountNumber = resp.accountNumber;
+                        model.additional.customerId = resp.customerId;
+                        model.additional.numberOfDisbursements = resp.numberOfDisbursements;
+                        model.additional.productCode = resp.productCode;
+                        model.additional.urnNo = resp.urnNo;
 
-                            var disbExistFlag = false;
-                            for (var i=0;i<resp.disbursementSchedules.length;i++) {
-                                var disbSchedule = resp.disbursementSchedules[i];
-                                console.log(disbSchedule);
-                                if (disbSchedule.id == disbursementId) {
-                                    model.loanAccountDisbursementSchedule = disbSchedule;
-                                    Utils.removeNulls(model,true);
-                                    disbExistFlag = true;
-                                    break;
-                                }
+                        model.additional.disbursementDone = false;
+
+                        var disbExistFlag = false;
+                        for (var i=0;i<resp.disbursementSchedules.length;i++) {
+                            var disbSchedule = resp.disbursementSchedules[i];
+                            console.log(disbSchedule);
+                            if (disbSchedule.id == disbursementId) {
+                                model.loanAccountDisbursementSchedule = disbSchedule;
+                                Utils.removeNulls(model,true);
+                                disbExistFlag = true;
+                                break;
                             }
-                            if(!disbExistFlag){
-                                PageHelper.showProgress('loan-fetch', 'Failed to load Disbursement', 5000);
-                                backToQueue();
-                            }
-                            else{
-                                PageHelper.showProgress('loan-fetch', 'Done.', 5000);
-                            }
-                            console.log(model);
+                        }
+                        if(!disbExistFlag){
+                            PageHelper.showProgress('loan-fetch', 'Failed to load Disbursement', 5000);
+                            backToQueue();
+                        }
+                        else{
+                            PageHelper.showProgress('loan-fetch', 'Done.', 5000);
+                        }
+                        console.log(model);
 
-                        },
-                        function (resp) {
-                            PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
-                            PageHelper.showErrors(resp);
+                    },
+                    function (resp) {
+                        PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
+                        PageHelper.showErrors(resp);
 
 
-                        }).$promise.finally(function () {
+                    }).$promise.finally(function () {
                         PageHelper.hideLoader();
                     });
                 }
@@ -182,10 +189,27 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "type": "actionbox",
-                        "items": [{
-                            "type": "submit",
-                            "title": "UPDATE"
-                        }]
+                        "condition":"!model.additional.disbursementDone",
+                        "items": [
+                            {
+                                "type":"button",
+                                "title":"DISBURSE",
+                                "icon":"fa fa-money",
+                                "onClick":"actions.disburseLoan(model,formCtrl,form)"
+                            }
+                        ]
+                    },
+                    {
+                        "type":"actionbox",
+                        "condition":"model.additional.disbursementDone",
+                        "items":[
+                            {
+                                "type": "submit",
+                                "title": "UPDATE"
+
+                            }
+
+                        ]
                     }
                 ]
             }],
@@ -194,6 +218,61 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 return SchemaResource.getDisbursementSchema().$promise;
             },
             actions: {
+                disburseLoan:function(model, formCtrl, form){
+                    console.log(formCtrl);
+                    formCtrl.scope.$broadcast("schemaFormValidate");
+                    if(!formCtrl.$valid){
+                        PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
+                        return;
+                    }
+
+                    if(window.confirm("Perform Disbursement?")){
+
+                        PageHelper.showLoader();
+                        var accountNumber = model.additional.accountNumber;
+                        var accountId = model.loanAccountDisbursementSchedule.loanId;
+                        PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
+
+                        LoanAccount.activateLoan({"accountId": accountNumber},
+                            function(data){
+                                $log.info("Inside success of activateLoan");
+                                var currDate = moment(new Date()).format("YYYY-MM-DD");
+                                var toSendData = {
+                                    accountId:accountId,
+                                    amount:model.loanAccountDisbursementSchedule.disbursementAmount,
+                                    disbursementDate:currDate,
+                                    bankAccountNumber:model.loanAccountDisbursementSchedule.customerAccountNumber,
+                                    ifscCode:model.loanAccountDisbursementSchedule.ifscCode,
+                                    customerId:model.additional.customerId,
+                                    numberOfDisbursements:model.additional.numberOfDisbursements,
+                                    productCode:model.additional.productCode,
+                                    urnNo:model.additional.urnNo
+
+                                };
+
+                                LoanAccount.disburse(toSendData,
+                                    function(data){
+                                        PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
+                                        model.additional.disbursementDone=true;
+
+                                    },
+                                    function(res){
+                                        PageHelper.showErrors(res);
+                                        PageHelper.showProgress('disbursement', 'Disbursement failed', 2000);
+                                    }).$promise.finally(function() {
+                                        PageHelper.hideLoader();
+                                    }
+                                );
+                            },
+                            function(res){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(res);
+                                PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
+                            });
+
+                    }
+
+                },
                 submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();
