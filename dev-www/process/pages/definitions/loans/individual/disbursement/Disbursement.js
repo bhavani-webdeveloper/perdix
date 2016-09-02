@@ -219,7 +219,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             },
             actions: {
                 disburseLoan:function(model, formCtrl, form){
-                    console.log(formCtrl);
                     formCtrl.scope.$broadcast("schemaFormValidate");
                     if(!formCtrl.$valid){
                         PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
@@ -237,7 +236,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             function(data){
                                 $log.info("Inside success of activateLoan");
                                 var currDate = moment(new Date()).format("YYYY-MM-DD");
-                                var toSendData = {
+                                /*var toSendData = {
                                     accountId:accountId,
                                     amount:model.loanAccountDisbursementSchedule.disbursementAmount,
                                     disbursementDate:currDate,
@@ -248,9 +247,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     productCode:model.additional.productCode,
                                     urnNo:model.additional.urnNo
 
-                                };
-
-                                LoanAccount.disburse(toSendData,
+                                };*/
+                                var toSendData = [];
+                                toSendData.push(model.loanAccountDisbursementSchedule);
+                                
+                                IndividualLoan.batchDisburse(toSendData,
                                     function(data){
                                         PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                         model.additional.disbursementDone=true;

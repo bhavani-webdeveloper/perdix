@@ -25,6 +25,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'PUT',
             url:endpoint+'/disburse'
         },
+        batchDisburse:{
+            method:'PUT',
+            url:endpoint+'/batchDisbursement'
+        },
         multiTrancheDisbursement:{
             method:'GET',
             url:endpoint+'/disbursementProcess/:loanId'
