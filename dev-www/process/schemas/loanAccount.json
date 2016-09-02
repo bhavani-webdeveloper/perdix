@@ -42,7 +42,7 @@
                 },
                 "portfolioUrnSelector":{
                     "type":"string",
-                    "title":"PORTFOLIO_INSURANCE_URN_SELECT"
+                    "title":"INSURED"
                 }
 
             }
@@ -276,7 +276,7 @@
                                 "type": "string"
                             },
                             "collateralType": {
-                                "title": "MACHINE_TYPE",
+                                "title": "COLLATERAL_TYPE",
                                 "type": "string",
                                 "enumCode":"collateral_type"
 
@@ -544,12 +544,12 @@
                 },
                 "insuranceFee":{
                     "type":"integer",
-                    "title":"INSURANCE_FEE"
+                    "title":"INSURANCE"
 
                 },
                 "interestRate": {
                     "title": "INTEREST_RATE",
-                    "type": "integer"
+                    "type": "number"
                 },
                 "isRestructure": {
                     "type": "boolean"
@@ -1006,7 +1006,7 @@
                 },
                 "otherFee":{
                     "type":"integer",
-                    "title":"OTHER_FEE"
+                    "title":"FEES"
                 },
                 "partnerCode": {
                     "type": "string",

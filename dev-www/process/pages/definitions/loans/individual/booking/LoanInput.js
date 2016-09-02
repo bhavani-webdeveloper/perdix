@@ -8,6 +8,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var bankName = SessionStore.getBankName();
         var bankId;
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
+        var defaultcentreId;
+        if (formHelper.enum("centre").data.length == 1)
+            defaultcentreId = formHelper.enum("centre").data[0].value;
 
         var getSanctionedAmount = function(model){
             var fee = 0;
@@ -40,6 +43,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount = model.loanAccount || {branchId :branchId};
                 model.additional = {branchName : branchName};
                 model.loanAccount.bankId = bankId;
+                model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                model.loanAccount.loanCentre.centreId = model.loanAccount.loanCentre.centreId || defaultcentreId;
                 model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                 model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                 model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
@@ -67,39 +72,35 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                 "items":[
                     {
+                    "type":"fieldset",
+                    "title":"BRANCH_DETAILS",
+                    "items":[{
+                            "key": "additional.branchName",
+                            "readonly":true
+                        },
+                        {
+                            key:"loanAccount.loanCentre.centreId",
+                            title:"CENTRE_ID",
+                            "type":"select"
+                        },
+                        {
+                            "key": "loanAccount.partnerCode",
+                            "title": "PARTNER",
+                            "type": "select"
+                        }]
+                    },
+                    {
                         "type": "fieldset",
                         "title": "PRODUCT_DETAILS",
                         "items": [
-                            {
-
-                                "key": "additional.branchName",
-                                "readonly":true
-                            },
-                            {
-                                "key": "loanAccount.partnerCode",
-                                "title": "PARTNER",
-                                "type": "select"
-                            },
                             {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
                                 "type": "select"
                             },
                             {
-                                key:"loanAccount.loanCentre.centreId",
-                                "type":"select",
-
-                                title:"CENTRE_ID",
-                                "type":"select"
-                                /*filter: {
-                                    "parentCode as branch": "model.branchId"
-                                },
-                                screenFilter: true*/
-                            },
-
-                            {
                                 "key": "loanAccount.tenure",
-                                "title":"TENURE_IN_MONTHS"
+                                "title":"DURATION_IN_MONTHS"
                             },
                             {
                                 "key": "loanAccount.frequency",
@@ -274,7 +275,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"customer.coBorrowerName",
-                                "title":"CO_APPLICANT_NAME"
+                                "title":"COAPPLICANT_NAME"
                             }
                         ]
                     },
@@ -440,7 +441,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 key:"loanAccount.guarantors",
-                                title:"GUARANTOR",
+                                notitle:"true",
+                                view:"fixed",
                                 type:"array",
                                 add:null,
                                 remove:null,
@@ -496,7 +498,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                                     {
                                         key:"loanAccount.guarantors[].guaFirstName",
-                                        title:"GUARANTOR_NAME"
+                                        title:"NAME"
                                     }
                                 ]
                             }
@@ -504,7 +506,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         "type":"fieldset",
-                        "title":"PORTFOLIO_URN",
+                        "title":"INSURANCE_POLICY",
                         "items":[
                             {
                                 "key":"additional.portfolioUrnSelector",
@@ -545,7 +547,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 
                             },
                             {
-                                key:"loanAccount.portfolioInsuranceUrn"
+                                key:"loanAccount.portfolioInsuranceUrn",
+                                "title":"URN_NO"
                                 
                             }
                         ]
@@ -553,59 +556,68 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         "type":"fieldset",
-                        "title":"NOMINEE",
+                        "title":"NOMINEE_DETAILS",
                         "items":[
                             {
                                 "key":"loanAccount.nominees",
                                 "type":"array",
-                                "title":"NOMINEE",
+                                notitle:"true",
+                                "view":"fixed",
                                 "add":null,
                                 "remove":null,
                                 "items":[
                                     {
                                         key:"loanAccount.nominees[].nomineeFirstName",
+                                        "title":"NAME"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeGender",
-                                        type:"select"
+                                        type:"select",
+                                        "title":"GENDER"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDOB",
-                                        type:"date"
+                                        type:"date",
+                                        "title":"DATE_OF_BIRTH"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDoorNo",
-
-
+                                        "title":"DOOR_NO"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeLocality",
+                                        "title":"LOCALITY"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeStreet",
+                                        "title":"STREET"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDistrict",
-                                        type:"text"
+                                        type:"text",
+                                        "title":"DISTRICT"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeState",
+                                        "title":"STATE"
 
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineePincode",
+                                        "title":"PIN_CODE"
 
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeRelationship",
-                                        type:"select"
+                                        type:"select",
+                                        "title":"RELATIONSHIP"
 
                                     }
                                 ]
