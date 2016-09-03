@@ -17,22 +17,21 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa;
-                model.creditValidation.interest = model._credit.interest;
-                model.creditValidation.fee = model._credit.fees;
-                model.creditValidation.penal_interest = model._credit.penalInterest;
-                model.creditValidation.amountDue = model._credit.demandAmountInPaisa;
-                model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa;
+                if (model._credit.principalOutstandingAmtInPaisa > 0)
+                    model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa/100;
+                if (model._credit.interest > 0)
+                    model.creditValidation.interest = model._credit.interest/100;
+                if (model._credit.fees > 0)
+                    model.creditValidation.fee = model._credit.fees/100;
+                if (model._credit.penalInterest > 0)
+                    model.creditValidation.penal_interest = model._credit.penalInterest/100;
+                if (model._credit.demandAmountInPaisa > 0)
+                    model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
+                if (model._credit.repaymentAmountInPaisa > 0)
+                    model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
-            }/*
-            model.creditValidation.customer_name = "Suresh";
-            model.creditValidation.principal = 1000;
-            model.creditValidation.interest = 90;
-            model.creditValidation.fee = 50;
-            model.creditValidation.penal_interest = 15;
-            model.creditValidation.amountDue = 1155;
-            model.creditValidation.amountCollected = 1155;*/
+            }
         },
 		
 		form: [
@@ -139,8 +138,26 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 if(model.creditValidation.status == "1")
                 {
                     $log.info("Inside FullPayment()");
-                    LoanProcess.approve("loanRepaymentDetailsId: " + model.creditValidation.loanRepaymentDetailsId, function(response){
+                    LoanProcess.approve({"loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId}, null, function(response){
                     PageHelper.hideLoader();
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
+                else if(model.creditValidation.status == "3")
+                {
+                    $log.info("Inside NoPayment()");
+                    var reqParams = {
+                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                        "remarks":model.creditValidation.reject_remarks,
+                        "rejectReason":model.creditValidation.reject_reason
+                    };
+                    LoanProcess.reject(reqParams,null, function(response){
+                    PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 
                     }, function(errorResponse){
                     PageHelper.hideLoader();

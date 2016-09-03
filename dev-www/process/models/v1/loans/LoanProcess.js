@@ -67,6 +67,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         approve:{
             method:'POST',
             url:endpoint+ "/approverepayment"
+        },
+        reject:{
+            method:'POST',
+            url:endpoint+ "/rejectrepayment"
         }
 
     });

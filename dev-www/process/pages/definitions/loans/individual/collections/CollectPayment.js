@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CollectPayment"),
 ["$log","$q", 'LoanProcess','PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService",
+'SessionStore',"$state","$stateParams","Masters","authService","Utils",
 function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+	SessionStore,$state,$stateParams,Masters,authService, Utils){
 
 	return {
 		"type": "schema-form",
@@ -10,13 +10,21 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		initialize: function (model, form, formCtrl) {
             model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
+            model.repayment.accountId = $stateParams.pageId;
             if (!model._bounce) {                
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                 model.collectPayment=model._bounce;
                 model.collectPayment.amountdue=model._bounce.amount1;
             }
-            model.repayment.repaymentType = "Cash";
+            model.repayment.instrument = "CASH_IN";
+            model.repayment.transactionName = "Scheduled Demand"; //transactionName : Advance Repayment, Scheduled Demand, Fee Payment, Pre-closure, Prepayment
+            //repaymentType applicable for KGFS - ADVANCED, SCHEDULED, OVERDUE
+            model.repayment.authorizationRemark = "";
+            model.repayment.authorizationUsing = "";
+            model.repayment.productCode = "T901";
+            model.repayment.urnNo = model._bounce.description;
+            model.repayment.repaymentDate = Utils.getCurrentDate();
         },
 		form: [
 			{
@@ -50,24 +58,24 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         readonly:true
                     },
                     {
-                        key:"repayment.repaymentType",
+                        key:"repayment.instrument",
                         title:"REPAYMENT_MODE",
                         type:"select",
                         titleMap: [{
                             "name":"Cash",
-                            "value":"Cash"
+                            "value":"CASH_IN"
                         },
                         {
                             "name":"Cheque",
-                            "value":"Cheque"
+                            "value":"CHQ_IN"
                         },
                         {
                             "name":"NEFT",
-                            "value":"NEFT"
+                            "value":"NEFT_IN"
                         },
                         {
                             "name":"RTGS",
-                            "value":"RTGS"
+                            "value":"RTGS_IN"
                         }]
                     },
                     {
@@ -82,31 +90,31 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         title:"CHEQUE_NUMBER",
 						type:"text",
                         required:true,
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
 					},
                     {
                         key:"repayment.chequeDate",
                         title:"CHEQUE_DATE",
                         type:"date",
                         required:true,
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key:"repayment.chequeBank",
                         title:"ISSUING_BANK",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key:"repayment.chequeBranch",
                         title:"ISSUING_BRANCH",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key: "repayment.chequePhoto",
                         title: "CHEQUE_PHOTO",
-                        condition:"model.repayment.repaymentType=='Cheque'",
+                        condition:"model.repayment.instrument=='CHQ'",
                         type: "file",
                         fileType: "image/*",
                         category: "noidea",
@@ -117,52 +125,52 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         title:"REFERENCE_NUMBER",
                         type:"text",
                         required: true,
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTDate",
                         title:"DATE",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.RTGSReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSDate",
                         title:"DATE",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
-                        key:"repayment.remarks",
+                        key:"repayment.cashCollectionRemark",
                         title:"REMARKS",
                         type:"textarea"
                     }
@@ -182,9 +190,8 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                 "repayment": {
                     type: "object",
                     properties: {
-                        "repaymentType": {
-                            type: "string",
-                            enum: ["Cash","Cheque","NEFT","RTGS"]
+                        "instrument": {
+                            type: "string"
                         }
                     }
                 }
@@ -197,6 +204,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 
                 LoanProcess.repay(model.repayment, function(response){
                     PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();
