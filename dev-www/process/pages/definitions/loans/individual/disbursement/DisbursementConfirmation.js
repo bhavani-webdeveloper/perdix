@@ -3,6 +3,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
         function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource,Utils){
 
         var branch = SessionStore.getBranch();
+        var backToQueue = function(){
+            $state.go("Page.Engine",{
+                pageName:"loans.individual.disbursement.DisbursementConfirmationQueue",
+                pageId:null
+            });
+        };
 
         return {
             "type": "schema-form",
@@ -104,6 +110,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
                         reqData.disbursementProcessAction = "SAVE";
+                        reqData.stage = null;
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
 
                             reqData = _.cloneDeep(resp);

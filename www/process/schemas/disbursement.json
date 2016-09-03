@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "disbursementProcessAction": {
+      "type": "string"
+    },
+    "customer":{
+      "type":"object",
+      "properties":{
+        "customerId":{
+          "type":"string",
+          "title":"ENTITY_ID"
+        },
+        "customerUrnNo":{
+          "type":"string",
+          "title":"ENTITY_URN"
+        }
+
+      }
+
+    },
+    "individualLoanDocuments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "disbursementId": {
+            "type": "integer"
+          },
+          "document": {
+            "type": "string"
+          },
+          "documentId": {
+            "type": "string"
+          },
+          "documentStatus": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "loanId": {
+            "type": "integer"
+          },
+          "remarks": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "disbursementId",
+          "document",
+          "documentId",
+          "documentStatus",
+          "id",
+          "loanId",
+          "remarks",
+          "version"
+        ]
+      }
+    },
+    "loanAccountDisbursementSchedule": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string"
+        },
+        "actualDisbursementDate": {
+          "type": "string"
+        },
+        "currentStage": {
+          "type": "string"
+        },
+        "customerAccountNumber": {
+          "type": "string"
+        },
+        "customerName": {
+          "type": "string"
+        },
+        "customerSignatureDate": {
+          "type": "string"
+        },
+        "disbursedAmount": {
+          "type": "integer"
+        },
+        "disbursementAmount": {
+          "type": "integer"
+        },
+        "disbursementFromBankAccountNumber": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "ifscCode": {
+          "type": "string"
+        },
+        "loanId": {
+          "type": "integer"
+        },
+        "remarks": {
+          "type": "string"
+        },
+        "scheduledDisbursementDate": {
+          "type": "string"
+        },
+        "trancheNumber": {
+          "type": "string"
+        },
+        "udf1": {
+          "title":"DISBURSEMENT_STATUS",
+          "type": "string"
+        },
+        "udf2": {
+          "title":"REJECTION_REMARKS",
+          "type": "string"
+        },
+        "udf3": {
+          "title":"REJECTION_REASON",
+          "type": "string"
+        },
+        "udf4": {
+          "title": "DISBURSEMENT_CONFIRMATION_STATUS",
+          "type":"string"
+        },
+        "udf5": {
+          "type": "string",
+          "title":"FINANCE_TEAM_REJECTION_REMARKS"
+        },
+        "udf6": {
+          "type": "string",
+          "title":"FINANCE_TEAM_REJECTION_REASON"
+        },
+        "udfDate1": {
+          "type": "string",
+          "title":"REJECTION_DATE"
+        },
+        "udfDate2": {
+          "type": "string"
+        },
+        "udfDate3": {
+          "type": "string"
+        },
+        "udfDate4": {
+          "type": "string"
+        },
+        "udfDate5": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "accountNumber",
+        "actualDisbursementDate",
+        "currentStage",
+        "customerAccountNumber",
+        "customerName",
+        "customerSignatureDate",
+        "disbursedAmount",
+        "disbursementAmount",
+        "disbursementFromBankAccountNumber",
+        "id",
+        "ifscCode",
+        "loanId",
+        "remarks",
+        "scheduledDisbursementDate",
+        "trancheNumber",
+        "udf1",
+
+        "udf4",
+
+        "udfDate2",
+        "udfDate3",
+        "udfDate4",
+        "udfDate5"
+      ]
+    },
+    "stage": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "disbursementProcessAction",
+    "individualLoanDocuments",
+    "loanAccountDisbursementSchedule",
+    "stage"
+  ]
+}

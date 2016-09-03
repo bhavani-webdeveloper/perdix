@@ -488,14 +488,9 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input ng-if=\"form.readonly\"\n" +
-    "           ng-model=\"$$value$$\"\n" +
-    "           ng-disabled=\"form.readonly\"\n" +
-    "           type=\"text\"\n" +
-    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-if=\"!form.readonly\"\n" +
+    "      ng-disabled=\"form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -3416,10 +3411,10 @@ function($log, $q, $scope){
 		if ($scope.initialize && angular.isFunction($scope.initialize)) {
 			$scope.initialize({model:$scope.model.searchOptions, form:$scope.searchForm, formCtrl:formCtrl});
 		}
-		if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
-			$scope.loadResults($scope.model.searchOptions);
-		}
 	};
+	if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
+		$scope.loadResults($scope.model.searchOptions);
+	}
 
 }])
 
@@ -29324,6 +29319,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
         function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource,Utils){
 
         var branch = SessionStore.getBranch();
+        var backToQueue = function(){
+            $state.go("Page.Engine",{
+                pageName:"loans.individual.disbursement.DisbursementConfirmationQueue",
+                pageId:null
+            });
+        };
 
         return {
             "type": "schema-form",
@@ -29425,6 +29426,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
                         reqData.disbursementProcessAction = "SAVE";
+                        reqData.stage = null;
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
 
                             reqData = _.cloneDeep(resp);
