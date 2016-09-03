@@ -98,14 +98,14 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				getActions: function(){
 					return [
 						{
-							name: "Update ACH",
+							name: "ACH Registration",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
 								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
-									pageId:item.accountNumber
+									pageId:item.loanId
 								});
 							},
 							isApplicable: function(item, index){
@@ -114,50 +114,19 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							}
 						},
 						{
-							name: "Update PDC",
+							name: "PDC Registration",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
 								EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.PDCRegistration",
-									pageId:item.accountNumber
+									pageId:item.loanId
 								});
 							},
 							isApplicable: function(item, index){
 								
 								return true;
-							}
-						},
-						{
-							name: "Do House Verification",
-							desc: "",
-							icon: "fa fa-house",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"AssetsLiabilitiesAndHealth",
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Stage02')
-									return true;
-								return false;
-							}
-						},
-						{
-							name: "Customer 360",
-							desc: "",
-							icon: "fa fa-user",
-							fn: function(item, index){
-								$state.go("Page.Customer360",{
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
-									return true;
-								return false;
 							}
 						}
 					];

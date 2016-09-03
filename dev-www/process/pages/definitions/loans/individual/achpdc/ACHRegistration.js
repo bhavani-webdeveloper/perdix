@@ -13,47 +13,39 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 		initialize: function (model, form, formCtrl) {
 			$log.info("ACH selection Page got initialized");
 			 model.ach = model.ach||{};
-			 model.loanAccount= model.loanAccount||{};
-			 if (model._ach.accountNumber) {
-				model.ach.loanAccountNumber=model._ach.accountNumber;
-				model.ach.BranchCode = model._ach.branchName,
-				model.ach.CentreCode = model._ach.centreCode,
-				model.ach.applicantName = model._ach.customerName
+			 model.achSearch = model.achSearch||{};
+			 if (model._ach.loanId) {
+				 	model.ach=model._ach;
+					model.ach.accountHolderName = model.achSearch.customerName;
+					model.ach.accountId=model._ach.loanId;
+				 	
 
-			 } else if ($stateParams.pageId) {
-			  model.ach.loanAccountNumber=$stateParams.pageId;
-			  ACH.search({id: $stateParams.pageId})
-                    .$promise
-                    .then(
-                        function (res) {
-                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-                            model.achSearch = res;
-                            model.ach.accountHolderName = model.achSearch.accountHolderName,
-                            model.ach.accountType = model.achSearch.accountType,
-                            model.ach.legalAccountNumber = model.achSearch.bankAccountNumber,
-                            model.ach.ifscCode = model.achSearch.ifscCode,
-                            model.ach.nameOfTheDestinationBankWithBranch = model.achSearch.bankName + " && " +model.achSearch.branchName,
-                            model.ach.uptoMaximumAmt = model.achSearch.maximumAmount,
-                            model.ach.startDate = model.achSearch.achStartDate,
-                            model.ach.endDate = model.achSearch.achEndDate,
-                            model.ach.mobilNumber = model.achSearch.phoneNo,
-                            model.ach.emailId = model.achSearch.emailId,
+					ACH.search({id: model._ach.loanId})
+	                    .$promise
+	                    .then(
+	                        function (res) {
+	                            $log.info("response: " + res);
 
+	                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+	                            model.achSearch = res;
+	                            model.ach = model.achSearch;
 
-                            PageHelper.hideLoader();
-                        }, function (httpRes) {
+						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                             PageHelper.showErrors(httpRes);
+                            $log.info("ACH Search Response : " httpRes);
+
                         }
-                   		);
-			 }  else {
-			  $state.go("Page.Engine",{
-									pageName:"loans.individual.Queue",
-									pageId:null
-								});
-			 }
-		 //   model.customer.urnNo="1234567890";
-		},
+                       );
+ 
+				} else {
+				  $state.go("Page.Engine",{
+										pageName:"loans.individual.Queue",
+										pageId:null
+									});
+				 			}
+			 //   model.customer.urnNo="1234567890";
+			},
 		modelPromise: function(pageId,model){
 
 		},
@@ -69,12 +61,12 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
-									"key": "ach.loanAccountNumber",
-									"title": "LOAN_ACCOUNT_NUMBER",
+									"key": "ach.loanId",
+									"title": "LOAN_ID",
 									"readonly":true
 								},
 								{
-									"key": "ach.BranchCode",
+									"key": "ach.branchName",
 									"title": "BRANCH_NAME",
 									"readonly":true
 								},
@@ -84,7 +76,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"readonly":true
 								},
 								{
-									"key": "ach.entityName",
+									"key": "ach.customerName",
 									"title": "ENTITY_NAME",
 									"readonly":true
 								},
@@ -111,7 +103,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"title": "ACCOUNT_TYPE"
 								},
 								{
-									"key": "ach.legalAccountNumber",
+									"key": "ach.bankAccountNumber",
 									"title": "LEGAL_ACCOUNT_NUMBER"
 								},
 								{
@@ -126,11 +118,38 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
                                     }
 								},
 								{
-									"key": "ach.nameOfTheDestinationBankWithBranch",
-									"title": "NAME_OF_THE_DESTINATION_BANK_WITH_BRANCH"
+									"key": "ach.branchName",
+									"title": "BRANCH_NAME"
 								},
 								{
-									"key": "ach.uptoMaximumAmt",
+									"key": "ach.bankName",
+									"title": "BANK_NAME"
+								},
+								{
+									"key": "ach.bankCity"
+									"title": "BANK_CITY",
+								},
+								{
+									"key": "ach.mandateApplicationId"
+									"title": "MANDATE_APPLICATION_ID",
+
+								},
+								{
+									"key": "ach.mandateFilePath"
+									"title": "MANDATE_FILE_PATH",
+								},
+								{
+									"key": "ach.mandateId",
+									"title": "MANDATE_ID"
+									"type": "Number",
+								},
+								{
+									"key": "ach.mandateOpenDate",
+									"title": "MANDATE_OPEN_DATE"
+									"type": "date",
+								},
+								{
+									"key": "ach.maximumAmount",
 									"title": "UPTO_MAXIMUM_AMOUNT",
 									"type": "Number"
 								},
@@ -141,29 +160,71 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"enumCode":"frequency"
 								},
 								{
-									"key": "ach.startDate",
+									"key": "ach.micr"
+									"title": "MICR",
+								},
+								{
+									"key": "ach.achStartDate",
 									"title": "START_DATE",
 									"type":"date"
 								},
 								{
-									"key": "ach.endDate",
+									"key": "ach.achEndDate",
 									"title": "END_DATE",
 									"type": "date"
 								},
 								{
-									"key": "ach.mobilNumber",
+									"key": "ach.phoneNo",
 									"title": "MOBILE_PHONE"
-								},
+								}
+								,
 								{
 									"key": "ach.emailId",
 									"title": "EMAIL"
+								},
+								{
+									"key": "ach.reference1"
+									"title": "REFERENCE1",
+								},
+								{
+									"key": "ach.reference2"
+									"title": "REFERENCE2",
+								},
+								{
+									"key": "ach.sponsorAccountCode"
+									"title": "SPONSOR_ACCOUNT_CODE",
+								},
+								{
+									"key": "ach.sponsorBankCode"
+									"title": "SPONSOR_BANK_CODE",
+								},
+								{
+									"key": "ach.umrn"
+									"title": "UMRN",
+								},
+								{
+									"key": "ach.utilityCode"
+									"title": "UTILITY_CODE",
+								},
+								{
+									"key": "ach.verificationStatus"
+									"title": "VERIFICATION_STATUS",
+								},
+								{
+									"key": "ach.registrationDate",
+									"title": "REGISTRATION_DATE"
+									"type": "date",
+								},
+								{
+									"key": "ach.remarks",
+									"title": "remarks"
 								}]
 							}
 						]
 				},
 				{
 					"type": "actionbox",
-					"condition":"!model.ach.id",
+					"condition":"!model.achSearch.bankAccountNumber",
 					"items": [{
 						"type": "submit",
 						"title": "Submit",
@@ -171,7 +232,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				},
 				{
 					"type": "actionbox",
-					"condition":"model.ach.id",
+					"condition":"model.achSearch.bankAccountNumber",
 					"items": [{
 						"type": "submit",
 						"title": "Update",
@@ -183,20 +244,30 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			actions: {
 				submit: function(model, form, formName){
 
-					$log.info("Inside submit()");
+					$log.info("Inside submit test()");
 					PageHelper.showLoader();
-					if (model.ach.id) {
+					if (model.achSearch.bankAccountNumber) {
+						$log.info("Inside Update()");
 						ACH.update(model.ach, function(response){
 							PageHelper.hideLoader();
-							model.ach=Utils.removeNulls(model.ach,true);
+							// $state.go("Page.Engine", {
+						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+						 //    	pageId: model.ach.loanId
+							// });
+							//model.ach=Utils.removeNulls(model.ach,true);
 						}, function(errorResponse){
 							PageHelper.hideLoader();
 							PageHelper.showErrors(errorResponse);
 						});
 					} else {
+						$log.info("Inside Create()");
 						ACH.create(model.ach, function(response){
 							PageHelper.hideLoader();
-							model.ach=response;
+							// $state.go("Page.Engine", {
+						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+						 //    	pageId: model.ach.loanId
+							// });
+							//model.ach=response;
 						}, function(errorResponse){
 							PageHelper.hideLoader();
 							PageHelper.showErrors(errorResponse);

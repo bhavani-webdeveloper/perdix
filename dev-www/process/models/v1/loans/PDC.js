@@ -13,11 +13,11 @@
              },
             create:{
                 method:'POST',
-                url:endpoint+'/create'
+                url:endpoint+'/createpdcAccount '
             },
             get:{
                 method:'GET',
-                url:endpoint+'/FetchpdcAccount'
+                url:endpoint+'/fetchpdcAccount'
             },
             search: searchResource({
                     method: 'GET',
@@ -25,7 +25,7 @@
             }),
              update:{
                 method:'POST',
-                url:endpoint+'/updatepdcAccount'           
+                url:endpoint+'/editPDCAccount'           
             },
             find:{
                 method:'GET',
