@@ -90,6 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             console.log(disbSchedule);
                             if (disbSchedule.id == disbursementId) {
                                 model.loanAccountDisbursementSchedule = disbSchedule;
+                                model.loanAccountDisbursementSchedule.accountNumber = resp.accountNumber;
                                 Utils.removeNulls(model,true);
                                 disbExistFlag = true;
                                 break;
@@ -149,6 +150,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             //b.loanAccount.disbursementFromBankAccountNumber
                         }
                     },*/
+                    {
+                        "key": "loanAccountDisbursementSchedule.disbursementAmount",
+                        "title":"DISBURSEMENT_AMOUNT"
+                    },
                     {
                         "key": "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         "title":"DISBURSEMENT_FROM_BANK_ACC_NO"
