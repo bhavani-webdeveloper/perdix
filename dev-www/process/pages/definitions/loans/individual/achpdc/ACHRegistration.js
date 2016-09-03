@@ -33,7 +33,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                             PageHelper.showErrors(httpRes);
-                            $log.info("ACH Search Response : " httpRes);
+                            $log.info("ACH Search Response : "  + httpRes);
 
                         }
                        );
@@ -126,27 +126,26 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"title": "BANK_NAME"
 								},
 								{
-									"key": "ach.bankCity"
-									"title": "BANK_CITY",
+									"key": "ach.bankCity",
+									"title": "BANK_CITY"
 								},
 								{
-									"key": "ach.mandateApplicationId"
-									"title": "MANDATE_APPLICATION_ID",
-
+									"key": "ach.mandateApplicationId",
+									"title": "MANDATE_APPLICATION_ID"
 								},
 								{
-									"key": "ach.mandateFilePath"
-									"title": "MANDATE_FILE_PATH",
+									"key": "ach.mandateFilePath",
+									"title": "MANDATE_FILE_PATH"
 								},
 								{
 									"key": "ach.mandateId",
-									"title": "MANDATE_ID"
-									"type": "Number",
+									"title": "MANDATE_ID",
+									"type": "Number"
 								},
 								{
 									"key": "ach.mandateOpenDate",
-									"title": "MANDATE_OPEN_DATE"
-									"type": "date",
+									"title": "MANDATE_OPEN_DATE",
+									"type": "date"
 								},
 								{
 									"key": "ach.maximumAmount",
@@ -160,8 +159,8 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"enumCode":"frequency"
 								},
 								{
-									"key": "ach.micr"
-									"title": "MICR",
+									"key": "ach.micr",
+									"title": "MICR"
 								},
 								{
 									"key": "ach.achStartDate",
@@ -183,37 +182,37 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"title": "EMAIL"
 								},
 								{
-									"key": "ach.reference1"
-									"title": "REFERENCE1",
+									"key": "ach.reference1",
+									"title": "REFERENCE1"
 								},
 								{
-									"key": "ach.reference2"
-									"title": "REFERENCE2",
+									"key": "ach.reference2",
+									"title": "REFERENCE2"
 								},
 								{
-									"key": "ach.sponsorAccountCode"
-									"title": "SPONSOR_ACCOUNT_CODE",
+									"key": "ach.sponsorAccountCode",
+									"title": "SPONSOR_ACCOUNT_CODE"
 								},
 								{
-									"key": "ach.sponsorBankCode"
-									"title": "SPONSOR_BANK_CODE",
+									"key": "ach.sponsorBankCode",
+									"title": "SPONSOR_BANK_CODE"
 								},
 								{
-									"key": "ach.umrn"
-									"title": "UMRN",
+									"key": "ach.umrn",
+									"title": "UMRN"
 								},
 								{
-									"key": "ach.utilityCode"
-									"title": "UTILITY_CODE",
+									"key": "ach.utilityCode",
+									"title": "UTILITY_CODE"
 								},
 								{
-									"key": "ach.verificationStatus"
-									"title": "VERIFICATION_STATUS",
+									"key": "ach.verificationStatus",
+									"title": "VERIFICATION_STATUS"
 								},
 								{
 									"key": "ach.registrationDate",
-									"title": "REGISTRATION_DATE"
-									"type": "date",
+									"title": "REGISTRATION_DATE",
+									"type": "date"
 								},
 								{
 									"key": "ach.remarks",
@@ -227,7 +226,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 					"condition":"!model.achSearch.bankAccountNumber",
 					"items": [{
 						"type": "submit",
-						"title": "Submit",
+						"title": "Submit"
 							  }]
 				},
 				{
@@ -235,7 +234,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 					"condition":"model.achSearch.bankAccountNumber",
 					"items": [{
 						"type": "submit",
-						"title": "Update",
+						"title": "Update"
 							  }]
 				}],
 			schema: function() {
