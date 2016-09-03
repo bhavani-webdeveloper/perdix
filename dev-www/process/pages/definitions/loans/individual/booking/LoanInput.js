@@ -255,7 +255,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     }
                                 },
                                 "outputMap": {
-
                                     "urnNo": "loanAccount.coBorrowerUrnNo",
                                     "firstName":"customer.coBorrowerName"
                                 },
@@ -552,15 +551,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             break;
                                     }
                                 }
-                                
                             },
                             {
                                 key:"loanAccount.portfolioInsuranceUrn",
                                 "title":"URN_NO"
-                                
                             }
                         ]
-                        
                     },
                     {
                         "type":"fieldset",
@@ -577,19 +573,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeFirstName",
                                         "title":"NAME"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeGender",
                                         type:"select",
                                         "title":"GENDER"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDOB",
                                         type:"date",
                                         "title":"DATE_OF_BIRTH"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDoorNo",
@@ -598,35 +591,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeLocality",
                                         "title":"LOCALITY"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeStreet",
                                         "title":"STREET"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDistrict",
                                         type:"text",
                                         "title":"DISTRICT"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeState",
                                         "title":"STATE"
-
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineePincode",
                                         "title":"PIN_CODE"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeRelationship",
                                         type:"select",
                                         "title":"RELATIONSHIP"
-
                                     }
                                 ]
                             }
@@ -687,58 +673,58 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                 ]
             },
-                {
-                    "type":"box",
-                    "title":"Deprecated Items",
-                    "items":[
-                        {
-                            "key": "loanAccount.isRestructure",
-                            "title":"IS_RESTRUCTURE"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherFirstName",
-                            "title":"HUSBAND_OR_FATHER_NAME"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherMiddleName"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherLastName"
-                        },
-                        {
-                            "key":"loanAccount.relationFirstName",
-                            "title":"RELATIVE_NAME"
-                        },
-                        {
-                            "key":"loanAccount.relation",
-                            "type":"select",
-                            "title":"T_RELATIONSHIP"
-                        },
-                        {
-                            key:"loanAccount.documentTracking",
-                            "title":"DOCUMENT_TRACKING"
-                        },
-                        {
-                            key:"loanAccount.customerBankAccountNumber",
-                            title:"CUSTOMER_BANK_ACC_NO"
-                        },
-                        {
-                            key:"loanAccount.customerBankIfscCode",
-                            title:"CUSTOMER_BANK_IFSC"
-                        }
-                    ]
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "save",
-                        "title": "SAVE_OFFLINE",
+            {
+                "type":"box",
+                "title":"Deprecated Items",
+                "items":[
+                    {
+                        "key": "loanAccount.isRestructure",
+                        "title":"IS_RESTRUCTURE"
                     },
                     {
-                        "type": "submit",
-                        "title": "SUBMIT"
-                    }]
-                }],
+                        "key":"loanAccount.husbandOrFatherFirstName",
+                        "title":"HUSBAND_OR_FATHER_NAME"
+                    },
+                    {
+                        "key":"loanAccount.husbandOrFatherMiddleName"
+                    },
+                    {
+                        "key":"loanAccount.husbandOrFatherLastName"
+                    },
+                    {
+                        "key":"loanAccount.relationFirstName",
+                        "title":"RELATIVE_NAME"
+                    },
+                    {
+                        "key":"loanAccount.relation",
+                        "type":"select",
+                        "title":"T_RELATIONSHIP"
+                    },
+                    {
+                        key:"loanAccount.documentTracking",
+                        "title":"DOCUMENT_TRACKING"
+                    },
+                    {
+                        key:"loanAccount.customerBankAccountNumber",
+                        title:"CUSTOMER_BANK_ACC_NO"
+                    },
+                    {
+                        key:"loanAccount.customerBankIfscCode",
+                        title:"CUSTOMER_BANK_IFSC"
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "save",
+                    "title": "SAVE_OFFLINE",
+                },
+                {
+                    "type": "submit",
+                    "title": "SUBMIT"
+                }]
+            }],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },

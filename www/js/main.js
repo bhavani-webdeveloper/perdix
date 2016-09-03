@@ -488,9 +488,14 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
+    "    <input ng-if=\"form.readonly\"\n" +
+    "           ng-model=\"$$value$$\"\n" +
+    "           ng-disabled=\"form.readonly\"\n" +
+    "           type=\"text\"\n" +
+    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-disabled=\"form.readonly\"\n" +
+    "      ng-if=\"!form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -3411,10 +3416,10 @@ function($log, $q, $scope){
 		if ($scope.initialize && angular.isFunction($scope.initialize)) {
 			$scope.initialize({model:$scope.model.searchOptions, form:$scope.searchForm, formCtrl:formCtrl});
 		}
+		if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
+			$scope.loadResults($scope.model.searchOptions);
+		}
 	};
-	if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
-		$scope.loadResults($scope.model.searchOptions);
-	}
 
 }])
 
@@ -6474,6 +6479,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         approve:{
             method:'POST',
             url:endpoint+ "/approverepayment"
+        },
+        reject:{
+            method:'POST',
+            url:endpoint+ "/rejectrepayment"
         }
 
     });
@@ -12106,7 +12115,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                                     model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
                                 }
-                            }
+                            },
                             title: "T_RELATIONSHIP"
                         },
                         {
@@ -22755,7 +22764,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22769,7 +22778,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22804,22 +22813,21 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa;
-                model.creditValidation.interest = model._credit.interest;
-                model.creditValidation.fee = model._credit.fees;
-                model.creditValidation.penal_interest = model._credit.penalInterest;
-                model.creditValidation.amountDue = model._credit.demandAmountInPaisa;
-                model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa;
+                if (model._credit.principalOutstandingAmtInPaisa > 0)
+                    model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa/100;
+                if (model._credit.interest > 0)
+                    model.creditValidation.interest = model._credit.interest/100;
+                if (model._credit.fees > 0)
+                    model.creditValidation.fee = model._credit.fees/100;
+                if (model._credit.penalInterest > 0)
+                    model.creditValidation.penal_interest = model._credit.penalInterest/100;
+                if (model._credit.demandAmountInPaisa > 0)
+                    model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
+                if (model._credit.repaymentAmountInPaisa > 0)
+                    model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
-            }/*
-            model.creditValidation.customer_name = "Suresh";
-            model.creditValidation.principal = 1000;
-            model.creditValidation.interest = 90;
-            model.creditValidation.fee = 50;
-            model.creditValidation.penal_interest = 15;
-            model.creditValidation.amountDue = 1155;
-            model.creditValidation.amountCollected = 1155;*/
+            }
         },
 		
 		form: [
@@ -22926,8 +22934,26 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 if(model.creditValidation.status == "1")
                 {
                     $log.info("Inside FullPayment()");
-                    LoanProcess.approve("loanRepaymentDetailsId: " + model.creditValidation.loanRepaymentDetailsId, function(response){
+                    LoanProcess.approve({"loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId}, null, function(response){
                     PageHelper.hideLoader();
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
+                else if(model.creditValidation.status == "3")
+                {
+                    $log.info("Inside NoPayment()");
+                    var reqParams = {
+                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                        "remarks":model.creditValidation.reject_remarks,
+                        "rejectReason":model.creditValidation.reject_reason
+                    };
+                    LoanProcess.reject(reqParams,null, function(response){
+                    PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 
                     }, function(errorResponse){
                     PageHelper.hideLoader();
@@ -22953,9 +22979,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.CollectPayment"),
 ["$log","$q", 'LoanProcess','PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService",
+'SessionStore',"$state","$stateParams","Masters","authService","Utils",
 function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+	SessionStore,$state,$stateParams,Masters,authService, Utils){
 
 	return {
 		"type": "schema-form",
@@ -22963,13 +22989,21 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 		initialize: function (model, form, formCtrl) {
             model.collectPayment = model.collectPayment||{};
             model.repayment = model.repayment || {};
+            model.repayment.accountId = $stateParams.pageId;
             if (!model._bounce) {                
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                 model.collectPayment=model._bounce;
                 model.collectPayment.amountdue=model._bounce.amount1;
             }
-            model.repayment.repaymentType = "Cash";
+            model.repayment.instrument = "CASH_IN";
+            model.repayment.transactionName = "Scheduled Demand"; //transactionName : Advance Repayment, Scheduled Demand, Fee Payment, Pre-closure, Prepayment
+            //repaymentType applicable for KGFS - ADVANCED, SCHEDULED, OVERDUE
+            model.repayment.authorizationRemark = "";
+            model.repayment.authorizationUsing = "";
+            model.repayment.productCode = "T901";
+            model.repayment.urnNo = model._bounce.description;
+            model.repayment.repaymentDate = Utils.getCurrentDate();
         },
 		form: [
 			{
@@ -23003,24 +23037,24 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         readonly:true
                     },
                     {
-                        key:"repayment.repaymentType",
+                        key:"repayment.instrument",
                         title:"REPAYMENT_MODE",
                         type:"select",
                         titleMap: [{
                             "name":"Cash",
-                            "value":"Cash"
+                            "value":"CASH_IN"
                         },
                         {
                             "name":"Cheque",
-                            "value":"Cheque"
+                            "value":"CHQ_IN"
                         },
                         {
                             "name":"NEFT",
-                            "value":"NEFT"
+                            "value":"NEFT_IN"
                         },
                         {
                             "name":"RTGS",
-                            "value":"RTGS"
+                            "value":"RTGS_IN"
                         }]
                     },
                     {
@@ -23035,31 +23069,31 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         title:"CHEQUE_NUMBER",
 						type:"text",
                         required:true,
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
 					},
                     {
                         key:"repayment.chequeDate",
                         title:"CHEQUE_DATE",
                         type:"date",
                         required:true,
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key:"repayment.chequeBank",
                         title:"ISSUING_BANK",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key:"repayment.chequeBranch",
                         title:"ISSUING_BRANCH",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='Cheque'"
+                        condition:"model.repayment.instrument=='CHQ'"
                     },
                     {
                         key: "repayment.chequePhoto",
                         title: "CHEQUE_PHOTO",
-                        condition:"model.repayment.repaymentType=='Cheque'",
+                        condition:"model.repayment.instrument=='CHQ'",
                         type: "file",
                         fileType: "image/*",
                         category: "noidea",
@@ -23070,52 +23104,52 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         title:"REFERENCE_NUMBER",
                         type:"text",
                         required: true,
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTDate",
                         title:"DATE",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.NEFTBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='NEFT'"
+                        condition:"model.repayment.instrument=='NEFT'"
                     },
                     {
                         key:"repayment.RTGSReferenceNumber",
                         title:"REFERENCE_NUMBER",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSDate",
                         title:"DATE",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSBankDetails",
                         title:"BANK_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
                         key:"repayment.RTGSBranchDetails",
                         title:"BRANCH_DETAILS",
                         type:"text",
-                        condition:"model.repayment.repaymentType=='RTGS'"
+                        condition:"model.repayment.instrument=='RTGS'"
                     },
                     {
-                        key:"repayment.remarks",
+                        key:"repayment.cashCollectionRemark",
                         title:"REMARKS",
                         type:"textarea"
                     }
@@ -23135,9 +23169,8 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                 "repayment": {
                     type: "object",
                     properties: {
-                        "repaymentType": {
-                            type: "string",
-                            enum: ["Cash","Cheque","NEFT","RTGS"]
+                        "instrument": {
+                            type: "string"
                         }
                     }
                 }
@@ -23150,6 +23183,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 
                 LoanProcess.repay(model.repayment, function(response){
                     PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();
@@ -23387,26 +23421,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
         },
-        /*offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },*/
         definition: {
             title: "SEARCH_PAYMENTS",
             searchForm: [
@@ -23426,10 +23440,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    /*"kyc_no": {
-                        "title": "KYC_NO",
-                        "type": "string"
-                    },*/
                     "branch": {
                         "title": "BRANCH_NAME",
                         "type": "string",
@@ -23465,61 +23475,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                 }).$promise;
 
                 return promise;
-                /*return $q.resolve({
-                    headers: {
-                        'x-total-count': 5
-                    },
-                    body:[
-                        {
-                            custname:"GeeKay Industries",
-                            applicant: "Kanimozhi",
-                            coApplicant: "Raja",
-                            loanacno:"508640101335",
-                            paymenttype:"PDC",
-                            amountdue: 19548,
-                            principal: 14872.36,
-                            interest: 4235.64,
-                            penalInterest: 200,
-                            charges: 200,
-                            fees: 40,
-                            numberOfDues: 2,
-                            installmentdate:"03-03-2016",
-                            p2pdate:"15-03-2016"
-                        },
-                        {
-                            custname:"Manjunatha Hydroflexibles",
-                            applicant: "Sudha",
-                            coApplicant: "Ragunath",
-                            loanacno:"508640108276",
-                            paymenttype:"PDC",
-                            amountdue: 19397,
-                            principal: 14844.7,
-                            interest: 4262.3,
-                            penalInterest: 150,
-                            charges: 100,
-                            fees: 40,
-                            numberOfDues: 1,
-                            installmentdate:"02-03-2016",
-                            p2pdate:""
-                        },
-                        {
-                            custname:"VSR Engineering",
-                            applicant: "Rajesh",
-                            coApplicant: "Selvam",
-                            loanacno:"508651508978",
-                            paymenttype:"ACH",
-                            amountdue: 49816,
-                            principal: 37110.26,
-                            interest: 10655.74,
-                            penalInterest: 1200,
-                            charges: 750,
-                            fees: 100,
-                            numberOfDues: 1,
-                            installmentdate:"05-03-2016",
-                            p2pdate:""
-                        }
-                    ]
-                });*/
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -28031,7 +27986,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     }
                                 },
                                 "outputMap": {
-
                                     "urnNo": "loanAccount.coBorrowerUrnNo",
                                     "firstName":"customer.coBorrowerName"
                                 },
@@ -28328,15 +28282,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             break;
                                     }
                                 }
-                                
                             },
                             {
                                 key:"loanAccount.portfolioInsuranceUrn",
                                 "title":"URN_NO"
-                                
                             }
                         ]
-                        
                     },
                     {
                         "type":"fieldset",
@@ -28353,19 +28304,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeFirstName",
                                         "title":"NAME"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeGender",
                                         type:"select",
                                         "title":"GENDER"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDOB",
                                         type:"date",
                                         "title":"DATE_OF_BIRTH"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDoorNo",
@@ -28374,35 +28322,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeLocality",
                                         "title":"LOCALITY"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeStreet",
                                         "title":"STREET"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDistrict",
                                         type:"text",
                                         "title":"DISTRICT"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeState",
                                         "title":"STATE"
-
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineePincode",
                                         "title":"PIN_CODE"
-
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeRelationship",
                                         type:"select",
                                         "title":"RELATIONSHIP"
-
                                     }
                                 ]
                             }
@@ -28463,58 +28404,58 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                 ]
             },
-                {
-                    "type":"box",
-                    "title":"Deprecated Items",
-                    "items":[
-                        {
-                            "key": "loanAccount.isRestructure",
-                            "title":"IS_RESTRUCTURE"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherFirstName",
-                            "title":"HUSBAND_OR_FATHER_NAME"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherMiddleName"
-                        },
-                        {
-                            "key":"loanAccount.husbandOrFatherLastName"
-                        },
-                        {
-                            "key":"loanAccount.relationFirstName",
-                            "title":"RELATIVE_NAME"
-                        },
-                        {
-                            "key":"loanAccount.relation",
-                            "type":"select",
-                            "title":"T_RELATIONSHIP"
-                        },
-                        {
-                            key:"loanAccount.documentTracking",
-                            "title":"DOCUMENT_TRACKING"
-                        },
-                        {
-                            key:"loanAccount.customerBankAccountNumber",
-                            title:"CUSTOMER_BANK_ACC_NO"
-                        },
-                        {
-                            key:"loanAccount.customerBankIfscCode",
-                            title:"CUSTOMER_BANK_IFSC"
-                        }
-                    ]
-                },
-                {
-                    "type": "actionbox",
-                    "items": [{
-                        "type": "save",
-                        "title": "SAVE_OFFLINE",
+            {
+                "type":"box",
+                "title":"Deprecated Items",
+                "items":[
+                    {
+                        "key": "loanAccount.isRestructure",
+                        "title":"IS_RESTRUCTURE"
                     },
                     {
-                        "type": "submit",
-                        "title": "SUBMIT"
-                    }]
-                }],
+                        "key":"loanAccount.husbandOrFatherFirstName",
+                        "title":"HUSBAND_OR_FATHER_NAME"
+                    },
+                    {
+                        "key":"loanAccount.husbandOrFatherMiddleName"
+                    },
+                    {
+                        "key":"loanAccount.husbandOrFatherLastName"
+                    },
+                    {
+                        "key":"loanAccount.relationFirstName",
+                        "title":"RELATIVE_NAME"
+                    },
+                    {
+                        "key":"loanAccount.relation",
+                        "type":"select",
+                        "title":"T_RELATIONSHIP"
+                    },
+                    {
+                        key:"loanAccount.documentTracking",
+                        "title":"DOCUMENT_TRACKING"
+                    },
+                    {
+                        key:"loanAccount.customerBankAccountNumber",
+                        title:"CUSTOMER_BANK_ACC_NO"
+                    },
+                    {
+                        key:"loanAccount.customerBankIfscCode",
+                        title:"CUSTOMER_BANK_IFSC"
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "save",
+                    "title": "SAVE_OFFLINE",
+                },
+                {
+                    "type": "submit",
+                    "title": "SUBMIT"
+                }]
+            }],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },

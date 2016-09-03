@@ -645,7 +645,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
                                     model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
                                 }
-                            }
+                            },
                             title: "T_RELATIONSHIP"
                         },
                         {
