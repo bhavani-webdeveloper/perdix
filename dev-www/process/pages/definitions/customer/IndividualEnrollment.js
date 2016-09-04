@@ -4,15 +4,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries){
 
-    var branch = SessionStore.getBranch();
-
-    var initData = function(model) {
-        model.customer.idAndBcCustId = model.customer.id + ' / ' + model.customer.bcCustId;
-        model.customer.fullName = Utils.getFullName(model.customer.firstName, model.customer.middleName, model.customer.lastName);
-        model.customer.fatherFullName = Utils.getFullName(model.customer.fatherFirstName, model.customer.fatherMiddleName, model.customer.fatherLastName);
-        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-    };
-
     return {
         "type": "schema-form",
         "title": "INDIVIDUAL_ENROLLMENT",
@@ -22,87 +13,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model.branchId = SessionStore.getBranchId() + '';
 
             model.customer.date = model.customer.date || Utils.getCurrentDate();
-/*
-            $log.info('STORAGE_KEY: ' + model.$$STORAGE_KEY$$);
-            if (!model.$$STORAGE_KEY$$) {
-                var expenditure = formHelper.enum('expenditure');
-                if (expenditure) {
-                    var expenditureSourcesTitlemap = expenditure.data;
-                    model.customer.expenditures = [];
-                    _.forEach(expenditureSourcesTitlemap, function(v){
-                        if (v.value !== 'Other') {
-                            model.customer.expenditures.push({expenditureSource:v.value,frequency:'Monthly',annualExpenses:0});
-                        }
-                    });
-                }
-            }
-*/
-/*
-            model.customer.familyMembers = model.customer.familyMembers || [];
-            var self = null;
-            _.each(model.customer.familyMembers, function(v){
-                if (v.relationShip === 'Self') {
-                    self = v;
-                }
-            });
-            if (!self) {
-                self = {
-                    customerId: model.customer.id,
-                    familyMemberFirstName: model.customer.firstName,
-                    relationShip: 'Self',
-                    gender: model.customer.gender,
-                    dateOfBirth: model.customer.dateOfBirth,
-                    maritalStatus: model.customer.maritalStatus,
-                    mobilePhone: model.customer.mobilePhone || '',
-                    age: moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years')
-                };
-                model.customer.familyMembers.push(self);
-            } else {
-                // TODO already self available, can verify here
-            }
-*/
             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-            //if (!model.customer.verifications || !model.customer.verifications.length) {
-            //    model.customer.verifications = [
-            //        {
-            //            "relationship": "Neighbour"
-            //        },
-            //        {
-            //            "relationship": "Neighbour"
-            //        }
-            //    ];
-            //}
+
             model = Utils.removeNulls(model,true);
             model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
-        },
-        modelPromise: function(pageId, _model) {
-            var deferred = $q.defer();
-            PageHelper.showLoader();
-            irfProgressMessage.pop("enrollment-save","Loading Customer Data...");
-            Enrollment.getCustomerById({id:pageId},function(resp,header){
-                var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
-                model.customer = resp;
-                model = EnrollmentHelper.fixData(model);
-                model._mode = 'EDIT';
-                if (model.customer.currentStage==='Stage01') {
-                    irfProgressMessage.pop("enrollment-save","Load Complete",2000);
-                    deferred.resolve(model);
-                    window.scrollTo(0, 0);
-                } else {
-                    irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" already enrolled", 5000);
-                    $state.go("Page.Landing");
-                }
-                PageHelper.hideLoader();
-            },function(resp){
-                PageHelper.hideLoader();
-                irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
-                $state.go("Page.Engine",{
-                    pageName:"CustomerSearch",
-                    pageId:null
-                });
-            });
-            return deferred.promise;
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -122,7 +37,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     readonly: true
                 },
                 {
-                    key: "customer.oldCustomerId"
+                    key: "customer.oldCustomerId",
+                    condition: "model.customer.oldCustomerId"
                 },
                 {
                     key: "customer.id",
@@ -137,16 +53,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     readonly: true
                 },
                 {
+                    key:"customer.photoImageId",
+                    type:"file",
+                    fileType:"image/*"
+                },
+                {
                     key: "customer.firstName",
                     title:"FULL_NAME",
                     type:"qrcode",
                     onCapture: EnrollmentHelper.customerAadhaarOnCapture
-                },
-                {
-                    key:"customer.photoImageId",
-                    type:"file",
-                    fileType:"image/*",
-                    "offline": true
                 },
                 {
                     key:"customer.centreId",
@@ -306,9 +221,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             type:"select",
                             screenFilter: true*/
                         },
+                        "customer.mobilePhone",
                         "customer.stdCode",
                         "customer.landLineNo",
-                        "customer.mobilePhone",
                         "customer.mailSameAsResidence"
                     ]
                 },
@@ -378,7 +293,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     "key": "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
-                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    onCapture: function(result, model, form) {
+                        EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                        this.actions.setProofs(model);
+                    }
                 },
                 {
                     type:"fieldset",
@@ -391,14 +309,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.identityProofImageId",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.identityProofReverseImageId",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.identityProofNo",
@@ -433,14 +349,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.addressProofImageId",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.addressProofReverseImageId",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.addressProofNo",
@@ -475,14 +389,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.udf.userDefinedFieldValues.udf34",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf35",
                             type:"file",
-                            fileType:"image/*",
-                            "offline": true
+                            fileType:"image/*"
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf36",
@@ -541,8 +453,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             //            {
             //                key:"customer.additionalKYCs[].kyc1ImagePath",
             //                type:"file",
-            //                fileType:"image/*",
-            //                "offline": true
+            //                fileType:"image/*"
             //            },
             //            {
             //                key:"customer.additionalKYCs[].kyc1IssueDate",
@@ -567,8 +478,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             //            {
             //                key:"customer.additionalKYCs[].kyc2ImagePath",
             //                type:"file",
-            //                fileType:"image/*",
-            //                "offline": true
+            //                fileType:"image/*"
             //            },
             //            {
             //                key:"customer.additionalKYCs[].kyc2IssueDate",
@@ -1055,7 +965,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     //},
                     //{
                     //    key:"customer.houseVerificationPhoto",
-                    //    offline: true,
                     //    type:"file",
                     //    fileType:"image/*"
                     //},
@@ -1065,16 +974,35 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     //},
                     //"customer.place"
                 ]
-            },{
-            "type": "actionbox",
-            "items": [{
-                "type": "save",
-                "title": "SAVE"
-            },{
-                "type": "submit",
-                "title": "SUBMIT"
-            }]
-        }],
+            },
+            {
+                "type": "actionbox",
+                "condition": "!model.customer.id",
+                "items": [{
+                    "type": "save",
+                    "title": "SAVE"
+                },{
+                    "type": "submit",
+                    "title": "SUBMIT"
+                }]
+            },
+            {
+                "type": "actionbox",
+                "condition": "model.customer.id",
+                "items": [{
+                    "type": "save",
+                    "title": "SAVE"
+                },{
+                    "type": "submit",
+                    "title": "SUBMIT"
+                },{
+                    "type": "button",
+                    "title": "RELOAD",
+                    "icon": "fa fa-refresh",
+                    "onClick": "actions.reload(model, formCtrl, form, $event)"
+                }]
+            }
+        ],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
@@ -1099,18 +1027,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 }
                 return deferred.promise;
             },
-            proceed: function(model, formCtrl, form, $event) {
-                var reqData = _.cloneDeep(model);
-                if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
-                    $log.info("Customer id not null, skipping save");
-                    EnrollmentHelper.proceedData(reqData).then(function (res) {
-                        $state.go("Page.Landing");
-                    });
-                }
-            },
             reload: function(model, formCtrl, form, $event) {
                 $state.go("Page.Engine", {
-                    pageName: 'ProfileInformation',
+                    pageName: 'customer.IndividualEnrollment',
                     pageId: model.customer.id
                 },{
                     reload: true,
@@ -1126,16 +1045,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     $log.warn("Invalid Data, returning false");
                     return false;
                 }
-                var sortFn = function(unordered){
-                    var out = {};
-                    Object.keys(unordered).sort().forEach(function(key) {
-                        out[key] = unordered[key];
-                    });
-                    return out;
-                };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-
 
                 var out = reqData.customer.$fingerprint;
                 var fpPromisesArr = [];
@@ -1158,28 +1069,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
                 // $q.all start
                 $q.all(fpPromisesArr).then(function(){
-
-                    if (reqData['customer']['miscellaneous']){
-                        var misc = reqData['customer']['miscellaneous'];
-                        if (misc['alcoholConsumption']){
-                            misc['alcoholConsumption'] = "Yes"
-                        } else {
-                            misc['alcoholConsumption'] = "No"
-                        }
-
-                        if (misc['narcoticsConsumption']){
-                            misc['narcoticsConsumption'] = "Yes"
-                        } else {
-                            misc['narcoticsConsumption'] = "No"
-                        }
-
-                        if (misc['tobaccoConsumption']){
-                            misc['tobaccoConsumption'] = "Yes"
-                        } else {
-                            misc['tobaccoConsumption'] = "No"
-                        }
-                    }
-
                     try{
                         var liabilities = reqData['customer']['liabilities'];
                         if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
@@ -1238,17 +1127,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     }catch(err){
                         console.error(err);
                     }
-                    /*
-                    Utils.removeNulls(reqData,true);
 
-                    EnrollmentHelper.saveData(reqData).then(function(res){
-                        EnrollmentHelper.proceedData(res).then(function(resp){
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('enrollment-submit', 'Done. Customer URN created : ' + resp.customer.urnNo, 5000);
-                            $log.info("Inside updateEnrollment Success!");
-                            $state.go("Page.Landing");
-                        });
-                    });*/
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){

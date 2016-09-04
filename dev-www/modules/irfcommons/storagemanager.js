@@ -213,7 +213,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
 							if (ret.data[i].parentCode == branchId)
-								ret.data[i].value = ret.data[i].code;
+								ret.data[i].value = Number(ret.data[i].code);
 						}
                         // console.warn(ret);
 						break;

@@ -12,20 +12,15 @@
                     "type": "string",
                     "title": "AADHAAR_NO",
                     "minLength": 12,
-                    "maxLength": 12,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 12
                 },
                 "nameInLocalLanguage":{
                     "type":"string",
                     "title":"NAME_IN_LOCAL_LANGUAGE"
-
                 },
                 "addressInLocalLanguage":{
                     "type":"string",
                     "title":"ADDRESS_IN_LOCAL_LANGUAGE"
-
                 },
                 "additionalKYCs": {
                     "type": "array",
@@ -37,81 +32,51 @@
                                 "type": "string",
                                 "title": "KYC1_PROOF_DOCUMENT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "KYC1",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "subCategory": "KYC1"
                             },
                             "kyc1IssueDate": {
                                 "type": "string",
                                 "title": "KYC1_ISSUE_DATE",
-                                "format": "date",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "format": "date"
                             },
                             "kyc1ProofNumber": {
                                 "type": "string",
-                                "title": "KYC1_PROOF_NUMBER",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "title": "KYC1_PROOF_NUMBER"
                             },
                             "kyc1ProofType": {
                                 "type": "string",
                                 "title": "KYC1_PROOF_TYPE",
-                                "enumCode": "kyc",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "enumCode": "kyc"
                             },
                             "kyc1ValidUptoDate": {
                                 "type": "string",
                                 "title": "KYC1_VALID_UPTO_DATE",
-                                "format": "date",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "format": "date"
                             },
                             "kyc2ImagePath": {
                                 "type": "string",
                                 "title": "KYC2_PROOF_DOCUMENT",
                                 "category": "CustomerEnrollment",
-                                "subCategory": "KYC2",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "subCategory": "KYC2"
                             },
                             "kyc2IssueDate": {
                                 "type": "string",
                                 "title": "KYC2_ISSUE_DATE",
-                                "format": "date",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "format": "date"
                             },
                             "kyc2ProofNumber": {
                                 "type": "string",
-                                "title": "KYC2_PROOF_NUMBER",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "title": "KYC2_PROOF_NUMBER"
                             },
                             "kyc2ProofType": {
                                 "type": "string",
                                 "title": "KYC2_PROOF_TYPE",
-                                "enumCode": "kyc",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "enumCode": "kyc"
                             },
                             "kyc2ValidUptoDate": {
                                 "type": "string",
                                 "title": "KYC2_VALID_UPTO_DATE",
-                                "format": "date",
-                                "captureStages": [
-                                    "Stage01"
-                                ]
+                                "format": "date"
                             }
                         }
                     }
@@ -119,93 +84,59 @@
                 "addressProof": {
                     "type": "string",
                     "title": "ADDRESS_PROOF",
-                    "enumCode": "address_proof",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "address_proof"
                 },
                 "addressProofImageId": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_IMAGE_ID",
                     "category": "CustomerEnrollment",
-                    "subCategory": "ADDRESSPROOF",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "ADDRESSPROOF"
                 },
                 "addressProofReverseImageId": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
                     "category": "CustomerEnrollment",
-                    "subCategory": "ADDRESSPROOF",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "ADDRESSPROOF"
                 },
                 "addressProofIssueDate": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_ISSUE_DATE",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "addressProofNo": {
                     "type": "string",
-                    "title": "ADDRESS_PROOF_NO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "ADDRESS_PROOF_NO"
                 },
                 "addressProofValidUptoDate": {
                     "type": "string",
                     "title": "ADDRESS_PROOF_VALID_UPTO_DATE",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "addressProofSameAsIdProof":{
                     "type":"boolean",
                     "default":false,
                     "title":"ADDRESS_PROOF_SAME_AS_ID"
                 },
-
                 "ageProof": {
                     "type": "string",
                     "title": "AGE_PROOF",
-                    "enumCode": "identity_proof",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "identity_proof"
                 },
                 "ageProofImageId": {
                     "type": "string",
                     "title": "AGE_PROOF_DOCUMENT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "AGEPROOF",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "AGEPROOF"
                 },
-
                 "caste": {
                     "type": "string",
                     "title": "CASTE",
-                    "enumCode": "caste",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "caste"
                 },
-
-
                 "dateOfBirth": {
                     "type": "string",
                     "title": "DATE_OF_BIRTH",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "district": {
                     "type": "string",
@@ -214,10 +145,7 @@
                 },
                 "doorNo": {
                     "type": "string",
-                    "title": "DOOR_NO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "DOOR_NO"
                 },
                 "enrollmentCheckerApprovedDate": {
                     "type": "string"
@@ -447,28 +375,19 @@
                         "properties": {
                             "annualExpenses": {
                                 "type": "integer",
-                                "title": "ANNUAL_EXPENSES",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "ANNUAL_EXPENSES"
                             },
 
                             "expenditureSource": {
                                 "type": "string",
                                 "title": "EXPENDITURE_SOURCE",
                                 "enumCode": "expenditure",
-                                "default": "Other",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "default": "Other"
                             },
                             "frequency": {
                                 "type": "string",
                                 "title": "FREQUENCY",
-                                "enumCode": "frequency",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "frequency"
                             }
 
                         },
@@ -493,34 +412,22 @@
                             "dateOfBirth": {
                                 "type": "string",
                                 "title": "DATE_OF_BIRTH",
-                                "format": "date",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "format": "date"
                             },
 
                             "deathCertificateUploaded": {
                                 "type": "boolean",
-                                "title": "DEATH_CERTIFICATE_UPLOADED",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "DEATH_CERTIFICATE_UPLOADED"
                             },
                             "deseasedetailscaptured": {
                                 "type": "boolean",
-                                "title": "DECEASED_DETAILS_CAPTURED",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "DECEASED_DETAILS_CAPTURED"
 
                             },
                             "educationStatus": {
                                 "type": "string",
                                 "title": "EDUCATION_STATUS",
-                                "enumCode": "education",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "education"
                             },
                             "enrolledUrnNo": {
                                 "type": "string",
@@ -528,32 +435,20 @@
                             },
                             "familyMemberFirstName": {
                                 "type": "string",
-                                "title": "FAMILY_MEMBER_FIRSTNAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "FAMILY_MEMBER_FIRSTNAME"
                             },
                             "familyMemberLastName": {
                                 "type": "string",
-                                "title": "FAMILY_MEMBER_LASTNAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "FAMILY_MEMBER_LASTNAME"
                             },
                             "familyMemberMiddleName": {
                                 "type": "string",
-                                "title": "FAMILY_MEMBER_MIDDLENAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "FAMILY_MEMBER_MIDDLENAME"
                             },
                             "gender": {
                                 "type": "string",
                                 "title": "GENDER",
-                                "enumCode": "gender",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "gender"
                             },
 
                             "incomes": {
@@ -614,18 +509,12 @@
                                 "type": "string",
                                 "title": "MOBILE_PHONE",
                                 "minLength": 10,
-                                "maxLength": 10,
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "maxLength": 10
                             },
                             "relationShip": {
                                 "type": "string",
                                 "title": "RELATIONSHIP",
-                                "enumCode": "relation",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "relation"
 
                             },
                             "contributionToExpenditure":{
@@ -655,24 +544,15 @@
                 },
                 "fatherFirstName": {
                     "type": "string",
-                    "title": "FATHER_FIRSTNAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "FATHER_FIRSTNAME"
                 },
                 "fatherLastName": {
                     "type": "string",
-                    "title": "FATHER_LASTNAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "FATHER_LASTNAME"
                 },
                 "fatherMiddleName": {
                     "type": "string",
-                    "title": "FATHER_MIDDLENAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "FATHER_MIDDLENAME"
                 },
                 "financialAssets": {
                     "type": "array",
@@ -684,59 +564,38 @@
                                 "type": "integer",
                                 "title": "AMOUNT_IN_PAISA",
                                 "minimum": 0,
-                                "maximum": 100000000,
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "maximum": 100000000
                             },
                             "frequencyOfDeposite": {
                                 "type": "string",
                                 "title": "FREQUENCY_OF_DEPOSIT",
-                                "enumCode": "frequency",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "frequency"
                             },
                             "instituteType": {
                                 "type": "string",
                                 "title": "INSTITUTE_TYPE",
-                                "enumCode": "finanical_asset",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "finanical_asset"
                             },
                             "instrumentType": {
                                 "type": "string",
                                 "title": "INSTRUMENT_TYPE",
-                                "enumCode": "financialAssetInstrumentType",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "financialAssetInstrumentType"
                             },
                             "maturityDate": {
                                 "type": "string",
                                 "title": "MATURITY_DATE",
-                                "format": "date",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "format": "date"
                             },
                             "nameOfInstitution": {
                                 "type": "string",
                                 "title": "NAME_OF_INSTITUTION",
                                 "minLength": 1,
-                                "maxLength": 100,
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "maxLength": 100
                             },
                             "startDate": {
                                 "type": "string",
                                 "title": "START_DATE",
-                                "format": "date",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "format": "date"
                             }
                         },
                         "required": [
@@ -752,138 +611,87 @@
                     "type": "string",
                     "title": "FIRSTNAME",
                     "minLength": 1,
-                    "maxLength": 100,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 100
                 },
                 "gender": {
                     "type": "string",
                     "title": "GENDER",
-                    "enumCode": "gender",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "gender"
                 },
 
                 "idProofIssueDate": {
                     "type": "string",
                     "title": "ID_PROOF_ISSUE_DATE",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "idProofValidUptoDate": {
                     "type": "string",
                     "title": "ID_PROOF_VALID_UPTO_DATE",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "identityProof": {
                     "type": "string",
                     "title": "IDENTITY_PROOF",
-                    "enumCode": "identity_proof",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "identity_proof"
                 },
                 "identityProofImageId": {
                     "type": "string",
                     "title": "IDENTITY_PROOF_DOCUMENT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "IDENTITYPROOF",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "IDENTITYPROOF"
                 },
                 "identityProofReverseImageId": {
                     "type": "string",
                     "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "IDENTITYPROOF",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "IDENTITYPROOF"
                 },
                 "identityProofNo": {
                     "type": "string",
-                    "title": "IDENTITY_PROOFNO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "IDENTITY_PROOFNO"
                 },
                 "centreCode": {
                     "type": "string",
                     "title": "CENTRE",
-                    "enumCode": "centre",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "centre"
                 },
                 "centreId": {
-                    "type": "string",
+                    "type": "integer",
                     "title": "CENTRE_ID",
-                    "enumCode": "centre",
-                    "captureStages": [
-                        "Stage01"
-                    ]
+                    "enumCode": "centre"
                 },
                 "inviteId": {
                     "type": "string",
-                    "title": "INVITE_ID",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "INVITE_ID"
                 },
                 "kgfsBankName": {
                     "type": "string",
-                    "title": "KGFS_BANK_NAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "KGFS_BANK_NAME"
                 },
                 "kgfsName": {
                     "type": "string",
                     "title": "BRANCH_NAME",
-                    "enumCode": "branch",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "branch"
                 },
                 "landLineNo": {
                     "type": "string",
                     "title": "LANDLINE_NO",
                     "minLength": 5,
-                    "maxLength": 15,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 15
                 },
                 "language": {
                     "type": "string",
                     "title": "LANGUAGE",
-                    "enumCode": "language",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "language"
                 },
                 "lastName": {
                     "type": "string",
-                    "title": "LASTNAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "LASTNAME"
                 },
 
                 "latitude": {
                     "type": "string",
-                    "title": "LATITUDE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "LATITUDE"
                 },
 
                 "liabilities": {
@@ -896,71 +704,44 @@
                             "frequencyOfInstallment": {
                                 "type": "string",
                                 "title": "FREQUENCY_OF_INSTALLMENT",
-                                "enumCode": "frequency",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "frequency"
                             },
                             "installmentAmountInPaisa": {
                                 "type": "integer",
-                                "title": "INSTALLMENT_AMOUNT_IN_PAISA",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "INSTALLMENT_AMOUNT_IN_PAISA"
                             },
                             "instituteName": {
                                 "type": "string",
-                                "title": "INSTITUTE_NAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "INSTITUTE_NAME"
                             },
                             "liabilityLoanPurpose": {
                                 "type": "string",
                                 "title": "LOAN_PURPOSE",
-                                "enumCode": "liability_loan_purpose",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "liability_loan_purpose"
                             },
                             "loanAmountInPaisa": {
                                 "type": "integer",
-                                "title": "LOAN_AMOUNT_IN_PAISA",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "LOAN_AMOUNT_IN_PAISA"
                             },
                             "loanSource": {
                                 "type": "string",
                                 "title": "LOAN_SOURCE",
-                                "enumCode": "loan_source",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "loan_source"
                             },
                             "loanType": {
                                 "type": "string",
                                 "title": "LOAN_TYPE",
-                                "enumCode": "liability_loan_type",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "liability_loan_type"
                             },
                             "maturityDate": {
                                 "type": "string",
                                 "title": "MATURITY_DATE",
-                                "format": "date",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "format": "date"
                             },
                             "startDate": {
                                 "type": "string",
                                 "title": "START_DATE",
-                                "format": "date",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "format": "date"
                             }
                         },
                         "required": [
@@ -975,31 +756,19 @@
                 },
                 "locality": {
                     "type": "string",
-                    "title": "LOCALITY",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "LOCALITY"
                 },
                 "longitude": {
                     "type": "string",
-                    "title": "LONGITUDE",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "title": "LONGITUDE"
                 },
                 "nameOfRo": {
                     "type": "string",
-                    "title": "NAME_OF_RO",
-                    "captureStages": [
-                        "Stage02"
-                    ]
+                    "title": "NAME_OF_RO"
                 },
                 "oldCustomerId": {
                     "type": "string",
-                    "title": "OLD_CUSTOMER_ID",
-                    "captureStages": [
-                        "Stage01"
-                    ]
+                    "title": "OLD_CUSTOMER_ID"
                 },
                 "ownership": {
                     "type": "string",
@@ -1010,25 +779,16 @@
                     "type": "string",
                     "title": "HOUSE_VERIFICATION_PHOTO",
                     "category": "CustomerEnrollment",
-                    "subCategory": "HOUSEVERIFICATTIONPHOTO",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "HOUSEVERIFICATTIONPHOTO"
                 },
                 "date": {
                     "type": "string",
                     "title": "DATE",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "format": "date"
                 },
                 "mailSameAsResidence": {
                     "type": "boolean",
-                    "title": "MAIL_SAME_AS_RESIDENCE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "MAIL_SAME_AS_RESIDENCE"
                 },
                 "mailingDistrict": {
                     "type": "string",
@@ -1037,33 +797,21 @@
                 },
                 "mailingDoorNo": {
                     "type": "string",
-                    "title": "DOOR_NO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "DOOR_NO"
                 },
                 "mailingLocality": {
                     "type": "string",
-                    "title": "LOCALITY",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "LOCALITY"
                 },
                 "mailingPincode": {
                     "type": "string",
                     "title": "PIN_CODE",
                     "minLength": 6,
-                    "maxLength": 6,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 6
                 },
                 "mailingPostoffice": {
                     "type": "string",
-                    "title": "POST_OFFICE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "POST_OFFICE"
                 },
                 "mailingState": {
                     "type": "string",
@@ -1072,66 +820,40 @@
                 },
                 "mailingStreet": {
                     "type": "string",
-                    "title": "STREET",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "STREET"
                 },
                 "maritalStatus": {
                     "type": "string",
                     "title": "MARITAL_STATUS",
-                    "enumCode": "marital_status",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "marital_status"
                 },
                 "middleName": {
                     "type": "string",
-                    "title": "MIDDLENAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "MIDDLENAME"
                 },
                 "miscellaneous": {
                     "type": "object",
                     "title": "MISCELLANEOUS",
                     "properties": {
                         "alcoholConsumption": {
-                            "type": "boolean",
-                            "title": "ALCOHOL_CONSUMPTION",
-                            "captureStages":[
-                                "Stage02"
-                            ]
+                            "type": "string",
+                            "title": "ALCOHOL_CONSUMPTION"
                         },
                         "heightInInch": {
                             "type": "integer",
-                            "title": "HEIGHT_IN_INCH",
-                            "captureStages":[
-                                "Stage02"
-                            ]
+                            "title": "HEIGHT_IN_INCH"
                         },
-
                         "narcoticsConsumption": {
-                            "type": "boolean",
-                            "title": "NARCOTICS_CONSUMPTION",
-                            "captureStages":[
-                                "Stage02"
-                            ]
+                            "type": "string",
+                            "title": "NARCOTICS_CONSUMPTION"
                         },
                         "tobaccoConsumption": {
-                            "type": "boolean",
-                            "title": "TOBACCO_CONSUMPTION",
-                            "captureStages":[
-                                "Stage02"
-                            ]
+                            "type": "string",
+                            "title": "TOBACCO_CONSUMPTION"
                         },
-
                         "weightInKg": {
                             "type": "integer",
-                            "title": "WEIGHT_IN_KG",
-                            "captureStages":[
-                                "Stage02"
-                            ]
+                            "title": "WEIGHT_IN_KG"
                         }
                     },
                     "required": [
@@ -1146,129 +868,85 @@
                     "type": "string",
                     "title": "MOBILE_PHONE",
                     "minLength": 10,
-                    "maxLength": 10,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 10
                 },
-
-
                 "panCardImageId": {
                     "type": "string",
                     "title": "PAN_CARD_IMAGE",
                     "category": "CustomerEnrollment",
-                    "subCategory": "PAN",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "PAN"
                 },
                 "panNo": {
                     "type": "string",
                     "title": "PAN_NO",
                     "minLength": 10,
-                    "maxLength": 10,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maxLength": 10
                 },
                 "photoImageId": {
                     "type": "string",
                     "title": "CUSTOMER_PHOTO",
                     "category": "CustomerEnrollment",
-                    "subCategory": "PHOTO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "subCategory": "PHOTO"
                 },
                 "leftHandThumpImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "leftHandIndexImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "leftHandMiddleImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "leftHandRingImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "leftHandSmallImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "rightHandThumpImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "rightHandIndexImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "rightHandMiddleImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "rightHandRingImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "rightHandSmallImageId": {
                     "type": "string",
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
-                    "subCategory": "FINGERPRINT",
-                    "captureStages":[
-                        "Stage02"
-                    ]
+                    "subCategory": "FINGERPRINT"
                 },
                 "physicalAssets": {
                     "type": "array",
@@ -1278,33 +956,21 @@
                         "properties": {
                             "address": {
                                 "type": "string",
-                                "title": "Address",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "Address"
                             },
                             "nameOfOwnedAsset": {
                                 "type": "string",
-                                "title": "NAME_OF_OWNED_ASSET",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "NAME_OF_OWNED_ASSET"
                             },
                             "numberOfOwnedAsset": {
                                 "type": "integer",
                                 "title": "NUMBER_OF_OWNED_ASSET",
-                                "captureStages":[
-                                    "Stage02"
-                                ],
                                 "default":1
                             },
                             "ownedAssetDetails": {
                                 "type": "string",
                                 "title": "OWNED_ASSET_DETAILS",
-                                "enumCode": "asset",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "asset"
                             },
                             "ownedAssetValue": {
                                 "type": "number",
@@ -1321,63 +987,39 @@
                     "type": "number",
                     "title": "PIN_CODE",
                     "minimum":100000,
-                    "maximum":999999,
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "maximum":999999
                 },
                 "place": {
                     "type": "string",
-                    "title": "PLACE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "PLACE"
                 },
                 "postOffice": {
                     "type": "string",
-                    "title": "POST_OFFICE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "POST_OFFICE"
                 },
 
                 "religion": {
                     "type": "string",
                     "title": "RELIGION",
-                    "enumCode": "religion",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode": "religion"
                 },
 
                 "spouseDateOfBirth": {
                     "type": "string",
                     "title": "SPOUSE_DATE_OF_BIRTH",
-                    "format": "date",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "format": "date"
                 },
                 "spouseFirstName": {
                     "type": "string",
-                    "title": "SPOUSE_FIRSTNAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "SPOUSE_FIRSTNAME"
                 },
                 "spouseLastName": {
                     "type": "string",
-                    "title": "SPOUSE_LASTNAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "SPOUSE_LASTNAME"
                 },
                 "spouseMiddleName": {
                     "type": "string",
-                    "title": "SPOUSE_MIDDLENAME",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "SPOUSE_MIDDLENAME"
                 },
                 "state": {
                     "type": "string",
@@ -1386,17 +1028,11 @@
                 },
                 "stdCode": {
                     "type": "string",
-                    "title": "STD_CODE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "STD_CODE"
                 },
                 "street": {
                     "type": "string",
-                    "title": "STREET",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "STREET"
                 },
 
                 "udf": {
@@ -1708,10 +1344,7 @@
                 },
                 "urnNo": {
                     "type": "string",
-                    "title": "URN_NO",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "URN_NO"
                 },
                 "verifications": {
                     "type": "array",
@@ -1722,46 +1355,28 @@
 
                             "houseNo": {
                                 "type": "string",
-                                "title": "HOUSE_NO",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "HOUSE_NO"
                             },
                             "houseNoIsVerified": {
                                 "type": "boolean",
-                                "title": "HOUSE_NO_IS_VERIFIED",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "HOUSE_NO_IS_VERIFIED"
                             },
                             "referenceFirstName": {
                                 "type": "string",
-                                "title": "REFERENCE_FULL_NAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "REFERENCE_FULL_NAME"
                             },
                             "referenceLastName": {
                                 "type": "string",
-                                "title": "REFERENCE_LASTNAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "REFERENCE_LASTNAME"
                             },
                             "referenceMiddleName": {
                                 "type": "string",
-                                "title": "REFERENCE_MIDDLENAME",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "title": "REFERENCE_MIDDLENAME"
                             },
                             "relationship": {
                                 "type": "string",
                                 "title": "RELATIONSHIP",
-                                "enumCode": "relationship",
-                                "captureStages":[
-                                    "Stage02"
-                                ]
+                                "enumCode": "relationship"
                             }
                         },
                         "required": [
@@ -1770,25 +1385,16 @@
                 },
                 "inCurrentAddressSince": {
                     "type": "string",
-                    "title": "IN_CURRENT_ADDRESS_SINCE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "IN_CURRENT_ADDRESS_SINCE"
                 },
                 "inCurrentAreaSince": {
                     "type": "string",
-                    "title": "IN_CURRENT_AREA_SINCE",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "title": "IN_CURRENT_AREA_SINCE"
                 },
                 "villageName": {
                     "type": "string",
                     "title": "VILLAGE_NAME",
-                    "enumCode":"village",
-                    "captureStages":[
-                        "Stage01"
-                    ]
+                    "enumCode":"village"
                 }
             },
             "required": [
@@ -1809,7 +1415,6 @@
                 "mailingPincode",
                 "mailingState",
                 "maritalStatus",
-                "photoImageId",
                 "pincode",
                 "religion",
                 "state",
@@ -1817,7 +1422,7 @@
                 "mailingDistrict",
                 "mailingState",
                 "mailingPincode",
-                "landLineNo"
+                "mobilePhone"
             ]
         },
         "enrollmentAction": {
