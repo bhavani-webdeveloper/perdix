@@ -29,6 +29,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
 
         };
+
+        var calculateTotalValue = function(value, form, model){
+            if (_.isNumber(model.loanAccount.collateral[form.arrayIndex].quantity) && _.isNumber(value)){
+                model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].collateralValue;
+            }
+        }
+
         try{
             var defaultPartner = formHelper.enum("partner").data[0].value;
         }catch(e){}
@@ -56,7 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 getSanctionedAmount(model);
                 $log.info(model);
             },
-            offline: true,
+            offline: false,
             getOfflineDisplayItem: function(item, index){
                 return [
                     '{{"ENTITY_NAME"|translate}}: ' + item.customer.firstName + (item.loanAccount.urnNo ? ' <small>{{"URN_NO"|translate}}:' + item.loanAccount.urnNo + '</small>' : ''),
@@ -151,7 +158,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
-                                        'customerType':"Enterprise",
                                         'stage': "Completed"
                                     }).$promise;
                                     return promise;
@@ -369,8 +375,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key":"loanAccount.collateral",
                         "title":"COLLATERAL",
                         "type":"array",
-                        "add":null,
-                        "remove":null,
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralType",
@@ -383,7 +387,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].manufacturer"
                             },
                             {
-                                "key":"loanAccount.collateral[].quantity"
+                                "key":"loanAccount.collateral[].quantity",
+                                "onChange": function(value ,form ,model, event){
+                                    calculateTotalValue(value, form, model);
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
@@ -394,7 +401,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key":"loanAccount.collateral[].collateralValue",
                                 "type":"amount",
-                                "title":"COLLATERAL_VALUE"
+                                "title":"COLLATERAL_VALUE",
+                                "onChange": function(value ,form ,model, event){
+                                    calculateTotalValue(value, form, model);
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].totalValue",
@@ -764,6 +774,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             IndividualLoan.create(resp,function(resp,headers){
                                 $log.info(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
+                                $state.go({pageName: 'loans.individual.booking.PendingQueue'})
                             },function(resp){
                                 $log.info(resp);
                                 PageHelper.showErrors(resp);
