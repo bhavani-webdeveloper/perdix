@@ -147,6 +147,24 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     });
 
                 }
+                else if(model.creditValidation.status == "2")
+                {
+                    $log.info("Inside PartialPayment()");
+                    var reqParams = {
+                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                        "remarks":model.creditValidation.reject_remarks,
+                        "rejectReason":model.creditValidation.reject_reason
+                    };
+                    LoanProcess.reject(reqParams,null, function(response){
+                    PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
                 else if(model.creditValidation.status == "3")
                 {
                     $log.info("Inside NoPayment()");
