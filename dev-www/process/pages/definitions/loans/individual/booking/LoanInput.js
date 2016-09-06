@@ -677,7 +677,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.originalAccountNumber",
-                                title:"ORIGINAL_ACCOUNT"
+                                title:"ORIGINAL_ACCOUNT",
+                                "readonly":true
                             }
                         ]
                     }
@@ -768,6 +769,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             delete resp.$promise;
                             delete resp.$resolved;
                             $log.info(resp);
+                            model.loanAccount.id = resp.loanAccount.id;
+                            $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                             resp.loanProcessAction="PROCEED";
                             //reqData.loanProcessAction="PROCEED";
                             PageHelper.showLoader();
@@ -775,10 +778,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 $log.info(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
                                 $state.go({pageName: 'loans.individual.booking.PendingQueue'})
-                            },function(resp){
-                                $log.info(resp);
-                                PageHelper.showErrors(resp);
+                            },function(errresp){
+                                $log.info(errresp);
+                                PageHelper.showErrors(errresp);
                                 PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
+                                model = resp;
 
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
