@@ -37,7 +37,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             autoSearch:true,
             searchSchema: {
                 "type": 'object',
-                "required":["branch"],
+               // "required":["branch"],
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
@@ -77,7 +77,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId || SessionStore.getBranchId(),
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,
@@ -167,8 +167,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'PRINCIPAL'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'INTEREST'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'Principal Due'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
                         "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
