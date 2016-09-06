@@ -12,16 +12,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
         initialize: function (model, form, formCtrl) {
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
+            model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
             if (model._pdc.loanId) {
-                model.pdc = model._pdc;
+                model.pdc.id = model._pdc.accountNumber;
+                model.pdc.branchName = model._pdc.branchName;
+                
                 
                 PDC.get({accountId: model._pdc.loanId},
                     function(res){
                         model.pdcGet = Utils.removeNulls(res,true);
-                        // for (var i = Things.length - 1; i >= 0; i--) {
-                        //     Things[i]
-                        // }
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
                         model.pdc.securityCheckNo = model.pdcGet;
@@ -60,13 +60,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                  "items": [{
                             "type":"fieldset",
                             "title": "LOAN_DETAILS",
-                            "items":[{
-                                    "key": "pdc.loanId",
-                                    "title": "LOAN_ID",
+                            "items":[
+                                {
+                                    "key": "pdc.id",
+                                    "title": "LOAN_ACCOUNT_NUMBER",
                                     "readonly":true
                                 },
                                 {
-                                    "key": "pdc.BranchCode",
+                                    "key": "pdc.branchName",
                                     "title": "BRANCH_NAME",
                                     "readonly":true
                                 },
@@ -94,50 +95,41 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             {
                             "type":"fieldset",
                             "title": "SECURITY_CHECK",
-                            "items":[{
-                                    "key": "pdc.pdcSummaryDTO.bankAccountNo",
-                                    "title": "BANK_ACCOUNT_NUMBER",
-                                    "readonly":true
-                                },
+                            "items":[
+                                // {
+                                //     "key": "pdc.bankAccountNo",
+                                //     "title": "BANK_ACCOUNT_NUMBER"
+                                // },
+                                // {
+                                //     "key": "pdc.securityCheckNo",
+                                //     "title": "SECURITY_CHECK_NO"
+                                // },
+                                // {
+                                //     "key": "pdc.chequeNoFrom",
+                                //     "title": "CHEQUE_NUMBER_FROM"
+                                // },
+                                // {
+                                //     "key": "pdc.chequeType",
+                                //     "title": "CHEQUE_TYPE"
+                                // },
                                 {
-                                    "key": "pdc.pdcSummaryDTO.securityCheckNo",
-                                    "title": "SECURITY_CHECK_NO"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.chequeNoFrom",
-                                    "title": "CHEQUE_NUMBER_FROM"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.chequeType",
-                                    "title": "CHEQUE_TYPE"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.customerBankAccountNo",
+                                    "key": "pdc.customerBankAccountNo",
                                     "title": "CUSTOMER_BANK_ACCOUNT_NUMBER"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.id",
-                                    "title": "ID"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.ifscCode",
-                                    "title": "IFSC_CODE"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.bankName",
-                                    "title": "BANK_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.numberOfCheque",
-                                    "title": "NUMBER_OF_CHEQUE",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.branchName",
-                                    "title": "BRANCH_NAME",
-                                    "readonly":true
-                                }]
+                                }
+                                // {
+                                //     "key": "pdc.ifscCode",
+                                //     "title": "IFSC_CODE"
+                                // },
+                                // {
+                                //     "key": "pdc.bankName",
+                                //     "title": "BANK_NAME",
+                                //     "readonly":true
+                                // },
+                                // {
+                                //     "key": "pdc.numberOfCheque",
+                                //     "title": "NUMBER_OF_CHEQUE"
+                                // }
+                                ]
                             },
                             {
                                 "type":"fieldset",
@@ -180,6 +172,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                     "startEmpty": true,
                                     "title":"CHECK_DETAILS",
                                     "items":[{
+                                            "key": "pdc.addCheque[].bankAccountNo",
+                                            "title": "BANK_ACCOUNT_NUMBER"
+                                        },
+                                        {
                                             "key": "pdc.addCheque[].bankName",
                                             "title": "BANK_NAME"
                                         },
@@ -188,13 +184,17 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                             "title": "IFSC_CODE"
                                         },
                                         {
-                                            "key": "pdc.addCheque[].checkStartNo",
-                                            "title": "CHECK_START_NUMBER",
+                                            "key": "pdc.addCheque[].chequeNoFrom",
+                                            "title": "CHEQUE_NUMBER_FROM",
                                             "type": "Number"
                                         },
                                         {
-                                            "key": "pdc.addCheque[].noOfLeaves",
-                                            "title": "NUMBER_OF_LEAVES",
+                                            "key": "pdc.addCheque[].chequeType",
+                                            "title": "CHEQUE_TYPE"
+                                        },
+                                        {
+                                            "key": "pdc.addCheque[].numberOfCheque",
+                                            "title": "NUMBER_OF_CHEQUE",
                                             "type": "Number"
                                         }]
                                 }]
@@ -225,7 +225,22 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.addCheque" array
                 model.pdc.chequeDetails = model.pdc.chequeDetails || [];
+                model.pdc.pdcSummaryDTO = model.pdc.pdcSummaryDTO || [];
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
+                    
+                    model.pdc.pdcSummaryDTO.push({
+                            bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
+                            bankName: model.pdc.addCheque[bankCount].bankName,
+                            ifscCode: model.pdc.addCheque[bankCount].ifscCode,
+                            chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
+                            chequeType: model.pdc.addCheque[bankCount].chequeType,
+                            numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
+                            customerBankAccountNo: model.pdc.customerBankAccountNo,
+                            loanAccountNo: model._pdc.accountNumber,
+                            branchName: model._pdc.branchName,
+                            id: model._pdc.loanId
+                        });
+
                     $log.info("bank no : " + bankCount);
                     //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
                     for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
@@ -251,7 +266,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 //     });
                 // } else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc, function(response){
+                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
                         model.pdc=response;
                     }, function(errorResponse){

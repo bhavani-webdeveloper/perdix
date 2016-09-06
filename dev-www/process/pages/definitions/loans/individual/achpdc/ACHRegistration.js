@@ -15,9 +15,11 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			 model.ach = model.ach||{};
 			 model.achSearch = model.achSearch||{};
 			 if (model._ach.loanId) {
-				 	model.ach=model._ach;
-					model.ach.accountHolderName = model.achSearch.customerName;
-					model.ach.accountId=model._ach.loanId;
+				 	//model.ach=model._ach;
+					model.ach.accountHolderName = model._ach.customerName;
+					model.ach.accountId = model._ach.accountNumber;
+					model.ach.branchName = model._ach.branchName;
+					model.flag = false;
 				 	
 
 					ACH.search({id: model._ach.loanId})
@@ -27,8 +29,24 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 	                            $log.info("response: " + res);
 
 	                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+	                            for (var key in res) {
+								  if (res.hasOwnProperty(key)) {
+								    var val = res[key];
+								    console.log(val);
+								  }
+								}
 	                            model.achSearch = res;
-	                            model.ach = model.achSearch;
+	                            $log.info("Search res: " + model.achSearch.length);	
+	                          var achSearchLength = model.achSearch.length;
+	                          for (var i = model.achSearch.length - 1; i >= 0; i--) {
+	                          	if(model.achSearch[i].accountHolderName == model.ach.accountHolderName)
+	                          	{
+	                          		model.flag = true;
+	                          		model.ach = model.achSearch[i];
+	                          	}
+	                          $log.info("Flag Value: " + model.ach.flag);	
+	                          }
+	                           
 
 						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -61,7 +79,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
-									"key": "ach.loanId",
+									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
 								},
@@ -104,7 +122,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								},
 								{
 									"key": "ach.bankAccountNumber",
-									"title": "LEGAL_ACCOUNT_NUMBER"
+									"title": "BANK_ACCOUNT_NUMBER"
 								},
 								{
 									"key": "ach.ifscCode",
@@ -148,8 +166,12 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"type": "date"
 								},
 								{
+									"key": "ach.mandateStatus",
+									"title": "MANDATE_STATUS"
+								},
+								{
 									"key": "ach.maximumAmount",
-									"title": "UPTO_MAXIMUM_AMOUNT",
+									"title": "MAX_ACH_AMOUNT",
 									"type": "Number"
 								},
 								{
@@ -175,8 +197,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								{
 									"key": "ach.phoneNo",
 									"title": "MOBILE_PHONE"
-								}
-								,
+								},
 								{
 									"key": "ach.emailId",
 									"title": "EMAIL"
@@ -217,13 +238,14 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								{
 									"key": "ach.remarks",
 									"title": "remarks"
-								}]
+								}
+								]
 							}
 						]
 				},
 				{
 					"type": "actionbox",
-					"condition":"!model.achSearch.bankAccountNumber",
+					"condition":"!model.flag",
 					"items": [{
 						"type": "submit",
 						"title": "Submit"
@@ -231,7 +253,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				},
 				{
 					"type": "actionbox",
-					"condition":"model.achSearch.bankAccountNumber",
+					"condition":"model.flag",
 					"items": [{
 						"type": "submit",
 						"title": "Update"
@@ -245,7 +267,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 
 					$log.info("Inside submit test()");
 					PageHelper.showLoader();
-					if (model.achSearch.bankAccountNumber) {
+					if (model.flag) {
 						$log.info("Inside Update()");
 						ACH.update(model.ach, function(response){
 							PageHelper.hideLoader();
