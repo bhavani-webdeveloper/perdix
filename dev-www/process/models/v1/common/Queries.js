@@ -14,10 +14,6 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
-	/*
-		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, rpa.page_config pageConfig from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
-	*/
-
 	resource.getPagesDefinition = function(userId) {
 		var deferred = $q.defer();
 		resource.getResult('userpages.list', {user_id:userId}).then(function(records){
@@ -93,23 +89,12 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		}, deferred.reject);
 		return deferred.promise;
 	};
-	resource.getTranslationJSON = function(langCode) {
-		var deferred = $q.defer();
-		if (translationLangs && translationLangs[langCode]) {
-			$log.info('translation object avilable in memory for ' + langCode);
-			deferred.resolve(translationLangs[langCode]);
-		} else if (translationResult && translationResult.length) {
+	resource.getTranslationJSON = function(translationResult, langCode) {
+		if (!translationLangs[langCode] && translationResult && translationResult.length) {
 			$log.info('all translation array avilable in memory for ' + langCode);
 			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
-			deferred.resolve(translationLangs[langCode]);
-		} else {
-			resource.downloadTranslations().then(function(result){
-				$log.info('all translation array downloaded for ' + langCode);
-				translationLangs[langCode] = prepareTranslationJSON(result, langCode);
-				deferred.resolve(translationLangs[langCode]);
-			});
 		}
-		return deferred.promise;
+		return translationLangs[langCode];
 	};
 
 	return resource;

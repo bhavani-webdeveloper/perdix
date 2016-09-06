@@ -758,6 +758,10 @@
                     "type": "string",
                     "title": "LOCALITY"
                 },
+                "landmark": {
+                    "type": "string",
+                    "title": "LANDMARK"
+                },
                 "longitude": {
                     "type": "string",
                     "title": "LONGITUDE"

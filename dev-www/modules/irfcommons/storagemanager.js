@@ -65,8 +65,6 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		} catch (e) {
 			$log.error('Branch,centre SORT FAILED after master fetch');
 		}
-
-		classifiers._timestamp = new Date().getTime();
 		return classifiers;
 	};
 	var factoryObj = {
@@ -144,13 +142,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
 			if (!masters || _.isEmpty(masters)) {
-				var stringMasters = retrieveItem('irfMasters');
-				try {
-					masters = JSON.parse(stringMasters);
-					$log.info('masters loaded to memory from localStorage');
-				} catch (e) {
-					$log.error(e);
-				}
+				masters = factoryObj.retrieveJSON('irfMasters');
 			} else {
 				$log.info('masters already in memory');
 			}
@@ -167,7 +159,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 							var _start = new Date().getTime();
 
 							masters = processMasters(codes);
-							storeItem('irfMasters', JSON.stringify(masters));
+							masters._timestamp = new Date().getTime();
+							factoryObj.storeJSON('irfMasters', masters);
 
 							$log.info(masters);
 							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));

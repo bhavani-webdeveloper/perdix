@@ -4069,14 +4069,35 @@ irf.commons.config(function($translateProvider) {
 	$translateProvider.preferredLanguage('en').fallbackLanguage('en');
 	//$translateProvider.useMissingTranslationHandlerLog();
 });
-irf.commons.factory('irfTranslateLoader', ['Queries', '$q', function(Queries, $q){
+irf.commons.factory('irfTranslateLoader',
+['languages', 'Queries', '$q', 'irfStorageService', '$log',
+function(languages, Queries, $q, irfStorageService, $log){
 	return function(options) {
 		var deferred = $q.defer();
-		Queries.downloadTranslations().then(function(translationResult){
-			return Queries.getTranslationJSON(options.key);
-		}).then(function(translations){
-			deferred.resolve(translations);
-		});
+		var translations = irfStorageService.retrieveJSON('irfTranslations');
+		var isSameWeek = false;
+		if (translations && translations._timestamp) {
+			isSameWeek = moment(translations._timestamp).diff(moment(new Date().getTime()), 'day') < 7;
+			$log.info('Translations isSameWeek:' + isSameWeek);
+		}
+		if (isSameWeek && translations && translations[options.key] && !options.forceServer) {
+			deferred.resolve(translations[options.key]);
+		} else {
+			Queries.downloadTranslations().then(function(translationResult) {
+				$log.info('Translations loading from server');
+				var langCodes = _.keys(languages);
+				translations = {
+					_timestamp: new Date().getTime()
+				};
+				for (var i = langCodes.length - 1; i >= 0; i--) {
+					translations[langCodes[i]] = Queries.getTranslationJSON(translationResult, langCodes[i]);
+				};
+				irfStorageService.storeJSON('irfTranslations', translations);
+				deferred.resolve(translations[options.key]);
+			}, function() {
+				deferred.reject(options.key);
+			});
+		}
 		return deferred.promise;
 	};
 }]);
@@ -4472,8 +4493,6 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		} catch (e) {
 			$log.error('Branch,centre SORT FAILED after master fetch');
 		}
-
-		classifiers._timestamp = new Date().getTime();
 		return classifiers;
 	};
 	var factoryObj = {
@@ -4551,13 +4570,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		},
 		cacheAllMaster: function(isServer, forceFetch) {
 			if (!masters || _.isEmpty(masters)) {
-				var stringMasters = retrieveItem('irfMasters');
-				try {
-					masters = JSON.parse(stringMasters);
-					$log.info('masters loaded to memory from localStorage');
-				} catch (e) {
-					$log.error(e);
-				}
+				masters = factoryObj.retrieveJSON('irfMasters');
 			} else {
 				$log.info('masters already in memory');
 			}
@@ -4574,7 +4587,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 							var _start = new Date().getTime();
 
 							masters = processMasters(codes);
-							storeItem('irfMasters', JSON.stringify(masters));
+							masters._timestamp = new Date().getTime();
+							factoryObj.storeJSON('irfMasters', masters);
 
 							$log.info(masters);
 							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
@@ -6191,10 +6205,6 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
-	/*
-		userpages.list=select p.uri, p.title, p.short_title shortTitle, p.icon_class iconClass, p.direct_access directAccess, p.offline, p.state, p.page_name pageName, p.page_id pageId, p.addl_params addlParams, rpa.page_config pageConfig from pages p, role_page_access rpa where p.id = rpa.page_id and rpa.role_id in (select role_id from user_roles where user_id = :user_id)
-	*/
-
 	resource.getPagesDefinition = function(userId) {
 		var deferred = $q.defer();
 		resource.getResult('userpages.list', {user_id:userId}).then(function(records){
@@ -6270,23 +6280,12 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		}, deferred.reject);
 		return deferred.promise;
 	};
-	resource.getTranslationJSON = function(langCode) {
-		var deferred = $q.defer();
-		if (translationLangs && translationLangs[langCode]) {
-			$log.info('translation object avilable in memory for ' + langCode);
-			deferred.resolve(translationLangs[langCode]);
-		} else if (translationResult && translationResult.length) {
+	resource.getTranslationJSON = function(translationResult, langCode) {
+		if (!translationLangs[langCode] && translationResult && translationResult.length) {
 			$log.info('all translation array avilable in memory for ' + langCode);
 			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
-			deferred.resolve(translationLangs[langCode]);
-		} else {
-			resource.downloadTranslations().then(function(result){
-				$log.info('all translation array downloaded for ' + langCode);
-				translationLangs[langCode] = prepareTranslationJSON(result, langCode);
-				deferred.resolve(translationLangs[langCode]);
-			});
 		}
-		return deferred.promise;
+		return translationLangs[langCode];
 	};
 
 	return resource;
@@ -11127,7 +11126,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
-                        readonly: true
+                        type: "select"
                     },
                     {
                         key: "customer.id",
@@ -11325,23 +11324,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
                 "items":[
+                    "customer.mobilePhone",
+                    "customer.landLineNo",
                     "customer.doorNo",
                     "customer.street",
                     "customer.locality",
-                    {
-                        key:"customer.villageName"/*,
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true*/
-                    },
+                    "customer.landmark",
+                    "customer.villageName",
                     "customer.udf.userDefinedFieldValues.udf9",
-                    {
-                        key:"customer.district"/*,
-                        type:"select",
-                        screenFilter: true*/
-                    },
+                    "customer.district",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -11372,12 +11363,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
-                    {
-                        key:"customer.state"
-                    },
-                    "customer.stdCode",
-                    "customer.landLineNo",
-                    "customer.mobilePhone"
+                    "customer.state"
                 ]
             },
             {
@@ -11395,12 +11381,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "IFSC_CODE",
                                 type: "lov",
                                 inputMap: {
-                                    "bankName": {
-                                        "key": "customer.bankAccounts[].bankName",
+                                    "customerBankName": {
+                                        "key": "customer.bankAccounts[].customerBankName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "branchName": {
-                                        "key": "customer.bankAccounts[].branch",
+                                        "key": "customer.bankAccounts[].customerBankBranchName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "ifscCode": {
@@ -11409,8 +11395,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 },
                                 outputMap: {
-                                    "bankName": "customer.bankAccounts[arrayIndex].bankName",
-                                    "branchName": "customer.bankAccounts[arrayIndex].branch",
+                                    "customerBankName": "customer.bankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.bankAccounts[arrayIndex].customerBankBranchName",
                                     "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
@@ -11430,11 +11416,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             },
                             {
-                                key: "customer.bankAccounts[].bankName",
+                                key: "customer.bankAccounts[].customerBankName",
                                 title: "BANK_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].branch",
+                                key: "customer.bankAccounts[].customerBankBranchName",
                                 title: "BRANCH_NAME"
                             },
                             {
@@ -11452,7 +11438,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 enumCode: "account_type"
                             },
                             {
-                                key: "customer.bankAccounts[].isDisbursementAccount",
+                                key: "customer.bankAccounts[].isDisbersementAccount",
                                 type: "radios",
                                 schema: {
                                     default: false
@@ -11564,7 +11550,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
-                    readonly: true
+                    type: "select"
+                },
+                {
+                    key:"customer.centreId",
+                    type:"select",
+                    filter: {
+                        "parentCode": "model.branchId"
+                    },
+                    screenFilter: true
                 },
                 {
                     key: "customer.oldCustomerId",
@@ -11595,14 +11589,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     title:"FULL_NAME",
                     type:"qrcode",
                     onCapture: EnrollmentHelper.customerAadhaarOnCapture
-                },
-                {
-                    key:"customer.centreId",
-                    type:"select",
-                    filter: {
-                        "parentCode": "model.branchId"
-                    },
-                    screenFilter: true
                 },
                 {
                     key:"customer.enrolledAs",
@@ -11696,6 +11682,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             "type": "box",
             "title": "CONTACT_INFORMATION",
             "items": [
+                "customer.mobilePhone",
+                "customer.landLineNo",
                 {
                     type: "fieldset",
                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
@@ -11703,18 +11691,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.doorNo",
                         "customer.street",
                         "customer.locality",
-                        {
-                            key:"customer.villageName"/*,
-                            type:"select",
-                            filter: {
-                                'parentCode': 'model.branchId'
-                            },
-                            screenFilter: true*/
-                        },
+                        "customer.landmark",
+                        "customer.villageName",
                         "customer.postOffice",
-                        {
-                            key:"customer.district"
-                        },
+                        "customer.district",
                         {
                             key: "customer.pincode",
                             type: "lov",
@@ -11749,14 +11729,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 ];
                             }
                         },
-                        {
-                            key:"customer.state"/*,
-                            type:"select",
-                            screenFilter: true*/
-                        },
-                        "customer.mobilePhone",
-                        "customer.stdCode",
-                        "customer.landLineNo",
+                        "customer.state",
                         "customer.mailSameAsResidence"
                     ]
                 },
@@ -12034,7 +12007,41 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     startEmpty: true,
                     items: [
                         {
+                            key:"customer.familyMembers[].relationShip",
+                            type:"select",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                if (modelValue && modelValue.toLowerCase() === 'self') {
+                                    if (model.customer.id)
+                                        model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                    if (model.customer.firstName)
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                    if (model.customer.gender)
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                    if (model.customer.dateOfBirth)
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                    if (model.customer.maritalStatus)
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    if (model.customer.mobilePhone)
+                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                    if (model.customer.spouseFirstName)
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                    if (model.customer.gender)
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' : 
+                                            (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                    if (model.customer.spouseDateOfBirth)
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                    if (model.customer.maritalStatus)
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                }
+                            },
+                            title: "T_RELATIONSHIP"
+                        },
+                        {
                             key:"customer.familyMembers[].customerId",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             type:"lov",
                             "inputMap": {
                                 "firstName": {
@@ -12073,31 +12080,18 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key:"customer.familyMembers[].familyMemberFirstName",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title:"FAMILY_MEMBER_FULL_NAME"
                         },
                         {
-                            key:"customer.familyMembers[].relationShip",
-                            type:"select",
-                            onChange: function(modelValue, form, model, formCtrl, event) {
-                                if (modelValue && modelValue.toLowerCase() === 'self') {
-                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                }
-                            },
-                            title: "T_RELATIONSHIP"
-                        },
-                        {
                             key: "customer.familyMembers[].gender",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             type: "radios",
                             title: "T_GENDER"
                         },
                         {
                             key:"customer.familyMembers[].age",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title: "AGE",
                             type:"number",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -12112,6 +12106,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key: "customer.familyMembers[].dateOfBirth",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             type:"date",
                             title: "T_DATEOFBIRTH",
                             "onChange": function(modelValue, form, model, formCtrl, event) {
@@ -12127,11 +12122,14 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key:"customer.familyMembers[].maritalStatus",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             type:"select",
                             title: "T_MARITAL_STATUS"
                         },
-
-                        "customer.familyMembers[].mobilePhone",
+                        {
+                            key: "customer.familyMembers[].mobilePhone",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                        },
                         {
                             key:"customer.familyMembers[].healthStatus",
                             type:"radios",
@@ -12523,12 +12521,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 title: "IFSC_CODE",
                                 type: "lov",
                                 inputMap: {
-                                    "bankName": {
-                                        "key": "customer.bankAccounts[].bankName",
+                                    "customerBankName": {
+                                        "key": "customer.bankAccounts[].customerBankName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "branchName": {
-                                        "key": "customer.bankAccounts[].branch",
+                                        "key": "customer.bankAccounts[].customerBankBranchName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "ifscCode": {
@@ -12537,8 +12535,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     }
                                 },
                                 outputMap: {
-                                    "bankName": "customer.bankAccounts[arrayIndex].bankName",
-                                    "branchName": "customer.bankAccounts[arrayIndex].branch",
+                                    "customerBankName": "customer.bankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.bankAccounts[arrayIndex].customerBankBranchName",
                                     "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
@@ -12558,11 +12556,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 }
                             },
                             {
-                                key: "customer.bankAccounts[].bankName",
+                                key: "customer.bankAccounts[].customerBankName",
                                 title: "BANK_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].branch",
+                                key: "customer.bankAccounts[].customerBankBranchName",
                                 title: "BRANCH_NAME"
                             },
                             {
@@ -12580,7 +12578,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 enumCode: "account_type"
                             },
                             {
-                                key: "customer.bankAccounts[].isDisbursementAccount",
+                                key: "customer.bankAccounts[].isDisbersementAccount",
                                 type: "radios",
                                 schema: {
                                     default: false

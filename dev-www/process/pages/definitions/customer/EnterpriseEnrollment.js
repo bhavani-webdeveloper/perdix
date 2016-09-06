@@ -34,7 +34,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
-                        readonly: true
+                        type: "select"
                     },
                     {
                         key: "customer.id",
@@ -232,23 +232,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
                 "items":[
+                    "customer.mobilePhone",
+                    "customer.landLineNo",
                     "customer.doorNo",
                     "customer.street",
                     "customer.locality",
-                    {
-                        key:"customer.villageName"/*,
-                        type:"select",
-                        filter: {
-                            'parentCode': 'model.branchId'
-                        },
-                        screenFilter: true*/
-                    },
+                    "customer.landmark",
+                    "customer.villageName",
                     "customer.udf.userDefinedFieldValues.udf9",
-                    {
-                        key:"customer.district"/*,
-                        type:"select",
-                        screenFilter: true*/
-                    },
+                    "customer.district",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -279,12 +271,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
-                    {
-                        key:"customer.state"
-                    },
-                    "customer.stdCode",
-                    "customer.landLineNo",
-                    "customer.mobilePhone"
+                    "customer.state"
                 ]
             },
             {
@@ -302,12 +289,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "IFSC_CODE",
                                 type: "lov",
                                 inputMap: {
-                                    "bankName": {
-                                        "key": "customer.bankAccounts[].bankName",
+                                    "customerBankName": {
+                                        "key": "customer.bankAccounts[].customerBankName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "branchName": {
-                                        "key": "customer.bankAccounts[].branch",
+                                        "key": "customer.bankAccounts[].customerBankBranchName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "ifscCode": {
@@ -316,8 +303,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 },
                                 outputMap: {
-                                    "bankName": "customer.bankAccounts[arrayIndex].bankName",
-                                    "branchName": "customer.bankAccounts[arrayIndex].branch",
+                                    "customerBankName": "customer.bankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.bankAccounts[arrayIndex].customerBankBranchName",
                                     "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
@@ -337,11 +324,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             },
                             {
-                                key: "customer.bankAccounts[].bankName",
+                                key: "customer.bankAccounts[].customerBankName",
                                 title: "BANK_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].branch",
+                                key: "customer.bankAccounts[].customerBankBranchName",
                                 title: "BRANCH_NAME"
                             },
                             {
@@ -359,7 +346,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 enumCode: "account_type"
                             },
                             {
-                                key: "customer.bankAccounts[].isDisbursementAccount",
+                                key: "customer.bankAccounts[].isDisbersementAccount",
                                 type: "radios",
                                 schema: {
                                     default: false
