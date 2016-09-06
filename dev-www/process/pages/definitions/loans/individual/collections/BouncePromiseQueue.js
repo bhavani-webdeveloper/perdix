@@ -57,7 +57,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
-                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'firstName': searchOptions.first_name,
@@ -143,6 +143,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
+
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  item.accountId,  /*Service missing_27082016*/
                         // "{{'BANK'|translate}} : " + item.bankName,
                         // "{{'BRANCH_ID'|translate}} : " + item.branchName,
@@ -158,11 +159,12 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         //"{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + item.customerCategoryLoanOfficer,
                         //"{{'OVERDUE_REASONS'|translate}} : " + item.overdueReasons,
                         //"{{'PROMISETOPAY_DATE'|translate}} : " + item.promiseToPayDate
+
                     ]
                 },
                 getActions: function(){
                     return [
-                        {
+                        /*{
                             name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
@@ -176,14 +178,14 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                                 //}
                                 return false;
                             }
-                        },
+                        },*/
                         {
                             name: "PROMISE_TO_PAY",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
