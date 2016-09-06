@@ -760,6 +760,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         return false;
                     }
 
+                    if (model.loanAccount.guarantors.length > 0){
+                        for (i=0;i<model.loanAccount.guarantors.length;i++){
+                            if (model.loanAccount.applicant === model.loanAccount.guarantors[i].guaUrnNo) {
+                                PageHelper.showProgress("loan-create","Applicant & Guarantor cannot be same",5000);
+                                return false;
+                            }
+                            if (model.loanAccount.coBorrowerUrnNo === model.loanAccount.guarantors[i].guaUrnNo) {
+                                PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
+                                return false;
+                            }
+                        }
+                    }
+                    
+
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
