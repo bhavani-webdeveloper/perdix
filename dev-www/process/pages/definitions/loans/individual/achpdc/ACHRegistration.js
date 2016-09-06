@@ -27,27 +27,19 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 	                    .then(
 	                        function (res) {
 	                            $log.info("response: " + res);
-
-	                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-	                            for (var key in res) {
-								  if (res.hasOwnProperty(key)) {
-								    var val = res[key];
-								    console.log(val);
-								  }
+		                            
+								model.achSearch = res;
+								for (var i = 0; i < model.achSearch.body.length; i++) {
+									//$log.info(achSearch.body[i].accountHolderName);
+									if(model.achSearch.body[i].accountId == model.ach.accountId)
+									{
+									model.flag = true;
+									//model.ach.bankName = model.achSearch.body[i];
+									model.ach = model.achSearch.body[i];
+							
+									}
 								}
-	                            model.achSearch = res;
-	                            $log.info("Search res: " + model.achSearch.length);	
-	                          var achSearchLength = model.achSearch.length;
-	                          for (var i = model.achSearch.length - 1; i >= 0; i--) {
-	                          	if(model.achSearch[i].accountHolderName == model.ach.accountHolderName)
-	                          	{
-	                          		model.flag = true;
-	                          		model.ach = model.achSearch[i];
-	                          	}
-	                          $log.info("Flag Value: " + model.ach.flag);	
-	                          }
-	                           
-
+								
 						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                             PageHelper.showErrors(httpRes);
@@ -79,6 +71,10 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
+				 				type:"section",
+				 				html:"<pre>{{model.ach}}</pre>"
+				 			},
+				 			{
 									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
@@ -171,8 +167,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								},
 								{
 									"key": "ach.maximumAmount",
-									"title": "MAX_ACH_AMOUNT",
-									"type": "Number"
+									"title": "MAX_ACH_AMOUNT"
 								},
 								{
 									"key": "ach.frequency",
