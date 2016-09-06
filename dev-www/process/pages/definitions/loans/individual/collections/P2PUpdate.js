@@ -1,30 +1,65 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.P2PUpdate"),
 ["$log","$q", 'Pages_ManagementHelper','LoanProcess','PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService","Utils",
+'SessionStore',"$state","$stateParams","Masters","authService","Utils", "LoanAccount",
 function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService, Utils){
+	SessionStore,$state,$stateParams,Masters,authService, Utils, LoanAccount){
 
 	return {
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
+            PageHelper.showLoader();
+            irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
+            //PageHelper
+            var loanAccountNo = $stateParams.pageId;
+            var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+            promise.then(function (data) { /* SUCCESS */
+                model.P2PUpdate = data;
+                console.log(data);
+                model.promise = model.promise || {};
+                model.promise.customerName=data.customer1FirstName;
+                model.promise.productCode=data.productCode;
+                model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
+                model.promise.urnNo=data.customerId1;
+                model.promise.instrument='CASH_IN'; 
+                model.promise.authorizationUsing='Testing-Swapnil';
+                model.promise.remarks='collections';
+                model.promise.accountNumber = data.accountId;
+                model.promise.amount = data.totalDemandDue;
+                var currDate = moment(new Date()).format("YYYY-MM-DD");
+                model.promise.repaymentDate = currDate;
+                model.promise.transactionDate = currDate;
+                
+                LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, 
+                    function(response){
+                        if (response.body.length){
+                        model.previousPromise = response.body[0]; 
+                    }
+                });
+                irfProgressMessage.pop('loading P2PUpdate', 'Loaded.', 2000);
+            }, function (resData) {
+                irfProgressMessage.pop('loading P2PUpdate', 'Error loading P2PUpdate.', 4000);
+                PageHelper.showErrors(resData);
+                backToLoansList();
+            })
+            .finally(function () {
+                PageHelper.hideLoader();
+            })
            
-            if (!model._bounce) {
+           /* if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                  model.promise = model._bounce;
+                 model.promise.assignTo='Null-testing';
+                 model.promise.bankName=model._bounce.;
                 model.promise.amountdue = model._bounce.amount1;
                 model.promise.custname = model._bounce.customerName;
                 model.promise.accountNumber = model._bounce.accountId;
                 model.promise.transactionDate = Utils.getCurrentDate();
+                model.promise.scheduledDate = Utils.getCurrentDate();
+                
             }
-            
-            LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, function(response){
-                if (response.body.length){
-                    model.previousPromise = response.body[0];
-                }
-
-            });
+            */
         },
 		form: [
 			{
@@ -34,8 +69,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 "condition": "model.previousPromise",
                 "items":[
                     {
-                        key: "previousPromise.customerNotAvailable",
-                        title: "CUSTOMER_NOT_AVAILABLE",
+                        key: "previousPromise.customerAvailable",
+                        title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
                             default: false
@@ -49,20 +84,31 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
                     {
                         key: "previousPromise.customerCategoryLoanOfficer",
-                        title: "CUSTOMER_CATEGORY",
-                        type: "select",
-                        titleMap: {
+                        title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
+                        //type: "select",
+                        /*titleMap: {
                             "A": "A",
                             "B": "B",
                             "C": "C",
                             "D": "D"
-                        }
+                        }*/
                     },
                     {
-                        key:"previousPromise.reason",
+                        key: "previousPromise.customerCategoryHubManager",
+                        title: "CUSTOMER_CATEGORY_HUB_MANAGER",
+                       // type: "select",
+                       /* titleMap: {
+                            "A": "A",
+                            "B": "B",
+                            "C": "C",
+                            "D": "D"
+                        }*/
+                    },
+                    {
+                        key:"previousPromise.overdueReasons",
                         title:"REASON",
-                        type:"select",
-                        titleMap: [{
+                        //type:"select",
+                        /*titleMap: [{
                             "name":"Wilful default",
                             "value":"Wilfuldefault"
                         },
@@ -77,14 +123,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         {
                             "name":"Others",
                             "value":"Others"
-                        }]
+                        }]*/
                     },
-                    {
+                    /*{
                         key:"previousPromise.overdueReasons",
                         title:"OTHER_REASON",
                         type:"textarea",
                         condition:"model.previousPromise.reason=='Others'"
-                    },
+                    },*/
                     {
                         key:"previousPromise.remarks",
                         title:"REMARKS",
@@ -97,7 +143,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 				"title":"PROMISE_TO_PAY",
 				"items":[
                     {
-                        key:"promise.custname",
+                        key:"promise.customerName",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
@@ -117,14 +163,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly: true
                     },
                     {
-                        key:"promise.amountdue",
+                        key:"promise.amount",
                         title:"AMOUNT_DUE",
                         //type:"amount",
                         readonly:true
                     },
                     {
-                        key: "promise.customerNotAvailable",
-                        title: "CUSTOMER_NOT_AVAILABLE",
+                        key: "promise.customerAvailable",
+                        title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
                             default: false
@@ -137,7 +183,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         type:"date",
                     },
                     {
-                        key: "promise.customerCategoryLoanOfficer",
+                        key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
                         title: "CUSTOMER_CATEGORY",
                         type: "select",
                         titleMap: {
@@ -170,9 +216,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
 					{
 						key:"promise.overdueReasons",
-                        title:"OTHER_REASON",
+                        title:"OVERDUE_REASON",
 						type:"textarea",
-                        condition:"model.promise.reason=='Others'"
+                       // condition:"model.promise.reason=='Others'"
 					},
                     {
                         key:"promise.remarks",
