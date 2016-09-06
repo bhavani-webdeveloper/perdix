@@ -16,6 +16,59 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		localStorage.removeItem(key);
 	};
 	var masters = {};
+	var processMasters = function(codes) {
+		var classifiers = {};
+		var l = codes.length;
+		for (i = 0; i < l; i++) {
+			var d = codes[i];
+			var c = classifiers[d['classifier']];
+			if (!c) {
+				c = classifiers[d['classifier']] = {};
+				c.data = [];
+				if (d['parentClassifier']) {
+					c['parentClassifier'] = d['parentClassifier'];
+				}
+			}
+			var _data = {
+				code: d['code'],
+				name: d['name'],
+				value: d['name'],
+				id: d['id']
+			};
+			if (d['parentClassifier'] && d['parentReferenceCode'])
+				_data.parentCode = d['parentReferenceCode'].trim();
+			if (d['field1']) _data.field1 = d['field1'].trim();
+			if (d['field2']) _data.field2 = d['field2'].trim();
+			if (d['field3']) _data.field3 = d['field3'].trim();
+			if (d['field4']) _data.field4 = d['field4'].trim();
+			if (d['field5']) _data.field5 = d['field5'].trim();
+			c.data.push(_data);
+		}
+
+		/** removing other bank branches, district **/
+		var bankId = null;
+		try {
+			var bankName = SessionStore.getBankName();
+			var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
+			if (bankId) {
+				classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
+				classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
+			}
+		} catch (e) {
+			$log.error('removing other bank branches FAILED after master fetch');
+			$log.error(e);
+		}
+		/** sort branches, centre **/
+		try {
+			classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
+			classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
+		} catch (e) {
+			$log.error('Branch,centre SORT FAILED after master fetch');
+		}
+
+		classifiers._timestamp = new Date().getTime();
+		return classifiers;
+	};
 	var factoryObj = {
 		storeJSON: function(key, value){
 			try {
@@ -89,17 +142,17 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 				return false;
 			}
 		},
-		cacheAllMaster: function(isServer,forceFetch) {
+		cacheAllMaster: function(isServer, forceFetch) {
 			if (!masters || _.isEmpty(masters)) {
-				var localMasters = retrieveItem('irfMasters');
+				var stringMasters = retrieveItem('irfMasters');
 				try {
-					masters = JSON.parse(localMasters);
-					$log.info('masters loaded to memory localStorage');
+					masters = JSON.parse(stringMasters);
+					$log.info('masters loaded to memory from localStorage');
 				} catch (e) {
 					$log.error(e);
 				}
 			} else {
-				$log.info('NoNeedToLoadMasters');
+				$log.info('masters already in memory');
 			}
 			if (isServer) {
 				$log.info('masters isServer');
@@ -109,65 +162,20 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 					if (masters && masters._timestamp) {
 						isSameDay = moment(masters._timestamp).startOf('day').isSame(moment(new Date().getTime()).startOf('day'));
 					}
-					(!forceFetch) && isSameDay && deferred.resolve("It's the same day for Masters/ not downloading");
-					((!forceFetch) && isSameDay) || rcResource.findAll(null).$promise.then(function(codes) {
-						var _start = new Date().getTime();
-						var classifiers = {};
-						var l = codes.length;
-						for (i = 0; i < l; i++) {
-							var d = codes[i];
-							var c = classifiers[d['classifier']];
-							if (!c) {
-								c = classifiers[d['classifier']] = {};
-								c.data = [];
-								if (d['parentClassifier']) {
-									c['parentClassifier'] = d['parentClassifier'];
-								}
-							}
-							var _data = {
-								code: d['code'],
-								name: d['name'],
-								value: d['name'],
-								id: d['id']
-							};
-							if (d['parentClassifier'] && d['parentReferenceCode'])
-								_data.parentCode = d['parentReferenceCode'].trim();
-							if (d['field1']) _data.field1 = d['field1'].trim();
-							if (d['field2']) _data.field2 = d['field2'].trim();
-							if (d['field3']) _data.field3 = d['field3'].trim();
-							if (d['field4']) _data.field4 = d['field4'].trim();
-							if (d['field5']) _data.field5 = d['field5'].trim();
-							c.data.push(_data);
-						}
-						$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
+					if (forceFetch || !isSameDay) {
+						rcResource.findAll(null).$promise.then(function(codes) {
+							var _start = new Date().getTime();
 
-						/** removing other bank branches, district **/
-						var bankId = null;
-						try {
-							var bankName = SessionStore.getBankName();
-							var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
-							if (bankId) {
-								classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
-								classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
-							}
-						} catch (e) {
-							$log.error('removing other bank branches FAILED after master fetch');
-							$log.error(e);
-						}
-						/** sort branches, centre **/
-						try {
-							classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
-							classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
-						} catch (e) {
-							$log.error('Branch,centre SORT FAILED after master fetch');
-						}
+							masters = processMasters(codes);
+							storeItem('irfMasters', JSON.stringify(masters));
 
-						classifiers._timestamp = new Date().getTime();
-						masters = classifiers;
-						$log.info(masters);
-						storeItem('irfMasters', JSON.stringify(classifiers));
-						deferred.resolve("masters download complete");
-					});
+							$log.info(masters);
+							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
+							deferred.resolve("masters download complete");
+						});
+					} else {
+						deferred.resolve("It's the same day for Masters/ not downloading");
+					}
 				} catch (e) {
 					deferred.reject(e);
 				}

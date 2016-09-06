@@ -1,13 +1,15 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$translate',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $translate){
 
 	var onlineLogin = function(username, password, refresh) {
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
 			irfStorageService.cacheAllMaster(true, refresh).then(function(msg){
-				$log.info(msg)
+				$log.info(msg);
+				$log.info('$translate.isForceAsyncReloadEnabled(): '+$translate.isForceAsyncReloadEnabled());
+				$translate.refresh();
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;

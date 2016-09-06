@@ -38,7 +38,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 },
                 {
                     key: "customer.oldCustomerId",
-                    condition: "model.customer.oldCustomerId"
+                    title:"CUSTOMER_ID",
+                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
+                    condition: "model.customer.oldCustomerId",
+                    readonly: true
                 },
                 {
                     key: "customer.id",
@@ -952,27 +955,117 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             }
                         ]
                     },
-                    //{
-                    //    "key": "customer.latitude",
-                    //    "title": "HOUSE_LOCATION",
-                    //    "type": "geotag",
-                    //    "latitude": "customer.latitude",
-                    //    "longitude": "customer.longitude"
-                    //},
-                    //{
-                    //    key: "customer.nameOfRo",
-                    //    readonly: true
-                    //},
-                    //{
-                    //    key:"customer.houseVerificationPhoto",
-                    //    type:"file",
-                    //    fileType:"image/*"
-                    //},
-                    //{
-                    //    key: "customer.date",
-                    //    type:"date"
-                    //},
-                    //"customer.place"
+                    {
+                       "key": "customer.latitude",
+                       "title": "HOUSE_LOCATION",
+                       "type": "geotag",
+                       "latitude": "customer.latitude",
+                       "longitude": "customer.longitude"
+                    },
+                    {
+                       key: "customer.nameOfRo",
+                       readonly: true
+                    },
+                    {
+                       key:"customer.houseVerificationPhoto",
+                       type:"file",
+                       fileType:"image/*"
+                    },
+                    {
+                       key: "customer.date",
+                       type:"date"
+                    },
+                    "customer.place"
+                ]
+            },
+            {
+                type: "box",
+                title: "CUSTOMER_BANK_ACCOUNTS",
+                items: [
+                    {
+                        key: "customer.bankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.bankAccounts[].ifscCode",
+                                title: "IFSC_CODE",
+                                type: "lov",
+                                inputMap: {
+                                    "bankName": {
+                                        "key": "customer.bankAccounts[].bankName",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.bankAccounts[].branch",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    "ifscCode": {
+                                        "key": "customer.bankAccounts[].ifscCode",
+                                        "title": "IFSC_CODE"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "customer.bankAccounts[arrayIndex].bankName",
+                                    "branchName": "customer.bankAccounts[arrayIndex].branch",
+                                    "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                        'firstName': inputModel.first_name,
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.bankAccounts[].bankName",
+                                title: "BANK_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].branch",
+                                title: "BRANCH_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].customerName",
+                                title: "CUSTOMER_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].accountNumber",
+                                title: "ACCOUNT_NUMBER"
+                            },
+                            {
+                                key: "customer.bankAccounts[].accountType",
+                                title: "ACCOUNT_TYPE",
+                                type: "select",
+                                enumCode: "account_type"
+                            },
+                            {
+                                key: "customer.bankAccounts[].isDisbursementAccount",
+                                type: "radios",
+                                schema: {
+                                    default: false
+                                },
+                                title: "DISBURSEMENT_ACCOUNT",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                },{
+                                    value: false,
+                                    name: "No"
+                                }]
+                            }
+                        ]
+                    }
                 ]
             },
             {

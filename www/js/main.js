@@ -455,7 +455,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('.')}}\"\n" +
+    "          name=\"{{form.key.join('$')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -620,6 +620,7 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
+    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -4060,15 +4061,25 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 }])
 
 irf.commons.config(function($translateProvider) {
-	
-	$translateProvider.useStaticFilesLoader({
-    prefix: './process/translations/',
-    suffix: '.json'
-  })
-  .preferredLanguage('en')
-  //.useMissingTranslationHandlerLog()
-  ;
+	/*$translateProvider.useStaticFilesLoader({
+		prefix: './process/translations/',
+		suffix: '.json'
+	});*/
+	$translateProvider.useLoader('irfTranslateLoader');
+	$translateProvider.preferredLanguage('en').fallbackLanguage('en');
+	//$translateProvider.useMissingTranslationHandlerLog();
 });
+irf.commons.factory('irfTranslateLoader', ['Queries', '$q', function(Queries, $q){
+	return function(options) {
+		var deferred = $q.defer();
+		Queries.downloadTranslations().then(function(translationResult){
+			return Queries.getTranslationJSON(options.key);
+		}).then(function(translations){
+			deferred.resolve(translations);
+		});
+		return deferred.promise;
+	};
+}]);
 
 irf.commons.service("entityManager", ["$log", function($log) {
 	var self = this;
@@ -4412,6 +4423,59 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		localStorage.removeItem(key);
 	};
 	var masters = {};
+	var processMasters = function(codes) {
+		var classifiers = {};
+		var l = codes.length;
+		for (i = 0; i < l; i++) {
+			var d = codes[i];
+			var c = classifiers[d['classifier']];
+			if (!c) {
+				c = classifiers[d['classifier']] = {};
+				c.data = [];
+				if (d['parentClassifier']) {
+					c['parentClassifier'] = d['parentClassifier'];
+				}
+			}
+			var _data = {
+				code: d['code'],
+				name: d['name'],
+				value: d['name'],
+				id: d['id']
+			};
+			if (d['parentClassifier'] && d['parentReferenceCode'])
+				_data.parentCode = d['parentReferenceCode'].trim();
+			if (d['field1']) _data.field1 = d['field1'].trim();
+			if (d['field2']) _data.field2 = d['field2'].trim();
+			if (d['field3']) _data.field3 = d['field3'].trim();
+			if (d['field4']) _data.field4 = d['field4'].trim();
+			if (d['field5']) _data.field5 = d['field5'].trim();
+			c.data.push(_data);
+		}
+
+		/** removing other bank branches, district **/
+		var bankId = null;
+		try {
+			var bankName = SessionStore.getBankName();
+			var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
+			if (bankId) {
+				classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
+				classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
+			}
+		} catch (e) {
+			$log.error('removing other bank branches FAILED after master fetch');
+			$log.error(e);
+		}
+		/** sort branches, centre **/
+		try {
+			classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
+			classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
+		} catch (e) {
+			$log.error('Branch,centre SORT FAILED after master fetch');
+		}
+
+		classifiers._timestamp = new Date().getTime();
+		return classifiers;
+	};
 	var factoryObj = {
 		storeJSON: function(key, value){
 			try {
@@ -4485,17 +4549,17 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 				return false;
 			}
 		},
-		cacheAllMaster: function(isServer,forceFetch) {
+		cacheAllMaster: function(isServer, forceFetch) {
 			if (!masters || _.isEmpty(masters)) {
-				var localMasters = retrieveItem('irfMasters');
+				var stringMasters = retrieveItem('irfMasters');
 				try {
-					masters = JSON.parse(localMasters);
-					$log.info('masters loaded to memory localStorage');
+					masters = JSON.parse(stringMasters);
+					$log.info('masters loaded to memory from localStorage');
 				} catch (e) {
 					$log.error(e);
 				}
 			} else {
-				$log.info('NoNeedToLoadMasters');
+				$log.info('masters already in memory');
 			}
 			if (isServer) {
 				$log.info('masters isServer');
@@ -4505,65 +4569,20 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 					if (masters && masters._timestamp) {
 						isSameDay = moment(masters._timestamp).startOf('day').isSame(moment(new Date().getTime()).startOf('day'));
 					}
-					(!forceFetch) && isSameDay && deferred.resolve("It's the same day for Masters/ not downloading");
-					((!forceFetch) && isSameDay) || rcResource.findAll(null).$promise.then(function(codes) {
-						var _start = new Date().getTime();
-						var classifiers = {};
-						var l = codes.length;
-						for (i = 0; i < l; i++) {
-							var d = codes[i];
-							var c = classifiers[d['classifier']];
-							if (!c) {
-								c = classifiers[d['classifier']] = {};
-								c.data = [];
-								if (d['parentClassifier']) {
-									c['parentClassifier'] = d['parentClassifier'];
-								}
-							}
-							var _data = {
-								code: d['code'],
-								name: d['name'],
-								value: d['name'],
-								id: d['id']
-							};
-							if (d['parentClassifier'] && d['parentReferenceCode'])
-								_data.parentCode = d['parentReferenceCode'].trim();
-							if (d['field1']) _data.field1 = d['field1'].trim();
-							if (d['field2']) _data.field2 = d['field2'].trim();
-							if (d['field3']) _data.field3 = d['field3'].trim();
-							if (d['field4']) _data.field4 = d['field4'].trim();
-							if (d['field5']) _data.field5 = d['field5'].trim();
-							c.data.push(_data);
-						}
-						$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
+					if (forceFetch || !isSameDay) {
+						rcResource.findAll(null).$promise.then(function(codes) {
+							var _start = new Date().getTime();
 
-						/** removing other bank branches, district **/
-						var bankId = null;
-						try {
-							var bankName = SessionStore.getBankName();
-							var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
-							if (bankId) {
-								classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
-								classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
-							}
-						} catch (e) {
-							$log.error('removing other bank branches FAILED after master fetch');
-							$log.error(e);
-						}
-						/** sort branches, centre **/
-						try {
-							classifiers['branch'].data = _.sortBy(classifiers['branch'].data, 'name');
-							classifiers['centre'].data = _.sortBy(classifiers['centre'].data, 'name');
-						} catch (e) {
-							$log.error('Branch,centre SORT FAILED after master fetch');
-						}
+							masters = processMasters(codes);
+							storeItem('irfMasters', JSON.stringify(masters));
 
-						classifiers._timestamp = new Date().getTime();
-						masters = classifiers;
-						$log.info(masters);
-						storeItem('irfMasters', JSON.stringify(classifiers));
-						deferred.resolve("masters download complete");
-					});
+							$log.info(masters);
+							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
+							deferred.resolve("masters download complete");
+						});
+					} else {
+						deferred.resolve("It's the same day for Masters/ not downloading");
+					}
 				} catch (e) {
 					deferred.reject(e);
 				}
@@ -4851,15 +4870,17 @@ irf.HOME_PAGE = {
 };
 
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$translate',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $translate){
 
 	var onlineLogin = function(username, password, refresh) {
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
 			irfStorageService.cacheAllMaster(true, refresh).then(function(msg){
-				$log.info(msg)
+				$log.info(msg);
+				$log.info('$translate.isForceAsyncReloadEnabled(): '+$translate.isForceAsyncReloadEnabled());
+				$translate.refresh();
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
@@ -6215,7 +6236,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
 	resource.searchPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		var request = {"pincode":pincode || '', "district":district || '', "state":state || '',};
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
 		resource.getResult("pincode.list", request, 10).then(function(records){
 			if (records && records.results) {
 				var result = {
@@ -6227,6 +6248,44 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				deferred.resolve(result);
 			}
 		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	var prepareTranslationJSON = function(arr, langCode) {
+		var result = {};
+		for (var i = arr.length - 1; i >= 0; i--) {
+			result[arr[i].code] = arr[i][langCode];
+		};
+		return result;
+	};
+	var translationResult = [];
+	var translationLangs = {};
+	resource.downloadTranslations = function() {
+		var deferred = $q.defer();
+		resource.getResult("translations.list", {}).then(function(records){
+			if (records && records.results && records.results.length) {
+				translationResult = records.results;
+				deferred.resolve(translationResult);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+	resource.getTranslationJSON = function(langCode) {
+		var deferred = $q.defer();
+		if (translationLangs && translationLangs[langCode]) {
+			$log.info('translation object avilable in memory for ' + langCode);
+			deferred.resolve(translationLangs[langCode]);
+		} else if (translationResult && translationResult.length) {
+			$log.info('all translation array avilable in memory for ' + langCode);
+			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
+			deferred.resolve(translationLangs[langCode]);
+		} else {
+			resource.downloadTranslations().then(function(result){
+				$log.info('all translation array downloaded for ' + langCode);
+				translationLangs[langCode] = prepareTranslationJSON(result, langCode);
+				deferred.resolve(translationLangs[langCode]);
+			});
+		}
 		return deferred.promise;
 	};
 
@@ -11083,16 +11142,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key:"customer.centreCode",
+                        key:"customer.centreId",
                         type:"select",
                         filter: {
                             "parentCode": "model.branchId"
                         },
                     },
                     {
-                        key: "customer.entityId",
+                        key: "customer.oldCustomerId",
                         title:"ENTITY_ID",
                         titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
                         readonly: true
                     },
                     {
@@ -11508,7 +11568,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 },
                 {
                     key: "customer.oldCustomerId",
-                    condition: "model.customer.oldCustomerId"
+                    title:"CUSTOMER_ID",
+                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
+                    condition: "model.customer.oldCustomerId",
+                    readonly: true
                 },
                 {
                     key: "customer.id",
@@ -12422,27 +12485,117 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             }
                         ]
                     },
-                    //{
-                    //    "key": "customer.latitude",
-                    //    "title": "HOUSE_LOCATION",
-                    //    "type": "geotag",
-                    //    "latitude": "customer.latitude",
-                    //    "longitude": "customer.longitude"
-                    //},
-                    //{
-                    //    key: "customer.nameOfRo",
-                    //    readonly: true
-                    //},
-                    //{
-                    //    key:"customer.houseVerificationPhoto",
-                    //    type:"file",
-                    //    fileType:"image/*"
-                    //},
-                    //{
-                    //    key: "customer.date",
-                    //    type:"date"
-                    //},
-                    //"customer.place"
+                    {
+                       "key": "customer.latitude",
+                       "title": "HOUSE_LOCATION",
+                       "type": "geotag",
+                       "latitude": "customer.latitude",
+                       "longitude": "customer.longitude"
+                    },
+                    {
+                       key: "customer.nameOfRo",
+                       readonly: true
+                    },
+                    {
+                       key:"customer.houseVerificationPhoto",
+                       type:"file",
+                       fileType:"image/*"
+                    },
+                    {
+                       key: "customer.date",
+                       type:"date"
+                    },
+                    "customer.place"
+                ]
+            },
+            {
+                type: "box",
+                title: "CUSTOMER_BANK_ACCOUNTS",
+                items: [
+                    {
+                        key: "customer.bankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.bankAccounts[].ifscCode",
+                                title: "IFSC_CODE",
+                                type: "lov",
+                                inputMap: {
+                                    "bankName": {
+                                        "key": "customer.bankAccounts[].bankName",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    "branchName": {
+                                        "key": "customer.bankAccounts[].branch",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    "ifscCode": {
+                                        "key": "customer.bankAccounts[].ifscCode",
+                                        "title": "IFSC_CODE"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "customer.bankAccounts[arrayIndex].bankName",
+                                    "branchName": "customer.bankAccounts[arrayIndex].branch",
+                                    "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                        'firstName': inputModel.first_name,
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key: "customer.bankAccounts[].bankName",
+                                title: "BANK_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].branch",
+                                title: "BRANCH_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].customerName",
+                                title: "CUSTOMER_NAME"
+                            },
+                            {
+                                key: "customer.bankAccounts[].accountNumber",
+                                title: "ACCOUNT_NUMBER"
+                            },
+                            {
+                                key: "customer.bankAccounts[].accountType",
+                                title: "ACCOUNT_TYPE",
+                                type: "select",
+                                enumCode: "account_type"
+                            },
+                            {
+                                key: "customer.bankAccounts[].isDisbursementAccount",
+                                type: "radios",
+                                schema: {
+                                    default: false
+                                },
+                                title: "DISBURSEMENT_ACCOUNT",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                },{
+                                    value: false,
+                                    name: "No"
+                                }]
+                            }
+                        ]
+                    }
                 ]
             },
             {
@@ -22791,6 +22944,24 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     });
 
                 }
+                else if(model.creditValidation.status == "2")
+                {
+                    $log.info("Inside PartialPayment()");
+                    var reqParams = {
+                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                        "remarks":model.creditValidation.reject_remarks,
+                        "rejectReason":model.creditValidation.reject_reason
+                    };
+                    LoanProcess.reject(reqParams,null, function(response){
+                    PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+
+                    }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    });
+
+                }
                 else if(model.creditValidation.status == "3")
                 {
                     $log.info("Inside NoPayment()");
@@ -27729,6 +27900,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
 
         };
+
+        var calculateTotalValue = function(value, form, model){
+            if (_.isNumber(model.loanAccount.collateral[form.arrayIndex].quantity) && _.isNumber(value)){
+                model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].collateralValue;
+            }
+        }
+
         try{
             var defaultPartner = formHelper.enum("partner").data[0].value;
         }catch(e){}
@@ -27756,7 +27934,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 getSanctionedAmount(model);
                 $log.info(model);
             },
-            offline: true,
+            offline: false,
             getOfflineDisplayItem: function(item, index){
                 return [
                     '{{"ENTITY_NAME"|translate}}: ' + item.customer.firstName + (item.loanAccount.urnNo ? ' <small>{{"URN_NO"|translate}}:' + item.loanAccount.urnNo + '</small>' : ''),
@@ -27851,7 +28029,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
-                                        'customerType':"Enterprise",
                                         'stage': "Completed"
                                     }).$promise;
                                     return promise;
@@ -28069,8 +28246,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "key":"loanAccount.collateral",
                         "title":"COLLATERAL",
                         "type":"array",
-                        "add":null,
-                        "remove":null,
                         "items":[
                             {
                                 "key":"loanAccount.collateral[].collateralType",
@@ -28083,7 +28258,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].manufacturer"
                             },
                             {
-                                "key":"loanAccount.collateral[].quantity"
+                                "key":"loanAccount.collateral[].quantity",
+                                "onChange": function(value ,form ,model, event){
+                                    calculateTotalValue(value, form, model);
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
@@ -28094,7 +28272,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key":"loanAccount.collateral[].collateralValue",
                                 "type":"amount",
-                                "title":"COLLATERAL_VALUE"
+                                "title":"COLLATERAL_VALUE",
+                                "onChange": function(value ,form ,model, event){
+                                    calculateTotalValue(value, form, model);
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].totalValue",
@@ -28464,6 +28645,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             IndividualLoan.create(resp,function(resp,headers){
                                 $log.info(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
+                                $state.go({pageName: 'loans.individual.booking.PendingQueue'})
                             },function(resp){
                                 $log.info(resp);
                                 PageHelper.showErrors(resp);
@@ -28474,9 +28656,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             });
 
 
-                        },function(resp){
-                            $log.info(resp);
-                            PageHelper.showErrors(resp);
+                        },function(errResp){
+                            $log.info(errResp);
+                            PageHelper.showErrors(errResp);
                             PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
                         }).$promise.finally(function(){

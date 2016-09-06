@@ -49,16 +49,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly: true
                     },
                     {
-                        key:"customer.centreCode",
+                        key:"customer.centreId",
                         type:"select",
                         filter: {
                             "parentCode": "model.branchId"
                         },
                     },
                     {
-                        key: "customer.entityId",
+                        key: "customer.oldCustomerId",
                         title:"ENTITY_ID",
                         titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
                         readonly: true
                     },
                     {

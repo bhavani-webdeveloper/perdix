@@ -713,6 +713,9 @@ span.htmlerror {
   transform: skew(8deg) rotate(3deg);
 }
 
+.dashboard-box .box-header .btn-box-tool {
+  font-size: 14px;
+}
 .dashboard-box .box-body .row {
   margin: 0 -5px;
 }

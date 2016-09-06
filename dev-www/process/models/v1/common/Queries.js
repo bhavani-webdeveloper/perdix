@@ -59,7 +59,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
 	resource.searchPincodes = function(pincode, district, state) {
 		var deferred = $q.defer();
-		var request = {"pincode":pincode || '', "district":district || '', "state":state || '',};
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
 		resource.getResult("pincode.list", request, 10).then(function(records){
 			if (records && records.results) {
 				var result = {
@@ -71,6 +71,44 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				deferred.resolve(result);
 			}
 		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	var prepareTranslationJSON = function(arr, langCode) {
+		var result = {};
+		for (var i = arr.length - 1; i >= 0; i--) {
+			result[arr[i].code] = arr[i][langCode];
+		};
+		return result;
+	};
+	var translationResult = [];
+	var translationLangs = {};
+	resource.downloadTranslations = function() {
+		var deferred = $q.defer();
+		resource.getResult("translations.list", {}).then(function(records){
+			if (records && records.results && records.results.length) {
+				translationResult = records.results;
+				deferred.resolve(translationResult);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+	resource.getTranslationJSON = function(langCode) {
+		var deferred = $q.defer();
+		if (translationLangs && translationLangs[langCode]) {
+			$log.info('translation object avilable in memory for ' + langCode);
+			deferred.resolve(translationLangs[langCode]);
+		} else if (translationResult && translationResult.length) {
+			$log.info('all translation array avilable in memory for ' + langCode);
+			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
+			deferred.resolve(translationLangs[langCode]);
+		} else {
+			resource.downloadTranslations().then(function(result){
+				$log.info('all translation array downloaded for ' + langCode);
+				translationLangs[langCode] = prepareTranslationJSON(result, langCode);
+				deferred.resolve(translationLangs[langCode]);
+			});
+		}
 		return deferred.promise;
 	};
 
