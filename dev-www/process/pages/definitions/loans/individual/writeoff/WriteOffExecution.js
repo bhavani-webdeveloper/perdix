@@ -26,6 +26,7 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 },
                 {
                     "key": "loanAccount.customerName",
+                    "readonly": true,
                     "required": true
                 },
                 {

@@ -37,7 +37,7 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             url:endpoint+'/grouprepayment'
         },
         writeOffQueue:{
-            method:'POST',
+            method:'GET',
             url:endpoint+'/findwriteoffList'
         },
         writeOff:{
