@@ -93,7 +93,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         },
                         {
                             key:"loanAccount.loanCentre.centreId",
-                            title:"CENTRE_ID",
+                            title:"CENTRE_NAME",
                             "type":"select",
                             enumCode: "centre",
                             parentEnumCode:"branch"
