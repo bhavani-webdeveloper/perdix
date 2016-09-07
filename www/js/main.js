@@ -5948,7 +5948,8 @@ irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
-irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
+//irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
+irf.FORM_DOWNLOAD_URL = 'http://115.113.193.49:8080/formsKinara/formPrint.jsp';
 
 irf.models
 	.constant('BASE_URL', irf.BASE_URL)
@@ -26985,7 +26986,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
-    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries) {
+    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils) {
 
 
         var getDocument = function(docsArr, docCode){
@@ -27051,7 +27052,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                 loanDocuments.push({
                                                     document: docsForProduct[i].docCode,
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
-                                                    $title: docsForProduct[i].docTitle
+                                                    $title: docsForProduct[i].docTitle,
+                                                    $formsKey: docsForProduct[i].formsKey
                                                 })
                                             }
                                         }
@@ -27134,11 +27136,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                     "icon": "fa fa-download",
                                                     "type": "button",
                                                     "readonly": false,
-                                                    "key": "loanDocs[].formsKey",
+                                                    "key": "loanAccount.loanDocuments[].$downloadRequired",
                                                     "onClick": function(model, form, schemaForm, event){
-                                                        console.log(model);
-                                                        console.log(form);
-                                                        console.log(event);
+                                                        var doc = model.loanAccount.loanDocuments[event.arrayIndex];
+                                                        console.log(doc);
+                                                        Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name="  + doc.$formsKey +  "&record_id=" + model.loanAccount.id)
                                                     }
                                                 }
                                             ]
