@@ -14,6 +14,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             if (model._credit) {
                 model.creditValidation = model._credit;               
                 model.creditValidation.loanRepaymentDetailsId = model._credit.id;
+                model.creditValidation.accountNumber = model._credit.accountNumber;
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
@@ -25,7 +26,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     model.creditValidation.fee = model._credit.fees/100;
                 if (model._credit.penalInterest > 0)
                     model.creditValidation.penal_interest = model._credit.penalInterest/100;
-                if (model._credit.demandAmountInPaisa > 0)
+                if (model._credit.demandAmountInPaisa > 0 || model._credit.demandAmountInPaisa == 0 )
                     model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
                 if (model._credit.repaymentAmountInPaisa > 0)
                     model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
@@ -52,6 +53,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         key:"creditValidation.co_applicant_name",
                         title:"CO_APPLICANT",
                         readonly:true,
+                    },
+                    {
+                        key:"creditValidation.accountNumber",
+                        title:"LOAN_ACCOUNT_NUMBER",
+                        readonly:true,
+                        //type:"amount"
                     },
                     {
                         key:"creditValidation.principal",
@@ -106,7 +113,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
-                            "name":"Amount not creditted in account",
+                            "name":"Amount not credited in account",
                             "value":"1"
                         }],
                         condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
@@ -138,7 +145,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 if(model.creditValidation.status == "1")
                 {
                     $log.info("Inside FullPayment()");
-                    LoanProcess.approve({"loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId}, null, function(response){
+                    LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+
                     PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -147,9 +155,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     });
 
                 }
-                else if(model.creditValidation.status == "2")
+                else if(model.creditValidation.status == "3")
                 {
-                    $log.info("Inside PartialPayment()");
+                    $log.info("Inside NoPayment()");
                     var reqParams = {
                         "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
                         "remarks":model.creditValidation.reject_remarks,
@@ -163,11 +171,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
                     });
-
                 }
-                else if(model.creditValidation.status == "3")
+                else if(model.creditValidation.status == "2")
                 {
-                    $log.info("Inside NoPayment()");
+                    $log.info("Inside PartialPayment()");
                     var reqParams = {
                         "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
                         "remarks":model.creditValidation.reject_remarks,
