@@ -96,6 +96,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -111,9 +112,25 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
+$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
+    "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
+    "        <a class=\"{{ item.style ? item.style : 'color-theme' }} {{form.fieldHtmlClass}}\"\n" +
+    "            href=\"\"\n" +
+    "            ng-href=\"{{form.href}}\"\n" +
+    "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
+    "            ng-disabled=\"form.readonly\">\n" +
+    "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
+    "            {{form.title | translate}}\n" +
+    "        </a>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body form-horizontal array-box\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\" id=\"{{pid}}\" ng-init=\"pid=form.key.join('_')\">\n" +
     "  <div schema-form-array-items sf-field-model=\"ng-repeat\" ng-repeat=\"item in $$value$$ track by $index\" class=\"array-box-theme panel {{form.fieldHtmlClass}}\" ng-init=\"id=pid+'_'+($index+1)\" ng-class=\"{'array-box-last':$last}\">\n" +
-    "    <h4 class=\"box-title box-title-theme\">\n" +
+    "    <h4 ng-if=\"!form.notitle\" class=\"box-title box-title-theme\">\n" +
     "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
@@ -140,7 +157,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "      <h3 class=\"box-title\">{{form.title | translate}}</h3>\n" +
+    "      <h3 class=\"box-title\">{{form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate)}}</h3>\n" +
     "    </div>\n" +
     "    <div class=\"box-body form-horizontal collapse in\" id=\"{{id}}\">\n" +
     "      <sf-decorator ng-repeat=\"item in form.items\" form=\"item\" class=\"ng-scope\"></sf-decorator>\n" +
@@ -149,7 +166,8 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "</div>")
 
 $templateCache.put("irf/template/adminlte/button.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"></label>\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
+    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
     "        <button class=\"btn {{ item.style ? item.style : 'btn-theme' }} {{form.fieldHtmlClass}}\"\n" +
     "                type=\"submit\"\n" +
@@ -228,7 +246,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "  <label for=\"{{form.key.slice(-1)[0]}}\"\n" +
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label {{form.labelHtmlClass}}\">\n" +
-    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
+    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form, arrayIndex:arrayIndex}) : (form.title | translate) }}\n" +
     "  </label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
     "    <input sf-field-model\n" +
@@ -239,6 +257,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -305,6 +324,7 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -355,13 +375,14 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model\n" +
+    "    <input sf-field-model=\"replaceAll\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"text\"\n" +
+    "           type=\"{{form.fieldType||'text'}}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -374,8 +395,8 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -394,6 +415,7 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -532,7 +554,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder}}\"\n" +
+    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -680,21 +702,22 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
-    "            ng-click=\"selectable ? (actualItem.selected = !actualItem.selected) : (expandable ? expand($event) : cb({item:actualItem,index:itemIndex}))\">\n" +
-    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
-    "            <p ng-if=\"item.length > 1\" ng-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
-    "            <p ng-if=\"item.length > 2\" ng-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
+    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "        </div>\n" +
-    "        <div class=\"checkbox\" ng-if=\"selectable\">\n" +
+    "        <div class=\"checkbox\" ng-if=\"selectable\" ng-click=\"actualItem.selected = !actualItem.selected\">\n" +
     "            <label class=\"checkbox-inline checkbox-theme\">\n" +
     "                <input type=\"checkbox\"\n" +
     "                       ng-model=\"actualItem.selected\">\n" +
     "                <span class=\"control-indicator\"></span>\n" +
     "            </label>\n" +
     "        </div>\n" +
-    "        <div class=\"list-context-menu\" ng-if=\"actions.length && !selectable\">\n" +
+    "        <div class=\"list-context-menu\" ng-if=\"actions.length\">\n" +
     "            <div class=\"dropdown irf-action-dropdown\">\n" +
     "                <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
     "                    <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
@@ -822,7 +845,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"basic\"\n" +
+    "          list-style=\"simple\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -1186,7 +1209,8 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "biometric": "biometric.html",
         "qrcode": "qrcode.html",
         "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html"
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
     };
 
     angular.forEach(irfAdminlteUI, function(value, key){
@@ -2584,17 +2608,80 @@ angular.module('irf.listView', ['irf.elements.commons'])
 		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
 	}
 
+	$scope.expanded = false;
 	$scope.expand = function($event) {
-
+		if ($scope.item && $scope.item.length > 3) {
+			$scope.expandItems = $scope.item.slice(3);
+			$scope.expanded = !$scope.expanded;
+		}
 	}
 }])
 ;
 
+angular.module('irf.pikaday', ['irf.elements.commons'])
+.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
+	// Runs during compile
+	return {
+		restrict: 'A',
+		require: '^ngModel',
+		scope: {
+			ngModel: '=',
+			form: '=irfPikaday'
+		},
+		link: function($scope, elem, attrs, ctrl) {
+			var datepicker = 'pikaday';
+			var pikadayOptions = {
+				// minDate: new Date(1800, 0, 1),
+				// maxDate: new Date(2050, 12, 31),
+				// yearRange: [1800,2050],
+				// format: 'YYYY-MM-DD'
+			};
+			angular.extend(pikadayOptions, elemConfig.pikaday);
+			if (!$scope.form.readonly) {
+				if (typeof cordova !== 'undefined' && window.datePicker) {
+					$(elem).next().on('click', function(){
+						window.datePicker.show({
+							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
+							mode: 'date'
+						}, function(date){
+							$log.info(date);
+							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
+							$(elem).val($scope.ngModel);
+							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+						});
+					});
+				} else {
+					pikadayOptions.field = $(elem).next()[0];
+					pikadayOptions.onSelect = function(date) {
+						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
+						$(elem).val($scope.ngModel);
+						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+					};
+					pikadayOptions.onDraw = function() {
+						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
+					};
+					var picker = new Pikaday(pikadayOptions);
+				}
+			}
+			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
+			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
+				if (n) {
+					if (pikadayOptions.dateDisplayFormat) {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+					} else {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+					}
+				}
+			});
+		}
+	};
+}]);
 angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 .directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
 	return {
 		scope: {
 			form: "=irfForm",
+			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2604,8 +2691,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2668,7 +2755,23 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			return;
 		}
 
-		self.launchLov();
+		if ($scope.form.autolov && $scope.modelValue) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov();
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				self.launchLov();
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov();
+		}
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2681,29 +2784,37 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 			templateUrl: "irf/template/lov/modal-lov.html",
 			controller: function($scope) {
 				$scope.$broadcast('schemaFormValidate');
-				$log.info($scope.locals);
+				//$log.info($scope.locals);
 			}
 		});
 	};
 
 	$scope.inputActions = {};
 
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
+	var getSearchPromise = function() {
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
-		promise.then(function(out){
-			$scope.listResponseItems = out.body;
-			$scope.listDisplayItems  =[];
-			angular.forEach(out.body, function(value, key) {
-				c = $scope.form.getListDisplayItem(value, key);
-				this.push(c);
-			}, $scope.listDisplayItems);
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -2718,70 +2829,12 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	};
 
 	self.close = function() {
-		$scope.modalWindow.close();
+		if ($scope.modalWindow) $scope.modalWindow.close();
 		$scope.listResponseItems = null;
 		$scope.listDisplayItems = null;
 	};
 }])
 ;
-angular.module('irf.pikaday', ['irf.elements.commons'])
-.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
-	// Runs during compile
-	return {
-		restrict: 'A',
-		require: '^ngModel',
-		scope: {
-			ngModel: '=',
-			form: '=irfPikaday'
-		},
-		link: function($scope, elem, attrs, ctrl) {
-			var datepicker = 'pikaday';
-			var pikadayOptions = {
-				// minDate: new Date(1800, 0, 1),
-				// maxDate: new Date(2050, 12, 31),
-				// yearRange: [1800,2050],
-				// format: 'YYYY-MM-DD'
-			};
-			angular.extend(pikadayOptions, elemConfig.pikaday);
-			if (!$scope.form.readonly) {
-				if (typeof cordova !== 'undefined' && window.datePicker) {
-					$(elem).next().on('click', function(){
-						window.datePicker.show({
-							date: $scope.ngModel ? moment($scope.ngModel).toDate() : new Date(),
-							mode: 'date'
-						}, function(date){
-							$log.info(date);
-							$scope.ngModel = moment(date).format(pikadayOptions.format);
-							$(elem).val($scope.ngModel);
-							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-						});
-					});
-				} else {
-					pikadayOptions.field = $(elem).next()[0];
-					pikadayOptions.onSelect = function(date) {
-						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
-						$(elem).val($scope.ngModel);
-						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-					};
-					pikadayOptions.onDraw = function() {
-						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
-					};
-					var picker = new Pikaday(pikadayOptions);
-				}
-			}
-			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
-			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
-				if (n) {
-					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n).format(pikadayOptions.dateDisplayFormat));
-					} else {
-						$(elem).next().val(moment(n).format('DD-MM-YYYY'));
-					}
-				}
-			});
-		}
-	};
-}]);
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -2923,6 +2976,9 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			$scope.schemaForm = $scope[$scope.formName];
 			if ($scope.schemaForm) {
 				$scope.schemaForm.scope = $scope;
+				$scope.schemaForm.submit = function() {
+					document.forms[$scope.formName].submit();
+				};
 			}
 			if (angular.isFunction($scope.initialize)) {
 				var start = new Date().getTime();
@@ -3281,7 +3337,51 @@ function($log, $q, $scope){
 			sfc.push({
 				"type": "section",
 				"html": "<hr/>"
-			},{
+			});
+			if ($scope.definition.sorting && $scope.definition.sortByColumns) {
+				sfc.push({
+					"type": "section",
+					"htmlClass": "row",
+					"items": [{
+						"type": "section",
+						"htmlClass": "col-xs-10",
+						"items": [{
+							"key": "sortBy",
+							"type":"select",
+							"title": "SORT_BY",
+							"titleMap": $scope.definition.sortByColumns
+						}]
+					},{
+						"type": "section",
+						"htmlClass": "col-xs-2",
+						"items": [{
+							"type":"anchor",
+							"notitle":true,
+							"title": "",
+							"icon": "fa fa-sort-amount-asc",
+							"onClick": function (model, formCtrl, form, event) {
+								if (form.icon == "fa fa-sort-amount-asc") {
+									form.icon = "fa fa-sort-amount-desc";
+									if (model.sortBy && !_.startsWith(model.sortBy, '-')) {
+										try {
+											//$scope.searchForm[0].
+										} catch (e) {}
+										var v = $scope.definition.sortByColumns[model.sortBy];
+										model.sortBy = '-' + model.sortBy;
+										$scope.definition.sortByColumns[model.sortBy] = v;
+									}
+								} else {
+									form.icon = "fa fa-sort-amount-asc";
+									if (model.sortBy && _.startsWith(model.sortBy, '-')) {
+										model.sortBy = model.sortBy.slice(1);
+									}
+								}
+							}
+						}]
+					}]
+				});
+			}
+			sfc.push({
 				"type": "actions",
 				"notitle": true,
 				"items": actions
@@ -3311,10 +3411,10 @@ function($log, $q, $scope){
 		if ($scope.initialize && angular.isFunction($scope.initialize)) {
 			$scope.initialize({model:$scope.model.searchOptions, form:$scope.searchForm, formCtrl:formCtrl});
 		}
+		if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
+			$scope.loadResults($scope.model.searchOptions);
+		}
 	};
-	if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
-		$scope.loadResults($scope.model.searchOptions);
-	}
 
 }])
 
@@ -6084,7 +6184,7 @@ irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q,
 });
 
 irf.models.factory('Queries',[
-"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log", 
+"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log",
 function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 	var endpoint = BASE_URL + '/api';
 
@@ -6181,6 +6281,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		}
 		return translationLangs[langCode];
 	};
+
+    resource.getLoanProductDocuments = function(prodCode){
+        var deferred = $q.defer();
+        resource.getResult('loan_products.list', {product_code: prodCode}).then(
+            function(res){
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(res){
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
 
 	return resource;
 }]);
@@ -22108,7 +22224,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
-                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'firstName': searchOptions.first_name,
@@ -22194,6 +22310,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 getListItem: function(item){
                     return [
                         item.customerName,
+
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  item.accountId,  /*Service missing_27082016*/
                         // "{{'BANK'|translate}} : " + item.bankName,
                         // "{{'BRANCH_ID'|translate}} : " + item.branchName,
@@ -22209,11 +22326,12 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         //"{{'CUSTOMER_CATEGORY_LOAN_OFFICER'|translate}} : " + item.customerCategoryLoanOfficer,
                         //"{{'OVERDUE_REASONS'|translate}} : " + item.overdueReasons,
                         //"{{'PROMISETOPAY_DATE'|translate}} : " + item.promiseToPayDate
+
                     ]
                 },
                 getActions: function(){
                     return [
-                        {
+                        /*{
                             name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
@@ -22227,14 +22345,14 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                                 //}
                                 return false;
                             }
-                        },
+                        },*/
                         {
                             name: "PROMISE_TO_PAY",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22512,7 +22630,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             autoSearch:true,
             searchSchema: {
                 "type": 'object',
-                "required":["branch"],
+               // "required":["branch"],
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
@@ -22552,7 +22670,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
-                    'loanAccountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId || SessionStore.getBranchId(),
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,
@@ -22642,8 +22760,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'PRINCIPAL'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'INTEREST'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'Principal Due'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
                         "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
@@ -23107,31 +23225,66 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.P2PUpdate"),
 ["$log","$q", 'Pages_ManagementHelper','LoanProcess','PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService","Utils",
+'SessionStore',"$state","$stateParams","Masters","authService","Utils", "LoanAccount",
 function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService, Utils){
+	SessionStore,$state,$stateParams,Masters,authService, Utils, LoanAccount){
 
 	return {
 		"type": "schema-form",
 		"title": "PROMISE_TO_PAY_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
+            PageHelper.showLoader();
+            irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
+            //PageHelper
+            var loanAccountNo = $stateParams.pageId;
+            var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+            promise.then(function (data) { /* SUCCESS */
+                model.P2PUpdate = data;
+                console.log(data);
+                model.promise = model.promise || {};
+                model.promise.customerName=data.customer1FirstName;
+                model.promise.productCode=data.productCode;
+                model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
+                model.promise.urnNo=data.customerId1;
+                model.promise.instrument='CASH_IN'; 
+                model.promise.authorizationUsing='Testing-Swapnil';
+                model.promise.remarks='collections';
+                model.promise.accountNumber = data.accountId;
+                model.promise.amount = data.totalDemandDue;
+                var currDate = moment(new Date()).format("YYYY-MM-DD");
+                model.promise.repaymentDate = currDate;
+                model.promise.transactionDate = currDate;
+                
+                LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, 
+                    function(response){
+                        if (response.body.length){
+                        model.previousPromise = response.body[0]; 
+                    }
+                });
+                irfProgressMessage.pop('loading P2PUpdate', 'Loaded.', 2000);
+            }, function (resData) {
+                irfProgressMessage.pop('loading P2PUpdate', 'Error loading P2PUpdate.', 4000);
+                PageHelper.showErrors(resData);
+                backToLoansList();
+            })
+            .finally(function () {
+                PageHelper.hideLoader();
+            })
            
-            if (!model._bounce) {
+           /* if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
             } else {
                  model.promise = model._bounce;
+                 model.promise.assignTo='Null-testing';
+                 model.promise.bankName=model._bounce.;
                 model.promise.amountdue = model._bounce.amount1;
                 model.promise.custname = model._bounce.customerName;
                 model.promise.accountNumber = model._bounce.accountId;
                 model.promise.transactionDate = Utils.getCurrentDate();
+                model.promise.scheduledDate = Utils.getCurrentDate();
+                
             }
-            
-            LoanProcess.p2pKGFSList({"accountNumber":model.promise.accountNumber}, function(response){
-                if (response.body.length){
-                    model.previousPromise = response.body[0];
-                }
-
-            });
+            */
         },
 		form: [
 			{
@@ -23141,8 +23294,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 "condition": "model.previousPromise",
                 "items":[
                     {
-                        key: "previousPromise.customerNotAvailable",
-                        title: "CUSTOMER_NOT_AVAILABLE",
+                        key: "previousPromise.customerAvailable",
+                        title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
                             default: false
@@ -23156,20 +23309,31 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
                     {
                         key: "previousPromise.customerCategoryLoanOfficer",
-                        title: "CUSTOMER_CATEGORY",
-                        type: "select",
-                        titleMap: {
+                        title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
+                        //type: "select",
+                        /*titleMap: {
                             "A": "A",
                             "B": "B",
                             "C": "C",
                             "D": "D"
-                        }
+                        }*/
                     },
                     {
-                        key:"previousPromise.reason",
+                        key: "previousPromise.customerCategoryHubManager",
+                        title: "CUSTOMER_CATEGORY_HUB_MANAGER",
+                       // type: "select",
+                       /* titleMap: {
+                            "A": "A",
+                            "B": "B",
+                            "C": "C",
+                            "D": "D"
+                        }*/
+                    },
+                    {
+                        key:"previousPromise.overdueReasons",
                         title:"REASON",
-                        type:"select",
-                        titleMap: [{
+                        //type:"select",
+                        /*titleMap: [{
                             "name":"Wilful default",
                             "value":"Wilfuldefault"
                         },
@@ -23184,14 +23348,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         {
                             "name":"Others",
                             "value":"Others"
-                        }]
+                        }]*/
                     },
-                    {
+                    /*{
                         key:"previousPromise.overdueReasons",
                         title:"OTHER_REASON",
                         type:"textarea",
                         condition:"model.previousPromise.reason=='Others'"
-                    },
+                    },*/
                     {
                         key:"previousPromise.remarks",
                         title:"REMARKS",
@@ -23204,7 +23368,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 				"title":"PROMISE_TO_PAY",
 				"items":[
                     {
-                        key:"promise.custname",
+                        key:"promise.customerName",
                         title:"ENTERPRISE_NAME",
                         readonly:true
                     },
@@ -23224,14 +23388,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         readonly: true
                     },
                     {
-                        key:"promise.amountdue",
+                        key:"promise.amount",
                         title:"AMOUNT_DUE",
                         //type:"amount",
                         readonly:true
                     },
                     {
-                        key: "promise.customerNotAvailable",
-                        title: "CUSTOMER_NOT_AVAILABLE",
+                        key: "promise.customerAvailable",
+                        title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
                             default: false
@@ -23244,7 +23408,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         type:"date",
                     },
                     {
-                        key: "promise.customerCategoryLoanOfficer",
+                        key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
                         title: "CUSTOMER_CATEGORY",
                         type: "select",
                         titleMap: {
@@ -23277,9 +23441,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
 					{
 						key:"promise.overdueReasons",
-                        title:"OTHER_REASON",
+                        title:"OVERDUE_REASON",
 						type:"textarea",
-                        condition:"model.promise.reason=='Others'"
+                       // condition:"model.promise.reason=='Others'"
 					},
                     {
                         key:"promise.remarks",
@@ -23461,27 +23625,19 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 	                    .then(
 	                        function (res) {
 	                            $log.info("response: " + res);
-
-	                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-	                            for (var key in res) {
-								  if (res.hasOwnProperty(key)) {
-								    var val = res[key];
-								    console.log(val);
-								  }
+		                            
+								model.achSearch = res;
+								for (var i = 0; i < model.achSearch.body.length; i++) {
+									//$log.info(achSearch.body[i].accountHolderName);
+									if(model.achSearch.body[i].accountId == model.ach.accountId)
+									{
+									model.flag = true;
+									//model.ach.bankName = model.achSearch.body[i];
+									model.ach = model.achSearch.body[i];
+							
+									}
 								}
-	                            model.achSearch = res;
-	                            $log.info("Search res: " + model.achSearch.length);	
-	                          var achSearchLength = model.achSearch.length;
-	                          for (var i = model.achSearch.length - 1; i >= 0; i--) {
-	                          	if(model.achSearch[i].accountHolderName == model.ach.accountHolderName)
-	                          	{
-	                          		model.flag = true;
-	                          		model.ach = model.achSearch[i];
-	                          	}
-	                          $log.info("Flag Value: " + model.ach.flag);	
-	                          }
-	                           
-
+								
 						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                             PageHelper.showErrors(httpRes);
@@ -23513,6 +23669,10 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
+				 				type:"section",
+				 				html:"<pre>{{model.ach}}</pre>"
+				 			},
+				 			{
 									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
@@ -23605,8 +23765,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								},
 								{
 									"key": "ach.maximumAmount",
-									"title": "MAX_ACH_AMOUNT",
-									"type": "Number"
+									"title": "MAX_ACH_AMOUNT"
 								},
 								{
 									"key": "ach.frequency",
@@ -26826,7 +26985,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
-    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan) {
+    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries) {
 
 
         var getDocument = function(docsArr, docCode){
@@ -26856,51 +27015,53 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                             PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                             model.loanAccount = res;
 
-                            var docsForProduct = [
-                                {
-                                    docTitle: "Loan Application",
-                                    docCode: "LOANAPPLICATION",
-                                    formsKey: 'loan',
-                                    downloadRequired: false
-                                },
-                                {
-                                    docTitle: "Legal Agreements",
-                                    docCode: "LEGALAGREEMENTS",
-                                    formsKey: 'legal',
-                                    downloadRequired: false
-                                },
-                                {
-                                    docTitle: 'Legal Schedule',
-                                    docCode: 'LEGALSCHEDULE',
-                                    formsKey: 'legalSchedule',
-                                    downloadRequired: true
-                                }
-                            ];
+                            Queries.getLoanProductDocuments(model.loanAccount.productCode)
+                                .then(
+                                    function(docs){
+                                        var docsForProduct = [];
+                                        for (var i=0; i< docs.length;i++){
+                                            var doc = docs[i];
+                                            docsForProduct.push(
+                                                {
+                                                    docTitle: doc.document_name,
+                                                    docCode: doc.document_code,
+                                                    formsKey: doc.forms_key,
+                                                    downloadRequired: doc.download_required
+                                                }
+                                            )
+                                        }
 
-                            var loanDocuments = model.loanAccount.loanDocuments;
-                            var availableDocCodes = [];
+                                        var loanDocuments = model.loanAccount.loanDocuments;
+                                        var availableDocCodes = [];
 
-                            for (var i=0; i<loanDocuments.length; i++){
-                                availableDocCodes.push(loanDocuments[i].document);
-                                var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
-                                if (documentObj!=null){
-                                    loanDocuments[i].$title = documentObj.docTitle;
-                                } else {
-                                    loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
-                                }
+                                        for (var i=0; i<loanDocuments.length; i++){
+                                            availableDocCodes.push(loanDocuments[i].document);
+                                            var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
+                                            if (documentObj!=null){
+                                                loanDocuments[i].$title = documentObj.docTitle;
+                                                loanDocuments[i].$key = documentObj.formsKey;
+                                            } else {
+                                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                            }
 
-                            }
+                                        }
 
-                            for (var i = 0; i < docsForProduct.length; i++) {
-                                if (_.indexOf(availableDocCodes, docsForProduct[i].docCode)==-1){
-                                    loanDocuments.push({
-                                        document: docsForProduct[i].docCode,
-                                        $downloadRequired: docsForProduct[i].downloadRequired,
-                                        $title: docsForProduct[i].docTitle
-                                    })
-                                }
-                            }
+                                        for (var i = 0; i < docsForProduct.length; i++) {
+                                            if (_.indexOf(availableDocCodes, docsForProduct[i].docCode)==-1){
+                                                loanDocuments.push({
+                                                    document: docsForProduct[i].docCode,
+                                                    $downloadRequired: docsForProduct[i].downloadRequired,
+                                                    $title: docsForProduct[i].docTitle
+                                                })
+                                            }
+                                        }
+                                    }, function(httpRes){
 
+                                    }
+                                )
+                                .finally(function(httpRes){
+
+                                })
                             PageHelper.hideLoader();
                         }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -26973,11 +27134,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                     "icon": "fa fa-download",
                                                     "type": "button",
                                                     "readonly": false,
+                                                    "key": "loanDocs[].formsKey",
                                                     "onClick": function(model, form, schemaForm, event){
                                                         console.log(model);
                                                         console.log(form);
                                                         console.log(event);
-                                                        //window.location =
                                                     }
                                                 }
                                             ]
@@ -27799,8 +27960,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
     }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();

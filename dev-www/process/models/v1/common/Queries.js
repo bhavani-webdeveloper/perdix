@@ -99,7 +99,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 
     resource.getLoanProductDocuments = function(prodCode){
         var deferred = $q.defer();
-        resource.getResult('product-documents.list', {product_code: prodCode}).then(
+        resource.getResult('loan_products.list', {product_code: prodCode}).then(
             function(res){
                 if (res && res.results && res.results.length){
                     deferred.resolve(res.results);

@@ -7,7 +7,8 @@ irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
-irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
+//irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
+irf.FORM_DOWNLOAD_URL = 'http://115.113.193.49:8080/formsKinara/formPrint.jsp';
 
 irf.models
 	.constant('BASE_URL', irf.BASE_URL)
