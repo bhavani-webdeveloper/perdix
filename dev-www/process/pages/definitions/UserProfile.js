@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__UserProfile",
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal",
+	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader",
 function($log, $q, SessionStore, languages, $translate, PM,
-	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal) {
+	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -111,7 +111,7 @@ function($log, $q, SessionStore, languages, $translate, PM,
 					PM.pop('cache-master',"Sync Failed, Please Try Again.",5000);
 				});
 
-
+				irfTranslateLoader({forceServer: true});
 			},
 			preSave: function(model, formCtrl, formName) {
 				var deferred = $q.defer();

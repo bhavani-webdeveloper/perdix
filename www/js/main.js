@@ -7587,9 +7587,9 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
 
 irf.pageCollection.factory("Pages__UserProfile",
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal",
+	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader",
 function($log, $q, SessionStore, languages, $translate, PM,
-	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal) {
+	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -7698,7 +7698,7 @@ function($log, $q, SessionStore, languages, $translate, PM,
 					PM.pop('cache-master',"Sync Failed, Please Try Again.",5000);
 				});
 
-
+				irfTranslateLoader({forceServer: true});
 			},
 			preSave: function(model, formCtrl, formName) {
 				var deferred = $q.defer();
@@ -20796,7 +20796,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
-								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
+								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loan:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
 									pageId:item.loanId
@@ -20804,7 +20804,11 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							},
 							isApplicable: function(item, index){
 								
-								return true;
+								if(item.stage == "Completed") {
+									return true;
+								} else { 
+									return false;
+								}
 							}
 						},
 						{
@@ -20819,8 +20823,12 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 								});
 							},
 							isApplicable: function(item, index){
+								if(item.stage == "Completed") {
+									return true;
+								} else { 
+									return false;
+								}
 								
-								return true;
 							}
 						}
 					];
@@ -23676,15 +23684,15 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			$log.info("ACH selection Page got initialized");
 			 model.ach = model.ach||{};
 			 model.achSearch = model.achSearch||{};
-			 if (model._ach.loanId) {
+			 if (model._ach) {
 				 	//model.ach=model._ach;
 					model.ach.accountHolderName = model._ach.customerName;
-					model.ach.accountId = model._ach.accountNumber;
+					model.ach.accountId = model._ach.accountId;
 					model.ach.branchName = model._ach.branchName;
 					model.flag = false;
 				 	
 
-					ACH.search({id: model._ach.loanId})
+					ACH.search({accountNumber: model.ach.accountId})
 	                    .$promise
 	                    .then(
 	                        function (res) {
@@ -23710,7 +23718,11 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
                         }
                        );
  
-				} else {
+				} else if (model._loan) {
+					model.ach.accountHolderName = model._loan.customerName;
+					model.ach.accountId = model._loan.accountNumber;
+					model.ach.branchName = model._loan.branchName;
+				}else {
 				  $state.go("Page.Engine",{
 										pageName:"loans.individual.Queue",
 										pageId:null
@@ -23733,10 +23745,6 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
-				 				type:"section",
-				 				html:"<pre>{{model.ach}}</pre>"
-				 			},
-				 			{
 									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
@@ -23923,34 +23931,46 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				submit: function(model, form, formName){
 
 					$log.info("Inside submit test()");
-					PageHelper.showLoader();
-					if (model.flag) {
-						$log.info("Inside Update()");
-						ACH.update(model.ach, function(response){
-							PageHelper.hideLoader();
-							// $state.go("Page.Engine", {
-						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-						 //    	pageId: model.ach.loanId
-							// });
-							//model.ach=Utils.removeNulls(model.ach,true);
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					} else {
-						$log.info("Inside Create()");
-						ACH.create(model.ach, function(response){
-							PageHelper.hideLoader();
-							// $state.go("Page.Engine", {
-						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-						 //    	pageId: model.ach.loanId
-							// });
-							//model.ach=response;
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					}
+					$log.info("Inside Create()");
+					ACH.create(model.ach, function(response){
+						PageHelper.hideLoader();
+						// $state.go("Page.Engine", {
+					 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					 //    	pageId: model.ach.loanId
+						// });
+						//model.ach=response;
+					}, function(errorResponse){
+						PageHelper.hideLoader();
+						PageHelper.showErrors(errorResponse);
+					});
+					//PageHelper.showLoader();
+					// if (model.flag) {
+					// 	$log.info("Inside Update()");
+					// 	ACH.update(model.ach, function(response){
+					// 		//PageHelper.hideLoader();
+					// 		// $state.go("Page.Engine", {
+					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					// 	 //    	pageId: model.ach.loanId
+					// 		// });
+					// 		//model.ach=Utils.removeNulls(model.ach,true);
+					// 	}, function(errorResponse){
+					// 		//PageHelper.hideLoader();
+					// 		PageHelper.showErrors(errorResponse);
+					// 	});
+					// } else {
+					// 	$log.info("Inside Create()");
+					// 	ACH.create(model.ach, function(response){
+					// 		PageHelper.hideLoader();
+					// 		// $state.go("Page.Engine", {
+					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					// 	 //    	pageId: model.ach.loanId
+					// 		// });
+					// 		//model.ach=response;
+					// 	}, function(errorResponse){
+					// 		PageHelper.hideLoader();
+					// 		PageHelper.showErrors(errorResponse);
+					// 	});
+					// }
 						// $state.go("Page.Engine", {
 						//     pageName: 'IndividualLoanBookingConfirmation',
 						//     pageId: model.customer.id
@@ -23978,7 +23998,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             if (model._pdc.loanId) {
                 model.pdc.id = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
-                
+                model.flag = false;
                 
                 PDC.get({accountId: model._pdc.loanId},
                     function(res){
@@ -23987,12 +24007,15 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                         PageHelper.showProgress("page-init","Done.",2000);
                         model.pdc.securityCheckNo = model.pdcGet;
                         $log.info("PDC GET RESP. : "+res);
+                        model.flag = true;
                     },
                     function(res){
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Error in loading customer.",2000);
                         // PageHelper.showErrors(res);
+                        model.flag = false;
                         $log.info("PDC GET Error : "+res);  
+
                         
                         /*$state.go("Page.Engine", {
                             pageName: 'EnrollmentHouseVerificationQueue',
@@ -24164,7 +24187,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 },
             {
                     "type": "actionbox",
-                    "condition":"!model.pdc.id",
+                    "condition":"!model.flag",
                     "items": [{
                         "type": "submit",
                         "title": "Submit",
@@ -24172,7 +24195,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 },
                 {
                     "type": "actionbox",
-                    "condition":"model.pdc.id",
+                    "condition":"model.flag",
                     "items": [{
                         "type": "submit",
                         "title": "Update",
@@ -24217,15 +24240,15 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 }
                 model.pdc.addCheque = [];
                 PageHelper.showLoader();
-                // if (model.pdc.id) {
-                //     PDC.update(model.pdc, function(response){
-                //         PageHelper.hideLoader();
-                //         model.pdc=Utils.removeNulls(model.pdc,true);
-                //     }, function(errorResponse){
-                //         PageHelper.hideLoader();
-                //         PageHelper.showErrors(errorResponse);
-                //     });
-                // } else {
+                if (model.flag) {
+                    PDC.update(model.pdc, function(response){
+                        PageHelper.hideLoader();
+                        model.pdc=Utils.removeNulls(model.pdc,true);
+                    }, function(errorResponse){
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(errorResponse);
+                    });
+                } else {
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
@@ -24234,7 +24257,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-                //}
+                }
                 /*$state.go("Page.Engine", {
                     pageName: 'IndividualLoanBookingConfirmation',
                     pageId: model.customer.id
@@ -25363,7 +25386,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
                 "items": [{
                             "key": "ach.achMandateReverseFileId",
                             "notitle":true,
-                            "category":"cat1",
+                            "category":"ACH",
                             "subCategory":"cat2",
                             "type": "file",
                             "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -25399,6 +25422,12 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Download Page got initialized");
+             model.achMandate = model.ach||{};
+             //model.mandate = model.mandate || {};
+             if (model._achMandate.accountId) {
+                model.mandateId = model._achMandate.accountId;
+                model.achMandate = model._achMandate;
+             }
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -25409,12 +25438,30 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
                 "title": "ACH_MANDATE_DOWNLOAD" ,
                 "colClass":"col-sm-6",
                 "items": [{
+                            "title": "DOWNLOAD",
+                            "key":"ach.achMandateDownload",
+                            "htmlClass": "btn-block",
+                            "icon": "fa fa-download",
+                            "type": "button",
+                            "readonly": false,
+                            "onClick": function(model, formCtrl, form, event){
+                                
+                                //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
+                                //model.mandate= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandateId;
+                                window.open("http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandateId);
+                                // console.log(model);
+                                // console.log(formCtrl);
+                                // console.log(form);
+                                // console.log(event);
+                            }
+                        },
+                        {
                             "key": "ach.achMandateFileId",
                             "notitle":true,
                             "category":"cat1",
                             "subCategory":"cat2",
                             "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            "fileType":"application/pdf"
                         },
                         {
                             "type": "button",
