@@ -36,10 +36,10 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             method:'POST',
             url:endpoint+'/grouprepayment'
         },
-        writeOffQueue:{
+        writeOffQueue:searchResource({
             method:'GET',
             url:endpoint+'/findwriteoffList'
-        },
+        }),
         writeOff:{
             method:'POST',
             url:endpoint+'/writeoff'
