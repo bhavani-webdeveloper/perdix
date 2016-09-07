@@ -96,7 +96,6 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"number\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -112,25 +111,9 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
-$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
-    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
-    "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
-    "        <a class=\"{{ item.style ? item.style : 'color-theme' }} {{form.fieldHtmlClass}}\"\n" +
-    "            href=\"\"\n" +
-    "            ng-href=\"{{form.href}}\"\n" +
-    "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
-    "            ng-disabled=\"form.readonly\">\n" +
-    "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
-    "            {{form.title | translate}}\n" +
-    "        </a>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "")
-
 $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body form-horizontal array-box\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\" id=\"{{pid}}\" ng-init=\"pid=form.key.join('_')\">\n" +
     "  <div schema-form-array-items sf-field-model=\"ng-repeat\" ng-repeat=\"item in $$value$$ track by $index\" class=\"array-box-theme panel {{form.fieldHtmlClass}}\" ng-init=\"id=pid+'_'+($index+1)\" ng-class=\"{'array-box-last':$last}\">\n" +
-    "    <h4 ng-if=\"!form.notitle\" class=\"box-title box-title-theme\">\n" +
+    "    <h4 class=\"box-title box-title-theme\">\n" +
     "      <span class=\"text\" data-toggle=\"{{form.view==='fixed'?'':'collapse'}}\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\" style=\"cursor:pointer\">{{ ($first ? ($$value$$.length > 1 ? \"1. \":\"\") : ($index + 1) + \". \") + (form.titleExpr ? evalExpr(form.titleExpr, {form:form,arrayIndex:$index}) : (form.title | translate)) }}</span>\n" +
     "      <span ng-hide=\"form.readonly || form.remove === null\" class=\"pull-right\" style=\"margin-right:0;margin-top:1px\">\n" +
     "        <span class=\"controls\" style=\"padding:0 0 0 7px;\">\n" +
@@ -157,7 +140,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "      <h3 class=\"box-title\">{{form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate)}}</h3>\n" +
+    "      <h3 class=\"box-title\">{{form.title | translate}}</h3>\n" +
     "    </div>\n" +
     "    <div class=\"box-body form-horizontal collapse in\" id=\"{{id}}\">\n" +
     "      <sf-decorator ng-repeat=\"item in form.items\" form=\"item\" class=\"ng-scope\"></sf-decorator>\n" +
@@ -166,8 +149,7 @@ $templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colCla
     "</div>")
 
 $templateCache.put("irf/template/adminlte/button.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
-    "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
-    "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
+    "    <label class=\"col-sm-4 hidden-xs control-label\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
     "        <button class=\"btn {{ item.style ? item.style : 'btn-theme' }} {{form.fieldHtmlClass}}\"\n" +
     "                type=\"submit\"\n" +
@@ -246,7 +228,7 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "  <label for=\"{{form.key.slice(-1)[0]}}\"\n" +
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label {{form.labelHtmlClass}}\">\n" +
-    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form, arrayIndex:arrayIndex}) : (form.title | translate) }}\n" +
+    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
     "    <input sf-field-model\n" +
@@ -257,7 +239,6 @@ $templateCache.put("irf/template/adminlte/default.html","<div class=\"form-group
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           step=\"any\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -324,7 +305,6 @@ $templateCache.put("irf/template/adminlte/input-aadhar.html","<div class=\"form-
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -375,14 +355,13 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
     "         class=\"col-sm-4 control-label\">{{:: form.title | translate }}</label>\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input sf-field-model=\"replaceAll\"\n" +
+    "    <input sf-field-model\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly || form.lovonly\"\n" +
     "           schema-validate=\"form\"\n" +
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "           type=\"{{form.fieldType||'text'}}\"\n" +
+    "           type=\"text\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -395,8 +374,8 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "        \" Max: \" + form.maxlength : \"\")\n" +
     "    }}&nbsp;</span>\n" +
     "\n" +
-    "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
+    "   	<a ng-hide=\"form.readonly\" irf-lov irf-form=\"form\" irf-schema=\"form.schema\" irf-model=\"model\"\n" +
+    "      style=\"position:absolute;top:6px;right:24px\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -415,7 +394,6 @@ $templateCache.put("irf/template/adminlte/qrcode.html","<div class=\"form-group 
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"{{:: form.type || 'text' }}\"\n" +
     "           class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "           placeholder=\"{{form.placeholder|translate}}\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
@@ -455,7 +433,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('$')}}\"\n" +
+    "          name=\"{{form.key.join('.')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -488,14 +466,9 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input ng-if=\"form.readonly\"\n" +
-    "           ng-model=\"$$value$$\"\n" +
-    "           ng-disabled=\"form.readonly\"\n" +
-    "           type=\"text\"\n" +
-    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-if=\"!form.readonly\"\n" +
+    "      ng-disabled=\"form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -559,7 +532,7 @@ $templateCache.put("irf/template/adminlte/textarea.html","<div class=\"form-grou
     "              class=\"form-control {{form.fieldHtmlClass}}\"\n" +
     "              id=\"{{form.key.slice(-1)[0]}}\"\n" +
     "              ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "              placeholder=\"{{form.placeholder|translate}}\"\n" +
+    "              placeholder=\"{{form.placeholder}}\"\n" +
     "              ng-disabled=\"form.readonly\"\n" +
     "              sf-field-model\n" +
     "              ng-model=\"$$value$$\"\n" +
@@ -620,7 +593,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
-    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -708,22 +680,21 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
-    "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
+    "    <div ng-switch-default class=\"list-view list-group-item\">\n" +
     "        <div class=\"list-group-item-body\"\n" +
-    "            ng-click=\"expandable ? expand($event) : cb({item:actualItem,index:itemIndex})\">\n" +
-    "            <h4 class=\"list-group-item-heading\" sg-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
-    "            <p ng-if=\"item.length > 1\" sg-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
-    "            <p ng-if=\"item.length > 2\" sg-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
-    "            <p ng-show=\"expanded\" ng-repeat=\"expandItem in expandItems\" sg-bind-html=\"expandItem\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
+    "            ng-click=\"selectable ? (actualItem.selected = !actualItem.selected) : (expandable ? expand($event) : cb({item:actualItem,index:itemIndex}))\">\n" +
+    "            <h4 class=\"list-group-item-heading\" ng-bind-html=\"item[0]\" ng-style=\"{'padding-left':selectable?'22px':''}\">&nbsp;</h4>\n" +
+    "            <p ng-if=\"item.length > 1\" ng-bind-html=\"item[1]\" class=\"list-group-item-text gray\">&nbsp;</p>\n" +
+    "            <p ng-if=\"item.length > 2\" ng-bind-html=\"item[2]\" class=\"list-group-item-text smaller\">&nbsp;</p>\n" +
     "        </div>\n" +
-    "        <div class=\"checkbox\" ng-if=\"selectable\" ng-click=\"actualItem.selected = !actualItem.selected\">\n" +
+    "        <div class=\"checkbox\" ng-if=\"selectable\">\n" +
     "            <label class=\"checkbox-inline checkbox-theme\">\n" +
     "                <input type=\"checkbox\"\n" +
     "                       ng-model=\"actualItem.selected\">\n" +
     "                <span class=\"control-indicator\"></span>\n" +
     "            </label>\n" +
     "        </div>\n" +
-    "        <div class=\"list-context-menu\" ng-if=\"actions.length\">\n" +
+    "        <div class=\"list-context-menu\" ng-if=\"actions.length && !selectable\">\n" +
     "            <div class=\"dropdown irf-action-dropdown\">\n" +
     "                <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
     "                    <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
@@ -851,7 +822,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
     "        </h4>\n" +
     "        <irf-list-view\n" +
-    "          list-style=\"simple\"\n" +
+    "          list-style=\"basic\"\n" +
     "          list-info=\"listViewOptions\"\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
@@ -1215,8 +1186,7 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "biometric": "biometric.html",
         "qrcode": "qrcode.html",
         "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
+        "validatebiometric": "validate-biometric.html"
     };
 
     angular.forEach(irfAdminlteUI, function(value, key){
@@ -2614,12 +2584,8 @@ angular.module('irf.listView', ['irf.elements.commons'])
 		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
 	}
 
-	$scope.expanded = false;
 	$scope.expand = function($event) {
-		if ($scope.item && $scope.item.length > 3) {
-			$scope.expandItems = $scope.item.slice(3);
-			$scope.expanded = !$scope.expanded;
-		}
+
 	}
 }])
 ;
@@ -2629,7 +2595,6 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 	return {
 		scope: {
 			form: "=irfForm",
-			modelValue: "=?irfModelValue",
 			parentModel: "=irfModel"
 		},
 		restrict: 'A',
@@ -2639,8 +2604,8 @@ angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 		controller: 'irfLovCtrl'
 	};
 }])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm){
 	var self = this;
 	$scope.inputFormHelper = $scope.form.searchHelper;
 
@@ -2703,23 +2668,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autolov && $scope.modelValue) {
-			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			getSearchPromise().then(function(out){
-				if (out.body && out.body.length === 1) {
-					$scope.callback(out.body[0]);
-				} else {
-					displayListOfResponse(out);
-					self.launchLov();
-				}
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			}, function(){
-				self.launchLov();
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			});
-		} else {
-			self.launchLov();
-		}
+		self.launchLov();
 	};
 
 	self.showBindValueAlert = function(bindKeys) {
@@ -2732,37 +2681,29 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			templateUrl: "irf/template/lov/modal-lov.html",
 			controller: function($scope) {
 				$scope.$broadcast('schemaFormValidate');
-				//$log.info($scope.locals);
+				$log.info($scope.locals);
 			}
 		});
 	};
 
 	$scope.inputActions = {};
 
-	var getSearchPromise = function() {
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+			promise = $scope.form.search($scope.inputModel, $scope.form);
 		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form});
 		}
-		return promise;
-	};
-
-	var displayListOfResponse = function(out) {
-		$scope.listResponseItems = out.body;
-		$scope.listDisplayItems  =[];
-		angular.forEach(out.body, function(value, key) {
-			c = $scope.form.getListDisplayItem(value, key);
-			this.push(c);
-		}, $scope.listDisplayItems);
-	};
-
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
-		getSearchPromise().then(function(out){
-			displayListOfResponse(out);
+		promise.then(function(out){
+			$scope.listResponseItems = out.body;
+			$scope.listDisplayItems  =[];
+			angular.forEach(out.body, function(value, key) {
+				c = $scope.form.getListDisplayItem(value, key);
+				this.push(c);
+			}, $scope.listDisplayItems);
 			$scope.showLoader = false;
 		},function(){
 			$scope.showLoader = false;
@@ -2777,7 +2718,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	self.close = function() {
-		if ($scope.modalWindow) $scope.modalWindow.close();
+		$scope.modalWindow.close();
 		$scope.listResponseItems = null;
 		$scope.listDisplayItems = null;
 	};
@@ -2806,11 +2747,11 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 				if (typeof cordova !== 'undefined' && window.datePicker) {
 					$(elem).next().on('click', function(){
 						window.datePicker.show({
-							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
+							date: $scope.ngModel ? moment($scope.ngModel).toDate() : new Date(),
 							mode: 'date'
 						}, function(date){
 							$log.info(date);
-							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
+							$scope.ngModel = moment(date).format(pikadayOptions.format);
 							$(elem).val($scope.ngModel);
 							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
 						});
@@ -2832,9 +2773,9 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
 				if (n) {
 					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+						$(elem).next().val(moment(n).format(pikadayOptions.dateDisplayFormat));
 					} else {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+						$(elem).next().val(moment(n).format('DD-MM-YYYY'));
 					}
 				}
 			});
@@ -2982,9 +2923,6 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			$scope.schemaForm = $scope[$scope.formName];
 			if ($scope.schemaForm) {
 				$scope.schemaForm.scope = $scope;
-				$scope.schemaForm.submit = function() {
-					document.forms[$scope.formName].submit();
-				};
 			}
 			if (angular.isFunction($scope.initialize)) {
 				var start = new Date().getTime();
@@ -3343,51 +3281,7 @@ function($log, $q, $scope){
 			sfc.push({
 				"type": "section",
 				"html": "<hr/>"
-			});
-			if ($scope.definition.sorting && $scope.definition.sortByColumns) {
-				sfc.push({
-					"type": "section",
-					"htmlClass": "row",
-					"items": [{
-						"type": "section",
-						"htmlClass": "col-xs-10",
-						"items": [{
-							"key": "sortBy",
-							"type":"select",
-							"title": "SORT_BY",
-							"titleMap": $scope.definition.sortByColumns
-						}]
-					},{
-						"type": "section",
-						"htmlClass": "col-xs-2",
-						"items": [{
-							"type":"anchor",
-							"notitle":true,
-							"title": "",
-							"icon": "fa fa-sort-amount-asc",
-							"onClick": function (model, formCtrl, form, event) {
-								if (form.icon == "fa fa-sort-amount-asc") {
-									form.icon = "fa fa-sort-amount-desc";
-									if (model.sortBy && !_.startsWith(model.sortBy, '-')) {
-										try {
-											//$scope.searchForm[0].
-										} catch (e) {}
-										var v = $scope.definition.sortByColumns[model.sortBy];
-										model.sortBy = '-' + model.sortBy;
-										$scope.definition.sortByColumns[model.sortBy] = v;
-									}
-								} else {
-									form.icon = "fa fa-sort-amount-asc";
-									if (model.sortBy && _.startsWith(model.sortBy, '-')) {
-										model.sortBy = model.sortBy.slice(1);
-									}
-								}
-							}
-						}]
-					}]
-				});
-			}
-			sfc.push({
+			},{
 				"type": "actions",
 				"notitle": true,
 				"items": actions
@@ -3417,10 +3311,10 @@ function($log, $q, $scope){
 		if ($scope.initialize && angular.isFunction($scope.initialize)) {
 			$scope.initialize({model:$scope.model.searchOptions, form:$scope.searchForm, formCtrl:formCtrl});
 		}
-		if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
-			$scope.loadResults($scope.model.searchOptions);
-		}
 	};
+	if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
+		$scope.loadResults($scope.model.searchOptions);
+	}
 
 }])
 
@@ -23555,9 +23449,11 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			 model.ach = model.ach||{};
 			 model.achSearch = model.achSearch||{};
 			 if (model._ach.loanId) {
-				 	model.ach=model._ach;
-					model.ach.accountHolderName = model.achSearch.customerName;
-					model.ach.accountId=model._ach.loanId;
+				 	//model.ach=model._ach;
+					model.ach.accountHolderName = model._ach.customerName;
+					model.ach.accountId = model._ach.accountNumber;
+					model.ach.branchName = model._ach.branchName;
+					model.flag = false;
 				 	
 
 					ACH.search({id: model._ach.loanId})
@@ -23567,8 +23463,24 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 	                            $log.info("response: " + res);
 
 	                            PageHelper.showProgress('loan-load', 'Loading done.', 2000);
+	                            for (var key in res) {
+								  if (res.hasOwnProperty(key)) {
+								    var val = res[key];
+								    console.log(val);
+								  }
+								}
 	                            model.achSearch = res;
-	                            model.ach = model.achSearch;
+	                            $log.info("Search res: " + model.achSearch.length);	
+	                          var achSearchLength = model.achSearch.length;
+	                          for (var i = model.achSearch.length - 1; i >= 0; i--) {
+	                          	if(model.achSearch[i].accountHolderName == model.ach.accountHolderName)
+	                          	{
+	                          		model.flag = true;
+	                          		model.ach = model.achSearch[i];
+	                          	}
+	                          $log.info("Flag Value: " + model.ach.flag);	
+	                          }
+	                           
 
 						 }, function (httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -23601,7 +23513,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
-									"key": "ach.loanId",
+									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
 								},
@@ -23644,7 +23556,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								},
 								{
 									"key": "ach.bankAccountNumber",
-									"title": "LEGAL_ACCOUNT_NUMBER"
+									"title": "BANK_ACCOUNT_NUMBER"
 								},
 								{
 									"key": "ach.ifscCode",
@@ -23688,8 +23600,12 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"type": "date"
 								},
 								{
+									"key": "ach.mandateStatus",
+									"title": "MANDATE_STATUS"
+								},
+								{
 									"key": "ach.maximumAmount",
-									"title": "UPTO_MAXIMUM_AMOUNT",
+									"title": "MAX_ACH_AMOUNT",
 									"type": "Number"
 								},
 								{
@@ -23715,8 +23631,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								{
 									"key": "ach.phoneNo",
 									"title": "MOBILE_PHONE"
-								}
-								,
+								},
 								{
 									"key": "ach.emailId",
 									"title": "EMAIL"
@@ -23757,13 +23672,14 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 								{
 									"key": "ach.remarks",
 									"title": "remarks"
-								}]
+								}
+								]
 							}
 						]
 				},
 				{
 					"type": "actionbox",
-					"condition":"!model.achSearch.bankAccountNumber",
+					"condition":"!model.flag",
 					"items": [{
 						"type": "submit",
 						"title": "Submit"
@@ -23771,7 +23687,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				},
 				{
 					"type": "actionbox",
-					"condition":"model.achSearch.bankAccountNumber",
+					"condition":"model.flag",
 					"items": [{
 						"type": "submit",
 						"title": "Update"
@@ -23785,7 +23701,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 
 					$log.info("Inside submit test()");
 					PageHelper.showLoader();
-					if (model.achSearch.bankAccountNumber) {
+					if (model.flag) {
 						$log.info("Inside Update()");
 						ACH.update(model.ach, function(response){
 							PageHelper.hideLoader();
@@ -23834,16 +23750,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
         initialize: function (model, form, formCtrl) {
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
+            model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
             if (model._pdc.loanId) {
-                model.pdc = model._pdc;
+                model.pdc.id = model._pdc.accountNumber;
+                model.pdc.branchName = model._pdc.branchName;
+                
                 
                 PDC.get({accountId: model._pdc.loanId},
                     function(res){
                         model.pdcGet = Utils.removeNulls(res,true);
-                        // for (var i = Things.length - 1; i >= 0; i--) {
-                        //     Things[i]
-                        // }
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
                         model.pdc.securityCheckNo = model.pdcGet;
@@ -23882,13 +23798,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                  "items": [{
                             "type":"fieldset",
                             "title": "LOAN_DETAILS",
-                            "items":[{
-                                    "key": "pdc.loanId",
-                                    "title": "LOAN_ID",
+                            "items":[
+                                {
+                                    "key": "pdc.id",
+                                    "title": "LOAN_ACCOUNT_NUMBER",
                                     "readonly":true
                                 },
                                 {
-                                    "key": "pdc.BranchCode",
+                                    "key": "pdc.branchName",
                                     "title": "BRANCH_NAME",
                                     "readonly":true
                                 },
@@ -23916,50 +23833,41 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             {
                             "type":"fieldset",
                             "title": "SECURITY_CHECK",
-                            "items":[{
-                                    "key": "pdc.pdcSummaryDTO.bankAccountNo",
-                                    "title": "BANK_ACCOUNT_NUMBER",
-                                    "readonly":true
-                                },
+                            "items":[
+                                // {
+                                //     "key": "pdc.bankAccountNo",
+                                //     "title": "BANK_ACCOUNT_NUMBER"
+                                // },
+                                // {
+                                //     "key": "pdc.securityCheckNo",
+                                //     "title": "SECURITY_CHECK_NO"
+                                // },
+                                // {
+                                //     "key": "pdc.chequeNoFrom",
+                                //     "title": "CHEQUE_NUMBER_FROM"
+                                // },
+                                // {
+                                //     "key": "pdc.chequeType",
+                                //     "title": "CHEQUE_TYPE"
+                                // },
                                 {
-                                    "key": "pdc.pdcSummaryDTO.securityCheckNo",
-                                    "title": "SECURITY_CHECK_NO"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.chequeNoFrom",
-                                    "title": "CHEQUE_NUMBER_FROM"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.chequeType",
-                                    "title": "CHEQUE_TYPE"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.customerBankAccountNo",
+                                    "key": "pdc.customerBankAccountNo",
                                     "title": "CUSTOMER_BANK_ACCOUNT_NUMBER"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.id",
-                                    "title": "ID"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.ifscCode",
-                                    "title": "IFSC_CODE"
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.bankName",
-                                    "title": "BANK_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.numberOfCheque",
-                                    "title": "NUMBER_OF_CHEQUE",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.pdcSummaryDTO.branchName",
-                                    "title": "BRANCH_NAME",
-                                    "readonly":true
-                                }]
+                                }
+                                // {
+                                //     "key": "pdc.ifscCode",
+                                //     "title": "IFSC_CODE"
+                                // },
+                                // {
+                                //     "key": "pdc.bankName",
+                                //     "title": "BANK_NAME",
+                                //     "readonly":true
+                                // },
+                                // {
+                                //     "key": "pdc.numberOfCheque",
+                                //     "title": "NUMBER_OF_CHEQUE"
+                                // }
+                                ]
                             },
                             {
                                 "type":"fieldset",
@@ -24002,6 +23910,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                     "startEmpty": true,
                                     "title":"CHECK_DETAILS",
                                     "items":[{
+                                            "key": "pdc.addCheque[].bankAccountNo",
+                                            "title": "BANK_ACCOUNT_NUMBER"
+                                        },
+                                        {
                                             "key": "pdc.addCheque[].bankName",
                                             "title": "BANK_NAME"
                                         },
@@ -24010,13 +23922,17 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                             "title": "IFSC_CODE"
                                         },
                                         {
-                                            "key": "pdc.addCheque[].checkStartNo",
-                                            "title": "CHECK_START_NUMBER",
+                                            "key": "pdc.addCheque[].chequeNoFrom",
+                                            "title": "CHEQUE_NUMBER_FROM",
                                             "type": "Number"
                                         },
                                         {
-                                            "key": "pdc.addCheque[].noOfLeaves",
-                                            "title": "NUMBER_OF_LEAVES",
+                                            "key": "pdc.addCheque[].chequeType",
+                                            "title": "CHEQUE_TYPE"
+                                        },
+                                        {
+                                            "key": "pdc.addCheque[].numberOfCheque",
+                                            "title": "NUMBER_OF_CHEQUE",
                                             "type": "Number"
                                         }]
                                 }]
@@ -24047,7 +23963,22 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.addCheque" array
                 model.pdc.chequeDetails = model.pdc.chequeDetails || [];
+                model.pdc.pdcSummaryDTO = model.pdc.pdcSummaryDTO || [];
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
+                    
+                    model.pdc.pdcSummaryDTO.push({
+                            bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
+                            bankName: model.pdc.addCheque[bankCount].bankName,
+                            ifscCode: model.pdc.addCheque[bankCount].ifscCode,
+                            chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
+                            chequeType: model.pdc.addCheque[bankCount].chequeType,
+                            numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
+                            customerBankAccountNo: model.pdc.customerBankAccountNo,
+                            loanAccountNo: model._pdc.accountNumber,
+                            branchName: model._pdc.branchName,
+                            id: model._pdc.loanId
+                        });
+
                     $log.info("bank no : " + bankCount);
                     //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
                     for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
@@ -24073,7 +24004,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 //     });
                 // } else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc, function(response){
+                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
                         model.pdc=response;
                     }, function(errorResponse){
@@ -27876,9 +27807,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
         var bankName = SessionStore.getBankName();
         var bankId;
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
-        var defaultcentreId;
-        if (formHelper.enum("centre").data.length == 1)
-            defaultcentreId = formHelper.enum("centre").data[0].value;
 
         var getSanctionedAmount = function(model){
             var fee = 0;
@@ -27919,7 +27847,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.additional = {branchName : branchName};
                 model.loanAccount.bankId = bankId;
                 model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                model.loanAccount.loanCentre.centreId = model.loanAccount.loanCentre.centreId || defaultcentreId;
                 model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                 model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                 model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
@@ -27949,14 +27876,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                     "type":"fieldset",
                     "title":"BRANCH_DETAILS",
-                    "items":[{
-                            "key": "additional.branchName",
-                            "readonly":true
+                    "items":[
+                        {
+                            key:"loanAccount.loanCentre.branchId",
+                            title:"BRANCH",
+                            "type":"select",
+                            "enumCode":"branch"
                         },
                         {
                             key:"loanAccount.loanCentre.centreId",
                             title:"CENTRE_ID",
-                            "type":"select"
+                            "type":"select",
+                            enumCode: "centre",
+                            parentCode:"branch"
                         },
                         {
                             "key": "loanAccount.partnerCode",
@@ -28546,7 +28478,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.originalAccountNumber",
-                                title:"ORIGINAL_ACCOUNT"
+                                title:"ORIGINAL_ACCOUNT",
+                                "readonly":true
                             }
                         ]
                     }
@@ -28628,6 +28561,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         return false;
                     }
 
+                    if (model.loanAccount.guarantors.length > 0){
+                        for (i=0;i<model.loanAccount.guarantors.length;i++){
+                            if (model.loanAccount.applicant === model.loanAccount.guarantors[i].guaUrnNo) {
+                                PageHelper.showProgress("loan-create","Applicant & Guarantor cannot be same",5000);
+                                return false;
+                            }
+                            if (model.loanAccount.coBorrowerUrnNo === model.loanAccount.guarantors[i].guaUrnNo) {
+                                PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
+                                return false;
+                            }
+                        }
+                    }
+
+
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
@@ -28637,6 +28584,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             delete resp.$promise;
                             delete resp.$resolved;
                             $log.info(resp);
+                            model.loanAccount.id = resp.loanAccount.id;
+                            $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                             resp.loanProcessAction="PROCEED";
                             //reqData.loanProcessAction="PROCEED";
                             PageHelper.showLoader();
@@ -28644,10 +28593,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 $log.info(resp);
                                 PageHelper.showProgress("loan-create","Loan Created",5000);
                                 $state.go({pageName: 'loans.individual.booking.PendingQueue'})
-                            },function(resp){
-                                $log.info(resp);
-                                PageHelper.showErrors(resp);
+                            },function(errresp){
+                                $log.info(errresp);
+                                PageHelper.showErrors(errresp);
                                 PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
+                                model = resp;
 
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();

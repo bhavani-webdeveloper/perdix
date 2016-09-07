@@ -1,15 +1,12 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var bankName = SessionStore.getBankName();
         var bankId;
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
-        var defaultcentreId;
-        if (formHelper.enum("centre").data.length == 1)
-            defaultcentreId = formHelper.enum("centre").data[0].value;
 
         var getSanctionedAmount = function(model){
             var fee = 0;
@@ -50,7 +47,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.additional = {branchName : branchName};
                 model.loanAccount.bankId = bankId;
                 model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                model.loanAccount.loanCentre.centreId = model.loanAccount.loanCentre.centreId || defaultcentreId;
                 model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                 model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                 model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
@@ -80,14 +76,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                     "type":"fieldset",
                     "title":"BRANCH_DETAILS",
-                    "items":[{
-                            "key": "additional.branchName",
-                            "readonly":true
+                    "items":[
+                        {
+                            key:"loanAccount.loanCentre.branchId",
+                            title:"BRANCH",
+                            "type":"select",
+                            "enumCode":"branch"
                         },
                         {
                             key:"loanAccount.loanCentre.centreId",
                             title:"CENTRE_ID",
-                            "type":"select"
+                            "type":"select",
+                            enumCode: "centre",
+                            parentCode:"branch"
                         },
                         {
                             "key": "loanAccount.partnerCode",
@@ -772,7 +773,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             }
                         }
                     }
-                    
+
 
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";

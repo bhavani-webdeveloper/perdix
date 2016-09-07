@@ -1,5 +1,5 @@
 irf.models.factory('Queries',[
-"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log", 
+"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log",
 function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 	var endpoint = BASE_URL + '/api';
 
@@ -96,6 +96,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		}
 		return translationLangs[langCode];
 	};
+
+    resource.getLoanProductDocuments = function(prodCode){
+        var deferred = $q.defer();
+        resource.getResult('product-documents.list', {product_code: prodCode}).then(
+            function(res){
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(res){
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
 
 	return resource;
 }]);

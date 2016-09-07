@@ -138,6 +138,10 @@
                     "title": "DATE_OF_BIRTH",
                     "format": "date"
                 },
+                "customerType": {
+                    "type": "string",
+                    "title": "CUSTOMER_TYPE"
+                },
                 "district": {
                     "type": "string",
                     "title": "DISTRICT",
