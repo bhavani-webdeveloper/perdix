@@ -620,6 +620,42 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "title":"STREET"
                                     },
                                     {
+                                        key: "loanAccount.nominees[].nomineePincode",
+                                        type: "lov",
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "pincode": {
+                                                key:"loanAccount.nominees[].nomineePincode"
+                                            },
+                                            "district": {
+                                                key: "loanAccount.nominees[].nomineeDistrict"
+                                            },
+                                            "state": {
+                                                key: "loanAccount.nominees[].nomineeState"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                                            "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                                            "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model) {
+                                            return Queries.searchPincodes(
+                                                inputModel.pincode,
+                                                inputModel.district,
+                                                inputModel.state
+                                            );
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.pincode,
+                                                item.district + ', ' + item.state
+                                            ];
+                                        }
+                                    },
+                                    {
                                         key:"loanAccount.nominees[].nomineeDistrict",
                                         type:"text",
                                         "title":"DISTRICT"
@@ -627,10 +663,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeState",
                                         "title":"STATE"
-                                    },
-                                    {
-                                        key:"loanAccount.nominees[].nomineePincode",
-                                        "title":"PIN_CODE"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeRelationship",
@@ -787,7 +819,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     if (model.additional.minAmountForSecurityEMI > 0){
-                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == ''){
+                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == '')){
                             PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
                             return false;
                         }
