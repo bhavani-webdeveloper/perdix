@@ -113,5 +113,23 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
+    resource.getGlobalSettings = function(name){
+        var deferred = $q.defer();
+        resource.getResult('globalSettings.list', {name:name}).then(
+            function(res){
+            	$log.info("checking checking");
+            	$log.info(res);
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results[0].value);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(err){
+                deferred.reject(err);
+            }
+        )
+        return deferred.promise;
+    }
+
 	return resource;
 }]);

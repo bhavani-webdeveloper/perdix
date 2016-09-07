@@ -58,6 +58,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.partnerCode = defaultPartner;
                 getSanctionedAmount(model);
                 $log.info(model);
+
+                model.additional.minAmountForSecurityEMI=0;
+                Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
+                    model.additional.minAmountForSecurityEMI = Number(value);
+                    $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);                    
+                },function(err){
+                    $log.info("Max Security EMI is not available");
+                });
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -326,6 +334,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
+                            },
+                            {
+                                key:"loanAccount.otherFee",
+                                type:"amount"
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -771,6 +783,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
                                 return false;
                             }
+                        }
+                    }
+
+                    if (model.additional.minAmountForSecurityEMI > 0){
+                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == ''){
+                            PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
+                            return false;
                         }
                     }
 

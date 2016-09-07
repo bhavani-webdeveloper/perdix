@@ -1006,7 +1006,7 @@
                 },
                 "otherFee":{
                     "type":"integer",
-                    "title":"FEES"
+                    "title":"OTHER_FEE"
                 },
                 "partnerCode": {
                     "type": "string",
