@@ -1005,13 +1005,11 @@
                     "type": "string",
                     "title": "POST_OFFICE"
                 },
-
                 "religion": {
                     "type": "string",
                     "title": "RELIGION",
                     "enumCode": "religion"
                 },
-
                 "spouseDateOfBirth": {
                     "type": "string",
                     "title": "SPOUSE_DATE_OF_BIRTH",
@@ -1042,7 +1040,6 @@
                     "type": "string",
                     "title": "STREET"
                 },
-
                 "udf": {
                     "type": "object",
                     "title": "UDF",
@@ -1075,7 +1072,6 @@
                                 "udf1":{
                                     "title": "SPOUSE_LOAN_CONSENT",
                                     "type":"boolean"
-
                                 },
                                 "udf2":{
                                     "title":"IF_HOUSE_RENTED_NAME_OF_LANDLORD",
@@ -1099,96 +1095,73 @@
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"condition"
-
                                 },
                                 "udf6": {
                                     "title": "TOILET",
                                     "type": "boolean"
-
                                 },
                                 "udf7": {
                                     "title": "BUSINESS_OR_EMPLOYER_NAME",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100
-
                                 },
                                 "udf8": {
                                     "title": "BUSINESS_VILLAGE",
                                     "type": "string",
                                     "maxLength": 100
-
                                 },
                                 "udf9": {
                                     "title": "BUSINESS_LANDMARK",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100
-
                                 },
                                 "udf10": {
                                     "title": "BUSINESS_PINCODE",
                                     "type": "number",
                                     "minimum": 100000,
                                     "maximum": 999999
-
                                 },
                                 "udf11": {
                                     "title": "BUSINESS_PHONE",
                                     "type": "number",
                                     "minimum": 1000000000,
                                     "maximum": 9999999999
-
                                 },
                                 "udf12": {
                                     "title": "IF_SHOP_RENTED_NAME_OF_LANDLORD",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100
-
                                 },
                                 "udf13": {
                                     "title": "CUST_OCCUPATION_TYPE",
                                     "type": "string",
-                                    "enumCode":"broad_occupation_type",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"broad_occupation_type"
                                 },
                                 "udf14": {
                                     "title": "RELATIONSHIP_WITH_BUSINESS_OWNER",
                                     "type": "string",
-                                    "enumCode":"relation_with_business_owner",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"relation_with_business_owner"
                                 },
                                 "udf15": {
                                     "title": "CROP_NAME",
                                     "type": "string",
                                     "minLength": 1,
-                                    "maxLength": 100,
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "maxLength": 100
                                 },
                                 "udf16": {
                                     "title": "WORK_PLACE_TYPE",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"work_place_type",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"work_place_type"
                                 },
                                 "udf17": {
                                     "title": "WORK_PERIOD",
                                     "type": "integer",
-                                    "minimum": 1,
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "minimum": 1
                                 },
                                 "udf18": {
                                     "title": "WORK_PLACE_BUILD_TYPE",
@@ -1202,58 +1175,40 @@
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"condition",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"condition"
                                 },
                                 "udf20": {
                                     "title": "WORK_PLACE",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"work_place",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"work_place"
                                 },
                                 "udf21": {
                                     "title": "WORK_PLACE_OTHERS",
                                     "type": "string",
                                     "minLength": 1,
-                                    "maxLength": 100,
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "maxLength": 100
                                 },
                                 "udf22": {
                                     "title": "BUSINESS_REG_NO",
                                     "type": "string",
                                     "minLength": 1,
-                                    "maxLength": 100,
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "maxLength": 100
                                 },
                                 "udf23": {
                                     "title": "BUSINESS_DESCRIPTION",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"condition",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"condition"
                                 },
                                 "udf24": {
                                     "title": "RELATION_WITH_FARMER",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"relation_with_business_owner",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"relation_with_business_owner"
                                 },
                                 "udf25": {
                                     "title": "LAND_OWNERSHIP",
@@ -1264,59 +1219,43 @@
                                 },
                                 "udf26": {
                                     "title": "IRRIGATED",
-                                    "type": "boolean",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "type": "boolean"
                                 },
                                 "udf27": {
                                     "title": "HARVEST_MONTH",
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 100,
-                                    "enumCode":"months",
-                                    "captureStages": [
-                                        "Stage02"
-                                    ]
+                                    "enumCode":"months"
                                 },
                                 "udf28": {
                                     "title": "LAND_AREA",
-                                    "type": "number",
-                                    "minimum": 0
-
+                                    "type": "number"
                                 },
                                 "udf29": {
-                                    "title": "ADDRESS_PROOF_BACK_SIDE",
+                                    "title": "YEARS_IN_CURR_ADDRESS",
                                     "type": "string",
-                                    "category": "CustomerEnrollment",
-                                    "subCategory": "ADDRESSPROOF"
-
+                                    "enumCode": "years_in_current_address"
                                 },
-
                                 "udf30": {
-                                    "title": "ID_PROOF_BACK_SIDE",
+                                    "title": "YEARS_IN_CURR_AREA",
                                     "type": "string",
-                                    "category": "CustomerEnrollment",
-                                    "subCategory": "IDENTITYPROOF"
-
+                                    "enumCode": "years_in_current_area"
                                 },
                                 "udf31": {
-                                    "title": "HOUSE_BUILD_TYPE",
+                                    "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
                                     "type": "string",
-                                    "enumCode":"house_build_type"
+                                    "enumCode": "years_in_present_area"
                                 },
                                 "udf32": {
-                                    "title": "NUMBER_OF_ROOMS_IN_HOUSE",
-                                    "type": "integer"
-
+                                    "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                                    "type": "string",
+                                    "enumCode": "years_in_current_address"
                                 },
                                 "udf33": {
                                     "type": "string",
                                     "title": "SPOUSE_IDENTITY_PROOF",
-                                    "enumCode": "identity_proof",
-                                    "captureStages":[
-                                        "Stage01"
-                                    ]
+                                    "enumCode": "identity_proof"
                                 },
                                 "udf34": {
                                     "type": "string",
@@ -1332,10 +1271,7 @@
                                 },
                                 "udf36": {
                                     "type": "string",
-                                    "title": "SPOUSE_IDENTITY_PROOF_NO",
-                                    "captureStages":[
-                                        "Stage01"
-                                    ]
+                                    "title": "SPOUSE_IDENTITY_PROOF_NO"
                                 }
                             }
                         },

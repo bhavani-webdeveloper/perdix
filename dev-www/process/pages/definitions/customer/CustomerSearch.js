@@ -3,12 +3,9 @@ irf.pageCollection.factory(irf.page("CustomerSearch"),
 function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
-		"id": "CustomerSearch",
 		"type": "search-list",
-		"name": "CustomerSearch",
 		"title": "CUSTOMER_SEARCH",
 		"subTitle": "",
-		"uri":"Customer Search",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("search-list sample got initialized");

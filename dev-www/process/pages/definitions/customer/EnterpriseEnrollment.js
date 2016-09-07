@@ -86,16 +86,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        type: "date"
                     },
                     {
-                       key: "customer.enterprise.businessInPresentAreaSince",
-                       type: "date",
-                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "customer.enterprise.businessInCurrentAddressSince",
-                        type: "date",
-                        title: "BUSINESS_IN_CURRENT_ADDRESS_SINCE"
-                    },
-                    {
                         "key": "customer.latitude",
                         "title": "BUSINESS_LOCATION",
                         "type": "geotag",
@@ -271,7 +261,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
-                    "customer.state"
+                    "customer.state",
+                    {
+                       key: "customer.udf.userDefinedFieldValues.udf31", // customer.enterprise.businessInPresentAreaSince
+                       type: "select"
+                    },
+                    {
+                        key: "customer.udf.userDefinedFieldValues.udf32", // customer.enterprise.businessInCurrentAddressSince
+                        type: "select"
+                    }
                 ]
             },
             {

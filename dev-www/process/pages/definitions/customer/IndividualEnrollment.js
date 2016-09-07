@@ -226,51 +226,42 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.mailingStreet",
                         "customer.mailingLocality",
                         "customer.mailingPostoffice",
-                        {
-                            key:"customer.mailingDistrict"
-                            //type:"select",
-                            //screenFilter: true
-                        },
-                        "customer.mailingPincode",
+                        "customer.mailingDistrict",
                         {
                             key: "customer.mailingPincode",
                             type: "lov",
                             fieldType: "number",
                             autolov: true,
                             inputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": {
+                                "pincode": "customer.mailingPincode",
+                                "district": {
                                     key: "customer.mailingDistrict"
                                 },
-                                "mailingState": {
+                                "state": {
                                     key: "customer.mailingState"
                                 }
                             },
                             outputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                                "pincode": "customer.mailingPincode",
+                                "district": "customer.mailingDistrict",
+                                "state": "customer.mailingState"
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
                                 return Queries.searchPincodes(
-                                    inputModel.mailingPincode,
-                                    inputModel.mailingDistrict,
-                                    inputModel.mailingState
+                                    inputModel.pincode,
+                                    inputModel.district,
+                                    inputModel.state
                                 );
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
-                                    item.mailingPincode,
-                                    item.mailingDistrict + ', ' + item.mailingState
+                                    item.pincode,
+                                    item.district + ', ' + item.state
                                 ];
                             }
                         },
-                        {
-                            key:"customer.mailingState",
-                            type:"select",
-                            screenFilter: true
-                        }
+                        "customer.mailingState"
                     ]
                 }
             ]
@@ -956,14 +947,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 type:"select"
                             },
                             {
-                                key:"customer.inCurrentAddressSince",
-                                type: "date"
-
+                                key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                type: "select"
                             },
                             {
-                                key:"customer.inCurrentAreaSince",
-                                type:"date"
-
+                                key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                type:"select"
                             }
                         ]
                     },
