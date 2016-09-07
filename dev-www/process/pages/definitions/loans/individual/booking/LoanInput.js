@@ -134,6 +134,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"lov",
                                 "lovonly": true,
                                 "inputMap": {
+                                    "customerType":{
+                                        "key":"customer.customerType",
+                                        "title":"CUSTOMER_TYPE",
+                                        "type":"select",
+                                        "titleMap":{
+                                            "Individual":"Individual",
+                                            "Enterprise":"Enterprise"
+                                        }
+                                    },
                                     "customerId":{
                                         "key":"customer.customerId",
                                         "title":"CUSTOMER_ID"
@@ -167,6 +176,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
+                                        'customerType':inputModel.customerType,
                                         'stage': "Completed"
                                     }).$promise;
                                     return promise;

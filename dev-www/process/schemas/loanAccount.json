@@ -24,6 +24,9 @@
                 "applicantName":{
 
                     "type":"string"
+                },
+                "customerType":{
+                    "type":"string"
                 }
             }
         },
