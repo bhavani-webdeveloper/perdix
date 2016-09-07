@@ -109,6 +109,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title": "PRODUCT_DETAILS",
                         "items": [
                             {
+                                "key": "loanAccount.id",
+                                "title": "LOAN_ID",
+                                "condition":"model.loanAccount.id"
+                            },
+                            {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
                                 "type": "select"
@@ -709,6 +714,49 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
+                                key: "loanAccount.customerBankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                title:"CUSTOMER_BANK_ACC_NO",
+                                bindMap: {
+                                    "customerId": "loanAccount.customerId"
+                                },
+                                outputMap: {
+                                    "account_number": "loanAccount.customerBankAccountNumber",
+                                    "ifsc_code": "loanAccount.customerBankIfscCode",
+                                    "customer_bank_name":"loanAccount.customerBank",
+                                    "customer_bank_branch_name":"loanAccount.customerBranch"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getCustomerBankAccounts(
+                                        inputModel.customerId
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number + (item.is_disbersement_account==1?'&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>':''),
+                                        item.ifsc_code + ', ' + item.customer_bank_name,
+                                        item.customer_bank_branch_name
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.customerBankIfscCode",
+                                title:"CUSTOMER_BANK_IFSC",
+                                "readonly":true
+                            },
+                            {
+                                key:"loanAccount.customerBank",
+                                title:"CUSTOMER_BANK",
+                                "readonly":true
+                            },
+                            {
+                                key:"loanAccount.customerBranch",
+                                title:"BRANCH_NAME",
+                                "readonly":true
+                            },
+                            {
                                 key:"loanAccount.disbursementSchedules",
                                 title:"DISBURSEMENT_SCHEDULES",
                                 add:null,
@@ -768,14 +816,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         key:"loanAccount.documentTracking",
                         "title":"DOCUMENT_TRACKING"
-                    },
-                    {
-                        key:"loanAccount.customerBankAccountNumber",
-                        title:"CUSTOMER_BANK_ACC_NO"
-                    },
-                    {
-                        key:"loanAccount.customerBankIfscCode",
-                        title:"CUSTOMER_BANK_IFSC"
                     }
                 ]
             },

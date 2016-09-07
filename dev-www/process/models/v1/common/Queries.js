@@ -131,5 +131,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
+    resource.getCustomerBankAccounts = function(customerId){
+        var deferred = $q.defer();
+		var request = {"customer_id":customerId};
+		resource.getResult("customerBankAccounts.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
 	return resource;
 }]);
