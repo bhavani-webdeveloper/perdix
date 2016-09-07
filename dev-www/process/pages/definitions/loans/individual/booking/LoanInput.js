@@ -725,15 +725,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         type:"amount"
                                     }
                                 ]
-                            },
-                            {
-                                key:"loanAccount.disbursementFromBankAccountNumber",
-                                title:"DISBURSEMENT_ACCOUNT"
-                            },
-                            {
-                                key:"loanAccount.originalAccountNumber",
-                                title:"ORIGINAL_ACCOUNT",
-                                "readonly":true
                             }
                         ]
                     }
@@ -743,6 +734,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type":"box",
                 "title":"Deprecated Items",
                 "items":[
+                    {
+                        key:"loanAccount.disbursementFromBankAccountNumber",
+                        title:"DISBURSEMENT_ACCOUNT"
+                    },
+                    {
+                        key:"loanAccount.originalAccountNumber",
+                        title:"ORIGINAL_ACCOUNT"
+                    },
                     {
                         "key": "loanAccount.isRestructure",
                         "title":"IS_RESTRUCTURE"
