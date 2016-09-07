@@ -54,6 +54,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         filter: {
                             "parentCode": "model.branchId"
                         },
+                        parentEnumCode:"branch"
                     },
                     {
                         key: "customer.oldCustomerId",

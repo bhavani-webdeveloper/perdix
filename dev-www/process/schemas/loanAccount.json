@@ -884,7 +884,9 @@
                                 "type": "boolean"
                             },
                             "nomineePincode": {
-                                "type": "string"
+                                "type": "number",
+                                "minimum": 100000,
+                                "maximum": 999999
                             },
                             "nomineeRelationship": {
                                 "type": "string",

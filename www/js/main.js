@@ -829,6 +829,30 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "    </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
+    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
+    "\n" +
+    "    </irf-progress-message>\n" +
+    "</div>\n" +
+    "")
+
+$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
+    "    <span class=\"a-wb-K-s\">\n" +
+    "        <span class=\"a-wb-ra-s\">\n" +
+    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
+    "        </span>\n" +
+    "        <div>\n" +
+    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
+    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
+    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
+    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
+    "                </svg>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </span>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
     "    <div class=\"modal-content\">\n" +
@@ -864,30 +888,6 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
-    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
-    "\n" +
-    "    </irf-progress-message>\n" +
-    "</div>\n" +
-    "")
-
-$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
-    "    <span class=\"a-wb-K-s\">\n" +
-    "        <span class=\"a-wb-ra-s\">\n" +
-    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
-    "        </span>\n" +
-    "        <div>\n" +
-    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
-    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
-    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
-    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
-    "                </svg>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "    </span>\n" +
-    "</div>\n" +
-    "")
 
 $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<form\n" +
@@ -2684,13 +2684,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			$scope.inputSchema.properties[key] = s;
 		});
 
-		if ($scope.inputForm.length == 0) {
-			$scope.inputActions.submit();
-		} else {
-			$scope.inputForm.push({"type":"submit", "title":"Search"});
-			// $log.info($scope.inputForm);
-		}
-
 		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
 
 		angular.forEach(mergedInputForm, function(value, key){
@@ -2703,22 +2696,23 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autolov && $scope.modelValue) {
+		if ($scope.form.autolov) {
 			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			self.init($scope.inputModel);
 			getSearchPromise().then(function(out){
 				if (out.body && out.body.length === 1) {
 					$scope.callback(out.body[0]);
 				} else {
 					displayListOfResponse(out);
-					self.launchLov();
+					self.launchLov(true, true);
 				}
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			}, function(){
-				self.launchLov();
+				self.launchLov(true, false);
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			});
 		} else {
-			self.launchLov();
+			self.launchLov(false, false);
 		}
 	};
 
@@ -2726,7 +2720,16 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
 	};
 
-	self.launchLov = function() {
+	self.launchLov = function(isInitialized, isSubmitted) {
+		if (!isInitialized) {
+			self.init($scope.inputModel);
+		}
+		if ($scope.inputForm.length) {
+			$scope.inputForm.push({"type":"submit", "title":"Search"});
+		} else if (!isSubmitted) {
+			$scope.inputActions.submit();
+		}
+
 		$scope.modalWindow = $uibModal.open({
 			scope: $scope,
 			templateUrl: "irf/template/lov/modal-lov.html",
@@ -2737,6 +2740,14 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		});
 	};
 
+	self.init = function(model) {
+		if (angular.isFunction($scope.form.initialize)) {
+			$scope.form.initialize(model);
+		} else if ($scope.form.initialize) {
+			$scope.evalExpr($scope.form.initialize, {model:model});
+		}
+	};
+
 	$scope.inputActions = {};
 
 	var getSearchPromise = function() {
@@ -2744,7 +2755,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
 			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
-		} else {
+		} else if ($scope.form.search) {
 			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
 		return promise;
@@ -2770,9 +2781,16 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	$scope.callback = function(item) {
-		$log.info("Selected Item->");
-		$log.info(item);
-		elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
+		if ($scope.form.outputMap) {
+			elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
+		}
+		if ($scope.form.onSelect) {
+			if (angular.isFunction($scope.form.onSelect)) {
+				$scope.form.onSelect(item, $scope.parentModel, $scope.locals);
+			} else if ($scope.form.onSelect) {
+				$scope.evalExpr($scope.form.onSelect, {result:item, model:$scope.parentModel, context:$scope.locals});
+			}
+		}
 		self.close();
 	};
 
@@ -6305,6 +6323,41 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
+    resource.getGlobalSettings = function(name){
+        var deferred = $q.defer();
+        resource.getResult('globalSettings.list', {name:name}).then(
+            function(res){
+            	$log.info("checking checking");
+            	$log.info(res);
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results[0].value);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(err){
+                deferred.reject(err);
+            }
+        )
+        return deferred.promise;
+    }
+
+    resource.getCustomerBankAccounts = function(customerId){
+        var deferred = $q.defer();
+		var request = {"customer_id":customerId};
+		resource.getResult("customerBankAccounts.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
 	return resource;
 }]);
 
@@ -6555,6 +6608,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'POST',
             url:endpoint+ "/approverepayment"
         },
+        partialPayment:{
+            method:'POST',
+            url:BASE_URL+ "/api/updateRepaymentAsPartialPayment"
+        },
         reject:{
             method:'POST',
             url:endpoint+ "/rejectrepayment"
@@ -6601,10 +6658,10 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             method:'POST',
             url:endpoint+'/grouprepayment'
         },
-        writeOffQueue:{
-            method:'POST',
+        writeOffQueue:searchResource({
+            method:'GET',
             url:endpoint+'/findwriteoffList'
-        },
+        }),
         writeOff:{
             method:'POST',
             url:endpoint+'/writeoff'
@@ -11160,6 +11217,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         filter: {
                             "parentCode": "model.branchId"
                         },
+                        parentEnumCode:"branch"
                     },
                     {
                         key: "customer.oldCustomerId",
@@ -11570,6 +11628,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     filter: {
                         "parentCode": "model.branchId"
                     },
+                    parentEnumCode:"branch",
                     screenFilter: true
                 },
                 {
@@ -11727,6 +11786,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "state": "customer.state"
                             },
                             searchHelper: formHelper,
+                            initialize: function(model) {
+                                $log.warn('in pincode initialize');
+                                $log.info(model);
+                            },
                             search: function(inputModel, form, model) {
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
@@ -11739,6 +11802,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     item.pincode,
                                     item.district + ', ' + item.state
                                 ];
+                            },
+                            onSelect: function(result, model, context) {
+                                $log.info(result);
                             }
                         },
                         "customer.state",
@@ -22812,6 +22878,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             if (model._credit) {
                 model.creditValidation = model._credit;               
                 model.creditValidation.loanRepaymentDetailsId = model._credit.id;
+                model.creditValidation.accountNumber = model._credit.accountNumber;
                 model.creditValidation.enterprise_name = model._credit.customerName;
                 model.creditValidation.applicant_name = model._credit.applicant;
                 model.creditValidation.co_applicant_name = model._credit.coApplicant;
@@ -22823,7 +22890,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     model.creditValidation.fee = model._credit.fees/100;
                 if (model._credit.penalInterest > 0)
                     model.creditValidation.penal_interest = model._credit.penalInterest/100;
-                if (model._credit.demandAmountInPaisa > 0)
+                if (model._credit.demandAmountInPaisa > 0 || model._credit.demandAmountInPaisa == 0 )
                     model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
                 if (model._credit.repaymentAmountInPaisa > 0)
                     model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
@@ -22850,6 +22917,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         key:"creditValidation.co_applicant_name",
                         title:"CO_APPLICANT",
                         readonly:true,
+                    },
+                    {
+                        key:"creditValidation.accountNumber",
+                        title:"LOAN_ACCOUNT_NUMBER",
+                        readonly:true,
+                        //type:"amount"
                     },
                     {
                         key:"creditValidation.principal",
@@ -22904,7 +22977,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title:"REJECT_REASON",
                         type:"select",
                         titleMap: [{
-                            "name":"Amount not creditted in account",
+                            "name":"Amount not credited in account",
                             "value":"1"
                         }],
                         condition:"model.creditValidation.status=='3' || model.creditValidation.status=='4'"
@@ -22936,7 +23009,8 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 if(model.creditValidation.status == "1")
                 {
                     $log.info("Inside FullPayment()");
-                    LoanProcess.approve({"loanRepaymentDetailsId": model.creditValidation.loanRepaymentDetailsId}, null, function(response){
+                    LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+
                     PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -22945,9 +23019,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     });
 
                 }
-                else if(model.creditValidation.status == "2")
+                else if(model.creditValidation.status == "3")
                 {
-                    $log.info("Inside PartialPayment()");
+                    $log.info("Inside NoPayment()");
                     var reqParams = {
                         "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
                         "remarks":model.creditValidation.reject_remarks,
@@ -22961,11 +23035,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
                     });
-
                 }
-                else if(model.creditValidation.status == "3")
+                else if(model.creditValidation.status == "2")
                 {
-                    $log.info("Inside NoPayment()");
+                    $log.info("Inside PartialPayment()");
                     var reqParams = {
                         "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
                         "remarks":model.creditValidation.reject_remarks,
@@ -28011,6 +28084,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.partnerCode = defaultPartner;
                 getSanctionedAmount(model);
                 $log.info(model);
+
+                model.additional.minAmountForSecurityEMI=0;
+                Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
+                    model.additional.minAmountForSecurityEMI = Number(value);
+                    $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);                    
+                },function(err){
+                    $log.info("Max Security EMI is not available");
+                });
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -28038,7 +28119,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         },
                         {
                             key:"loanAccount.loanCentre.centreId",
-                            title:"CENTRE_ID",
+                            title:"CENTRE_NAME",
                             "type":"select",
                             enumCode: "centre",
                             parentEnumCode:"branch"
@@ -28053,6 +28134,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "type": "fieldset",
                         "title": "PRODUCT_DETAILS",
                         "items": [
+                            {
+                                "key": "loanAccount.id",
+                                "title": "LOAN_ID",
+                                "condition":"model.loanAccount.id"
+                            },
                             {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
@@ -28079,6 +28165,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"lov",
                                 "lovonly": true,
                                 "inputMap": {
+                                    "customerType":{
+                                        "key":"customer.customerType",
+                                        "title":"CUSTOMER_TYPE",
+                                        "type":"select",
+                                        "titleMap":{
+                                            "Individual":"Individual",
+                                            "Enterprise":"Enterprise"
+                                        }
+                                    },
                                     "customerId":{
                                         "key":"customer.customerId",
                                         "title":"CUSTOMER_ID"
@@ -28112,6 +28207,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         'branchName': inputModel.branch ||SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
                                         'centreCode':inputModel.centreCode,
+                                        'customerType':inputModel.customerType,
                                         'stage': "Completed"
                                     }).$promise;
                                     return promise;
@@ -28279,6 +28375,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
+                            },
+                            {
+                                key:"loanAccount.otherFee",
+                                type:"amount"
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -28561,6 +28661,42 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "title":"STREET"
                                     },
                                     {
+                                        key: "loanAccount.nominees[].nomineePincode",
+                                        type: "lov",
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "pincode": {
+                                                key:"loanAccount.nominees[].nomineePincode"
+                                            },
+                                            "district": {
+                                                key: "loanAccount.nominees[].nomineeDistrict"
+                                            },
+                                            "state": {
+                                                key: "loanAccount.nominees[].nomineeState"
+                                            }
+                                        },
+                                        outputMap: {
+                                            "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                                            "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                                            "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model) {
+                                            return Queries.searchPincodes(
+                                                inputModel.pincode,
+                                                inputModel.district,
+                                                inputModel.state
+                                            );
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.pincode,
+                                                item.district + ', ' + item.state
+                                            ];
+                                        }
+                                    },
+                                    {
                                         key:"loanAccount.nominees[].nomineeDistrict",
                                         type:"text",
                                         "title":"DISTRICT"
@@ -28568,10 +28704,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key:"loanAccount.nominees[].nomineeState",
                                         "title":"STATE"
-                                    },
-                                    {
-                                        key:"loanAccount.nominees[].nomineePincode",
-                                        "title":"PIN_CODE"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeRelationship",
@@ -28608,6 +28740,49 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
+                                key: "loanAccount.customerBankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                title:"CUSTOMER_BANK_ACC_NO",
+                                bindMap: {
+                                    "customerId": "loanAccount.customerId"
+                                },
+                                outputMap: {
+                                    "account_number": "loanAccount.customerBankAccountNumber",
+                                    "ifsc_code": "loanAccount.customerBankIfscCode",
+                                    "customer_bank_name":"loanAccount.customerBank",
+                                    "customer_bank_branch_name":"loanAccount.customerBranch"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getCustomerBankAccounts(
+                                        inputModel.customerId
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number + (item.is_disbersement_account==1?'&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>':''),
+                                        item.ifsc_code + ', ' + item.customer_bank_name,
+                                        item.customer_bank_branch_name
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.customerBankIfscCode",
+                                title:"CUSTOMER_BANK_IFSC",
+                                "readonly":true
+                            },
+                            {
+                                key:"loanAccount.customerBank",
+                                title:"CUSTOMER_BANK",
+                                "readonly":true
+                            },
+                            {
+                                key:"loanAccount.customerBranch",
+                                title:"BRANCH_NAME",
+                                "readonly":true
+                            },
+                            {
                                 key:"loanAccount.disbursementSchedules",
                                 title:"DISBURSEMENT_SCHEDULES",
                                 add:null,
@@ -28624,15 +28799,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         type:"amount"
                                     }
                                 ]
-                            },
-                            {
-                                key:"loanAccount.disbursementFromBankAccountNumber",
-                                title:"DISBURSEMENT_ACCOUNT"
-                            },
-                            {
-                                key:"loanAccount.originalAccountNumber",
-                                title:"ORIGINAL_ACCOUNT",
-                                "readonly":true
                             }
                         ]
                     }
@@ -28642,6 +28808,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 "type":"box",
                 "title":"Deprecated Items",
                 "items":[
+                    {
+                        key:"loanAccount.disbursementFromBankAccountNumber",
+                        title:"DISBURSEMENT_ACCOUNT"
+                    },
+                    {
+                        key:"loanAccount.originalAccountNumber",
+                        title:"ORIGINAL_ACCOUNT"
+                    },
                     {
                         "key": "loanAccount.isRestructure",
                         "title":"IS_RESTRUCTURE"
@@ -28668,14 +28842,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         key:"loanAccount.documentTracking",
                         "title":"DOCUMENT_TRACKING"
-                    },
-                    {
-                        key:"loanAccount.customerBankAccountNumber",
-                        title:"CUSTOMER_BANK_ACC_NO"
-                    },
-                    {
-                        key:"loanAccount.customerBankIfscCode",
-                        title:"CUSTOMER_BANK_IFSC"
                     }
                 ]
             },
@@ -28724,6 +28890,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
                                 return false;
                             }
+                        }
+                    }
+
+                    if (model.additional.minAmountForSecurityEMI > 0){
+                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == '')){
+                            PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
+                            return false;
                         }
                     }
 
@@ -29787,6 +29960,7 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 },
                 {
                     "key": "loanAccount.customerName",
+                    "readonly": true,
                     "required": true
                 },
                 {

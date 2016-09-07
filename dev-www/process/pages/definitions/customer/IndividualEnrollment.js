@@ -42,6 +42,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     filter: {
                         "parentCode": "model.branchId"
                     },
+                    parentEnumCode:"branch",
                     screenFilter: true
                 },
                 {
@@ -199,6 +200,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "state": "customer.state"
                             },
                             searchHelper: formHelper,
+                            initialize: function(model) {
+                                $log.warn('in pincode initialize');
+                                $log.info(model);
+                            },
                             search: function(inputModel, form, model) {
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
@@ -211,6 +216,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     item.pincode,
                                     item.district + ', ' + item.state
                                 ];
+                            },
+                            onSelect: function(result, model, context) {
+                                $log.info(result);
                             }
                         },
                         "customer.state",

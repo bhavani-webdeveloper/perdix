@@ -24,6 +24,9 @@
                 "applicantName":{
 
                     "type":"string"
+                },
+                "customerType":{
+                    "type":"string"
                 }
             }
         },
@@ -881,7 +884,9 @@
                                 "type": "boolean"
                             },
                             "nomineePincode": {
-                                "type": "string"
+                                "type": "number",
+                                "minimum": 100000,
+                                "maximum": 999999
                             },
                             "nomineeRelationship": {
                                 "type": "string",
@@ -1006,7 +1011,7 @@
                 },
                 "otherFee":{
                     "type":"integer",
-                    "title":"FEES"
+                    "title":"OTHER_FEE"
                 },
                 "partnerCode": {
                     "type": "string",
@@ -1110,6 +1115,7 @@
                 "currentStage",
                 "customerBank",
                 "customerBranch",
+                "commercialCibilCharge",
                 "customerId",
                 "disbursedAmountInPaisa",
                 "disbursementSchedules",
