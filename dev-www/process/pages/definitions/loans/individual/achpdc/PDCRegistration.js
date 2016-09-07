@@ -17,7 +17,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             if (model._pdc.loanId) {
                 model.pdc.id = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
-                
+                model.flag = false;
                 
                 PDC.get({accountId: model._pdc.loanId},
                     function(res){
@@ -26,12 +26,15 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                         PageHelper.showProgress("page-init","Done.",2000);
                         model.pdc.securityCheckNo = model.pdcGet;
                         $log.info("PDC GET RESP. : "+res);
+                        model.flag = true;
                     },
                     function(res){
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Error in loading customer.",2000);
                         // PageHelper.showErrors(res);
+                        model.flag = false;
                         $log.info("PDC GET Error : "+res);  
+
                         
                         /*$state.go("Page.Engine", {
                             pageName: 'EnrollmentHouseVerificationQueue',
@@ -203,7 +206,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 },
             {
                     "type": "actionbox",
-                    "condition":"!model.pdc.id",
+                    "condition":"!model.flag",
                     "items": [{
                         "type": "submit",
                         "title": "Submit",
@@ -211,7 +214,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 },
                 {
                     "type": "actionbox",
-                    "condition":"model.pdc.id",
+                    "condition":"model.flag",
                     "items": [{
                         "type": "submit",
                         "title": "Update",
@@ -256,15 +259,15 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 }
                 model.pdc.addCheque = [];
                 PageHelper.showLoader();
-                // if (model.pdc.id) {
-                //     PDC.update(model.pdc, function(response){
-                //         PageHelper.hideLoader();
-                //         model.pdc=Utils.removeNulls(model.pdc,true);
-                //     }, function(errorResponse){
-                //         PageHelper.hideLoader();
-                //         PageHelper.showErrors(errorResponse);
-                //     });
-                // } else {
+                if (model.flag) {
+                    PDC.update(model.pdc, function(response){
+                        PageHelper.hideLoader();
+                        model.pdc=Utils.removeNulls(model.pdc,true);
+                    }, function(errorResponse){
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(errorResponse);
+                    });
+                } else {
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
@@ -273,7 +276,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-                //}
+                }
                 /*$state.go("Page.Engine", {
                     pageName: 'IndividualLoanBookingConfirmation',
                     pageId: model.customer.id

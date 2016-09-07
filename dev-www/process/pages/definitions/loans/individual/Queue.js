@@ -102,7 +102,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
-								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
+								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loan:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
 									pageId:item.loanId
@@ -110,7 +110,11 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							},
 							isApplicable: function(item, index){
 								
-								return true;
+								if(item.stage == "Completed") {
+									return true;
+								} else { 
+									return false;
+								}
 							}
 						},
 						{
@@ -125,8 +129,12 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 								});
 							},
 							isApplicable: function(item, index){
+								if(item.stage == "Completed") {
+									return true;
+								} else { 
+									return false;
+								}
 								
-								return true;
 							}
 						}
 					];

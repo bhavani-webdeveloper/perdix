@@ -21,7 +21,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
                 "items": [{
                             "key": "ach.achMandateReverseFileId",
                             "notitle":true,
-                            "category":"cat1",
+                            "category":"ACH",
                             "subCategory":"cat2",
                             "type": "file",
                             "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

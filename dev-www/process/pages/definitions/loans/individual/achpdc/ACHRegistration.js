@@ -14,15 +14,15 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			$log.info("ACH selection Page got initialized");
 			 model.ach = model.ach||{};
 			 model.achSearch = model.achSearch||{};
-			 if (model._ach.loanId) {
+			 if (model._ach) {
 				 	//model.ach=model._ach;
 					model.ach.accountHolderName = model._ach.customerName;
-					model.ach.accountId = model._ach.accountNumber;
+					model.ach.accountId = model._ach.accountId;
 					model.ach.branchName = model._ach.branchName;
 					model.flag = false;
 				 	
 
-					ACH.search({id: model._ach.loanId})
+					ACH.search({accountNumber: model.ach.accountId})
 	                    .$promise
 	                    .then(
 	                        function (res) {
@@ -48,7 +48,11 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
                         }
                        );
  
-				} else {
+				} else if (model._loan) {
+					model.ach.accountHolderName = model._loan.customerName;
+					model.ach.accountId = model._loan.accountNumber;
+					model.ach.branchName = model._loan.branchName;
+				}else {
 				  $state.go("Page.Engine",{
 										pageName:"loans.individual.Queue",
 										pageId:null
@@ -71,10 +75,6 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				 			"type":"fieldset",
 				 			"title": "LOAN_DETAILS",
 				 			"items":[{
-				 				type:"section",
-				 				html:"<pre>{{model.ach}}</pre>"
-				 			},
-				 			{
 									"key": "ach.accountId",
 									"title": "LOAN_ID",
 									"readonly":true
@@ -261,34 +261,46 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 				submit: function(model, form, formName){
 
 					$log.info("Inside submit test()");
-					PageHelper.showLoader();
-					if (model.flag) {
-						$log.info("Inside Update()");
-						ACH.update(model.ach, function(response){
-							PageHelper.hideLoader();
-							// $state.go("Page.Engine", {
-						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-						 //    	pageId: model.ach.loanId
-							// });
-							//model.ach=Utils.removeNulls(model.ach,true);
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					} else {
-						$log.info("Inside Create()");
-						ACH.create(model.ach, function(response){
-							PageHelper.hideLoader();
-							// $state.go("Page.Engine", {
-						 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-						 //    	pageId: model.ach.loanId
-							// });
-							//model.ach=response;
-						}, function(errorResponse){
-							PageHelper.hideLoader();
-							PageHelper.showErrors(errorResponse);
-						});
-					}
+					$log.info("Inside Create()");
+					ACH.create(model.ach, function(response){
+						PageHelper.hideLoader();
+						// $state.go("Page.Engine", {
+					 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					 //    	pageId: model.ach.loanId
+						// });
+						//model.ach=response;
+					}, function(errorResponse){
+						PageHelper.hideLoader();
+						PageHelper.showErrors(errorResponse);
+					});
+					//PageHelper.showLoader();
+					// if (model.flag) {
+					// 	$log.info("Inside Update()");
+					// 	ACH.update(model.ach, function(response){
+					// 		//PageHelper.hideLoader();
+					// 		// $state.go("Page.Engine", {
+					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					// 	 //    	pageId: model.ach.loanId
+					// 		// });
+					// 		//model.ach=Utils.removeNulls(model.ach,true);
+					// 	}, function(errorResponse){
+					// 		//PageHelper.hideLoader();
+					// 		PageHelper.showErrors(errorResponse);
+					// 	});
+					// } else {
+					// 	$log.info("Inside Create()");
+					// 	ACH.create(model.ach, function(response){
+					// 		PageHelper.hideLoader();
+					// 		// $state.go("Page.Engine", {
+					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
+					// 	 //    	pageId: model.ach.loanId
+					// 		// });
+					// 		//model.ach=response;
+					// 	}, function(errorResponse){
+					// 		PageHelper.hideLoader();
+					// 		PageHelper.showErrors(errorResponse);
+					// 	});
+					// }
 						// $state.go("Page.Engine", {
 						//     pageName: 'IndividualLoanBookingConfirmation',
 						//     pageId: model.customer.id
