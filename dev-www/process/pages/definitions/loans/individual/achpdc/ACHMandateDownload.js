@@ -43,19 +43,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
                             }
                         },
                         {
-                            "key": "ach.achMandateFileId",
-                            "notitle":true,
-                            "category":"cat1",
-                            "subCategory":"cat2",
-                            "type": "file",
-                            "fileType":"application/pdf"
-                        },
-                        {
-                            "type": "button",
-                            "icon": "fa fa-user-plus",
-                            "title": "UPLOAD",
-                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                        }]
+                            "type":"fieldset",
+                            "title":"Upload Status",
+                            "items":[{
+                                    "key": "ach.achMandateFileId",
+                                    "type": "file",
+                                    "category":"ACH",
+                                    "subCategory":"DOC1",
+                                    "title": "Upload ACH Status"
+                                }]
+                }]
             }],
         schema: function() {
             return Enrollment.getSchema().$promise;

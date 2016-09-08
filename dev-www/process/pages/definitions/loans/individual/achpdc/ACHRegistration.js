@@ -12,14 +12,22 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			$log.info("ACH selection Page got initialized");
-			 model.ach = model.ach||{};
-			 model.achSearch = model.achSearch||{};
-			 if (model._ach) {
+			model.ach = model.ach||{};
+			model.achSearch = model.achSearch||{};
+			model.flag = false;
+
+			 if (model._ach || model._loanAch) {
 				 	//model.ach=model._ach;
+				 	if(model._ach){
 					model.ach.accountHolderName = model._ach.customerName;
 					model.ach.accountId = model._ach.accountId;
 					model.ach.branchName = model._ach.branchName;
-					model.flag = false;
+				}
+					else if (model._loanAch) {
+					model.ach.accountHolderName = model._loanAch.customerName;
+					model.ach.accountId = model._loanAch.accountNumber;
+					model.ach.branchName = model._loanAch.branchName;
+				}
 				 	
 
 					ACH.search({accountNumber: model.ach.accountId})
@@ -36,7 +44,6 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									model.flag = true;
 									//model.ach.bankName = model.achSearch.body[i];
 									model.ach = model.achSearch.body[i];
-							
 									}
 								}
 								
@@ -48,16 +55,21 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
                         }
                        );
  
-				} else if (model._loan) {
-					model.ach.accountHolderName = model._loan.customerName;
-					model.ach.accountId = model._loan.accountNumber;
-					model.ach.branchName = model._loan.branchName;
-				}else {
-				  $state.go("Page.Engine",{
-										pageName:"loans.individual.Queue",
-										pageId:null
-									});
-				 			}
+				} else {
+					 if (model._ach){
+					 	$state.go("Page.Engine",{
+								pageName:"loans.individual.achpdc.ACHMandateQueue",
+								pageId:null
+							});
+			 			} else {
+					 	$state.go("Page.Engine",{
+								pageName:"loans.individual.Queue",
+								pageId:null
+							});
+			 			}
+
+					 }
+				  
 			 //   model.customer.urnNo="1234567890";
 			},
 		modelPromise: function(pageId,model){
@@ -173,7 +185,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									"key": "ach.frequency",
 									"title": "FREQUENCY",
 									"type":"select",
-									"enumCode":"frequency"
+									"enumCode": "ach_frequency"
 								},
 								{
 									"key": "ach.micr",
@@ -259,11 +271,12 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
        		 },
 			actions: {
 				submit: function(model, form, formName){
-
+					PageHelper.showLoader();
 					$log.info("Inside submit test()");
 					$log.info("Inside Create()");
 					ACH.create(model.ach, function(response){
 						PageHelper.hideLoader();
+						PageHelper.showProgress("page-init","Done.",2000);
 						// $state.go("Page.Engine", {
 					 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
 					 //    	pageId: model.ach.loanId

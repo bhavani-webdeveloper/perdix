@@ -24,7 +24,12 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				"properties": {
 					"stage": {
 						"title": "STAGE",
-						"type": "string"
+						"type": "string",
+						"enumCode": "loan_stage",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
 					},
 					"branchName": {
 						"title": "BRANCH_ID",
@@ -102,7 +107,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
-								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loan:item});
+								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loanAch:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.ACHRegistration",
 									pageId:item.loanId

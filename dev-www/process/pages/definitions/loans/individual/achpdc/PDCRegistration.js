@@ -14,11 +14,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             model.pdc = model.pdc||{};
             model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
-            if (model._pdc.loanId) {
+            model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
+            if (model._pdc.loanId ) {
                 model.pdc.id = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
-                model.flag = false;
-                
+                PageHelper.showLoader();
                 PDC.get({accountId: model._pdc.loanId},
                     function(res){
                         model.pdcGet = Utils.removeNulls(res,true);
@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                     },
                     function(res){
                         PageHelper.hideLoader();
-                        PageHelper.showProgress("page-init","Error in loading customer.",2000);
+                        //PageHelper.showProgress("page-init","Error in loading customer.",2000);
                         // PageHelper.showErrors(res);
                         model.flag = false;
                         $log.info("PDC GET Error : "+res);  
@@ -63,8 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                  "items": [{
                             "type":"fieldset",
                             "title": "LOAN_DETAILS",
-                            "items":[
-                                {
+                            "items":[{
                                     "key": "pdc.id",
                                     "title": "LOAN_ACCOUNT_NUMBER",
                                     "readonly":true
@@ -160,7 +159,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                             },
                                             {
                                                 "key": "pdc.chequeDetails[].ifscCode",
-                                                "title": "IFSC_CODE"
+                                                "title": "IFSC_CODE",
+                                                "type": "lov",
+                                                "inputMap": {
+                                                    "ifscCode": {
+                                                        "key": "ifscCode",
+                                                        "title": "IFSC_CODE"
+                                                    }
+                                                }
                                             },
                                             {
                                                 "key": "pdc.chequeDetails[].chequeNo",
@@ -184,7 +190,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                         },
                                         {
                                             "key": "pdc.addCheque[].ifscCode",
-                                            "title": "IFSC_CODE"
+                                            "title": "IFSC_CODE",
+                                            "type": "lov",
+                                            "inputMap": {
+                                                "ifscCode": {
+                                                    "key": "ifscCode",
+                                                    "title": "IFSC_CODE"
+                                                }
+                                            }
                                         },
                                         {
                                             "key": "pdc.addCheque[].chequeNoFrom",
@@ -193,7 +206,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                         },
                                         {
                                             "key": "pdc.addCheque[].chequeType",
-                                            "title": "CHEQUE_TYPE"
+                                            "title": "CHEQUE_TYPE",
+                                                "type": "lov",
+                                                "inputMap": {
+                                                    "chequeType": {
+                                                        "key": "pdc_cheque_type",
+                                                        "title": "CHEQUE_TYPE"
+                                                    }
+                                                }
                                         },
                                         {
                                             "key": "pdc.addCheque[].numberOfCheque",
@@ -244,25 +264,24 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             id: model._pdc.loanId
                         });
 
-                    $log.info("bank no : " + bankCount);
+                    //$log.info("bank no : " + bankCount);
                     //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
-                    for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
-                        $log.info("Leaves No.: " + leavesCount);
-                        $log.info("Cheque No.: " + ( model.pdc.addCheque[bankCount].checkStartNo + leavesCount));
-                        var currentLeafNo = model.pdc.addCheque[bankCount].checkStartNo + leavesCount;
-                        model.pdc.chequeDetails.push({
-                            bankName: model.pdc.addCheque[bankCount].bankName,
-                            ifscCode: model.pdc.addCheque[bankCount].ifscCode,
-                            chequeNo: currentLeafNo
-                        });
-                    }
+                    // for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
+                    //     $log.info("Leaves No.: " + leavesCount);
+                    //     $log.info("Cheque No.: " + ( model.pdc.addCheque[bankCount].checkStartNo + leavesCount));
+                    //     var currentLeafNo = model.pdc.addCheque[bankCount].checkStartNo + leavesCount;
+                    //     model.pdc.chequeDetails.push({
+                    //         bankName: model.pdc.addCheque[bankCount].bankName,
+                    //         ifscCode: model.pdc.addCheque[bankCount].ifscCode,
+                    //         chequeNo: currentLeafNo
+                    //     });
+                    // }
                 }
                 model.pdc.addCheque = [];
                 PageHelper.showLoader();
                 if (model.flag) {
                     PDC.update(model.pdc, function(response){
                         PageHelper.hideLoader();
-                        model.pdc=Utils.removeNulls(model.pdc,true);
                     }, function(errorResponse){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
@@ -271,7 +290,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
-                        model.pdc=response;
                     }, function(errorResponse){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);

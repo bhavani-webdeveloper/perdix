@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("ACHSubmission"),
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
 ["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
 
     
@@ -11,6 +11,8 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
+            model.mandate = model.mandate || {};
+            model.mandate.id = 1;
         },
         form:[{
                 "type":"box",
@@ -30,7 +32,13 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
                                     "icon":"fa fa-download",
                                     "type":"button",
                                     "notitle":true,
-                                    "readonly":false
+                                    "readonly":false,
+                                    "onClick": function(model, formCtrl, form, $event){
+                                                    model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
+                                                    window.open(model.mandate.link);
+                                                                    
+                                                }
+                                    //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
                                 }]
                             },
                             {
@@ -39,8 +47,8 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
                             "items":[{
                                     "key": "image1",
                                     "type": "file",
-                                    "category":"cat1",
-                                    "subCategory":"cat2",
+                                    "category":"ACH",
+                                    "subCategory":"DOC1",
                                     "title": "Upload ACH Status"
                                 },
                                 {
@@ -49,6 +57,8 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
                                     "icon":"fa fa-upload",
                                     "type":"button",
                                     "notitle":true,
+                                    "type": "file",
+                                    "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                     "readonly":false
                                 }]
                 }]
@@ -64,6 +74,13 @@ irf.pageCollection.factory(irf.page("ACHSubmission"),
             },
             reject:function(model,form){
                 alert("Rejected");
+            },
+            proceed: function(model, formCtrl, form, $event) {
+            },
+            downloadForm: function(model, formCtrl, form, $event){
+                model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
+                window.open(model.mandate.link);
+                                
             }
         }
     };
