@@ -57,7 +57,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         return IndividualLoan.searchDisbursement({
                             'currentStage': 'ReadyForDisbursement',
                             'customerSignatureDate': searchOptions.customerSignatureDate,
-                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate
+                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
+                            'page': pageOpts.pageNo,
+                            'per_page': pageOpts.itemsPerPage,
+                            'sortBy':searchOptions.sortBy
 
                         }).$promise;
 

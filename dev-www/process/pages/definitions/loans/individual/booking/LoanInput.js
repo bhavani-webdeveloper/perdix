@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             $log.info(model.loanAccount.commercialCibilCharge);
             $log.info(model.loanAccount.securityEmi);
 
-            model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested - fee;
+            model.additional.loanAmount = model.loanAccount.loanAmountRequested - fee;
 
         };
 
@@ -381,7 +381,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 type:"amount"
                             },
                             {
-                                "key": "loanAccount.loanAmount",
+                                "key": "additional.loanAmount",
                                 "type":"amount",
                                 "title":"NET_DISBURSEMENT_AMOUNT"
                             },
@@ -895,6 +895,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             return false;
                         }
                     }
+                    model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
 
 
                     var reqData = _.cloneDeep(model);
