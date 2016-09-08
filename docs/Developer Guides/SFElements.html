@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<title>IRF SF Developer document</title>
+
+<xmp theme="spacelab" style="display:none;">
+
+# Introduction
+
+Screens in Perdix8 are designed using Schema-Form architecture, which renders screen based on schema and form.
+
+**Schema** is the data definition, meaning, the definition will be based on database table columns, say, 
+`"customer_name":{ "title": "Customer Name", "type": "string" }`
+
+**Form** is the screen field definition, meaning, the definition will be based on html fields, say,
+`{ "key": "customer_id", "type": "text" }`
+here "Key" refers the schema entry.
+
+Check the standard list of [form-types](https://github.com/json-schema-form/angular-schema-form/blob/master/docs/index.md#form-types) in https://github.com/json-schema-form/angular-schema-form/blob/master/docs/index.md
+
+Find below the complete list of form elements supported in IRF-SF form elements:
+
+* tabs
+* box
+* actionbox
+* fieldset
+* section
+* array
+* help
+* select
+* radios
+* checkbox
+* amount
+* date
+* geotag
+* textarea
+* qrcode
+* lov
+* file
+* actions
+* button
+* default
+
+### Sample Form
+    [
+      "firstname",
+      {
+        key: "surname",
+        type: "select",
+        titleMap: [
+          { value: "Andersson", name: "Andersson" },
+          { value: "Johansson", name: "Johansson" },
+          { value: "other", name: "Something else..."}
+        ]
+      }
+    ]
+
+### Sample Schema
+
+    {
+      "type": "object",
+      "title": "Comment",
+      "required": [
+        "name",
+        "email",
+        "comment"
+      ],
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "pattern": "^\\S+@\\S+$",
+          "description": "Email will be used for evil."
+        },
+        "comment": {
+          "title": "Comment",
+          "type": "string",
+          "maxLength": 20,
+          "validationMessage": "Don't be greedy!"
+        }
+      }
+    }
+
+Form will be defined in JSON data format, in which, `[]` means an array and `{}` means an object. An array is a list of values, wherein object is a collection of key-value pairs.
+
+Form elements will be given in an array.
+An element can be either a simple ***string*** or an ***object***.
+
+- If it is a simple string, it will be used to refer the schema element and all properties of the element will be defaulted.
+- If it is an object, the `"key"` will be used to refer schema element, and this will allow the form element to override schema definition and provide additional definitions.
+    - `"key"` is a mandatory field, except for buttons and other UI fields which doesn't have schema reference (table column to map with)
+
+
+# Details
+
+Key will be represented in dotted notation to identify nested schema elements. eg: `"key": "customer.mail_id"`
+
+Key should have empty square brackets to represent array of elements. eg: `"key": "customer.family_members[].urn"`
+
+`arrayIndex` is a keyword used in *expressions* to indicate the current array index.
+
+For any element's object definition `"type"` must be given.
+
+Any `"title"` should only be label code as a standard process.
+
+# Elements
+
+### box
+
+Box must be the first element to be defined in any page. any other elements should go inside this element. Box doesn't have key, since this is UI element.
+
+Eg:
+
+    {
+        "type": "box",
+        "title": "CUSTOMER_PROFILE", // sample label code
+        "colClass": "col-sm-6", // col-sm-6 is default, optional
+        "readonly": false, // default-false, optional, this & everything under items becomes readonly
+        "items": [
+            "customer.first_name",
+            {
+                "key": "customer.last_name",
+                "title": "CUSTOMER_LASTNAME",
+                "type": "text"
+            }
+        ]
+    }
+
+box will have items, which is an array, will take inner/nested element definitions (sub form).
+
+### fieldset
+
+This is just a title given to a set of fields. this can be nested inside box items.
+
+eg:
+
+    {
+        "type": "fieldset",
+        "title": "CUSTOMER_ADDRESS",
+        "readonly": false,
+        "items": [
+            "customer.first_name",
+            {
+                "key": "customer.last_name",
+                "title": "CUSTOMER_LASTNAME",
+                "type": "text"
+            }
+        ]
+    }
+
+### array
+
+Array is a list of values which can be repeated (multiple values).
+
+Eg:
+
+    {
+        "type": "array",
+        "title": "CUSTOMER_FAMILY", // either title or titleExpr
+        "titleExpr": "model.customer.family[arrayIndex].first_name",
+        "add": null, // optional, removes the add button
+        "remove": null, // optional, removes the delete button
+        "readonly": false, // optional
+        "items": [
+            "customer.family[].first_name",
+            {
+                "key": "customer.family[].urn",
+                "condition": "model.customer.family[arrayIndex].urn",
+                "title": "CUSTOMER_LASTNAME",
+                "type": "number",
+                "readonly": true
+            }
+        ]
+    }
+
+### select
+
+This is the dropdown input element with 3 types of filter support.
+
+Eg:
+
+    {
+        "key": "customer.religion", // important, should refer schema
+        "type": "select",
+        "title": "RELIGION", // either title or titleExpr. (title will be translated for multi language support, titleExpr is not)
+        "titleExpr": "'Relegion of ' + model.customer.firstName",
+        "htmlClass": "any-class", // optional, any additional css classes, no need
+        "fieldHtmlClass": "select-me" // optional, will be applied on the dropdown html element
+        "required": false, // default-false, optional, derived from schema
+        "readonly": false, // optional
+        "notitle": false, // default-false, if true, title will be removed and dropdown will take full width. If only title to be removed without changing element width, try giving ""(empty) in "title". This option applies for all input elements
+        "enumCode": "religion", // optional, will be derived from schema. enumCode will take value from 'masters'. Optionally titleMap can be given which will take precedence.
+        "screenFilter": false, // default-false, if true, it will show on-screen filters, currently names will be filtered on english, not on translated language
+        "filter": {
+            "parentCode as branch": "model.customer.kgfsName",
+            "parentCode": "model.branchCode"
+        }
+    }
+
+### radios
+
+radio buttons to choose from, definition is same as select, except screenFilter & filter will not be applicable. `"type"` will be `"radios"`
+
+### checkbox
+
+boolean types in schema will be marked as checkbox in form. Making boolean as required in schema/form level will make the checkbox to be valid only if it is selected.
+
+eg:
+
+    {
+        "key": "customer.isNarcotic",
+        "type": "checkbox",
+        "title": "NARCOTIC_CHECK_QUESTION",
+        "htmlClass": "any-class", // optional, any additional css classes, no need
+        "fieldHtmlClass": "check-me" // optional, will be applied on the checkbox html element
+        "required": false, // default-false, optional, derived from schema
+        "readonly": false, // optional
+        "notitle": false, // if true, only checkbox icon will be shown
+        "fullwidth": false // since title will be displayed on right side of the checkbox, fullwidth:true will make it full width without removing the title
+    }
+
+### amount
+
+This should be used for any fields that handles amount. this will show currency symbol.
+
+Eg:
+
+    {
+        "key": "customer.expenditures[].annualExpenses",
+        "type": "checkbox",
+        "title": "ANNUAL_EXPENSES",
+        "htmlClass": "any-class", // optional, any additional css classes, no need
+        "labelHtmlClass": "label-me", // optional, any additional label styling
+        "fieldHtmlClass": "input-me" // optional, will be applied on the input html element
+        "required": false, // default-false, optional, derived from schema
+        "readonly": false, // optional
+        "notitle": false, // if true, only input will be shown with currency symbol
+    }
+
+### date
+
+Any date field should use this element, This will have date picker to help select dates.
+
+Eg:
+
+    {
+        "key": "customer.financialAssets[].startDate",
+        "type": "date",
+        "title": "START_DATE",
+        "htmlClass": "any-class", // optional
+        "labelHtmlClass": "label-me", // optional
+        "fieldHtmlClass": "input-me" // optional
+        "required": false, // optional
+        "readonly": false, // optional
+        "notitle": false, // optional
+    }
+
+### geotag
+
+Both longitude and latitude will be captured as part of this element. Either one of long/lat should be given as key.
+
+Eg:
+
+    {
+        "key": "customer.latitude",
+        "type": "geotag",
+        "title": "HOUSE_LOCATION",
+        "latitude": "customer.latitude", // !important
+        "longitude": "customer.longitude", // !important
+        "htmlClass": "any-class", // optional
+        "required": false, // optional
+        "readonly": false, // optional
+        "notitle": false, // optional
+    }
+
+### textarea
+
+
+    {
+        "key": "customer.address",
+        "type": "textarea",
+        "title": "ADDRESS",
+        "htmlClass": "any-class", // optional
+        "labelHtmlClass": "label-me", // optional
+        "fieldHtmlClass": "input-me" // optional
+        "placeholder": "placeholder text" // optional
+        "required": false, // optional
+        "readonly": false, // optional
+        "notitle": false, // optional
+    }
+
+</xmp>
+
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+</html>
