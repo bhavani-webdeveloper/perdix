@@ -1,9 +1,9 @@
 
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
-["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess','LoanAccount', 'entityManager','PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess,LoanAccount,entityManager, PageHelper,formHelper,irfProgressMessage,
     SessionStore,$state,$stateParams,Masters,authService){
 
     return {
@@ -12,6 +12,46 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
         initialize: function (model, form, formCtrl) {
             $log.info("Transaction Authorization Page got initialized");
              model.transAuth =  model.transAuth || {};
+
+              //PageHelper.showLoader();
+                    irfProgressMessage.pop('loading-Transaction Authorization-details', 'Loading Transaction Authorization Details');
+                    //PageHelper
+                    var loanAccountNo = $stateParams.pageId;
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    promise.then(function (data) { /* SUCCESS */
+                        model.loanAccount = data;
+                        console.log('sarthak')
+                        console.log(data);
+                        model.transAuth = model.transAuth || {};
+                        model.transAuth.customer_name = data.customer1FirstName;
+                        model.transAuth.productCode=data.productCode;
+                        model.transAuth.urnNo=data.customerId1;
+                        model.transAuth.instrument='CASH_IN'; 
+                        model.transAuth.authorizationUsing='Testing-Swapnil';
+                        model.transAuth.remarks='collections';
+                        model.transAuth.accountNumber = data.accountId;
+                        model.transAuth.amountDue = data.totalDemandDue;
+                        model.transAuth.principal=data.totalPrincipalDue;
+                        model.transAuth.interest=data.totalNormalInterestDue;
+                        model.transAuth.applicant_name=data.applicant;
+                        model.transAuth.applicant_name=data.coapplicant;
+                        model.transAuth.penal_interest=data.totalPenalInterestDue;
+                        model.transAuth.fee=data.totalFeeDue;
+
+                        model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa/100;
+
+                        var currDate = moment(new Date()).format("YYYY-MM-DD");
+                        model.creditValidation.repaymentDate = currDate;
+                        irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                    }, function (resData) {
+                        irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                        PageHelper.showErrors(resData);
+                        backToLoansList();
+                    })
+                    .finally(function () {
+                        PageHelper.hideLoader();
+                    })
+            /*
             if(model._transAuth)
             {
                 model.transAuth = model._transAuth;
@@ -27,7 +67,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorizationQueue', pageId: null});
             
-            }
+            }*/
         },
         
         form: [
@@ -93,7 +133,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         type:"amount"
                                     }]
                                 },
-                                {
+                                /*{
                                 "type": "section",
                                 "htmlClass": "col-xs-4 col-md-4",
                                 "items": [{
@@ -105,7 +145,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                             default: false
                                         }
                                     }]
-                                }]
+                                }*/]
                     },
                     {
                         type:"section",
