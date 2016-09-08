@@ -195,27 +195,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "readonly": true
                                     },
                                     {
-                                        "key": "loanAccount.guarantors[].guaMiddleName",
-
-                                        "readonly": true
-                                    },
-                                    {
                                         "key": "loanAccount.guarantors[].guaDob",
 
                                         "readonly": true
                                     },
                                     {
                                         "key": "loanAccount.guarantors[].address",
-
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].assetDetails",
-
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].totalLiabilities",
 
                                         "readonly": true
                                     }
