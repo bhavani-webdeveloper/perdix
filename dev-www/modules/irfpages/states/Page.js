@@ -152,7 +152,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 try {
                     var data = res.data;
                     var errors = [];
-                    if (data.errors) {
+                    if (_.hasIn(data, 'errors')) {
                         _.forOwn(data.errors, function (keyErrors, key) {
                             var keyErrorsLength = keyErrors.length;
                             for (var i = 0; i < keyErrorsLength; i++) {
@@ -162,7 +162,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                         });
 
                     }
-                    if (data.error) {
+                    if (_.hasIn(data, 'error')) {
                         errors.push({message: data.error});
                     }
                     this.setErrors(errors);

@@ -42,7 +42,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment = {};
                         model.repayment.productCode=data.productCode;
                         model.repayment.urnNo=data.customerId1;
-                        model.repayment.instrument='CASH_IN'; 
+                        model.repayment.instrument='CASH';
                         model.repayment.authorizationUsing='Testing-Swapnil';
                         model.repayment.remarks='collections';
                         model.repayment.accountId = data.accountId;
@@ -72,12 +72,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.accountId",
                                 readonly:true
                             },
-                            "repayment.amount",
+                            {
+                                key: "repayment.amount",
+                                type: "amount"
+                            },
                             "repayment.repaymentDate",
                             "repayment.cashCollectionRemark",
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
+                                "required": true,
                                 "titleMap":{
                                     "Advance Repayment":"Advance Repayment",
                                     "Scheduled Demand":"Scheduled Demand",
@@ -104,6 +108,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 "key": "repayment.instrument",
                                 "type": "select",
+                                "required": true,
                                 "titleMap": [
                                     {
                                         name: "CASH",
@@ -137,9 +142,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "title":"ACCOUNT_ID"
                                 },
                                 "amount": {
-                                    "type": "string",
+                                    "type": "number",
                                     "title":"AMOUNT"
-
                                 },
                                 "authorizationRemark": {
                                     "type": "string",
@@ -159,7 +163,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 "instrument": {
                                     "type": "string",
-                                    "title": "INSTRUMENT_TYPE"
+                                    "title": "INSTRUMENT_TYPE",
+                                    "required": true
                                 },
                                 "productCode": {
                                     "type": "string",
@@ -190,6 +195,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "title":"URN_NO"
                                 }
                             },
+                            required: [
+                                'instrument'
+                            ]
                         },
                         "additional": {
                             "type": "object",
@@ -240,11 +248,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                                 }
                             },function(resp){
-                                try{
-                                    PageHelper.showErrors(resp);
-                                }catch(err){
-                                    console.error(err);
-                                }
+                                PageHelper.showErrors(resp);
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
                             });
