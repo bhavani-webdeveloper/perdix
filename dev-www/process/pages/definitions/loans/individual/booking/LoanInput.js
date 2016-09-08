@@ -174,7 +174,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                                 },
                                 "searchHelper": formHelper,
-                                "search": function(inputModel, form) {
+                                initialize: function(inputModel) {
+                                    $log.warn('in pincode initialize');
+                                    $log.info(inputModel);
+                                },
+                                "search": function(inputModel, form, model) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
                                         'customerId':inputModel.customerId,
@@ -192,6 +196,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         data.id,
                                         data.urnNo
                                     ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    $log.info(result);
+                                    var promise = Queries.getCustomerBankAccounts(
+                                        result.id
+                                    ).then(function(response){
+                                        if(response && response.body && response.body.length){
+                                            for (var i = response.body.length - 1; i >= 0; i--) {
+                                                if(response.body[i].is_disbersement_account == 1){
+                                                    model.loanAccount.customerBankAccountNumber = response.body[i].account_number;
+                                                    model.loanAccount.customerBankIfscCode = response.body[i].ifsc_code;
+                                                    model.loanAccount.customerBank = response.body[i].customer_bank_name;
+                                                    model.loanAccount.customerBranch = response.body[i].customer_bank_branch_name;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
                             },
                             {
