@@ -200,9 +200,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "state": "customer.state"
                             },
                             searchHelper: formHelper,
-                            initialize: function(model) {
+                            initialize: function(inputModel) {
                                 $log.warn('in pincode initialize');
-                                $log.info(model);
+                                $log.info(inputModel);
                             },
                             search: function(inputModel, form, model) {
                                 return Queries.searchPincodes(
