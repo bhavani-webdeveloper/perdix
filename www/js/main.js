@@ -823,30 +823,6 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "    </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
-    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
-    "\n" +
-    "    </irf-progress-message>\n" +
-    "</div>\n" +
-    "")
-
-$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
-    "    <span class=\"a-wb-K-s\">\n" +
-    "        <span class=\"a-wb-ra-s\">\n" +
-    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
-    "        </span>\n" +
-    "        <div>\n" +
-    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
-    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
-    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
-    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
-    "                </svg>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "    </span>\n" +
-    "</div>\n" +
-    "")
-
 $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
     "    <div class=\"modal-content\">\n" +
@@ -882,6 +858,30 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
+    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
+    "\n" +
+    "    </irf-progress-message>\n" +
+    "</div>\n" +
+    "")
+
+$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
+    "    <span class=\"a-wb-K-s\">\n" +
+    "        <span class=\"a-wb-ra-s\">\n" +
+    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
+    "        </span>\n" +
+    "        <div>\n" +
+    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
+    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
+    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
+    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
+    "                </svg>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </span>\n" +
+    "</div>\n" +
+    "")
 
 $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<form\n" +
@@ -2736,6 +2736,13 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			$scope.inputSchema.properties[key] = s;
 		});
 
+		if ($scope.inputForm.length == 0) {
+			$scope.inputActions.submit();
+		} else {
+			$scope.inputForm.push({"type":"submit", "title":"Search"});
+			// $log.info($scope.inputForm);
+		}
+
 		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
 
 		angular.forEach(mergedInputForm, function(value, key){
@@ -2748,23 +2755,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autolov) {
+		if ($scope.form.autolov && $scope.modelValue) {
 			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			self.init($scope.inputModel);
 			getSearchPromise().then(function(out){
 				if (out.body && out.body.length === 1) {
 					$scope.callback(out.body[0]);
 				} else {
 					displayListOfResponse(out);
-					self.launchLov(true, true);
+					self.launchLov();
 				}
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			}, function(){
-				self.launchLov(true, false);
+				self.launchLov();
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			});
 		} else {
-			self.launchLov(false, false);
+			self.launchLov();
 		}
 	};
 
@@ -2772,16 +2778,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
 	};
 
-	self.launchLov = function(isInitialized, isSubmitted) {
-		if (!isInitialized) {
-			self.init($scope.inputModel);
-		}
-		if ($scope.inputForm.length) {
-			$scope.inputForm.push({"type":"submit", "title":"Search"});
-		} else if (!isSubmitted) {
-			$scope.inputActions.submit();
-		}
-
+	self.launchLov = function() {
 		$scope.modalWindow = $uibModal.open({
 			scope: $scope,
 			templateUrl: "irf/template/lov/modal-lov.html",
@@ -2792,14 +2789,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		});
 	};
 
-	self.init = function(model) {
-		if (angular.isFunction($scope.form.initialize)) {
-			$scope.form.initialize(model);
-		} else if ($scope.form.initialize) {
-			$scope.evalExpr($scope.form.initialize, {model:model});
-		}
-	};
-
 	$scope.inputActions = {};
 
 	var getSearchPromise = function() {
@@ -2807,7 +2796,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
 			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
-		} else if ($scope.form.search) {
+		} else {
 			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
 		return promise;
@@ -2833,16 +2822,9 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	$scope.callback = function(item) {
-		if ($scope.form.outputMap) {
-			elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
-		}
-		if ($scope.form.onSelect) {
-			if (angular.isFunction($scope.form.onSelect)) {
-				$scope.form.onSelect(item, $scope.parentModel, $scope.locals);
-			} else if ($scope.form.onSelect) {
-				$scope.evalExpr($scope.form.onSelect, {result:item, model:$scope.parentModel, context:$scope.locals});
-			}
-		}
+		$log.info("Selected Item->");
+		$log.info(item);
+		elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
 		self.close();
 	};
 
@@ -26847,31 +26829,12 @@ irf.pageCollection.factory("Pages__RejectConfirmQueue",
         }
     };
 }]);
-irf.commons.factory('LoanBookingCommons', [
-    function(){
+irf.commons.factory('LoanBookingCommons', [ 'Queries',
+    function(Queries){
 
         return {
             getDocsForProduct: function(productCode){
-                return [
-                    {
-                        docTitle: "Loan Application",
-                        docCode: "LOANAPPLICATION",
-                        formsKey: 'loan',
-                        downloadRequired: false
-                    },
-                    {
-                        docTitle: "Legal Agreements",
-                        docCode: "LEGALAGREEMENTS",
-                        formsKey: 'legal',
-                        downloadRequired: false
-                    },
-                    {
-                        docTitle: 'Legal Schedule',
-                        docCode: 'LEGALSCHEDULE',
-                        formsKey: 'legalSchedule',
-                        downloadRequired: true
-                    }
-                ]
+                return Queries.getLoanProductDocuments(productCode)
             },
             getDocumentDetails: function(docsForProduct, docCode){
                 var i = 0;
@@ -27128,7 +27091,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CaptureDisbursemen
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
-    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils) {
+    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils',
+        function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils) {
 
 
         var getDocument = function(docsArr, docCode){
@@ -27244,7 +27208,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                     "items": [
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-3",
+                                            "htmlClass": "col-sm-2",
                                             "items": [
                                                 {
                                                     "key": "loanAccount.loanDocuments[].$title",
@@ -27268,12 +27232,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-2",
+                                            "htmlClass": "col-sm-3",
                                             "key": "loanDocs[].downloadRequired",
                                             //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                             "items": [
                                                 {
-                                                    "title": "DOWNLOAD",
+                                                    "title": "DOWNLOAD_FORM",
                                                     "htmlClass": "btn-block",
                                                     "icon": "fa fa-download",
                                                     "type": "button",
@@ -27381,30 +27345,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         model.loanAccount = res;
                         var loanDocuments = model.loanAccount.loanDocuments;
                         var availableDocCodes = [];
-                        var docsForProduct = LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode);
-
-                        for (var i=0; i<loanDocuments.length; i++){
-                            availableDocCodes.push(loanDocuments[i].document);
-                            var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
-                            if (documentObj!=null){
-                                loanDocuments[i].$title = documentObj.docTitle;
-                            } else {
-                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
-                            }
-
-                        }
-
-                        for (var i = 0; i < docsForProduct.length; i++) {
-                            if (_.indexOf(availableDocCodes, docsForProduct[i].docCode)==-1){
-                                loanDocuments.push({
-                                    document: docsForProduct[i].docCode,
-                                    $downloadRequired: docsForProduct[i].downloadRequired,
-                                    $title: docsForProduct[i].docTitle
-                                })
-                            }
-                        }
-
-                        PageHelper.hideLoader();
+                        LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode)
+                            .then(
+                                function(docsForProduct){
+                                    for (var i=0; i<loanDocuments.length; i++){
+                                        availableDocCodes.push(loanDocuments[i].document);
+                                        var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
+                                        if (documentObj!=null){
+                                            loanDocuments[i].$title = documentObj.docTitle;
+                                        } else {
+                                            loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                        }
+                                    }
+                                    PageHelper.hideLoader();
+                                },
+                                function(httpRes){
+                                    PageHelper.hideLoader();
+                                }
+                            )
                     }, function (httpRes) {
                         PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                         PageHelper.showErrors(httpRes);
@@ -27455,12 +27413,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-2",
+                                        "htmlClass": "col-sm-3",
                                         "key": "loanDocs[].downloadRequired",
                                         //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                         "items": [
                                             {
-                                                "title": "DOWNLOAD",
+                                                "title": "DOWNLOAD_FORM",
                                                 "htmlClass": "btn-block",
                                                 "icon": "fa fa-download",
                                                 "type": "button",
@@ -27476,7 +27434,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-3",
+                                        "htmlClass": "col-sm-2",
                                         "items": [
                                             {
                                                 "key": "loanAccount.loanDocuments[].documentStatus",
@@ -28279,7 +28237,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                                 },
                                 "searchHelper": formHelper,
-                                "search": function(inputModel, form) {
+                                initialize: function(inputModel) {
+                                    $log.warn('in pincode initialize');
+                                    $log.info(inputModel);
+                                },
+                                "search": function(inputModel, form, model) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
                                         'customerId':inputModel.customerId,
@@ -28297,6 +28259,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         data.id,
                                         data.urnNo
                                     ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    $log.info(result);
+                                    var promise = Queries.getCustomerBankAccounts(
+                                        result.id
+                                    ).then(function(response){
+                                        if(response && response.body && response.body.length){
+                                            for (var i = response.body.length - 1; i >= 0; i--) {
+                                                if(response.body[i].is_disbersement_account == 1){
+                                                    model.loanAccount.customerBankAccountNumber = response.body[i].account_number;
+                                                    model.loanAccount.customerBankIfscCode = response.body[i].ifsc_code;
+                                                    model.loanAccount.customerBank = response.body[i].customer_bank_name;
+                                                    model.loanAccount.customerBranch = response.body[i].customer_bank_branch_name;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
                             },
                             {
