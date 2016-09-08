@@ -1,28 +1,9 @@
-irf.commons.factory('LoanBookingCommons', [
-    function(){
+irf.commons.factory('LoanBookingCommons', [ 'Queries',
+    function(Queries){
 
         return {
             getDocsForProduct: function(productCode){
-                return [
-                    {
-                        docTitle: "Loan Application",
-                        docCode: "LOANAPPLICATION",
-                        formsKey: 'loan',
-                        downloadRequired: false
-                    },
-                    {
-                        docTitle: "Legal Agreements",
-                        docCode: "LEGALAGREEMENTS",
-                        formsKey: 'legal',
-                        downloadRequired: false
-                    },
-                    {
-                        docTitle: 'Legal Schedule',
-                        docCode: 'LEGALSCHEDULE',
-                        formsKey: 'legalSchedule',
-                        downloadRequired: true
-                    }
-                ]
+                return Queries.getLoanProductDocuments(productCode)
             },
             getDocumentDetails: function(docsForProduct, docCode){
                 var i = 0;

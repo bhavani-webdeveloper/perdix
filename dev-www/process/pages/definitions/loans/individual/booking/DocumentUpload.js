@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
-    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils) {
+    ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils',
+        function ($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils) {
 
 
         var getDocument = function(docsArr, docCode){
@@ -115,7 +116,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                     "items": [
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-3",
+                                            "htmlClass": "col-sm-2",
                                             "items": [
                                                 {
                                                     "key": "loanAccount.loanDocuments[].$title",
@@ -139,12 +140,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-2",
+                                            "htmlClass": "col-sm-3",
                                             "key": "loanDocs[].downloadRequired",
                                             //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                             "items": [
                                                 {
-                                                    "title": "DOWNLOAD",
+                                                    "title": "DOWNLOAD_FORM",
                                                     "htmlClass": "btn-block",
                                                     "icon": "fa fa-download",
                                                     "type": "button",

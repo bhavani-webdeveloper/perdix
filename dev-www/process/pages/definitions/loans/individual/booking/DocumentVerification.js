@@ -20,30 +20,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         model.loanAccount = res;
                         var loanDocuments = model.loanAccount.loanDocuments;
                         var availableDocCodes = [];
-                        var docsForProduct = LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode);
-
-                        for (var i=0; i<loanDocuments.length; i++){
-                            availableDocCodes.push(loanDocuments[i].document);
-                            var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
-                            if (documentObj!=null){
-                                loanDocuments[i].$title = documentObj.docTitle;
-                            } else {
-                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
-                            }
-
-                        }
-
-                        for (var i = 0; i < docsForProduct.length; i++) {
-                            if (_.indexOf(availableDocCodes, docsForProduct[i].docCode)==-1){
-                                loanDocuments.push({
-                                    document: docsForProduct[i].docCode,
-                                    $downloadRequired: docsForProduct[i].downloadRequired,
-                                    $title: docsForProduct[i].docTitle
-                                })
-                            }
-                        }
-
-                        PageHelper.hideLoader();
+                        LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode)
+                            .then(
+                                function(docsForProduct){
+                                    for (var i=0; i<loanDocuments.length; i++){
+                                        availableDocCodes.push(loanDocuments[i].document);
+                                        var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
+                                        if (documentObj!=null){
+                                            loanDocuments[i].$title = documentObj.docTitle;
+                                        } else {
+                                            loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                        }
+                                    }
+                                    PageHelper.hideLoader();
+                                },
+                                function(httpRes){
+                                    PageHelper.hideLoader();
+                                }
+                            )
                     }, function (httpRes) {
                         PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
                         PageHelper.showErrors(httpRes);
@@ -94,12 +88,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-2",
+                                        "htmlClass": "col-sm-3",
                                         "key": "loanDocs[].downloadRequired",
                                         //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                         "items": [
                                             {
-                                                "title": "DOWNLOAD",
+                                                "title": "DOWNLOAD_FORM",
                                                 "htmlClass": "btn-block",
                                                 "icon": "fa fa-download",
                                                 "type": "button",
@@ -115,7 +109,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-3",
+                                        "htmlClass": "col-sm-2",
                                         "items": [
                                             {
                                                 "key": "loanAccount.loanDocuments[].documentStatus",
