@@ -100,7 +100,10 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     'stage': 'LoanBooking',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId
+                    'customerId': searchOptions.customerId,
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,
+                    'sortBy':searchOptions.sortBy
                 }).$promise;
                 //var out = {
                 //    body: [
