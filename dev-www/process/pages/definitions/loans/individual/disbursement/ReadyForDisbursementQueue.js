@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager){
             return {
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
@@ -94,7 +94,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     name: "Proceed to Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-
+                                        entityManager.setModel('loans.individual.disbursement.Disbursement', {_disbursement:item});
                                         $state.go("Page.Engine",{
                                             pageName:"loans.individual.disbursement.Disbursement",
                                             pageId:[item.loanId,item.id].join(".")

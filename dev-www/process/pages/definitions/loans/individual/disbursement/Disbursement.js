@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount",
-        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount){
+    ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
+        function($log, Enrollment, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
 
         var branch = SessionStore.getBranch();
         var backToQueue = function(){
@@ -9,6 +9,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 pageId:null
             });
         };
+        //model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber
+        //populate from getBankAccounts
+
         /*var banks = [];
         var getBankById = function(banks, id){
             for (var i=0;i<banks.length;i++){
@@ -18,14 +21,39 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             }
             return null;
         }*/
+        /*model._more = {};
+        Bank.getBankAccounts()
+                    .$promise
+                    .then(
+                        function(res){
+                            if (res.length==0){
+                                PageHelper.showProgress('loan-load', 'No bank details found', 2000);
+                                PageHelper.hideLoader();
+                                return;
+                            }
+                            for (var i=0; i<res.length; i++){
+                                var bank = res[i];
+                                banks.push({
+                                    name: bank.bankName + " - " + bank.branchName,
+                                    value: bank.id,
+                                    obj: bank
+                                })
+                            }
+                            model._more.banks = banks;
+                            PageHelper.showProgress('loan-load', 'Loading loan details');
+                        }, function(httpRes){
+
+                        }
+                    )*/
+
 
         return {
             "type": "schema-form",
             "title": "DISBURSE_LOAN",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
-                $log.info("Individual Loan Booking Page got initialized");
-                $log.info("Demo Customer Page got initialized");
+                $log.info("Disbursement Page got initialized");
+
                 /*model._more = {};
 
                 var loanId = $stateParams['pageId'];
@@ -73,9 +101,40 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 try {
                     var loanId = ($stateParams['pageId'].split('.'))[0];
                     var disbursementId = ($stateParams['pageId'].split('.'))[1];
+                    $log.info("loanId ::" + loanId);
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
-                    IndividualLoan.get({id: loanId}, function (resp, head) {
+                    IndividualLoan.getDisbursementList([loanId], function (resp, head) {
+                        model.additional.accountNumber = resp[0].accountId;
+                        model.additional.customerId = resp[0].customerId;
+                        model.additional.numberOfDisbursements = resp[0].numDisbursements;
+                        model.additional.productCode = resp[0].productCode;
+                        model.additional.urnNo = resp[0].urnNo;
+                        model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
+                        if (!model._disbursement) {
+                            $log.info("Page visited directly");
+                            $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
+                        } else {
+                            model.loanAccountDisbursementSchedule=model._disbursement;
+                            $log.info("Printing the loanAccountDisbursementSchedule");
+                            $log.info(model.loanAccountDisbursementSchedule);
+                            //model.loanAccountDisbursementSchedule.amountdue=model._bounce.amount1;
+                        }
+                        model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
+                        model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
+                        model.loanAccountDisbursementSchedule.customerAccountNumber= resp[0].bankAccountNumber;
+                        model.loanAccountDisbursementSchedule.ifscCode = resp[0].ifscCode;
+
+                    },
+                    function (resp) {
+                        PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
+                        PageHelper.showErrors(resp);
+
+
+                    }).$promise.finally(function () {
+                        PageHelper.hideLoader();
+                    });
+                    /*IndividualLoan.get({id: loanId}, function (resp, head) {
                         model.additional.accountNumber = resp.accountNumber;
                         model.additional.customerId = resp.customerId;
                         model.additional.numberOfDisbursements = resp.numberOfDisbursements;
@@ -113,7 +172,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                     }).$promise.finally(function () {
                         PageHelper.hideLoader();
-                    });
+                    });*/
                 }
                 catch(err){
                     console.error(err);
@@ -129,7 +188,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             form: [{
                 "type": "box",
                 "title": "DISBURSEMENT_DETAILS", // sample label code
-                "colClass": "col-sm-12", // col-sm-6 is default, optional
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
                     /*{
@@ -151,12 +209,37 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }
                     },*/
                     {
-                        "key": "loanAccountDisbursementSchedule.disbursementAmount",
-                        "title":"DISBURSEMENT_AMOUNT"
+                        "key": "additional.accountNumber",
+                        "title":"ACCOUNT_NUMBER",
+                        "readonly":true
                     },
                     {
-                        "key": "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
-                        "title":"DISBURSEMENT_FROM_BANK_ACC_NO"
+                        "key": "loanAccountDisbursementSchedule.disbursementAmount",
+                        "title":"DISBURSEMENT_AMOUNT",
+                        "type":"amount"
+                    },
+                    {
+                        key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
+                        type: "lov",
+                        autolov: true,
+                        title:"DISBURSEMENT_FROM_BANK_ACC_NO",
+                        bindMap: {
+                            
+                        },
+                        outputMap: {
+                            "account_number": "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getBankAccounts();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.account_number,
+                                item.ifsc_code + ', ' + item.bank_name,
+                                item.branch_name
+                            ];
+                        }
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.customerAccountNumber",
@@ -184,7 +267,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         "key": "loanAccountDisbursementSchedule.udf2",
                         "title": "REJECTED_REASON",
-                        "type": "text",
                         "enumCode": "reject_reason"
                     },
                     {
@@ -193,17 +275,22 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title": "REJECT_REMARKS"
                     },
                     {
-                        "type": "actionbox",
-                        "condition":"!model.additional.disbursementDone",
-                        "items": [
+                        "type":"actions",
+                        "items":[
                             {
                                 "type":"button",
                                 "title":"DISBURSE",
                                 "icon":"fa fa-money",
                                 "onClick":"actions.disburseLoan(model,formCtrl,form)"
+                            },
+                            {
+                                "type":"button",
+                                "title":"REJECT",
+                                "onClick":"actions.disburseLoan(model,formCtrl,form)"
                             }
                         ]
-                    },
+                    }
+                    /*,
                     {
                         "type":"actionbox",
                         "condition":"model.additional.disbursementDone",
@@ -215,7 +302,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             }
 
                         ]
-                    }
+                    }*/
                 ]
             }],
             schema: function() {
@@ -241,18 +328,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             function(data){
                                 $log.info("Inside success of activateLoan");
                                 var currDate = moment(new Date()).format("YYYY-MM-DD");
-                                /*var toSendData = {
-                                    accountId:accountId,
-                                    amount:model.loanAccountDisbursementSchedule.disbursementAmount,
-                                    disbursementDate:currDate,
-                                    bankAccountNumber:model.loanAccountDisbursementSchedule.customerAccountNumber,
-                                    ifscCode:model.loanAccountDisbursementSchedule.ifscCode,
-                                    customerId:model.additional.customerId,
-                                    numberOfDisbursements:model.additional.numberOfDisbursements,
-                                    productCode:model.additional.productCode,
-                                    urnNo:model.additional.urnNo
+                                model.loanAccountDisbursementSchedule.accountNumber = accountNumber;
 
-                                };*/
                                 var toSendData = [];
                                 toSendData.push(model.loanAccountDisbursementSchedule);
                                 
@@ -275,6 +352,37 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 PageHelper.showErrors(res);
                                 PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
                             });
+
+                    }
+
+                },
+                rejectLoan:function(model, formCtrl, form){
+                    formCtrl.scope.$broadcast("schemaFormValidate");
+                    if(!formCtrl.$valid){
+                        PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
+                        return;
+                    }
+
+                    if(window.confirm("Are you sure to reject the loan disbursement?")){
+
+                        PageHelper.showLoader();
+                        var accountNumber = model.additional.accountNumber;
+                        var accountId = model.loanAccountDisbursementSchedule.loanId;
+                        PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
+
+                        var reqData = _.cloneDeep(model);
+                        reqData.disbursementProcessAction = "PROCEED";
+                        reqData.stage = "RejectedDisbursement";
+                        IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                            PageHelper.showProgress("upd-disb","Done.","5000");
+                            backToQueue();
+                        },function(resp){
+                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                            PageHelper.showErrors(resp);
+
+                        }).$promise.finally(function(){
+                            PageHelper.hideLoader();
+                        });
 
                     }
 

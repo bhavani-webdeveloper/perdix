@@ -27,7 +27,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         batchDisburse:{
             method:'PUT',
-            url:endpoint+'/batchDisbursement'
+            url:endpoint+'/batchDisbursement',
+            isArray:true
         },
         multiTrancheDisbursement:{
             method:'GET',
@@ -49,6 +50,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         searchDisbursementHead:{
             method:'HEAD',
             url:endpoint+'/findDisbursement',
+            isArray:true
+        },
+        getDisbursementList:{
+            method:'PUT',
+            url:endpoint+'/getDisbursementList',
             isArray:true
         },
         getDocuments:{
