@@ -170,16 +170,16 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountNumber, /*Service is missing*/
-                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
-                        "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
-                        "{{'Cheque No'|translate}}: " + item.chequeNo,  /*Service is missing*/
-                        "{{'Issuing Bank'|translate}}: " + item.issuingBank,  /*Service is missing*/
-                        "{{'Issuing Branch'|translate}}: " + item.issuingBranch,  /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
+                        "{{'INSTALLMENT_DATE'|translate}}: " + item.installmentDate,  /*Service is missing*/
+                        "{{'PAYMENT_MODE'|translate}}: " + item.paymentMode,  /*Service is missing*/
+                        "{{'CHEQUE_NO'|translate}}: " + item.chequeNo,  /*Service is missing*/
+                        "{{'ISSUING_BANK'|translate}}: " + item.issuingBank,  /*Service is missing*/
+                        "{{'ISSUING_BRANCH'|translate}}: " + item.issuingBranch,  /*Service is missing*/
                         "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'PTP Date'|translate}}: " + item.PTPDate,              /*Service is missing*/
-                        "{{'Reasons'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
-                        "{{'Type Of Customer'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
+                        "{{'PTP_DATE'|translate}}: " + item.PTPDate,              /*Service is missing*/
+                        "{{'REASONS'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
+                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
                     ]
                 },
                 getActions: function(){
