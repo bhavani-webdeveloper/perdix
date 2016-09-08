@@ -193,16 +193,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "key": "loanAccount.guarantors[].guaFirstName",
 
                                         "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].guaDob",
-
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].address",
-
-                                        "readonly": true
                                     }
                                 ]
                             }
@@ -213,16 +203,78 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "COLLATERAL DETAILS",
                         "items": [
                             {
-                                "key": "loanAccount.collateral.collateralType",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral.collateralDescription",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral.collateralValue",
-                                "readonly": true
+                                "key":"loanAccount.collateral",
+                                "title":"COLLATERAL",
+                                "type":"array",
+                                "readonly": true,
+                                "items":[
+                                    {
+                                        "key":"loanAccount.collateral[].collateralType",
+                                        "type":"select"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateralDescription"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].manufacturer"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].quantity",
+                                        "onChange": function(value ,form ,model, event){
+                                            calculateTotalValue(value, form, model);
+                                        }
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].modelNo"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].machineOld"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateralValue",
+                                        "type":"amount",
+                                        "title":"COLLATERAL_VALUE",
+                                        "onChange": function(value ,form ,model, event){
+                                            calculateTotalValue(value, form, model);
+                                        }
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].totalValue",
+                                        "type":"amount",
+                                        "title":"TOTAL_VALUE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].marginValue",
+                                        "type":"amount",
+                                        "title":"PURCHASE_PRICE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].loanToValue",
+                                        "type":"amount",
+                                        "title":"PRESENT_VALUE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral1FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_1"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral2FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_2"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral3FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_3"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].photoFilePath",
+                                        "type":"file",
+                                        "fileType":"image/*",
+                                        "title":"PHOTO"
+                                    }
+                                ]
                             }
                         ]
                     }
