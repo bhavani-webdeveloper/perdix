@@ -260,17 +260,17 @@
                                 "type": "string"
                             },
                             "collateral1FilePath": {
-                                "type": "string",
+                                "type": ["null", "string"],
                                 "category":"Loan",
                                 "subCategory":"COLLATERAL1"
                             },
                             "collateral2FilePath": {
-                                "type": "string",
+                                "type": ["null", "string"],
                                 "category":"Loan",
                                 "subCategory":"COLLATERAL2"
                             },
                             "collateral3FilePath": {
-                                "type": "string",
+                                "type": ["null", "string"],
                                 "category":"Loan",
                                 "subCategory":"COLLATERAL3"
                             },
@@ -309,7 +309,7 @@
                                 "type": "integer"
                             },
                             "photoFilePath": {
-                                "type": "string",
+                                "type": ["null", "string"],
                                 "category":"Loan",
                                 "subCategory":"COLLATERALPHOTO"
                             },

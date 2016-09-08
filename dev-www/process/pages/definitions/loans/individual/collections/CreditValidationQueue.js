@@ -30,7 +30,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     },
                     "branch": {
                         "title": "BRANCH_NAME",
-                        "type": "string",
+                        "type": ["null", "string"],
                         "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
@@ -38,7 +38,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": ['null', 'number'],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",

@@ -57,6 +57,9 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Gracefully clearing progress messages */
         PageHelper.gracefulClearProgress();
 
+        /* Hiding Loader */
+        PageHelper.hideLoader();
+
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
 			if (model.persist) {
@@ -64,7 +67,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			} else {
 				entityManager.setModel(fromParams.pageName, null);
 				$log.info('Previous page cleaned:' + fromParams.pageName);
-			} 
+			}
 			irfOfflineFileRegistry.clear();
 			$log.info("offline file registry cleared");
 		}

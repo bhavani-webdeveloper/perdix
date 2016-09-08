@@ -4762,6 +4762,9 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Gracefully clearing progress messages */
         PageHelper.gracefulClearProgress();
 
+        /* Hiding Loader */
+        PageHelper.hideLoader();
+
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
 			if (model.persist) {
@@ -4769,7 +4772,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			} else {
 				entityManager.setModel(fromParams.pageName, null);
 				$log.info('Previous page cleaned:' + fromParams.pageName);
-			} 
+			}
 			irfOfflineFileRegistry.clear();
 			$log.info("offline file registry cleared");
 		}
@@ -5137,7 +5140,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 try {
                     var data = res.data;
                     var errors = [];
-                    if (data.errors) {
+                    if (_.hasIn(data, 'errors')) {
                         _.forOwn(data.errors, function (keyErrors, key) {
                             var keyErrorsLength = keyErrors.length;
                             for (var i = 0; i < keyErrorsLength; i++) {
@@ -5147,7 +5150,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                         });
 
                     }
-                    if (data.error) {
+                    if (_.hasIn(data, 'error')) {
                         errors.push({message: data.error});
                     }
                     this.setErrors(errors);
@@ -5943,9 +5946,10 @@ $(document).ready(function(){
     angular.bootstrap($("html"), ['MainApp']);
 });
 
+
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
 //irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
-//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+// irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
@@ -6618,7 +6622,35 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         },
         get: {
             method: 'GET',
-            url: endpoint + '/show/:accountId'
+            url: endpoint + '/show/:accountId',
+            transformResponse: function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status === 200){
+                    // debugger;
+                    if (_.hasIn(data, 'accountBalance') && _.isString(data['accountBalance'])){
+                        data.accountBalance = parseInt(data['accountBalance']);
+                    }
+                    if (_.hasIn(data, 'totalPrincipalDue') && _.isString(data['totalPrincipalDue'])){
+                        data.totalPrincipalDue = parseInt(data['totalPrincipalDue']);
+                    }
+                    if (_.hasIn(data, 'totalNormalInterestDue') && _.isString(data['totalNormalInterestDue'])){
+                        data.totalNormalInterestDue = parseInt(data['totalNormalInterestDue']);
+                    }
+                    if (_.hasIn(data, 'totalPenalInterestDue') && _.isString(data['totalPenalInterestDue'])){
+                        data.totalPenalInterestDue = parseInt(data['totalPenalInterestDue']);
+                    }
+                    if (_.hasIn(data, 'totalFeeDue') && _.isString(data['totalFeeDue'])){
+                        data.totalFeeDue = parseInt(data['totalFeeDue']);
+                    }
+                    if (_.hasIn(data, 'totalDemandDue') && _.isString(data['totalDemandDue'])){
+                        data.totalDemandDue = parseInt(data['totalDemandDue']);
+                    }
+                }
+                
+                return data;
+
+            }
+
         },
         viewLoans: searchResource({
             method: 'GET',
@@ -19705,11 +19737,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.loanAccount = data;
                         console.log(data);
                         model.repayment = {};
+                        model.repayment.productCode=data.productCode;
+                        model.repayment.urnNo=data.customerId1;
+                        model.repayment.instrument='CASH';
+                        model.repayment.authorizationUsing='Testing-Swapnil';
+                        model.repayment.remarks='collections';
                         model.repayment.accountId = data.accountId;
                         model.repayment.amount = data.totalDemandDue;
                         model.repayment.productCode = data.productCode;
                         model.repayment.urnNo = data.customerId1;
-
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
@@ -19733,12 +19769,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.accountId",
                                 readonly:true
                             },
-                            "repayment.amount",
+                            {
+                                key: "repayment.amount",
+                                type: "amount"
+                            },
                             "repayment.repaymentDate",
                             "repayment.cashCollectionRemark",
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
+                                "required": true,
                                 "titleMap":{
                                     "Advance Repayment":"Advance Repayment",
                                     "Scheduled Demand":"Scheduled Demand",
@@ -19765,6 +19805,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 "key": "repayment.instrument",
                                 "type": "select",
+                                "required": true,
                                 "titleMap": [
                                     {
                                         name: "CASH",
@@ -19798,9 +19839,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "title":"ACCOUNT_ID"
                                 },
                                 "amount": {
-                                    "type": "string",
+                                    "type": "number",
                                     "title":"AMOUNT"
-
                                 },
                                 "authorizationRemark": {
                                     "type": "string",
@@ -19820,7 +19860,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 "instrument": {
                                     "type": "string",
-                                    "title": "INSTRUMENT_TYPE"
+                                    "title": "INSTRUMENT_TYPE",
+                                    "required": true
                                 },
                                 "productCode": {
                                     "type": "string",
@@ -19851,6 +19892,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "title":"URN_NO"
                                 }
                             },
+                            required: [
+                                'instrument'
+                            ]
                         },
                         "additional": {
                             "type": "object",
@@ -19901,11 +19945,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                                 }
                             },function(resp){
-                                try{
-                                    PageHelper.showErrors(resp);
-                                }catch(err){
-                                    console.error(err);
-                                }
+                                PageHelper.showErrors(resp);
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
                             });
@@ -22260,7 +22300,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
@@ -22287,7 +22327,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": "integer",
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -22510,7 +22550,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": "integer",
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -22618,7 +22658,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountNumber, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
                         "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
                         "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
@@ -22639,7 +22679,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22654,7 +22694,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22706,7 +22746,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                // "required":["branch"],
@@ -22733,7 +22773,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": ['null', "integer"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -22838,13 +22878,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
-                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'Principal Due'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
-                        "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
+                        "{{'CHARGES'|translate}}: " + item.part4,                /*Service is missing*/
                         "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                        "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
+                        "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
                 getActions: function(){
@@ -22854,7 +22894,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -22885,42 +22925,56 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
-["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+["$log","$q", 'Pages_ManagementHelper','LoanProcess','LoanAccount', 'PageHelper','formHelper','irfProgressMessage',
+'SessionStore',"$state","$stateParams","Masters","authService", "Utils",
+function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHelper,irfProgressMessage,
+	SessionStore,$state,$stateParams,Masters,authService, Utils){
 
 	return {
 		"type": "schema-form",
 		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
-            model.creditValidation = model.creditValidation || {};
 
-            if (model._credit) {
-                model.creditValidation = model._credit;               
-                model.creditValidation.loanRepaymentDetailsId = model._credit.id;
-                model.creditValidation.accountNumber = model._credit.accountNumber;
-                model.creditValidation.enterprise_name = model._credit.customerName;
-                model.creditValidation.applicant_name = model._credit.applicant;
-                model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                if (model._credit.principalOutstandingAmtInPaisa > 0)
-                    model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa/100;
-                if (model._credit.interest > 0)
-                    model.creditValidation.interest = model._credit.interest/100;
-                if (model._credit.fees > 0)
-                    model.creditValidation.fee = model._credit.fees/100;
-                if (model._credit.penalInterest > 0)
-                    model.creditValidation.penal_interest = model._credit.penalInterest/100;
-                if (model._credit.demandAmountInPaisa > 0 || model._credit.demandAmountInPaisa == 0 )
-                    model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
-                if (model._credit.repaymentAmountInPaisa > 0)
-                    model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
-            } else {
-                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
-            }
+                    //PageHelper.showLoader();
+                    irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
+                    //PageHelper
+                    var loanAccountNo = $stateParams.pageId;
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    promise.then(function (data) { /* SUCCESS */
+                        model.loanAccount = data;
+                        console.log('sarthak')
+                        console.log(data);
+                        model.creditValidation = model.creditValidation || {};
+                        model.creditValidation.enterprise_name = data.customer1FirstName;
+                        model.creditValidation.productCode=data.productCode;
+                        model.creditValidation.urnNo=data.customerId1;
+                        model.creditValidation.instrument='CASH_IN';
+                        model.creditValidation.authorizationUsing='Testing-Swapnil';
+                        model.creditValidation.remarks='collections';
+                        model.creditValidation.accountNumber = data.accountId;
+                        model.creditValidation.amountDue = data.totalDemandDue;
+                        model.creditValidation.principal=data.totalPrincipalDue;
+                        model.creditValidation.interest=data.totalNormalInterestDue;
+                        model.creditValidation.applicant_name=data.applicant;
+                        model.creditValidation.applicant_name=data.coapplicant;
+                        model.creditValidation.penal_interest=data.totalPenalInterestDue;
+                        model.creditValidation.fee=data.totalFeeDue;
+                        model.creditValidation.loanRepaymentDetailsId = model._credit.id;
+
+                        model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
+
+                        irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                    }, function (resData) {
+                        irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                        PageHelper.showErrors(resData);
+                        backToLoansList();
+                    })
+                    .finally(function () {
+                        PageHelper.hideLoader();
+                    })
         },
-		
+
 		form: [
 			{
 				"type":"box",
@@ -23027,66 +23081,68 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-                PageHelper.showLoader();
-                if(model.creditValidation.status == "1")
-                {
-                    $log.info("Inside FullPayment()");
-                    LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+                Utils.confirm("Are You Sure?")
+                    .then(function(){
+                        PageHelper.showLoader();
+                        if(model.creditValidation.status == "1")
+                        {
+                            $log.info("Inside FullPayment()");
+                            LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+                                PageHelper.hideLoader();
+                                PageHelper.navigateGoBack();
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                    PageHelper.hideLoader();
+                        }
+                        else if(model.creditValidation.status == "3")
+                        {
+                            $log.info("Inside NoPayment()");
+                            var reqParams = {
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                                "remarks":model.creditValidation.reject_remarks,
+                                "rejectReason":model.creditValidation.reject_reason
+                            };
+                            LoanProcess.reject(reqParams,null, function(response){
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
+                        }
+                        else if(model.creditValidation.status == "2")
+                        {
+                            $log.info("Inside PartialPayment()");
+                            var reqParams = {
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                                "remarks":model.creditValidation.reject_remarks,
+                                "rejectReason":model.creditValidation.reject_reason
+                            };
+                            LoanProcess.partialPayment(reqParams,null, function(response){
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
-                }
-                else if(model.creditValidation.status == "3")
-                {
-                    $log.info("Inside NoPayment()");
-                    var reqParams = {
-                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                        "remarks":model.creditValidation.reject_remarks,
-                        "rejectReason":model.creditValidation.reject_reason
-                    };
-                    LoanProcess.reject(reqParams,null, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
-                }
-                else if(model.creditValidation.status == "2")
-                {
-                    $log.info("Inside PartialPayment()");
-                    var reqParams = {
-                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                        "remarks":model.creditValidation.reject_remarks,
-                        "rejectReason":model.creditValidation.reject_reason
-                    };
-                    LoanProcess.reject(reqParams,null, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                        } else {
+                            $log.info("Outside FullPayment()");
+                            LoanProcess.repay(model.creditValidation, function(response){
+                                PageHelper.hideLoader();
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                } else {
-                    $log.info("Outside FullPayment()");
-                    LoanProcess.repay(model.creditValidation, function(response){
-                    PageHelper.hideLoader();
+                        }
+                })
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
-
-                }
-                
 			}
 		}
 	};
@@ -23111,7 +23167,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                 model.collectPayment=model._bounce;
                 model.collectPayment.amountdue=model._bounce.amount1;
             }
-            model.repayment.instrument = "CASH_IN";
+            model.repayment.instrument = "CASH";
             model.repayment.transactionName = "Scheduled Demand"; //transactionName : Advance Repayment, Scheduled Demand, Fee Payment, Pre-closure, Prepayment
             //repaymentType applicable for KGFS - ADVANCED, SCHEDULED, OVERDUE
             model.repayment.authorizationRemark = "";
@@ -23157,19 +23213,19 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         type:"select",
                         titleMap: [{
                             "name":"Cash",
-                            "value":"CASH_IN"
+                            "value":"CASH"
                         },
                         {
                             "name":"Cheque",
-                            "value":"CHQ_IN"
+                            "value":"CHQ"
                         },
                         {
                             "name":"NEFT",
-                            "value":"NEFT_IN"
+                            "value":"NEFT"
                         },
                         {
                             "name":"RTGS",
-                            "value":"RTGS_IN"
+                            "value":"RTGS"
                         }]
                     },
                     {
@@ -23321,6 +23377,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 		initialize: function (model, form, formCtrl) {
             PageHelper.showLoader();
             irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
+            console.log(SessionStore.getRole());
             //PageHelper
             var loanAccountNo = $stateParams.pageId;
             var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
@@ -23384,7 +23441,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
-                            default: false
+                            default:false
                         }
                     },
                     {
@@ -23603,7 +23660,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     },
                     "branch": {
                         "title": "BRANCH_NAME",
-                        "type": "string",
+                        "type": ["null", "string"],
                         "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
@@ -23611,7 +23668,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": ['null', 'number'],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -23669,7 +23726,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 return true;
@@ -24367,7 +24424,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     'firstName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'status': "PENDING"
+                    'status': "PartialPayment"
                 }).$promise;
 
                 return promise;
@@ -24411,7 +24468,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.TransactionAuthorization', {_transAuth:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorization', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -24427,280 +24484,272 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
     };
 }]);
 
-
-
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
-["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-    SessionStore,$state,$stateParams,Masters,authService){
+    ["$log", "$q", 'Pages_ManagementHelper', 'LoanProcess', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
+        function ($log, $q, ManagementHelper, LoanProcess, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
+                  SessionStore, $state, $stateParams, Masters, authService, Utils) {
 
-    return {
-        "type": "schema-form",
-        "title": "PAYMENT_DETAILS_FOR_LOAN",
-        initialize: function (model, form, formCtrl) {
-            $log.info("Transaction Authorization Page got initialized");
-             model.transAuth =  model.transAuth || {};
-            if(model._transAuth)
-            {
-                model.transAuth = model._transAuth;
-                model.transAuth.customer_name = model._transAuth.customerName;
-                model.transAuth.applicant_name = model._transAuth.applicantName;
-                model.transAuth.co_applicant_name = model._transAuth.coApplicantName;
-                model.transAuth.principal = model._transAuth.principalOutstandingAmtInPaisa;
-                model.transAuth.interest = model._transAuth.interest;
-                model.transAuth.fee = model._transAuth.fee;
-                model.transAuth.penal_interest = model._transAuth.penal_interest;
-                model.transAuth.amountDue = model._transAuth.demandAmountInPaisa;
-                model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa;
-            
-            } else {
-                $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorizationQueue', pageId: null});
-            
-            }
-        },
-        
-        form: [
-            {
-                "type":"box",
-                "title":"PAYMENT",
-                "items":[
+            return {
+                "type": "schema-form",
+                "title": "PAYMENT_DETAILS_FOR_LOAN",
+                initialize: function (model, form, formCtrl) {
+                    $log.info("Transaction Authorization Page got initialized");
+                    model.transAuth = model.transAuth || {};
+                    model._input = {isPenalInterestWaivedOff: false, isFeeWaivedOff: false};
+                    PageHelper.showLoader();
+
+                    //PageHelper.showLoader();
+                    irfProgressMessage.pop('loading-Transaction Authorization-details', 'Loading Transaction Authorization Details');
+                    //PageHelper
+                    var loanAccountNo = $stateParams.pageId;
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    promise.then(function (data) { /* SUCCESS */
+                        model.loanAccount = data;
+                        console.log('sarthak')
+                        console.log(data);
+                        model.transAuth = model.transAuth || {};
+                        model.transAuth.customer_name = data.customer1FirstName;
+                        model.transAuth.productCode = data.productCode;
+                        model.transAuth.urnNo = data.customerId1;
+                        model.transAuth.instrument = 'CASH_IN';
+                        model.transAuth.authorizationUsing = 'Testing-Swapnil';
+                        model.transAuth.remarks = 'collections';
+                        model.transAuth.accountNumber = data.accountId;
+                        model.transAuth.amountDue = data.totalDemandDue;
+                        model.transAuth.principal = data.totalPrincipalDue;
+                        model.transAuth.interest = data.totalNormalInterestDue;
+                        model.transAuth.applicant_name = data.applicant;
+                        model.transAuth.applicant_name = data.coapplicant;
+                        model.transAuth.penal_interest = data.totalPenalInterestDue;
+                        model.transAuth.loanRepaymentDetailsId = model._transAuth.id;
+                        model.transAuth.fee = data.totalFeeDue;
+
+                        model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa / 100;
+                        irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                        PageHelper.hideLoader();
+                    }, function (resData) {
+                        irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                        PageHelper.showErrors(resData);
+                        backToLoansList();
+                    })
+                },
+
+                form: [
                     {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.customer_name",
-                                        title:"ENTERPRISE_NAME",
-                                        readonly:true
+                        "type": "box",
+                        "title": "PAYMENT",
+                        "items": [
+                            {
+                                type: "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.customer_name",
+                                        title: "ENTERPRISE_NAME",
+                                        readonly: true
                                     },
+                                        {
+                                            key: "transAuth.applicant_name",
+                                            title: "APPLICANT",
+                                            readonly: true,
+                                        },
+                                        {
+                                            key: "transAuth.co_applicant_name",
+                                            title: "CO_APPLICANT",
+                                            readonly: true,
+                                        }]
+                                },
                                     {
-                                        key:"transAuth.applicant_name",
-                                        title:"APPLICANT",
-                                        readonly:true,
-                                    },
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4"
+                                    }]
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.principal",
+                                        title: "PRINCIPAL",
+                                        readonly: true,
+                                        type: "amount"
+                                    }]
+                                },
                                     {
-                                        key:"transAuth.co_applicant_name",
-                                        title:"CO_APPLICANT",
-                                        readonly:true,
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4"
                                     }]
-                                },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4"
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.principal",
-                                        title:"PRINCIPAL",
-                                        readonly:true,
-                                        type:"amount"
-                                    }]
-                                },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4"
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.interest",
-                                        title:"INTEREST",
-                                        readonly:true,
-                                        type:"amount"
-                                    }]
-                                },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4",
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
                                 "items": [{
-                                        key: "int_waived_off",
-                                        title: "WAIVED",
-                                        type: "checkbox",
-                                        "fullwidth":true,
-                                        schema: {
-                                            default: false
-                                        }
-                                    }]
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.penal_interest",
-                                        title:"PENAL_INTEREST",
-                                        readonly:true,
-                                        type:"amount"
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.interest",
+                                        title: "INTEREST",
+                                        readonly: true,
+                                        type: "amount"
                                     }]
                                 },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4",
+                                    /*{
+                                     "type": "section",
+                                     "htmlClass": "col-xs-4 col-md-4",
+                                     "items": [{
+                                     key: "int_waived_off",
+                                     title: "WAIVED",
+                                     type: "checkbox",
+                                     "fullwidth":true,
+                                     schema: {
+                                     default: false
+                                     }
+                                     }]
+                                     }*/]
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
                                 "items": [{
-                                        key: "p_int_waived_off",
-                                        title: "WAIVED",
-                                        type: "checkbox",
-                                        "fullwidth":true,
-                                        schema: {
-                                            default: false
-                                        }
-                                    }]
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.fee",
-                                        title:"FEES_AND_OTHER_CHARGES",
-                                        readonly:true,
-                                        type:"amount"
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.penal_interest",
+                                        title: "PENAL_INTEREST",
+                                        readonly: true,
+                                        type: "amount"
                                     }]
                                 },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4",
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4",
+                                        "items": [{
+                                            key: "_input.isPenalInterestWaivedOff",
+                                            title: "WAIVED",
+                                            type: "checkbox",
+                                            "fullwidth": true,
+                                            schema: {
+                                                default: false
+                                            }
+                                        }]
+                                    }]
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
                                 "items": [{
-                                        key: "fee_waived_off",
-                                        title: "WAIVED",
-                                        type: "checkbox",
-                                        "fullwidth":true,
-                                        schema: {
-                                            default: false
-                                        }
-                                    }]
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.amountDue",
-                                        title:"AMOUNT_DUE",
-                                        readonly:true,
-                                        type:"amount"
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.fee",
+                                        title: "FEES_AND_OTHER_CHARGES",
+                                        readonly: true,
+                                        type: "amount"
                                     }]
                                 },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4"
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.amountCollected",
-                                        title:"AMOUNT_COLLECTED",
-                                        readonly:true,
-                                        type:"amount"
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4",
+                                        "items": [{
+                                            key: "_input.isFeeWaivedOff",
+                                            title: "WAIVED",
+                                            type: "checkbox",
+                                            "fullwidth": true,
+                                            schema: {
+                                                default: false
+                                            }
+                                        }]
+                                    }]
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.amountDue",
+                                        title: "AMOUNT_DUE",
+                                        readonly: true,
+                                        type: "amount"
                                     }]
                                 },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4"
-                                }]
-                    },
-                    {
-                        type:"section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-xs-8 col-md-8",
-                            "items": [{
-                                        key:"transAuth.status",
-                                        title:"",
-                                        type:"radios",
-                                        titleMap:{
-                                            "1":"Approve",
-                                            "2":"Reject"
-                                        }
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4"
+                                    }]
+                            },
+                            {
+                                type: "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-xs-8 col-md-8",
+                                    "items": [{
+                                        key: "transAuth.amountCollected",
+                                        title: "AMOUNT_COLLECTED",
+                                        readonly: true,
+                                        type: "amount"
                                     }]
                                 },
-                                {
-                                "type": "section",
-                                "htmlClass": "col-xs-4 col-md-4"
-                                }]
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4 col-md-4"
+                                    }]
+                            }
+                        ]
                     },
                     {
-                        key:"transAuth.reject_reason",
-                        title:"REJECT_REASON",
-                        type:"select",
-                        titleMap: [{
-                            "name":"Amount not creditted in account",
-                            "value":"1"
-                        }],
-                        condition:"model.status=='2'"
+                        "type": "actionbox",
+                        "items": [{
+                            "type": "submit",
+                            "title": "SUBMIT"
+                        }]
+                    }],
+                schema: function () {
+                    return ManagementHelper.getVillageSchemaPromise();
+                },
+                actions: {
+                    generateFregCode: function (model, form) {
+                        console.log(model);
+                        if (model.village.pincode > 100000) {
+                            model.village.fregcode = Number(model.village.pincode + "001");
+                        }
+                        else {
+                            model.village.fregcode = "";
+                        }
+
                     },
-                    {
-                        key:"transAuth.reject_remarks",
-                        title:"REJECT_REMARKS",
-                        readonly:false,
-                        condition:"model.status=='2'"
+                    submit: function (model, form, formName) {
+                        $log.info("Inside submit()");
+                        Utils.confirm("Are You Sure?")
+                            .then(function () {
+                                if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {
+
+                                    return;
+                                } else {
+                                    LoanProcess.approve({loanRepaymentDetailsId: model.transAuth.loanRepaymentDetailsId}, null)
+                                        .$promise
+                                        .then(
+                                            function (res) {
+                                                PageHelper.navigateGoBack();
+                                            }, function (httpRes) {
+                                                PageHelper.showErrors(httpRes);
+                                            }
+                                        )
+                                }
+                            })
+
+
                     }
-                ]
-            },
-            {
-                "type": "actionbox",
-                "items": [{
-                    "type": "submit",
-                    "title": "SUBMIT"
-            }]
-        }],
-        schema: function() {
-            return ManagementHelper.getVillageSchemaPromise();
-        },
-        actions: {
-            generateFregCode:function(model,form){
-                console.log(model);
-                if(model.village.pincode>100000){
-                    model.village.fregcode = Number(model.village.pincode+"001");
                 }
-                else {
-                    model.village.fregcode="";
-                }
-
-            },
-            submit: function(model, form, formName){
-                $log.info("Inside submit()");
-                console.warn(model);
-                LoanProcess.repay(model.repayment, function(response){
-                    PageHelper.hideLoader();
-
-                }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                });
-            }
-        }
-    };
-}]);
+            };
+        }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig", function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig){
@@ -26951,7 +27000,10 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     'stage': 'LoanBooking',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId
+                    'customerId': searchOptions.customerId,
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,
+                    'sortBy':searchOptions.sortBy
                 }).$promise;
                 //var out = {
                 //    body: [
@@ -27973,16 +28025,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "key": "loanAccount.guarantors[].guaFirstName",
 
                                         "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].guaDob",
-
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "loanAccount.guarantors[].address",
-
-                                        "readonly": true
                                     }
                                 ]
                             }
@@ -27993,16 +28035,78 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "COLLATERAL DETAILS",
                         "items": [
                             {
-                                "key": "loanAccount.collateral.collateralType",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral.collateralDescription",
-                                "readonly": true
-                            },
-                            {
-                                "key": "loanAccount.collateral.collateralValue",
-                                "readonly": true
+                                "key":"loanAccount.collateral",
+                                "title":"COLLATERAL",
+                                "type":"array",
+                                "readonly": true,
+                                "items":[
+                                    {
+                                        "key":"loanAccount.collateral[].collateralType",
+                                        "type":"select"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateralDescription"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].manufacturer"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].quantity",
+                                        "onChange": function(value ,form ,model, event){
+                                            calculateTotalValue(value, form, model);
+                                        }
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].modelNo"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].machineOld"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateralValue",
+                                        "type":"amount",
+                                        "title":"COLLATERAL_VALUE",
+                                        "onChange": function(value ,form ,model, event){
+                                            calculateTotalValue(value, form, model);
+                                        }
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].totalValue",
+                                        "type":"amount",
+                                        "title":"TOTAL_VALUE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].marginValue",
+                                        "type":"amount",
+                                        "title":"PURCHASE_PRICE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].loanToValue",
+                                        "type":"amount",
+                                        "title":"PRESENT_VALUE"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral1FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_1"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral2FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_2"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateral3FilePath",
+                                        "type":"file",
+                                        "title":"DOCUMENT_3"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].photoFilePath",
+                                        "type":"file",
+                                        "fileType":"image/*",
+                                        "title":"PHOTO"
+                                    }
+                                ]
                             }
                         ]
                     }

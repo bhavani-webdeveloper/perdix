@@ -1,15 +1,15 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
 ["$log","$q", 'Pages_ManagementHelper','LoanProcess','LoanAccount', 'PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService",
+'SessionStore',"$state","$stateParams","Masters","authService", "Utils",
 function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService){
+	SessionStore,$state,$stateParams,Masters,authService, Utils){
 
 	return {
 		"type": "schema-form",
 		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
-            
+
                     //PageHelper.showLoader();
                     irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
                     //PageHelper
@@ -23,7 +23,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.enterprise_name = data.customer1FirstName;
                         model.creditValidation.productCode=data.productCode;
                         model.creditValidation.urnNo=data.customerId1;
-                        model.creditValidation.instrument='CASH_IN'; 
+                        model.creditValidation.instrument='CASH_IN';
                         model.creditValidation.authorizationUsing='Testing-Swapnil';
                         model.creditValidation.remarks='collections';
                         model.creditValidation.accountNumber = data.accountId;
@@ -34,11 +34,10 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.applicant_name=data.coapplicant;
                         model.creditValidation.penal_interest=data.totalPenalInterestDue;
                         model.creditValidation.fee=data.totalFeeDue;
+                        model.creditValidation.loanRepaymentDetailsId = model._credit.id;
 
                         model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
 
-                        var currDate = moment(new Date()).format("YYYY-MM-DD");
-                        model.creditValidation.repaymentDate = currDate;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                     }, function (resData) {
                         irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
@@ -48,32 +47,8 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                     .finally(function () {
                         PageHelper.hideLoader();
                     })
-            
-
-           /* if (model._credit) {
-                model.creditValidation = model._credit;               
-                model.creditValidation.loanRepaymentDetailsId = model._credit.id;
-                model.creditValidation.accountNumber = model._credit.accountNumber;
-                model.creditValidation.enterprise_name = model._credit.customerName;
-                model.creditValidation.applicant_name = model._credit.applicant;
-                model.creditValidation.co_applicant_name = model._credit.coApplicant;
-                if (model._credit.principalOutstandingAmtInPaisa > 0)
-                    model.creditValidation.principal = model._credit.principalOutstandingAmtInPaisa/100;
-                if (model._credit.interest > 0)
-                    model.creditValidation.interest = model._credit.interest/100;
-                if (model._credit.fees > 0)
-                    model.creditValidation.fee = model._credit.fees/100;
-                if (model._credit.penalInterest > 0)
-                    model.creditValidation.penal_interest = model._credit.penalInterest/100;
-                if (model._credit.demandAmountInPaisa > 0 || model._credit.demandAmountInPaisa == 0 )
-                    model.creditValidation.amountDue = model._credit.demandAmountInPaisa/100;
-                if (model._credit.repaymentAmountInPaisa > 0)
-                    model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
-            } else {
-                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
-            }*/
         },
-		
+
 		form: [
 			{
 				"type":"box",
@@ -180,66 +155,68 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
 			submit: function(model, form, formName){
 				$log.info("Inside submit()");
 				console.warn(model);
-                PageHelper.showLoader();
-                if(model.creditValidation.status == "1")
-                {
-                    $log.info("Inside FullPayment()");
-                    LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+                Utils.confirm("Are You Sure?")
+                    .then(function(){
+                        PageHelper.showLoader();
+                        if(model.creditValidation.status == "1")
+                        {
+                            $log.info("Inside FullPayment()");
+                            LoanProcess.approve({"loanRepaymentDetailsId" : model.creditValidation.loanRepaymentDetailsId},null, function(response){
+                                PageHelper.hideLoader();
+                                PageHelper.navigateGoBack();
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                    PageHelper.hideLoader();
+                        }
+                        else if(model.creditValidation.status == "3")
+                        {
+                            $log.info("Inside NoPayment()");
+                            var reqParams = {
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                                "remarks":model.creditValidation.reject_remarks,
+                                "rejectReason":model.creditValidation.reject_reason
+                            };
+                            LoanProcess.reject(reqParams,null, function(response){
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
+                        }
+                        else if(model.creditValidation.status == "2")
+                        {
+                            $log.info("Inside PartialPayment()");
+                            var reqParams = {
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                                "remarks":model.creditValidation.reject_remarks,
+                                "rejectReason":model.creditValidation.reject_reason
+                            };
+                            LoanProcess.partialPayment(reqParams,null, function(response){
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
-                }
-                else if(model.creditValidation.status == "3")
-                {
-                    $log.info("Inside NoPayment()");
-                    var reqParams = {
-                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                        "remarks":model.creditValidation.reject_remarks,
-                        "rejectReason":model.creditValidation.reject_reason
-                    };
-                    LoanProcess.reject(reqParams,null, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
-                }
-                else if(model.creditValidation.status == "2")
-                {
-                    $log.info("Inside PartialPayment()");
-                    var reqParams = {
-                        "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                        "remarks":model.creditValidation.reject_remarks,
-                        "rejectReason":model.creditValidation.reject_reason
-                    };
-                    LoanProcess.partialPayment(reqParams,null, function(response){
-                    PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
+                        } else {
+                            $log.info("Outside FullPayment()");
+                            LoanProcess.repay(model.creditValidation, function(response){
+                                PageHelper.hideLoader();
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
+                            }, function(errorResponse){
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(errorResponse);
+                            });
 
-                } else {
-                    $log.info("Outside FullPayment()");
-                    LoanProcess.repay(model.creditValidation, function(response){
-                    PageHelper.hideLoader();
+                        }
+                })
 
-                    }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    });
-
-                }
-                
 			}
 		}
 	};

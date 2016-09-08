@@ -61,7 +61,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "integer",
+                        "type": ['null', "integer"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -171,7 +171,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'CHARGES'|translate}}: " + item.part4,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
                         "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },

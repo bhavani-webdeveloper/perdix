@@ -85,7 +85,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     'firstName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'status': "PENDING"
+                    'status': "PartialPayment"
                 }).$promise;
 
                 return promise;
