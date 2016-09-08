@@ -69,8 +69,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:endpoint+ "/approverepayment"
         },
         partialPayment:{
-            method:'POST',
-            url:BASE_URL+ "/api/updateRepaymentAsPartialPayment"
+            method:'PUT',
+            url:endpoint+ "/partialpayment"
         },
         reject:{
             method:'POST',

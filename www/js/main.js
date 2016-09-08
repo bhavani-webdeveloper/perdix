@@ -6592,8 +6592,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:endpoint+ "/approverepayment"
         },
         partialPayment:{
-            method:'POST',
-            url:BASE_URL+ "/api/updateRepaymentAsPartialPayment"
+            method:'PUT',
+            url:endpoint+ "/partialpayment"
         },
         reject:{
             method:'POST',
@@ -23100,9 +23100,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         {
                             $log.info("Inside NoPayment()");
                             var reqParams = {
-                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                                "remarks":model.creditValidation.reject_remarks,
-                                "rejectReason":model.creditValidation.reject_reason
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId
                             };
                             LoanProcess.reject(reqParams,null, function(response){
                                 PageHelper.hideLoader();
@@ -23117,9 +23115,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         {
                             $log.info("Inside PartialPayment()");
                             var reqParams = {
-                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                                "remarks":model.creditValidation.reject_remarks,
-                                "rejectReason":model.creditValidation.reject_reason
+                                "id":model.creditValidation.loanRepaymentDetailsId
                             };
                             LoanProcess.partialPayment(reqParams,null, function(response){
                                 PageHelper.hideLoader();
