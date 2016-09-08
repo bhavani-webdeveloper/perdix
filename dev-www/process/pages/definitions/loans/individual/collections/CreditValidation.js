@@ -27,13 +27,15 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.authorizationUsing='Testing-Swapnil';
                         model.creditValidation.remarks='collections';
                         model.creditValidation.accountNumber = data.accountId;
-                        model.creditValidation.amount = data.totalDemandDue;
+                        model.creditValidation.amountDue = data.totalDemandDue;
                         model.creditValidation.principal=data.totalPrincipalDue;
                         model.creditValidation.interest=data.totalNormalInterestDue;
                         model.creditValidation.applicant_name=data.applicant;
                         model.creditValidation.applicant_name=data.coapplicant;
                         model.creditValidation.penal_interest=data.totalPenalInterestDue;
                         model.creditValidation.fee=data.totalFeeDue;
+
+                        model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.creditValidation.repaymentDate = currDate;
