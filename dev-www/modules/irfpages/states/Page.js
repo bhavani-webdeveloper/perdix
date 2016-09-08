@@ -1,6 +1,6 @@
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -170,6 +170,9 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     $log.error(err);
                 }
 
+            },
+            navigateGoBack: function(){
+                return window.history.back();
             }
         }
     }]);

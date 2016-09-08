@@ -24,6 +24,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
+
+                    var config = {
+                        fingerprintEnabled: false
+                    };
+
+                    model.$pageConfig = config;
+
                     PageHelper.showLoader();
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
                     //PageHelper
@@ -35,6 +42,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment = {};
                         model.repayment.accountId = data.accountId;
                         model.repayment.amount = data.totalDemandDue;
+                        model.repayment.productCode = data.productCode;
+                        model.repayment.urnNo = data.customerId1;
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
@@ -73,10 +82,30 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Prepayment":"Prepayment"
                                 }
                             },
-                            "additional.override_fp",
                             {
-                                "key": "repayment.authorizationRemark",
-                                "condition": "model.additional.override_fp==true"
+                                "type": "fieldset",
+                                "title": "Fingerprint",
+                                "condition": "model.$pageConfig.fingerprintEnabled==true",
+                                "items": [
+                                    {
+                                        "key": "additional.override_fp",
+                                        "condition": "model.$pageConfig.fingerprintEnabled==true"
+                                    },
+                                    {
+                                        "key": "repayment.authorizationRemark",
+                                        "condition": "model.additional.override_fp==true"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "repayment.instrument",
+                                "type": "select",
+                                "titleMap": [
+                                    {
+                                        name: "CASH",
+                                        value: "CASH"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -123,6 +152,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "groupCode": {
                                     "type": "string",
                                     "title":"GROUP_CODE"
+                                },
+                                "instrument": {
+                                    "type": "string",
+                                    "title": "INSTRUMENT_TYPE"
                                 },
                                 "productCode": {
                                     "type": "string",
@@ -193,10 +226,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showLoader();
                             var postData = _.cloneDeep(model.repayment);
                             postData.amount = parseInt(Number(postData.amount))+"";
+                            postData.instrument = "CASH";
                             LoanAccount.repay(postData,function(resp,header){
                                 $log.info(resp);
                                 try{
                                     alert(resp.response);
+                                    PageHelper.navigateGoBack();
                                 }catch(err){
 
                                 }

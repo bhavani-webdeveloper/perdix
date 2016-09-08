@@ -396,7 +396,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "    }}&nbsp;</span>\n" +
     "\n" +
     "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:0;right:15px;padding:7px 9px 6px;\" href=\"\">\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -455,7 +455,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('$')}}\"\n" +
+    "          name=\"{{form.key.join('.')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -488,14 +488,9 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input ng-if=\"form.readonly\"\n" +
-    "           ng-model=\"$$value$$\"\n" +
-    "           ng-disabled=\"form.readonly\"\n" +
-    "           type=\"text\"\n" +
-    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-if=\"!form.readonly\"\n" +
+    "      ng-disabled=\"form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -620,7 +615,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
-    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -2624,6 +2618,64 @@ angular.module('irf.listView', ['irf.elements.commons'])
 }])
 ;
 
+angular.module('irf.pikaday', ['irf.elements.commons'])
+.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
+	// Runs during compile
+	return {
+		restrict: 'A',
+		require: '^ngModel',
+		scope: {
+			ngModel: '=',
+			form: '=irfPikaday'
+		},
+		link: function($scope, elem, attrs, ctrl) {
+			var datepicker = 'pikaday';
+			var pikadayOptions = {
+				// minDate: new Date(1800, 0, 1),
+				// maxDate: new Date(2050, 12, 31),
+				// yearRange: [1800,2050],
+				// format: 'YYYY-MM-DD'
+			};
+			angular.extend(pikadayOptions, elemConfig.pikaday);
+			if (!$scope.form.readonly) {
+				if (typeof cordova !== 'undefined' && window.datePicker) {
+					$(elem).next().on('click', function(){
+						window.datePicker.show({
+							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
+							mode: 'date'
+						}, function(date){
+							$log.info(date);
+							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
+							$(elem).val($scope.ngModel);
+							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+						});
+					});
+				} else {
+					pikadayOptions.field = $(elem).next()[0];
+					pikadayOptions.onSelect = function(date) {
+						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
+						$(elem).val($scope.ngModel);
+						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+					};
+					pikadayOptions.onDraw = function() {
+						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
+					};
+					var picker = new Pikaday(pikadayOptions);
+				}
+			}
+			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
+			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
+				if (n) {
+					if (pikadayOptions.dateDisplayFormat) {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+					} else {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+					}
+				}
+			});
+		}
+	};
+}]);
 angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 .directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
 	return {
@@ -2801,64 +2853,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 }])
 ;
-angular.module('irf.pikaday', ['irf.elements.commons'])
-.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
-	// Runs during compile
-	return {
-		restrict: 'A',
-		require: '^ngModel',
-		scope: {
-			ngModel: '=',
-			form: '=irfPikaday'
-		},
-		link: function($scope, elem, attrs, ctrl) {
-			var datepicker = 'pikaday';
-			var pikadayOptions = {
-				// minDate: new Date(1800, 0, 1),
-				// maxDate: new Date(2050, 12, 31),
-				// yearRange: [1800,2050],
-				// format: 'YYYY-MM-DD'
-			};
-			angular.extend(pikadayOptions, elemConfig.pikaday);
-			if (!$scope.form.readonly) {
-				if (typeof cordova !== 'undefined' && window.datePicker) {
-					$(elem).next().on('click', function(){
-						window.datePicker.show({
-							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
-							mode: 'date'
-						}, function(date){
-							$log.info(date);
-							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
-							$(elem).val($scope.ngModel);
-							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-						});
-					});
-				} else {
-					pikadayOptions.field = $(elem).next()[0];
-					pikadayOptions.onSelect = function(date) {
-						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
-						$(elem).val($scope.ngModel);
-						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-					};
-					pikadayOptions.onDraw = function() {
-						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
-					};
-					var picker = new Pikaday(pikadayOptions);
-				}
-			}
-			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
-			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
-				if (n) {
-					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
-					} else {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
-					}
-				}
-			});
-		}
-	};
-}]);
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -5008,8 +5002,8 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 }])
 
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -5179,6 +5173,9 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     $log.error(err);
                 }
 
+            },
+            navigateGoBack: function(){
+                return window.history.back();
             }
         }
     }]);
@@ -19710,6 +19707,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
+
+                    var config = {
+                        fingerprintEnabled: false
+                    };
+
+                    model.$pageConfig = config;
+
                     PageHelper.showLoader();
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
                     //PageHelper
@@ -19721,6 +19725,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment = {};
                         model.repayment.accountId = data.accountId;
                         model.repayment.amount = data.totalDemandDue;
+                        model.repayment.productCode = data.productCode;
+                        model.repayment.urnNo = data.customerId1;
 
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
@@ -19759,10 +19765,30 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Prepayment":"Prepayment"
                                 }
                             },
-                            "additional.override_fp",
                             {
-                                "key": "repayment.authorizationRemark",
-                                "condition": "model.additional.override_fp==true"
+                                "type": "fieldset",
+                                "title": "Fingerprint",
+                                "condition": "model.$pageConfig.fingerprintEnabled==true",
+                                "items": [
+                                    {
+                                        "key": "additional.override_fp",
+                                        "condition": "model.$pageConfig.fingerprintEnabled==true"
+                                    },
+                                    {
+                                        "key": "repayment.authorizationRemark",
+                                        "condition": "model.additional.override_fp==true"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "repayment.instrument",
+                                "type": "select",
+                                "titleMap": [
+                                    {
+                                        name: "CASH",
+                                        value: "CASH"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -19809,6 +19835,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "groupCode": {
                                     "type": "string",
                                     "title":"GROUP_CODE"
+                                },
+                                "instrument": {
+                                    "type": "string",
+                                    "title": "INSTRUMENT_TYPE"
                                 },
                                 "productCode": {
                                     "type": "string",
@@ -19879,10 +19909,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showLoader();
                             var postData = _.cloneDeep(model.repayment);
                             postData.amount = parseInt(Number(postData.amount))+"";
+                            postData.instrument = "CASH";
                             LoanAccount.repay(postData,function(resp,header){
                                 $log.info(resp);
                                 try{
                                     alert(resp.response);
+                                    PageHelper.navigateGoBack();
                                 }catch(err){
 
                                 }
@@ -22829,7 +22861,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
                         "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
@@ -22840,7 +22872,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
+                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){

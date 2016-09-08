@@ -171,7 +171,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
                         "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
                         "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
@@ -182,7 +182,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
+                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
