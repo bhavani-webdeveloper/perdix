@@ -10,6 +10,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 		initialize: function (model, form, formCtrl) {
             PageHelper.showLoader();
             irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
+            console.log(SessionStore.getRole());
             //PageHelper
             var loanAccountNo = $stateParams.pageId;
             var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
@@ -73,7 +74,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         title: "CUSTOMER_AVAILABLE",
                         type: "checkbox",
                         schema: {
-                            default: false
+                            default:false
                         }
                     },
                     {

@@ -24,7 +24,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.transAuth.penal_interest = model._transAuth.penal_interest;
                 model.transAuth.amountDue = model._transAuth.demandAmountInPaisa;
                 model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa;
-            
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.TransactionAuthorizationQueue', pageId: null});
             

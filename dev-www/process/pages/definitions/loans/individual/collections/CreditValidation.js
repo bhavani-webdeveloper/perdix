@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"),
-["$log","$q", 'Pages_ManagementHelper','LoanProcess', 'PageHelper','formHelper','irfProgressMessage',
+["$log","$q", 'Pages_ManagementHelper','LoanProcess','LoanAccount', 'PageHelper','formHelper','irfProgressMessage',
 'SessionStore',"$state","$stateParams","Masters","authService",
-function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
+function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHelper,irfProgressMessage,
 	SessionStore,$state,$stateParams,Masters,authService){
 
 	return {
@@ -9,9 +9,46 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 		"title": "PAYMENT_DETAILS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             $log.info("Credit Validation Page got initialized");
-            model.creditValidation = model.creditValidation || {};
+            
+                    //PageHelper.showLoader();
+                    irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
+                    //PageHelper
+                    var loanAccountNo = $stateParams.pageId;
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    promise.then(function (data) { /* SUCCESS */
+                        model.loanAccount = data;
+                        console.log('sarthak')
+                        console.log(data);
+                        model.creditValidation = model.creditValidation || {};
+                        model.creditValidation.enterprise_name = data.customer1FirstName;
+                        model.creditValidation.productCode=data.productCode;
+                        model.creditValidation.urnNo=data.customerId1;
+                        model.creditValidation.instrument='CASH_IN'; 
+                        model.creditValidation.authorizationUsing='Testing-Swapnil';
+                        model.creditValidation.remarks='collections';
+                        model.creditValidation.accountNumber = data.accountId;
+                        model.creditValidation.amount = data.totalDemandDue;
+                        model.creditValidation.principal=data.totalPrincipalDue;
+                        model.creditValidation.interest=data.totalNormalInterestDue;
+                        model.creditValidation.applicant_name=data.applicant;
+                        model.creditValidation.applicant_name=data.coapplicant;
+                        model.creditValidation.penal_interest=data.totalPenalInterestDue;
+                        model.creditValidation.fee=data.totalFeeDue;
 
-            if (model._credit) {
+                        var currDate = moment(new Date()).format("YYYY-MM-DD");
+                        model.creditValidation.repaymentDate = currDate;
+                        irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                    }, function (resData) {
+                        irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                        PageHelper.showErrors(resData);
+                        backToLoansList();
+                    })
+                    .finally(function () {
+                        PageHelper.hideLoader();
+                    })
+            
+
+           /* if (model._credit) {
                 model.creditValidation = model._credit;               
                 model.creditValidation.loanRepaymentDetailsId = model._credit.id;
                 model.creditValidation.accountNumber = model._credit.accountNumber;
@@ -32,7 +69,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
             } else {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
-            }
+            }*/
         },
 		
 		form: [
@@ -165,7 +202,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     };
                     LoanProcess.reject(reqParams,null, function(response){
                     PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
                     }, function(errorResponse){
                     PageHelper.hideLoader();
@@ -180,9 +217,9 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         "remarks":model.creditValidation.reject_remarks,
                         "rejectReason":model.creditValidation.reject_reason
                     };
-                    LoanProcess.reject(reqParams,null, function(response){
+                    LoanProcess.partialPayment(reqParams,null, function(response){
                     PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidationQueue', pageId: null});
 
                     }, function(errorResponse){
                     PageHelper.hideLoader();

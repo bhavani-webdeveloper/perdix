@@ -14,7 +14,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
@@ -41,7 +41,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": "integer",
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",

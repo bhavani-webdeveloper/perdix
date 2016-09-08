@@ -96,7 +96,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CreditValidation', {_credit:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CreditValidation', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 return true;

@@ -17,7 +17,7 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                 model.collectPayment=model._bounce;
                 model.collectPayment.amountdue=model._bounce.amount1;
             }
-            model.repayment.instrument = "CASH_IN";
+            model.repayment.instrument = "CASH";
             model.repayment.transactionName = "Scheduled Demand"; //transactionName : Advance Repayment, Scheduled Demand, Fee Payment, Pre-closure, Prepayment
             //repaymentType applicable for KGFS - ADVANCED, SCHEDULED, OVERDUE
             model.repayment.authorizationRemark = "";
@@ -63,19 +63,19 @@ function($log, $q, LoanProcess, PageHelper,formHelper,irfProgressMessage,
                         type:"select",
                         titleMap: [{
                             "name":"Cash",
-                            "value":"CASH_IN"
+                            "value":"CASH"
                         },
                         {
                             "name":"Cheque",
-                            "value":"CHQ_IN"
+                            "value":"CHQ"
                         },
                         {
                             "name":"NEFT",
-                            "value":"NEFT_IN"
+                            "value":"NEFT"
                         },
                         {
                             "name":"RTGS",
-                            "value":"RTGS_IN"
+                            "value":"RTGS"
                         }]
                     },
                     {

@@ -19,27 +19,29 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             method: 'GET',
             url: endpoint + '/show/:accountId',
             transformResponse: function(data, headersGetter, status){
+                data = JSON.parse(data);
                 if (status === 200){
-                    if (_.hasIn(data, 'accountBalance') && _.isString(data, 'accountBalance')){
+                    // debugger;
+                    if (_.hasIn(data, 'accountBalance') && _.isString(data['accountBalance'])){
                         data.accountBalance = parseInt(data['accountBalance']);
                     }
-                    if (_.hasIn(data, 'totalPrincipalDue') && _.isString(data, 'totalPrincipalDue')){
+                    if (_.hasIn(data, 'totalPrincipalDue') && _.isString(data['totalPrincipalDue'])){
                         data.totalPrincipalDue = parseInt(data['totalPrincipalDue']);
                     }
-                    if (_.hasIn(data, 'totalNormalInterestDue') && _.isString(data, 'totalNormalInterestDue')){
+                    if (_.hasIn(data, 'totalNormalInterestDue') && _.isString(data['totalNormalInterestDue'])){
                         data.totalNormalInterestDue = parseInt(data['totalNormalInterestDue']);
                     }
-                    if (_.hasIn(data, 'totalPenalInterestDue') && _.isString(data, 'totalPenalInterestDue')){
+                    if (_.hasIn(data, 'totalPenalInterestDue') && _.isString(data['totalPenalInterestDue'])){
                         data.totalPenalInterestDue = parseInt(data['totalPenalInterestDue']);
                     }
-                    if (_.hasIn(data, 'totalFeeDue') && _.isString(data, 'totalFeeDue')){
+                    if (_.hasIn(data, 'totalFeeDue') && _.isString(data['totalFeeDue'])){
                         data.totalFeeDue = parseInt(data['totalFeeDue']);
                     }
-                    if (_.hasIn(data, 'totalDemandDue') && _.isString(data, 'totalDemandDue')){
+                    if (_.hasIn(data, 'totalDemandDue') && _.isString(data['totalDemandDue'])){
                         data.totalDemandDue = parseInt(data['totalDemandDue']);
                     }
                 }
-
+                
                 return data;
 
             }

@@ -34,7 +34,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                // "required":["branch"],
@@ -61,7 +61,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": "integer",
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -166,13 +166,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
-                        "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'Principal Due'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'Interest Due'|translate}}: " + item.part2,              /*Service is missing*/
-                        "{{'Penal interest'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'Charges'|translate}}: " + item.part4,                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                        "{{'Number of dues'|translate}}: " + item.numberOfDues     /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
+                        "{{'CHARGES'|translate}}: " + item.part4,                /*Service is missing*/
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/     
+                        "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues     /*Service is missing*/
                     ]
                 },
                 getActions: function(){
@@ -182,7 +182,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             desc: "",
                             fn: function(item, index){
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){

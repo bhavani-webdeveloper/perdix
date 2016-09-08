@@ -40,11 +40,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.loanAccount = data;
                         console.log(data);
                         model.repayment = {};
+                        model.repayment.productCode=data.productCode;
+                        model.repayment.urnNo=data.customerId1;
+                        model.repayment.instrument='CASH_IN'; 
+                        model.repayment.authorizationUsing='Testing-Swapnil';
+                        model.repayment.remarks='collections';
                         model.repayment.accountId = data.accountId;
                         model.repayment.amount = data.totalDemandDue;
                         model.repayment.productCode = data.productCode;
                         model.repayment.urnNo = data.customerId1;
-
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);

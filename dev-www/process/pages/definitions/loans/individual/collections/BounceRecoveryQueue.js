@@ -61,7 +61,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                     },*/
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": "integer",
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -169,7 +169,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.loanAccountNumber, /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountNumber, /*Service is missing*/
                         "{{'Total Amount Due'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
                         "{{'Installment Date'|translate}}: " + item.installmentDate,  /*Service is missing*/
                         "{{'Payment Mode'|translate}}: " + item.paymentMode,  /*Service is missing*/
@@ -190,7 +190,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
@@ -205,7 +205,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.loanacno});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountNumber});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){
