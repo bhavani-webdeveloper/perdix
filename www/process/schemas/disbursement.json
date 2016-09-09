@@ -84,10 +84,10 @@
           "type": "string"
         },
         "disbursedAmount": {
-          "type": "integer"
+          "type": "number"
         },
         "disbursementAmount": {
-          "type": "integer"
+          "type": "number"
         },
         "disbursementFromBankAccountNumber": {
           "type": "string"

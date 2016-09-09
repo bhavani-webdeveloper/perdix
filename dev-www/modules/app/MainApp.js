@@ -1,12 +1,29 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore",
-function($scope, $log, SessionStore) {
+["$scope", "$log", "SessionStore", "Queries",
+function($scope, $log, SessionStore, Queries) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
 
 	document.mainTitle = "Perdix Mobility | Alpha";
+
+	$scope.isCordova = typeof(cordova) !== 'undefined';
+
+	$.getJSON("app_manifest.json", function(json) {
+		$scope.$apply(function(){
+			$scope.app_manifest = json;
+		});
+		Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
+			$scope.latest_version = value;
+			if ($scope.app_manifest.version != $scope.latest_version) {
+				Queries.getGlobalSettings('cordova.latest_apk_url').then(function(url){
+					$log.debug('latest_apk_url:'+url);
+					$scope.latest_apk_url = url;
+				});
+			}
+		});
+	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;
 	if ($.AdminLTE.options.navbarMenuSlimscroll && typeof $.fn.slimscroll != 'undefined') {

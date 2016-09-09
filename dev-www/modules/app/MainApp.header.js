@@ -24,9 +24,6 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 
 	$scope.photo = SessionStore.getPhoto();
 
-	$scope.appShortName = $scope.$parent.appShortName;
-	$scope.appName = $scope.$parent.appName;
-
 	$("a[href='#']").click(function(e){e.preventDefault()});
 
 	$scope.showLogs = function() {
