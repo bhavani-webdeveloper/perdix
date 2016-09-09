@@ -1,73 +1,64 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
-["$log", "SessionStore",'Utils', function($log, SessionStore, Utils) {
+["$log", "SessionStore","Enrollment",'Utils', function($log, SessionStore, Enrollment, Utils) {
+/*
+ACHClearingCollection.js does the following
+1. To download the demand due list with date criteria
+2. To upload the status of the demands as received from Bank
+*/
     return {
         "type": "schema-form",
         "title": "ACH Collections",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
-            $log.info("Demo Customer Page got initialized");
-            
-            
-            var docsTitles = [
-                "Ajay Karthik | GKB Industries Ltd. | 5607891 | Belgaum branch",
-                "Ravi S | Key Metals Pvt. Ltd. | 8725678 | Hubli branch"
-            ];
 
-            for(var i=0;i<docsTitles.length;i++){
-
-
-                model.loanDocs[i]= {
-                    "title":docsTitles[i]
-                }
-
-            }
         },
         
-        form: [
+        form: [{
+            "type":"box",
+            "title":"ACH Submission and Status Update",
+            "items":[{
+                    "type":"fieldset",
+                    "title":"Submit to Bank",
+                    "items":[{
+                            "key":"achCollections.demandDate",
+                            "title": "INSTALLMENT_DATE",
+                            "type":"date"
+                        },
+                        {
+                            "title":"Download",
+                            "htmlClass":"btn-block",
+                            "icon":"fa fa-download",
+                            "type":"button",
+                            "notitle":true,
+                            "readonly":false,
+                            "onClick": function(model, formCtrl, form, $event){
+                                            model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
+                                            window.open(model.mandate.link);
+                                                            
+                                        }
+                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                        }]
+                    },
+                    {
+                    "type":"fieldset",
+                    "title":"Upload Status",
+                    "items":[{
+                            "key": "ach.achMandateReverseFileId",
+                            "notitle":true,
+                            "category":"ACH",
+                            "subCategory":"cat2",
+                            "type": "file",
+                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        },
+                        {
+                            "type": "button",
+                            "icon": "fa fa-user-plus",
+                            "title": "UPLOAD",
+                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                    }]
 
-                {
-                    "type":"box",
-                    "title":"Daily Collections",
-                    "items":[
-                                    
-                                    {
-                                        "titleExpr":"model.loanDocs[arrayIndex].title",
-                                        "type":"array",
-                                        "key":"loanDocs",
-                                        "add":null,
-                                        "remove":null,
-                                        "items":[
-
-                                                    {
-                                                        "title":"EMI",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"UMRN",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"Record Repayment",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-money",
-                                                        "type":"button",
-                                                        "readonly":false
-                                                    }
-
-
-                                                   ]
-                                    }
-                            ]
-
-                }
-           
-              ],
+                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },

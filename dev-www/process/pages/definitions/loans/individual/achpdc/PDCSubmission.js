@@ -42,16 +42,15 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
                                     "category":"cat1",
                                     "subCategory":"cat2",
                                     "title": "Upload PDC Status"
-                                }
-                                // {
-                                //     "title":"Upload",
-                                //     "htmlClass":"btn-block",
-                                //     "icon":"fa fa-upload",
-                                //     "type":"button",
-                                //     "notitle":true,
-                                //     "readonly":false
-                                // }
-                                ]
+                                },
+                                {
+                                    "title":"Upload",
+                                    "htmlClass":"btn-block",
+                                    "icon":"fa fa-upload",
+                                    "type":"button",
+                                    "notitle":true,
+                                    "readonly":false
+                                }]
                 }]
             }],
         schema: function() {

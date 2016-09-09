@@ -1,7 +1,12 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
 ["$log", "ACH","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", 
 function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$stateParams){
-
+/*
+ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
+else the create field is called. Both Update and Create points to same API. 
+The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+and filled in the screen. 
+*/
 	var branch = SessionStore.getBranch();
 
 	return {
@@ -12,12 +17,15 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			$log.info("ACH selection Page got initialized");
+			//Create Model ach
 			model.ach = model.ach||{};
 			model.achSearch = model.achSearch||{};
+			//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
 			model.flag = false;
-
+			//_ach from loans.individual.achpdc.ACHMandateDownload
+			//_loanAch  from loans.individual.Queue
 			 if (model._ach || model._loanAch) {
-				 	//model.ach=model._ach;
+				 	
 				 	if(model._ach){
 					model.ach.accountHolderName = model._ach.customerName;
 					model.ach.accountId = model._ach.accountId;
@@ -29,7 +37,7 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 					model.ach.branchName = model._loanAch.branchName;
 				}
 				 	
-
+					//Search for existance of Loan account Number
 					ACH.search({accountNumber: model.ach.accountId})
 	                    .$promise
 	                    .then(
@@ -42,7 +50,6 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 									if(model.achSearch.body[i].accountId == model.ach.accountId)
 									{
 									model.flag = true;
-									//model.ach.bankName = model.achSearch.body[i];
 									model.ach = model.achSearch.body[i];
 									}
 								}
@@ -272,52 +279,18 @@ function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$st
 			actions: {
 				submit: function(model, form, formName){
 					PageHelper.showLoader();
-					$log.info("Inside submit test()");
-					$log.info("Inside Create()");
 					ACH.create(model.ach, function(response){
 						PageHelper.hideLoader();
 						PageHelper.showProgress("page-init","Done.",2000);
 						// $state.go("Page.Engine", {
-					 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-					 //    	pageId: model.ach.loanId
+					 	//pageName: 'loans.individual.booking.DocumentUploadQueue',
+					 	//pageId: model.ach.loanId
 						// });
 						//model.ach=response;
 					}, function(errorResponse){
 						PageHelper.hideLoader();
 						PageHelper.showErrors(errorResponse);
 					});
-					//PageHelper.showLoader();
-					// if (model.flag) {
-					// 	$log.info("Inside Update()");
-					// 	ACH.update(model.ach, function(response){
-					// 		//PageHelper.hideLoader();
-					// 		// $state.go("Page.Engine", {
-					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-					// 	 //    	pageId: model.ach.loanId
-					// 		// });
-					// 		//model.ach=Utils.removeNulls(model.ach,true);
-					// 	}, function(errorResponse){
-					// 		//PageHelper.hideLoader();
-					// 		PageHelper.showErrors(errorResponse);
-					// 	});
-					// } else {
-					// 	$log.info("Inside Create()");
-					// 	ACH.create(model.ach, function(response){
-					// 		PageHelper.hideLoader();
-					// 		// $state.go("Page.Engine", {
-					// 	 //    	pageName: 'loans.individual.booking.DocumentUploadQueue',
-					// 	 //    	pageId: model.ach.loanId
-					// 		// });
-					// 		//model.ach=response;
-					// 	}, function(errorResponse){
-					// 		PageHelper.hideLoader();
-					// 		PageHelper.showErrors(errorResponse);
-					// 	});
-					// }
-						// $state.go("Page.Engine", {
-						//     pageName: 'IndividualLoanBookingConfirmation',
-						//     pageId: model.customer.id
-						// });
 				}
 			}
 	};

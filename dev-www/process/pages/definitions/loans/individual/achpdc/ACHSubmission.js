@@ -1,8 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
 ["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
-
-    
-
+/*
+The ACHSubmission.js is to download the ACH Mandates that are created on the current date. Onc created, the Mandate details
+are updated into the excel. This screen helps in viewing all the ACH Mandates registered on the current date.
+This excel document can be downloaded here.
+*/
     return {
         "id": "ACHSubmission",
         "type": "schema-form",
@@ -16,52 +18,27 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
         },
         form:[{
                 "type":"box",
-                "title":"ACH Submission and Status Update",
+                "title":"Download ACH Mandate pending for submission",
                 "htmlClass": "text-danger",
                 "items":[{
-                            "type":"fieldset",
-                            "title":"Submit to Bank",
-                            "items":[{
-                                    "key":"demandDate",
-                                    "title": "INSTALLMENT_DATE",
-                                    "type":"date"
-                                },
-                                {
-                                    "title":"Download",
-                                    "htmlClass":"btn-block",
-                                    "icon":"fa fa-download",
-                                    "type":"button",
-                                    "notitle":true,
-                                    "readonly":false,
-                                    "onClick": function(model, formCtrl, form, $event){
-                                                    model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
-                                                    window.open(model.mandate.link);
-                                                                    
-                                                }
-                                    //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                        "type":"fieldset",
+                        "title":"Download ACH Mandate Registrations",
+                        "items":[{
+                                "title":"Download",
+                                "htmlClass":"btn-block",
+                                "icon":"fa fa-download",
+                                "type":"button",
+                                "notitle":true,
+                                "readonly":false,
+                                "onClick": function(model, formCtrl, form, $event){
+                                                model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
+                                                window.open(model.mandate.link);
+                                                                
+                                            }
+                                //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
                                 }]
-                            },
-                            {
-                            "type":"fieldset",
-                            "title":"Upload Status",
-                            "items":[{
-                                    "key": "image1",
-                                    "type": "file",
-                                    "category":"ACH",
-                                    "subCategory":"DOC1",
-                                    "title": "Upload ACH Status"
-                                },
-                                {
-                                    "title":"Upload",
-                                    "htmlClass":"btn-block",
-                                    "icon":"fa fa-upload",
-                                    "type":"button",
-                                    "notitle":true,
-                                    "type": "file",
-                                    "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                    "readonly":false
-                                }]
-                }]
+                        }]
+                
             }],
         schema: function() {
             return Enrollment.getSchema().$promise;

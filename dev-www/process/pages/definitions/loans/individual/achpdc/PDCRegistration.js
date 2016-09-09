@@ -16,15 +16,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             model.pdcGet = model.pdcGet||{};
             model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
             if (model._pdc.loanId ) {
-                model.pdc.id = model._pdc.accountNumber;
+                model.pdc.accountId = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
+                model.pdc.customerName = model._pdc.customerName;
                 PageHelper.showLoader();
-                PDC.get({accountId: model._pdc.loanId},
+                PDC.get({accountId: model.pdc.accountId},
                     function(res){
                         model.pdcGet = Utils.removeNulls(res,true);
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
-                        model.pdc.securityCheckNo = model.pdcGet;
+                        model.pdc = model.pdcGet;
                         $log.info("PDC GET RESP. : "+res);
                         model.flag = true;
                     },
@@ -64,7 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             "type":"fieldset",
                             "title": "LOAN_DETAILS",
                             "items":[{
-                                    "key": "pdc.id",
+                                    "key": "pdc.accountId",
                                     "title": "LOAN_ACCOUNT_NUMBER",
                                     "readonly":true
                                 },
@@ -282,6 +283,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 if (model.flag) {
                     PDC.update(model.pdc, function(response){
                         PageHelper.hideLoader();
+
                     }, function(errorResponse){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
@@ -297,7 +299,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                 }
                 /*$state.go("Page.Engine", {
                     pageName: 'IndividualLoanBookingConfirmation',
-                    pageId: model.customer.id
+                    pageId: model.customer.accountId
                 });*/
             }
         }

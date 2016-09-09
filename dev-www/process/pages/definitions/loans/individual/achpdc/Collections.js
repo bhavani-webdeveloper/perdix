@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("Collections"),
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
 ["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
 
     

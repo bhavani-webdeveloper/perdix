@@ -1,113 +1,66 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
 ["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
-
-    
-
+/*
+PDCCollections.js does the following
+1. To download the demand due list with date criteria
+2. To upload the status of the demands as received from Bank
+*/
     return {
         "id": "PDCCollections",
-        "type": "schema-form",
+        "type": "schema-form",z
         "name": "PDCCollections",
         "title": "PDC Collections",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
-            $log.info("Demo Customer Page got initialized");
-            
-            
-            var docsTitles = [
-                "Kaushik G | HPL | 9057328 | Trichy branch",
-                "Bala R | GKMB Cotton Exports Pvt. Ltd. | 3562678 | Dindigul branch"
-            ];
 
-            for(var i=0;i<docsTitles.length;i++){
-
-
-                model.loanDocs[i]= {
-                    "title":docsTitles[i]
-                }
-
-            }
         },
         
-        form: [
+        form: [{
+            "type":"box",
+            "title":"PDC Submission and Status Update",
+            "items":[{
+                    "type":"fieldset",
+                    "title":"Submit to Bank",
+                    "items":[{
+                            "key":"pdcCollections.demandDate",
+                            "title": "INSTALLMENT_DATE",
+                            "type":"date"
+                        },
+                        {
+                            "title":"Download",
+                            "htmlClass":"btn-block",
+                            "icon":"fa fa-download",
+                            "type":"button",
+                            "notitle":true,
+                            "readonly":false,
+                            "onClick": function(model, formCtrl, form, $event){
+                                            model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
+                                            window.open(model.mandate.link);
+                                                            
+                                        }
+                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                        }]
+                    },
+                    {
+                    "type":"fieldset",
+                    "title":"Upload Status",
+                    "items":[{
+                            "key": "pdcCollections.pdcMandateReverseFileId",
+                            "notitle":true,
+                            "category":"PDC",
+                            "subCategory":"cat2",
+                            "type": "file",
+                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        },
+                        {
+                            "type": "button",
+                            "icon": "fa fa-user-plus",
+                            "title": "UPLOAD",
+                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                    }]
 
-                {
-                    "type":"box",
-                    "title":"Daily Collections",
-                    "items":[
-                                    
-                                    {
-                                        "titleExpr":"model.loanDocs[arrayIndex].title",
-                                        "type":"array",
-                                        "key":"loanDocs",
-                                        "add":null,
-                                        "remove":null,
-                                        "items":[
-
-                                                    {
-                                                        "title":"EMI",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"Cheque Number",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"Bank Name",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"Record Repayment",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-money",
-                                                        "type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"PDC Lost Reason",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"PDC Returned Reason",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"PDC Error Action",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-download",
-                                                        //"type":"button",
-                                                        "readonly":false
-                                                    },
-                                                    {
-                                                        "title":"Record PDC Non-payment",
-                                                        "htmlClass":"btn-block",
-                                                        "icon":"fa fa-money",
-                                                        "type":"button",
-                                                        "readonly":false
-                                                    }
-
-
-                                                   ]
-                                    }
-                            ]
-
-                }
-           
-              ],
+                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
