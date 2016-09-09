@@ -122,6 +122,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }
                         model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
+                        model.loanAccountDisbursementSchedule.udf2= model.loanAccountDisbursementSchedule.udf2 || '';
+                        model.loanAccountDisbursementSchedule.udf3= model.loanAccountDisbursementSchedule.udf3 || '';
 
                     },
                     function (resp) {
