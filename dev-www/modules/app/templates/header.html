@@ -3,7 +3,7 @@
         <!-- Logo -->
         <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><img class="img-circle img-responsive" src="img/icon.png" alt="User Avatar"></span>
+            <span class="logo-mini"><img class="img-circle img-responsive" src="img/icon.png" style="opacity:.8"></span>
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg"><!-- <b>IRF</b> -->{{ $parent.appName }}</span>
         </a>
@@ -24,13 +24,14 @@
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li ng-if="$parent.isCordova && $parent.latest_apk_url" class="dropdown notifications-menu">
-                        <a href="" class="dropdown-toggle" ng-href="{{ $parent.latest_apk_url }}" >
+
+                    <li ng-show="$parent.latest_apk_url" class="dropdown notifications-menu">
+                        <a href="" class="dropdown-toggle latest_apk_url" ng-href="{{$parent.latest_apk_url}}" target="_blank">
                             <i class="fa fa-cloud-download"></i>
                         </a>
                     </li>
                     <!-- TODO to be removed. for perdix 7 compatibility -->
-                    <li ng-if="!$parent.isCordova" class="dropdown notifications-menu">
+                    <li ng-show="$parent.connect_perdix7" class="dropdown notifications-menu">
                         <a href="" class="dropdown-toggle" onclick="parent.switchApp()">
                             <strong>7</strong>
                         </a>

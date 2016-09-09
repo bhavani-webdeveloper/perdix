@@ -1,0 +1,127 @@
+{
+    "$schema":"http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        
+                 "currentDate":{
+                      "type": "string",
+                      "title": "CURRENT_DATE"
+                 },
+                 "HubName":{
+                      "type": "string",
+                      "title": "HUB_NAME"
+
+                 },
+                 "SpokeName":{
+                      "type": "string",
+                      "title": "AMOUNT"
+                 },
+
+                 "Applicant":
+                 {
+                  "type":"object",
+                  "title":"APPLICANT",
+                  "properties": {
+
+                    "name":{
+                      "type": "string",
+                      "title": "NAME"
+                 },
+                 "MobileNumber1":{
+                      "type": "Number",
+                      "title": "MOBILE_NUMBER1"
+                 },
+                 "AlternateMobileNumber":{
+                      "type": "string",
+                      "title": "ALTERNATE_MOBILE_NUMBER"
+                 },
+               }
+             },
+
+             "Business":
+             {
+              "type":"object",
+              "title":"Business",
+              "properties":{
+                "BusinessName":{
+                      "type": "string",
+                      "title": "BUSINESS_NAME"
+                 },
+                 "BusinessType":{
+                      "type": "Number",
+                      "title": "BUSINESS_TYPE"
+                 },
+                 "BusinessActivity":{
+                      "type": "string",
+                      "title": "BUSINESS_ACTIVITY"
+                 },
+
+                 "BusinessAddressLine1":{
+                      "type": "string",
+                      "title": "BUSINESS_ADDRESS_LINE1"
+                 },
+                 "AddressLine2":{
+                      "type": "Number",
+                      "title": "ADDRESS_LINE2"
+                 },
+                 "PinCode":{
+                      "type": "Number",
+                      "title": "PIN_CODE"
+                 },
+                 "State":{
+                      "type": "string",
+                      "title": "STATE"
+                 },
+                 "District":{
+                      "type": "Number",
+                      "title": "DISTRICT"
+                 },
+                 "Location":{
+                      "type": "string",
+                      "title": "LOCATION"
+                 },
+                 "Area":{
+                      "type": "string",
+                      "title": "AREA"
+                 },
+                
+
+              }
+             },
+
+             "InterestedInLoan":{
+                      "type": "boolean",
+                      "title": "INTERESTED_IN_LOAN"
+                 },
+                 "LoanPurpose":{
+                      "type": "Number",
+                      "title": "LOAN_PURPOSE"
+                 },
+                 "LoanAmountRequested":{
+                      "type": "string",
+                      "title": "LOAN_AMOUNT_REQUESTED"
+                 },
+                 "LoanRequiredBy":{
+                      "type": "string",
+                      "title": "LOAN_REQUIRED_BY"
+                 },
+                 "DateOfScreening":{
+                      "type": "Number",
+                      "title": "DATE_OF_SCREENING"
+                 },
+                 "FollowUpdate":{
+                      "type": "string",
+                      "title": "FOLLOWUP_DATE"
+                 },
+
+
+
+
+           }
+         }
+
+
+                    
+
+
+                 

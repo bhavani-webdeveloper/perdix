@@ -2373,6 +2373,7 @@ label {
 .header-corporate-logo {
   height: 50px;
   padding: 5px 0;
+  margin-right: -100px;
   float: left;
 }
 .header-corporate-logo .header-corporate-logo-img {
@@ -2654,6 +2655,55 @@ label {
   float: left;
   width: 100%;
   position: relative;
+}
+a.latest_apk_url {
+  -webkit-animation: color_change .5s infinite alternate;
+  -moz-animation: color_change .5s infinite alternate;
+  -ms-animation: color_change .5s infinite alternate;
+  -o-animation: color_change .5s infinite alternate;
+  animation: color_change .5s infinite alternate;
+}
+@-webkit-keyframes color_change {
+  from {
+    color: white;
+  }
+  to {
+    color: transparent;
+    -webkit-filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.5));
+    filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.5));
+  }
+}
+@-moz-keyframes color_change {
+  from {
+    color: white;
+  }
+  to {
+    color: transparent;
+  }
+}
+@-ms-keyframes color_change {
+  from {
+    color: white;
+  }
+  to {
+    color: transparent;
+  }
+}
+@-o-keyframes color_change {
+  from {
+    color: white;
+  }
+  to {
+    color: transparent;
+  }
+}
+@keyframes color_change {
+  from {
+    color: white;
+  }
+  to {
+    color: transparent;
+  }
 }
 
 /* vietnamese */

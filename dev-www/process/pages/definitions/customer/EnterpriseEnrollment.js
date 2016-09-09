@@ -230,7 +230,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.locality",
                     "customer.landmark",
                     "customer.villageName",
-                    "customer.udf.userDefinedFieldValues.udf9",
+                    // "customer.udf.userDefinedFieldValues.udf9",
                     "customer.district",
                     {
                         key: "customer.pincode",

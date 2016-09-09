@@ -51,9 +51,15 @@
 						"Page/Engine/loans.individual.booking.PendingVerificationQueue"
 					]
 				},
-				"Page/Engine/loans.individual.PendingClearingQueue",
-				"Page/Engine/loans.individual.PendingCashQueue",
-				"Page/Engine/loans.individual.BounceQueue"
+				{
+					"title": "DISBURSEMENT",
+					"iconClass": "fa fa-book",
+					"items": [
+						"Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
+						"Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
+						"Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue"
+					]
+				}
 			]
 		},
 		"Page/Engine/CentrePaymentCollection"

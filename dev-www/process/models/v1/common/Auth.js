@@ -13,7 +13,10 @@ irf.models.factory('AuthTokenHelper', ['SessionStore', '$log', function(SessionS
 			$log.info("Setting AuthData into Session");
 		},
 		getAuthData: function(){
-			return SessionStore.getItem(irf.SESSION_AUTH_KEY); //authData;
+			if (!authData || !authData.access_token) {
+				authData = SessionStore.getItem(irf.SESSION_AUTH_KEY); //authData;
+			}
+			return authData;
 		},
 		clearAuthData:function(){
 			authData={};

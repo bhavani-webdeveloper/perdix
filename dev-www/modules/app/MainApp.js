@@ -1,8 +1,8 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore", "Queries",
-function($scope, $log, SessionStore, Queries) {
+["$scope", "$log", "SessionStore", "Queries", "$state",
+function($scope, $log, SessionStore, Queries, $state) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
 
@@ -14,15 +14,20 @@ function($scope, $log, SessionStore, Queries) {
 		$scope.$apply(function(){
 			$scope.app_manifest = json;
 		});
-		Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
-			$scope.latest_version = value;
-			if ($scope.app_manifest.version != $scope.latest_version) {
-				Queries.getGlobalSettings('cordova.latest_apk_url').then(function(url){
-					$log.debug('latest_apk_url:'+url);
-					$scope.latest_apk_url = url;
-				});
-			}
-		});
+		if ($scope.isCordova) {
+			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
+				$scope.latest_version = value;
+				if ($scope.app_manifest.version != $scope.latest_version) {
+					Queries.getGlobalSettings('cordova.latest_apk_url').then(function(url){
+						$log.debug('latest_apk_url:'+url);
+						$scope.latest_apk_url = url;
+					});
+				}
+			});
+		}
+		if ($scope.app_manifest.connect_perdix7) {
+			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+		}
 	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;
