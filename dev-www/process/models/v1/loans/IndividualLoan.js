@@ -53,7 +53,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             isArray:true
         },
         getDisbursementList:{
-            method:'PUT',
+            method:'GET',
             url:endpoint+'/getDisbursementList',
             isArray:true
         },

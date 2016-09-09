@@ -104,7 +104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     $log.info("loanId ::" + loanId);
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
-                    IndividualLoan.getDisbursementList([loanId], function (resp, head) {
+                    IndividualLoan.getDisbursementList({"currentStage":loanId}, function (resp, head) {
                         model.additional.accountNumber = resp[0].accountId;
                         model.additional.customerId = resp[0].customerId;
                         model.additional.numberOfDisbursements = resp[0].numDisbursements;
@@ -122,8 +122,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }
                         model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
-                        model.loanAccountDisbursementSchedule.customerAccountNumber= resp[0].bankAccountNumber;
-                        model.loanAccountDisbursementSchedule.ifscCode = resp[0].ifscCode;
 
                     },
                     function (resp) {
@@ -222,7 +220,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         type: "lov",
                         autolov: true,
-                        title:"DISBURSEMENT_FROM_BANK_ACC_NO",
+                        title:"DISBURSEMENT_FROM_ACCOUNT",
                         bindMap: {
                             
                         },
@@ -243,25 +241,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.customerAccountNumber",
-                        "title": "CUSTOMER_ACC_NO"
+                        "title": "CUSTOMER_BANK_ACC_NO",
+                        "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.ifscCode",
-                        "title": "CUSTOMER_BANK_IFSC"
+                        "title": "CUSTOMER_BANK_IFSC",
+                        "readonly":true
                     },
                     {
                         "key": "additional.branchName",
                         "title":"BRANCH_NAME",
                         readonly:true
-                    },
-                    {
-                        "key": "loanAccountDisbursementSchedule.udf1",
-                        "type": "select",
-                        //"enumCode": "status"
-                        "titleMap": {
-                         "Sent To Bank": "Sent To Bank",
-                         "Reject": "Reject"
-                         }
                     },
                     {
 
@@ -286,7 +277,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             {
                                 "type":"button",
                                 "title":"REJECT",
-                                "onClick":"actions.disburseLoan(model,formCtrl,form)"
+                                "onClick":"actions.rejectLoan(model,formCtrl,form)"
                             }
                         ]
                     }
@@ -322,6 +313,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.showLoader();
                         var accountNumber = model.additional.accountNumber;
                         var accountId = model.loanAccountDisbursementSchedule.loanId;
+                        model.loanAccountDisbursementSchedule.udf1 = "Sent to Bank";
                         PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
 
                         LoanAccount.activateLoan({"accountId": accountNumber},
@@ -368,6 +360,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.showLoader();
                         var accountNumber = model.additional.accountNumber;
                         var accountId = model.loanAccountDisbursementSchedule.loanId;
+                        model.loanAccountDisbursementSchedule.udf1 = "Rejected";
                         PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
 
                         var reqData = _.cloneDeep(model);

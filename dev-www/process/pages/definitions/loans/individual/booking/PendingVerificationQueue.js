@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingVerificatio
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
         "type": "search-list",
-        "title": "PENDING_VERIFICATION_QUEUE",
+        "title": "LOAN_PENDING_VERIFICATION_QUEUE",
         "subTitle": "",
         "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {

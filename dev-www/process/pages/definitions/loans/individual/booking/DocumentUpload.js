@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
 
         return {
             "type": "schema-form",
-            "title": "DOCUMENT_EXECUTION",
+            "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
             "subTitle": " ",
             initialize: function (model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
@@ -67,7 +67,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                     document: docsForProduct[i].docCode,
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
                                                     $title: docsForProduct[i].docTitle,
-                                                    $formsKey: docsForProduct[i].formsKey
+                                                    $formsKey: docsForProduct[i].formsKey,
+                                                    disbursementId:model.loanAccount.disbursementSchedules[0].id
                                                 })
                                             }
                                         }
@@ -99,7 +100,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
-                    "title": "DOCUMENT_EXECUTION",
+                    "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
                     "htmlClass": "text-danger",
                     "items": [
                         {

@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 "items": [
 
                     {
-                        "key":"loanAccountDisbursementSchedule.udf4",
+                        "key":"loanAccountDisbursementSchedule.udf1",
                         "type":"select",
                         "titleMap":{
                             "Confirmed":"Confirmed",

@@ -67,7 +67,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info("Max Security EMI is not available");
                 });
             },
-            offline: false,
+            offline: true,
             getOfflineDisplayItem: function(item, index){
                 return [
                     '{{"ENTITY_NAME"|translate}}: ' + item.customer.firstName + (item.loanAccount.urnNo ? ' <small>{{"URN_NO"|translate}}:' + item.loanAccount.urnNo + '</small>' : ''),
@@ -111,7 +111,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.id",
                                 "title": "LOAN_ID",
-                                "condition":"model.loanAccount.id"
+                                "condition":"model.loanAccount.id",
+                                "readonly":true
                             },
                             {
                                 "key": "loanAccount.productCode",
@@ -896,6 +897,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
+                    if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                        model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
+                        model.loanAccount.disbursementSchedules[0].ifscCode = model.loanAccount.customerBankIfscCode;
+                    }
 
 
                     var reqData = _.cloneDeep(model);

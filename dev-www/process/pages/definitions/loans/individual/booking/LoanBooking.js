@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
         return {
             "type": "schema-form",
-            "title": "CONFIRM_LOAN_BOOKING",
+            "title": "CAPTURE_DATES",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
@@ -58,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             form: [{
                 "type": "box",
-                "title": "LOAN BOOKING DETAILS", // sample label code
+                "title": "UPDATE_ACCOUNT", // sample label code
                 "colClass": "col-sm-6", // col-sm-6 is default, optional
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
@@ -88,7 +88,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 ]
             }, {
                 "type": "box",
-                "title": "LOAN ACCOUNT DETAILS", // sample label code
+                "title": "LOAN_DETAILS", // sample label code
                 "colClass": "col-sm-6", // col-sm-6 is default, optional
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
@@ -134,16 +134,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.loanPurpose1",
                         "readonly": true
                     },
-                    {
+                    /*{
                         "key": "loanAccount.loanPurpose2",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.loanPurpose3",
                         "readonly": true
-                    },
+                    },*/
                     {
-                        "key": "loanAccount.customer.centreCode",
+                        "key": "loanAccount.loanCentre[0].centreId",
                         "title": "CENTRE",
                         "readonly": true
                     },
@@ -310,8 +310,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 },
                 reenter: function (model, formCtrl, form, $event) {
                     $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBooking',
-                        pageId: model.customer.id
+                        pageName: 'loans.individual.booking.PendingQueue',
+                        pageId: null
                     });
                 }
             }

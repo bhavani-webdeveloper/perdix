@@ -14,7 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                 },
                 offline: false,
                 definition: {
-                    title: "ReadyForDisbursement",
+                    title: "READYFORDISBURSEMENT",
                     autoSearch: true,
                     sorting:true,
                     sortByColumns:{

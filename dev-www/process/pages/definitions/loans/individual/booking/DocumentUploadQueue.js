@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueu
 function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
     return {
         "type": "search-list",
-        "title": "DOCUMENT_UPLOAD_QUEUE",
+        "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
         "subTitle": "",
         "uri":"Loan Booking/Stage 3",
         initialize: function (model, form, formCtrl) {
@@ -103,7 +103,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                         "enumCode": "branch"
                     },
                     "centreCode": {
-                        "title": "CENTER_NAME",
+                        "title": "CENTRE_NAME",
                         "type": "string",
                         "x-schema-form": {
                             "type": "select"
