@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Perdix Mobility | 8.7</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=100%, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="mobile_manifest.json">
+    <link rel="icon" sizes="256x256" href="img/logo.ico" type="image/x-icon">
+    <link rel="icon" sizes="192x192" href="img/logo.jpg" type="image/jpeg">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js" integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8=" crossorigin="anonymous"></script>
+
+<style type="text/css">
+    html, body {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    #i8, #i7 {
+        height: 100%;
+        width: 100%;
+        float: left;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    #switchI {
+        position: absolute;
+        top: 20px;
+        right: 200px;
+    }
+</style>
+
+</head>
+<body>
+
+    <iframe id="i8" src="http://uatperdix.kgfs.co.in/static/perdix-v8-dev/www"></iframe>
+    <iframe id="i7" src="http://uatperdix.kgfs.co.in/kgfs"></iframe>
+
+<script type="text/html" id="i8Html">
+    <li class="dropdown notifications-menu" id="i7Link">
+        <a href="" class="dropdown-toggle" onclick="parent.switchApp()">
+            <strong>7</strong>
+        </a>
+    </li>
+</script>
+<script type="text/html" id="i7Html">
+    <a id="i8Link" href="#" class="mnu1" onClick="parent.switchApp()">Perdix 8</a>
+</script>
+<script type="text/javascript">
+    var i7 = document.getElementById('i7');
+    var i8 = document.getElementById('i8');
+    i7.style.display = 'none';
+
+    var showI7 = false;
+    var switchApp = function () {
+        if (showI7) {
+            i8.style.display = 'block';
+            i7.style.display = 'none';
+            showI7 = false;
+        } else {
+            i8.contentWindow.location.href;
+            i7.style.display = 'block';
+            i8.style.display = 'none';
+            showI7 = true;
+        }
+    };
+
+    var injectButtonI8 = function() {
+        var i7Link = i8.contentDocument.getElementById('i7Link');
+        if (!i7Link) {
+            // console.warn('i7Link not avilable on perdix8');
+            $($('#i8Html').html()).prependTo($(i8.contentDocument).find('header ul.navbar-nav'));
+            setTimeout(injectButtonI8, 1000);
+        } else {
+            // console.warn('i7Link avilable on perdix8');
+            setTimeout(injectButtonI8, 60000);
+        }
+        
+    };
+
+    var injectButtonI7 = function() {
+        var i8Link = i7.contentDocument.getElementById('i8Link');
+        if (!i8Link) {
+            // console.warn('i8Link not avilable on perdix7');
+            $($('#i7Html').html()).prependTo($(i7.contentDocument).find('.top-sec td[align="right"]'));
+            setTimeout(injectButtonI7, 1000);
+        } else {
+            // console.warn('i8Link avilable on perdix7');
+            setTimeout(injectButtonI7, 60000);
+        }
+    };
+
+    injectButtonI8();
+    injectButtonI7();
+</script>
+</body>
+</html>
