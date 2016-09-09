@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("demo.Demo"),
+irf.pageCollection.factory(irf.page("demo.Demo2"),
 ["$log", "Enrollment", "SessionStore","Files",
     function($log, Enrollment, SessionStore,Files){
 
@@ -6,10 +6,10 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
 
         return {
             "type": "schema-form",
-            "title": "Demo Page",
-            "subTitle": "Demo Page secondary title",
+            "title": "Demo Page2",
+            "subTitle": "Demo Page2 secondary title",
             initialize: function (model, form, formCtrl) {
-                $log.info("Demo Customer Page got initialized");
+                $log.info("Demo Customer Page2 got initialized");
 
                 model.address = model.address || {};
                 model.address.streetAddress = "Stt";
