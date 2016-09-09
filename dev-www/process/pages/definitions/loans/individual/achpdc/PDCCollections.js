@@ -6,9 +6,7 @@ PDCCollections.js does the following
 2. To upload the status of the demands as received from Bank
 */
     return {
-        "id": "PDCCollections",
-        "type": "schema-form",z
-        "name": "PDCCollections",
+        "type": "schema-form",
         "title": "PDC Collections",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
