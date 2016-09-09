@@ -181,8 +181,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                             name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.CollectPayment', pageId: item.accountId});
+                                entityManager.setModel('loans.LoanRepay', {_bounce:item});
+                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
                                 //if (index%2==0){

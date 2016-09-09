@@ -46,7 +46,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.authorizationUsing='Testing-Swapnil';
                         model.repayment.remarks='collections';
                         model.repayment.accountId = data.accountId;
-                        model.repayment.amount = data.totalDemandDue;
+                        model.repayment.amount = 0;
+                        model.repayment.demandAmount = data.totalDemandDue;
                         model.repayment.productCode = data.productCode;
                         model.repayment.urnNo = data.customerId1;
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
@@ -71,6 +72,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key:"repayment.accountId",
                                 readonly:true
+                            },
+                            {
+                                key: "repayment.demandAmount",
+                                readonly: true,
+                                title: "TOTAL_DEMAND_DUE",
+                                type: "amount"
                             },
                             {
                                 key: "repayment.amount",
@@ -143,7 +150,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 "amount": {
                                     "type": "number",
-                                    "title":"AMOUNT"
+                                    "title":"AMOUNT_PAID"
+
                                 },
                                 "authorizationRemark": {
                                     "type": "string",
