@@ -17,6 +17,30 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 }
             }
 
+            function getTransactionNames(totalDemandDue){
+
+                if (totalDemandDue>0){
+                    return {
+                        "Scheduled Demand":"Scheduled Demand",
+                        "Fee Payment":"Fee Payment",
+                        "Pre-closure":"Pre-closure",
+                        "Prepayment":"Prepayment"
+                    }
+                }
+
+                return {
+                    "Advance Repayment":"Advance Repayment",
+                    "Scheduled Demand":"Scheduled Demand",
+                    "Fee Payment":"Fee Payment",
+                    "Pre-closure":"Pre-closure",
+                    "Prepayment":"Prepayment"
+                }
+            }
+
+            var _pageGlobals = {
+                transactionNames: {}
+            };
+
             return {
                 "id": "LoanRepay",
                 "type": "schema-form",
@@ -50,6 +74,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.demandAmount = data.totalDemandDue;
                         model.repayment.productCode = data.productCode;
                         model.repayment.urnNo = data.customerId1;
+                        //_pageGlobals.totalDemandDue = data.totalDemandDue;
+                        _pageGlobals.transactionNames = getTransactionNames(data.totalDemandDue);
+
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
@@ -89,13 +116,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                "titleMap":{
-                                    "Advance Repayment":"Advance Repayment",
-                                    "Scheduled Demand":"Scheduled Demand",
-                                    "Fee Payment":"Fee Payment",
-                                    "Pre-closure":"Pre-closure",
-                                    "Prepayment":"Prepayment"
-                                }
+                                "titleMap":_pageGlobals.transactionNames
                             },
                             {
                                 "type": "fieldset",
