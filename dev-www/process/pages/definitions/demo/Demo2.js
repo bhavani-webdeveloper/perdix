@@ -85,7 +85,10 @@ irf.pageCollection.factory(irf.page("demo.Demo2"),
                                 },
                                 "code": {
                                     "type": "integer",
-                                    "title":"Code"
+                                    "title":"Code",
+                                    "x-schema-form": {
+                                        "type": "text"
+                                    }
                                 },
                                 "number":{
                                     "type":"integer",
