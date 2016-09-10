@@ -511,7 +511,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     if (model.customer.spouseFirstName)
                                         model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
                                     if (model.customer.gender)
-                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' : 
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
                                             (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
                                     model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
                                     if (model.customer.spouseDateOfBirth)
@@ -992,33 +992,33 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 title: "CUSTOMER_BANK_ACCOUNTS",
                 items: [
                     {
-                        key: "customer.bankAccounts",
+                        key: "customer.customerBankAccounts",
                         type: "array",
                         title: "BANK_ACCOUNTS",
                         startEmpty: true,
                         items: [
                             {
-                                key: "customer.bankAccounts[].ifscCode",
+                                key: "customer.customerBankAccounts[].ifscCode",
                                 title: "IFSC_CODE",
                                 type: "lov",
                                 inputMap: {
                                     "customerBankName": {
-                                        "key": "customer.bankAccounts[].customerBankName",
+                                        "key": "customer.customerBankAccounts[].customerBankName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "branchName": {
-                                        "key": "customer.bankAccounts[].customerBankBranchName",
+                                        "key": "customer.customerBankAccounts[].customerBankBranchName",
                                         "title": "BRANCH_NAME"
                                     },
                                     "ifscCode": {
-                                        "key": "customer.bankAccounts[].ifscCode",
+                                        "key": "customer.customerBankAccounts[].ifscCode",
                                         "title": "IFSC_CODE"
                                     }
                                 },
                                 outputMap: {
-                                    "customerBankName": "customer.bankAccounts[arrayIndex].customerBankName",
-                                    "branchName": "customer.bankAccounts[arrayIndex].customerBankBranchName",
-                                    "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
+                                    "customerBankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form) {
@@ -1037,29 +1037,29 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 }
                             },
                             {
-                                key: "customer.bankAccounts[].customerBankName",
+                                key: "customer.customerBankAccounts[].customerBankName",
                                 title: "BANK_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].customerBankBranchName",
+                                key: "customer.customerBankAccounts[].customerBankBranchName",
                                 title: "BRANCH_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].customerName",
+                                key: "customer.customerBankAccounts[].customerName",
                                 title: "CUSTOMER_NAME"
                             },
                             {
-                                key: "customer.bankAccounts[].accountNumber",
+                                key: "customer.customerBankAccounts[].accountNumber",
                                 title: "ACCOUNT_NUMBER"
                             },
                             {
-                                key: "customer.bankAccounts[].accountType",
+                                key: "customer.customerBankAccounts[].accountType",
                                 title: "ACCOUNT_TYPE",
                                 type: "select",
                                 enumCode: "account_type"
                             },
                             {
-                                key: "customer.bankAccounts[].isDisbersementAccount",
+                                key: "customer.customerBankAccounts[].isDisbersementAccount",
                                 type: "radios",
                                 schema: {
                                     default: false

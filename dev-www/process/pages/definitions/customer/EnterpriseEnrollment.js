@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils){
 
     var branch = SessionStore.getBranch();
 
@@ -285,17 +285,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         items: [
                             {
                                 key: "customer.customerBankAccounts[].ifscCode",
+                                title: "IFSC_CODE",
                                 type: "lov",
-                                autolov: true,
                                 inputMap: {
-                                    "ifscCode": {
-                                        "key": "customer.customerBankAccounts[].ifscCode"
-                                    },
                                     "customerBankName": {
-                                        "key": "customer.customerBankAccounts[].customerBankName"
+                                        "key": "customer.customerBankAccounts[].customerBankName",
+                                        "title": "BRANCH_NAME"
                                     },
                                     "branchName": {
-                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
+                                        "key": "customer.customerBankAccounts[].customerBankBranchName",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    "ifscCode": {
+                                        "key": "customer.customerBankAccounts[].ifscCode",
+                                        "title": "IFSC_CODE"
                                     }
                                 },
                                 outputMap: {
@@ -306,10 +309,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 searchHelper: formHelper,
                                 search: function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.customerBankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
+                                    var promise = Enrollment.search({
+                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                        'firstName': inputModel.first_name,
                                     }).$promise;
                                     return promise;
                                 },
@@ -322,25 +324,33 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankName",
-                                readonly: true
+                                title: "BANK_NAME"
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankBranchName",
-                                readonly: true
+                                title: "BRANCH_NAME"
                             },
                             {
-                                key: "customer.customerBankAccounts[].customerName"
+                                key: "customer.customerBankAccounts[].customerName",
+                                title: "CUSTOMER_NAME"
                             },
                             {
-                                key: "customer.customerBankAccounts[].accountNumber"
+                                key: "customer.customerBankAccounts[].accountNumber",
+                                title: "ACCOUNT_NUMBER"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",
-                                type: "select"
+                                title: "ACCOUNT_TYPE",
+                                type: "select",
+                                enumCode: "account_type"
                             },
                             {
                                 key: "customer.customerBankAccounts[].isDisbersementAccount",
                                 type: "radios",
+                                schema: {
+                                    default: false
+                                },
+                                title: "DISBURSEMENT_ACCOUNT",
                                 titleMap: [{
                                     value: true,
                                     name: "Yes"
