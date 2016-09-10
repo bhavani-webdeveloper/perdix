@@ -317,9 +317,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 getListDisplayItem: function(data, index) {
                                     return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
                                     ];
                                 }
                             },
