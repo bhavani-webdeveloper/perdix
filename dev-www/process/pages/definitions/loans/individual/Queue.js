@@ -3,18 +3,14 @@ irf.pageCollection.factory(irf.page("loans.individual.Queue"),
 function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
-		"id": "CustomerSearch",
 		"type": "search-list",
-		"name": "CustomerSearch",
-		"title": "CUSTOMER_SEARCH",
+		"title": "LOANS_SEARCH",
 		"subTitle": "",
-		"uri":"Customer Search",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
-			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Search Customers",
+			title: "SEARCH_LOANS",
 			searchForm: [
 				"*"
 			],
@@ -53,7 +49,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						"type": "number"
 					}
 				},
-				"required":["branch"]
+				"required":["stage", "branchName"]
 			},
 			getSearchFormHelper: function() {
 				return formHelper;

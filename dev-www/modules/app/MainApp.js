@@ -1,8 +1,8 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore", "Queries", "$state",
-function($scope, $log, SessionStore, Queries, $state) {
+["$scope", "$log", "SessionStore", "Queries", "$state", "$timeout",
+function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
 	document.mainTitle = "Perdix Mobility";
@@ -27,7 +27,12 @@ function($scope, $log, SessionStore, Queries, $state) {
 			});
 		}
 		if ($scope.app_manifest.connect_perdix7) {
-			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+			$timeout(function() {
+				if ($state.current.name === irf.REDIRECT_STATE) {
+					$log.debug("Legacy Perdix7 interoperability enabled, and trying redirect assuming token is avilable.");
+					$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+				}
+			});
 		}
 	});
 

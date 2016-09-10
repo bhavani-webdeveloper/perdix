@@ -1339,6 +1339,44 @@
                     "type": "string",
                     "title": "VILLAGE_NAME",
                     "enumCode":"village"
+                },
+                "customerBankAccounts": {
+                    "type": "array",
+                    "title": "CUSTOMER_BANK_ACCOUNT",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "ifscCode": {
+                                "type": "string",
+                                "title": "IFSC_CODE"
+                            },
+                            "customerBankName": {
+                                "type": "string",
+                                "title": "BANK_NAME"
+                            },
+                            "customerBankBranchName": {
+                                "type": "string",
+                                "title": "BRANCH_NAME"
+                            },
+                            "customerName": {
+                                "type": "string",
+                                "title": "CUSTOMER_NAME"
+                            },
+                            "accountNumber": {
+                                "type": "string",
+                                "title": "ACCOUNT_NUMBER"
+                            },
+                            "accountType": {
+                                "type": "string",
+                                "title": "ACCOUNT_TYPE",
+                                "enumCode": "account_type"
+                            },
+                            "isDisbersementAccount": {
+                                "type": "boolean",
+                                "title": "DISBURSEMENT_ACCOUNT"
+                            }
+                        }
+                    }
                 }
             },
             "required": [

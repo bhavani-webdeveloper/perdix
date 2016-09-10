@@ -396,7 +396,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "    }}&nbsp;</span>\n" +
     "\n" +
     "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:7px 9px 6px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -455,7 +455,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('.')}}\"\n" +
+    "          name=\"{{form.key.join('$')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -488,9 +488,14 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
+    "    <input ng-if=\"form.readonly\"\n" +
+    "           ng-model=\"$$value$$\"\n" +
+    "           ng-disabled=\"form.readonly\"\n" +
+    "           type=\"text\"\n" +
+    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-disabled=\"form.readonly\"\n" +
+    "      ng-if=\"!form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -589,22 +594,6 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -615,6 +604,7 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
+    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -633,6 +623,22 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -2618,6 +2624,188 @@ angular.module('irf.listView', ['irf.elements.commons'])
 }])
 ;
 
+angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
+.directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
+	return {
+		scope: {
+			form: "=irfForm",
+			modelValue: "=?irfModelValue",
+			parentModel: "=irfModel"
+		},
+		restrict: 'A',
+		link: function($scope, elem, attrs, ctrl) {
+			$(elem).click(ctrl.onClickLOV);
+		},
+		controller: 'irfLovCtrl'
+	};
+}])
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
+	var self = this;
+	$scope.inputFormHelper = $scope.form.searchHelper;
+
+	self.onClickLOV = function(e) {
+		e.preventDefault();
+
+		$scope.listResponseItems = null;
+		$scope.listDisplayItems = null;
+		$scope.bindModel = {};
+		$scope.inputModel = {};
+		$scope.locals = {};
+		$scope.inputForm = [];
+		$scope.formName = $scope.form.key.join('__');
+
+		$scope.locals.arrayIndex = elementsUtils.getArrayIndex($scope.form.key);
+
+		elementsUtils.mapInput($scope.form.bindMap, $scope.parentModel, $scope.bindModel, $scope.locals);
+
+		elementsUtils.mapInput($scope.form.inputMap, $scope.parentModel, $scope.inputModel, $scope.locals);
+
+		$scope.inputSchema = {
+			"type": "object",
+			"properties": {}
+		};
+
+		angular.forEach($scope.form.inputMap, function(value, key){
+			var v;
+			if (_.isObject(value)) {
+				v = value.key.split(".");
+				var vv = _.clone(value);
+				vv.key = key;
+				$scope.inputForm.push(vv);
+			} else {
+				$scope.inputForm.push(key);
+				v = value.split(".");
+			}
+			var s = $scope.$parent.$parent.schema;
+			for (i = 0; i < v.length; i++) {
+				if (_.endsWith(v[i], '[]')) {
+					v[i] = v[i].substring(0, v[i].length-2);
+					s = s["properties"][v[i]]["items"];
+				} else {
+					s = s["properties"][v[i]];
+				}
+			}
+			$scope.inputSchema.properties[key] = s;
+		});
+
+		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
+
+		angular.forEach(mergedInputForm, function(value, key){
+			$scope.inputSchema.properties[key] = s;
+		});*/
+
+		var bindSize = _.size($scope.form.bindMap);
+		if (bindSize && bindSize != _.remove(_.values($scope.bindModel), undefined).length) {
+			self.showBindValueAlert($scope.form.bindMap);
+			return;
+		}
+
+		if ($scope.form.autolov) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			self.init($scope.inputModel);
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov(true, true);
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				self.launchLov(true, false);
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov(false, false);
+		}
+	};
+
+	self.showBindValueAlert = function(bindKeys) {
+		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
+	};
+
+	self.launchLov = function(isInitialized, isSubmitted) {
+		if (!isInitialized) {
+			self.init($scope.inputModel);
+		}
+		if ($scope.inputForm.length) {
+			$scope.inputForm.push({"type":"submit", "title":"Search"});
+		} else if (!isSubmitted) {
+			$scope.inputActions.submit();
+		}
+
+		$scope.modalWindow = $uibModal.open({
+			scope: $scope,
+			templateUrl: "irf/template/lov/modal-lov.html",
+			controller: function($scope) {
+				$scope.$broadcast('schemaFormValidate');
+				//$log.info($scope.locals);
+			}
+		});
+	};
+
+	self.init = function(model) {
+		if (angular.isFunction($scope.form.initialize)) {
+			$scope.form.initialize(model);
+		} else if ($scope.form.initialize) {
+			$scope.evalExpr($scope.form.initialize, {model:model});
+		}
+	};
+
+	$scope.inputActions = {};
+
+	var getSearchPromise = function() {
+		angular.extend($scope.inputModel, $scope.bindModel);
+		var promise;
+		if (angular.isFunction($scope.form.search)) {
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+		} else if ($scope.form.search) {
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+		}
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
+			$scope.showLoader = false;
+		},function(){
+			$scope.showLoader = false;
+		});
+	};
+
+	$scope.callback = function(item) {
+		if ($scope.form.outputMap) {
+			elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
+		}
+		if ($scope.form.onSelect) {
+			if (angular.isFunction($scope.form.onSelect)) {
+				$scope.form.onSelect(item, $scope.parentModel, $scope.locals);
+			} else if ($scope.form.onSelect) {
+				$scope.evalExpr($scope.form.onSelect, {result:item, model:$scope.parentModel, context:$scope.locals});
+			}
+		}
+		self.close();
+	};
+
+	self.close = function() {
+		if ($scope.modalWindow) $scope.modalWindow.close();
+		$scope.listResponseItems = null;
+		$scope.listDisplayItems = null;
+	};
+}])
+;
 angular.module('irf.pikaday', ['irf.elements.commons'])
 .directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
 	// Runs during compile
@@ -2676,165 +2864,6 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
-.directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
-	return {
-		scope: {
-			form: "=irfForm",
-			modelValue: "=?irfModelValue",
-			parentModel: "=irfModel"
-		},
-		restrict: 'A',
-		link: function($scope, elem, attrs, ctrl) {
-			$(elem).click(ctrl.onClickLOV);
-		},
-		controller: 'irfLovCtrl'
-	};
-}])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
-	var self = this;
-	$scope.inputFormHelper = $scope.form.searchHelper;
-
-	self.onClickLOV = function(e) {
-		e.preventDefault();
-
-		$scope.listResponseItems = null;
-		$scope.listDisplayItems = null;
-		$scope.bindModel = {};
-		$scope.inputModel = {};
-		$scope.locals = {};
-		$scope.inputForm = [];
-		$scope.formName = $scope.form.key.join('__');
-
-		$scope.locals.arrayIndex = elementsUtils.getArrayIndex($scope.form.key);
-
-		elementsUtils.mapInput($scope.form.bindMap, $scope.parentModel, $scope.bindModel, $scope.locals);
-
-		elementsUtils.mapInput($scope.form.inputMap, $scope.parentModel, $scope.inputModel, $scope.locals);
-
-		$scope.inputSchema = {
-			"type": "object",
-			"properties": {}
-		};
-
-		angular.forEach($scope.form.inputMap, function(value, key){
-			var v;
-			if (_.isObject(value)) {
-				v = value.key.split(".");
-				var vv = _.clone(value);
-				vv.key = key;
-				$scope.inputForm.push(vv);
-			} else {
-				$scope.inputForm.push(key);
-				v = value.split(".");
-			}
-			var s = $scope.$parent.$parent.schema;
-			for (i = 0; i < v.length; i++) {
-				s = s["properties"][v[i]];
-			}
-			$scope.inputSchema.properties[key] = s;
-		});
-
-		if ($scope.inputForm.length == 0) {
-			$scope.inputActions.submit();
-		} else {
-			$scope.inputForm.push({"type":"submit", "title":"Search"});
-			// $log.info($scope.inputForm);
-		}
-
-		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
-
-		angular.forEach(mergedInputForm, function(value, key){
-			$scope.inputSchema.properties[key] = s;
-		});*/
-
-		var bindSize = _.size($scope.form.bindMap);
-		if (bindSize && bindSize != _.remove(_.values($scope.bindModel), undefined).length) {
-			self.showBindValueAlert($scope.form.bindMap);
-			return;
-		}
-
-		if ($scope.form.autolov && $scope.modelValue) {
-			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			getSearchPromise().then(function(out){
-				if (out.body && out.body.length === 1) {
-					$scope.callback(out.body[0]);
-				} else {
-					displayListOfResponse(out);
-					self.launchLov();
-				}
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			}, function(){
-				self.launchLov();
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			});
-		} else {
-			self.launchLov();
-		}
-	};
-
-	self.showBindValueAlert = function(bindKeys) {
-		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
-	};
-
-	self.launchLov = function() {
-		$scope.modalWindow = $uibModal.open({
-			scope: $scope,
-			templateUrl: "irf/template/lov/modal-lov.html",
-			controller: function($scope) {
-				$scope.$broadcast('schemaFormValidate');
-				//$log.info($scope.locals);
-			}
-		});
-	};
-
-	$scope.inputActions = {};
-
-	var getSearchPromise = function() {
-		angular.extend($scope.inputModel, $scope.bindModel);
-		var promise;
-		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
-		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
-		}
-		return promise;
-	};
-
-	var displayListOfResponse = function(out) {
-		$scope.listResponseItems = out.body;
-		$scope.listDisplayItems  =[];
-		angular.forEach(out.body, function(value, key) {
-			c = $scope.form.getListDisplayItem(value, key);
-			this.push(c);
-		}, $scope.listDisplayItems);
-	};
-
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
-		getSearchPromise().then(function(out){
-			displayListOfResponse(out);
-			$scope.showLoader = false;
-		},function(){
-			$scope.showLoader = false;
-		});
-	};
-
-	$scope.callback = function(item) {
-		$log.info("Selected Item->");
-		$log.info(item);
-		elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
-		self.close();
-	};
-
-	self.close = function() {
-		if ($scope.modalWindow) $scope.modalWindow.close();
-		$scope.listResponseItems = null;
-		$scope.listDisplayItems = null;
-	};
-}])
-;
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -5723,8 +5752,8 @@ angular.module('IRFLogger', [])
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore", "Queries", "$state",
-function($scope, $log, SessionStore, Queries, $state) {
+["$scope", "$log", "SessionStore", "Queries", "$state", "$timeout",
+function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
 	document.mainTitle = "Perdix Mobility";
@@ -5749,7 +5778,12 @@ function($scope, $log, SessionStore, Queries, $state) {
 			});
 		}
 		if ($scope.app_manifest.connect_perdix7) {
-			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+			$timeout(function() {
+				if ($state.current.name === irf.REDIRECT_STATE) {
+					$log.debug("Legacy Perdix7 interoperability enabled, and trying redirect assuming token is avilable.");
+					$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+				}
+			});
 		}
 	});
 
@@ -5967,7 +6001,7 @@ $(document).ready(function(){
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
 //irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
-// irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
 irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
@@ -6559,6 +6593,18 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
     return ret;
 });
 
+irf.models.factory('CustomerBankBranch', function($resource, $httpParamSerializer, BASE_URL, searchResource, $q) {
+    var endpoint = BASE_URL + '/api';
+
+    var ret = $resource(endpoint, null, {
+        search: searchResource({
+            method: 'GET',
+            url: endpoint + '/customerbankbranch'
+        })
+    });
+
+    return ret;
+});
 irf.models.factory('LoanProcess',[
 "$resource","$httpParamSerializer","BASE_URL","searchResource",
 function($resource,$httpParamSerializer,BASE_URL,searchResource){
@@ -6796,40 +6842,39 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
     });
 });
 
-    irf.models.factory('ACH',function($resource,$httpParamSerializer,BASE_URL, searchResource){
-        var endpoint = BASE_URL + '/api/ach';
-        /*
-         * $get : /api/enrollments/{blank/withhistory/...}/{id}
-         *  eg: /enrollments/definitions -> $get({service:'definition'})
-         *      /enrollments/1           -> $get({id:1})
-         * $post will send data as form data, save will send it as request payload
-         */
-        return $resource(endpoint, null, {
-            getSchema:{
-            method:'GET',
-            url:'process/schemas/ach.json'
-             },
-            create:{
-                method:'POST',
-                url:endpoint+'/create'
-            },
+irf.models.factory('ACH', function($resource, $httpParamSerializer, BASE_URL, searchResource) {
+    var endpoint = BASE_URL + '/api/ach';
+    /*
+     * $get : /api/enrollments/{blank/withhistory/...}/{id}
+     *  eg: /enrollments/definitions -> $get({service:'definition'})
+     *      /enrollments/1           -> $get({id:1})
+     * $post will send data as form data, save will send it as request payload
+     */
+    return $resource(endpoint, null, {
+        getSchema: {
+            method: 'GET',
+            url: 'process/schemas/ach.json'
+        },
+        create: {
+            method: 'POST',
+            url: endpoint + '/create'
+        },
 
-            search: searchResource({
-                    method: 'GET',
-                    url: endpoint + '/search'
-            }),
-            searchHead:{
-                method:'HEAD',
-                url: endpoint + '/search',
-                 isArray:true
-            },
-             update:{
-                method:'PUT',
-                url:endpoint+'/update'           
-            }
-        });
+        search: searchResource({
+            method: 'GET',
+            url: endpoint + '/search'
+        }),
+        searchHead: {
+            method: 'HEAD',
+            url: endpoint + '/search',
+            isArray: true
+        },
+        update: {
+            method: 'PUT',
+            url: endpoint + '/update'
+        }
     });
-
+});
     irf.models.factory('PDC',function($resource,$httpParamSerializer,BASE_URL, searchResource){
         var endpoint = BASE_URL + '/api/ach';
         /*
@@ -11335,9 +11380,9 @@ irf.pageCollection.factory("Pages__CustomerRUD",
 
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrollment"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
 
@@ -11619,34 +11664,32 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         startEmpty: true,
                         items: [
                             {
-                                key: "customer.bankAccounts[].ifscCode",
-                                title: "IFSC_CODE",
+                                key: "customer.customerBankAccounts[].ifscCode",
                                 type: "lov",
+                                autolov: true,
                                 inputMap: {
+                                    "ifscCode": {
+                                        "key": "customer.customerBankAccounts[].ifscCode"
+                                    },
                                     "customerBankName": {
-                                        "key": "customer.bankAccounts[].customerBankName",
-                                        "title": "BRANCH_NAME"
+                                        "key": "customer.customerBankAccounts[].customerBankName"
                                     },
                                     "branchName": {
-                                        "key": "customer.bankAccounts[].customerBankBranchName",
-                                        "title": "BRANCH_NAME"
-                                    },
-                                    "ifscCode": {
-                                        "key": "customer.bankAccounts[].ifscCode",
-                                        "title": "IFSC_CODE"
+                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
                                     }
                                 },
                                 outputMap: {
-                                    "customerBankName": "customer.bankAccounts[arrayIndex].customerBankName",
-                                    "branchName": "customer.bankAccounts[arrayIndex].customerBankBranchName",
-                                    "ifscCode": "customer.bankAccounts[arrayIndex].ifscCode"
+                                    "customerBankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = Enrollment.search({
-                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                        'firstName': inputModel.first_name,
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.customerBankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
                                     }).$promise;
                                     return promise;
                                 },
@@ -11658,34 +11701,26 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             },
                             {
-                                key: "customer.bankAccounts[].customerBankName",
-                                title: "BANK_NAME"
+                                key: "customer.customerBankAccounts[].customerBankName",
+                                readonly: true
                             },
                             {
-                                key: "customer.bankAccounts[].customerBankBranchName",
-                                title: "BRANCH_NAME"
+                                key: "customer.customerBankAccounts[].customerBankBranchName",
+                                readonly: true
                             },
                             {
-                                key: "customer.bankAccounts[].customerName",
-                                title: "CUSTOMER_NAME"
+                                key: "customer.customerBankAccounts[].customerName"
                             },
                             {
-                                key: "customer.bankAccounts[].accountNumber",
-                                title: "ACCOUNT_NUMBER"
+                                key: "customer.customerBankAccounts[].accountNumber"
                             },
                             {
-                                key: "customer.bankAccounts[].accountType",
-                                title: "ACCOUNT_TYPE",
-                                type: "select",
-                                enumCode: "account_type"
+                                key: "customer.customerBankAccounts[].accountType",
+                                type: "select"
                             },
                             {
-                                key: "customer.bankAccounts[].isDisbersementAccount",
+                                key: "customer.customerBankAccounts[].isDisbersementAccount",
                                 type: "radios",
-                                schema: {
-                                    default: false
-                                },
-                                title: "DISBURSEMENT_ACCOUNT",
                                 titleMap: [{
                                     value: true,
                                     name: "Yes"
@@ -20941,18 +20976,14 @@ irf.pageCollection.factory(irf.page("loans.individual.Queue"),
 function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
-		"id": "CustomerSearch",
 		"type": "search-list",
-		"name": "CustomerSearch",
-		"title": "CUSTOMER_SEARCH",
+		"title": "LOANS_SEARCH",
 		"subTitle": "",
-		"uri":"Customer Search",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
-			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Search Customers",
+			title: "SEARCH_LOANS",
 			searchForm: [
 				"*"
 			],
@@ -20991,7 +21022,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						"type": "number"
 					}
 				},
-				"required":["branch"]
+				"required":["stage", "branchName"]
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
@@ -23930,303 +23961,257 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
-["$log", "ACH","PageHelper","irfProgressMessage", "SessionStore","$state","Utils", "$stateParams", 
-function($log, ACH,PageHelper, irfProgressMessage, SessionStore,$state,Utils,$stateParams){
-/*
-ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
-else the create field is called. Both Update and Create points to same API. 
-The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
-and filled in the screen. 
-*/
-	var branch = SessionStore.getBranch();
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), ["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams",
+	function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
+		/*
+		ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
+		else the create field is called. Both Update and Create points to same API. 
+		The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+		and filled in the screen. 
+		*/
+		var branch = SessionStore.getBranch();
 
-	return {
-		"id": "ach",
-		"type": "schema-form",
-		"name": "ach",
-		"title": "ACH_REGISTRATION",
-		"subTitle": "",
-		initialize: function (model, form, formCtrl) {
-			$log.info("ACH selection Page got initialized");
-			//Create Model ach
-			model.ach = model.ach||{};
-			model.achSearch = model.achSearch||{};
-			//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
-			model.flag = false;
-			//_ach from loans.individual.achpdc.ACHMandateDownload
-			//_loanAch  from loans.individual.Queue
-			 if (model._ach || model._loanAch) {
-				 	
-				 	if(model._ach){
-					model.ach.accountHolderName = model._ach.customerName;
-					model.ach.accountId = model._ach.accountId;
-					model.ach.branchName = model._ach.branchName;
-				}
-					else if (model._loanAch) {
-					model.ach.accountHolderName = model._loanAch.customerName;
-					model.ach.accountId = model._loanAch.accountNumber;
-					model.ach.branchName = model._loanAch.branchName;
-				}
-				 	
+		return {
+			"id": "ach",
+			"type": "schema-form",
+			"name": "ach",
+			"title": "ACH_REGISTRATION",
+			"subTitle": "",
+			initialize: function(model, form, formCtrl) {
+				//Create Model ach
+				model.ach = model.ach || {};
+				model.achSearch = model.achSearch || {};
+				//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
+				model.flag = false;
+				//_ach from loans.individual.achpdc.ACHMandateDownload
+				//_loanAch  from loans.individual.Queue
+				if (model._ach || model._loanAch) {
+
+					if (model._ach) {
+						model.ach.accountHolderName = model._ach.customerName;
+						model.ach.accountId = model._ach.accountId;
+						model.ach.branchName = model._ach.branchName;
+					} else if (model._loanAch) {
+						model.ach.accountHolderName = model._loanAch.customerName;
+						model.ach.accountId = model._loanAch.accountNumber;
+						model.ach.branchName = model._loanAch.branchName;
+					}
+
 					//Search for existance of Loan account Number
-					ACH.search({accountNumber: model.ach.accountId})
-	                    .$promise
-	                    .then(
-	                        function (res) {
-	                            $log.info("response: " + res);
-		                            
-								model.achSearch = res;
-								for (var i = 0; i < model.achSearch.body.length; i++) {
-									//$log.info(achSearch.body[i].accountHolderName);
-									if(model.achSearch.body[i].accountId == model.ach.accountId)
-									{
+					ACH.search({ accountNumber: model.ach.accountId }).$promise.then(function(res) {
+							$log.info("response: " + res);
+
+							model.achSearch = res;
+							for (var i = 0; i < model.achSearch.body.length; i++) {
+								//$log.info(achSearch.body[i].accountHolderName);
+								if (model.achSearch.body[i].accountId == model.ach.accountId) {
 									model.flag = true;
 									model.ach = model.achSearch.body[i];
-									}
 								}
-								
-						 }, function (httpRes) {
-                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-                            PageHelper.showErrors(httpRes);
-                            $log.info("ACH Search Response : "  + httpRes);
-
-                        }
-                       );
- 
-				} else {
-					 if (model._ach){
-					 	$state.go("Page.Engine",{
-								pageName:"loans.individual.achpdc.ACHMandateQueue",
-								pageId:null
-							});
-			 			} else {
-					 	$state.go("Page.Engine",{
-								pageName:"loans.individual.Queue",
-								pageId:null
-							});
-			 			}
-
-					 }
-				  
-			 //   model.customer.urnNo="1234567890";
-			},
-		modelPromise: function(pageId,model){
-
-		},
-		offline: false,
-		getOfflineDisplayItem: function(item, index){
-			
-		},
-		form: [{
-			"type": "box",
-			"notitle": true ,
-			"colClass":"col-sm-8",
-				 "items": [{
-				 			"type":"fieldset",
-				 			"title": "LOAN_DETAILS",
-				 			"items":[{
-									"key": "ach.accountId",
-									"title": "LOAN_ID",
-									"readonly":true
-								},
-								{
-									"key": "ach.branchName",
-									"title": "BRANCH_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.CentreCode",
-									"title": "CENTRE_CODE",
-									"readonly":true
-								},
-								{
-									"key": "ach.customerName",
-									"title": "ENTITY_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.applicantName",
-									"title": "APPLICANT_NAME",
-									"readonly":true
-								},
-								{
-									"key": "ach.coApplicantName",
-									"title": "COAPPLICANT_NAME",
-									"readonly":true
-								}]
-							},
-							{
-								"type":"fieldset",
-								"title":"ACH_DETAILS",
-								"items":[{
-									"key": "ach.accountHolderName",
-									"title": "ACCOUNT_HOLDER_NAME"
-								},
-								{
-									"key": "ach.accountType",
-									"title": "ACCOUNT_TYPE"
-								},
-								{
-									"key": "ach.bankAccountNumber",
-									"title": "BANK_ACCOUNT_NUMBER"
-								},
-								{
-									"key": "ach.ifscCode",
-									"title": "IFSC_CODE",
-									"type": "lov",
-                                    "inputMap": {
-                                        "ifscCode": {
-                                            "key": "ifscCode",
-                                            "title": "IFSC_CODE"
-                                        }
-                                    }
-								},
-								{
-									"key": "ach.branchName",
-									"title": "BRANCH_NAME"
-								},
-								{
-									"key": "ach.bankName",
-									"title": "BANK_NAME"
-								},
-								{
-									"key": "ach.bankCity",
-									"title": "BANK_CITY"
-								},
-								{
-									"key": "ach.mandateApplicationId",
-									"title": "MANDATE_APPLICATION_ID"
-								},
-								{
-									"key": "ach.mandateFilePath",
-									"title": "MANDATE_FILE_PATH"
-								},
-								{
-									"key": "ach.mandateId",
-									"title": "MANDATE_ID",
-									"type": "Number"
-								},
-								{
-									"key": "ach.mandateOpenDate",
-									"title": "MANDATE_OPEN_DATE",
-									"type": "date"
-								},
-								{
-									"key": "ach.mandateStatus",
-									"title": "MANDATE_STATUS"
-								},
-								{
-									"key": "ach.maximumAmount",
-									"title": "MAX_ACH_AMOUNT"
-								},
-								{
-									"key": "ach.frequency",
-									"title": "FREQUENCY",
-									"type":"select",
-									"enumCode": "ach_frequency"
-								},
-								{
-									"key": "ach.micr",
-									"title": "MICR"
-								},
-								{
-									"key": "ach.achStartDate",
-									"title": "START_DATE",
-									"type":"date"
-								},
-								{
-									"key": "ach.achEndDate",
-									"title": "END_DATE",
-									"type": "date"
-								},
-								{
-									"key": "ach.phoneNo",
-									"title": "MOBILE_PHONE"
-								},
-								{
-									"key": "ach.emailId",
-									"title": "EMAIL"
-								},
-								{
-									"key": "ach.reference1",
-									"title": "REFERENCE1"
-								},
-								{
-									"key": "ach.reference2",
-									"title": "REFERENCE2"
-								},
-								{
-									"key": "ach.sponsorAccountCode",
-									"title": "SPONSOR_ACCOUNT_CODE"
-								},
-								{
-									"key": "ach.sponsorBankCode",
-									"title": "SPONSOR_BANK_CODE"
-								},
-								{
-									"key": "ach.umrn",
-									"title": "UMRN"
-								},
-								{
-									"key": "ach.utilityCode",
-									"title": "UTILITY_CODE"
-								},
-								{
-									"key": "ach.verificationStatus",
-									"title": "VERIFICATION_STATUS"
-								},
-								{
-									"key": "ach.registrationDate",
-									"title": "REGISTRATION_DATE",
-									"type": "date"
-								},
-								{
-									"key": "ach.remarks",
-									"title": "remarks"
-								}
-								]
 							}
-						]
-				},
-				{
-					"type": "actionbox",
-					"condition":"!model.flag",
+						},
+						function(httpRes) {
+							PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+							PageHelper.showErrors(httpRes);
+							$log.info("ACH Search Response : " + httpRes);
+						}
+					);
+				} else {
+					if (model._ach) {
+						$state.go("Page.Engine", {
+							pageName: "loans.individual.achpdc.ACHMandateQueue",
+							pageId: null
+						});
+					} else {
+						$state.go("Page.Engine", {
+							pageName: "loans.individual.Queue",
+							pageId: null
+						});
+					}
+
+				}
+
+				//   model.customer.urnNo="1234567890";
+				$log.info("ACH_REGISTRATION got initialized");
+			},
+			modelPromise: function(pageId, model) {
+
+			},
+			offline: false,
+			getOfflineDisplayItem: function(item, index) {
+
+			},
+			form: [{
+				"type": "box",
+				"notitle": true,
+				"items": [{
+					"type": "fieldset",
+					"title": "LOAN_DETAILS",
 					"items": [{
-						"type": "submit",
-						"title": "Submit"
-							  }]
-				},
-				{
-					"type": "actionbox",
-					"condition":"model.flag",
+						"key": "ach.accountId",
+						"title": "LOAN_ID",
+						"readonly": true
+					}, {
+						"key": "ach.branchName",
+						"title": "BRANCH_NAME",
+						"readonly": true
+					}, {
+						"key": "ach.CentreCode",
+						"title": "CENTRE_CODE",
+						"readonly": true
+					}, {
+						"key": "ach.customerName",
+						"title": "ENTITY_NAME",
+						"readonly": true
+					}, {
+						"key": "ach.applicantName",
+						"title": "APPLICANT_NAME",
+						"readonly": true
+					}, {
+						"key": "ach.coApplicantName",
+						"title": "COAPPLICANT_NAME",
+						"readonly": true
+					}]
+				}, {
+					"type": "fieldset",
+					"title": "ACH_DETAILS",
 					"items": [{
-						"type": "submit",
-						"title": "Update"
-							  }]
-				}],
+							"key": "ach.accountHolderName",
+							"title": "ACCOUNT_HOLDER_NAME"
+						}, {
+							"key": "ach.accountType",
+							"title": "ACCOUNT_TYPE"
+						}, {
+							"key": "ach.bankAccountNumber",
+							"title": "BANK_ACCOUNT_NUMBER"
+						}, {
+							"key": "ach.ifscCode",
+							"title": "IFSC_CODE",
+							"type": "lov",
+							"inputMap": {
+								"ifscCode": {
+									"key": "ifscCode",
+									"title": "IFSC_CODE"
+								}
+							}
+						}, {
+							"key": "ach.branchName",
+							"title": "BRANCH_NAME"
+						}, {
+							"key": "ach.bankName",
+							"title": "BANK_NAME"
+						}, {
+							"key": "ach.bankCity",
+							"title": "BANK_CITY"
+						}, {
+							"key": "ach.mandateApplicationId",
+							"title": "MANDATE_APPLICATION_ID"
+						}, {
+							"key": "ach.mandateFilePath",
+							"title": "MANDATE_FILE_PATH"
+						}, {
+							"key": "ach.mandateId",
+							"title": "MANDATE_ID",
+							"type": "Number"
+						}, {
+							"key": "ach.mandateOpenDate",
+							"title": "MANDATE_OPEN_DATE",
+							"type": "date"
+						},
+						"ach.mandateStatus", {
+							"key": "ach.maximumAmount",
+							"title": "MAX_ACH_AMOUNT"
+						}, {
+							"key": "ach.frequency",
+							"title": "FREQUENCY",
+							"type": "select",
+							"enumCode": "ach_frequency"
+						}, {
+							"key": "ach.micr",
+							"title": "MICR"
+						}, {
+							"key": "ach.achStartDate",
+							"title": "START_DATE",
+							"type": "date"
+						}, {
+							"key": "ach.achEndDate",
+							"title": "END_DATE",
+							"type": "date"
+						}, {
+							"key": "ach.phoneNo",
+							"title": "MOBILE_PHONE"
+						}, {
+							"key": "ach.emailId",
+							"title": "EMAIL"
+						}, {
+							"key": "ach.reference1",
+							"title": "REFERENCE1"
+						}, {
+							"key": "ach.reference2",
+							"title": "REFERENCE2"
+						}, {
+							"key": "ach.sponsorAccountCode",
+							"title": "SPONSOR_ACCOUNT_CODE"
+						}, {
+							"key": "ach.sponsorBankCode",
+							"title": "SPONSOR_BANK_CODE"
+						}, {
+							"key": "ach.umrn",
+							"title": "UMRN"
+						}, {
+							"key": "ach.utilityCode",
+							"title": "UTILITY_CODE"
+						}, {
+							"key": "ach.verificationStatus",
+							"title": "VERIFICATION_STATUS"
+						}, {
+							"key": "ach.registrationDate",
+							"title": "REGISTRATION_DATE",
+							"type": "date"
+						}, {
+							"key": "ach.remarks",
+							"title": "remarks"
+						}
+					]
+				}]
+			}, {
+				"type": "actionbox",
+				"condition": "!model.flag",
+				"items": [{
+					"type": "submit",
+					"title": "Submit"
+				}]
+			}, {
+				"type": "actionbox",
+				"condition": "model.flag",
+				"items": [{
+					"type": "submit",
+					"title": "Update"
+				}]
+			}],
 			schema: function() {
-            return ACH.getSchema().$promise;
-       		 },
+				return ACH.getSchema().$promise;
+			},
 			actions: {
-				submit: function(model, form, formName){
+				submit: function(model, form, formName) {
 					PageHelper.showLoader();
-					ACH.create(model.ach, function(response){
+					ACH.create(model.ach, function(response) {
 						PageHelper.hideLoader();
-						PageHelper.showProgress("page-init","Done.",2000);
+						PageHelper.showProgress("page-init", "Done.", 2000);
 						// $state.go("Page.Engine", {
-					 	//pageName: 'loans.individual.booking.DocumentUploadQueue',
-					 	//pageId: model.ach.loanId
+						//pageName: 'loans.individual.booking.DocumentUploadQueue',
+						//pageId: model.ach.loanId
 						// });
 						//model.ach=response;
-					}, function(errorResponse){
+					}, function(errorResponse) {
 						PageHelper.hideLoader();
 						PageHelper.showErrors(errorResponse);
 					});
 				}
 			}
-	};
-}]);
+		};
+	}
+]);
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
 ["$log", "PDC", "PageHelper", "SessionStore","$state", "$stateParams", function($log, PDC, PageHelper, SessionStore,$state,$stateParams){
 
