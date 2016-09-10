@@ -594,6 +594,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -623,22 +639,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -2088,6 +2088,44 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 		$scope.showUploadProgress = true;
 		$scope.fileError = false;
 
+/*
+
+  *url: 'server/upload/url', // upload.php script, node.js route, or servlet url
+  /*
+  Specify the file and optional data to be sent to the server.
+  Each field including nested objects will be sent as a form data multipart.
+  Samples: {pic: file, username: username}
+    {files: files, otherInfo: {id: id, person: person,...}} multiple files (html5)
+    {profiles: {[{pic: file1, username: username1}, {pic: file2, username: username2}]} nested array multiple files (html5)
+    {file: file, info: Upload.json({id: id, name: name, ...})} send fields as json string
+    {file: file, info: Upload.jsonBlob({id: id, name: name, ...})} send fields as json blob, 'application/json' content_type
+    {picFile: Upload.rename(file, 'profile.jpg'), title: title} send file with picFile key and profile.jpg file name * /
+  *data: {key: file, otherInfo: uploadInfo},
+  /*
+  This is to accommodate server implementations expecting nested data object keys in .key or [key] format.
+  Example: data: {rec: {name: 'N', pic: file}} sent as: rec[name] -> N, rec[pic] -> file  
+     data: {rec: {name: 'N', pic: file}, objectKey: '.k'} sent as: rec.name -> N, rec.pic -> file * /  
+  objectKey: '[k]' or '.k' // default is '[k]'
+  /*
+  This is to accommodate server implementations expecting array data object keys in '[i]' or '[]' or 
+  ''(multiple entries with same key) format.
+  Example: data: {rec: [file[0], file[1], ...]} sent as: rec[0] -> file[0], rec[1] -> file[1],...  
+    data: {rec: {rec: [f[0], f[1], ...], arrayKey: '[]'} sent as: rec[] -> f[0], rec[] -> f[1],...* /  
+  arrayKey: '[i]' or '[]' or '.i' or '' //default is '[i]'
+  method: 'POST' or 'PUT'(html5), default POST,
+  headers: {'Authorization': 'xxx'}, // only for html5
+  withCredentials: boolean,
+  /*
+  See resumable upload guide below the code for more details (html5 only) * /
+  resumeSizeUrl: '/uploaded/size/url?file=' + file.name // uploaded file size so far on the server.
+  resumeSizeResponseReader: function(data) {return data.size;} // reads the uploaded file size from resumeSizeUrl GET response
+  resumeSize: function() {return promise;} // function that returns a prommise which will be
+                                            // resolved to the upload file size on the server.
+  resumeChunkSize: 10000 or '10KB' or '10MB' // upload in chunks of specified size
+  disableProgress: boolean // default false, experimental as hotfix for potential library conflicts with other plugins
+  ... and all other angular $http() options could be used here.
+*/
+
 		self.upload = Upload.upload({
 			url: FILE_UPLOAD_URL + $httpParamSerializer({
 				category: category,
@@ -2172,7 +2210,13 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 	$scope.startFileUpload = function($event) {
 		$event.preventDefault();
 		$scope.uploadAborted = false;
-		self.getFileContent($scope.form.fileType, false).then(self.fileUpload);
+		if ($scope.form.customHandle && _.isFunction($scope.form.customHandle)) {
+			self.getFileContent($scope.form.fileType, false).then(function(file){
+				$scope.form.customHandle(file, function(e){$scope.uploadProgress = (e.loaded / e.total) * 100;}, $scope.modelValue, $scope.form, $scope.model);
+			});
+		} else {
+			self.getFileContent($scope.form.fileType, false).then(self.fileUpload);
+		}
 	};
 
 	self.getBiometric = function(mimeType) {
@@ -2372,6 +2416,10 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 			}
 			return null;
 		};
+
+		if ($scope.form.customHandle && _.isFunction($scope.form.customHandle)) {
+			return;
+		}
 
 		$scope.$watch('modelValue', function(n,o){
 			if (n) {
@@ -5779,6 +5827,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 		}
 		if ($scope.app_manifest.connect_perdix7) {
 			$timeout(function() {
+				$scope.connect_perdix7 = true;
 				if ($state.current.name === irf.REDIRECT_STATE) {
 					$log.debug("Legacy Perdix7 interoperability enabled, and trying redirect assuming token is avilable.");
 					$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
@@ -6842,39 +6891,59 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
     });
 });
 
-irf.models.factory('ACH', function($resource, $httpParamSerializer, BASE_URL, searchResource) {
-    var endpoint = BASE_URL + '/api/ach';
-    /*
-     * $get : /api/enrollments/{blank/withhistory/...}/{id}
-     *  eg: /enrollments/definitions -> $get({service:'definition'})
-     *      /enrollments/1           -> $get({id:1})
-     * $post will send data as form data, save will send it as request payload
-     */
-    return $resource(endpoint, null, {
-        getSchema: {
-            method: 'GET',
-            url: 'process/schemas/ach.json'
-        },
-        create: {
-            method: 'POST',
-            url: endpoint + '/create'
-        },
+irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+        var endpoint = BASE_URL + '/api/ach';
+        /*
+         * $get : /api/enrollments/{blank/withhistory/...}/{id}
+         *  eg: /enrollments/definitions -> $get({service:'definition'})
+         *      /enrollments/1           -> $get({id:1})
+         * $post will send data as form data, save will send it as request payload
+         */
+        var resource = $resource(endpoint, null, {
+            getSchema: {
+                method: 'GET',
+                url: 'process/schemas/ach.json'
+            },
+            create: {
+                method: 'POST',
+                url: endpoint + '/create'
+            },
+            search: searchResource({
+                method: 'GET',
+                url: endpoint + '/search'
+            }),
+            searchHead: {
+                method: 'HEAD',
+                url: endpoint + '/search',
+                isArray: true
+            },
+            update: {
+                method: 'PUT',
+                url: endpoint + '/update'
+            }
+        });
 
-        search: searchResource({
-            method: 'GET',
-            url: endpoint + '/search'
-        }),
-        searchHead: {
-            method: 'HEAD',
-            url: endpoint + '/search',
-            isArray: true
-        },
-        update: {
-            method: 'PUT',
-            url: endpoint + '/update'
+        resource.achMandateUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/feed/achmandateupload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp){
+                // TODO handle success
+                deferred.resolve(resp);
+            }, function(errResp){
+                // TODO handle error
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
         }
-    });
-});
+
+        return resource;
+    }
+]);
     irf.models.factory('PDC',function($resource,$httpParamSerializer,BASE_URL, searchResource){
         var endpoint = BASE_URL + '/api/ach';
         /*
@@ -25668,7 +25737,7 @@ PDCCollections.js does the following
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", "ACH", function($log, Enrollment, SessionStore,$state,$stateParams, ACH){
 /*
 ACHMandateUpload.js is to Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
 either approved by bank/ rejected by bank) 
@@ -25697,7 +25766,10 @@ either approved by bank/ rejected by bank)
                             "category":"ACH",
                             "subCategory":"cat2",
                             "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            customHandle: function(file, progress, modelValue, form, model) {
+                                ACH.achMandateUpload(file, progress);
+                            }
                         },
                         {
                             "type": "button",

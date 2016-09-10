@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", function($log, Enrollment, SessionStore,$state,$stateParams){
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", "ACH", function($log, Enrollment, SessionStore,$state,$stateParams, ACH){
 /*
 ACHMandateUpload.js is to Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
 either approved by bank/ rejected by bank) 
@@ -28,7 +28,10 @@ either approved by bank/ rejected by bank)
                             "category":"ACH",
                             "subCategory":"cat2",
                             "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            customHandle: function(file, progress, modelValue, form, model) {
+                                ACH.achMandateUpload(file, progress);
+                            }
                         },
                         {
                             "type": "button",
