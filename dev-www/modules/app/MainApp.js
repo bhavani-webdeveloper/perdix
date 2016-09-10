@@ -5,14 +5,15 @@ MainApp.controller("MainController",
 function($scope, $log, SessionStore, Queries, $state) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
-
-	document.mainTitle = "Perdix Mobility | Alpha";
+	document.mainTitle = "Perdix Mobility";
 
 	$scope.isCordova = typeof(cordova) !== 'undefined';
 
 	$.getJSON("app_manifest.json", function(json) {
 		$scope.$apply(function(){
 			$scope.app_manifest = json;
+			$scope.appName = json.title;
+			document.mainTitle = json.name;
 		});
 		if ($scope.isCordova) {
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){

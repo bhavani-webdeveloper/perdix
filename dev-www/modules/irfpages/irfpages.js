@@ -103,7 +103,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 				}
 			}
 		} else {
-			$log.info("UserData is present in Session.")
+			$log.info("UserData is already in Session");
 			setProfilePreferences(authService.getUserData());
 		}
 		irfStorageService.cacheAllMaster(false);
