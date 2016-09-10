@@ -278,7 +278,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 title: "CUSTOMER_BANK_ACCOUNTS",
                 items: [
                     {
-                        key: "customer.bankAccounts",
+                        key: "customer.customerBankAccounts",
                         type: "array",
                         title: "BANK_ACCOUNTS",
                         startEmpty: true,
