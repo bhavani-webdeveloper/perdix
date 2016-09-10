@@ -396,7 +396,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "    }}&nbsp;</span>\n" +
     "\n" +
     "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:0;right:15px;padding:7px 9px 6px;\" href=\"\">\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -455,7 +455,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('$')}}\"\n" +
+    "          name=\"{{form.key.join('.')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -488,14 +488,9 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <input ng-if=\"form.readonly\"\n" +
-    "           ng-model=\"$$value$$\"\n" +
-    "           ng-disabled=\"form.readonly\"\n" +
-    "           type=\"text\"\n" +
-    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
-    "      ng-if=\"!form.readonly\"\n" +
+    "      ng-disabled=\"form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -620,7 +615,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
-    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -829,30 +823,6 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "    </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
-    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
-    "\n" +
-    "    </irf-progress-message>\n" +
-    "</div>\n" +
-    "")
-
-$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
-    "    <span class=\"a-wb-K-s\">\n" +
-    "        <span class=\"a-wb-ra-s\">\n" +
-    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
-    "        </span>\n" +
-    "        <div>\n" +
-    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
-    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
-    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
-    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
-    "                </svg>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "    </span>\n" +
-    "</div>\n" +
-    "")
-
 $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
     "    <div class=\"modal-content\">\n" +
@@ -888,6 +858,30 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
+    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
+    "\n" +
+    "    </irf-progress-message>\n" +
+    "</div>\n" +
+    "")
+
+$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
+    "    <span class=\"a-wb-K-s\">\n" +
+    "        <span class=\"a-wb-ra-s\">\n" +
+    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
+    "        </span>\n" +
+    "        <div>\n" +
+    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
+    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
+    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
+    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
+    "                </svg>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </span>\n" +
+    "</div>\n" +
+    "")
 
 $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<form\n" +
@@ -2624,6 +2618,64 @@ angular.module('irf.listView', ['irf.elements.commons'])
 }])
 ;
 
+angular.module('irf.pikaday', ['irf.elements.commons'])
+.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
+	// Runs during compile
+	return {
+		restrict: 'A',
+		require: '^ngModel',
+		scope: {
+			ngModel: '=',
+			form: '=irfPikaday'
+		},
+		link: function($scope, elem, attrs, ctrl) {
+			var datepicker = 'pikaday';
+			var pikadayOptions = {
+				// minDate: new Date(1800, 0, 1),
+				// maxDate: new Date(2050, 12, 31),
+				// yearRange: [1800,2050],
+				// format: 'YYYY-MM-DD'
+			};
+			angular.extend(pikadayOptions, elemConfig.pikaday);
+			if (!$scope.form.readonly) {
+				if (typeof cordova !== 'undefined' && window.datePicker) {
+					$(elem).next().on('click', function(){
+						window.datePicker.show({
+							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
+							mode: 'date'
+						}, function(date){
+							$log.info(date);
+							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
+							$(elem).val($scope.ngModel);
+							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+						});
+					});
+				} else {
+					pikadayOptions.field = $(elem).next()[0];
+					pikadayOptions.onSelect = function(date) {
+						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
+						$(elem).val($scope.ngModel);
+						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+					};
+					pikadayOptions.onDraw = function() {
+						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
+					};
+					var picker = new Pikaday(pikadayOptions);
+				}
+			}
+			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
+			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
+				if (n) {
+					if (pikadayOptions.dateDisplayFormat) {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+					} else {
+						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+					}
+				}
+			});
+		}
+	};
+}]);
 angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 .directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
 	return {
@@ -2684,6 +2736,13 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			$scope.inputSchema.properties[key] = s;
 		});
 
+		if ($scope.inputForm.length == 0) {
+			$scope.inputActions.submit();
+		} else {
+			$scope.inputForm.push({"type":"submit", "title":"Search"});
+			// $log.info($scope.inputForm);
+		}
+
 		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
 
 		angular.forEach(mergedInputForm, function(value, key){
@@ -2696,23 +2755,22 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 			return;
 		}
 
-		if ($scope.form.autolov) {
+		if ($scope.form.autolov && $scope.modelValue) {
 			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			self.init($scope.inputModel);
 			getSearchPromise().then(function(out){
 				if (out.body && out.body.length === 1) {
 					$scope.callback(out.body[0]);
 				} else {
 					displayListOfResponse(out);
-					self.launchLov(true, true);
+					self.launchLov();
 				}
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			}, function(){
-				self.launchLov(true, false);
+				self.launchLov();
 				$element.find('i').attr('class', 'fa fa-bars color-theme');
 			});
 		} else {
-			self.launchLov(false, false);
+			self.launchLov();
 		}
 	};
 
@@ -2720,16 +2778,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
 	};
 
-	self.launchLov = function(isInitialized, isSubmitted) {
-		if (!isInitialized) {
-			self.init($scope.inputModel);
-		}
-		if ($scope.inputForm.length) {
-			$scope.inputForm.push({"type":"submit", "title":"Search"});
-		} else if (!isSubmitted) {
-			$scope.inputActions.submit();
-		}
-
+	self.launchLov = function() {
 		$scope.modalWindow = $uibModal.open({
 			scope: $scope,
 			templateUrl: "irf/template/lov/modal-lov.html",
@@ -2740,14 +2789,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		});
 	};
 
-	self.init = function(model) {
-		if (angular.isFunction($scope.form.initialize)) {
-			$scope.form.initialize(model);
-		} else if ($scope.form.initialize) {
-			$scope.evalExpr($scope.form.initialize, {model:model});
-		}
-	};
-
 	$scope.inputActions = {};
 
 	var getSearchPromise = function() {
@@ -2755,7 +2796,7 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
 			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
-		} else if ($scope.form.search) {
+		} else {
 			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
 		}
 		return promise;
@@ -2781,16 +2822,9 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	$scope.callback = function(item) {
-		if ($scope.form.outputMap) {
-			elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
-		}
-		if ($scope.form.onSelect) {
-			if (angular.isFunction($scope.form.onSelect)) {
-				$scope.form.onSelect(item, $scope.parentModel, $scope.locals);
-			} else if ($scope.form.onSelect) {
-				$scope.evalExpr($scope.form.onSelect, {result:item, model:$scope.parentModel, context:$scope.locals});
-			}
-		}
+		$log.info("Selected Item->");
+		$log.info(item);
+		elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
 		self.close();
 	};
 
@@ -2801,64 +2835,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 }])
 ;
-angular.module('irf.pikaday', ['irf.elements.commons'])
-.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
-	// Runs during compile
-	return {
-		restrict: 'A',
-		require: '^ngModel',
-		scope: {
-			ngModel: '=',
-			form: '=irfPikaday'
-		},
-		link: function($scope, elem, attrs, ctrl) {
-			var datepicker = 'pikaday';
-			var pikadayOptions = {
-				// minDate: new Date(1800, 0, 1),
-				// maxDate: new Date(2050, 12, 31),
-				// yearRange: [1800,2050],
-				// format: 'YYYY-MM-DD'
-			};
-			angular.extend(pikadayOptions, elemConfig.pikaday);
-			if (!$scope.form.readonly) {
-				if (typeof cordova !== 'undefined' && window.datePicker) {
-					$(elem).next().on('click', function(){
-						window.datePicker.show({
-							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
-							mode: 'date'
-						}, function(date){
-							$log.info(date);
-							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
-							$(elem).val($scope.ngModel);
-							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-						});
-					});
-				} else {
-					pikadayOptions.field = $(elem).next()[0];
-					pikadayOptions.onSelect = function(date) {
-						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
-						$(elem).val($scope.ngModel);
-						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
-					};
-					pikadayOptions.onDraw = function() {
-						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
-					};
-					var picker = new Pikaday(pikadayOptions);
-				}
-			}
-			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
-			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
-				if (n) {
-					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
-					} else {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
-					}
-				}
-			});
-		}
-	};
-}]);
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -4656,11 +4632,9 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						}
 						break;
 					case 'centre':
-						r.data = $filter('filter')(r.data, {parentCode:branchId}, true);
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
-							if (ret.data[i].parentCode == branchId)
-								ret.data[i].value = Number(ret.data[i].code);
+                            ret.data[i].value = Number(ret.data[i].code);
 						}
                         // console.warn(ret);
 						break;
@@ -4832,7 +4806,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 				}
 			}
 		} else {
-			$log.info("UserData is present in Session.")
+			$log.info("UserData is already in Session");
 			setProfilePreferences(authService.getUserData());
 		}
 		irfStorageService.cacheAllMaster(false);
@@ -5753,14 +5727,15 @@ MainApp.controller("MainController",
 function($scope, $log, SessionStore, Queries, $state) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
-
-	document.mainTitle = "Perdix Mobility | Alpha";
+	document.mainTitle = "Perdix Mobility";
 
 	$scope.isCordova = typeof(cordova) !== 'undefined';
 
 	$.getJSON("app_manifest.json", function(json) {
 		$scope.$apply(function(){
 			$scope.app_manifest = json;
+			$scope.appName = json.title;
+			document.mainTitle = json.name;
 		});
 		if ($scope.isCordova) {
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
@@ -11638,7 +11613,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 title: "CUSTOMER_BANK_ACCOUNTS",
                 items: [
                     {
-                        key: "customer.bankAccounts",
+                        key: "customer.customerBankAccounts",
                         type: "array",
                         title: "BANK_ACCOUNTS",
                         startEmpty: true,

@@ -302,7 +302,7 @@
                                 "type": "integer"
                             },
                             "manufacturer":{
-                                "type":"string",
+                                "type":["null", "string"],
                                 "title":"MANUFACTURER"
                             },
                             "marginValue": {
@@ -320,7 +320,7 @@
 
                             },
                             "modelNo":{
-                                "type":"string",
+                                "type":["null", "string"],
                                 "title":"MODEL_NO"
 
                             },
