@@ -11666,12 +11666,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.customerBankAccounts[].ifscCode",
                                 type: "lov",
-                                autolov: true,
+                                lovonly: true,
                                 inputMap: {
                                     "ifscCode": {
                                         "key": "customer.customerBankAccounts[].ifscCode"
                                     },
-                                    "customerBankName": {
+                                    "bankName": {
                                         "key": "customer.customerBankAccounts[].customerBankName"
                                     },
                                     "branchName": {
@@ -11679,7 +11679,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 },
                                 outputMap: {
-                                    "customerBankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
                                     "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
                                     "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
                                 },
@@ -11687,7 +11687,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 search: function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.customerBankName,
+                                        'bankName': inputModel.bankName,
                                         'ifscCode': inputModel.ifscCode,
                                         'branchName': inputModel.branchName
                                     }).$promise;
