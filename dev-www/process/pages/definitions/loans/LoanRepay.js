@@ -98,6 +98,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         "items": [
                             {
                                 key:"repayment.accountId",
+                                title: "LOAN_ACCOUNT_NUMBER",
                                 readonly:true
                             },
                             {
@@ -139,10 +140,119 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "required": true,
                                 "titleMap": [
                                     {
-                                        name: "CASH",
+                                        name: "Cash",
                                         value: "CASH"
+                                    },
+                                    {
+                                        "name":"Cheque",
+                                        "value":"CHQ"
+                                    },
+                                    {
+                                        "name":"NEFT",
+                                        "value":"NEFT"
+                                    },
+                                    {
+                                        "name":"RTGS",
+                                        "value":"RTGS"
                                     }
+
                                 ]
+                            },
+                            {
+                                key:"repayment.checqueNumber",
+                                title:"CHEQUE_NUMBER",
+                                type:"Number",
+                                required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key:"repayment.chequeDate",
+                                title:"CHEQUE_DATE",
+                                type:"date",
+                                required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key:"repayment.ifscCode",
+                                title:"IFSC",
+                                type:"text",
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key:"repayment.chequeBank",
+                                title:"ISSUING_BANK",
+                                type:"text",
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key:"repayment.chequeBranch",
+                                title:"ISSUING_BRANCH",
+                                type:"text",
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key: "repayment.chequePhoto",
+                                title: "CHEQUE_PHOTO",
+                                condition:"model.repayment.instrument=='CHQ'",
+                                type: "file",
+                                fileType: "image/*",
+                                category: "noidea",
+                                subCategory: "absolutlynoidea"
+                            },
+                            {
+                                key:"repayment.NEFTReferenceNumber",
+                                title:"REFERENCE_NUMBER",
+                                type:"number",
+                                required: true,
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key:"repayment.NEFTDate",
+                                title:"DATE",
+                                type:"date",
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key:"repayment.ifscCode",
+                                title:"IFSC",
+                                type:"text",
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key:"repayment.NEFTBankDetails",
+                                title:"BANK_DETAILS",
+                                type:"text",
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key:"repayment.NEFTBranchDetails",
+                                title:"BRANCH_DETAILS",
+                                type:"text",
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key:"repayment.RTGSReferenceNumber",
+                                title:"REFERENCE_NUMBER",
+                                type:"text",
+                                condition:"model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key:"repayment.RTGSDate",
+                                title:"DATE",
+                                type:"text",
+                                condition:"model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key:"repayment.RTGSBankDetails",
+                                title:"BANK_DETAILS",
+                                type:"text",
+                                condition:"model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key:"repayment.RTGSBranchDetails",
+                                title:"BRANCH_DETAILS",
+                                type:"text",
+                                condition:"model.repayment.instrument=='RTGS'"
                             }
                         ]
                     },
@@ -206,6 +316,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "repaymentDate": {
                                     "type": "string",
                                     "title":"REPAYMENT_DATE",
+                                    readonly:true,
                                     "x-schema-form": {
                                         "type": "date"
                                     }

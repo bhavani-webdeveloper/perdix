@@ -24,7 +24,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.promise.urnNo=data.customerId1;
                 model.promise.instrument='CASH_IN'; 
                 model.promise.authorizationUsing='Testing-Swapnil';
-                model.promise.remarks='collections';
+                model.promise.remarks='';
                 model.promise.accountNumber = data.accountId;
                 model.promise.amount = data.totalDemandDue;
                 var currDate = moment(new Date()).format("YYYY-MM-DD");
@@ -178,54 +178,65 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         }
                     },
                     {
-                        key:"promise.promiseToPayDate",
-                        title:"PROMISE_TO_PAY_DATE",
-                        readonly:false,
-                        type:"date",
-                    },
-                    {
-                        key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
-                        title: "CUSTOMER_CATEGORY",
-                        type: "select",
-                        titleMap: {
-                            "A": "A",
-                            "B": "B",
-                            "C": "C",
-                            "D": "D"
-                        }
-                    },
-                    {
-                        key:"promise.reason",
-                        title:"REASON",
-                        type:"select",
-                        titleMap: [{
-                            "name":"Wilful default",
-                            "value":"Wilfuldefault"
+                     "type": "fieldset",
+                     "title": "PROMISE_TO_PAY_DETAILS",
+                     condition:"model.promise.customerAvailable==true",
+                     "items": [
+                        {
+                            key:"promise.promiseToPayDate",
+                            title:"PROMISE_TO_PAY_DATE",
+                            readonly:false,
+                            type:"date",
+                            
                         },
                         {
-                            "name":"Hardship",
-                            "value":"Hardship"
+                            key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
+                            title: "CUSTOMER_CATEGORY",
+                            type: "select",
+                            titleMap: {
+                                "A": "A",
+                                "B": "B",
+                                "C": "C",
+                                "D": "D"
+                            },
+                            
                         },
                         {
-                            "name":"Able to Pay",
-                            "value":"AbletoPay"
+                            key:"promise.reason",
+                            title:"REASON",
+                            type:"select",
+                            titleMap: [{
+                                "name":"Wilful default",
+                                "value":"Wilfuldefault"
+                            },
+                            {
+                                "name":"Hardship",
+                                "value":"Hardship"
+                            },
+                            {
+                                "name":"Able to Pay",
+                                "value":"AbletoPay"
+                            },
+                            {
+                                "name":"Others",
+                                "value":"Others"
+                            }],
+                            
                         },
+    					{
+    						key:"promise.overdueReasons",
+                            title:"OVERDUE_REASON",
+    						type:"textarea",
+                           // condition:"model.promise.reason=='Others'"
+                           
+    					},
                         {
-                            "name":"Others",
-                            "value":"Others"
+                            key:"promise.remarks",
+                            title:"REMARKS",
+                            type:"textarea",
+
                         }]
-                    },
-					{
-						key:"promise.overdueReasons",
-                        title:"OVERDUE_REASON",
-						type:"textarea",
-                       // condition:"model.promise.reason=='Others'"
-					},
-                    {
-                        key:"promise.remarks",
-                        title:"REMARKS",
-                        type:"textarea"
-                    }
+                    }    
 				]
 			}
 			,

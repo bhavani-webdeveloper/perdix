@@ -50,15 +50,15 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     /*"kyc_no": {
                         "title": "KYC_NO",
                         "type": "string"
-                    },
-                    "branch": {
+                    },*/
+                    "branchId": {
                         "title": "BRANCH_NAME",
-                        "type": "string",
+                        "type": ["null","string"],
                         "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
                         }
-                    },*/
+                    },
                     "centre": {
                         "title": "CENTRE",
                         "type": ['null', "integer"],
