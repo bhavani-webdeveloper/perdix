@@ -72,7 +72,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
-    pDef.getPageConfig = function(pageUri) {
+    pDef.getRolePageConfig = function(pageUri) {
         var deferred = $q.defer();
         if (userAllowedPages) {
             var p = userAllowedPages[pageUri];
@@ -93,6 +93,30 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
                 deferred.reject(errorResponse);
             });
         }
+        return deferred.promise;
+    };
+
+    var readOnlyFormCache = {};
+    pDef.setReadOnlyByRole = function(pageUri, form) {
+        var deferred = $q.defer();
+        pDef.getRolePageConfig(pageUri).then(function(config){
+            if (config) {
+                $log.info("config:");
+                $log.info(config);
+                if (!readOnlyFormCache[pageUri]) {
+                    readOnlyFormCache[pageUri] = form;
+                }
+                var f = _.cloneDeep(form);
+                for (var i = f.length - 1; i >= 0; i--) {
+                    f[i].readonly = !!config.readonly;
+                };
+                deferred.resolve(f);
+            } else if (readOnlyFormCache[pageUri]) {
+                $log.debug('resetting initial form');
+                deferred.resolve(readOnlyFormCache[pageUri]);
+            }
+            $log.info("Profile Page got initialized");
+        });
         return deferred.promise;
     };
 

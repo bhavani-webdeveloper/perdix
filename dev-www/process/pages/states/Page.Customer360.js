@@ -203,7 +203,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 				$scope.initialize(response);
 			});
 		}, function(errorResponse){
-
+			PageHelper.showErrors(errorResponse);
 		});
 	});
 

@@ -132,7 +132,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		$('#bottom-card-selector').remove();
 		$('section.content').css('min-height', '250px');
 
-		$scope.$apply(function(){$scope.collapsedView = false;});
+		$timeout(function(){$scope.collapsedView = false;});
 	};
 
 	var isBoxLayout = false;
@@ -159,7 +159,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				isBoxLayout = false;
 			}
 		}
-		$scope.$apply(function(){$scope.showCollapsedViewButton = !isBoxLayout;});
+		$timeout(function(){$scope.showCollapsedViewButton = !isBoxLayout;});
 	};
 
 	$scope.showCollapsedViewButton = true;

@@ -19,22 +19,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             var self = this;
-            self.formBkp = self.form;
-            PagesDefinition.getPageConfig("Page/Engine/customer360.CustomerProfile").then(function(config){
-                if (config) {
-                    $log.info("config:");
-                    $log.info(config);
-                    var f1 = _.cloneDeep(self.form);
-                    for (var i = f1.length - 1; i >= 0; i--) {
-                        f1[i].readonly = config.readonly;
-                    };
-                    self.form = f1;
-                } else {
-                    self.form = self.formBkp;
-                }
-                $log.info("Profile Page got initialized");
-                initData(model);
+            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.CustomerProfile", self.form).then(function(form){
+                self.form = form;
             });
+            initData(model);
         },
         modelPromise: function(pageId, _model) {
             if (!_model || !_model.customer || _model.customer.id != pageId) {
@@ -77,6 +65,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         form: [{
             "type": "box",
             "title": "CUSTOMER_INFORMATION",
+            "readonly": true,
             "items": [
                 {
                     key: "customer.idAndBcCustId",
@@ -223,6 +212,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         },{
             "type": "box",
             "title": "CONTACT_INFORMATION",
+            "readonly": true,
             "items":[{
                 type: "fieldset",
                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
@@ -285,6 +275,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         },{
             type:"box",
             title:"KYC",
+            "readonly": true,
             items:[
                 {
                     "key": "customer.aadhaarNo",
@@ -459,6 +450,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         {
             "type": "box",
             "title": "T_FAMILY_DETAILS",
+            "readonly": true,
             "items": [{
                 key:"customer.familyMembers",
                 type:"array",
@@ -584,48 +576,47 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     }
                 ]
             },
-                {
-                    "type": "fieldset",
-                    "title": "EXPENDITURES",
-                    "items": [{
-                        key:"customer.expenditures",
-                        type:"array",
-                        remove: null,
-                        view: "fixed",
-                        titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                        items:[{
+            {
+                "type": "fieldset",
+                "title": "EXPENDITURES",
+                "items": [{
+                    key:"customer.expenditures",
+                    type:"array",
+                    remove: null,
+                    view: "fixed",
+                    titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
+                    items:[{
+                        type: 'section',
+                        htmlClass: 'row',
+                        items: [{
                             type: 'section',
-                            htmlClass: 'row',
+                            htmlClass: 'col-xs-6',
                             items: [{
-                                type: 'section',
-                                htmlClass: 'col-xs-6',
-                                items: [{
-                                    key:"customer.expenditures[].frequency",
-                                    type:"select",
-                                    notitle: true
-                                }]
-                            },{
-                                type: 'section',
-                                htmlClass: 'col-xs-6',
-                                items: [{
-                                    key: "customer.expenditures[].annualExpenses",
-                                    type:"amount",
-                                    notitle: true
-                                }]
+                                key:"customer.expenditures[].frequency",
+                                type:"select",
+                                notitle: true
+                            }]
+                        },{
+                            type: 'section',
+                            htmlClass: 'col-xs-6',
+                            items: [{
+                                key: "customer.expenditures[].annualExpenses",
+                                type:"amount",
+                                notitle: true
                             }]
                         }]
                     }]
                 }]
+            }]
         },
         {
             "type":"box",
             "title":"BUSINESS_OCCUPATION_DETAILS",
+            "readonly": true,
             "items":[
                 {
                     key:"customer.udf.userDefinedFieldValues.udf13",
                     type:"select"
-
-
                 },
                 {
                     type:"fieldset",
@@ -719,12 +710,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         }
                     ]
                 }
-
             ]
         },
         {
             "type": "box",
             "title": "T_ASSETS",
+            "readonly": true,
             "items": [{
                 key: "customer.physicalAssets",
                 type: "array",
@@ -740,43 +731,43 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     }
                 ]
             },
-                {
-                    key: "customer.financialAssets",
-                    title:"FINANCIAL_ASSETS",
-                    type: "array",
-                    items: [
-                        {
-                            key:"customer.financialAssets[].instrumentType",
-                            type:"select"
-                        },
-                        "customer.financialAssets[].nameOfInstitution",
-                        {
-                            key:"customer.financialAssets[].instituteType",
-                            type:"select"
-                        },
-                        {
-                            key: "customer.financialAssets[].amountInPaisa",
-                            type: "amount"
-                        },
-                        {
-                            key:"customer.financialAssets[].frequencyOfDeposite",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.financialAssets[].startDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.financialAssets[].maturityDate",
-                            type:"date"
-                        }
-                    ]
-                }]
-
+            {
+                key: "customer.financialAssets",
+                title:"FINANCIAL_ASSETS",
+                type: "array",
+                items: [
+                    {
+                        key:"customer.financialAssets[].instrumentType",
+                        type:"select"
+                    },
+                    "customer.financialAssets[].nameOfInstitution",
+                    {
+                        key:"customer.financialAssets[].instituteType",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.financialAssets[].amountInPaisa",
+                        type: "amount"
+                    },
+                    {
+                        key:"customer.financialAssets[].frequencyOfDeposite",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.financialAssets[].startDate",
+                        type:"date"
+                    },
+                    {
+                        key:"customer.financialAssets[].maturityDate",
+                        type:"date"
+                    }
+                ]
+            }]
         },
         {
             type:"box",
             title:"T_LIABILITIES",
+            "readonly": true,
             items:[
                 {
                     key:"customer.liabilities",
@@ -824,6 +815,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         {
             "type": "box",
             "title": "T_HOUSE_VERIFICATION",
+            "readonly": true,
             "items": [
                 {
                     "key": "customer.firstName",
@@ -922,6 +914,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             ]
         },{
             "type": "actionbox",
+            "readonly": true,
             "items": [{
                 "type": "submit",
                 "title": "SUBMIT"
