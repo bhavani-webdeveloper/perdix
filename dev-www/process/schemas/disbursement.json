@@ -124,14 +124,10 @@
           "type": "string"
         },
         "udf4": {
-          "title": "DISBURSEMENT_CONFIRMATION_STATUS",
+          "title": "FINANCE_TEAM_REJECTION_REMARKS",
           "type":"string"
         },
         "udf5": {
-          "type": "string",
-          "title":"FINANCE_TEAM_REJECTION_REMARKS"
-        },
-        "udf6": {
           "type": "string",
           "title":"FINANCE_TEAM_REJECTION_REASON",
           "enumCode": "reject_reason"

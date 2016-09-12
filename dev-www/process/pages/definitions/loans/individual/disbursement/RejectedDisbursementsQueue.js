@@ -9,12 +9,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();
-                    model.stage = 'ReadyForDisbursement';
+                    model.stage = 'RejectedDisbursement';
                     console.log(model);
                 },
                 offline: false,
                 definition: {
-                    title: "ReadyForDisbursement",
+                    title: "REJECTED_DISBURSEMENT_QUEUE",
                     autoSearch: true,
                     sorting:true,
                     sortByColumns:{
@@ -55,7 +55,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                     },
                     getResultsPromise: function(searchOptions, pageOpts){
                         return IndividualLoan.searchDisbursement({
-                            'currentStage': 'ReadyForDisbursement',
+                            'currentStage': 'RejectedDisbursement',
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate
 

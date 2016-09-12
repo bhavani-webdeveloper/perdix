@@ -79,11 +79,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "title":"ACTUAL_DISBURSEMENT_DATE"
                     },
                     {
-                        "key":"loanAccountDisbursementSchedule.udf5",
+                        "key":"loanAccountDisbursementSchedule.udf4",
                         "title":"FINANCE_TEAM_REJECTION_REMARKS"
                     },
                     {
-                        "key":"loanAccountDisbursementSchedule.udf6",
+                        "key":"loanAccountDisbursementSchedule.udf5",
                         "title":"FINANCE_TEAM_REJECTION_REASON",
                         "type": "select"
                     },

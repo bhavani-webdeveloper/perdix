@@ -374,7 +374,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.otherFee",
+                                key:"loanAccount.processingFeeInPaisa",
                                 type:"amount"
                             },
                             {
@@ -387,7 +387,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"NET_DISBURSEMENT_AMOUNT"
                             },
                             {
-                                "key":"loanAccount.interestRate"
+                                "key":"loanAccount.interestRate",
+                                "type":"number"
                             },
                             {
                                 "key": "loanAccount.loanApplicationDate",
@@ -902,6 +903,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.loanAccount.disbursementSchedules[i].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
                             model.loanAccount.disbursementSchedules[i].ifscCode = model.loanAccount.customerBankIfscCode;
                             model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                        }
+                    }
+
+                    if (model.loanAccount.processingFeeInPaisa){
+                        if (model.loanAccount.processingFeeInPaisa > 0){
+                            model.loanAccount.processingFeeInPaisa = model.loanAccount.processingFeeInPaisa * 100;
                         }
                     }
 
