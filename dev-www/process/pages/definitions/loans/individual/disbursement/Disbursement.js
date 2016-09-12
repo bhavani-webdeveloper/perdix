@@ -366,10 +366,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         var accountId = model.loanAccountDisbursementSchedule.loanId;
                         model.loanAccountDisbursementSchedule.udf1 = "Rejected";
                         PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
+                        var reqloanAccountDisbursementSchedule = _.cloneDeep(model.loanAccountDisbursementSchedule);
 
-                        var reqData = _.cloneDeep(model);
+                        var reqData = {};
                         reqData.disbursementProcessAction = "PROCEED";
                         reqData.stage = "RejectedDisbursement";
+                        reqData.loanAccountDisbursementSchedule = reqloanAccountDisbursementSchedule;
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
                             PageHelper.showProgress("upd-disb","Done.","5000");
                             backToQueue();

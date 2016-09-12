@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCROQue
 function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager){
     return {
         "type": "search-list",
-        "title": "CRO Queue",
+        "title": "CRO_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");

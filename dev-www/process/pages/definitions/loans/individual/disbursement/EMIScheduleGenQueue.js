@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loan.individual.booking.EMIScheduleGenQueue
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
         "type": "search-list",
-        "title": "EMI Schedule Generation Queue",
+        "title": "EMI_SCH_GEN_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
