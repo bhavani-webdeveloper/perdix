@@ -174,7 +174,9 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         {
                             $log.info("Inside NoPayment()");
                             var reqParams = {
-                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId
+                                "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
+                                "remarks":model.creditvalidation.reject_remarks,
+                                "rejectReason":model.creditvalidation.reject_reason
                             };
                             LoanProcess.reject(reqParams,null, function(response){
                                 PageHelper.hideLoader();

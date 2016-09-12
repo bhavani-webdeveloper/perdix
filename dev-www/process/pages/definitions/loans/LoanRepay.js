@@ -67,8 +67,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.productCode=data.productCode;
                         model.repayment.urnNo=data.customerId1;
                         model.repayment.instrument='CASH';
-                        model.repayment.authorizationUsing='Testing-Swapnil';
-                        model.repayment.remarks='collections';
+                        model.repayment.authorizationUsing='';
+                        model.repayment.remarks='';
                         model.repayment.accountId = data.accountId;
                         model.repayment.amount = 0;
                         model.repayment.demandAmount = data.totalDemandDue;

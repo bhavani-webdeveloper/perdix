@@ -85,7 +85,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.installmentAmountInPaisa,
+                        'Amount Due: ' + item.overDueAmountInPaisa,
                         'Payment Type:' + item.paymentType
                     ]
                 },
