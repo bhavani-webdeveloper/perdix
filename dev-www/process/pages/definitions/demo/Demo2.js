@@ -26,6 +26,7 @@ irf.pageCollection.factory(irf.page("demo.Demo2"),
 
 
             },
+            
             form: [
                 {
                     "type":"box",

@@ -247,6 +247,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
+                            
+
+
                             "pincode": "customer.pincode",
                             "district": "customer.district",
                             "state": "customer.state"
