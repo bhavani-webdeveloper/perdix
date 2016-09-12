@@ -84,7 +84,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.udf6",
-                        title:"FINANCE_TEAM_REJECTION_REASON"
+                        "title":"FINANCE_TEAM_REJECTION_REASON",
+                        "type": "select"
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.udfDate1",
@@ -110,7 +111,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
                         reqData.disbursementProcessAction = "SAVE";
-                        reqData.stage = null;
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
 
                             reqData = _.cloneDeep(resp);

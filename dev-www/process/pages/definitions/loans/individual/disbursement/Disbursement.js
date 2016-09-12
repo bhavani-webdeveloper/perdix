@@ -260,7 +260,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         "key": "loanAccountDisbursementSchedule.udf2",
                         "title": "REJECTED_REASON",
-                        "enumCode": "reject_reason"
+                        "type":"select"
                     },
                     {
 
@@ -331,6 +331,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     function(data){
                                         PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                         model.additional.disbursementDone=true;
+                                        PageHelper.hideLoader();
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
 
                                     },
                                     function(res){

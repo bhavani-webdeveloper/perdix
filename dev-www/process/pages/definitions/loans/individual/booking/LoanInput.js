@@ -898,8 +898,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
-                        model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
-                        model.loanAccount.disbursementSchedules[0].ifscCode = model.loanAccount.customerBankIfscCode;
+                        for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                            model.loanAccount.disbursementSchedules[i].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
+                            model.loanAccount.disbursementSchedules[i].ifscCode = model.loanAccount.customerBankIfscCode;
+                            model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                        }
                     }
 
 

@@ -116,7 +116,8 @@
         },
         "udf2": {
           "title":"REJECTION_REMARKS",
-          "type": "string"
+          "type": "string",
+          "enumCode": "reject_reason"
         },
         "udf3": {
           "title":"REJECTION_REASON",
@@ -132,7 +133,8 @@
         },
         "udf6": {
           "type": "string",
-          "title":"FINANCE_TEAM_REJECTION_REASON"
+          "title":"FINANCE_TEAM_REJECTION_REASON",
+          "enumCode": "reject_reason"
         },
         "udfDate1": {
           "type": "string",
