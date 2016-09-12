@@ -1,43 +1,44 @@
 irf.pageCollection.factory(irf.page("lead.Leadgeneration"),
-["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition, Queries){
+["$log",  "Enrollment",  "SessionStore", "PageHelper","formHelper","Queries",
+function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
+
+     var branch = SessionStore.getBranch();
+
 
     return {
         "type": "schema-form",
         "title": "LEAD_GENERATION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
+            $log.info("create new lead generation page ");
             
         },
-        offline: true,
+
+        
       
-        },
+    
         form: [{
             "type": "box",
             "title": "",
             "items": [
-                {
-                    key: "currentDate",
-                    type: "select"
-                },
+            {
+                key:"currentDate",
+                type:"date"
+            },
+                
                 {
                     key:"HubName",
                     type:"select",
-                    filter: {
-                        "parentCode": "model.branchId"
-                    },
-                    parentEnumCode:"branch",
-                    screenFilter: true
+                    
+                
                 },
+
                 {
                     key: "SpokeName",
-                    title:"CUSTOMER_ID",
-                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
-                    condition: "model.customer.oldCustomerId",
-                    readonly: true
+                    title:"SPOKE_NAME",
+                    
                 },
+
                 ]
             },
     
@@ -52,8 +53,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     type: "fieldset",
                     title: "APPLICANT_DETAILS",
                     items: [
+
                         "Applicant.Name",
-                        "Applicant.MobileNumber",
+                        "Applicant.MobileNumber1",
                         "Applicant.AlternateMobileNumber"
                                 
                     ]
@@ -68,10 +70,45 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "Business.BusinessActivity",
                         "Business.BusinessAddressLine1",
                         "Business.AddressLine2",
-                        "Business.Pincode"
-                        "Business.State"
-                        "Business.District"
-                        "Business.Location"
+
+                        {
+
+                        key: "Business.Pincode",
+                        title:"PIN_CODE",
+                        type: "lov",
+                        fieldType: "number",
+                        autolov: true,
+                        inputMap: {
+                            "pincode": "Business.Pincode",
+                            "district": {
+                                key: "Business.District"
+                            },
+                            "state": {
+                                key: "Business.State"
+                            }
+                        },
+                        outputMap: {
+                        
+                            "pincode": "Business.pincode",
+                            "district": "Business.District",
+                            "state": "Business.State"
+                        },
+
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },
+                        
+                        "Business.State",
+                        "Business.District",
+                        "Business.Location",
                         "Business.Area"
 
                         ]
@@ -93,24 +130,30 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         
                         "LoanPurpose",
-                        "LoanAmountRequested",
+                        "LoanamountRequested",
                         {
-                            key:"LoanRequiredBy"
-                            type:"select"
-                        },
-                        {
-                            key:"DateOfScreening"
+                            key:"LoanRequiredBy",
                             type:"date"
                         },
                         {
-                            key:"FollowDate"
+                            key:"DateOfScreening",
                             type:"date"
                         },
                         {
-                            key:"ReasonforRejection"
-                            type:"select"
+                            key:"FollowUpdate",
+                            type:"date"
                         },
-                        "AdditionalRemarks",
+                        {
+                            key:"ReasonforRejection",
+                            type:"select",
+                            title:"REASON_FOR_REJECTION"
+                        },
+                        {
+                           key: "AdditionalRemarks",
+                           title:"ADDITIONAL_REMARKS"
+
+                        }
+                        
    
     
                     ]
@@ -135,7 +178,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
 
 
-        {
+        
+    schema:{
+
     "$schema":"http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
@@ -165,7 +210,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "NAME"
                  },
                  "MobileNumber1":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "MOBILE_NUMBER1"
                  },
                  "AlternateMobileNumber":{
@@ -185,7 +230,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "BUSINESS_NAME"
                  },
                  "BusinessType":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "BUSINESS_TYPE"
                  },
                  "BusinessActivity":{
@@ -198,11 +243,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "BUSINESS_ADDRESS_LINE1"
                  },
                  "AddressLine2":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "ADDRESS_LINE2"
                  },
                  "PinCode":{
-                      "type": "Number",
+                      
                       "title": "PIN_CODE"
                  },
                  "State":{
@@ -210,7 +255,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "STATE"
                  },
                  "District":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "DISTRICT"
                  },
                  "Location":{
@@ -231,11 +276,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "INTERESTED_IN_LOAN"
                  },
                  "LoanPurpose":{
-                      "type": "Number",
+                      "type": "string",
                       "title": "LOAN_PURPOSE"
                  },
-                 "LoanAmountRequested":{
-                      "type": "string",
+                 "LoanamountRequested":{
+                      "type": "number",
                       "title": "LOAN_AMOUNT_REQUESTED"
                  },
                  "LoanRequiredBy":{
@@ -243,7 +288,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                       "title": "LOAN_REQUIRED_BY"
                  },
                  "DateOfScreening":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "DATE_OF_SCREENING"
                  },
                  "FollowUpdate":{
