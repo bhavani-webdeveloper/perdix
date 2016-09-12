@@ -14,16 +14,17 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             //PageHelper
             var loanAccountNo = $stateParams.pageId;
             var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+            model.additional = {};
             promise.then(function (data) { /* SUCCESS */
                 model.P2PUpdate = data;
                 console.log(data);
                 model.promise = model.promise || {};
                 model.promise.customerName=data.customer1FirstName;
                 model.promise.productCode=data.productCode;
-                model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
-                model.promise.urnNo=data.customerId1;
-                model.promise.instrument='CASH_IN'; 
-                model.promise.authorizationUsing='Testing-Swapnil';
+                //model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
+                //model.promise.urnNo=data.customerId1;
+                //model.promise.instrument='CASH_IN'; 
+                model.promise.authorizationUsing="";
                 model.promise.remarks='';
                 model.promise.accountNumber = data.accountId;
                 model.promise.amount = data.totalDemandDue;
@@ -46,6 +47,20 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             .finally(function () {
                 PageHelper.hideLoader();
             })
+
+            if(model._screen && model._screen == "BouncePromiseQueue"){
+                model.additional.fromBouncePromiseQueue = true;
+                model.additional.fromBounceQueue = false;
+            }else if(model._screen && model._screen == "BounceQueue"){
+                model.additional.fromBouncePromiseQueue = false;
+                model.additional.fromBounceQueue = true;
+            }
+            else{
+                model.additional.fromBouncePromiseQueue = false;
+                model.additional.fromBounceQueue = false;
+            }
+
+
            
            /* if (!model._bounce) {
                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
@@ -180,7 +195,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                      "type": "fieldset",
                      "title": "PROMISE_TO_PAY_DETAILS",
-                     condition:"model.promise.customerAvailable==true",
                      "items": [
                         {
                             key:"promise.promiseToPayDate",
@@ -193,6 +207,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             key: "promise.customerCategoryLoanOfficer", // When User change this condition should also change
                             title: "CUSTOMER_CATEGORY",
                             type: "select",
+                            "condition":"model.additional.fromBounceQueue==true",
                             titleMap: {
                                 "A": "A",
                                 "B": "B",
@@ -202,7 +217,20 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             
                         },
                         {
-                            key:"promise.reason",
+                            key: "promise.customerCategoryHubManager", // When User change this condition should also change
+                            title: "CUSTOMER_CATEGORY",
+                            type: "select",
+                            "condition":"model.additional.fromBouncePromiseQueue==true",
+                            titleMap: {
+                                "A": "A",
+                                "B": "B",
+                                "C": "C",
+                                "D": "D"
+                            },
+                            
+                        },
+                        {
+                            key:"additional.reason",
                             title:"REASON",
                             type:"select",
                             titleMap: [{
@@ -224,10 +252,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             
                         },
     					{
-    						key:"promise.overdueReasons",
+    						key:"additional.overdueReasons",
                             title:"OVERDUE_REASON",
     						type:"textarea",
-                           // condition:"model.promise.reason=='Others'"
+                           "condition":"model.additional.reason=='Others'"
                            
     					},
                         {
@@ -258,10 +286,34 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 				$log.info("Inside submit()");
 				console.warn(model);
 				PageHelper.showLoader();
+                if (model.additional.reason && model.additional.reason == "Others")
+                    model.promise.overdueReasons = model.additional.overdueReasons;
+                else
+                    model.promise.overdueReasons = model.additional.reason;
+                $log.info("going to submit");
+                $log.info(model._screen);
+
+                if (model.previousPromise){
+                    if(model._screen && model._screen == "BouncePromiseQueue"){
+                        model.promise.customerCategoryLoanOfficer = model.previousPromise.customerCategoryLoanOfficer;
+                    }else if (model._screen && model._screen == "BounceRecoveryQueue"){
+                        model.promise.customerCategoryLoanOfficer = model.previousPromise.customerCategoryLoanOfficer;
+                        model.promise.customerCategoryHubManager = model.previousPromise.customerCategoryHubManager;
+                    }else{
+                        model.promise.customerCategoryHubManager = model.previousPromise.customerCategoryHubManager;
+                    }
+                }
+                $log.info(model.promise.customerCategoryLoanOfficer);
+                $log.info(model.promise.customerCategoryHubManager);
 
                 LoanProcess.p2pUpdate(model.promise, function(response){
                     PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                    if(model._screen && model._screen == "BouncePromiseQueue")
+                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.BouncePromiseQueue', pageId: null});
+                    else if(model._screen && model._screen == "BounceRecoveryQueue")
+                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceRecoveryQueue', pageId: null});
+                    else if(model._screen && model._screen == "BounceQueue")
+                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();

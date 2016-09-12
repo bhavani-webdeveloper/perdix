@@ -116,8 +116,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
-                                "required": true,
-                                "titleMap":_pageGlobals.transactionNames
+                                "required": true
                             },
                             {
                                 "type": "fieldset",
@@ -327,7 +326,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 "transactionName": {
                                     "type": "string",
-                                    "title":"TRANSACTION_NAME"
+                                    "title":"TRANSACTION_NAME",
+                                    "enumCode":"repayment_transaction_name",
 
                                 },
                                 "urnNo": {
@@ -373,6 +373,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         return deferred.promise;
                     },
                     submit: function (model, formCtrl, formName) {
+                        if (model.repayment.demandAmount > 0 && model.repayment.transactionName == "Advance Repayment"){
+                            PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
+                            return false;
+                        }
                         $log.info("Inside submit");
                         if(window.confirm("Are you Sure?")){
                             PageHelper.showLoader();
