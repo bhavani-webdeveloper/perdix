@@ -10,6 +10,8 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
         "title": "LEAD_GENERATION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
+
+
             $log.info("create new lead generation page ");
             
         },
@@ -126,14 +128,45 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
                     items:[
                         {
                             key:"InterestedInLoan",
-                            type:"select"
+                            type:"select",
+                            titleMap:{
+                                "Yes":"Yes",
+                                "No":"No"
+                            }
+                        },
+
+                        {
+                            key:"LoanPurpose",
+                            type:"select",
+                            titleMap:{
+                                "AssetPurchase":"AssetPurchase",
+                                "WorkingCapital":"WorkingCapital",
+                                "BusinessDevelopment":"BusinessDevelopment",
+                                "LineOfCredit":"LineOfCredit",
+                                
+
+                            }
                         },
                         
-                        "LoanPurpose",
-                        "LoanamountRequested",
+                    
+                        {
+                            key:"LoanamountRequested",
+                            title:"Loan_Amount_Requested"
+
+                        },
+
                         {
                             key:"LoanRequiredBy",
-                            type:"date"
+                            type:"select",
+                            titleMap:{
+                                "In this week":"In this week",
+                                "In this month":"In this month",
+                                "Next 2 -3 months":"Next 2 -3 months",
+                                "Next 4-6 months":"Next 4-6 months",
+                                
+
+                            }
+
                         },
                         {
                             key:"DateOfScreening",
@@ -217,7 +250,12 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
                       "type": "string",
                       "title": "ALTERNATE_MOBILE_NUMBER"
                  },
-               }
+               },
+
+                "required": [
+                            "Name",
+                            "MobileNumber1"
+                        ]
              },
 
              "Business":
@@ -268,11 +306,19 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
                  },
                 
 
-              }
+              },
+               "required": [
+                            "BusinessAddressLine1",
+                            "Area",
+                            "BusinessName",
+                            "BusinessType",
+                            "BusinessActivity"
+
+                        ]
              },
 
              "InterestedInLoan":{
-                      "type": "boolean",
+                      "type": "string",
                       "title": "INTERESTED_IN_LOAN"
                  },
                  "LoanPurpose":{
@@ -281,7 +327,7 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
                  },
                  "LoanamountRequested":{
                       "type": "number",
-                      "title": "LOAN_AMOUNT_REQUESTED"
+                      
                  },
                  "LoanRequiredBy":{
                       "type": "string",
@@ -296,11 +342,35 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
                       "title": "FOLLOWUP_DATE"
                  },
 
+                 
 
 
 
-           }
-         }
+
+
+           },
+
+           "required": [
+                            "InterestedInLoan",
+                            "LoanPurpose",
+                            "LoanamountRequested",
+                            "LoanRequiredBy",
+                            "DateOfScreening",
+                            "FollowUpdate",
+                            "currentDate",
+                            "HubName"
+                        ]
+
+
+         },
+
+         actions: {
+                submit: function(model, form, formName){
+                }
+            }
+
+          
+
      };
  }
  ]);
