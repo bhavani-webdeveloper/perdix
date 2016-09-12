@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("lead.Leadgeneration"),
-["$log",  "Enrollment",  "SessionStore", "PageHelper","formHelper","Queries",
-function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
+["$log",  "Enrollment",  "SessionStore", "PageHelper","formHelper","Queries","lead",
+function($log, lead, Enrollment,  SessionStore,PageHelper,formHelper,Queries){
 
      var branch = SessionStore.getBranch();
 
@@ -210,159 +210,14 @@ function($log,  Enrollment,  SessionStore,PageHelper,formHelper,Queries){
         ],
 
 
+        schema: function() {
+                return lead.getSchema().$promise;
+            },
+
+
 
         
-    schema:{
-
-    "$schema":"http://json-schema.org/draft-04/schema#",
-    "type": "object",
-    "properties": {
-        
-                 "currentDate":{
-                      "type": "string",
-                      "title": "CURRENT_DATE"
-                 },
-                 "HubName":{
-                      "type": "string",
-                      "title": "HUB_NAME"
-
-                 },
-                 "SpokeName":{
-                      "type": "string",
-                      "title": "AMOUNT"
-                 },
-
-                 "Applicant":
-                 {
-                  "type":"object",
-                  "title":"APPLICANT",
-                  "properties": {
-
-                    "Name":{
-                      "type": "string",
-                      "title": "NAME"
-                 },
-                 "MobileNumber1":{
-                      "type": "number",
-                      "title": "MOBILE_NUMBER1"
-                 },
-                 "AlternateMobileNumber":{
-                      "type": "string",
-                      "title": "ALTERNATE_MOBILE_NUMBER"
-                 },
-               },
-
-                "required": [
-                            "Name",
-                            "MobileNumber1"
-                        ]
-             },
-
-             "Business":
-             {
-              "type":"object",
-              "title":"Business",
-              "properties":{
-                "BusinessName":{
-                      "type": "string",
-                      "title": "BUSINESS_NAME"
-                 },
-                 "BusinessType":{
-                      "type": "number",
-                      "title": "BUSINESS_TYPE"
-                 },
-                 "BusinessActivity":{
-                      "type": "string",
-                      "title": "BUSINESS_ACTIVITY"
-                 },
-
-                 "BusinessAddressLine1":{
-                      "type": "string",
-                      "title": "BUSINESS_ADDRESS_LINE1"
-                 },
-                 "AddressLine2":{
-                      "type": "number",
-                      "title": "ADDRESS_LINE2"
-                 },
-                 "PinCode":{
-                      
-                      "title": "PIN_CODE"
-                 },
-                 "State":{
-                      "type": "string",
-                      "title": "STATE"
-                 },
-                 "District":{
-                      "type": "number",
-                      "title": "DISTRICT"
-                 },
-                 "Location":{
-                      "type": "string",
-                      "title": "LOCATION"
-                 },
-                 "Area":{
-                      "type": "string",
-                      "title": "AREA"
-                 },
-                
-
-              },
-               "required": [
-                            "BusinessAddressLine1",
-                            "Area",
-                            "BusinessName",
-                            "BusinessType",
-                            "BusinessActivity"
-
-                        ]
-             },
-
-             "InterestedInLoan":{
-                      "type": "string",
-                      "title": "INTERESTED_IN_LOAN"
-                 },
-                 "LoanPurpose":{
-                      "type": "string",
-                      "title": "LOAN_PURPOSE"
-                 },
-                 "LoanamountRequested":{
-                      "type": "number",
-                      
-                 },
-                 "LoanRequiredBy":{
-                      "type": "string",
-                      "title": "LOAN_REQUIRED_BY"
-                 },
-                 "DateOfScreening":{
-                      "type": "number",
-                      "title": "DATE_OF_SCREENING"
-                 },
-                 "FollowUpdate":{
-                      "type": "string",
-                      "title": "FOLLOWUP_DATE"
-                 },
-
-                 
-
-
-
-
-
-           },
-
-           "required": [
-                            "InterestedInLoan",
-                            "LoanPurpose",
-                            "LoanamountRequested",
-                            "LoanRequiredBy",
-                            "DateOfScreening",
-                            "FollowUpdate",
-                            "currentDate",
-                            "HubName"
-                        ]
-
-
-         },
+    
 
          actions: {
                 submit: function(model, form, formName){

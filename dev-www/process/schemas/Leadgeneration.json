@@ -1,4 +1,5 @@
 {
+
     "$schema":"http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
@@ -28,14 +29,19 @@
                       "title": "NAME"
                  },
                  "MobileNumber1":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "MOBILE_NUMBER1"
                  },
                  "AlternateMobileNumber":{
                       "type": "string",
                       "title": "ALTERNATE_MOBILE_NUMBER"
                  },
-               }
+               },
+
+                "required": [
+                            "Name",
+                            "MobileNumber1"
+                        ]
              },
 
              "Business":
@@ -48,7 +54,7 @@
                       "title": "BUSINESS_NAME"
                  },
                  "BusinessType":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "BUSINESS_TYPE"
                  },
                  "BusinessActivity":{
@@ -61,11 +67,11 @@
                       "title": "BUSINESS_ADDRESS_LINE1"
                  },
                  "AddressLine2":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "ADDRESS_LINE2"
                  },
                  "PinCode":{
-                      "type": "Number",
+                      
                       "title": "PIN_CODE"
                  },
                  "State":{
@@ -73,7 +79,7 @@
                       "title": "STATE"
                  },
                  "District":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "DISTRICT"
                  },
                  "Location":{
@@ -86,27 +92,35 @@
                  },
                 
 
-              }
+              },
+               "required": [
+                            "BusinessAddressLine1",
+                            "Area",
+                            "BusinessName",
+                            "BusinessType",
+                            "BusinessActivity"
+
+                        ]
              },
 
              "InterestedInLoan":{
-                      "type": "boolean",
+                      "type": "string",
                       "title": "INTERESTED_IN_LOAN"
                  },
                  "LoanPurpose":{
-                      "type": "Number",
+                      "type": "string",
                       "title": "LOAN_PURPOSE"
                  },
-                 "LoanAmountRequested":{
-                      "type": "string",
-                      "title": "LOAN_AMOUNT_REQUESTED"
+                 "LoanamountRequested":{
+                      "type": "number",
+                      
                  },
                  "LoanRequiredBy":{
                       "type": "string",
                       "title": "LOAN_REQUIRED_BY"
                  },
                  "DateOfScreening":{
-                      "type": "Number",
+                      "type": "number",
                       "title": "DATE_OF_SCREENING"
                  },
                  "FollowUpdate":{
@@ -114,14 +128,24 @@
                       "title": "FOLLOWUP_DATE"
                  },
 
-
-
-
-           }
-         }
-
-
-                    
-
-
                  
+
+
+
+
+
+           },
+
+           "required": [
+                            "InterestedInLoan",
+                            "LoanPurpose",
+                            "LoanamountRequested",
+                            "LoanRequiredBy",
+                            "DateOfScreening",
+                            "FollowUpdate",
+                            "currentDate",
+                            "HubName"
+                        ]
+
+
+         },
