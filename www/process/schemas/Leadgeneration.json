@@ -23,7 +23,7 @@
                   "title":"APPLICANT",
                   "properties": {
 
-                    "name":{
+                    "Name":{
                       "type": "string",
                       "title": "NAME"
                  },

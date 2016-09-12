@@ -23,9 +23,7 @@ MainApp.controller("irfMainMenuController", [
 	$scope.photo = SessionStore.getPhoto();
 
 	$http.get("process/MenuDefinition.json").then(function(response){
-		PagesDefinition
-		.getUserAllowedDefinition(response.data)
-		.then(function(resp){
+		PagesDefinition.getUserAllowedDefinition(response.data).then(function(resp){
 			$scope.definition = resp;
 			$.AdminLTE.layout.activate();
 			$.AdminLTE.tree('.sidebar');
@@ -59,6 +57,9 @@ MainApp.controller("irfMainMenuController", [
 			adminLteSidemenuFixOnSmallScreen();
 			updateAppTitle(menu.title);
 			window.scrollTo(0,0);
+		}
+		if (angular.isFunction(menu.onClick)) {
+			menu.onClick(event, menu);
 		}
 	};
 

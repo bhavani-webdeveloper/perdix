@@ -1,8 +1,7 @@
-irf.models.factory('Bank',[
-    "$resource","$httpParamSerializer","BASE_URL","searchResource",
-    function($resource,$httpParamSerializer,BASE_URL,searchResource){
+irf.models.factory('Bank', [
+    "$resource", "$httpParamSerializer", "BASE_URL", "searchResource",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource) {
         var endpoint = BASE_URL + '/api';
-
 
         return $resource(endpoint, null, {
             getBankAccounts: {
@@ -10,6 +9,6 @@ irf.models.factory('Bank',[
                 url: endpoint + '/bankaccounts',
                 isArray: true
             }
-        });B
-
-    }]);
+        });
+    }
+]);

@@ -1,5 +1,5 @@
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore",
-    function($resource, $log, BASE_URL, $q, Queries, SessionStore){
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
+    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
@@ -36,9 +36,25 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
                     md.splice(i, 1);
                 }
             } else if (angular.isObject(md[i])) {
-                md[i].items = __parseMenuDefinition(allowedPages, menuMap, md[i].items);
-                if (!md[i].items || md[i].items.length == 0) {
-                    md.splice(i, 1);
+                if (md[i].items) {
+                    // SUBMENU
+                    md[i].items = __parseMenuDefinition(allowedPages, menuMap, md[i].items);
+                    if (!md[i].items || md[i].items.length == 0) {
+                        md.splice(i, 1);
+                    }
+                } else if (md[i].link || md[i].linkId) {
+                    // LINKS
+                    var l = md[i].link;
+                    if (md[i].linkId) {
+                        var lid = md[i].linkId;
+                        md[i].onClick = function(event, menu) {
+                            Link[lid](event, menu, l);
+                        };
+                    } else {
+                        md[i].onClick = function(event, menu) {
+                            window.open(event, menu, l);
+                        };
+                    }
                 }
             }
         }
@@ -55,8 +71,6 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         }
         return null;
     };
-
-    pDef.parseMenuDefinition = parseMenuDefinition;
 
     pDef.getUserAllowedDefinition = function(menuDef) {
         var deferred = $q.defer();

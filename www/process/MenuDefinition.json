@@ -57,11 +57,21 @@
 					"items": [
 						"Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
 						"Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
-						"Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue"
+						"Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
+						"Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
+						"Page/Engine/loans.individual.disbursement.PendingFROQueue",
+						"Page/Engine/loans.individual.disbursement.PendingCROQueue",
+						"Page/Engine/loan.individual.booking.EMIScheduleGenQueue"
 					]
 				}
 			]
 		},
-		"Page/Engine/CentrePaymentCollection"
+		"Page/Engine/CentrePaymentCollection",
+		{
+			"title": "BI_LINK",
+			"iconClass": "fa fa-area-chart",
+			"linkId": "BI_LINK1",
+			"link": "http://www.heromotocorp.com/en-in/reach-us/book-bike-service-appointment.html"
+		}
 	]
 }

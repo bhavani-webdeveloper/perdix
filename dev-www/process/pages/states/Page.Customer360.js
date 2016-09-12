@@ -1,8 +1,8 @@
 irf.pages.controller("Customer360Ctrl",
 ["$log", "$scope", "$stateParams", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
-"entityManager", "Utils",
+"entityManager", "Utils", "PageHelper",
 function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
-	entityManager, Utils){
+	entityManager, Utils, PageHelper){
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
@@ -211,20 +211,19 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		$log.info(data);
 		$scope.model = {customer: data};
 		$scope.introFormName = "introForm";
+		$scope.pageTitle = 'CUSTOMER_360';
 		if (data.customerType === 'Enterprise') {
 			$scope.introForm = enterprisePortfolioForm;
-			$scope.pageTitle = 'BUSINESS_360';
+			//$scope.pageTitle = 'BUSINESS_360';
 		} else {
 			$scope.introForm = customerPortfolioForm;
-			$scope.pageTitle = 'CUSTOMER_360';
 		}
 		$log.info($scope.pageTitle);
 
 		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
 		$scope.model.customer.fullName = Utils.getFullName(data.firstName, data.middleName, data.lastName);
 
-		$scope.dashboardDefinition.title = (data.urnNo ? (data.urnNo + ": ") : "")
-			+ $scope.model.customer.fullName;
+		$scope.dashboardDefinition.title = /*(data.urnNo ? (data.urnNo + ": ") : "") + */$scope.model.customer.fullName;
 
 		$scope.model.customer.idAndUrn = data.id + ' | ' + data.urnNo;
 

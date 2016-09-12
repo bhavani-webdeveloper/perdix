@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer360.BusinessProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition", "$stateParams",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "$stateParams", "$timeout",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition, $stateParams){
+    PageHelper, Utils, BiometricService, PagesDefinition, $stateParams, $timeout){
 
     var branch = SessionStore.getBranch();
 
@@ -29,7 +29,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             }
             PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.BusinessProfile", self.form).then(function(form){
                 self.form = [];
-                self.form = form;
+                $timeout(function(){
+                    self.form = form;
+                });
             });
         },
         modelPromise: function(pageId, _model) {
