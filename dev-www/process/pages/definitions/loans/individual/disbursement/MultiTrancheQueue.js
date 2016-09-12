@@ -11,7 +11,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
             model.stage = 'MTDisbursementDataCapture';
         },
         definition: {
-            title: "SEARCH_CONDITION",
+            title: "SEARCH",
             autoSearch: true,
             sorting:true,
             sortByColumns:{

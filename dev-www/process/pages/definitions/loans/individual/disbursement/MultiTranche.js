@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"),
-["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper", 
+function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper){
 
     var branch = SessionStore.getBranch();
 
@@ -15,8 +16,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
                 $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.MultiTrancheQueue', pageId: null});
                 return;
             }
-            model.tranche = {};
-            model.tranche = _.cloneDeep(model._MTQueue);
+            model.loanAccountDisbursementSchedule = {};
+            model.loanAccountDisbursementSchedule = _.cloneDeep(model._MTQueue);
+            model.loanAccountDisbursementSchedule.actualDisbursementDate = "";
+            model.loanAccountDisbursementSchedule.customerSignatureDate = "";
+            model.loanAccountDisbursementSchedule.scheduledDisbursementDate = "";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -24,24 +28,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
         },
         form: [{
             "type": "box",
-            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model._MTQueue.accountNumber",
             "items": [
                 {
-                    "key": "tranche.trancheNumber",
+                    "key": "loanAccountDisbursementSchedule.trancheNumber",
                     "title": "TRANCHE_NUMBER"
                 },
                 {
-                    "key": "tranche.scheduledDisbursementDate",
+                    "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                     "title": "DISBURSEMENT_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "tranche.customerSignatureDate",
-                    "title": "CUSTOMER_SIGN_DATE",
+                    "key": "loanAccountDisbursementSchedule.customerSignatureDate",
+                    "title": "CUSTOMER_SIGNATURE_DATE",
                     "type": "date"
                 },
                 {
-                    "key": "tranche.remarks",
+                    "key": "loanAccountDisbursementSchedule.remarks",
                     "title": "REMARKS"
                 },
                 {
@@ -54,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"
             ]
         }],
         schema: function() {
-            return IndividualLoan.getSchema().$promise;
+            return SchemaResource.getDisbursementSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
