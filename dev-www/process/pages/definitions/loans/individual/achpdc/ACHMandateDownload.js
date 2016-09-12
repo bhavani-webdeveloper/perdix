@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
                         },
                         {
                             "type":"fieldset",
-                            "title":"Upload Status",
+                            "title":"UPLOAD_STATUS",
                             "items":[{
                                     "key": "ach.achMandateFileId",
                                     "type": "file",

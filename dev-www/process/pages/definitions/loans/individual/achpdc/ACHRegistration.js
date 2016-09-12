@@ -88,40 +88,49 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						"key": "ach.accountId",
 						"title": "LOAN_ID",
 						"readonly": true
-					}, {
+					},
+					{
 						"key": "ach.branchName",
 						"title": "BRANCH_NAME",
 						"readonly": true
-					}, {
+					},
+					{
 						"key": "ach.CentreCode",
 						"title": "CENTRE_CODE",
 						"readonly": true
-					}, {
+					},
+					{
 						"key": "ach.customerName",
 						"title": "ENTITY_NAME",
 						"readonly": true
-					}, {
+					},
+					{
 						"key": "ach.applicantName",
 						"title": "APPLICANT_NAME",
 						"readonly": true
-					}, {
+					},
+					{
 						"key": "ach.coApplicantName",
 						"title": "COAPPLICANT_NAME",
 						"readonly": true
 					}]
-				}, {
+				},
+				{
 					"type": "fieldset",
 					"title": "ACH_DETAILS",
 					"items": [{
 							"key": "ach.accountHolderName",
 							"title": "ACCOUNT_HOLDER_NAME"
-						}, {
+						},
+						{
 							"key": "ach.accountType",
 							"title": "ACCOUNT_TYPE"
-						}, {
+						},
+						{
 							"key": "ach.bankAccountNumber",
 							"title": "BANK_ACCOUNT_NUMBER"
-						}, {
+						},
+						{
 							"key": "ach.ifscCode",
 							"title": "IFSC_CODE",
 							"type": "lov",
@@ -131,26 +140,33 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 									"title": "IFSC_CODE"
 								}
 							}
-						}, {
+						},
+						{
 							"key": "ach.branchName",
 							"title": "BRANCH_NAME"
-						}, {
+						},
+						{
 							"key": "ach.bankName",
 							"title": "BANK_NAME"
-						}, {
+						},
+						{
 							"key": "ach.bankCity",
 							"title": "BANK_CITY"
-						}, {
+						},
+						{
 							"key": "ach.mandateApplicationId",
 							"title": "MANDATE_APPLICATION_ID"
-						}, {
+						},
+						{
 							"key": "ach.mandateFilePath",
 							"title": "MANDATE_FILE_PATH"
-						}, {
+						},
+						{
 							"key": "ach.mandateId",
 							"title": "MANDATE_ID",
 							"type": "Number"
-						}, {
+						},
+						{
 							"key": "ach.mandateOpenDate",
 							"title": "MANDATE_OPEN_DATE",
 							"type": "date"
@@ -158,67 +174,105 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						"ach.mandateStatus", {
 							"key": "ach.maximumAmount",
 							"title": "MAX_ACH_AMOUNT"
-						}, {
+						},
+						{
 							"key": "ach.frequency",
 							"title": "FREQUENCY",
 							"type": "select",
 							"enumCode": "ach_frequency"
-						}, {
+						},
+						{
 							"key": "ach.micr",
 							"title": "MICR"
-						}, {
+						},
+						{
 							"key": "ach.achStartDate",
 							"title": "START_DATE",
 							"type": "date"
-						}, {
+						},
+						{
 							"key": "ach.achEndDate",
 							"title": "END_DATE",
 							"type": "date"
-						}, {
+						},
+						{
 							"key": "ach.phoneNo",
 							"title": "MOBILE_PHONE"
-						}, {
+						},
+						{
 							"key": "ach.emailId",
 							"title": "EMAIL"
-						}, {
+						},
+						{
 							"key": "ach.reference1",
 							"title": "REFERENCE1"
-						}, {
+						},
+						{
 							"key": "ach.reference2",
 							"title": "REFERENCE2"
-						}, {
+						},
+						{
 							"key": "ach.sponsorAccountCode",
 							"title": "SPONSOR_ACCOUNT_CODE"
-						}, {
+						},
+						{
 							"key": "ach.sponsorBankCode",
 							"title": "SPONSOR_BANK_CODE"
-						}, {
+						},
+						{
 							"key": "ach.umrn",
 							"title": "UMRN"
-						}, {
+						},
+						{
 							"key": "ach.utilityCode",
 							"title": "UTILITY_CODE"
-						}, {
+						},
+						{
 							"key": "ach.verificationStatus",
-							"title": "VERIFICATION_STATUS"
-						}, {
+							"title": "VERIFICATION_STATUS",
+							"type": "select",
+							"enumCode": "ach_verification"
+						},
+						{
 							"key": "ach.registrationDate",
 							"title": "REGISTRATION_DATE",
 							"type": "date"
-						}, {
+						},
+						{
 							"key": "ach.remarks",
 							"title": "remarks"
-						}
+						},
+						{
+		                    "type":"fieldset",
+		                    "title":"Download ACH Mandate",
+		                    "items":[{
+		                            "title":"Download",
+		                            "htmlClass":"btn-block",
+		                            "icon":"fa fa-download",
+		                            "type":"button",
+		                            "condition": "model.flag",
+		                            "notitle":true,
+		                            "readonly":false,
+		                            "onClick": function(model, formCtrl, form, $event){
+		                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId;
+		                                            window.open("http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId);
+		                                                            
+		                                        }
+		                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+		                        }]
+	                    }
 					]
 				}]
-			}, {
+			},
+			{
 				"type": "actionbox",
 				"condition": "!model.flag",
 				"items": [{
 					"type": "submit",
 					"title": "Submit"
 				}]
-			}, {
+			},
+			{
 				"type": "actionbox",
 				"condition": "model.flag",
 				"items": [{
@@ -235,6 +289,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 					ACH.create(model.ach, function(response) {
 						PageHelper.hideLoader();
 						PageHelper.showProgress("page-init", "Done.", 2000);
+						model.flag = true;
 						// $state.go("Page.Engine", {
 						//pageName: 'loans.individual.booking.DocumentUploadQueue',
 						//pageId: model.ach.loanId

@@ -12,20 +12,22 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
         initialize: function (model, form, formCtrl) {
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
-            model.pdc.chequeDetails = model.pdc.chequeDetails||[];
+            //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
             model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
             if (model._pdc.loanId ) {
                 model.pdc.accountId = model._pdc.accountNumber;
+                model.pdc.loanAccountNo = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
                 model.pdc.customerName = model._pdc.customerName;
                 PageHelper.showLoader();
-                PDC.get({accountId: model.pdc.accountId},
+                PDC.get({accountNumber: model.pdc.accountId},
                     function(res){
                         model.pdcGet = Utils.removeNulls(res,true);
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init","Done.",2000);
                         model.pdc = model.pdcGet;
+                        model.pdc.addCheque = model.pdc.pdcSummaryDTO;
                         $log.info("PDC GET RESP. : "+res);
                         model.flag = true;
                     },
@@ -65,7 +67,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             "type":"fieldset",
                             "title": "LOAN_DETAILS",
                             "items":[{
-                                    "key": "pdc.accountId",
+                                    "key": "pdc.loanAccountNo",
                                     "title": "LOAN_ACCOUNT_NUMBER",
                                     "readonly":true
                                 },
@@ -143,38 +145,38 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                     "title": "First Instalment Date",
                                     "type": "date"
                                 },
-                                {
-                                    "type": "fieldset",
-                                    "title": "CHEQUE_LEAVES",
-                                    "items": [{
-                                        "type":"array",
-                                        "key":"pdc.chequeDetails",
-                                        "add": null,
-                                        "startEmpty": true,
-                                        "title":"CHECK_DETAILS",
-                                        "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
-                                        "items":[{
-                                                "key": "pdc.chequeDetails[].bankName",
-                                                "title": "BANK_NAME",
-                                                "readonly": true
-                                            },
-                                            {
-                                                "key": "pdc.chequeDetails[].ifscCode",
-                                                "title": "IFSC_CODE",
-                                                "type": "lov",
-                                                "inputMap": {
-                                                    "ifscCode": {
-                                                        "key": "ifscCode",
-                                                        "title": "IFSC_CODE"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "key": "pdc.chequeDetails[].chequeNo",
-                                                "title": "CHEQUE_NUMBER"
-                                            }]
-                                    },]
-                                },
+                                // {
+                                //     "type": "fieldset",
+                                //     "title": "CHEQUE_LEAVES",
+                                //     "items": [{
+                                //         "type":"array",
+                                //         "key":"pdc.chequeDetails",
+                                //         "add": null,
+                                //         "startEmpty": true,
+                                //         "title":"CHECK_DETAILS",
+                                //         "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
+                                //         "items":[{
+                                //                 "key": "pdc.chequeDetails[].bankName",
+                                //                 "title": "BANK_NAME",
+                                //                 "readonly": true
+                                //             },
+                                //             {
+                                //                 "key": "pdc.chequeDetails[].ifscCode",
+                                //                 "title": "IFSC_CODE",
+                                //                 "type": "lov",
+                                //                 "inputMap": {
+                                //                     "ifscCode": {
+                                //                         "key": "ifscCode",
+                                //                         "title": "IFSC_CODE"
+                                //                     }
+                                //                 }
+                                //             },
+                                //             {
+                                //                 "key": "pdc.chequeDetails[].chequeNo",
+                                //                 "title": "CHEQUE_NUMBER"
+                                //             }]
+                                //     }]
+                                // },
                                 {
                                     "type":"array",
                                     "key":"pdc.addCheque",
@@ -208,13 +210,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                         {
                                             "key": "pdc.addCheque[].chequeType",
                                             "title": "CHEQUE_TYPE",
-                                                "type": "lov",
-                                                "inputMap": {
-                                                    "chequeType": {
-                                                        "key": "pdc_cheque_type",
-                                                        "title": "CHEQUE_TYPE"
-                                                    }
-                                                }
+                                            "type": "select",
+                                            "enumCode": "pdc_cheque_type"
                                         },
                                         {
                                             "key": "pdc.addCheque[].numberOfCheque",
@@ -248,8 +245,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.addCheque" array
-                model.pdc.chequeDetails = model.pdc.chequeDetails || [];
-                model.pdc.pdcSummaryDTO = model.pdc.pdcSummaryDTO || [];
+                //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
+                model.pdc.pdcSummaryDTO = [];
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
                     
                     model.pdc.pdcSummaryDTO.push({
@@ -278,7 +275,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                     //     });
                     // }
                 }
-                model.pdc.addCheque = [];
+                //model.pdc.addCheque = [];
                 PageHelper.showLoader();
                 if (model.flag) {
                     PDC.update(model.pdc, function(response){
@@ -292,6 +289,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
+                        model.flag = true;
                     }, function(errorResponse){
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);

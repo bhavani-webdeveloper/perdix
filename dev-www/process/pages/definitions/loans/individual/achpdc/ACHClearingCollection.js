@@ -43,13 +43,16 @@ ACHClearingCollection.js does the following
                     "type":"fieldset",
                     "title":"Upload Status",
                     "items":[{
-                            "key": "ach.achMandateReverseFileId",
-                            "notitle":true,
-                            "category":"ACH",
-                            "subCategory":"cat2",
-                            "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                        },
+                                "key": "ach.achDemandListFileId",
+                                "notitle":true,
+                                "category":"ACH",
+                                "subCategory":"cat2",
+                                "type": "file",
+                                "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                customHandle: function(file, progress, modelValue, form, model) {
+                                    ACH.achMandateUpload(file, progress);
+                                }
+                            },
                         {
                             "type": "button",
                             "icon": "fa fa-user-plus",

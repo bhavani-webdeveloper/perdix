@@ -46,7 +46,24 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
-        }
+        };
+
+        resource.achDemandListUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/feed/achmandateupload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp){
+                // TODO handle success
+                deferred.resolve(resp);
+            }, function(errResp){
+                // TODO handle error
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
 
         return resource;
     }

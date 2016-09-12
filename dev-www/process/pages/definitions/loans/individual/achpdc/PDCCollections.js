@@ -43,12 +43,15 @@ PDCCollections.js does the following
                     "type":"fieldset",
                     "title":"Upload Status",
                     "items":[{
-                            "key": "pdcCollections.pdcMandateReverseFileId",
-                            "notitle":true,
-                            "category":"PDC",
-                            "subCategory":"cat2",
-                            "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                "key": "ach.pdcReverseFeedListFileId",
+                                "notitle":true,
+                                "category":"ACH",
+                                "subCategory":"cat2",
+                                "type": "file",
+                                "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                customHandle: function(file, progress, modelValue, form, model) {
+                                    PDC.pdcReverseFeedListUpload(file, progress);
+                                }
                         },
                         {
                             "type": "button",
