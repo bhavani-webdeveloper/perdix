@@ -873,7 +873,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     PageHelper.clearErrors();
 
                     model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2 = model.loanAccount.loanPurpose1;
-                    model.loanAccount.branchId = model.loanAccount.loanCentre.branchId;
                     if (model.loanAccount.applicant === model.loanAccount.coBorrowerUrnNo) {
                         PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
                         return false;
