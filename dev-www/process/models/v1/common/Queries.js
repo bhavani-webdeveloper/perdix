@@ -97,9 +97,9 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return translationLangs[langCode];
 	};
 
-    resource.getLoanProductDocuments = function(prodCode){
+    resource.getLoanProductDocuments = function(prodCode, process, stage){
         var deferred = $q.defer();
-        resource.getResult('loan_products.list', {product_code: prodCode}).then(
+        resource.getResult('loan_products.list', {product_code: prodCode, process:process, stage:stage}).then(
             function(res){
                 if (res && res.results && res.results.length){
                     deferred.resolve(res.results);

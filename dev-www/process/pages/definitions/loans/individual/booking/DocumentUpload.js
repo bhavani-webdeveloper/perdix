@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                             PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                             model.loanAccount = res;
 
-                            Queries.getLoanProductDocuments(model.loanAccount.productCode)
+                            Queries.getLoanProductDocuments(model.loanAccount.productCode,"LoanBooking","DocumentUpload")
                                 .then(
                                     function(docs){
                                         var docsForProduct = [];
