@@ -116,7 +116,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key:"repayment.transactionName",
                                 "type":"select",
-                                "required": true
+                                "required": true,
+                                titleMap: {
+                                    "Advance Repayment":"Advance Repayment",
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
+                                    "Prepayment":"Prepayment"
+                                }
                             },
                             {
                                 "type": "fieldset",
