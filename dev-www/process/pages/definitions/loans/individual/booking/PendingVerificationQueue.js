@@ -101,7 +101,9 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     'stage': 'DocumentVerification',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId
+                    'customerId': searchOptions.customerId,
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,
                 }).$promise;
             },
             paginationOptions: {
