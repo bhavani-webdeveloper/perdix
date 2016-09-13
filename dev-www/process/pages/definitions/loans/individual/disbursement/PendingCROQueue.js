@@ -76,6 +76,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'per_page': 100,
                     'sortBy':null
                 }).$promise;
+
+                return promise;
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -96,16 +98,15 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                 },
                 getListItem: function(item){
                     return [
-                        item.customerName,
-                        'Customer ID : ' + item.id,
-                        item.disbursementAmount,
-                        "{{'SANCTION_DATE'|translate}} : " + item.scheduledDisbursementDate
+                        item.customerName + " ( Account #: "+item.accountNumber+")",
+                        "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
+                        "{{'TRANCHE'|translate}} : &#8377;" + item.trancheNumber
                     ]
                 },
                 getActions: function(){
                     return [
                         {
-                            name: "{{'UPDATE_STATUS'|translate}}",
+                            name: "{{'UPDATE'|translate}}",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");

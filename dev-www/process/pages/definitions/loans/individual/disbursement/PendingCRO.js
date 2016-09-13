@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
-["$log", "IndividualLoan", "SessionStore","$state", "$stateParams", function($log, IndividualLoan, SessionStore,$state,$stateParams){
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper", 
+function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper){
 
     var branch = SessionStore.getBranch();
 
@@ -16,8 +17,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
                 $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingCROQueue', pageId: null});
                 return;
             }
-            model.tranche = {};
-            model.tranche = _.cloneDeep(model._CROQueue);
+            model.loanAccountDisbursementSchedule = {};
+            model.loanAccountDisbursementSchedule = _.cloneDeep(model._CROQueue);
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -28,20 +29,22 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
             "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
             "items": [
                 {
-                    "key": "tranche.trancheNumber",
+                    "key": "loanAccountDisbursementSchedule.trancheNumber",
                     "title": "TRANCHE_NUMBER"
                 },
                 {
-                    "key": "tranche.remarks1",
-                    "title": "FRO_REMARKS"
+                    "key": "loanAccountDisbursementSchedule.remarks1",
+                    "title": "FRO_REMARKS",
+                    "readonly":true
                 },
                 {
-                    "key": "tranche.assigned_date",
-                    "title": "Hub Manager Requested Date",
-                    "type": "date"
+                    "key": "loanAccountDisbursementSchedule.udfDate2",
+                    "title": "REQUESTED_DATE",
+                    "type": "date",
+                    "readonly":true
                 },
                 {
-                    "key": "tranche.cro_status",
+                    "key": "loanAccountDisbursementSchedule.cro_status",
                     "title": "Status",
                     "type": "radios",
                     "titleMap": {
@@ -50,18 +53,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
                             }
                 },
                  {
-                    "key": "tranche.remarks2",
+                    "key": "loanAccountDisbursementSchedule.remarks2",
                     "title": "REMARKS"
                 },
                 {
-                    "key": "tranche.latitude",
+                    "key": "loanAccountDisbursementSchedule.latitude",
                     "title": "Location",
                     "type": "geotag",
-                    "latitude": "tranche.latitude",
-                    "longitude": "tranche.longitude"
+                    "latitude": "loanAccountDisbursementSchedule.latitude",
+                    "longitude": "loanAccountDisbursementSchedule.longitude"
                 },
                 {
-                    key:"tranche.photoId",
+                    key:"loanAccountDisbursementSchedule.photoId",
                     "title":"Photo",
                     "category":"customer",
                     "subCategory":"customer",
@@ -79,14 +82,29 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingCRO"),
             ]
         }],
         schema: function() {
-            return IndividualLoan.getSchema().$promise;
+            return SchemaResource.getDisbursementSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'loans.individual.disbursement.PendingCROQueue',
-                        pageId: null
+                if(window.confirm("Are you sure?")){
+                    PageHelper.showLoader();
+                    var reqData = _.cloneDeep(model);
+                    delete reqData.$promise;
+                    delete reqData.$resolved;
+                    delete reqData._FROQueue;
+                    reqData.disbursementProcessAction = "PROCEED";
+                    IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                        PageHelper.showProgress("upd-disb","Done.","5000");
+                        PageHelper.hideLoader();
+                        $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.PendingCROQueue', pageId: null});
+                    },function(resp){
+                        PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                        PageHelper.showErrors(resp);
+
+                    }).$promise.finally(function(){
+                        PageHelper.hideLoader();
                     });
+                }
             }
         }
     };

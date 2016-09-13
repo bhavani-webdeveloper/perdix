@@ -43,7 +43,10 @@
           "loanId": {
             "type": "integer"
           },
-          "remarks": {
+          "remarks1": {
+            "type": "string"
+          },
+          "remarks2": {
             "type": "string"
           },
           "version": {
@@ -57,7 +60,6 @@
           "documentStatus",
           "id",
           "loanId",
-          "remarks",
           "version"
         ]
       }
@@ -137,7 +139,8 @@
           "title":"REJECTION_DATE"
         },
         "udfDate2": {
-          "type": "string"
+          "type": "string",
+          "title":"ASSIGNED_DATE"
         },
         "udfDate3": {
           "type": "string"
@@ -166,9 +169,7 @@
         "scheduledDisbursementDate",
         "trancheNumber",
         "udf1",
-
         "udf4",
-
         "udfDate2",
         "udfDate3",
         "udfDate4",

@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiTranche"),
-["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper", 
-function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper){
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper","Utils", 
+function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper,Utils){
 
     var branch = SessionStore.getBranch();
 
@@ -45,10 +45,6 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "type": "date"
                 },
                 {
-                    "key": "loanAccountDisbursementSchedule.remarks",
-                    "title": "REMARKS"
-                },
-                {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
@@ -64,13 +60,15 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
             submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();
+                        model.loanAccountDisbursementSchedule.udfDate2 = Utils.getCurrentDateTime();
                         var reqData = _.cloneDeep(model);
                         delete reqData.$promise;
                         delete reqData.$resolved;
                         reqData.disbursementProcessAction = "PROCEED";
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
                             PageHelper.showProgress("upd-disb","Done.","5000");
-                            backToQueue();
+                            PageHelper.hideLoader();
+                            $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.MultiTrancheQueue', pageId: null});
                         },function(resp){
                             PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
                             PageHelper.showErrors(resp);
