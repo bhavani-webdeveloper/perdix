@@ -62,7 +62,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                                         $log.info("printing");
                                         $log.info(model.individualLoanDocuments);
 
-                                        var loanDocuments = _.cloneDeep(model.individualLoanDocuments);
+                                        var loanDocuments = model.individualLoanDocuments;
                                         var availableDocCodes = [];
                                         $log.info("Number of documents: " + loanDocuments.length);
                                         $log.info("docsForProduct length: " + docsForProduct.length);
@@ -70,14 +70,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
 
                                         for (var i=0; i<loanDocuments.length; i++){
                                             availableDocCodes.push(loanDocuments[i].document_code);
-                                            $log.info(loanDocuments[i].document_code);
+                                            $log.info(loanDocuments[i]);
                                             var documentObj = getDocument(docsForProduct, loanDocuments[i].document_code);
-                                            if (documentObj!=null){
+                                            if (_.isObject(documentObj)){
                                                 $log.info("going to set value");
                                                 loanDocuments[i].$title = documentObj.docTitle;
                                                 loanDocuments[i].$key = documentObj.formsKey;
                                             } else {
                                                 $log.info("in else");
+                                                $log.info(loanDocuments);
                                                 loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
                                             }
 
@@ -90,7 +91,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
-                                                    disbursementId:model.loanAccount.disbursementSchedules[0].id
+                                                    disbursementId:model.loanAccountDisbursementSchedule.id,
+                                                    loanId:model.loanAccountDisbursementSchedule.loanId,
+                                                    documentStatus:"PENDING"
                                                 })
                                             }
                                         }
@@ -146,6 +149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                             "notitle": true,
                             "view": "fixed",
                             "key": "individualLoanDocuments",
+                            "startEmpty":true,
                             "add": null,
                             "remove": null,
                             "items": [
@@ -221,7 +225,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                 submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();
-                        model.loanAccountDisbursementSchedule.udfDate2 = Utils.getCurrentDateTime();
                         var reqData = _.cloneDeep(model);
                         delete reqData.$promise;
                         delete reqData.$resolved;
@@ -240,7 +243,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                             PageHelper.hideLoader();
                         });
                     }
-            }
+                }
             }
         };
     }]);

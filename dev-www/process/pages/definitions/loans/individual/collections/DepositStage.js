@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig", function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig){
+["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries", 
+function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig,Queries){
 
     var branch = SessionStore.getBranch();
 
@@ -9,7 +10,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage")
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
-            model.loggedInUser = SessionStore.getUsername();
+            model.loggedInUser = SessionStore.getLoginname();
+
+            Queries.getDepositList(SessionStore.getLoginname())
+            .$promise
+            .then(function (res){
+
+            },
+            function(){
+                
+            });
+
 
             model.pendingCashDeposits = [{
                 "loan_ac_no":"508640101335",

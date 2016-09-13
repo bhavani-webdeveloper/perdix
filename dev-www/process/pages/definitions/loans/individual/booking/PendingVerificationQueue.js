@@ -137,7 +137,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 getActions: function(){
                     return [
                         {
-                            name: "Proceed to verification",
+                            name: "VERIFY_DOCUMENT",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
