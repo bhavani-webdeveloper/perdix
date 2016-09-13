@@ -209,7 +209,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		$scope.page = $injector.get(irf.page($scope.pageName));
 	} catch (e) {
 		$log.error(e);
-		//$state.go('Page.EngineError', {pageName:$scope.pageName});
+		$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
 	if ($scope.page) {

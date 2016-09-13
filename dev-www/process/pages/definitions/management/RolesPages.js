@@ -1,4 +1,5 @@
-irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages",
+irf.pageCollection.factory(irf.page("management.RolesPages"),
+["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages",
     function($log, SessionStore, PageHelper, formHelper, RolesPages) {
 
         var branch = SessionStore.getBranch();
@@ -65,7 +66,8 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                             condition: "model.rolePage.access.length",
                             type: "array",
                             add: null,
-                            titleExpr: "(model.rolePage.access[arrayIndex].access?'✔✔ ':'── ') + model.rolePage.access[arrayIndex].uri",
+                            remove: null,
+                            titleExpr: "(model.rolePage.access[arrayIndex].access?'⚫ ':'⚪ ') + model.rolePage.access[arrayIndex].uri",
                             items: [
                                 {
                                     type: "section",
@@ -135,13 +137,13 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
             actions: {
                 submit: function(model, form, formName) {
                     var req = {
+                        role_id: model.rolePage.currentRoleId,
                         pages: []
                     };
 
                     for (var i = model.rolePage.access.length - 1; i >= 0; i--) {
                         if (model.rolePage.access[i].access) {
                             var a = {
-                                role_id: model.rolePage.currentRoleId,
                                 page_id: model.rolePage.access[i].id,
                                 page_config: model.rolePage.access[i].page_config
                             };
@@ -149,10 +151,13 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                         }
                     };
 
+                    PageHelper.showLoader();
                     RolesPages.updateRolePageAccess(req).$promise.then(function(resp){
-
+                        PageHelper.showProgress("roles-pages","Page roles updated", 3000);
                     }, function(err){
-
+                        PageHelper.showErrors(err);
+                    }).finally(function(){
+                        PageHelper.hideLoader();
                     });
                 }
             }
