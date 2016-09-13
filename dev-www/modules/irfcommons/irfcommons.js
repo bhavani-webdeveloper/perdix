@@ -145,6 +145,9 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 
             return moment().format('YYYY-MM-DD');
         },
+		getCurrentDateTime:function(){
+            return moment();
+        },
 		removeNulls:function(obj, recurse) {
 
 			for (var i in obj) {
