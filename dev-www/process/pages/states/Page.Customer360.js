@@ -1,8 +1,8 @@
 irf.pages.controller("Customer360Ctrl",
 ["$log", "$scope", "$stateParams", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
-"entityManager", "Utils", "PageHelper",
+"entityManager", "Utils", "PageHelper", "$filter",
 function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
-	entityManager, Utils, PageHelper){
+	entityManager, Utils, PageHelper, $filter){
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
@@ -53,14 +53,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
 				"items": [
-					{
-						"title": "NEW_LOAN",
-						"iconClass": "fa fa-key",
-						"items": [
-							"Page/Engine/Loans.NewJewel",
-							"Page/Engine/Loans.NewMEL"
-						]
-					},
+					"Page/Engine/loans.individual.booking.LoanInput",
 					"Page/Engine/customer360.loans.View",
 					"Page/Engine/Loans.Service"
 				]
@@ -273,6 +266,34 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
 		};
+
+		if ($scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.LoanInput"])
+		$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.LoanInput"].onClick = function(event, menu) {
+			var loanInput = {};
+			try {
+				loanInput = {
+					loanAccount: {
+						bankId: $filter('filter')(formHelper.enum("bank").data, {name:SessionStore.getBankName()}, true)[0].code,
+						branchId: $filter('filter')(formHelper.enum("branch").data, {name:$scope.model.customer.kgfsName}, true)[0].code,
+						urnNo: $scope.model.customer.urnNo,
+						customerId: $scope.model.customer.id,
+						loanCentre: {
+							branchId: $scope.model.customer.kgfsName,
+							centreId: $scope.model.customer.centreId
+						}
+					},
+					additional: {
+						branchName: $scope.model.customer.kgfsName
+					},
+					customer: {
+						firstName: $scope.model.customer.firstName
+					}
+				};
+			} catch (e) {}
+			entityManager.setModel(menu.stateParams.pageName, loanInput);
+			return $q.resolve(menu);
+		};
+
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
