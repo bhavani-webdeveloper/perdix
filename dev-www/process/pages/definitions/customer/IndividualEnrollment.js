@@ -999,72 +999,63 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         items: [
                             {
                                 key: "customer.customerBankAccounts[].ifscCode",
-                                title: "IFSC_CODE",
                                 type: "lov",
+                                lovonly: true,
                                 inputMap: {
-                                    "customerBankName": {
-                                        "key": "customer.customerBankAccounts[].customerBankName",
-                                        "title": "BRANCH_NAME"
+                                    "ifscCode": {
+                                        "key": "customer.customerBankAccounts[].ifscCode"
+                                    },
+                                    "bankName": {
+                                        "key": "customer.customerBankAccounts[].customerBankName"
                                     },
                                     "branchName": {
-                                        "key": "customer.customerBankAccounts[].customerBankBranchName",
-                                        "title": "BRANCH_NAME"
-                                    },
-                                    "ifscCode": {
-                                        "key": "customer.customerBankAccounts[].ifscCode",
-                                        "title": "IFSC_CODE"
+                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
                                     }
                                 },
                                 outputMap: {
-                                    "customerBankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
                                     "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
                                     "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = Enrollment.search({
-                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                        'firstName': inputModel.first_name,
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.bankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
                                     }).$promise;
                                     return promise;
                                 },
                                 getListDisplayItem: function(data, index) {
                                     return [
-                                        [data.firstName, data.fatherFirstName].join(' '),
-                                        data.id
+                                        data.ifscCode,
+                                        data.branchName,
+                                        data.bankName
                                     ];
                                 }
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankName",
-                                title: "BANK_NAME"
+                                readonly: true
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankBranchName",
-                                title: "BRANCH_NAME"
+                                readonly: true
                             },
                             {
-                                key: "customer.customerBankAccounts[].customerName",
-                                title: "CUSTOMER_NAME"
+                                key: "customer.customerBankAccounts[].customerName"
                             },
                             {
-                                key: "customer.customerBankAccounts[].accountNumber",
-                                title: "ACCOUNT_NUMBER"
+                                key: "customer.customerBankAccounts[].accountNumber"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",
-                                title: "ACCOUNT_TYPE",
-                                type: "select",
-                                enumCode: "account_type"
+                                type: "select"
                             },
                             {
                                 key: "customer.customerBankAccounts[].isDisbersementAccount",
                                 type: "radios",
-                                schema: {
-                                    default: false
-                                },
-                                title: "DISBURSEMENT_ACCOUNT",
                                 titleMap: [{
                                     value: true,
                                     name: "Yes"

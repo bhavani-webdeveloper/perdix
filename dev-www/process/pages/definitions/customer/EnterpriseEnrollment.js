@@ -16,8 +16,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
         },
-        modelPromise: function(pageId, _model) {
-        },
         offline: true,
         getOfflineDisplayItem: function(item, index){
             return [
@@ -142,7 +140,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        enumCode: "businessLine"
+                        enumCode: "businessLine",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSector",
@@ -154,9 +153,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
-                        enumCode: "businessSubSector"
+                        enumCode: "businessSubSector",
+                        parentEnumCode: "businessSector"
                     },
-                   {
+                    {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
                         title: "RELATIONSHIP_TO_BUSINESS",

@@ -150,21 +150,24 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        enumCode: "businessLine"
+                        enumCode: "businessLine",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        enumCode: "businessSector"
+                        enumCode: "businessSector",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
-                        enumCode: "businessSubSector"
+                        enumCode: "businessSubSector",
+                        parentEnumCode: "businessSector"
                     },
-                   {
+                    {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
                         title: "RELATIONSHIP_TO_BUSINESS",
