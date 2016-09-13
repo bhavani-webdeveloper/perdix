@@ -19,7 +19,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             var self = this;
-            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.CustomerProfile", self.form).then(function(form){
+            self.form = [];
+            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.CustomerProfile", self.formSource).then(function(form){
                 self.form = form;
             });
             initData(model);
@@ -62,7 +63,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 item["customer"]["villageName"]
             ]
         },
-        form: [{
+        form: [],
+        formSource: [{
             "type": "box",
             "title": "CUSTOMER_INFORMATION",
             "readonly": true,

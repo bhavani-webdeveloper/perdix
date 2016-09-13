@@ -27,24 +27,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     PageHelper.hideLoader();
                 });
             }
-            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.BusinessProfile", self.form).then(function(form){
-                self.form = [];
-                $timeout(function(){
-                    self.form = form;
-                });
+            self.form = [];
+            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.BusinessProfile", self.formSource).then(function(form){
+                self.form = form;
             });
         },
-        modelPromise: function(pageId, _model) {
-        },
-        offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item.customer.firstName,
-                item.customer.centreCode,
-                item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-            ]
-        },
-        form: [
+        form: [],
+        formSource: [
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
@@ -379,9 +368,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 "type": "actionbox",
                 "readonly": true,
                 "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },{
                     "type": "submit",
                     "title": "SUBMIT"
                 }]
