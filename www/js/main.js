@@ -3960,6 +3960,9 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 
             return moment().format('YYYY-MM-DD');
         },
+		getCurrentDateTime:function(){
+            return moment().format();
+        },
 		removeNulls:function(obj, recurse) {
 
 			for (var i in obj) {
@@ -7304,7 +7307,11 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
         allPages: searchResource({
             method: 'GET',
             url: endpoint + '/allPages.php'
-        })
+        }),
+        updateRolePageAccess: {
+            method: 'PUT',
+            url: endpoint + '/updateRolePageAccess.php'
+        }
     });
 
     return res;
@@ -15401,28 +15408,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                if (reqData.customer.id) {
-                    EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(resp.customer,true);
-                        model.customer = resp.customer;
-                    });
-                } else {
-                    EnrollmentHelper.saveData(reqData).then(function(res){
-                        EnrollmentHelper.proceedData(res).then(function(resp){
-                            Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
-                        }, function(err) {
-                            Utils.removeNulls(res.customer,true);
-                            model.customer = res.customer;
-                        });
-                    });
-                }
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
                     model.enrollmentAction = "SAVE";
-                    $log.info(model);
-                    var reqData = _.cloneDeep(model);
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
@@ -26455,7 +26444,8 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
             initialize: function(model, form, formCtrl) {
                 model.address = model.address || {};
             },
-            form: [{
+            form: [
+                {
                     "type": "box",
                     colClass: "col-sm-12",
                     "title": "Role & Page Mapping",
@@ -26481,9 +26471,19 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                             },
                             onSelect: function(result, model, context) {
                                 PageHelper.showLoader();
-                                RolesPages.allPages().$promise.then(function(result){
+                                RolesPages.allPages({roleId:result.id}).$promise.then(function(result){
                                     if (result && result.body && result.body.length) {
-                                        model.rolePage.access = result.body;
+                                        model.rolePage.access = [];
+                                        for (var i = 0; i < result.body.length; i++) {
+                                            var a = {
+                                                id: result.body[i].id, // page_id
+                                                uri: result.body[i].uri,
+                                                rpa_id: result.body[i].rpa_id,
+                                                page_config: result.body[i].page_config,
+                                                access: !!result.body[i].rpa_id
+                                            };
+                                            model.rolePage.access.push(a);
+                                        };
                                     }
                                 }).finally(function(){
                                     PageHelper.hideLoader();
@@ -26500,7 +26500,7 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                             condition: "model.rolePage.access.length",
                             type: "array",
                             add: null,
-                            titleExpr: "(model.rolePage.access[arrayIndex].access?'&bull; ':'') + model.rolePage.access[arrayIndex].uri",
+                            titleExpr: "(model.rolePage.access[arrayIndex].access?'✔✔ ':'── ') + model.rolePage.access[arrayIndex].uri",
                             items: [
                                 {
                                     type: "section",
@@ -26524,7 +26524,7 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                                             htmlClass: "col-sm-9",
                                             items: [
                                                 {
-                                                    key: "rolePage.access[].config",
+                                                    key: "rolePage.access[].page_config",
                                                     title: "Config",
                                                     type: "textarea"
                                                 }
@@ -26533,6 +26533,16 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                                     ]
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    type: "actionbox",
+                    condition: "model.rolePage.access.length",
+                    items: [
+                        {
+                            type: "submit",
+                            title: "Update Pages For Role"
                         }
                     ]
                 }
@@ -26558,7 +26568,28 @@ irf.pageCollection.factory(irf.page("management.RolesPages"), ["$log", "SessionS
                 }
             },
             actions: {
-                submit: function(model, form, formName) {}
+                submit: function(model, form, formName) {
+                    var req = {
+                        pages: []
+                    };
+
+                    for (var i = model.rolePage.access.length - 1; i >= 0; i--) {
+                        if (model.rolePage.access[i].access) {
+                            var a = {
+                                role_id: model.rolePage.currentRoleId,
+                                page_id: model.rolePage.access[i].id,
+                                page_config: model.rolePage.access[i].page_config
+                            };
+                            req.pages.push(a);
+                        }
+                    };
+
+                    RolesPages.updateRolePageAccess(req).$promise.then(function(resp){
+
+                    }, function(err){
+
+                    });
+                }
             }
         };
     }

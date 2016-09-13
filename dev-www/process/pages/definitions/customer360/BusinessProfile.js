@@ -399,28 +399,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                if (reqData.customer.id) {
-                    EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(resp.customer,true);
-                        model.customer = resp.customer;
-                    });
-                } else {
-                    EnrollmentHelper.saveData(reqData).then(function(res){
-                        EnrollmentHelper.proceedData(res).then(function(resp){
-                            Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
-                        }, function(err) {
-                            Utils.removeNulls(res.customer,true);
-                            model.customer = res.customer;
-                        });
-                    });
-                }
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
                     model.enrollmentAction = "SAVE";
-                    $log.info(model);
-                    var reqData = _.cloneDeep(model);
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
