@@ -51,7 +51,7 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
         resource.achDemandListUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
-                url: BASE_URL + "/api/feed/achmandateupload",
+                url: BASE_URL + "/api/feed/achreversefeedupload",
                 data: {
                     file: file
                 }

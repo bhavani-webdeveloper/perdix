@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
-["$log", "PDC", "PageHelper", "SessionStore","$state", "$stateParams", function($log, PDC, PageHelper, SessionStore,$state,$stateParams){
+["$log", "PDC", "PageHelper", "SessionStore","$state", "CustomerBankBranch", 'formHelper', "$stateParams", 
+function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelper,$stateParams){
 
     var branch = SessionStore.getBranch();
 
@@ -15,7 +16,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
             //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
             model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
-            if (model._pdc.loanId ) {
+            if (model._pdc ) {
                 model.pdc.accountId = model._pdc.accountNumber;
                 model.pdc.loanAccountNo = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
@@ -46,9 +47,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                     }
                 );
 
-             } else if ($stateParams.pageId) {
-              model.pdc.loanId=$stateParams.pageId;
-             } else {
+             } 
+             // else if ($stateParams.pageId) {
+             //  model.pdc.loanId=$stateParams.pageId;
+             // }
+             else {
               $state.go("Page.Engine",{
                                     pageName:"loans.individual.Queue",
                                     pageId:null
@@ -188,19 +191,53 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                                             "title": "BANK_ACCOUNT_NUMBER"
                                         },
                                         {
+                                            "key": "pdc.addCheque[].ifscCode",
+                                            "title": "IFSC_CODE",
+                                            "type": "lov",
+                                            "lovonly": true,
+                                            "inputMap": {
+                                                "ifscCode": {
+                                                    "key": "pdc.addCheque[].ifscCode"
+                                                },
+                                                "bankName": {
+                                                    "key": "pdc.addCheque[].bankName"
+                                                },
+                                                "branchName": {
+                                                    "key": "pdc.addCheque[].branchName"
+                                                }
+                                            },
+                                            outputMap: {
+                                                "bankName": "pdc.addCheque[arrayIndex].bankName",
+                                                "branchName": "pdc.addCheque[arrayIndex].branchName",
+                                                "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
+                                            },
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form) {
+                                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                var promise = CustomerBankBranch.search({
+                                                    'bankName': inputModel.bankName,
+                                                    'ifscCode': inputModel.ifscCode,
+                                                    'branchName': inputModel.branchName
+                                                }).$promise;
+                                                return promise;
+                                            },
+                                            getListDisplayItem: function(data, index) {
+                                                return [
+                                                    data.ifscCode,
+                                                    data.branchName,
+                                                    data.bankName
+                                                ];
+                                            }
+                            
+
+                                        },
+                                        {
                                             "key": "pdc.addCheque[].bankName",
                                             "title": "BANK_NAME"
                                         },
                                         {
-                                            "key": "pdc.addCheque[].ifscCode",
-                                            "title": "IFSC_CODE",
-                                            "type": "lov",
-                                            "inputMap": {
-                                                "ifscCode": {
-                                                    "key": "ifscCode",
-                                                    "title": "IFSC_CODE"
-                                                }
-                                            }
+                                            "key": "pdc.addCheque[].branchName",
+                                            "title": "BRANCH_NAME"
                                         },
                                         {
                                             "key": "pdc.addCheque[].chequeNoFrom",
@@ -258,7 +295,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
                             numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
                             customerBankAccountNo: model.pdc.customerBankAccountNo,
                             loanAccountNo: model._pdc.accountNumber,
-                            branchName: model._pdc.branchName,
+                            branchName: model.pdc.addCheque[bankCount].branchName,
                             id: model._pdc.loanId
                         });
 

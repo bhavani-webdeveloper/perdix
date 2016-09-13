@@ -1,0 +1,31 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"pdc": {
+			"type": "object",
+			"required": [
+				"ifscCode"
+			],
+			"addCheque": {
+				"type":"object",
+	            "properties":{
+		            "ifscCode":{
+	                      "type": "string",
+	                      "title": "IFSC_CODE"
+	                 },
+	                 "bankName":{
+	                      "type": "string",
+	                      "title": "BANK_NAME"
+
+	                 },
+	                 "branchName":{
+	                      "type": "string",
+	                      "title": "BRANCH_NAME"
+	                 }
+	            }
+
+			}
+		}
+	}
+}

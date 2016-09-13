@@ -19,6 +19,7 @@ either approved by bank/ rejected by bank)
             
         },
         form: [{
+            
                 "type": "box",
                 "title": "ACH_MANDATE_UPLOAD" ,
                 "colClass":"col-sm-6",

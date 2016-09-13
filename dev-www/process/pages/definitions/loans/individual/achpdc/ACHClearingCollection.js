@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
-["$log", "SessionStore","Enrollment",'Utils', function($log, SessionStore, Enrollment, Utils) {
+["$log", "SessionStore","Enrollment",'Utils','ACH', 'AuthTokenHelper',
+function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper) {
 /*
 ACHClearingCollection.js does the following
 1. To download the demand due list with date criteria
@@ -10,7 +11,8 @@ ACHClearingCollection.js does the following
         "title": "ACH Collections",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
-
+            model.authToken = AuthTokenHelper.getAuthData().access_token;
+            model.userLogin = SessionStore.getLoginname();
         },
         
         form: [{
@@ -32,9 +34,10 @@ ACHClearingCollection.js does the following
                             "notitle":true,
                             "readonly":false,
                             "onClick": function(model, formCtrl, form, $event){
-                                            model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
-                                            window.open(model.mandate.link);
-                                                            
+                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
+                                            //window.open(model.mandate.link);
+                                            window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");
+                                                
                                         }
                             //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
                         }]
@@ -45,12 +48,12 @@ ACHClearingCollection.js does the following
                     "items":[{
                                 "key": "ach.achDemandListFileId",
                                 "notitle":true,
+                                "type": "file",
                                 "category":"ACH",
                                 "subCategory":"cat2",
-                                "type": "file",
                                 "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                 customHandle: function(file, progress, modelValue, form, model) {
-                                    ACH.achMandateUpload(file, progress);
+                                    ACH.achDemandListUpload(file, progress);
                                 }
                             },
                         {

@@ -244,13 +244,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						},
 						{
 		                    "type":"fieldset",
+		                    "condition": "model.flag",
 		                    "title":"Download ACH Mandate",
 		                    "items":[{
 		                            "title":"Download",
 		                            "htmlClass":"btn-block",
+		                            "condition": "model.flag",
 		                            "icon":"fa fa-download",
 		                            "type":"button",
-		                            "condition": "model.flag",
 		                            "notitle":true,
 		                            "readonly":false,
 		                            "onClick": function(model, formCtrl, form, $event){
