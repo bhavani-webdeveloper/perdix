@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
 
     return {
         "type": "schema-form",
-        "title": "ACH Clearing - Collection",
+        "title": "ACH_CLEARING_COLLECTION",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");

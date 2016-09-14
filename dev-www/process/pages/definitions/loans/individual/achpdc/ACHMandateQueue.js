@@ -4,7 +4,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "ACH_Queue",
+		"title": "ACH_MANDATE_QUEUE",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;

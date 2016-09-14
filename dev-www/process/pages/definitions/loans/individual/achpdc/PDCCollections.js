@@ -8,7 +8,7 @@ PDCCollections.js does the following
 */
     return {
         "type": "schema-form",
-        "title": "PDC COLLECTIONS",
+        "title": "PDC_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;

@@ -4,10 +4,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
     
 
     return {
-        "id": "PDCSubmission",
         "type": "schema-form",
-        "name": "PDCSubmission",
-        "title": "PDC SUBMISSION",
+        "title": "PDC_SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");

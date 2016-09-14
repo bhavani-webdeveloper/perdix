@@ -7,7 +7,7 @@ This excel document can be downloaded here.
 */
     return {
         "type": "schema-form",
-        "title": "ACH SUBMISSION",
+        "title": "ACH_SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");

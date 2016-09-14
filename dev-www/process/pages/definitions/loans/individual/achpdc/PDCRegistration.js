@@ -5,9 +5,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "pdc",
         "type": "schema-form",
-        "name": "pdc",
         "title": "PDC_REGISTRATION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {

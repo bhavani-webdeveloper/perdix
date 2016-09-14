@@ -8,7 +8,7 @@ ACHClearingCollection.js does the following
 */
     return {
         "type": "schema-form",
-        "title": "ACH Collections",
+        "title": "ACH_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;

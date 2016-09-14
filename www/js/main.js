@@ -24455,9 +24455,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "pdc",
         "type": "schema-form",
-        "name": "pdc",
         "title": "PDC_REGISTRATION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
@@ -25539,7 +25537,7 @@ ACHClearingCollection.js does the following
 */
     return {
         "type": "schema-form",
-        "title": "ACH Collections",
+        "title": "ACH_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
@@ -25623,7 +25621,7 @@ This excel document can be downloaded here.
 */
     return {
         "type": "schema-form",
-        "title": "ACH SUBMISSION",
+        "title": "ACH_SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
@@ -25684,7 +25682,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
 
     return {
         "type": "schema-form",
-        "title": "ACH Clearing - Collection",
+        "title": "ACH_CLEARING_COLLECTION",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
@@ -25763,7 +25761,7 @@ PDCCollections.js does the following
 */
     return {
         "type": "schema-form",
-        "title": "PDC COLLECTIONS",
+        "title": "PDC_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
@@ -25904,7 +25902,7 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
 
     return {
         "type": "schema-form",
-        "title": "ACH_MANDATE",
+        "title": "ACH_MANDATE_DOWNLOAD",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Download Page got initialized");
@@ -25992,10 +25990,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
     
 
     return {
-        "id": "PDCSubmission",
         "type": "schema-form",
-        "name": "PDCSubmission",
-        "title": "PDC SUBMISSION",
+        "title": "PDC_SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");

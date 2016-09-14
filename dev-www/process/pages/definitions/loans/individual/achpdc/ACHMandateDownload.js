@@ -6,7 +6,7 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
 
     return {
         "type": "schema-form",
-        "title": "ACH_MANDATE",
+        "title": "ACH_MANDATE_DOWNLOAD",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Download Page got initialized");
