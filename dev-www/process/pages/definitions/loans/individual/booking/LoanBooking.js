@@ -1,7 +1,16 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
-    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils", function ($log, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils) {
+    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries", 
+    function ($log, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils,Queries) {
 
         var branch = SessionStore.getBranch();
+        var pendingDisbursementDays;
+
+        Queries.getGlobalSettings("loan.individual.booking.pendingDisbursementDays").then(function(value){
+            pendingDisbursementDays = Number(value);
+            $log.info("pendingDisbursementDays:" + pendingDisbursementDays);                    
+        },function(err){
+            $log.info("pendingDisbursementDays is not available");
+        });
 
         return {
             "type": "schema-form",
@@ -36,6 +45,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                             model.loanAccount = res;
                             PageHelper.showProgress('load-loan', 'Almost Done...');
+
+                            if(model.loanAccount.collateral.length > 0){
+                                for (var i = model.loanAccount.collateral.length - 1; i >= 0; i--) {
+                                    if(model.loanAccount.collateral[i].loanToValue != "" && model.loanAccount.collateral[i].loanToValue != null)
+                                        model.loanAccount.collateral[i].loanToValue = Number(model.loanAccount.collateral[i].loanToValue);
+                                    else
+                                        model.loanAccount.collateral[i].loanToValue = 0;
+                                }
+                            }
 
                             /* Now load the customer */
                             Enrollment.getCustomerById({id: model.loanAccount.customerId})
@@ -231,27 +249,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "key":"loanAccount.collateral[].machineOld"
                                     },
                                     {
+                                        "key":"loanAccount.collateral[].loanToValue",
+                                        "type":"amount",
+                                        "title":"PRESENT_VALUE"
+                                    },
+                                    {
                                         "key":"loanAccount.collateral[].collateralValue",
                                         "type":"amount",
-                                        "title":"COLLATERAL_VALUE",
-                                        "onChange": function(value ,form ,model, event){
-                                            calculateTotalValue(value, form, model);
-                                        }
+                                        "title":"PURCHASE_PRICE"
                                     },
                                     {
                                         "key":"loanAccount.collateral[].totalValue",
                                         "type":"amount",
                                         "title":"TOTAL_VALUE"
-                                    },
-                                    {
-                                        "key":"loanAccount.collateral[].marginValue",
-                                        "type":"amount",
-                                        "title":"PURCHASE_PRICE"
-                                    },
-                                    {
-                                        "key":"loanAccount.collateral[].loanToValue",
-                                        "type":"amount",
-                                        "title":"PRESENT_VALUE"
                                     },
                                     {
                                         "key":"loanAccount.collateral[].collateral1FilePath",
@@ -285,6 +295,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             actions: {
                 submit: function (model, form, formName) {
+
+                    $log.info("submitting");
+                    
+                    var date1 = new Date(model._currentDisbursement.scheduledDisbursementDate);
+                    var date2 = new Date(model.loanAccount.sanctionDate);
+                    var diffDays = date1.getDate() - date2.getDate(); 
+
+                    if (diffDays > pendingDisbursementDays){
+                        PageHelper.showProgress("loan-create","Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days",5000);
+                        return false;
+                    }
                     Utils.confirm("Ready to book the loan?")
                         .then(function(){
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
