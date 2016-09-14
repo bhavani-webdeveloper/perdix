@@ -52,7 +52,7 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
                 {
                     $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.AccountQueue', pageId: ''});
+                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffQueue', pageId: ''});
                 }
             }
         }
