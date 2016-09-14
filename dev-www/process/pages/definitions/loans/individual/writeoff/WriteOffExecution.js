@@ -8,6 +8,11 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
         "title": "WRITE_OFF",
         initialize: function (model, form, formCtrl) {
             $log.info("WriteOff Screen got initialized");
+            model.loanAccount = model.loanAccount || [];
+            if (model._loanAccount ) {
+                model.loanAccount = model._loanAccount;
+            }
+
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -19,22 +24,31 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
             "colClass": "col-sm-12", // col-sm-6 is default, optional
 
             "items": [
+            /*
                 {
-                    "key": "loanAccount.accountNumber",
-                    "readonly": true,
-                    "type": "number"
+                    type:"section",
+                    html:"<pre>{{model._loanAccount}}</pre>"
                 },
                 {
-                    "key": "loanAccount.customerName",
+                    type:"section",
+                    html:"<pre>{{model.loanAccount}}</pre>"
+                },
+            */
+                {
+                    "key": "loanAccount.accountId",
+                    "readonly": true
+                },
+                {
+                    "key": "loanAccount.amount1",
                     "readonly": true,
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffAmount",
+                    "key": "loanAccount.amount2",
                     "required": true
                 },
                 {
-                    "key": "loanAccount.writeOffDate",
+                    "key": "loanAccount.transactionDate",
                     "type": "date"
                 },
                 {

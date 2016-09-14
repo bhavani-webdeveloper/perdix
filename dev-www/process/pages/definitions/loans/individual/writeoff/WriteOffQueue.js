@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "LoanAccount",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "LoanAccount", "entityManager",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, EntityManager){
     return {
         "type": "search-list",
         "title": "PENDING_WRITEOFF_QUEUE",
@@ -79,9 +79,9 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
                 },
                 getListItem: function(item){
                     return [
-                        item.accountNumber,
-                        item.customerName,
-                        "<em>Write-off Amount: Rs."+item.writeOffAmount+", Write-off Date: "+item.writeOffDate + "</em>"
+                        item.accountId,
+                        item.amount1,
+                        "<em>Write-off Amount: Rs."+item.amount3+", Interest: Rs."+item.amount2 + "</em>"
                     ]
                 },
                 getActions: function(){
@@ -91,6 +91,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");
+                                EntityManager.setModel("loans.individual.writeoff.WriteOffExecution",{_loanAccount:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffExecution', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
