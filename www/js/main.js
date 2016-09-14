@@ -11002,7 +11002,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        enumCode: "businessSector"
+                        enumCode: "businessSector",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
@@ -28925,6 +28926,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"Deprecated Items",
+                "condition":"false",
                 "items":[
                     {
                         key:"loanAccount.disbursementFromBankAccountNumber",

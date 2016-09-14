@@ -147,7 +147,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
-                        enumCode: "businessSector"
+                        enumCode: "businessSector",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
