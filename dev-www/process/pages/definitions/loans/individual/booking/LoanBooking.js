@@ -171,9 +171,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },*/
                     {
-                        "key": "loanAccount.loanCentre[0].centreId",
+                        "key": "loanAccount.loanCentre.centreId",
                         "title": "CENTRE",
-                        "readonly": true
+                        "readonly": true,
+                        "type":"select"
                     },
                     {
                         "key": "loanAccount.interestRate",
