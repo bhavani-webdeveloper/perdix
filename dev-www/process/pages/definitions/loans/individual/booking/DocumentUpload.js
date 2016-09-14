@@ -152,6 +152,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                     "type": "button",
                                                     "readonly": false,
                                                     "key": "loanAccount.loanDocuments[].$downloadRequired",
+                                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired && model.loanAccount.loanDocuments[arrayIndex].documentId==null",
                                                     "onClick": function(model, form, schemaForm, event){
                                                         var doc = model.loanAccount.loanDocuments[event.arrayIndex];
                                                         console.log(doc);
