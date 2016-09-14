@@ -1075,7 +1075,8 @@
                         },
                         "required": [
 
-                            "collateralType"
+                            "collateralType",
+                            "collateralDescription"
 
                         ]
                     }

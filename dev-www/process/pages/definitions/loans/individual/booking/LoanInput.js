@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -52,6 +52,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         }
 
+
+        var getProductDetails=function (value,model){
+            if (value)
+                LoanProducts.getProductData({"productCode":value})
+                .$promise
+                .then(
+                    function(res){
+                        try
+                        {
+                            delete model.additional.product;
+                        }
+                        catch(err){
+                            console.error(err);
+                        }
+                        model.additional.product = res;
+                    },
+                    function(httpRes){
+                        PageHelper.showProgress('loan-create', 'Failed to load the Product details. Try again.', 4000);
+                        PageHelper.showErrors(httpRes);
+                        PageHelper.hideLoader();
+                    }
+                )
+        }
+
         return {
             "type": "schema-form",
             "title": "Loan Input",
@@ -81,6 +105,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 },function(err){
                     $log.info("Max Security EMI is not available");
                 });
+                if(model.loanAccount.productCode!="")
+                    getProductDetails(model.loanAccount.productCode,model);
             },
             offline: true,
             getOfflineDisplayItem: function(item, index){
@@ -132,7 +158,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
-                                "type": "select"
+                                "type": "select",
+                                onChange:function(value,form,model){
+                                    getProductDetails(value,model);
+                                }
                             },
                             {
                                 "key": "loanAccount.tenure",
@@ -915,6 +944,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (model.loanAccount.processingFeeInPaisa){
                         if (model.loanAccount.processingFeeInPaisa > 0){
                             model.loanAccount.processingFeeInPaisa = model.loanAccount.processingFeeInPaisa * 100;
+                        }
+                    }
+
+                    //Product specific validations
+                    if(model.additional.product){
+                        if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
+                                PageHelper.showProgress("loan-create","Collateral details are mandatory",5000);
+                                return false;
                         }
                     }
 
