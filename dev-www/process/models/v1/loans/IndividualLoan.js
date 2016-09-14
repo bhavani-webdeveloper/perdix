@@ -76,7 +76,24 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         get:{
             method:'GET',
-            url:endpoint+'/:id'
+            url:endpoint+'/:id',
+            transformResponse: function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status === 200){
+                    // debugger;
+                    if (!_.isUndefined(data.nominees) && !_.isNull(data.nominees) && _.isArray(data.nominees) && data.nominees.length>0){
+                        for (var i=0;i<data.nominees.length; i++){
+                            var n = data.nominees[i];
+                            if (!_.isUndefined(n.nomineePincode)){
+                                data.nominees[i].nomineePincode = parseInt(n.nomineePincode);
+                            }
+                        }
+                    }
+                }
+
+                return data;
+
+            }
         }
     });
 }]);
