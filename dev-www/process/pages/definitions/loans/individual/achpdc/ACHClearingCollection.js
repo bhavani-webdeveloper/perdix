@@ -55,13 +55,15 @@ ACHClearingCollection.js does the following
                                 customHandle: function(file, progress, modelValue, form, model) {
                                     ACH.achDemandListUpload(file, progress);
                                 }
-                            },
-                        {
-                            "type": "button",
-                            "icon": "fa fa-user-plus",
-                            "title": "UPLOAD",
-                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                            }]
+                            }
+                            // ,
+                            // {
+                            // "type": "button",
+                            // "icon": "fa fa-user-plus",
+                            // "title": "UPLOAD",
+                            // "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                            // }
+                            ]
                     }]
 
                 }],
