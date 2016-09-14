@@ -31,7 +31,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         if (documentObj!=null){
                                             loanDocuments[i].$title = documentObj.document_name;
                                         } else {
-                                            loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                            loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                         }
                                     }
                                     PageHelper.hideLoader();
@@ -78,7 +78,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                 "items": [
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-2",
+                                        "htmlClass": "col-sm-4",
                                         "items": [
                                             {
                                                 "key": "loanAccount.loanDocuments[].$title",
@@ -90,7 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-3",
+                                        "htmlClass": "col-sm-2",
                                         "key": "loanDocs[].downloadRequired",
                                         //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                         "items": [
@@ -111,7 +111,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     },
                                     {
                                         "type": "section",
-                                        "htmlClass": "col-sm-2",
+                                        "htmlClass": "col-sm-3",
                                         "items": [
                                             {
                                                 "key": "loanAccount.loanDocuments[].documentStatus",

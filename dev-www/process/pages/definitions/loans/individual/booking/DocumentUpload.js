@@ -142,7 +142,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                         {
                                             "type": "section",
                                             "htmlClass": "col-sm-3",
-                                            "key": "loanDocs[].downloadRequired",
+                                            "key": "loanAccount.loanDocuments[].$downloadRequired",
                                             //"condition": "model.loanDocs[arrayIndex].downloadRequired==true",
                                             "items": [
                                                 {
@@ -152,7 +152,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                     "type": "button",
                                                     "readonly": false,
                                                     "key": "loanAccount.loanDocuments[].$downloadRequired",
-                                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired && model.loanAccount.loanDocuments[arrayIndex].documentId==null",
+                                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
                                                     "onClick": function(model, form, schemaForm, event){
                                                         var doc = model.loanAccount.loanDocuments[event.arrayIndex];
                                                         console.log(doc);
