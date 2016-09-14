@@ -37,6 +37,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             var defaultPartner = formHelper.enum("partner").data[0].value;
         }catch(e){}
 
+        var populateDisbursementSchedule=function (value,form,model){
+            PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+            model.loanAccount.disbursementSchedules=[];
+            for(var i=0;i<value;i++){
+                model.loanAccount.disbursementSchedules.push({
+                    trancheNumber:""+(i+1),
+                    disbursementAmount:0
+                });
+            }
+            if (value ==1){
+                model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmountRequested;
+            }
+
+        }
+
         return {
             "type": "schema-form",
             "title": "Loan Input",
@@ -714,7 +729,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                     {
                         "type": "fieldset",
-                        "title": "Disbursement Details",
+                        "title": "DISBURSEMENT_DETAILS",
                         "items": [
                             {
                                 key:"loanAccount.sanctionDate",
@@ -725,16 +740,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.numberOfDisbursements",
                                 title:"NUM_OF_DISBURSEMENTS",
                                 onChange:function(value,form,model){
-                                    $log.info(value);
-                                    $log.info(model);
-
-                                    model.loanAccount.disbursementSchedules=[];
-                                    for(var i=0;i<value;i++){
-                                        model.loanAccount.disbursementSchedules.push({
-                                            trancheNumber:""+(i+1),
-                                            disbursementAmount:0
-                                        });
-                                    }
+                                    populateDisbursementSchedule(value,form,model);
                                 }
                             },
                             {
