@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
         var populateDisbursementDate = function(modelValue,form,model){
             if (modelValue){
                 modelValue = new Date(modelValue);
-                model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue + 1);
+                model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue.setDate(modelValue.getDate()+1));
             }
         };
 
@@ -320,6 +320,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     }
                     if (customerSignatureDate<=sanctionDate){
                         PageHelper.showProgress("loan-create","Customer sign date should be greater than the Loan sanction date",5000);
+                        return false;
+                    }
+
+                    if (scheduledDisbursementDate<=customerSignatureDate){
+                        PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
                         return false;
                     }
 
