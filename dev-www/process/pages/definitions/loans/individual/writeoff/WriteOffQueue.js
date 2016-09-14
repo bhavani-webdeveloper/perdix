@@ -14,7 +14,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
         },
 
         offline: false,
-        
+
         definition: {
             title: "SEARCH",
             autoSearch: false,
@@ -41,11 +41,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
                     },
                     "branchName": {
                         "title": "BRANCH_NAME",
-                        "type": "string",
+                        "type": "integer",
                         "x-schema-form": {
                             "type": "select"
                         },
-                        "enumCode": "branch"
+                        "enumCode": "branch_id"
                     }
                 }
             },
@@ -56,7 +56,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
                 return LoanAccount.writeOffQueue({
                     'Branches': searchOptions.branchName
                 }).$promise;
-                
+
             },
             paginationOptions: {
                 "viewMode": "page",

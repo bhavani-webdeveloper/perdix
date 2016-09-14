@@ -221,6 +221,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						ret.data = r.data = $filter('filter')(r.data, {parentCode:branchId}, true);
 						$log.warn('village:'+ret.data.length);
 						break;
+                    case 'branch_id':
+                        ret.data = _.clone(r.data);
+                        for (var i=0 ;i<ret.data.length; i++){
+                            ret.data[i].value = Number(ret.data[i].code);
+                        }
+                        break;
 					case 'partner':
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
