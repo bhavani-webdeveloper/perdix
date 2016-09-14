@@ -12,6 +12,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             $log.info("pendingDisbursementDays is not available");
         });
 
+        var populateDisbursementDate = function(modelValue,form,model){
+            if (modelValue){
+                modelValue = new Date(modelValue);
+                model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue + 1);
+            }
+        };
+
         return {
             "type": "schema-form",
             "title": "CAPTURE_DATES",
@@ -84,7 +91,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "_currentDisbursement.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
                         "type": "date",
-                        "required": true
+                        "required": true,
+                        "onChange":function(modelValue,form,model){
+                            populateDisbursementDate(modelValue,form,model);
+                        }
                     },
                     {
                         "key": "_currentDisbursement.scheduledDisbursementDate",
