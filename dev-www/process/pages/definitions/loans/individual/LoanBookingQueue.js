@@ -1,36 +1,15 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBookingQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore",
-function($log, formHelper, Enrollment, $state, SessionStore){
+["$log", "formHelper", "IndividualLoan", "$state", "SessionStore",
+function($log, formHelper, IndividualLoan, $state, SessionStore){
     return {
         "id": "LoanBookingQueue",
         "type": "search-list",
         "name": "Pending for Loan Booking Queue",
         "title": "Pending for Loan Booking Queue",
-        //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
         },
-        /*offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },*/
         definition: {
             title: "Search Loans pending for Booking",
             searchForm: [
@@ -78,14 +57,14 @@ function($log, formHelper, Enrollment, $state, SessionStore){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = Enrollment.search({
+                var promise = IndividualLoan.search({
+                    'stage': 'LoanBooking',
                     'branchName': searchOptions.branch,
                     'centreCode': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
-                    'lastName': searchOptions.last_name,
+                    'customerId': null,
+                    'accountNumber':loan_no,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'stage': "Stage02"
                 }).$promise;
 
                 return promise;

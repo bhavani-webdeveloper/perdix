@@ -702,6 +702,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         key: "loanAccount.nominees[].nomineePincode",
                                         type: "lov",
+                                        "title":"PIN_CODE",
                                         fieldType: "number",
                                         autolov: true,
                                         inputMap: {

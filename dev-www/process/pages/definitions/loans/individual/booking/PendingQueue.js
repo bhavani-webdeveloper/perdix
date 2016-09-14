@@ -77,18 +77,20 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     "branchName": {
                         "title": "BRANCH_NAME",
                         "type": "string",
+                        "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
-                        },
-                        "enumCode": "branch"
+                        }
+                        
                     },
                     "centreCode": {
                         "title": "CENTER_NAME",
                         "type": "string",
+                        "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select"
                         },
-                        "enumCode": "centre"
+                        "parentEnumCode":"branch"
                     }
                 }
             },
@@ -100,38 +102,12 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     'stage': 'LoanBooking',
                     'branchName': searchOptions.branchName,
                     'centreCode': searchOptions.centreCode,
-                    'customerId': searchOptions.customerId,
+                    'customerId': null,
+                    'accountNumber':null,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
                     'sortBy':searchOptions.sortBy
                 }).$promise;
-                //var out = {
-                //    body: [
-                //        {
-                //            "name": "Ajay Karthik | GKB Industries Ltd.",
-                //            "loan_amount": "7,50,000",
-                //            "cycle": "5607891 | Belgaum branch",
-                //            "sanction_date": "12/07/2016"
-                //        },
-                //        {
-                //            "name":"Ravi S | Key Metals Pvt. Ltd.",
-                //            "loan_amount": "20,00,00",
-                //            "cycle": "8725678 | Hubli branch",
-                //            "sanction_date": "17/07/2016"
-                //        },
-                //        {
-                //            "name":"Kaushik G | HPL",
-                //            "loan_amount": "30,00,000",
-                //            "cycle": "9057328 | Trichy branch",
-                //            "sanction_date": "01/07/2016"
-                //        }
-                //    ],
-                //    headers: {
-                //        "method": "GET",
-                //        "x-total-count": 20
-                //    }
-                //}
-                //return $q.resolve(out)
             },
             paginationOptions: {
                 "viewMode": "page",
@@ -154,9 +130,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 },
                 getListItem: function(item){
                     return [
-                        item.customerName,
+                        item.customerName ,
                         "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
-                        "Cycle : " + item.cycle
                     ]
                 },
                 getActions: function(){
