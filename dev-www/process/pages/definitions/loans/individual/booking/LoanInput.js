@@ -29,7 +29,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         var calculateTotalValue = function(value, form, model){
             if (_.isNumber(model.loanAccount.collateral[form.arrayIndex].quantity) && _.isNumber(value)){
-                model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].collateralValue;
+                model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].loanToValue;
             }
         }
 
@@ -495,27 +495,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].machineOld"
                             },
                             {
-                                "key":"loanAccount.collateral[].collateralValue",
+                                "key":"loanAccount.collateral[].loanToValue",
                                 "type":"amount",
-                                "title":"COLLATERAL_VALUE",
+                                "title":"PRESENT_VALUE",
                                 "onChange": function(value ,form ,model, event){
                                     calculateTotalValue(value, form, model);
                                 }
                             },
                             {
-                                "key":"loanAccount.collateral[].totalValue",
-                                "type":"amount",
-                                "title":"TOTAL_VALUE"
-                            },
-                            {
-                                "key":"loanAccount.collateral[].marginValue",
+                                "key":"loanAccount.collateral[].collateralValue",
                                 "type":"amount",
                                 "title":"PURCHASE_PRICE"
                             },
                             {
-                                "key":"loanAccount.collateral[].loanToValue",
+                                "key":"loanAccount.collateral[].totalValue",
                                 "type":"amount",
-                                "title":"PRESENT_VALUE"
+                                "title":"TOTAL_VALUE",
+                                "readonly":true
                             },
                             {
                                 "key":"loanAccount.collateral[].collateral1FilePath",
