@@ -2,12 +2,9 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
     ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams",
         function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams){
             return {
-                "id": "ViewLoans",
                 "type": "search-list",
-                "name": "View Loans",
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
-                "uri":"Loans/View Loans",
                 initialize: function (model, form, formCtrl) {
                     $log.info("ViewLoans initialiized");
                 },

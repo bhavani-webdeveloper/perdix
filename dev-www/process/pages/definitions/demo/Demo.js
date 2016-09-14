@@ -22,16 +22,16 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                 },function(err){
 
                 });
-
-
-
             },
             form: [
                 {
                     "type":"box",
                     "title":"Details",
                     "items":[
-                        "address.streetAddress",
+                        {
+                            key: "address.streetAddress",
+                            type: "date"
+                        },
                         {
                             key:"address.city",
                             type:"select",
@@ -47,8 +47,14 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                             html: "<i>asdf</i>{{model.address.streetAddress}}"
                         }
                     ]
+                },
+                {
+                    type: "actionbox",
+                    items: [{
+                        type: "submit",
+                        title: "Download Dump"
+                    }]
                 }
-
             ],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -106,6 +112,7 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
             },
             actions: {
                 submit: function(model, form, formName){
+                    $log.info('on submit action ....');
                 }
             }
         };

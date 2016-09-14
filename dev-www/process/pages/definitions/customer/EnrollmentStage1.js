@@ -268,9 +268,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     var branch = SessionStore.getBranch();
 
     return {
-        "id": "ProfileInformation",
         "type": "schema-form",
-        "name": "Stage1",
         "title": "CUSTOMER_ENROLLMENT",
         "subTitle": "STAGE_1",
         initialize: function (model, form, formCtrl) {

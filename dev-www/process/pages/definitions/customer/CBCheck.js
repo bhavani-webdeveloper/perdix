@@ -1,14 +1,11 @@
-irf.pageCollection.factory("Pages__CBCheck",
+irf.pageCollection.factory(irf.page("CBCheck"),
 	["$log", "formHelper", "Enrollment", "CreditBureau", "SessionStore", "$state", "entityManager",
 	function($log, formHelper, Enrollment, CreditBureau, SessionStore, $state, entityManager){
 	var branch = SessionStore.getBranch();
 	return {
-		"id": "CustomerCBCheck",
 		"type": "search-list",
-		"name": "CustomerCBCheck",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "CUSTOMER_SEARCH",
-		"uri":"",
 		initialize: function (model, form, formCtrl) {
 			model.branchName = branch;
 			$log.info("search-CustomerCBCheck got initialized");

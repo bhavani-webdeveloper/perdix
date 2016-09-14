@@ -4,12 +4,9 @@ irf.pageCollection.factory(irf.page("AssetsLiabilitiesAndHealth"),
 function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage, PageHelper,
          SessionStore,Utils,authService, BiometricService, Files) {
     return {
-        "id": "AssetsAndLiabilities",
         "type": "schema-form",
-        "name": "Stage2",
         "title": "HOUSE_VERIFICATION",
         "subTitle": "Enrollment Stage 2",
-        "uri": "Profile/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("I got initialized");
             $log.info($stateParams);

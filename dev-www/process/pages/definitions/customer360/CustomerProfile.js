@@ -55,14 +55,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 return deferred.promise;
             }
         },
-        offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item["customer"]["urnNo"],
-                item["customer"]["firstName"],
-                item["customer"]["villageName"]
-            ]
-        },
         form: [],
         formSource: [{
             "type": "box",

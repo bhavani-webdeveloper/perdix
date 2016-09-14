@@ -1,4 +1,4 @@
-irf.pageCollection.factory("Pages__CBCheckStatusQueue",
+irf.pageCollection.factory(irf.page("CBCheckStatusQueue"),
 ["$log", "formHelper", "CreditBureau", "CreditBureau", "SessionStore", "$state", "entityManager",
 "irfProgressMessage", "irfSimpleModal", "PageHelper",
 function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, entityManager,
@@ -6,12 +6,9 @@ function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, ent
 	var branch = SessionStore.getBranch();
 	var nDays = 15;
 	return {
-		"id": "CBCheckStatusQueue",
 		"type": "search-list",
-		"name": "CBCheckStatusQueue",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "CUSTOMER_STATUS_QUEUE",
-		"uri":"",
 		initialize: function (model, form, formCtrl) {
 			model.branchName = branch;
 			$log.info("search-list sample got initialized");

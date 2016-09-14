@@ -1,10 +1,8 @@
-irf.pageCollection.factory("Pages__CBCheckCapture",
+irf.pageCollection.factory(irf.page("CBCheckCapture"),
 	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage",
 	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM){
 	return {
-		"id": "CustomerCBCheckCapture",
 		"type": "schema-form",
-		"name": "CustomerCBCheckCapture",
 		"title": "CREDIT_BUREAU_CHECK",
 		"subTitle": "LOAN_DATA_CAPTURE",
 		initialize: function (model, form, formCtrl) {

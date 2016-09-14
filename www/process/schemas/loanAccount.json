@@ -30,6 +30,747 @@
                 }
             }
         },
+        "encoreencore": {
+            "type": "object",
+            "properties": {
+                "accountId": {
+                    "type": "string"
+                },
+                "productType": {
+                    "type": "string"
+                },
+                "productCode": {
+                    "type": "string"
+                },
+                "accountName": {
+                    "type": "string"
+                },
+                "branchCode": {
+                    "type": "string"
+                },
+                "glSubHead": {
+                    "type": "string"
+                },
+                "normalInterestRate": {
+                    "type": "string"
+                },
+                "penalInterestRate": {
+                    "type": "string"
+                },
+                "postMaturityNormalInterestRate": {
+                    "type": "string"
+                },
+                "operationalMode": {
+                    "type": "string"
+                },
+                "operationalStatus": {
+                    "type": "string"
+                },
+                "customerId1": {
+                    "type": "string"
+                },
+                "customer1FirstName": {
+                    "type": "string"
+                },
+                "customer1MiddleName": {
+                    "type": "null"
+                },
+                "customer1LastName": {
+                    "type": "null"
+                },
+                "customer1Address1": {
+                    "type": "string"
+                },
+                "customer1Address2": {
+                    "type": "string"
+                },
+                "customer1Address3": {
+                    "type": "string"
+                },
+                "customer1CountryCode": {
+                    "type": "string"
+                },
+                "customer1StateCode": {
+                    "type": "string"
+                },
+                "customer1CityCode": {
+                    "type": "string"
+                },
+                "customer1DistrictCode": {
+                    "type": "string"
+                },
+                "customer1PinCode": {
+                    "type": "string"
+                },
+                "customer1Phone1": {
+                    "type": "null"
+                },
+                "customer1Phone2": {
+                    "type": "null"
+                },
+                "customer1Email": {
+                    "type": "null"
+                },
+                "customerId2": {
+                    "type": "null"
+                },
+                "customer2FirstName": {
+                    "type": "null"
+                },
+                "customer2MiddleName": {
+                    "type": "null"
+                },
+                "customer2LastName": {
+                    "type": "null"
+                },
+                "customer2Address1": {
+                    "type": "null"
+                },
+                "customer2Address2": {
+                    "type": "null"
+                },
+                "customer2Address3": {
+                    "type": "null"
+                },
+                "customer2CountryCode": {
+                    "type": "null"
+                },
+                "customer2StateCode": {
+                    "type": "null"
+                },
+                "customer2CityCode": {
+                    "type": "null"
+                },
+                "customer2DistrictCode": {
+                    "type": "null"
+                },
+                "customer2PinCode": {
+                    "type": "null"
+                },
+                "customer2Phone1": {
+                    "type": "null"
+                },
+                "customer2Phone2": {
+                    "type": "null"
+                },
+                "customer2Email": {
+                    "type": "null"
+                },
+                "amount": {
+                    "type": "string"
+                },
+                "tenureMagnitude": {
+                    "type": "string"
+                },
+                "tenureUnit": {
+                    "type": "string"
+                },
+                "disbursementByDate": {
+                    "type": "string"
+                },
+                "migrated": {
+                    "type": "string"
+                },
+                "moratoriumPeriod": {
+                    "type": "string"
+                },
+                "moratoriumType": {
+                    "type": "string"
+                },
+                "accountBalance": {
+                    "type": "string"
+                },
+                "accountOpenDate": {
+                    "type": "string"
+                },
+                "lastArchiveBalance": {
+                    "type": "string"
+                },
+                "lastArchiveDate": {
+                    "type": "string"
+                },
+                "lastEntryDate": {
+                    "type": "string"
+                },
+                "bookedNotDueNormalInterest": {
+                    "type": "string"
+                },
+                "bookedNotDuePenalInterest": {
+                    "type": "string"
+                },
+                "bookedNormalInterest": {
+                    "type": "string"
+                },
+                "bookedPenalInterest": {
+                    "type": "string"
+                },
+                "demandAdjustment": {
+                    "type": "string"
+                },
+                "numDisbursements": {
+                    "type": "integer"
+                },
+                "numDemands": {
+                    "type": "integer"
+                },
+                "numSatisifiedDemands": {
+                    "type": "integer"
+                },
+                "numRepayments": {
+                    "type": "integer"
+                },
+                "numAdvanceSatisfiedDemands": {
+                    "type": "integer"
+                },
+                "numScheduledDemandsRaised": {
+                    "type": "integer"
+                },
+                "firstDisbursementDate": {
+                    "type": "string"
+                },
+                "lastDisbursementDate": {
+                    "type": "string"
+                },
+                "lastDemandRunDate": {
+                    "type": "string"
+                },
+                "nextDemandRunDate": {
+                    "type": "string"
+                },
+                "nextDemandScheduledDate": {
+                    "type": "string"
+                },
+                "lastBookingDate": {
+                    "type": "string"
+                },
+                "firstRepaymentDate": {
+                    "type": "string"
+                },
+                "lastRepaymentDate": {
+                    "type": "string"
+                },
+                "maturityDate": {
+                    "type": "string"
+                },
+                "closedOnValueDate": {
+                    "type": "null"
+                },
+                "totalPrincipalRepaid": {
+                    "type": "string"
+                },
+                "totalNormalInterestRepaid": {
+                    "type": "string"
+                },
+                "totalPenalInterestRepaid": {
+                    "type": "string"
+                },
+                "totalFeeRepaid": {
+                    "type": "string"
+                },
+                "totalRepaid": {
+                    "type": "string"
+                },
+                "totalPrincipalDue": {
+                    "type": "string"
+                },
+                "totalNormalInterestDue": {
+                    "type": "string"
+                },
+                "totalPenalInterestDue": {
+                    "type": "string"
+                },
+                "totalFeeDue": {
+                    "type": "string"
+                },
+                "totalDemandDue": {
+                    "type": "string"
+                },
+                "totalPrincipalRaised": {
+                    "type": "string"
+                },
+                "totalNormalInterestRaised": {
+                    "type": "string"
+                },
+                "totalPenalInterestRaised": {
+                    "type": "string"
+                },
+                "totalDemandRaised": {
+                    "type": "string"
+                },
+                "totalDisbursed": {
+                    "type": "string"
+                },
+                "recoverableInterest": {
+                    "type": "string"
+                },
+                "principalNotDue": {
+                    "type": "string"
+                },
+                "payOffAmount": {
+                    "type": "string"
+                },
+                "payOffAndDueAmount": {
+                    "type": "string"
+                },
+                "disbursableAmount": {
+                    "type": "string"
+                },
+                "daysPastDue": {
+                    "type": "integer"
+                },
+                "npa": {
+                    "type": "string"
+                },
+                "equatedInstallment": {
+                    "type": "string"
+                },
+                "defaultFirstRepaymentDate": {
+                    "type": "null"
+                },
+                "minFirstRepaymentDate": {
+                    "type": "null"
+                },
+                "maxFirstRepaymentDate": {
+                    "type": "null"
+                },
+                "netDisbursementRequired": {
+                    "type": "boolean"
+                },
+                "fee": {
+                    "type": "null"
+                },
+                "fees": {
+                    "type": "null"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "transactionId": {
+                                "type": "string"
+                            },
+                            "valueDate": {
+                                "type": "string"
+                            },
+                            "transactionDate": {
+                                "type": "string"
+                            },
+                            "systemDateAndTime": {
+                                "type": "string"
+                            },
+                            "accountId": {
+                                "type": "string"
+                            },
+                            "entityId": {
+                                "type": "string"
+                            },
+                            "sequenceNum": {
+                                "type": "integer"
+                            },
+                            "transactionName": {
+                                "type": "string"
+                            },
+                            "part1": {
+                                "type": "string"
+                            },
+                            "part2": {
+                                "type": "string"
+                            },
+                            "part3": {
+                                "type": "string"
+                            },
+                            "part4": {
+                                "type": "null"
+                            },
+                            "part5": {
+                                "type": "null"
+                            },
+                            "part6": {
+                                "type": "null"
+                            },
+                            "amount1": {
+                                "type": "string"
+                            },
+                            "amount2": {
+                                "type": "string"
+                            },
+                            "amount3": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "null"
+                            },
+                            "userId": {
+                                "type": "string"
+                            },
+                            "customerName": {
+                                "type": "null"
+                            },
+                            "status": {
+                                "type": "null"
+                            },
+                            "responseCode": {
+                                "type": "null"
+                            },
+                            "payeeAccountId": {
+                                "type": "null"
+                            },
+                            "param1": {
+                                "type": "string"
+                            },
+                            "param2": {
+                                "type": "null"
+                            },
+                            "instrument": {
+                                "type": "string"
+                            },
+                            "reference": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "transactionId",
+                            "valueDate",
+                            "transactionDate",
+                            "systemDateAndTime",
+                            "accountId",
+                            "entityId",
+                            "sequenceNum",
+                            "transactionName",
+                            "part1",
+                            "part2",
+                            "part3",
+                            "part4",
+                            "part5",
+                            "part6",
+                            "amount1",
+                            "amount2",
+                            "amount3",
+                            "description",
+                            "userId",
+                            "customerName",
+                            "status",
+                            "responseCode",
+                            "payeeAccountId",
+                            "param1",
+                            "param2",
+                            "instrument",
+                            "reference"
+                        ]
+                    }
+                },
+                "historyTransactions": {
+                    "type": "array",
+                    "items": {}
+                },
+                "repaymentSchedule": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "transactionId": {
+                                "type": "string"
+                            },
+                            "valueDate": {
+                                "type": "string"
+                            },
+                            "transactionDate": {
+                                "type": "string"
+                            },
+                            "systemDateAndTime": {
+                                "type": "null"
+                            },
+                            "accountId": {
+                                "type": "string"
+                            },
+                            "entityId": {
+                                "type": "null"
+                            },
+                            "sequenceNum": {
+                                "type": "integer"
+                            },
+                            "transactionName": {
+                                "type": "string"
+                            },
+                            "part1": {
+                                "type": "string"
+                            },
+                            "part2": {
+                                "type": "string"
+                            },
+                            "part3": {
+                                "type": "string"
+                            },
+                            "part4": {
+                                "type": "string"
+                            },
+                            "part5": {
+                                "type": "string"
+                            },
+                            "part6": {
+                                "type": "string"
+                            },
+                            "amount1": {
+                                "type": "string"
+                            },
+                            "amount2": {
+                                "type": "string"
+                            },
+                            "amount3": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "userId": {
+                                "type": "string"
+                            },
+                            "customerName": {
+                                "type": "null"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "responseCode": {
+                                "type": "null"
+                            },
+                            "payeeAccountId": {
+                                "type": "null"
+                            },
+                            "param1": {
+                                "type": "string"
+                            },
+                            "param2": {
+                                "type": "null"
+                            },
+                            "instrument": {
+                                "type": "null"
+                            },
+                            "reference": {
+                                "type": "null"
+                            }
+                        },
+                        "required": [
+                            "transactionId",
+                            "valueDate",
+                            "transactionDate",
+                            "systemDateAndTime",
+                            "accountId",
+                            "entityId",
+                            "sequenceNum",
+                            "transactionName",
+                            "part1",
+                            "part2",
+                            "part3",
+                            "part4",
+                            "part5",
+                            "part6",
+                            "amount1",
+                            "amount2",
+                            "amount3",
+                            "description",
+                            "userId",
+                            "customerName",
+                            "status",
+                            "responseCode",
+                            "payeeAccountId",
+                            "param1",
+                            "param2",
+                            "instrument",
+                            "reference"
+                        ]
+                    }
+                },
+                "accountStatement": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "balance": {
+                                "type": "string"
+                            },
+                            "accountId": {
+                                "type": "string"
+                            },
+                            "valueDate": {
+                                "type": "string"
+                            },
+                            "transactionDate": {
+                                "type": "string"
+                            },
+                            "referencedTransactionId": {
+                                "type": "string"
+                            },
+                            "subAccountId": {
+                                "type": "null"
+                            },
+                            "entryNum": {
+                                "type": "integer"
+                            },
+                            "accountEntryType": {
+                                "type": "string"
+                            },
+                            "amount": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "transactionId": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "balance",
+                            "accountId",
+                            "valueDate",
+                            "transactionDate",
+                            "referencedTransactionId",
+                            "subAccountId",
+                            "entryNum",
+                            "accountEntryType",
+                            "amount",
+                            "description",
+                            "transactionId"
+                        ]
+                    }
+                },
+                "partnerLoanDemandSchedule": {
+                    "type": "null"
+                },
+                "feesJsonStr": {
+                    "type": "string"
+                },
+                "transactionJsonStr": {
+                    "type": "string"
+                },
+                "historyTransactionJsonStr": {
+                    "type": "string"
+                },
+                "repaymentScheduleJsonStr": {
+                    "type": "string"
+                },
+                "accountStatementEntryJsonStr": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "accountId",
+                "productType",
+                "productCode",
+                "accountName",
+                "branchCode",
+                "glSubHead",
+                "normalInterestRate",
+                "penalInterestRate",
+                "postMaturityNormalInterestRate",
+                "operationalMode",
+                "operationalStatus",
+                "customerId1",
+                "customer1FirstName",
+                "customer1MiddleName",
+                "customer1LastName",
+                "customer1Address1",
+                "customer1Address2",
+                "customer1Address3",
+                "customer1CountryCode",
+                "customer1StateCode",
+                "customer1CityCode",
+                "customer1DistrictCode",
+                "customer1PinCode",
+                "customer1Phone1",
+                "customer1Phone2",
+                "customer1Email",
+                "customerId2",
+                "customer2FirstName",
+                "customer2MiddleName",
+                "customer2LastName",
+                "customer2Address1",
+                "customer2Address2",
+                "customer2Address3",
+                "customer2CountryCode",
+                "customer2StateCode",
+                "customer2CityCode",
+                "customer2DistrictCode",
+                "customer2PinCode",
+                "customer2Phone1",
+                "customer2Phone2",
+                "customer2Email",
+                "amount",
+                "tenureMagnitude",
+                "tenureUnit",
+                "disbursementByDate",
+                "migrated",
+                "moratoriumPeriod",
+                "moratoriumType",
+                "accountBalance",
+                "accountOpenDate",
+                "lastArchiveBalance",
+                "lastArchiveDate",
+                "lastEntryDate",
+                "bookedNotDueNormalInterest",
+                "bookedNotDuePenalInterest",
+                "bookedNormalInterest",
+                "bookedPenalInterest",
+                "demandAdjustment",
+                "numDisbursements",
+                "numDemands",
+                "numSatisifiedDemands",
+                "numRepayments",
+                "numAdvanceSatisfiedDemands",
+                "numScheduledDemandsRaised",
+                "firstDisbursementDate",
+                "lastDisbursementDate",
+                "lastDemandRunDate",
+                "nextDemandRunDate",
+                "nextDemandScheduledDate",
+                "lastBookingDate",
+                "firstRepaymentDate",
+                "lastRepaymentDate",
+                "maturityDate",
+                "closedOnValueDate",
+                "totalPrincipalRepaid",
+                "totalNormalInterestRepaid",
+                "totalPenalInterestRepaid",
+                "totalFeeRepaid",
+                "totalRepaid",
+                "totalPrincipalDue",
+                "totalNormalInterestDue",
+                "totalPenalInterestDue",
+                "totalFeeDue",
+                "totalDemandDue",
+                "totalPrincipalRaised",
+                "totalNormalInterestRaised",
+                "totalPenalInterestRaised",
+                "totalDemandRaised",
+                "totalDisbursed",
+                "recoverableInterest",
+                "principalNotDue",
+                "payOffAmount",
+                "payOffAndDueAmount",
+                "disbursableAmount",
+                "daysPastDue",
+                "npa",
+                "equatedInstallment",
+                "defaultFirstRepaymentDate",
+                "minFirstRepaymentDate",
+                "maxFirstRepaymentDate",
+                "netDisbursementRequired",
+                "fee",
+                "fees",
+                "transactions",
+                "historyTransactions",
+                "repaymentSchedule",
+                "accountStatement",
+                "partnerLoanDemandSchedule",
+                "feesJsonStr",
+                "transactionJsonStr",
+                "historyTransactionJsonStr",
+                "repaymentScheduleJsonStr",
+                "accountStatementEntryJsonStr"
+            ]
+        },
         "additional":{
             "type":"object",
             "properties":{
@@ -334,7 +1075,8 @@
                         },
                         "required": [
 
-                            "collateralType"
+                            "collateralType",
+                            "collateralDescription"
 
                         ]
                     }
@@ -884,7 +1626,7 @@
                                 "type": "boolean"
                             },
                             "nomineePincode": {
-                                "type": "number",
+                                "type": ["number", "string"],
                                 "minimum": 100000,
                                 "maximum": 999999
                             },
@@ -1064,7 +1806,7 @@
                     "type": "string"
                 },
                 "tenure": {
-                    "type": "integer",
+                    "type": ["integer", "string"],
                     "title":"TENURE",
                     "minimum":0
                 },

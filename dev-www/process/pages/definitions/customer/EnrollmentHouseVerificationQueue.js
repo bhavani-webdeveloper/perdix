@@ -1,13 +1,10 @@
-irf.pageCollection.factory("Pages__EnrollmentHouseVerificationQueue",
+irf.pageCollection.factory(irf.page("EnrollmentHouseVerificationQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
 	return {
-		"id": "EnrollmentHouseVerificationQueue",
 		"type": "search-list",
-		"name": "House Verification Pending Queue",
 		"title": "T_HOUSE_VERIFICATION_PENDING_QUEUE",
 		"subTitle": "T_ENROLLMENTS_PENDING",
-		"uri":"Customer Enrollment/Stage 2",
 		initialize: function (model, form, formCtrl) {
 			$log.info("search-list sample got initialized");
 			model.branch = SessionStore.getBranch();
