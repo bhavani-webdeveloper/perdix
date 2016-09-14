@@ -48,6 +48,11 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                     "required": true
                 },
                 {
+                    "title": "REMARKS",
+                    "key": "loanAccount.writeOffRemarks",
+                    "required": true
+                },
+                {
                     "key": "loanAccount.transactionDate",
                     "type": "date"
                 },
@@ -65,6 +70,13 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 // Disbursement Date should be >= Sanction Date + 30 days
                 // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
                 {
+                    // Update information in DB
+                    return LoanAccount.writeOff({
+                        'accountNumber': loanAccount.accountId,
+                        'writeOffDate' : loanAccount.transactionDate,
+                        'remarks' : loanAccount.writeOffRemarks
+                    }).$promise;
+
                     $log.info("Redirecting");
                     $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffQueue', pageId: ''});
                 }
