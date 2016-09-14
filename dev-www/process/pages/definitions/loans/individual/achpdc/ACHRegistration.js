@@ -9,9 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 		var branch = SessionStore.getBranch();
 
 		return {
-			"id": "ach",
 			"type": "schema-form",
-			"name": "ach",
 			"title": "ACH_REGISTRATION",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {

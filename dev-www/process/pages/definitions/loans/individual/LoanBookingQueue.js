@@ -2,9 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBookingQueue")
 ["$log", "formHelper", "IndividualLoan", "$state", "SessionStore",
 function($log, formHelper, IndividualLoan, $state, SessionStore){
     return {
-        "id": "LoanBookingQueue",
         "type": "search-list",
-        "name": "Pending for Loan Booking Queue",
         "title": "Pending for Loan Booking Queue",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");

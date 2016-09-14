@@ -42,9 +42,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
             };
 
             return {
-                "id": "LoanRepay",
                 "type": "schema-form",
-                "name": "LoanRepay",
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {

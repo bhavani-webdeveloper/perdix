@@ -2,9 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.PendingCashQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "PendingCashQueue",
         "type": "search-list",
-        "name": "Pending for Cash Payment",
         "title": "Pending for Cash Payment",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {

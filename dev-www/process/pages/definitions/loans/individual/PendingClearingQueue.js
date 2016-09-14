@@ -2,9 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.PendingClearingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "PendingClearingQueue",
         "type": "search-list",
-        "name": "Pending for Clearing",
         "title": "Pending for Clearing",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {

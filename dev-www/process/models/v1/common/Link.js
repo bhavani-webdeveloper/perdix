@@ -12,3 +12,14 @@ irf.models.factory('Link', [
         return links;
     }
 ]);
+
+/*
+
+{
+	"title": "BI_LINK",
+	"iconClass": "fa fa-area-chart",
+	"linkId": "BI_LINK1",
+	"link": "http://www.heromotocorp.com/en-in/reach-us/book-bike-service-appointment.html"
+}
+
+*/

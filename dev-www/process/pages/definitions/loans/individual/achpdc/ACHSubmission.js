@@ -6,9 +6,7 @@ are updated into the excel. This screen helps in viewing all the ACH Mandates re
 This excel document can be downloaded here.
 */
     return {
-        "id": "ACHSubmission",
         "type": "schema-form",
-        "name": "ACHSubmission",
         "title": "ACH SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {

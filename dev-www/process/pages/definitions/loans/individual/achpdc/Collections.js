@@ -4,9 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
     
 
     return {
-        "id": "Collections",
         "type": "schema-form",
-        "name": "Collections",
         "title": "ACH Clearing - Collection",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {

@@ -488,22 +488,11 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
-    "    <!--input ng-if=\"form.readonly\"\n" +
+    "    <input ng-if=\"form.readonly\"\n" +
     "           ng-model=\"$$value$$\"\n" +
     "           ng-disabled=\"form.readonly\"\n" +
     "           type=\"text\"\n" +
-    "           class=\"form-control {{form.fieldHtmlClass}}\" /-->\n" +
-    "    <select sf-field-model=\"replaceAll\"\n" +
-    "      ng-model=\"$$value$$\"\n" +
-    "      ng-if=\"form.readonly\"\n" +
-    "      schema-validate=\"form\"\n" +
-    "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "      id=\"{{form.id}}\" name=\"{{form.id}}\"\n" +
-    "      ng-init=\"form.enumCode = form.enumCode ? form.enumCode : form.schema.enumCode; evalExpr('registerForTitleMap(form)', {form:form}); form.id=form.key.slice(-1)[0]\"\n" +
-    "      irf-options-builder=\"form\"\n" +
-    "      ng-options=\"item.value as item.name for item in form.filteredTitleMap\"\n" +
-    "      ng-disabled=\"form.readonly\"\n" +
-    "    ></select>\n" +
+    "           class=\"form-control {{form.fieldHtmlClass}}\" />\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
     "      ng-if=\"!form.readonly\"\n" +
@@ -605,6 +594,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -634,22 +639,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -1051,6 +1040,20 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "  </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
+    "	<table class=\"table table-condensed\">\n" +
+    "	    <tbody>\n" +
+    "	        <tr>\n" +
+    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
+    "	        </tr>\n" +
+    "	        <tr ng-repeat=\"item in definition.data\">\n" +
+    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
+    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
+    "	        </tr>\n" +
+    "	    </tbody>\n" +
+    "	</table>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<div ng-class=\"{'read-only':form.readonly}\" style=\"position:relative;height:inherit;\">\n" +
     "  <div class=\"row\" style=\"padding-bottom:7px;\">\n" +
     "    <div class=\"col-xs-12\">\n" +
@@ -1069,20 +1072,6 @@ $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<di
     "      <button ng-click=\"validateFinger($event)\" class=\"btn btn-theme btn-xs btn-block\" ng-disabled=\"disabled\"><i class=\"fa fa-hand-pointer-o\">&nbsp;</i>{{ buttonTitle | translate}}</button>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
-    "	<table class=\"table table-condensed\">\n" +
-    "	    <tbody>\n" +
-    "	        <tr>\n" +
-    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
-    "	        </tr>\n" +
-    "	        <tr ng-repeat=\"item in definition.data\">\n" +
-    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
-    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
-    "	        </tr>\n" +
-    "	    </tbody>\n" +
-    "	</table>\n" +
     "</div>")
 }]);
 })();
@@ -1192,6 +1181,100 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1699,100 +1782,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 		}
 	};
 }])*/
-;
-
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
 ;
 
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
@@ -3280,29 +3269,6 @@ angular.module('irf.searchBox', [])
     }])
 ;
 
-angular.module('irf.table', ['irf.elements.commons'])
-.directive('irfSimpleTable', function(){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableKey: "=",
-			tablePromise: "&"
-		},
-		templateUrl: 'irf/template/table/SimpleTable.html',
-		controller: 'irfSimpleTableCtrl'
-	}
-})
-.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
-	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
-		$scope.definition = data;
-	});
-
-	$scope.isObject = angular.isObject;
-}])
-;
-
-
 angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource'])
 .directive('irfResourceSearchWrapper', function(){
 	return {
@@ -3603,6 +3569,29 @@ angular.module('irf.searchListWrapper', ['irf.elements.commons', 'ngResource'])
 		return response;
 	})
 ;
+
+angular.module('irf.table', ['irf.elements.commons'])
+.directive('irfSimpleTable', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			tableKey: "=",
+			tablePromise: "&"
+		},
+		templateUrl: 'irf/template/table/SimpleTable.html',
+		controller: 'irfSimpleTableCtrl'
+	}
+})
+.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
+	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
+		$scope.definition = data;
+	});
+
+	$scope.isObject = angular.isObject;
+}])
+;
+
 
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
@@ -6645,6 +6634,17 @@ irf.models.factory('Link', [
         return links;
     }
 ]);
+
+/*
+
+{
+	"title": "BI_LINK",
+	"iconClass": "fa fa-area-chart",
+	"linkId": "BI_LINK1",
+	"link": "http://www.heromotocorp.com/en-in/reach-us/book-bike-service-appointment.html"
+}
+
+*/
 irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
     /*
@@ -7287,6 +7287,19 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
     });
 }]);
 
+irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource) {
+    var endpoint = irf.BI_BASE_URL;
+
+    var res = $resource(endpoint, null, {
+        reportList: {
+            method: 'GET',
+            url: endpoint + '/report_list.php',
+            isArray: true
+        }
+    });
+
+    return res;
+});
 irf.models.factory('Masters',function($resource,$httpParamSerializer, searchResource){
     var endpoint = irf.MANAGEMENT_BASE_URL;
 
@@ -8434,6 +8447,93 @@ irf.pageCollection.factory(irf.page("demo.Demo2"),
     }
 ]);
 
+irf.pageCollection.factory(irf.page("bi.BIReports"),
+["$log", "BIReports", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper",
+    function($log, BIReports, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper) {
+
+        return {
+            "type": "schema-form",
+            "title": "REPORTS",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                var self = this;
+                self.form = [];
+                PageHelper.showLoader();
+                BIReports.reportList().$promise.then(function(resp){
+                    self.formSource[0].items[0].titleMap = resp;
+                    self.form = self.formSource;
+                }, function(errResp){
+                    PageHelper.showErrors(errResp);
+                }).finally(function(){
+                    PageHelper.hideLoader();
+                });
+            },
+            form: [],
+            formSource: [
+                {
+                    "type": "box",
+                    "title": "CHOOSE_A_REPORT",
+                    "items": [
+                        {
+                            "key": "bi.report_name",
+                            "type": "select"
+                        },
+                        {
+                            "key": "bi.from_date",
+                            "type": "date"
+                        },
+                        {
+                            "key": "bi.to_date",
+                            "type": "date"
+                        }
+                    ]
+                },
+                {
+                    type: "actionbox",
+                    items: [{
+                        type: "submit",
+                        title: "DOWNLOAD_REPORT"
+                    }]
+                }
+            ],
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "bi": {
+                        "type": "object",
+                        "properties": {
+                            "report_name": {
+                                "type": "string",
+                                "title": "REPORT_NAME"
+                            },
+                            "from_date": {
+                                "type": "string",
+                                "title": "FROM_DATE"
+                            },
+                            "to_date": {
+                                "type": "string",
+                                "title": "TO_DATE"
+                            }
+                        },
+                        "required": [
+                            "report_name",
+                            "from_date",
+                            "to_date"
+                        ]
+                    }
+                }
+            },
+            actions: {
+                submit: function(model, form, formName) {
+                    var biDownloadUrl = irf.BI_BASE_URL + '/download.php?auth_token='+ AuthTokenHelper.getAuthData().access_token +'&' + $httpParamSerializer(model.bi);
+                    $log.info(biDownloadUrl);
+                    window.open(biDownloadUrl);
+                }
+            }
+        };
+    }
+]);
 irf.pageCollection.factory(irf.page("EnrollmentHouseVerificationQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore",
 function($log, formHelper, Enrollment, $state, SessionStore){
@@ -15182,9 +15282,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
             };
 
             return {
-                "id": "LoanRepay",
                 "type": "schema-form",
-                "name": "LoanRepay",
                 "title": "LOAN_REPAYMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
@@ -20444,9 +20542,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBookingQueue")
 ["$log", "formHelper", "IndividualLoan", "$state", "SessionStore",
 function($log, formHelper, IndividualLoan, $state, SessionStore){
     return {
-        "id": "LoanBookingQueue",
         "type": "search-list",
-        "name": "Pending for Loan Booking Queue",
         "title": "Pending for Loan Booking Queue",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
@@ -22318,9 +22414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.PendingClearingQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "PendingClearingQueue",
         "type": "search-list",
-        "name": "Pending for Clearing",
         "title": "Pending for Clearing",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
@@ -22493,9 +22587,7 @@ irf.pageCollection.factory(irf.page("loans.individual.PendingCashQueue"),
 ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q",
 function($log, formHelper, Enrollment, $state, SessionStore,$q){
     return {
-        "id": "PendingCashQueue",
         "type": "search-list",
-        "name": "Pending for Cash Payment",
         "title": "Pending for Cash Payment",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
@@ -24020,9 +24112,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 		var branch = SessionStore.getBranch();
 
 		return {
-			"id": "ach",
 			"type": "schema-form",
-			"name": "ach",
 			"title": "ACH_REGISTRATION",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
@@ -25532,9 +25622,7 @@ are updated into the excel. This screen helps in viewing all the ACH Mandates re
 This excel document can be downloaded here.
 */
     return {
-        "id": "ACHSubmission",
         "type": "schema-form",
-        "name": "ACHSubmission",
         "title": "ACH SUBMISSION",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
@@ -25595,9 +25683,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
     
 
     return {
-        "id": "Collections",
         "type": "schema-form",
-        "name": "Collections",
         "title": "ACH Clearing - Collection",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
