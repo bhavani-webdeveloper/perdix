@@ -713,9 +713,6 @@ span.htmlerror {
   transform: skew(8deg) rotate(3deg);
 }
 
-.dashboard-box .box-header .btn-box-tool {
-  font-size: 14px;
-}
 .dashboard-box .box-body .row {
   margin: 0 -5px;
 }
@@ -1124,14 +1121,12 @@ span.htmlerror {
 .skin-blue-light .main-header li.user-header {
   background-color: #3c8dbc;
 }
-.skin-blue-light::-moz-selection,
-.skin-blue-light ::-moz-selection {
+.skin-blue-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #3c8dbc;
 }
-.skin-blue-light::selection,
-.skin-blue-light ::selection {
+.skin-blue-light::selection {
   color: #fff;
   background: #3c8dbc;
 }
@@ -1278,14 +1273,12 @@ span.htmlerror {
 .skin-green-light .main-header li.user-header {
   background-color: #00a65a;
 }
-.skin-green-light::-moz-selection,
-.skin-green-light ::-moz-selection {
+.skin-green-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #00a65a;
 }
-.skin-green-light::selection,
-.skin-green-light ::selection {
+.skin-green-light::selection {
   color: #fff;
   background: #00a65a;
 }
@@ -1432,14 +1425,12 @@ span.htmlerror {
 .skin-purple-light .main-header li.user-header {
   background-color: #605ca8;
 }
-.skin-purple-light::-moz-selection,
-.skin-purple-light ::-moz-selection {
+.skin-purple-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #605ca8;
 }
-.skin-purple-light::selection,
-.skin-purple-light ::selection {
+.skin-purple-light::selection {
   color: #fff;
   background: #605ca8;
 }
@@ -1586,14 +1577,12 @@ span.htmlerror {
 .skin-red-light .main-header li.user-header {
   background-color: #dd4b39;
 }
-.skin-red-light::-moz-selection,
-.skin-red-light ::-moz-selection {
+.skin-red-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #dd4b39;
 }
-.skin-red-light::selection,
-.skin-red-light ::selection {
+.skin-red-light::selection {
   color: #fff;
   background: #dd4b39;
 }
@@ -1740,14 +1729,12 @@ span.htmlerror {
 .skin-yellow-light .main-header li.user-header {
   background-color: #f39c12;
 }
-.skin-yellow-light::-moz-selection,
-.skin-yellow-light ::-moz-selection {
+.skin-yellow-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #f39c12;
 }
-.skin-yellow-light::selection,
-.skin-yellow-light ::selection {
+.skin-yellow-light::selection {
   color: #fff;
   background: #f39c12;
 }
@@ -1920,14 +1907,12 @@ span.htmlerror {
 .skin-fuchsia-light .main-header li.user-header {
   background-color: #d348b8;
 }
-.skin-fuchsia-light::-moz-selection,
-.skin-fuchsia-light ::-moz-selection {
+.skin-fuchsia-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #d348b8;
 }
-.skin-fuchsia-light::selection,
-.skin-fuchsia-light ::selection {
+.skin-fuchsia-light::selection {
   color: #fff;
   background: #d348b8;
 }
@@ -2100,14 +2085,12 @@ span.htmlerror {
 .skin-deepteal-light .main-header li.user-header {
   background-color: #0B3E37;
 }
-.skin-deepteal-light::-moz-selection,
-.skin-deepteal-light ::-moz-selection {
+.skin-deepteal-light::-moz-selection {
   /* Code for Firefox */
   color: #fff;
   background: #0B3E37;
 }
-.skin-deepteal-light::selection,
-.skin-deepteal-light ::selection {
+.skin-deepteal-light::selection {
   color: #fff;
   background: #0B3E37;
 }
