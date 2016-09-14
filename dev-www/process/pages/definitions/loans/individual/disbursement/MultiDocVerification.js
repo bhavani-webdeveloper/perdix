@@ -29,36 +29,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
             model.loanAccountDisbursementSchedule = {};
             model.loanAccountDisbursementSchedule = _.cloneDeep(model._DocVerifyQueue);
             PageHelper.showLoader();
-            /*IndividualLoan.getDocuments({documentStatus:"PENDING",loanId:model.loanAccountDisbursementSchedule.loanId})
-                .$promise
-                .then(
-                    function (res) {
-                        PageHelper.showProgress('loan-load', 'Loading done.', 2000);
-                        model.individualLoanDocuments = res;
-                        var availableDocCodes = [];
-                        LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode)
-                        .then(
-                            function(docsForProduct){
-                                for (var i=0; i<loanDocuments.length; i++){
-                                    availableDocCodes.push(loanDocuments[i].document);
-                                    var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
-                                    if (documentObj!=null){
-                                        loanDocuments[i].$title = documentObj.docTitle;
-                                    } else {
-                                        loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
-                                    }
-                                }
-                                PageHelper.hideLoader();
-                            },
-                            function(httpRes){
-                                PageHelper.hideLoader();
-                            }
-                        )
-                    }, function (httpRes) {
-                        PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-                        PageHelper.showErrors(httpRes);
-                    }
-                )*/
                 IndividualLoan.get({id: model.loanAccountDisbursementSchedule.loanId})
                     .$promise
                     .then(

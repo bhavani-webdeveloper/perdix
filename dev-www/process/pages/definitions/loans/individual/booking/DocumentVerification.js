@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"),
-["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files){
+["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files","Queries",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files,Queries){
 
     return {
         "type": "schema-form",
@@ -18,16 +18,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     function (res) {
                         PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                         model.loanAccount = res;
+                        $log.info(res);
                         var loanDocuments = model.loanAccount.loanDocuments;
                         var availableDocCodes = [];
-                        LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode)
+                        LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode,"LoanBooking","DocumentUpload")
                             .then(
                                 function(docsForProduct){
+                                    $log.info(docsForProduct);
                                     for (var i=0; i<loanDocuments.length; i++){
                                         availableDocCodes.push(loanDocuments[i].document);
                                         var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
                                         if (documentObj!=null){
-                                            loanDocuments[i].$title = documentObj.docTitle;
+                                            loanDocuments[i].$title = documentObj.document_name;
                                         } else {
                                             loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
                                         }
