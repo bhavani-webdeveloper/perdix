@@ -6,7 +6,7 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
 
     return {
         "type": "schema-form",
-        "title": "ACH_REGISTRATION",
+        "title": "ACH_MANDATE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Download Page got initialized");
@@ -28,6 +28,9 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                 "title": "ACH_MANDATE_DOWNLOAD" ,
                 "colClass":"col-sm-6",
                 "items": [{
+                            "type":"fieldset",
+                            "title":"DOWNLOAD_STATUS",
+                            "items":[{
                             "title": "DOWNLOAD",
                             "key":"ach.achMandateDownload",
                             "htmlClass": "btn-block",
@@ -36,16 +39,17 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                             "readonly": false,
                             "onClick": function(model, formCtrl, form, event){
                                 
-                                //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
-                                //model.mandate= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandateId;
+                                    //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
+                                    //model.mandate= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandateId;
 
-                                //$log.info(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                //console.log(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                // console.log(formCtrl);
-                                // console.log(form);
-                                // console.log(event);
-                            }
+                                    //$log.info(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
+                                    //console.log(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
+                                    window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
+                                    // console.log(formCtrl);
+                                    // console.log(form);
+                                    // console.log(event);
+                                }
+                            }]
                         },
                         {
                             "type":"fieldset",

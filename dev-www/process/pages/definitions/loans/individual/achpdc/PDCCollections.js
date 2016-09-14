@@ -8,7 +8,7 @@ PDCCollections.js does the following
 */
     return {
         "type": "schema-form",
-        "title": "PDC Collections",
+        "title": "PDC COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
@@ -34,8 +34,8 @@ PDCCollections.js does the following
                             "notitle":true,
                             "readonly":false,
                             "onClick": function(model, formCtrl, form, $event){
-                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
-                                            //window.open(model.mandate.link);
+                                            
+                                            //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
                                             window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
                                                 
                                         }

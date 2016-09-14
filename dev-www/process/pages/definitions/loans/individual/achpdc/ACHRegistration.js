@@ -44,6 +44,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 								if (model.achSearch.body[i].accountId == model.ach.accountId) {
 									model.flag = true;
 									model.ach = model.achSearch.body[i];
+									model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
 								}
 							}
 						},
@@ -141,6 +142,47 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 								}
 							}
 						},
+						// {
+      //                       "key": "ach.ifscCode",
+      //                       "title": "IFSC_CODE",
+      //                       "type": "lov",
+      //                       "lovonly": true,
+      //                       "inputMap": {
+      //                           "ifscCode": {
+      //                               "key": "ach.ifscCode"
+      //                           },
+      //                           "bankName": {
+      //                               "key": "ach.bankName"
+      //                           },
+      //                           "branchName": {
+      //                               "key": "ach.branchName"
+      //                           }
+      //                       },
+      //                       outputMap: {
+      //                           "bankName": "ach.bankName",
+      //                           "branchName": "ach.branchName",
+      //                           "ifscCode": "ach.ifscCode"
+      //                       },
+      //                       searchHelper: formHelper,
+      //                       search: function(inputModel, form) {
+      //                           $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+      //                           var promise = CustomerBankBranch.search({
+      //                               'bankName': inputModel.bankName,
+      //                               'ifscCode': inputModel.ifscCode,
+      //                               'branchName': inputModel.branchName
+      //                           }).$promise;
+      //                           return promise;
+      //                       },
+      //                       getListDisplayItem: function(data, index) {
+      //                           return [
+      //                               data.ifscCode,
+      //                               data.branchName,
+      //                               data.bankName
+      //                           ];
+      //                       }
+            
+
+      //                   },
 						{
 							"key": "ach.branchName",
 							"title": "BRANCH_NAME"
