@@ -418,8 +418,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.processingFeeInPaisa",
-                                type:"amount"
+                                key:"additional.processingFee",
+                                type:"amount",
+                                "title":"PROCESSING_FEES"
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -938,12 +939,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
-                    if (model.loanAccount.processingFeeInPaisa){
-                        if (model.loanAccount.processingFeeInPaisa > 0){
-                            model.loanAccount.processingFeeInPaisa = model.loanAccount.processingFeeInPaisa * 100;
+                    if (model.additional.processingFee){
+                        if (model.additional.processingFee > 0){
+                            model.loanAccount.processingFeeInPaisa = Number(model.additional.processingFee) * 100;
                         }
                     }
-
                     //Product specific validations
                     if(model.additional.product){
                         if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
