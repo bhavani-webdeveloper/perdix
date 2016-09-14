@@ -836,6 +836,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"Deprecated Items",
+                "condition":"false",
                 "items":[
                     {
                         key:"loanAccount.disbursementFromBankAccountNumber",
