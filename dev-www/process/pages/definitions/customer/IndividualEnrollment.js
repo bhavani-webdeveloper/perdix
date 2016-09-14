@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition, Queries){
+    PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
         "type": "schema-form",

@@ -57,7 +57,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                 loanDocuments[i].$key = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                             } else {
-                                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                                loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                             }
 
                                         }

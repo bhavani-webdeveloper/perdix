@@ -396,7 +396,7 @@ $templateCache.put("irf/template/adminlte/input-lov.html","<div class=\"form-gro
     "    }}&nbsp;</span>\n" +
     "\n" +
     "   	<a ng-hide=\"form.readonly\" irf-lov irf-model-value=\"$$value$$\" irf-form=\"form\" irf-model=\"model\"\n" +
-    "      style=\"position:absolute;top:0;right:15px;padding:4px 9px 9px;\" href=\"\">\n" +
+    "      style=\"position:absolute;top:0;right:15px;padding:7px 9px 6px;\" href=\"\">\n" +
     "      <i class=\"fa fa-bars color-theme\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -455,7 +455,7 @@ $templateCache.put("irf/template/adminlte/radios.html","<div class=\"form-group 
     "          ng-model=\"$$value$$\"\n" +
     "          ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "          ng-value=\"item.value\"\n" +
-    "          name=\"{{form.key.join('.')}}\"\n" +
+    "          name=\"{{form.key.join('$')}}\"\n" +
     "        /><!-- \n" +
     "          ng-change=\"$emit('irfSelectValueChanged', [form.enumCode, (form.titleMap | filter:{value:$$value$$})[0].code])\" -->\n" +
     "        <span ng-if=\"!form.readonly\" class=\"control-indicator\"></span>\n" +
@@ -488,9 +488,25 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
     "  </label>{{helper}}\n" +
     "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\">\n" +
+    "    <!--input ng-if=\"form.readonly\"\n" +
+    "           ng-model=\"$$value$$\"\n" +
+    "           ng-disabled=\"form.readonly\"\n" +
+    "           type=\"text\"\n" +
+    "           class=\"form-control {{form.fieldHtmlClass}}\" /-->\n" +
     "    <select sf-field-model=\"replaceAll\"\n" +
     "      ng-model=\"$$value$$\"\n" +
+    "      ng-if=\"form.readonly\"\n" +
+    "      schema-validate=\"form\"\n" +
+    "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
+    "      id=\"{{form.id}}\" name=\"{{form.id}}\"\n" +
+    "      ng-init=\"form.enumCode = form.enumCode ? form.enumCode : form.schema.enumCode; evalExpr('registerForTitleMap(form)', {form:form}); form.id=form.key.slice(-1)[0]\"\n" +
+    "      irf-options-builder=\"form\"\n" +
+    "      ng-options=\"item.value as item.name for item in form.filteredTitleMap\"\n" +
     "      ng-disabled=\"form.readonly\"\n" +
+    "    ></select>\n" +
+    "    <select sf-field-model=\"replaceAll\"\n" +
+    "      ng-model=\"$$value$$\"\n" +
+    "      ng-if=\"!form.readonly\"\n" +
     "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "      schema-validate=\"form\"\n" +
     "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
@@ -589,22 +605,6 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -615,6 +615,7 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        {{ menu.title | translate }}\n" +
     "      </h3>\n" +
     "      <div class=\"box-tools pull-right\">\n" +
+    "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "        <button ng-if=\"!menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-chevron-down\"></i></button>\n" +
     "        <button ng-if=\"menu.parentMenu\" type=\"button\" class=\"btn btn-box-tool\" ng-click=\"loadPage($event, menu.parentMenu)\"><i class=\"fa fa-times\"></i></button>\n" +
     "      </div>\n" +
@@ -633,6 +634,22 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -1034,20 +1051,6 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "  </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
-    "	<table class=\"table table-condensed\">\n" +
-    "	    <tbody>\n" +
-    "	        <tr>\n" +
-    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
-    "	        </tr>\n" +
-    "	        <tr ng-repeat=\"item in definition.data\">\n" +
-    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
-    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
-    "	        </tr>\n" +
-    "	    </tbody>\n" +
-    "	</table>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<div ng-class=\"{'read-only':form.readonly}\" style=\"position:relative;height:inherit;\">\n" +
     "  <div class=\"row\" style=\"padding-bottom:7px;\">\n" +
     "    <div class=\"col-xs-12\">\n" +
@@ -1066,6 +1069,20 @@ $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<di
     "      <button ng-click=\"validateFinger($event)\" class=\"btn btn-theme btn-xs btn-block\" ng-disabled=\"disabled\"><i class=\"fa fa-hand-pointer-o\">&nbsp;</i>{{ buttonTitle | translate}}</button>\n" +
     "    </div>\n" +
     "  </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
+    "	<table class=\"table table-condensed\">\n" +
+    "	    <tbody>\n" +
+    "	        <tr>\n" +
+    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
+    "	        </tr>\n" +
+    "	        <tr ng-repeat=\"item in definition.data\">\n" +
+    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
+    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
+    "	        </tr>\n" +
+    "	    </tbody>\n" +
+    "	</table>\n" +
     "</div>")
 }]);
 })();
@@ -1175,100 +1192,6 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
-;
-
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1778,6 +1701,100 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 }])*/
 ;
 
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
 .directive('irfDashboardBox', function(){
 	return {
@@ -2082,6 +2099,44 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 		$scope.showUploadProgress = true;
 		$scope.fileError = false;
 
+/*
+
+  *url: 'server/upload/url', // upload.php script, node.js route, or servlet url
+  /*
+  Specify the file and optional data to be sent to the server.
+  Each field including nested objects will be sent as a form data multipart.
+  Samples: {pic: file, username: username}
+    {files: files, otherInfo: {id: id, person: person,...}} multiple files (html5)
+    {profiles: {[{pic: file1, username: username1}, {pic: file2, username: username2}]} nested array multiple files (html5)
+    {file: file, info: Upload.json({id: id, name: name, ...})} send fields as json string
+    {file: file, info: Upload.jsonBlob({id: id, name: name, ...})} send fields as json blob, 'application/json' content_type
+    {picFile: Upload.rename(file, 'profile.jpg'), title: title} send file with picFile key and profile.jpg file name * /
+  *data: {key: file, otherInfo: uploadInfo},
+  /*
+  This is to accommodate server implementations expecting nested data object keys in .key or [key] format.
+  Example: data: {rec: {name: 'N', pic: file}} sent as: rec[name] -> N, rec[pic] -> file  
+     data: {rec: {name: 'N', pic: file}, objectKey: '.k'} sent as: rec.name -> N, rec.pic -> file * /  
+  objectKey: '[k]' or '.k' // default is '[k]'
+  /*
+  This is to accommodate server implementations expecting array data object keys in '[i]' or '[]' or 
+  ''(multiple entries with same key) format.
+  Example: data: {rec: [file[0], file[1], ...]} sent as: rec[0] -> file[0], rec[1] -> file[1],...  
+    data: {rec: {rec: [f[0], f[1], ...], arrayKey: '[]'} sent as: rec[] -> f[0], rec[] -> f[1],...* /  
+  arrayKey: '[i]' or '[]' or '.i' or '' //default is '[i]'
+  method: 'POST' or 'PUT'(html5), default POST,
+  headers: {'Authorization': 'xxx'}, // only for html5
+  withCredentials: boolean,
+  /*
+  See resumable upload guide below the code for more details (html5 only) * /
+  resumeSizeUrl: '/uploaded/size/url?file=' + file.name // uploaded file size so far on the server.
+  resumeSizeResponseReader: function(data) {return data.size;} // reads the uploaded file size from resumeSizeUrl GET response
+  resumeSize: function() {return promise;} // function that returns a prommise which will be
+                                            // resolved to the upload file size on the server.
+  resumeChunkSize: 10000 or '10KB' or '10MB' // upload in chunks of specified size
+  disableProgress: boolean // default false, experimental as hotfix for potential library conflicts with other plugins
+  ... and all other angular $http() options could be used here.
+*/
+
 		self.upload = Upload.upload({
 			url: FILE_UPLOAD_URL + $httpParamSerializer({
 				category: category,
@@ -2166,7 +2221,13 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 	$scope.startFileUpload = function($event) {
 		$event.preventDefault();
 		$scope.uploadAborted = false;
-		self.getFileContent($scope.form.fileType, false).then(self.fileUpload);
+		if ($scope.form.customHandle && _.isFunction($scope.form.customHandle)) {
+			self.getFileContent($scope.form.fileType, false).then(function(file){
+				$scope.form.customHandle(file, function(e){$scope.uploadProgress = (e.loaded / e.total) * 100;}, $scope.modelValue, $scope.form, $scope.model);
+			});
+		} else {
+			self.getFileContent($scope.form.fileType, false).then(self.fileUpload);
+		}
 	};
 
 	self.getBiometric = function(mimeType) {
@@ -2366,6 +2427,10 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 			}
 			return null;
 		};
+
+		if ($scope.form.customHandle && _.isFunction($scope.form.customHandle)) {
+			return;
+		}
 
 		$scope.$watch('modelValue', function(n,o){
 			if (n) {
@@ -2618,6 +2683,188 @@ angular.module('irf.listView', ['irf.elements.commons'])
 }])
 ;
 
+angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
+.directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
+	return {
+		scope: {
+			form: "=irfForm",
+			modelValue: "=?irfModelValue",
+			parentModel: "=irfModel"
+		},
+		restrict: 'A',
+		link: function($scope, elem, attrs, ctrl) {
+			$(elem).click(ctrl.onClickLOV);
+		},
+		controller: 'irfLovCtrl'
+	};
+}])
+.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
+function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
+	var self = this;
+	$scope.inputFormHelper = $scope.form.searchHelper;
+
+	self.onClickLOV = function(e) {
+		e.preventDefault();
+
+		$scope.listResponseItems = null;
+		$scope.listDisplayItems = null;
+		$scope.bindModel = {};
+		$scope.inputModel = {};
+		$scope.locals = {};
+		$scope.inputForm = [];
+		$scope.formName = $scope.form.key.join('__');
+
+		$scope.locals.arrayIndex = elementsUtils.getArrayIndex($scope.form.key);
+
+		elementsUtils.mapInput($scope.form.bindMap, $scope.parentModel, $scope.bindModel, $scope.locals);
+
+		elementsUtils.mapInput($scope.form.inputMap, $scope.parentModel, $scope.inputModel, $scope.locals);
+
+		$scope.inputSchema = {
+			"type": "object",
+			"properties": {}
+		};
+
+		angular.forEach($scope.form.inputMap, function(value, key){
+			var v;
+			if (_.isObject(value)) {
+				v = value.key.split(".");
+				var vv = _.clone(value);
+				vv.key = key;
+				$scope.inputForm.push(vv);
+			} else {
+				$scope.inputForm.push(key);
+				v = value.split(".");
+			}
+			var s = $scope.$parent.$parent.schema;
+			for (i = 0; i < v.length; i++) {
+				if (_.endsWith(v[i], '[]')) {
+					v[i] = v[i].substring(0, v[i].length-2);
+					s = s["properties"][v[i]]["items"];
+				} else {
+					s = s["properties"][v[i]];
+				}
+			}
+			$scope.inputSchema.properties[key] = s;
+		});
+
+		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
+
+		angular.forEach(mergedInputForm, function(value, key){
+			$scope.inputSchema.properties[key] = s;
+		});*/
+
+		var bindSize = _.size($scope.form.bindMap);
+		if (bindSize && bindSize != _.remove(_.values($scope.bindModel), undefined).length) {
+			self.showBindValueAlert($scope.form.bindMap);
+			return;
+		}
+
+		if ($scope.form.autolov) {
+			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
+			self.init($scope.inputModel);
+			getSearchPromise().then(function(out){
+				if (out.body && out.body.length === 1) {
+					$scope.callback(out.body[0]);
+				} else {
+					displayListOfResponse(out);
+					self.launchLov(true, true);
+				}
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			}, function(){
+				self.launchLov(true, false);
+				$element.find('i').attr('class', 'fa fa-bars color-theme');
+			});
+		} else {
+			self.launchLov(false, false);
+		}
+	};
+
+	self.showBindValueAlert = function(bindKeys) {
+		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
+	};
+
+	self.launchLov = function(isInitialized, isSubmitted) {
+		if (!isInitialized) {
+			self.init($scope.inputModel);
+		}
+		if ($scope.inputForm.length) {
+			$scope.inputForm.push({"type":"submit", "title":"Search"});
+		} else if (!isSubmitted) {
+			$scope.inputActions.submit();
+		}
+
+		$scope.modalWindow = $uibModal.open({
+			scope: $scope,
+			templateUrl: "irf/template/lov/modal-lov.html",
+			controller: function($scope) {
+				$scope.$broadcast('schemaFormValidate');
+				//$log.info($scope.locals);
+			}
+		});
+	};
+
+	self.init = function(model) {
+		if (angular.isFunction($scope.form.initialize)) {
+			$scope.form.initialize(model);
+		} else if ($scope.form.initialize) {
+			$scope.evalExpr($scope.form.initialize, {model:model});
+		}
+	};
+
+	$scope.inputActions = {};
+
+	var getSearchPromise = function() {
+		angular.extend($scope.inputModel, $scope.bindModel);
+		var promise;
+		if (angular.isFunction($scope.form.search)) {
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+		} else if ($scope.form.search) {
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+		}
+		return promise;
+	};
+
+	var displayListOfResponse = function(out) {
+		$scope.listResponseItems = out.body;
+		$scope.listDisplayItems  =[];
+		angular.forEach(out.body, function(value, key) {
+			c = $scope.form.getListDisplayItem(value, key);
+			this.push(c);
+		}, $scope.listDisplayItems);
+	};
+
+	$scope.inputActions.submit = function(model, form, formName) {
+		$scope.showLoader = true;
+		getSearchPromise().then(function(out){
+			displayListOfResponse(out);
+			$scope.showLoader = false;
+		},function(){
+			$scope.showLoader = false;
+		});
+	};
+
+	$scope.callback = function(item) {
+		if ($scope.form.outputMap) {
+			elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
+		}
+		if ($scope.form.onSelect) {
+			if (angular.isFunction($scope.form.onSelect)) {
+				$scope.form.onSelect(item, $scope.parentModel, $scope.locals);
+			} else if ($scope.form.onSelect) {
+				$scope.evalExpr($scope.form.onSelect, {result:item, model:$scope.parentModel, context:$scope.locals});
+			}
+		}
+		self.close();
+	};
+
+	self.close = function() {
+		if ($scope.modalWindow) $scope.modalWindow.close();
+		$scope.listResponseItems = null;
+		$scope.listDisplayItems = null;
+	};
+}])
+;
 angular.module('irf.pikaday', ['irf.elements.commons'])
 .directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
 	// Runs during compile
@@ -2676,165 +2923,6 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
-.directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
-	return {
-		scope: {
-			form: "=irfForm",
-			modelValue: "=?irfModelValue",
-			parentModel: "=irfModel"
-		},
-		restrict: 'A',
-		link: function($scope, elem, attrs, ctrl) {
-			$(elem).click(ctrl.onClickLOV);
-		},
-		controller: 'irfLovCtrl'
-	};
-}])
-.controller('irfLovCtrl', ["$scope", "$q", "$log", "$uibModal", "elementsUtils", "schemaForm", "$element",
-function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
-	var self = this;
-	$scope.inputFormHelper = $scope.form.searchHelper;
-
-	self.onClickLOV = function(e) {
-		e.preventDefault();
-
-		$scope.listResponseItems = null;
-		$scope.listDisplayItems = null;
-		$scope.bindModel = {};
-		$scope.inputModel = {};
-		$scope.locals = {};
-		$scope.inputForm = [];
-		$scope.formName = $scope.form.key.join('__');
-
-		$scope.locals.arrayIndex = elementsUtils.getArrayIndex($scope.form.key);
-
-		elementsUtils.mapInput($scope.form.bindMap, $scope.parentModel, $scope.bindModel, $scope.locals);
-
-		elementsUtils.mapInput($scope.form.inputMap, $scope.parentModel, $scope.inputModel, $scope.locals);
-
-		$scope.inputSchema = {
-			"type": "object",
-			"properties": {}
-		};
-
-		angular.forEach($scope.form.inputMap, function(value, key){
-			var v;
-			if (_.isObject(value)) {
-				v = value.key.split(".");
-				var vv = _.clone(value);
-				vv.key = key;
-				$scope.inputForm.push(vv);
-			} else {
-				$scope.inputForm.push(key);
-				v = value.split(".");
-			}
-			var s = $scope.$parent.$parent.schema;
-			for (i = 0; i < v.length; i++) {
-				s = s["properties"][v[i]];
-			}
-			$scope.inputSchema.properties[key] = s;
-		});
-
-		if ($scope.inputForm.length == 0) {
-			$scope.inputActions.submit();
-		} else {
-			$scope.inputForm.push({"type":"submit", "title":"Search"});
-			// $log.info($scope.inputForm);
-		}
-
-		/*var mergedInputForm = schemaForm.merge($scope.$parent.$parent.schema, _.values($scope.form.inputMap));
-
-		angular.forEach(mergedInputForm, function(value, key){
-			$scope.inputSchema.properties[key] = s;
-		});*/
-
-		var bindSize = _.size($scope.form.bindMap);
-		if (bindSize && bindSize != _.remove(_.values($scope.bindModel), undefined).length) {
-			self.showBindValueAlert($scope.form.bindMap);
-			return;
-		}
-
-		if ($scope.form.autolov && $scope.modelValue) {
-			$element.find('i').attr('class', 'fa fa-spinner fa-pulse fa-fw color-theme');
-			getSearchPromise().then(function(out){
-				if (out.body && out.body.length === 1) {
-					$scope.callback(out.body[0]);
-				} else {
-					displayListOfResponse(out);
-					self.launchLov();
-				}
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			}, function(){
-				self.launchLov();
-				$element.find('i').attr('class', 'fa fa-bars color-theme');
-			});
-		} else {
-			self.launchLov();
-		}
-	};
-
-	self.showBindValueAlert = function(bindKeys) {
-		elementsUtils.alert("Value(s) for " + _.keys(bindKeys).join(", ") + " which is/are required is missing");
-	};
-
-	self.launchLov = function() {
-		$scope.modalWindow = $uibModal.open({
-			scope: $scope,
-			templateUrl: "irf/template/lov/modal-lov.html",
-			controller: function($scope) {
-				$scope.$broadcast('schemaFormValidate');
-				//$log.info($scope.locals);
-			}
-		});
-	};
-
-	$scope.inputActions = {};
-
-	var getSearchPromise = function() {
-		angular.extend($scope.inputModel, $scope.bindModel);
-		var promise;
-		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
-		} else {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
-		}
-		return promise;
-	};
-
-	var displayListOfResponse = function(out) {
-		$scope.listResponseItems = out.body;
-		$scope.listDisplayItems  =[];
-		angular.forEach(out.body, function(value, key) {
-			c = $scope.form.getListDisplayItem(value, key);
-			this.push(c);
-		}, $scope.listDisplayItems);
-	};
-
-	$scope.inputActions.submit = function(model, form, formName) {
-		$scope.showLoader = true;
-		getSearchPromise().then(function(out){
-			displayListOfResponse(out);
-			$scope.showLoader = false;
-		},function(){
-			$scope.showLoader = false;
-		});
-	};
-
-	$scope.callback = function(item) {
-		$log.info("Selected Item->");
-		$log.info(item);
-		elementsUtils.mapOutput($scope.form.outputMap, item, $scope.parentModel, $scope.locals);
-		self.close();
-	};
-
-	self.close = function() {
-		if ($scope.modalWindow) $scope.modalWindow.close();
-		$scope.listResponseItems = null;
-		$scope.listDisplayItems = null;
-	};
-}])
-;
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -3192,6 +3280,29 @@ angular.module('irf.searchBox', [])
     }])
 ;
 
+angular.module('irf.table', ['irf.elements.commons'])
+.directive('irfSimpleTable', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			tableKey: "=",
+			tablePromise: "&"
+		},
+		templateUrl: 'irf/template/table/SimpleTable.html',
+		controller: 'irfSimpleTableCtrl'
+	}
+})
+.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
+	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
+		$scope.definition = data;
+	});
+
+	$scope.isObject = angular.isObject;
+}])
+;
+
+
 angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource'])
 .directive('irfResourceSearchWrapper', function(){
 	return {
@@ -3492,29 +3603,6 @@ angular.module('irf.searchListWrapper', ['irf.elements.commons', 'ngResource'])
 		return response;
 	})
 ;
-
-angular.module('irf.table', ['irf.elements.commons'])
-.directive('irfSimpleTable', function(){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableKey: "=",
-			tablePromise: "&"
-		},
-		templateUrl: 'irf/template/table/SimpleTable.html',
-		controller: 'irfSimpleTableCtrl'
-	}
-})
-.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
-	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
-		$scope.definition = data;
-	});
-
-	$scope.isObject = angular.isObject;
-}])
-;
-
 
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
@@ -11196,9 +11284,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition, Queries){
+    PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
         "type": "schema-form",
@@ -27024,7 +27112,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"),
                                                 loanDocuments[i].$key = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                             } else {
-                                                loanDocuments[i].$title = "DOCUMENT TITLE NOT MAINTAINED";
+                                                loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                             }
 
                                         }
