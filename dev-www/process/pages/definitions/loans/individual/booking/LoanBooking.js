@@ -308,14 +308,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                     $log.info("submitting");
                     
-                    var date1 = new Date(model._currentDisbursement.scheduledDisbursementDate);
-                    var date2 = new Date(model.loanAccount.sanctionDate);
-                    var diffDays = date1.getDate() - date2.getDate(); 
+                    var scheduledDisbursementDate = new Date(model._currentDisbursement.scheduledDisbursementDate);
+                    var sanctionDate = new Date(model.loanAccount.sanctionDate);
+                    var customerSignatureDate = new Date(model._currentDisbursement.customerSignatureDate);
+                    var diffDays = scheduledDisbursementDate.getDate() - sanctionDate.getDate(); 
 
                     if (diffDays > pendingDisbursementDays){
                         PageHelper.showProgress("loan-create","Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days",5000);
                         return false;
                     }
+                    if (customerSignatureDate<=sanctionDate){
+                        PageHelper.showProgress("loan-create","Customer sign date should be greater than the Loan sanction date",5000);
+                        return false;
+                    }
+
                     Utils.confirm("Ready to book the loan?")
                         .then(function(){
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
