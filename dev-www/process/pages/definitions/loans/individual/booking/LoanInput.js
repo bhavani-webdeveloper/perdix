@@ -67,6 +67,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             console.error(err);
                         }
                         model.additional.product = res;
+                        if (model.additional.product.frequency == 'M')
+                            model.loanAccount.frequency = 'Monthly';
                     },
                     function(httpRes){
                         PageHelper.showProgress('loan-create', 'Failed to load the Product details. Try again.', 4000);
@@ -951,8 +953,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.showProgress("loan-create","Collateral details are mandatory",5000);
                                 return false;
                         }
+                        if (!_.isNaN(model.additional.product.amountFrom) && model.additional.product.amountFrom > 0){
+                            if (model.loanAccount.loanAmountRequested < model.additional.product.amountFrom){
+                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
+                                return false;
+                            }
+                            if (model.loanAccount.loanAmountRequested > model.additional.product.amountTo){
+                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
+                                return false;
+                            }
+                        }
+                        if (!_.isNaN(model.additional.product.tenureFrom) && model.additional.product.tenureFrom > 0){
+                            if (model.loanAccount.tenure < model.additional.product.tenureFrom){
+                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.tenureFrom + " - " + model.additional.product.tenureTo + "]",5000);
+                                return false;
+                            }
+                            if (model.loanAccount.tenure > model.additional.product.tenureTo){
+                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.tenureFrom + " - " + model.additional.product.tenureTo + "]",5000);
+                                return false;
+                            }
+                        }
                     }
-
 
                     var reqData = _.cloneDeep(model);
                     reqData.loanProcessAction="SAVE";
