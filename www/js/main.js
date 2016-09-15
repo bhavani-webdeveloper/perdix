@@ -6311,6 +6311,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
                 deferred.resolve(form);
             }
             $log.info("Profile Page got initialized");
+        }, function(){
+            deferred.resolve(form);
         });
         return deferred.promise;
     };
@@ -6408,6 +6410,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				var def = {};
 				_.each(records.results, function(v, k){
 					var d = {
+						"uri": v.uri,
 						"offline": v.offline,
 						"directAccess": v.directAccess,
 						"title": v.title,
@@ -13977,11 +13980,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     return out;
                 };
                 var reqData = _.cloneDeep(model);
-                EnrollmentHelper.fixData(reqData);
+                //EnrollmentHelper.fixData(reqData);
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
-                    model.enrollmentAction = "SAVE";
+                    reqData.enrollmentAction = "PROCEED";
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);

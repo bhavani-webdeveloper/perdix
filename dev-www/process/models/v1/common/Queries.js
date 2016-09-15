@@ -21,6 +21,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 				var def = {};
 				_.each(records.results, function(v, k){
 					var d = {
+						"uri": v.uri,
 						"offline": v.offline,
 						"directAccess": v.directAccess,
 						"title": v.title,
