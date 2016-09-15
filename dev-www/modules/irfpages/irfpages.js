@@ -4,6 +4,10 @@ irf.page = function(path) {
 	return "Pages__" + path.replace(/\./g, '$');
 };
 
+irf.form = function(path) {
+	return "Form__" + path.replace(/\./g, '$');
+};
+
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
 var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection"], function ($compileProvider) {
@@ -32,12 +36,15 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 		$log.info('set ProfilePreferences');
 		SessionStore.setSession(userData);
 		irfStorageService.storeJSON('UserData', userData);
-		var m = irfStorageService.getJSON("UserProfile", userData.login);
-		if (m && m.settings) {
+		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
+		var km = _.keys(m);
+		if (km.length === 1 && km[0] === userData.login) {
+			m = m[km[0]];
 			$log.info('set ProfilePreferences -> found saved settings');
 			SessionStore.profile = m.profile;
 			SessionStore.settings = m.settings;
 			$log.saveLog = SessionStore.settings.consoleLog;
+			$log.debug(m.settings.dateFormat);
 			irfElementsConfig.setDateDisplayFormat(m.settings.dateFormat);
 		} else {
 			$log.saveLog = false;

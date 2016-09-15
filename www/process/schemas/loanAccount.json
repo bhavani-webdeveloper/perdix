@@ -1625,13 +1625,11 @@
                                 "type": "boolean"
                             },
                             "nomineePincode": {
-                                "type": ["number", "string"],
-                                "minimum": 100000,
-                                "maximum": 999999
+                                "type": "number"
                             },
                             "nomineeRelationship": {
                                 "type": "string",
-                                "enumCode":"relationship"
+                                "enumCode":"relation"
                             },
                             "nomineeState": {
                                 "type": "string"

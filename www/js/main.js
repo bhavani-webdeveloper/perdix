@@ -220,7 +220,7 @@ $templateCache.put("irf/template/adminlte/date.html","<div class=\"form-group fo
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"hidden\" irf-pikaday=\"form\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
-    "    <input class=\"form-control {{form.fieldHtmlClass}}\" ng-disabled=\"form.readonly\" readonly/>\n" +
+    "    <input class=\"form-control {{form.fieldHtmlClass}}\" ng-disabled=\"form.readonly\" placeholder=\"DDMMYYYY\"/>\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
     "        \"Required \" : \"\")\n" +
@@ -513,7 +513,7 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "      id=\"{{form.id}}\" name=\"{{form.id}}\"\n" +
     "      ng-init=\"form.enumCode = form.enumCode ? form.enumCode : form.schema.enumCode; evalExpr('registerForTitleMap(form)', {form:form}); form.id=form.key.slice(-1)[0]\"\n" +
     "      irf-options-builder=\"form\"\n" +
-    "      ng-options=\"item.value as item.name for item in form.filteredTitleMap\"\n" +
+    "      ng-options=\"item.value as item.name group by item.group for item in form.filteredTitleMap\"\n" +
     "    >\n" +
     "      <option value=\"\">{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option>\n" +
     "    </select>\n" +
@@ -605,6 +605,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -638,40 +654,11 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "  </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
     "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
     "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
     "  <span class=\"switch-handle\"></span> \n" +
     "</label>")
-
-$templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
-    "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
-    "</div>\n" +
-    "<span>\n" +
-    "	<i class=\"fa fa-map-marker color-theme\"></i>&nbsp;\n" +
-    "	<a href=\"\" ng-href=\"{{ position.geourl }}\" target=\"_blank\" ng-style=\"{color:error.message?'tomato':'inherit'}\">\n" +
-    "		{{ (position.geolocation || error.message) | translate }}\n" +
-    "	</a>\n" +
-    "	<a ng-hide=\"readOnly\" class=\"pull-right\" ng-click=\"refreshLocation()\" href=\"\">\n" +
-    "		<i class=\"fa fa-refresh\" style=\"color:#ccc\"></i>\n" +
-    "	</a>\n" +
-    "</span>")
 
 $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-control\" ng-class=\"{'read-only':form.readonly}\" ng-style=\"(isImage || inputFileDataURL) ? {height:'inherit'}:{}\" style=\"position:relative;\">\n" +
     "  <div ng-if=\"isImage\" class=\"row\" style=\"padding-bottom:7px;\">\n" +
@@ -717,6 +704,19 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "  </div>\n" +
     "  <input type=\"file\" id=\"{{::id}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
     "</div>")
+
+$templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
+    "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
+    "</div>\n" +
+    "<span>\n" +
+    "	<i class=\"fa fa-map-marker color-theme\"></i>&nbsp;\n" +
+    "	<a href=\"\" ng-href=\"{{ position.geourl }}\" target=\"_blank\" ng-style=\"{color:error.message?'tomato':'inherit'}\">\n" +
+    "		{{ (position.geolocation || error.message) | translate }}\n" +
+    "	</a>\n" +
+    "	<a ng-hide=\"readOnly\" class=\"pull-right\" ng-click=\"refreshLocation()\" href=\"\">\n" +
+    "		<i class=\"fa fa-refresh\" style=\"color:#ccc\"></i>\n" +
+    "	</a>\n" +
+    "</span>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
     "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
@@ -1051,6 +1051,20 @@ $templateCache.put("irf/template/searchListWrapper/search-list-wrapper.html","<d
     "  </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
+    "	<table class=\"table table-condensed\">\n" +
+    "	    <tbody>\n" +
+    "	        <tr>\n" +
+    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
+    "	        </tr>\n" +
+    "	        <tr ng-repeat=\"item in definition.data\">\n" +
+    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
+    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
+    "	        </tr>\n" +
+    "	    </tbody>\n" +
+    "	</table>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<div ng-class=\"{'read-only':form.readonly}\" style=\"position:relative;height:inherit;\">\n" +
     "  <div class=\"row\" style=\"padding-bottom:7px;\">\n" +
     "    <div class=\"col-xs-12\">\n" +
@@ -1069,20 +1083,6 @@ $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<di
     "      <button ng-click=\"validateFinger($event)\" class=\"btn btn-theme btn-xs btn-block\" ng-disabled=\"disabled\"><i class=\"fa fa-hand-pointer-o\">&nbsp;</i>{{ buttonTitle | translate}}</button>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-responsive\">\n" +
-    "	<table class=\"table table-condensed\">\n" +
-    "	    <tbody>\n" +
-    "	        <tr>\n" +
-    "	            <th ng-repeat=\"column in definition.columns\" style=\"{{column.style}}\" ng-bind-html=\"column.title\"></th>\n" +
-    "	        </tr>\n" +
-    "	        <tr ng-repeat=\"item in definition.data\">\n" +
-    "	            <td ng-repeat-start=\"i in item\" ng-if=\"!isObject(i)\" ng-bind-html=\"i\"></td>\n" +
-    "	            <td ng-repeat-end ng-if=\"isObject(i)\" sg-attrs=\"i\" ng-bind-html=\"i.value\"></td>\n" +
-    "	        </tr>\n" +
-    "	    </tbody>\n" +
-    "	</table>\n" +
     "</div>")
 }]);
 })();
@@ -1192,6 +1192,100 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html",
+        "anchor": "anchor.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1701,100 +1795,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 }])*/
 ;
 
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html",
-        "anchor": "anchor.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
-;
-
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
 .directive('irfDashboardBox', function(){
 	return {
@@ -2223,7 +2223,16 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 		$scope.uploadAborted = false;
 		if ($scope.form.customHandle && _.isFunction($scope.form.customHandle)) {
 			self.getFileContent($scope.form.fileType, false).then(function(file){
-				$scope.form.customHandle(file, function(e){$scope.uploadProgress = (e.loaded / e.total) * 100;}, $scope.modelValue, $scope.form, $scope.model);
+				$scope.inputFileName = $scope.inputFileName || file.name;
+				$scope.uploadProgress = 0;
+				$scope.showUploadProgress = true;
+				$scope.fileError = false;
+				var promise = $scope.form.customHandle(file, function(e){$scope.uploadProgress = (e.loaded / e.total) * 100;}, $scope.modelValue, $scope.form, $scope.model);
+				if (promise && _.isFunction(promise.then)) {
+					promise.finally(function(){
+						$scope.showUploadProgress = false;
+					});
+				}
 			});
 		} else {
 			self.getFileContent($scope.form.fileType, false).then(self.fileUpload);
@@ -2806,9 +2815,9 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 
 	self.init = function(model) {
 		if (angular.isFunction($scope.form.initialize)) {
-			$scope.form.initialize(model);
+			$scope.form.initialize(model, $scope.form, $scope.parentModel, $scope.locals);
 		} else if ($scope.form.initialize) {
-			$scope.evalExpr($scope.form.initialize, {model:model});
+			$scope.evalExpr($scope.form.initialize, {inputModel:model, form:$scope.form, model:$scope.parentModel, context:$scope.locals});
 		}
 	};
 
@@ -2818,9 +2827,9 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 		angular.extend($scope.inputModel, $scope.bindModel);
 		var promise;
 		if (angular.isFunction($scope.form.search)) {
-			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel);
+			promise = $scope.form.search($scope.inputModel, $scope.form, $scope.parentModel, $scope.locals);
 		} else if ($scope.form.search) {
-			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel});
+			promise = $scope.evalExpr($scope.form.search, {inputModel:$scope.inputModel, form:$scope.form, model:$scope.parentModel, context:$scope.locals});
 		}
 		return promise;
 	};
@@ -2875,7 +2884,8 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 			ngModel: '=',
 			form: '=irfPikaday'
 		},
-		link: function($scope, elem, attrs, ctrl) {
+		link: function($scope, element, attrs, ctrl) {
+			var elem = $(element);
 			var datepicker = 'pikaday';
 			var pikadayOptions = {
 				// minDate: new Date(1800, 0, 1),
@@ -2886,38 +2896,51 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 			angular.extend(pikadayOptions, elemConfig.pikaday);
 			if (!$scope.form.readonly) {
 				if (typeof cordova !== 'undefined' && window.datePicker) {
-					$(elem).next().on('click', function(){
+					elem.next().on('click', function(){
 						window.datePicker.show({
 							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
 							mode: 'date'
 						}, function(date){
 							$log.info(date);
 							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
-							$(elem).val($scope.ngModel);
-							$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+							elem.val($scope.ngModel);
+							elem.controller('ngModel').$setViewValue($scope.ngModel);
 						});
 					});
 				} else {
-					pikadayOptions.field = $(elem).next()[0];
+					var setValue = function(value) {
+						$scope.ngModel = value;
+						elem.val($scope.ngModel);
+						elem.controller('ngModel').$setViewValue($scope.ngModel);
+					};
+					pikadayOptions.field = elem.next()[0];
 					pikadayOptions.onSelect = function(date) {
-						$scope.ngModel = this.getMoment().format(pikadayOptions.format);
-						$(elem).val($scope.ngModel);
-						$(elem).controller('ngModel').$setViewValue($scope.ngModel);
+						setValue(this.getMoment().format(pikadayOptions.format));
 					};
 					pikadayOptions.onDraw = function() {
 						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
 					};
 					var picker = new Pikaday(pikadayOptions);
+					elem.next().on('blur', function(e){
+						if (this.value && this.value.length == 8) {
+							var m = moment(this.value, 'DDMMYYYY');
+							setValue(m.format('YYYY-MM-DD'));
+						}
+					}).on('focus', function(e){
+						this.select();
+					});
 				}
 			}
 			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
 			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
 				if (n) {
 					if (pikadayOptions.dateDisplayFormat) {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+						elem.next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
 					} else {
-						$(elem).next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+						elem.next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
 					}
+				} else {
+					elem.next().val('');
 				}
 			});
 		}
@@ -3280,29 +3303,6 @@ angular.module('irf.searchBox', [])
     }])
 ;
 
-angular.module('irf.table', ['irf.elements.commons'])
-.directive('irfSimpleTable', function(){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableKey: "=",
-			tablePromise: "&"
-		},
-		templateUrl: 'irf/template/table/SimpleTable.html',
-		controller: 'irfSimpleTableCtrl'
-	}
-})
-.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
-	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
-		$scope.definition = data;
-	});
-
-	$scope.isObject = angular.isObject;
-}])
-;
-
-
 angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource'])
 .directive('irfResourceSearchWrapper', function(){
 	return {
@@ -3603,6 +3603,29 @@ angular.module('irf.searchListWrapper', ['irf.elements.commons', 'ngResource'])
 		return response;
 	})
 ;
+
+angular.module('irf.table', ['irf.elements.commons'])
+.directive('irfSimpleTable', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			tableKey: "=",
+			tablePromise: "&"
+		},
+		templateUrl: 'irf/template/table/SimpleTable.html',
+		controller: 'irfSimpleTableCtrl'
+	}
+})
+.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
+	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
+		$scope.definition = data;
+	});
+
+	$scope.isObject = angular.isObject;
+}])
+;
+
 
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
@@ -4804,6 +4827,10 @@ irf.page = function(path) {
 	return "Pages__" + path.replace(/\./g, '$');
 };
 
+irf.form = function(path) {
+	return "Form__" + path.replace(/\./g, '$');
+};
+
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
 var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection"], function ($compileProvider) {
@@ -4832,12 +4859,15 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 		$log.info('set ProfilePreferences');
 		SessionStore.setSession(userData);
 		irfStorageService.storeJSON('UserData', userData);
-		var m = irfStorageService.getJSON("UserProfile", userData.login);
-		if (m && m.settings) {
+		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
+		var km = _.keys(m);
+		if (km.length === 1 && km[0] === userData.login) {
+			m = m[km[0]];
 			$log.info('set ProfilePreferences -> found saved settings');
 			SessionStore.profile = m.profile;
 			SessionStore.settings = m.settings;
 			$log.saveLog = SessionStore.settings.consoleLog;
+			$log.debug(m.settings.dateFormat);
 			irfElementsConfig.setDateDisplayFormat(m.settings.dateFormat);
 		} else {
 			$log.saveLog = false;
@@ -7988,7 +8018,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
 
 }]);
 
-irf.pageCollection.factory("Pages__UserProfile",
+irf.pageCollection.factory(irf.page("UserProfile"),
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
 	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader",
 function($log, $q, SessionStore, languages, $translate, PM,
@@ -10994,8 +11024,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
-            model.customer.kgfsName = SessionStore.getBranch();
+            //model.branchId = SessionStore.getBranchId() + '';
+            //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
         },
         offline: true,
@@ -11211,8 +11241,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.doorNo",
                     "customer.street",
                     "customer.locality",
-                    "customer.landmark",
                     "customer.villageName",
+                    "customer.landmark",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -11410,13 +11440,13 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
+            //model.branchId = SessionStore.getBranchId() + '';
 
             model.customer.date = model.customer.date || Utils.getCurrentDate();
             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
 
             model = Utils.removeNulls(model,true);
-            model.customer.kgfsName = SessionStore.getBranch();
+            //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
         },
         offline: true,
@@ -11484,6 +11514,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     type:"radios"
                 },
                 {
+                    key:"customer.dateOfBirth",
+                    type:"date",
+                    "onChange": function(modelValue, form, model) {
+                        if (model.customer.dateOfBirth) {
+                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    }
+                },
+                {
                     key:"customer.age",
                     title: "AGE",
                     type:"number",
@@ -11494,15 +11533,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             } else {
                                 model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
                             }
-                        }
-                    }
-                },
-                {
-                    key:"customer.dateOfBirth",
-                    type:"date",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
                     }
                 },
@@ -11576,9 +11606,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.doorNo",
                         "customer.street",
                         "customer.locality",
-                        "customer.landmark",
                         "customer.villageName",
                         "customer.postOffice",
+                        "customer.landmark",
                         {
                             key: "customer.pincode",
                             type: "lov",
@@ -28378,8 +28408,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             $log.info(model.loanAccount.commercialCibilCharge);
             $log.info(model.loanAccount.securityEmi);
 
-            model.additional.loanAmount = model.loanAccount.loanAmountRequested - fee;
-
         };
 
         var calculateTotalValue = function(value, form, model){
@@ -28747,11 +28775,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.loanAmountRequested",
                                 "type":"amount",
-                                "title":"LOAN_AMOUNT_REQUESTED",
-                                "onChange":function(value,form,model){
-                                    model.loanAccount.insuranceFee = 0.004*value;
-                                    getSanctionedAmount(model);
-                                }
+                                "title":"LOAN_AMOUNT_REQUESTED"
                             },
                             {
                                 key:"loanAccount.insuranceFee",
@@ -28782,11 +28806,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.otherFee",
                                 type:"amount"
-                            },
-                            {
-                                "key": "additional.loanAmount",
-                                "type":"amount",
-                                "title":"NET_DISBURSEMENT_AMOUNT"
                             },
                             {
                                 "key":"loanAccount.interestRate",
@@ -28868,7 +28887,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"amount",
                                 "title":"TOTAL_VALUE",
                                 "readonly":true
-                            },
+                            }/*,
                             {
                                 "key":"loanAccount.collateral[].collateral1FilePath",
                                 "type":"file",
@@ -28889,7 +28908,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"file",
                                 "fileType":"image/*",
                                 "title":"PHOTO"
-                            }
+                            }*/
                         ]
                     }
                 ]
@@ -28907,7 +28926,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 title: "GUARANTOR",
                                 view:"fixed",
                                 type:"array",
-                                remove:null,
                                 items:[
                                     {
                                         "key": "loanAccount.guarantors[].guaUrnNo",
@@ -29076,9 +29094,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             "state": "loanAccount.nominees[arrayIndex].nomineeState"
                                         },
                                         searchHelper: formHelper,
-                                        search: function(inputModel, form, model) {
+                                        initialize: function(inputModel, form, model, context) {
+                                            inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                        },
+                                        search: function(inputModel, form, model, context) {
                                             return Queries.searchPincodes(
-                                                inputModel.pincode,
+                                                inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
                                                 inputModel.district,
                                                 inputModel.state
                                             );

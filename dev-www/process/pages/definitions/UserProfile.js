@@ -1,4 +1,4 @@
-irf.pageCollection.factory("Pages__UserProfile",
+irf.pageCollection.factory(irf.page("UserProfile"),
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
 	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader",
 function($log, $q, SessionStore, languages, $translate, PM,
