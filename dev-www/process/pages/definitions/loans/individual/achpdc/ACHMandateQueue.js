@@ -6,10 +6,12 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 		"type": "search-list",
 		"title": "ACH_MANDATE_QUEUE",
 		"subTitle": "",
+
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("search-list sample got initialized");
 		},
+
 		definition: {
 			title: "SEARCH_CUSTOMERS",
 			searchForm: [
@@ -39,9 +41,11 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 				}
 				//"required":["branch"]
 			},
+
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
+
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
 				var promise = ACH.search({
@@ -52,6 +56,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 
 				return promise;
 			},
+
 			paginationOptions: {
 				"viewMode": "page",
 				"getItemsPerPage": function(response, headers){
@@ -61,16 +66,19 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 					return headers['x-total-count']
 				}
 			},
+
 			listOptions: {
 				expandable: true,
 				itemCallback: function(item, index) {
 				},
+
 				getItems: function(response, headers){
-					if (response!=null && response.length && response.length!=0){
+					if (response!=null && response.length && response.length!=0) {
 						return response;
 					}
 					return [];
 				},
+
 				getListItem: function(item){
 					return [
 						
@@ -80,6 +88,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 						"{{'REGISTRATION_STATUS'|translate}} : " + item.registrationStatus
 					]
 				},
+
 				getActions: function(){
 					return [
 						{
@@ -110,7 +119,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if((item.registrationStatus == "PENDING") || (item.registrationStatus == "REJECTED")) {
+								if ( (item.registrationStatus == "PENDING") || (item.registrationStatus == "REJECTED") ) {
 									return true;
 								} else { 
 									return false;

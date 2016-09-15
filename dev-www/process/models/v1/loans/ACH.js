@@ -28,6 +28,14 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
             update: {
                 method: 'PUT',
                 url: endpoint + '/update'
+            },
+            getDemandList: {
+                method: 'GET',
+                url: endpoint + '/achdemandList'
+            },
+            bulkRepay: {
+                method: 'POST',
+                url: endpoint + '/achbulkrepay'
             }
         });
 

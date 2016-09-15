@@ -10,51 +10,54 @@ ACHClearingCollection.js does the following
         "type": "schema-form",
         "title": "ACH_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
+
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
         },
         
-        form: [{
-            "type":"box",
-            "title":"ACH_SUBMISSION_AND_STATUS_UPDATE",
-            "items":[{
-                    "type":"fieldset",
-                    "title":"SUBMIT_TO_BANK",
-                    "items":[{
-                            "key":"achCollections.demandDate",
-                            "title": "INSTALLMENT_DATE",
-                            "type":"date"
-                        },
-                        {
-                            "title":"DOWNLOAD",
-                            "htmlClass":"btn-block",
-                            "icon":"fa fa-download",
-                            "type":"button",
-                            "notitle":true,
-                            "readonly":false,
-                            "onClick": function(model, formCtrl, form, $event){
-                                            
-                                            //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
-                                            window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");
-                                                
-                                        }
-                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
-                        }]
+        form: [
+            {
+                "type":"box",
+                "title":"ACH_SUBMISSION_AND_STATUS_UPDATE",
+                "items":[
+                    {
+                        "type":"fieldset",
+                        "title":"SUBMIT_TO_BANK",
+                        "items":[
+                            {
+                                "key":"achCollections.demandDate",
+                                "title": "INSTALLMENT_DATE",
+                                "type":"date"
+                            },
+                            {
+                                "title":"DOWNLOAD",
+                                "htmlClass":"btn-block",
+                                "icon":"fa fa-download",
+                                "type":"button",
+                                "notitle":true,
+                                "readonly":false,
+                                "onClick": function(model, formCtrl, form, $event){
+                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
+                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");     
+                                }
+                            }
+                        ]
                     },
                     {
-                    "type":"fieldset",
-                    "title":"UPLOAD_STATUS",
-                    "items":[{
-                                "key": "ach.achDemandListFileId",
-                                "notitle":true,
-                                "type": "file",
-                                "category":"ACH",
-                                "subCategory":"cat2",
-                                "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                customHandle: function(file, progress, modelValue, form, model) {
-                                    ACH.achDemandListUpload(file, progress);
-                                }
+                        "type":"fieldset",
+                        "title":"UPLOAD_STATUS",
+                        "items":[
+                            {
+                                    "key": "ach.achDemandListFileId",
+                                    "notitle":true,
+                                    "type": "file",
+                                    "category":"ACH",
+                                    "subCategory":"cat2",
+                                    "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    customHandle: function(file, progress, modelValue, form, model) {
+                                        ACH.achDemandListUpload(file, progress);
+                                    }
                             }
                             // ,
                             // {
@@ -63,13 +66,16 @@ ACHClearingCollection.js does the following
                             // "title": "UPLOAD",
                             // "onClick": "actions.proceed(model, formCtrl, form, $event)"
                             // }
-                            ]
-                    }]
+                        ]
+                    }
+                ]
+            }
+        ],
 
-                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+        
         actions: {
             submit: function(model, form, formName){
             },

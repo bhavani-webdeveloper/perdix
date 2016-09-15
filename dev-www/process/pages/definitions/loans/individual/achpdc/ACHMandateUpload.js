@@ -11,39 +11,48 @@ either approved by bank/ rejected by bank)
         "type": "schema-form",
         "title": "ACH_MANDATE_UPLOAD",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Upload Page got initialized");
         },
         offline: false,
+
         getOfflineDisplayItem: function(item, index){
             
         },
-        form: [{
-            
+
+        form: [
+            {
+                
                 "type": "box",
                 "title": "ACH_MANDATE_UPLOAD_FROM_BANK" ,
                 "colClass":"col-sm-6",
-                "items": [{
-                            "key": "ach.achMandateReverseFileId",
-                            "notitle":true,
-                            "category":"ACH",
-                            "subCategory":"cat2",
-                            "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            customHandle: function(file, progress, modelValue, form, model) {
-                                ACH.achMandateUpload(file, progress);
-                            }
-                        },
-                        {
-                            "type": "button",
-                            "icon": "fa fa-user-plus",
-                            "title": "UPLOAD",
-                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                        }]
-            }],
+                "items": [
+                    {
+                        "key": "ach.achMandateReverseFileId",
+                        "notitle":true,
+                        "category":"ACH",
+                        "subCategory":"cat2",
+                        "type": "file",
+                        "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        customHandle: function(file, progress, modelValue, form, model) {
+                            ACH.achMandateUpload(file, progress);
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "icon": "fa fa-user-plus",
+                        "title": "UPLOAD",
+                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                    }
+                ]
+            }
+        ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
@@ -51,6 +60,7 @@ either approved by bank/ rejected by bank)
                         pageId: model.customer.id
                     });
             },
+            
             proceed: function(model, formCtrl, form, $event) {
             }
         }

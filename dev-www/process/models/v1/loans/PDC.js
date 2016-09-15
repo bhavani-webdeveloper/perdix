@@ -40,6 +40,14 @@
             securitycheque:{
                 method:'GET',
                 url:endpoint+'/securitychequelist'           
+            },
+            getDemandList: {
+                method: 'GET',
+                url: endpoint + '/pdcdemandList'
+            },
+            bulkRepay: {
+                method: 'POST',
+                url: endpoint + '/pdcbulkrepay'
             }
         });
 
