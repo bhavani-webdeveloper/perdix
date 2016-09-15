@@ -35,7 +35,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
                     model = EnrollmentHelper.fixData(model);
-                    if (model.customer.currentStage==='Stage01') {
+                    if (model.customer.currentStage==='BasicEnrollment') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
                     } else {
@@ -861,7 +861,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         {
                             key:"customer.udf.userDefinedFieldValues.udf31",
                             "type":"select"
-                            
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf32"

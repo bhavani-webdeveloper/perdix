@@ -128,6 +128,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
             } else if (readOnlyFormCache[pageUri]) {
                 $log.debug('resetting initial form');
                 deferred.resolve(readOnlyFormCache[pageUri]);
+            } else {
+                deferred.resolve(form);
             }
             $log.info("Profile Page got initialized");
         });
