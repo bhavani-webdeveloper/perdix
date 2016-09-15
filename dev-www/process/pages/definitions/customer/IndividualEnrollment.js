@@ -179,7 +179,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.landmark",
                         "customer.villageName",
                         "customer.postOffice",
-                        "customer.district",
                         {
                             key: "customer.pincode",
                             type: "lov",
@@ -221,6 +220,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 $log.info(result);
                             }
                         },
+                        "customer.district",
                         "customer.state",
                         "customer.mailSameAsResidence"
                     ]

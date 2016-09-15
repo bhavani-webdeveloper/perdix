@@ -231,8 +231,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.locality",
                     "customer.landmark",
                     "customer.villageName",
-                    // "customer.udf.userDefinedFieldValues.udf9",
-                    "customer.district",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -248,7 +246,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
-                            
+
 
 
                             "pincode": "customer.pincode",
@@ -266,6 +264,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
+                    // "customer.udf.userDefinedFieldValues.udf9",
+                    "customer.district",
                     "customer.state",
                     {
                        key: "customer.udf.userDefinedFieldValues.udf31", // customer.enterprise.businessInPresentAreaSince
