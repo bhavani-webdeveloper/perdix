@@ -235,7 +235,7 @@ $templateCache.put("irf/template/adminlte/date.html","<div class=\"form-group fo
     "      <button ng-click=\"$$value$$ = ''\"\n" +
     "        onClick=\"$($(event.target).parents('.form-group')[0]).find('input.form-control').val(null)\"\n" +
     "        class=\"btn btn-box-tool btn-xs\"\n" +
-    "        style=\"padding-left:5px;padding-right:7px;outline:none\"><i class=\"fa fa-times\"></i></button>\n" +
+    "        style=\"padding-left:5px;padding-right:7px;outline:none\" tabindex=\"-1\"><i class=\"fa fa-times\"></i></button>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
@@ -660,6 +660,19 @@ $templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"swi
     "  <span class=\"switch-handle\"></span> \n" +
     "</label>")
 
+$templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
+    "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
+    "</div>\n" +
+    "<span>\n" +
+    "	<i class=\"fa fa-map-marker color-theme\"></i>&nbsp;\n" +
+    "	<a href=\"\" ng-href=\"{{ position.geourl }}\" target=\"_blank\" ng-style=\"{color:error.message?'tomato':'inherit'}\">\n" +
+    "		{{ (position.geolocation || error.message) | translate }}\n" +
+    "	</a>\n" +
+    "	<a ng-hide=\"readOnly\" class=\"pull-right\" ng-click=\"refreshLocation()\" href=\"\">\n" +
+    "		<i class=\"fa fa-refresh\" style=\"color:#ccc\"></i>\n" +
+    "	</a>\n" +
+    "</span>")
+
 $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-control\" ng-class=\"{'read-only':form.readonly}\" ng-style=\"(isImage || inputFileDataURL) ? {height:'inherit'}:{}\" style=\"position:relative;\">\n" +
     "  <div ng-if=\"isImage\" class=\"row\" style=\"padding-bottom:7px;\">\n" +
     "    <div class=\"col-xs-12\" style=\"text-align:center;height:200px;overflow:hidden\">\n" +
@@ -704,19 +717,6 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "  </div>\n" +
     "  <input type=\"file\" id=\"{{::id}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
     "</div>")
-
-$templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
-    "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
-    "</div>\n" +
-    "<span>\n" +
-    "	<i class=\"fa fa-map-marker color-theme\"></i>&nbsp;\n" +
-    "	<a href=\"\" ng-href=\"{{ position.geourl }}\" target=\"_blank\" ng-style=\"{color:error.message?'tomato':'inherit'}\">\n" +
-    "		{{ (position.geolocation || error.message) | translate }}\n" +
-    "	</a>\n" +
-    "	<a ng-hide=\"readOnly\" class=\"pull-right\" ng-click=\"refreshLocation()\" href=\"\">\n" +
-    "		<i class=\"fa fa-refresh\" style=\"color:#ccc\"></i>\n" +
-    "	</a>\n" +
-    "</span>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
     "    <div ng-switch-default class=\"list-view list-group-item\" ng-class=\"{'expanded':expanded}\">\n" +
@@ -2925,6 +2925,8 @@ angular.module('irf.pikaday', ['irf.elements.commons'])
 						if (this.value && this.value.length == 8) {
 							var m = moment(this.value, 'DDMMYYYY');
 							setValue(m.format('YYYY-MM-DD'));
+						} else if (!this.value) {
+							setValue('');
 						}
 					}).on('focus', function(e){
 						this.select();
@@ -6106,7 +6108,7 @@ $(document).ready(function(){
 irf.BASE_URL = 'http://52.4.230.141:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
-irf.MANAGEMENT_BASE_URL = 'http://52.4.230.141:8081';
+irf.MANAGEMENT_BASE_URL = 'http://52.4.230.141:8081/management';
 
 //irf.FORM_DOWNLOAD_URL = 'http://uatperdix.kgfs.co.in:8081/saijaforms/DownloadForms.php';
 irf.FORM_DOWNLOAD_URL = 'http://115.113.193.49:8080/formsKinara/formPrint.jsp';
@@ -7074,6 +7076,14 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
             update: {
                 method: 'PUT',
                 url: endpoint + '/update'
+            },
+            getDemandList: {
+                method: 'GET',
+                url: endpoint + '/achdemandList'
+            },
+            bulkRepay: {
+                method: 'POST',
+                url: endpoint + '/achbulkrepay'
             }
         });
 
@@ -7156,6 +7166,14 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
             securitycheque:{
                 method:'GET',
                 url:endpoint+'/securitychequelist'           
+            },
+            getDemandList: {
+                method: 'GET',
+                url: endpoint + '/pdcdemandList'
+            },
+            bulkRepay: {
+                method: 'POST',
+                url: endpoint + '/pdcbulkrepay'
             }
         });
 
@@ -23264,7 +23282,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchId = SessionStore.getBranchId();
+            //model.branchId = SessionStore.getBranchId();
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -23310,8 +23328,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "branchId": {
                         "title": "BRANCH_NAME",
-                        "type": ["null","string"],
-                        "enumCode": "branch",
+                        "type": ["null","integer"],
+                        "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
                         }
@@ -23322,9 +23340,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
+                            "parentEnumCode": "branch_id"
                         }
                     }
                 }
@@ -24290,352 +24306,350 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), ["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams",
-	function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
-		/*
-		ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
-		else the create field is called. Both Update and Create points to same API. 
-		The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
-		and filled in the screen. 
-		*/
-		var branch = SessionStore.getBranch();
+function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
+	/*
+	ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
+	else the create field is called. Both Update and Create points to same API. 
+	The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+	and filled in the screen. 
+	*/
+	var branch = SessionStore.getBranch();
 
-		return {
-			"type": "schema-form",
-			"title": "ACH_REGISTRATION",
-			"subTitle": "",
-			initialize: function(model, form, formCtrl) {
-				//Create Model ach
-				model.ach = model.ach || {};
-				model.achSearch = model.achSearch || {};
-				//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
-				model.flag = false;
-				//_ach from loans.individual.achpdc.ACHMandateDownload
-				//_loanAch  from loans.individual.Queue
-				if (model._ach || model._loanAch) {
+	return {
+		"type": "schema-form",
+		"title": "ACH_REGISTRATION",
+		"subTitle": "",
 
-					if (model._ach) {
-						model.ach.accountHolderName = model._ach.customerName;
-						model.ach.accountId = model._ach.accountId;
-						model.ach.branchName = model._ach.branchName;
-					} else if (model._loanAch) {
-						model.ach.accountHolderName = model._loanAch.customerName;
-						model.ach.accountId = model._loanAch.accountNumber;
-						model.ach.branchName = model._loanAch.branchName;
-					}
+		initialize: function(model, form, formCtrl) {
 
-					//Search for existance of Loan account Number
-					ACH.search({ accountNumber: model.ach.accountId }).$promise.then(function(res) {
-							$log.info("response: " + res);
+			//Create Model ach
+			model.ach = model.ach || {};
+			model.achSearch = model.achSearch || {};
 
-							model.achSearch = res;
-							for (var i = 0; i < model.achSearch.body.length; i++) {
-								//$log.info(achSearch.body[i].accountHolderName);
-								if (model.achSearch.body[i].accountId == model.ach.accountId) {
-									model.flag = true;
-									model.ach = model.achSearch.body[i];
-									model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
-								}
-							}
-						},
-						function(httpRes) {
-							PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-							PageHelper.showErrors(httpRes);
-							$log.info("ACH Search Response : " + httpRes);
-						}
-					);
-				} else {
-					if (model._ach) {
-						$state.go("Page.Engine", {
-							pageName: "loans.individual.achpdc.ACHMandateQueue",
-							pageId: null
-						});
-					} else {
-						$state.go("Page.Engine", {
-							pageName: "loans.individual.Queue",
-							pageId: null
-						});
-					}
+			//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
+			model.flag = false;
+			
+			//_ach from loans.individual.achpdc.ACHMandateDownload
+			//_loanAch  from loans.individual.Queue
 
+			if (model._ach || model._loanAch) {
+
+				if (model._ach) {
+			
+					model.ach.accountHolderName = model._ach.customerName;
+					model.ach.accountId = model._ach.accountId;
+					model.ach.branchName = model._ach.branchName;
+			
+				} 
+				else if (model._loanAch) {
+				
+					model.ach.accountHolderName = model._loanAch.customerName;
+					model.ach.accountId = model._loanAch.accountNumber;
+					model.ach.branchName = model._loanAch.branchName;
+				
 				}
 
-				//   model.customer.urnNo="1234567890";
-				$log.info("ACH_REGISTRATION got initialized");
-			},
-			modelPromise: function(pageId, model) {
+				//Search for existance of Loan account Number
+				ACH.search({ accountNumber: model.ach.accountId }).$promise.then(function(res) {
+						$log.info("response: " + res);
+						model.achSearch = res;
 
-			},
-			offline: false,
-			getOfflineDisplayItem: function(item, index) {
+						for (var i = 0; i < model.achSearch.body.length; i++) {
+						
+							//$log.info(achSearch.body[i].accountHolderName);
+							if (model.achSearch.body[i].accountId == model.ach.accountId) {
+						
+								model.flag = true;
+								model.ach = model.achSearch.body[i];
+								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
+						
+							}
+						}
+					},
+					function(httpRes) {
+						PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+						PageHelper.showErrors(httpRes);
+						$log.info("ACH Search Response : " + httpRes);
+					}
+				);
 
-			},
-			form: [{
+			} 
+			else {
+			
+				if (model._ach) {
+					$state.go("Page.Engine", {
+						pageName: "loans.individual.achpdc.ACHMandateQueue",
+						pageId: null
+					});
+				} 
+				else {
+					$state.go("Page.Engine", {
+						pageName: "loans.individual.Queue",
+						pageId: null
+					});
+				}
+
+			}
+
+			//   model.customer.urnNo="1234567890";
+			$log.info("ACH_REGISTRATION got initialized");
+		},
+
+		modelPromise: function(pageId, model) {
+
+		},
+		offline: false,
+		
+		getOfflineDisplayItem: function(item, index) {
+
+		},
+		
+		form: [
+			{
 				"type": "box",
 				"notitle": true,
-				"items": [{
-					"type": "fieldset",
-					"title": "LOAN_DETAILS",
-					"items": [{
-						"key": "ach.accountId",
-						"title": "LOAN_ID",
-						"readonly": true
-					},
+				"items": [
 					{
-						"key": "ach.branchName",
-						"title": "BRANCH_NAME",
-						"readonly": true
-					},
-					{
-						"key": "ach.CentreCode",
-						"title": "CENTRE_CODE",
-						"readonly": true
-					},
-					{
-						"key": "ach.customerName",
-						"title": "ENTITY_NAME",
-						"readonly": true
-					},
-					{
-						"key": "ach.applicantName",
-						"title": "APPLICANT_NAME",
-						"readonly": true
-					},
-					{
-						"key": "ach.coApplicantName",
-						"title": "COAPPLICANT_NAME",
-						"readonly": true
-					}]
-				},
-				{
-					"type": "fieldset",
-					"title": "ACH_DETAILS",
-					"items": [{
-							"key": "ach.accountHolderName",
-							"title": "ACCOUNT_HOLDER_NAME"
-						},
-						{
-							"key": "ach.accountType",
-							"title": "ACCOUNT_TYPE"
-						},
-						{
-							"key": "ach.bankAccountNumber",
-							"title": "BANK_ACCOUNT_NUMBER"
-						},
-						{
-							"key": "ach.ifscCode",
-							"title": "IFSC_CODE",
-							"type": "lov",
-							"inputMap": {
-								"ifscCode": {
-									"key": "ifscCode",
-									"title": "IFSC_CODE"
-								}
+						"type": "fieldset",
+						"title": "LOAN_DETAILS",
+						"items": [
+							{
+								"key": "ach.accountId",
+								"title": "LOAN_ID",
+								"readonly": true
+							},
+							{
+								"key": "ach.branchName",
+								"title": "BRANCH_NAME",
+								"readonly": true
+							},
+							{
+								"key": "ach.CentreCode",
+								"title": "CENTRE_CODE",
+								"readonly": true
+							},
+							{
+								"key": "ach.customerName",
+								"title": "ENTITY_NAME",
+								"readonly": true
+							},
+							{
+								"key": "ach.applicantName",
+								"title": "APPLICANT_NAME",
+								"readonly": true
+							},
+							{
+								"key": "ach.coApplicantName",
+								"title": "COAPPLICANT_NAME",
+								"readonly": true
 							}
-						},
-						// {
-      //                       "key": "ach.ifscCode",
-      //                       "title": "IFSC_CODE",
-      //                       "type": "lov",
-      //                       "lovonly": true,
-      //                       "inputMap": {
-      //                           "ifscCode": {
-      //                               "key": "ach.ifscCode"
-      //                           },
-      //                           "bankName": {
-      //                               "key": "ach.bankName"
-      //                           },
-      //                           "branchName": {
-      //                               "key": "ach.branchName"
-      //                           }
-      //                       },
-      //                       outputMap: {
-      //                           "bankName": "ach.bankName",
-      //                           "branchName": "ach.branchName",
-      //                           "ifscCode": "ach.ifscCode"
-      //                       },
-      //                       searchHelper: formHelper,
-      //                       search: function(inputModel, form) {
-      //                           $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-      //                           var promise = CustomerBankBranch.search({
-      //                               'bankName': inputModel.bankName,
-      //                               'ifscCode': inputModel.ifscCode,
-      //                               'branchName': inputModel.branchName
-      //                           }).$promise;
-      //                           return promise;
-      //                       },
-      //                       getListDisplayItem: function(data, index) {
-      //                           return [
-      //                               data.ifscCode,
-      //                               data.branchName,
-      //                               data.bankName
-      //                           ];
-      //                       }
-            
-
-      //                   },
-						{
-							"key": "ach.branchName",
-							"title": "BRANCH_NAME"
-						},
-						{
-							"key": "ach.bankName",
-							"title": "BANK_NAME"
-						},
-						{
-							"key": "ach.bankCity",
-							"title": "BANK_CITY"
-						},
-						{
-							"key": "ach.mandateApplicationId",
-							"title": "MANDATE_APPLICATION_ID"
-						},
-						{
-							"key": "ach.mandateFilePath",
-							"title": "MANDATE_FILE_PATH"
-						},
-						{
-							"key": "ach.mandateId",
-							"title": "MANDATE_ID",
-							"type": "Number"
-						},
-						{
-							"key": "ach.mandateOpenDate",
-							"title": "MANDATE_OPEN_DATE",
-							"type": "date"
-						},
-						"ach.mandateStatus", {
-							"key": "ach.maximumAmount",
-							"title": "MAX_ACH_AMOUNT"
-						},
-						{
-							"key": "ach.frequency",
-							"title": "FREQUENCY",
-							"type": "select",
-							"enumCode": "ach_frequency"
-						},
-						{
-							"key": "ach.micr",
-							"title": "MICR"
-						},
-						{
-							"key": "ach.achStartDate",
-							"title": "START_DATE",
-							"type": "date"
-						},
-						{
-							"key": "ach.achEndDate",
-							"title": "END_DATE",
-							"type": "date"
-						},
-						{
-							"key": "ach.phoneNo",
-							"title": "MOBILE_PHONE"
-						},
-						{
-							"key": "ach.emailId",
-							"title": "EMAIL"
-						},
-						{
-							"key": "ach.reference1",
-							"title": "REFERENCE1"
-						},
-						{
-							"key": "ach.reference2",
-							"title": "REFERENCE2"
-						},
-						{
-							"key": "ach.sponsorAccountCode",
-							"title": "SPONSOR_ACCOUNT_CODE"
-						},
-						{
-							"key": "ach.sponsorBankCode",
-							"title": "SPONSOR_BANK_CODE"
-						},
-						{
-							"key": "ach.umrn",
-							"title": "UMRN"
-						},
-						{
-							"key": "ach.utilityCode",
-							"title": "UTILITY_CODE"
-						},
-						{
-							"key": "ach.verificationStatus",
-							"title": "VERIFICATION_STATUS",
-							"type": "select",
-							"enumCode": "ach_verification"
-						},
-						{
-							"key": "ach.registrationDate",
-							"title": "REGISTRATION_DATE",
-							"type": "date"
-						},
-						{
-							"key": "ach.remarks",
-							"title": "REMARKS"
-						},
-						{
-		                    "type":"fieldset",
-		                    "condition": "model.flag",
-		                    "title":"DOWNLOAD_ACH_MANDATE",
-		                    "items":[{
-		                            "title":"DOWNLOAD",
-		                            "htmlClass":"btn-block",
-		                            "condition": "model.flag",
-		                            "icon":"fa fa-download",
-		                            "type":"button",
-		                            "notitle":true,
-		                            "readonly":false,
-		                            "onClick": function(model, formCtrl, form, $event){
-		                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId;
-		                                            window.open("http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId);
-		                                                            
-		                                        }
-		                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
-		                        }]
-	                    }
-					]
-				}]
+						]
+					},
+					{
+						"type": "fieldset",
+						"title": "ACH_DETAILS",
+						"items": [
+							{
+								"key": "ach.accountHolderName",
+								"title": "ACCOUNT_HOLDER_NAME"
+							},
+							{
+								"key": "ach.accountType",
+								"title": "ACCOUNT_TYPE"
+							},
+							{
+								"key": "ach.bankAccountNumber",
+								"title": "BANK_ACCOUNT_NUMBER"
+							},
+							{
+								"key": "ach.ifscCode",
+								"title": "IFSC_CODE",
+								"type": "lov",
+								"inputMap": {
+									"ifscCode": {
+										"key": "ifscCode",
+										"title": "IFSC_CODE"
+									}
+								}
+							},
+							{
+								"key": "ach.branchName",
+								"title": "BRANCH_NAME"
+							},
+							{
+								"key": "ach.bankName",
+								"title": "BANK_NAME"
+							},
+							{
+								"key": "ach.bankCity",
+								"title": "BANK_CITY"
+							},
+							{
+								"key": "ach.mandateApplicationId",
+								"title": "MANDATE_APPLICATION_ID"
+							},
+							{
+								"key": "ach.mandateFilePath",
+								"title": "MANDATE_FILE_PATH"
+							},
+							{
+								"key": "ach.mandateId",
+								"title": "MANDATE_ID",
+								"type": "Number"
+							},
+							{
+								"key": "ach.mandateOpenDate",
+								"title": "MANDATE_OPEN_DATE",
+								"type": "date"
+							},
+							{
+								"key": "ach.mandateStatus",
+								"type": "select",
+								"enumCode": "ach_mandate_stage"
+							},
+							{
+								"key": "ach.maximumAmount",
+								"title": "MAX_ACH_AMOUNT"
+							},
+							{
+								"key": "ach.frequency",
+								"title": "FREQUENCY",
+								"type": "select",
+								"enumCode": "ach_frequency"
+							},
+							{
+								"key": "ach.micr",
+								"title": "MICR"
+							},
+							{
+								"key": "ach.achStartDate",
+								"title": "START_DATE",
+								"type": "date"
+							},
+							{
+								"key": "ach.achEndDate",
+								"title": "END_DATE",
+								"type": "date"
+							},
+							{
+								"key": "ach.phoneNo",
+								"title": "MOBILE_PHONE"
+							},
+							{
+								"key": "ach.emailId",
+								"title": "EMAIL"
+							},
+							{
+								"key": "ach.reference1",
+								"title": "REFERENCE1"
+							},
+							{
+								"key": "ach.reference2",
+								"title": "REFERENCE2"
+							},
+							{
+								"key": "ach.sponsorAccountCode",
+								"title": "SPONSOR_ACCOUNT_CODE"
+							},
+							{
+								"key": "ach.sponsorBankCode",
+								"title": "SPONSOR_BANK_CODE"
+							},
+							{
+								"key": "ach.umrn",
+								"title": "UMRN"
+							},
+							{
+								"key": "ach.utilityCode",
+								"title": "UTILITY_CODE"
+							},
+							{
+								"key": "ach.verificationStatus",
+								"title": "VERIFICATION_STATUS",
+								"type": "select",
+								"enumCode": "ach_verification"
+							},
+							{
+								"key": "ach.registrationDate",
+								"title": "REGISTRATION_DATE",
+								"type": "date"
+							},
+							{
+								"key": "ach.remarks",
+								"title": "REMARKS"
+							},
+							{
+			                    "type":"fieldset",
+			                    "condition": "model.flag",
+			                    "title":"DOWNLOAD_ACH_MANDATE",
+			                    "items":[
+			                    	{
+			                            "title":"DOWNLOAD",
+			                            "htmlClass":"btn-block",
+			                            "condition": "model.flag",
+			                            "icon":"fa fa-download",
+			                            "type":"button",
+			                            "notitle":true,
+			                            "readonly":false,
+			                            "onClick": function(model, formCtrl, form, $event){
+			                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId;
+			                                            window.open("http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId);
+			                                                            
+	                                    }
+			                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+			                        }
+		                        ]
+		                    }
+						]
+					}
+				]
 			},
 			{
 				"type": "actionbox",
 				"condition": "!model.flag",
-				"items": [{
-					"type": "submit",
-					"title": "SUBMIT"
-				}]
+				"items": [
+					{
+						"type": "submit",
+						"title": "SUBMIT"
+					}
+				]
 			},
 			{
 				"type": "actionbox",
 				"condition": "model.flag",
-				"items": [{
-					"type": "submit",
-					"title": "UPDATE"
-				}]
-			}],
-			schema: function() {
-				return ACH.getSchema().$promise;
-			},
-			actions: {
-				submit: function(model, form, formName) {
-					PageHelper.showLoader();
-					ACH.create(model.ach, function(response) {
-						PageHelper.hideLoader();
-						PageHelper.showProgress("page-init", "Done.", 2000);
-						model.flag = true;
-						// $state.go("Page.Engine", {
-						//pageName: 'loans.individual.booking.DocumentUploadQueue',
-						//pageId: model.ach.loanId
-						// });
-						//model.ach=response;
-					}, function(errorResponse) {
-						PageHelper.hideLoader();
-						PageHelper.showErrors(errorResponse);
-					});
-				}
+				"items": [
+					{
+						"type": "submit",
+						"title": "UPDATE"
+					}
+				]
 			}
-		};
-	}
-]);
+		],
+
+		schema: function() {
+			return ACH.getSchema().$promise;
+		},
+
+		actions: {
+			submit: function(model, form, formName) {
+				PageHelper.showLoader();
+				ACH.create(model.ach, function(response) {
+					PageHelper.hideLoader();
+					PageHelper.showProgress("page-init", "Done.", 2000);
+					model.flag = true;
+					// $state.go("Page.Engine", {
+					//pageName: 'loans.individual.booking.DocumentUploadQueue',
+					//pageId: model.ach.loanId
+					// });
+					//model.ach=response;
+				}, function(errorResponse) {
+					PageHelper.hideLoader();
+					PageHelper.showErrors(errorResponse);
+				});
+			}
+		}
+	};
+}]);
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
 ["$log", "PDC", "PageHelper", "SessionStore","$state", "CustomerBankBranch", 'formHelper', "$stateParams", 
 function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelper,$stateParams){
@@ -24646,13 +24660,16 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         "type": "schema-form",
         "title": "PDC_REGISTRATION",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
             //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdcGet = model.pdcGet||{};
             model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
+         
             if (model._pdc ) {
+            
                 model.pdc.accountId = model._pdc.accountNumber;
                 model.pdc.loanAccountNo = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
@@ -24670,270 +24687,282 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     },
                     function(res){
                         PageHelper.hideLoader();
-                        //PageHelper.showProgress("page-init","Error in loading customer.",2000);
-                        // PageHelper.showErrors(res);
                         model.flag = false;
                         $log.info("PDC GET Error : "+res);  
-
-                        
-                        /*$state.go("Page.Engine", {
-                            pageName: 'EnrollmentHouseVerificationQueue',
-                            pageId: null
-                        });*/
                     }
                 );
 
-             } 
-             // else if ($stateParams.pageId) {
-             //  model.pdc.loanId=$stateParams.pageId;
-             // }
-             else {
-              $state.go("Page.Engine",{
-                                    pageName:"loans.individual.Queue",
-                                    pageId:null
-                                });
-             }
+            } 
+            else {
+
+                $state.go("Page.Engine",{
+                    pageName:"loans.individual.Queue",
+                    pageId:null
+                });
+             
+            }
         },
         offline: false,
+
         getOfflineDisplayItem: function(item, index){
             
         },
-        form: [{
-            "type": "box",
-            "notitle": true ,
-            "colClass":"col-sm-8",
-                 "items": [{
-                            "type":"fieldset",
-                            "title": "LOAN_DETAILS",
-                            "items":[{
-                                    "key": "pdc.loanAccountNo",
-                                    "title": "LOAN_ACCOUNT_NUMBER",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.branchName",
-                                    "title": "BRANCH_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.CentreCode",
-                                    "title": "CENTRE_CODE",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.customerName",
-                                    "title": "ENTITY_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.applicantName",
-                                    "title": "APPLICANT_NAME",
-                                    "readonly":true
-                                },
-                                {
-                                    "key": "pdc.coApplicantName",
-                                    "title": "COAPPLICANT_NAME",
-                                    "readonly":true
-                                }]
-                            },
-                            {
-                            "type":"fieldset",
-                            "title": "SECURITY_CHEQUE",
-                            "items":[
-                                // {
-                                //     "key": "pdc.bankAccountNo",
-                                //     "title": "BANK_ACCOUNT_NUMBER"
-                                // },
-                                // {
-                                //     "key": "pdc.securityCheckNo",
-                                //     "title": "SECURITY_CHEQUE_NO"
-                                // },
-                                // {
-                                //     "key": "pdc.chequeNoFrom",
-                                //     "title": "CHEQUE_NUMBER_FROM"
-                                // },
-                                // {
-                                //     "key": "pdc.chequeType",
-                                //     "title": "CHEQUE_TYPE"
-                                // },
-                                {
-                                    "key": "pdc.customerBankAccountNo",
-                                    "title": "CUSTOMER_BANK_ACCOUNT_NUMBER"
-                                }
-                                // {
-                                //     "key": "pdc.ifscCode",
-                                //     "title": "IFSC_CODE"
-                                // },
-                                // {
-                                //     "key": "pdc.bankName",
-                                //     "title": "BANK_NAME",
-                                //     "readonly":true
-                                // },
-                                // {
-                                //     "key": "pdc.numberOfCheque",
-                                //     "title": "NUMBER_OF_CHEQUE"
-                                // }
-                                ]
-                            },
-                            {
-                                "type":"fieldset",
-                                "title":"PDC_DETAILS",
-                                "items":[
-                                {
-                                    "key": "pdc.firstInstallmentDate",
-                                    "title": "FIRST_INSTALMENT_DATE",
-                                    "type": "date"
-                                },
-                                // {
-                                //     "type": "fieldset",
-                                //     "title": "CHEQUE_LEAVES",
-                                //     "items": [{
-                                //         "type":"array",
-                                //         "key":"pdc.chequeDetails",
-                                //         "add": null,
-                                //         "startEmpty": true,
-                                //         "title":"CHEQUE_DETAILS",
-                                //         "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
-                                //         "items":[{
-                                //                 "key": "pdc.chequeDetails[].bankName",
-                                //                 "title": "BANK_NAME",
-                                //                 "readonly": true
-                                //             },
-                                //             {
-                                //                 "key": "pdc.chequeDetails[].ifscCode",
-                                //                 "title": "IFSC_CODE",
-                                //                 "type": "lov",
-                                //                 "inputMap": {
-                                //                     "ifscCode": {
-                                //                         "key": "ifscCode",
-                                //                         "title": "IFSC_CODE"
-                                //                     }
-                                //                 }
-                                //             },
-                                //             {
-                                //                 "key": "pdc.chequeDetails[].chequeNo",
-                                //                 "title": "CHEQUE_NUMBER"
-                                //             }]
-                                //     }]
-                                // },
-                                {
-                                    "type":"array",
-                                    "key":"pdc.addCheque",
-                                    "view": "fixed",
-                                    "startEmpty": true,
-                                    "title":"CHEQUE_DETAILS",
-                                    "items":[{
-                                            "key": "pdc.addCheque[].bankAccountNo",
-                                            "title": "BANK_ACCOUNT_NUMBER"
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].ifscCode",
-                                            "title": "IFSC_CODE",
-                                            "type": "lov",
-                                            "lovonly": true,
-                                            "inputMap": {
-                                                "ifscCode": {
-                                                    "key": "pdc.addCheque[].ifscCode"
-                                                },
-                                                "bankName": {
-                                                    "key": "pdc.addCheque[].bankName"
-                                                },
-                                                "branchName": {
-                                                    "key": "pdc.addCheque[].branchName"
-                                                }
-                                            },
-                                            outputMap: {
-                                                "bankName": "pdc.addCheque[arrayIndex].bankName",
-                                                "branchName": "pdc.addCheque[arrayIndex].branchName",
-                                                "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
-                                            },
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form) {
-                                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                var promise = CustomerBankBranch.search({
-                                                    'bankName': inputModel.bankName,
-                                                    'ifscCode': inputModel.ifscCode,
-                                                    'branchName': inputModel.branchName
-                                                }).$promise;
-                                                return promise;
-                                            },
-                                            getListDisplayItem: function(data, index) {
-                                                return [
-                                                    data.ifscCode,
-                                                    data.branchName,
-                                                    data.bankName
-                                                ];
-                                            }
-                            
 
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].bankName",
-                                            "title": "BANK_NAME"
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].branchName",
-                                            "title": "BRANCH_NAME"
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].chequeNoFrom",
-                                            "title": "CHEQUE_NUMBER_FROM",
-                                            "type": "Number"
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].chequeType",
-                                            "title": "CHEQUE_TYPE",
-                                            "type": "select",
-                                            "enumCode": "pdc_cheque_type"
-                                        },
-                                        {
-                                            "key": "pdc.addCheque[].numberOfCheque",
-                                            "title": "NUMBER_OF_CHEQUE",
-                                            "type": "Number"
-                                        }]
-                                }]
+        form: [
+            {
+                "type": "box",
+                "notitle": true ,
+                "colClass":"col-sm-8",
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title": "LOAN_DETAILS",
+                        "items":[
+                            {
+                                "key": "pdc.loanAccountNo",
+                                "title": "LOAN_ACCOUNT_NUMBER",
+                                "readonly":true
+                            },
+                            {
+                                "key": "pdc.branchName",
+                                "title": "BRANCH_NAME",
+                                "readonly":true
+                            },
+                            {
+                                "key": "pdc.CentreCode",
+                                "title": "CENTRE_CODE",
+                                "readonly":true
+                            },
+                            {
+                                "key": "pdc.customerName",
+                                "title": "ENTITY_NAME",
+                                "readonly":true
+                            },
+                            {
+                                "key": "pdc.applicantName",
+                                "title": "APPLICANT_NAME",
+                                "readonly":true
+                            },
+                            {
+                                "key": "pdc.coApplicantName",
+                                "title": "COAPPLICANT_NAME",
+                                "readonly":true
                             }
                         ]
-                },
+                    },
+                    {
+                        "type":"fieldset",
+                        "title": "SECURITY_CHEQUE",
+                        "items":[
+                            // {
+                            //     "key": "pdc.bankAccountNo",
+                            //     "title": "BANK_ACCOUNT_NUMBER"
+                            // },
+                            // {
+                            //     "key": "pdc.securityCheckNo",
+                            //     "title": "SECURITY_CHEQUE_NO"
+                            // },
+                            // {
+                            //     "key": "pdc.chequeNoFrom",
+                            //     "title": "CHEQUE_NUMBER_FROM"
+                            // },
+                            // {
+                            //     "key": "pdc.chequeType",
+                            //     "title": "CHEQUE_TYPE"
+                            // },
+                            {
+                                "key": "pdc.customerBankAccountNo",
+                                "title": "CUSTOMER_BANK_ACCOUNT_NUMBER"
+                            }
+                            // {
+                            //     "key": "pdc.ifscCode",
+                            //     "title": "IFSC_CODE"
+                            // },
+                            // {
+                            //     "key": "pdc.bankName",
+                            //     "title": "BANK_NAME",
+                            //     "readonly":true
+                            // },
+                            // {
+                            //     "key": "pdc.numberOfCheque",
+                            //     "title": "NUMBER_OF_CHEQUE"
+                            // }
+                        ]
+                    },
+                    {
+                        "type":"fieldset",
+                        "title":"PDC_DETAILS",
+                        "items":[
+                            {
+                                "key": "pdc.firstInstallmentDate",
+                                "title": "FIRST_INSTALMENT_DATE",
+                                "type": "date"
+                            },
+                            // {
+                            //     "type": "fieldset",
+                            //     "title": "CHEQUE_LEAVES",
+                            //     "items": [{
+                            //         "type":"array",
+                            //         "key":"pdc.chequeDetails",
+                            //         "add": null,
+                            //         "startEmpty": true,
+                            //         "title":"CHEQUE_DETAILS",
+                            //         "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
+                            //         "items":[{
+                            //                 "key": "pdc.chequeDetails[].bankName",
+                            //                 "title": "BANK_NAME",
+                            //                 "readonly": true
+                            //             },
+                            //             {
+                            //                 "key": "pdc.chequeDetails[].ifscCode",
+                            //                 "title": "IFSC_CODE",
+                            //                 "type": "lov",
+                            //                 "inputMap": {
+                            //                     "ifscCode": {
+                            //                         "key": "ifscCode",
+                            //                         "title": "IFSC_CODE"
+                            //                     }
+                            //                 }
+                            //             },
+                            //             {
+                            //                 "key": "pdc.chequeDetails[].chequeNo",
+                            //                 "title": "CHEQUE_NUMBER"
+                            //             }]
+                            //     }]
+                            // },
+                            {
+                                "type":"array",
+                                "key":"pdc.addCheque",
+                                "view": "fixed",
+                                "startEmpty": true,
+                                "title":"CHEQUE_DETAILS",
+                                "items":[
+                                    {
+                                        "key": "pdc.addCheque[].bankAccountNo",
+                                        "title": "BANK_ACCOUNT_NUMBER"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].ifscCode",
+                                        "title": "IFSC_CODE",
+                                        "type": "lov",
+                                        "lovonly": true,
+                                        "inputMap": {
+                                            "ifscCode": {
+                                                "key": "pdc.addCheque[].ifscCode"
+                                            },
+                                            "bankName": {
+                                                "key": "pdc.addCheque[].bankName"
+                                            },
+                                            "branchName": {
+                                                "key": "pdc.addCheque[].branchName"
+                                            }
+                                        },
+
+                                        outputMap: {
+                                            "bankName": "pdc.addCheque[arrayIndex].bankName",
+                                            "branchName": "pdc.addCheque[arrayIndex].branchName",
+                                            "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
+                                        },
+
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form) {
+                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                            var promise = CustomerBankBranch.search({
+                                                'bankName': inputModel.bankName,
+                                                'ifscCode': inputModel.ifscCode,
+                                                'branchName': inputModel.branchName
+                                            }).$promise;
+                                            return promise;
+                                        },
+
+                                        getListDisplayItem: function(data, index) {
+                                            return [
+                                                data.ifscCode,
+                                                data.branchName,
+                                                data.bankName
+                                            ];
+                                        }
+                        
+
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].bankName",
+                                        "title": "BANK_NAME"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].branchName",
+                                        "title": "BRANCH_NAME"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].chequeNoFrom",
+                                        "title": "CHEQUE_NUMBER_FROM",
+                                        "type": "Number"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].chequeType",
+                                        "title": "CHEQUE_TYPE",
+                                        "type": "select",
+                                        "enumCode": "pdc_cheque_type"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].numberOfCheque",
+                                        "title": "NUMBER_OF_CHEQUE",
+                                        "type": "Number"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
             {
-                    "type": "actionbox",
-                    "condition":"!model.flag",
-                    "items": [{
+                "type": "actionbox",
+                "condition":"!model.flag",
+                "items": [
+                    {
                         "type": "submit",
                         "title": "SUBMIT",
-                              }]
-                },
-                {
-                    "type": "actionbox",
-                    "condition":"model.flag",
-                    "items": [{
+                              
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "condition":"model.flag",
+                "items": [
+                    {
                         "type": "submit",
                         "title": "UPDATE",
-                              }]
-                }],
+                    }
+                ]
+            }
+        ],
+
         schema: function() {
             return PDC.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.addCheque" array
                 //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
                 model.pdc.pdcSummaryDTO = [];
+
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
                     
                     model.pdc.pdcSummaryDTO.push({
-                            bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
-                            bankName: model.pdc.addCheque[bankCount].bankName,
-                            ifscCode: model.pdc.addCheque[bankCount].ifscCode,
-                            chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
-                            chequeType: model.pdc.addCheque[bankCount].chequeType,
-                            numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
-                            customerBankAccountNo: model.pdc.customerBankAccountNo,
-                            loanAccountNo: model._pdc.accountNumber,
-                            branchName: model.pdc.addCheque[bankCount].branchName,
-                            id: model._pdc.loanId
-                        });
+                        bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
+                        bankName: model.pdc.addCheque[bankCount].bankName,
+                        ifscCode: model.pdc.addCheque[bankCount].ifscCode,
+                        chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
+                        chequeType: model.pdc.addCheque[bankCount].chequeType,
+                        numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
+                        customerBankAccountNo: model.pdc.customerBankAccountNo,
+                        loanAccountNo: model._pdc.accountNumber,
+                        branchName: model.pdc.addCheque[bankCount].branchName,
+                        id: model._pdc.loanId
+                    });
 
                     //$log.info("bank no : " + bankCount);
                     //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
@@ -24948,9 +24977,12 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     //     });
                     // }
                 }
+
                 //model.pdc.addCheque = [];
                 PageHelper.showLoader();
+
                 if (model.flag) {
+                
                     PDC.update(model.pdc, function(response){
                         PageHelper.hideLoader();
 
@@ -24958,7 +24990,10 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-                } else {
+                
+                }
+                else {
+                
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
@@ -24967,6 +25002,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
+                
                 }
                 /*$state.go("Page.Engine", {
                     pageName: 'IndividualLoanBookingConfirmation',
@@ -24976,6 +25012,141 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         }
     };
 }]);
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateQueue"),
+["$log", "formHelper","entityManager", "ACH","$state", "SessionStore", "Utils",
+function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "ACH_MANDATE_QUEUE",
+		"subTitle": "",
+
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("search-list sample got initialized");
+		},
+
+		definition: {
+			title: "SEARCH_CUSTOMERS",
+			searchForm: [
+				"*"
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SEARCH_OPTIONS',
+				"properties": {
+					"accountNumber": {
+						"title": "ACCOUNT_NUMBER",
+						"type": "string",
+						"enumCode": "stage",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
+					"mandateStatus": {
+						"title": "MANDATE_STATUS",
+						"type": "string"
+					},
+					"bankName": {
+						"title": "BANK_NAME",
+						"type": "string"
+					}
+				}
+				//"required":["branch"]
+			},
+
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				var promise = ACH.search({
+					'accountNumber': searchOptions.accountNumber,
+					'mandateStatus': searchOptions.mandateStatus,
+					'bankName': searchOptions.bankName
+				}).$promise;
+
+				return promise;
+			},
+
+			paginationOptions: {
+				"viewMode": "page",
+				"getItemsPerPage": function(response, headers){
+					return 20;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+
+			listOptions: {
+				expandable: true,
+				itemCallback: function(item, index) {
+				},
+
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0) {
+						return response;
+					}
+					return [];
+				},
+
+				getListItem: function(item){
+					return [
+						
+						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountId,
+						"{{'CUSTOMER_NAME'|translate}} : " + item.accountHolderName,
+						"{{'LOAN_AMOUNT'|translate}} : " + item.maximumAmount,
+						"{{'REGISTRATION_STATUS'|translate}} : " + item.registrationStatus
+					]
+				},
+
+				getActions: function(){
+					return [
+						{
+							name: "ACH_UPDATE",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_ach:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.achpdc.ACHRegistration",
+									pageId:item.loanId
+								});
+							},
+							isApplicable: function(item, index){
+								return true;
+
+							}
+						},
+						{
+							name: "ACH_MANDATE",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.achpdc.ACHMandateDownload",{_achMandate:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.achpdc.ACHMandateDownload",
+									pageId:item.loanId
+								});
+							},
+							isApplicable: function(item, index){
+								if ( (item.registrationStatus == "PENDING") || (item.registrationStatus == "REJECTED") ) {
+									return true;
+								} else { 
+									return false;
+								}
+							}
+						}
+					];
+				}
+			}
+		}
+	};
+}]);
+
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
 ["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
 function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
@@ -25725,51 +25896,54 @@ ACHClearingCollection.js does the following
         "type": "schema-form",
         "title": "ACH_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
+
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
         },
         
-        form: [{
-            "type":"box",
-            "title":"ACH_SUBMISSION_AND_STATUS_UPDATE",
-            "items":[{
-                    "type":"fieldset",
-                    "title":"SUBMIT_TO_BANK",
-                    "items":[{
-                            "key":"achCollections.demandDate",
-                            "title": "INSTALLMENT_DATE",
-                            "type":"date"
-                        },
-                        {
-                            "title":"DOWNLOAD",
-                            "htmlClass":"btn-block",
-                            "icon":"fa fa-download",
-                            "type":"button",
-                            "notitle":true,
-                            "readonly":false,
-                            "onClick": function(model, formCtrl, form, $event){
-                                            
-                                            //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
-                                            window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");
-                                                
-                                        }
-                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
-                        }]
+        form: [
+            {
+                "type":"box",
+                "title":"ACH_SUBMISSION_AND_STATUS_UPDATE",
+                "items":[
+                    {
+                        "type":"fieldset",
+                        "title":"SUBMIT_TO_BANK",
+                        "items":[
+                            {
+                                "key":"achCollections.demandDate",
+                                "title": "INSTALLMENT_DATE",
+                                "type":"date"
+                            },
+                            {
+                                "title":"DOWNLOAD",
+                                "htmlClass":"btn-block",
+                                "icon":"fa fa-download",
+                                "type":"button",
+                                "notitle":true,
+                                "readonly":false,
+                                "onClick": function(model, formCtrl, form, $event){
+                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
+                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");     
+                                }
+                            }
+                        ]
                     },
                     {
-                    "type":"fieldset",
-                    "title":"UPLOAD_STATUS",
-                    "items":[{
-                                "key": "ach.achDemandListFileId",
-                                "notitle":true,
-                                "type": "file",
-                                "category":"ACH",
-                                "subCategory":"cat2",
-                                "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                customHandle: function(file, progress, modelValue, form, model) {
-                                    ACH.achDemandListUpload(file, progress);
-                                }
+                        "type":"fieldset",
+                        "title":"UPLOAD_STATUS",
+                        "items":[
+                            {
+                                    "key": "ach.achDemandListFileId",
+                                    "notitle":true,
+                                    "type": "file",
+                                    "category":"ACH",
+                                    "subCategory":"cat2",
+                                    "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    customHandle: function(file, progress, modelValue, form, model) {
+                                        ACH.achDemandListUpload(file, progress);
+                                    }
                             }
                             // ,
                             // {
@@ -25778,13 +25952,16 @@ ACHClearingCollection.js does the following
                             // "title": "UPLOAD",
                             // "onClick": "actions.proceed(model, formCtrl, form, $event)"
                             // }
-                            ]
-                    }]
+                        ]
+                    }
+                ]
+            }
+        ],
 
-                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+        
         actions: {
             submit: function(model, form, formName){
             },
@@ -25799,63 +25976,176 @@ ACHClearingCollection.js does the following
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
-["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
+["$log", "ACH", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
+function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
 /*
-The ACHSubmission.js is to download the ACH Mandates that are created on the current date. Onc created, the Mandate details
-are updated into the excel. This screen helps in viewing all the ACH Mandates registered on the current date.
-This excel document can be downloaded here.
+The ACHSubmission.js is to download the ACH  Demandlist for the given date and to update the status of them.
 */
     return {
         "type": "schema-form",
         "title": "ACH_SUBMISSION",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
-            model.mandate = model.mandate || {};
-            model.mandate.id = 1;
+            model.achDemand = model.achDemand || {};
+
+            model.achDemand.demandList = [{
+                accountId: "10010101",
+                amount1: "100",
+                customerName: "aaa",
+                check: false
+            },
+            {
+                accountId: "10010102",
+                amount1: "100",
+                customerName: "bbb",
+                check: true
+            }];
         },
-        form:[{
-                "type":"box",
-                "title":"Download ACH Mandate pending for submission",
-                "htmlClass": "text-danger",
-                "items":[{
+
+        form:[
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
                         "type":"fieldset",
-                        "title":"Download ACH Mandate Registrations",
-                        "items":[{
-                                "title":"Download",
-                                "htmlClass":"btn-block",
-                                "icon":"fa fa-download",
+                        "title":"SEARCH_ACH_DEMANDs",
+                        "items":[
+                            {
+                                "key": "achDemand.search.demandDate",
+                                "title": "DEMAND_DATE",
+                                "type": "date"
+
+                            },
+                            {
+                                "key": "achDemand.search.branchId",
+                                "title": "BRANCH_CODE",
+                                "type": "select",
+                                "enumCode": "branch_id",
+                            },
+                            {
+                                "title":"SEARCH",
                                 "type":"button",
-                                "notitle":true,
-                                "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                                model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
-                                                window.open(model.mandate.link);
-                                                                
-                                            }
-                                //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
-                                }]
-                        }]
-                
-            }],
+                                    PageHelper.showLoader();
+                                    ACH.getDemandList(model.achDemand.search).$promise.then(function(response) {
+                                        PageHelper.showProgress("page-init", "Done.", 2000);
+                                       // model.achDemand.demandList = response;
+                                    }, function(errorResponse) {
+                                        PageHelper.showErrors(errorResponse);
+                                    }).finally(function(){
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"UPDATE_ACH_DEMANDs",
+                        "items":[
+                            {   
+                                "key": "achDemand.checkbox",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                    //
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+
+                                    for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                        model.achDemand.demandList[i].check = true;  
+
+                                    }
+                                    else
+                                    {
+
+                                    for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                        model.achDemand.demandList[i].check = false;
+
+                                    }
+                                                            
+                                }    
+
+                            },
+                            {
+                                "type":"array",
+                                "key":"achDemand.demandList",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"CHEQUE_DETAILS",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].customerName",
+                                "items":[
+                                    {
+                                        "key": "achDemand.demandList[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].amount1",
+                                        "title": "LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].customerName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].check",
+                                        "title": "MARK_AS_PAID",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
+
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+        
         actions: {
             submit: function(model, form, formName){
-            },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
-            },
-            proceed: function(model, formCtrl, form, $event) {
-            },
-            downloadForm: function(model, formCtrl, form, $event){
-                model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandate.id;
-                window.open(model.mandate.link);
-                                
+                PageHelper.showLoader();
+                ACH.bulkRepay(model.achDemand.demandList, function(response) {
+                    PageHelper.hideLoader();
+                    PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.flag = true;
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
+
             }
         }
     };
@@ -25949,42 +26239,46 @@ PDCCollections.js does the following
         "type": "schema-form",
         "title": "PDC_COLLECTIONS",
         "subTitle": Utils.getCurrentDate(),
+
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
         },
         
-        form: [{
-            "type":"box",
-            "title":"PDC_SUBMISSION_AND_STATUS_UPDATE",
-            "items":[{
-                    "type":"fieldset",
-                    "title":"Submit to Bank",
-                    "items":[{
-                            "key":"pdcCollections.demandDate",
-                            "title": "INSTALLMENT_DATE",
-                            "type":"date"
-                        },
-                        {
-                            "title":"DOWNLOAD",
-                            "htmlClass":"btn-block",
-                            "icon":"fa fa-download",
-                            "type":"button",
-                            "notitle":true,
-                            "readonly":false,
-                            "onClick": function(model, formCtrl, form, $event){
-                                            
-                                            //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
-                                            window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
-                                                
-                                        }
-                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
-                        }]
+        form: [
+            {
+                "type":"box",
+                "title":"PDC_SUBMISSION_AND_STATUS_UPDATE",
+                "items":[
+                    {
+                        "type":"fieldset",
+                        "title":"Submit to Bank",
+                        "items":[
+                            {
+                                "key":"pdcCollections.demandDate",
+                                "title": "INSTALLMENT_DATE",
+                                "type":"date"
+                            },
+                            {
+                                "title":"DOWNLOAD",
+                                "htmlClass":"btn-block",
+                                "icon":"fa fa-download",
+                                "type":"button",
+                                "notitle":true,
+                                "readonly":false,
+                                "onClick": function(model, formCtrl, form, $event){
+                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
+                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
+                                            }
+                                //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                            }
+                        ]
                     },
                     {
-                    "type":"fieldset",
-                    "title":"Upload Status",
-                    "items":[{
+                        "type":"fieldset",
+                        "title":"Upload Status",
+                        "items":[
+                            {
                                 "key": "ach.pdcReverseFeedListFileId",
                                 "notitle":true,
                                 "category":"ACH",
@@ -26002,13 +26296,16 @@ PDCCollections.js does the following
                             //     "title": "UPLOAD",
                             //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
                             // }
-                            ]
-                    }]
+                        ]
+                    }
+                ]
+            }
+        ],
 
-                }],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+        
         actions: {
             submit: function(model, form, formName){
             },
@@ -26035,39 +26332,48 @@ either approved by bank/ rejected by bank)
         "type": "schema-form",
         "title": "ACH_MANDATE_UPLOAD",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Upload Page got initialized");
         },
         offline: false,
+
         getOfflineDisplayItem: function(item, index){
             
         },
-        form: [{
-            
+
+        form: [
+            {
+                
                 "type": "box",
                 "title": "ACH_MANDATE_UPLOAD_FROM_BANK" ,
                 "colClass":"col-sm-6",
-                "items": [{
-                            "key": "ach.achMandateReverseFileId",
-                            "notitle":true,
-                            "category":"ACH",
-                            "subCategory":"cat2",
-                            "type": "file",
-                            "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            customHandle: function(file, progress, modelValue, form, model) {
-                                ACH.achMandateUpload(file, progress);
-                            }
-                        },
-                        {
-                            "type": "button",
-                            "icon": "fa fa-user-plus",
-                            "title": "UPLOAD",
-                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                        }]
-            }],
+                "items": [
+                    {
+                        "key": "ach.achMandateReverseFileId",
+                        "notitle":true,
+                        "category":"ACH",
+                        "subCategory":"cat2",
+                        "type": "file",
+                        "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        customHandle: function(file, progress, modelValue, form, model) {
+                            ACH.achMandateUpload(file, progress);
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "icon": "fa fa-user-plus",
+                        "title": "UPLOAD",
+                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                    }
+                ]
+            }
+        ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
                     $state.go("Page.Engine", {
@@ -26075,6 +26381,7 @@ either approved by bank/ rejected by bank)
                         pageId: model.customer.id
                     });
             },
+            
             proceed: function(model, formCtrl, form, $event) {
             }
         }
@@ -26085,58 +26392,50 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
 function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelper){
 
     var branch = SessionStore.getBranch();
-
     return {
         "type": "schema-form",
         "title": "ACH_MANDATE_DOWNLOAD",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Download Page got initialized");
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
-             // model.achMandate = model.ach||{};
-             // //model.mandate = model.mandate || {};
-             // if (model._achMandate.accountId) {
-             //    model.mandateId = model._achMandate.accountId;
-             //    model.achMandate = model._achMandate;
-             // }
         },
         offline: false,
+        
         getOfflineDisplayItem: function(item, index){
             
         },
-        form: [{
+
+        form: [
+            {
                 "type": "box",
                 "title": "DOWNLOAD_ACH_MANDATES" ,
                 "colClass":"col-sm-6",
-                "items": [{
-                            "type":"fieldset",
-                            "title":"DOWNLOAD_STATUS",
-                            "items":[{
-                            "title": "DOWNLOAD",
-                            "key":"ach.achMandateDownload",
-                            "htmlClass": "btn-block",
-                            "icon": "fa fa-download",
-                            "type": "button",
-                            "readonly": false,
-                            "onClick": function(model, formCtrl, form, event){
-                                
-                                    //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=1";
-                                    //model.mandate= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id="+model.mandateId;
-
-                                    //$log.info(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                    //console.log(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"DOWNLOAD_STATUS",
+                        "items":[
+                            {
+                                "title": "DOWNLOAD",
+                                "key":"ach.achMandateDownload",
+                                "htmlClass": "btn-block",
+                                "icon": "fa fa-download",
+                                "type": "button",
+                                "readonly": false,
+                                "onClick": function(model, formCtrl, form, event){
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                    // console.log(formCtrl);
-                                    // console.log(form);
-                                    // console.log(event);
                                 }
-                            }]
-                        },
-                        {
-                            "type":"fieldset",
-                            "title":"UPLOAD_STATUS",
-                            "items":[{
+                            }
+                        ]
+                    },
+                    {
+                        "type":"fieldset",
+                        "title":"UPLOAD_STATUS",
+                        "items":[
+                            {
                                 "key": "ach.achMandateReverseFileId",
                                 "notitle":true,
                                 "category":"ACH",
@@ -26154,86 +26453,194 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                             //     "title": "UPLOAD",
                             //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
                             // }
-                            ]
-                }]
-            }],
+                        ]
+                    }
+                ]
+            }
+        ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'loans.individual.achpdc.ACHMandateUpload',
-                        pageId: model.customer.id
-                    });
+                $state.go("Page.Engine", {
+                    pageName: 'loans.individual.achpdc.ACHMandateUpload',
+                    pageId: model.customer.id
+                });
             }
         }
     };
 }]);
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
-["$log", "Enrollment", "SessionStore",'Utils', function($log, Enrollment, SessionStore,Utils){
-
-    
-
+["$log", "PDC", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
+function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
+/*
+The PDCSubmission.js is to download the PDC Demandlist for the given date and to update the status of them. 
+*/
     return {
         "type": "schema-form",
         "title": "PDC_SUBMISSION",
         "subTitle": "",
+
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
+            model.pdcDemand = model.pdcDemand || {};
+
+            model.pdcDemand.demandList = [{
+                accountId: "10010101",
+                amount1: "100",
+                customerName: "aaa",
+                check: false
+            },
+            {
+                accountId: "10010102",
+                amount1: "100",
+                customerName: "bbb",
+                check: true
+            }];
         },
-        form:[{
-                "type":"box",
-                "title":"PDC Submission and Status Update",
-                "htmlClass": "text-danger",
-                "items":[{
-                            "type":"fieldset",
-                            "title":"Submit to Bank",
-                            "items":[{
-                                    "key":"demandDate",
-                                    "title": "INSTALLMENT_DATE",
-                                    "type":"date"
-                                },
-                                {
-                                    "title":"Download",
-                                    "htmlClass":"btn-block",
-                                    "icon":"fa fa-download",
-                                    "type":"button",
-                                    "notitle":true,
-                                    "readonly":false
-                                }]
+
+        form:[
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"PDC_DEMANDS",
+                        "items":[
+                            {
+                                "key": "pdcDemand.search.demandDate",
+                                "title": "DEMAND_DATE",
+                                "type": "date"
+
                             },
                             {
-                            "type":"fieldset",
-                            "title":"Upload Status",
-                            "items":[{
-                                    "key": "image1",
-                                    "type": "file",
-                                    "category":"cat1",
-                                    "subCategory":"cat2",
-                                    "title": "Upload PDC Status"
-                                },
-                                {
-                                    "title":"Upload",
-                                    "htmlClass":"btn-block",
-                                    "icon":"fa fa-upload",
-                                    "type":"button",
-                                    "notitle":true,
-                                    "readonly":false
-                                }]
-                }]
-            }],
+                                "key": "pdcDemand.search.branchId",
+                                "title": "BRANCH_CODE",
+                                "type": "select",
+                                "enumCode": "branch_id",
+                            },
+                            {
+                                "title":"SEARCH",
+                                "type":"button",
+                                "onClick": function(model, formCtrl, form, $event){
+                                    PageHelper.showLoader();
+                                    PDC.getDemandList(model.pdcDemand.search).$promise.then(function(response) {
+                                        PageHelper.showProgress("page-init", "Done.", 2000);
+                                       // model.pdcDemand.demandList = response;
+                                    }, function(errorResponse) {
+                                        PageHelper.showErrors(errorResponse);
+                                    }).finally(function(){
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"PDC_DEMANDS",
+                        "items":[
+                            {   
+                                "key": "pdcDemand.checkbox",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                    //
+                                "onChange": function(modelValue, form, model){
+                                    
+                                    if (modelValue)
+                                    {
+                                    
+                                    for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                        model.pdcDemand.demandList[i].check = true;  
+                                    
+                                    }
+                                    else
+                                    {
+                                    
+                                    for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                        model.pdcDemand.demandList[i].check = false;
+
+                                    }
+                                                            
+                                }    
+
+                            },
+                            {
+                                "type":"array",
+                                "key":"pdcDemand.demandList",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"CHEQUE_DETAILS",
+                                "titleExpr": "(model.pdcDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.pdcDemand.demandList[arrayIndex].accountId + ' - ' + model.pdcDemand.demandList[arrayIndex].customerName",
+                                "items":[
+                                    {
+                                        "key": "pdcDemand.demandList[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].amount1",
+                                        "title": "LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].customerName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].check",
+                                        "title": "MARK_AS_PAID",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
+
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName){
-            },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
+                PageHelper.showLoader();
+                PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
+                    PageHelper.hideLoader();
+                    PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.flag = true;
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };
