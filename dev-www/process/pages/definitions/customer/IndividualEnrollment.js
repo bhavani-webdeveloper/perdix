@@ -10,13 +10,13 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
+            //model.branchId = SessionStore.getBranchId() + '';
 
             model.customer.date = model.customer.date || Utils.getCurrentDate();
             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
 
             model = Utils.removeNulls(model,true);
-            model.customer.kgfsName = SessionStore.getBranch();
+            //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
         },
         offline: true,
@@ -84,6 +84,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     type:"radios"
                 },
                 {
+                    key:"customer.dateOfBirth",
+                    type:"date",
+                    "onChange": function(modelValue, form, model) {
+                        if (model.customer.dateOfBirth) {
+                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    }
+                },
+                {
                     key:"customer.age",
                     title: "AGE",
                     type:"number",
@@ -94,15 +103,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             } else {
                                 model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
                             }
-                        }
-                    }
-                },
-                {
-                    key:"customer.dateOfBirth",
-                    type:"date",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                         }
                     }
                 },
@@ -176,9 +176,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "customer.doorNo",
                         "customer.street",
                         "customer.locality",
-                        "customer.landmark",
                         "customer.villageName",
                         "customer.postOffice",
+                        "customer.landmark",
                         {
                             key: "customer.pincode",
                             type: "lov",

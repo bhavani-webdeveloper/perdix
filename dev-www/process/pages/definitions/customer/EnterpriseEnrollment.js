@@ -12,8 +12,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
-            model.customer.kgfsName = SessionStore.getBranch();
+            //model.branchId = SessionStore.getBranchId() + '';
+            //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
         },
         offline: true,
@@ -229,8 +229,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.doorNo",
                     "customer.street",
                     "customer.locality",
-                    "customer.landmark",
                     "customer.villageName",
+                    "customer.landmark",
                     {
                         key: "customer.pincode",
                         type: "lov",
