@@ -922,7 +922,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
-                    model.enrollmentAction = "SAVE";
+                    model.enrollmentAction = "PROCEED";
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
                     Enrollment.updateEnrollment(reqData, function (res, headers) {

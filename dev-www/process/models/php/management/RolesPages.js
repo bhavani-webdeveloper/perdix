@@ -1,5 +1,5 @@
 irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searchResource) {
-    var endpoint = irf.MANAGEMENT_BASE_URL + "/perdix-user-management";
+    var endpoint = irf.MANAGEMENT_BASE_URL + "/user-management";
 
     var res = $resource(endpoint, null, {
         allRoles: searchResource({
