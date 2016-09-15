@@ -23,8 +23,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             $log.info(model.loanAccount.commercialCibilCharge);
             $log.info(model.loanAccount.securityEmi);
 
-            model.additional.loanAmount = model.loanAccount.loanAmountRequested - fee;
-
         };
 
         var calculateTotalValue = function(value, form, model){
@@ -392,11 +390,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.loanAmountRequested",
                                 "type":"amount",
-                                "title":"LOAN_AMOUNT_REQUESTED",
-                                "onChange":function(value,form,model){
-                                    model.loanAccount.insuranceFee = 0.004*value;
-                                    getSanctionedAmount(model);
-                                }
+                                "title":"LOAN_AMOUNT_REQUESTED"
                             },
                             {
                                 key:"loanAccount.insuranceFee",
@@ -427,11 +421,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.otherFee",
                                 type:"amount"
-                            },
-                            {
-                                "key": "additional.loanAmount",
-                                "type":"amount",
-                                "title":"NET_DISBURSEMENT_AMOUNT"
                             },
                             {
                                 "key":"loanAccount.interestRate",
@@ -513,7 +502,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"amount",
                                 "title":"TOTAL_VALUE",
                                 "readonly":true
-                            },
+                            }/*,
                             {
                                 "key":"loanAccount.collateral[].collateral1FilePath",
                                 "type":"file",
@@ -534,7 +523,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "type":"file",
                                 "fileType":"image/*",
                                 "title":"PHOTO"
-                            }
+                            }*/
                         ]
                     }
                 ]
@@ -720,9 +709,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             "state": "loanAccount.nominees[arrayIndex].nomineeState"
                                         },
                                         searchHelper: formHelper,
-                                        search: function(inputModel, form, model) {
+                                        initialize: function(inputModel, form, model, context) {
+                                            inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                        },
+                                        search: function(inputModel, form, model, context) {
                                             return Queries.searchPincodes(
-                                                inputModel.pincode,
+                                                inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
                                                 inputModel.district,
                                                 inputModel.state
                                             );
