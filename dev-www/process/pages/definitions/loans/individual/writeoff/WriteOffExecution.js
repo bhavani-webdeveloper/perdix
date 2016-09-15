@@ -1,5 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution"),
-["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", function($log, Enrollment, SessionStore, $state, SchemaResource){
+["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", "LoanAccount", 
+function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
 
     var branch = SessionStore.getBranch();
 
@@ -12,6 +13,7 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
             if (model._loanAccount ) {
                 model.loanAccount = model._loanAccount;
             }
+            model.loanAccount.remarks = "";
 
         },
         offline: false,
@@ -35,26 +37,50 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 },
             */
                 {
+                    "title": "ACCOUNT_ID",
                     "key": "loanAccount.accountId",
                     "readonly": true
                 },
                 {
-                    "key": "loanAccount.amount1",
-                    "readonly": true,
-                    "required": true
+                    "title": "CUSTOMER_NAME",
+                    "key": "loanAccount.customerName",
+                    "readonly": true
                 },
                 {
-                    "key": "loanAccount.amount2",
+                    "title": "CUSTOMER_URN",
+                    "key": "loanAccount.description",
+                    "readonly": true
+                },
+                {
+                    "title": "TOTAL_DEMAND_DUE",
+                    "key": "loanAccount.amount1",
+                    "readonly": true
+                },
+                {
+                    "title": "PRINCIPAL_DUE",
+                    "key": "loanAccount.part1",
+                    "readonly": true
+                },
+                {
+                    "title": "INTEREST_DUE",
+                    "key": "loanAccount.part2",
+                    "readonly": true
+                },
+                {
+                    "title": "PRODUCT_CODE",
+                    "key": "loanAccount.param1",
+                    "readonly": true
+                },
+                {
+                    "title": "WRITE_OFF_DATE",
+                    "key": "loanAccount.transactionDate",
+                    "type": "date",
                     "required": true
                 },
                 {
                     "title": "REMARKS",
-                    "key": "loanAccount.writeOffRemarks",
+                    "key": "loanAccount.remarks",
                     "required": true
-                },
-                {
-                    "key": "loanAccount.transactionDate",
-                    "type": "date"
                 },
                 {
                     "type": "submit",
@@ -72,9 +98,9 @@ irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution
                 {
                     // Update information in DB
                     return LoanAccount.writeOff({
-                        'accountNumber': loanAccount.accountId,
-                        'writeOffDate' : loanAccount.transactionDate,
-                        'remarks' : loanAccount.writeOffRemarks
+                        'accountNumber': model.loanAccount.accountId,
+                        'writeOffDate' : model.loanAccount.transactionDate,
+                        'remarks' : model.loanAccount.remarks
                     }).$promise;
 
                     $log.info("Redirecting");

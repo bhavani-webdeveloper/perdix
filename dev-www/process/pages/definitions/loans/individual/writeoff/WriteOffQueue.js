@@ -78,9 +78,9 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
                 },
                 getListItem: function(item){
                     return [
-                        item.accountId,
-                        item.amount1,
-                        "<em>Write-off Amount: Rs."+item.amount3+", Interest: Rs."+item.amount2 + "</em>"
+                        "<em>Account ID:" + item.accountId + " | Customer Name:" + item.customerName + " | Customer URN:" + item.description + "</em>",
+                        "<em>Total Demand Due:" + item.amount1 + " | Principal Due:" + item.part1 + " | Interest Due:" + item.part2 + "</em>",
+                        "<em>Product Code:" + item.param1 + "</em>"
                     ]
                 },
                 getActions: function(){
