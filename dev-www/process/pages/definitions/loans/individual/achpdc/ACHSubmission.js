@@ -34,7 +34,7 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                 "items": [
                     {
                         "type":"fieldset",
-                        "title":"SEARCH_ACH_DEMANDs",
+                        "title":"SEARCH_ACH_DEMANDS",
                         "items":[
                             {
                                 "key": "achDemand.search.demandDate",
@@ -156,7 +156,7 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
-        
+
         actions: {
             submit: function(model, form, formName){
                 PageHelper.showLoader();

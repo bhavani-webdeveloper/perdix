@@ -34,7 +34,7 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                 "items": [
                     {
                         "type":"fieldset",
-                        "title":"PDC_DEMANDS",
+                        "title":"SEARCH_PDC_DEMANDS",
                         "items":[
                             {
                                 "key": "pdcDemand.search.demandDate",

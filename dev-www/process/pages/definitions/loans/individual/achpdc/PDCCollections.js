@@ -23,7 +23,7 @@ PDCCollections.js does the following
                 "items":[
                     {
                         "type":"fieldset",
-                        "title":"Submit to Bank",
+                        "title":"SUBMIT_TO_BANK",
                         "items":[
                             {
                                 "key":"pdcCollections.demandDate",
@@ -47,7 +47,7 @@ PDCCollections.js does the following
                     },
                     {
                         "type":"fieldset",
-                        "title":"Upload Status",
+                        "title":"UPLOAD_STATUS",
                         "items":[
                             {
                                 "key": "ach.pdcReverseFeedListFileId",

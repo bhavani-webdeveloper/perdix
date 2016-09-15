@@ -197,6 +197,7 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							},
 							{
 								"key": "ach.mandateStatus",
+								"title": "MANDATE_STATUS"
 								"type": "select",
 								"enumCode": "ach_mandate_stage"
 							},
