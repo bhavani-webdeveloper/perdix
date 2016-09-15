@@ -103,7 +103,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.additional.minAmountForSecurityEMI=0;
                 Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
                     model.additional.minAmountForSecurityEMI = Number(value);
-                    $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);                    
+                    $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
                 },function(err){
                     $log.info("Max Security EMI is not available");
                 });
@@ -446,15 +446,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key": "loanAccount.loanPurpose1",
                                 "title": "LOAN_PURPOSE",
                                 "type":"select"
-                            }/*,
+                            },
                             {
                                 "key": "loanAccount.loanPurpose2",
                                 "title": "LOAN_PURPOSE_2",
                                 "type":"select",
-                                "filter":{
-                                    "parentCode as loan_purpose_1":"model.loanAccount.loanPurpose1"
-                                }
-                            },
+                                "parentEnumCode": "loan_purpose_1"
+                            }/*,
                             {
                                 "key": "loanAccount.loanPurpose3",
                                 "title": "LOAN_PURPOSE_3",
@@ -551,10 +549,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items":[
                             {
                                 key:"loanAccount.guarantors",
-                                notitle:"true",
+                                title: "GUARANTOR",
                                 view:"fixed",
                                 type:"array",
-                                add:null,
                                 remove:null,
                                 items:[
                                     {
@@ -908,7 +905,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info(model);
                     PageHelper.clearErrors();
 
-                    model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2 = model.loanAccount.loanPurpose1;
+                    model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2;
                     if (model.loanAccount.applicant === model.loanAccount.coBorrowerUrnNo) {
                         PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
                         return false;

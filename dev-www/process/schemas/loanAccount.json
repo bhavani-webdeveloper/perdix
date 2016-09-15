@@ -1522,7 +1522,6 @@
                     "title": "LOAN_PURPOSE_LEVEL_2",
                     "type": "string",
                     "enumCode":"loan_purpose_2"
-
                 },
                 "loanPurpose3": {
                     "title": "LOAN_PURPOSE_LEVEL_3",
