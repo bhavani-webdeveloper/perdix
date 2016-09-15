@@ -132,6 +132,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
                 deferred.resolve(form);
             }
             $log.info("Profile Page got initialized");
+        }, function(){
+            deferred.resolve(form);
         });
         return deferred.promise;
     };

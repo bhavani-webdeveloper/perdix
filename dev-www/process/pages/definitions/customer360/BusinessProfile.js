@@ -401,11 +401,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     return out;
                 };
                 var reqData = _.cloneDeep(model);
-                EnrollmentHelper.fixData(reqData);
+                //EnrollmentHelper.fixData(reqData);
                 Utils.confirm("Update - Are You Sure?", "Customer Profile").then(function() {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('PROFILE', 'Working...');
-                    model.enrollmentAction = "SAVE";
+                    reqData.enrollmentAction = "PROCEED";
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
