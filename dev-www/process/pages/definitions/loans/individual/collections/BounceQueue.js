@@ -7,7 +7,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchId = SessionStore.getBranchId();
+            //model.branchId = SessionStore.getBranchId();
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -53,8 +53,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "branchId": {
                         "title": "BRANCH_NAME",
-                        "type": ["null","string"],
-                        "enumCode": "branch",
+                        "type": ["null","integer"],
+                        "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
                         }
@@ -65,9 +65,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
+                            "parentEnumCode": "branch_id"
                         }
                     }
                 }
