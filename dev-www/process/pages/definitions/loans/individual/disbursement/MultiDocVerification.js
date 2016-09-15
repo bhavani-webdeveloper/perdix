@@ -293,6 +293,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                         if (redirectToUploadFlag == true){
                             reqData['stage'] = 'DocumentUpload';
                         }
+                        else
+                            reqData['stage'] = 'ReadyForDisbursement';
 
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
                             PageHelper.showProgress("upd-disb","Done.","5000");

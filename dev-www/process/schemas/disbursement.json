@@ -100,6 +100,12 @@
         "ifscCode": {
           "type": "string"
         },
+        "customerBankName": {
+          "type":"string"
+        },
+        "customerBankBranchName": {
+          "type":"string"
+        },
         "loanId": {
           "type": "integer"
         },

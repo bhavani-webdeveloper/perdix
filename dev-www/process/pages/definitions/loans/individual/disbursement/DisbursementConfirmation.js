@@ -68,6 +68,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     {
                         "key":"loanAccountDisbursementSchedule.udf1",
                         "type":"select",
+                        "onChange":function (modelValue, form, model){
+                            if (modelValue == "Confirmed"){
+                                model.loanAccountDisbursementSchedule.udf4 = "";
+                                model.loanAccountDisbursementSchedule.udf5 = "";
+                                model.loanAccountDisbursementSchedule.udfDate1 = "";
+                            }
+                        },
                         "titleMap":{
                             "Confirmed":"Confirmed",
                             "Rejected":"Rejected"

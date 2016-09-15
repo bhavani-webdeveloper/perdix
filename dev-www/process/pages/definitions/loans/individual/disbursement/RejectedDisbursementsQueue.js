@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager){
             return {
                 "type": "search-list",
                 "title": "REJECTED_DISBURSEMENT_QUEUE",
@@ -90,12 +90,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                         getActions: function(){
                             return [
                                 {
-                                    name: "Proceed to Disbursement",
+                                    name: "UPDATE_ACCOUNT",
                                     desc: "",
                                     fn: function(item, index){
 
+                                        entityManager.setModel('loans.individual.disbursement.UpdateAccountDetails', {_rejectedDisbursementQueue:item});
                                         $state.go("Page.Engine",{
-                                            pageName:"loans.individual.disbursement.Disbursement",
+                                            pageName:"loans.individual.disbursement.UpdateAccountDetails",
                                             pageId:[item.loanId,item.id].join(".")
                                         });
 
