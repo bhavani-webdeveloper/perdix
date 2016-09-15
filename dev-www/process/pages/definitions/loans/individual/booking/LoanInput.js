@@ -552,7 +552,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 title: "GUARANTOR",
                                 view:"fixed",
                                 type:"array",
-                                remove:null,
                                 items:[
                                     {
                                         "key": "loanAccount.guarantors[].guaUrnNo",
