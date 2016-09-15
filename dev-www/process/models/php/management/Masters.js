@@ -1,5 +1,5 @@
 irf.models.factory('Masters',function($resource,$httpParamSerializer, searchResource){
-    var endpoint = irf.MANAGEMENT_BASE_URL;
+    var endpoint = irf.MANAGEMENT_BASE_URL + '/perdixService/index.php';
 
     return $resource(endpoint, null, {
 
