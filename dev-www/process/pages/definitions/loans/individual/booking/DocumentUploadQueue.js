@@ -15,7 +15,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
 
         definition: {
             title: "LOAN_TYPE",
-            autoSearch: false,
+            autoSearch: true,
             sorting:true,
             sortByColumns:{
                 "name":"Customer Name",

@@ -150,6 +150,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 "type": "actionbox",
                 "items": [
                     {
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": "actions.goBack(model, formCtrl, form, $event)"
+                    },
+                    {
                         "type": "submit",
                         "title": "Submit"
                     }
@@ -203,11 +208,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         PageHelper.hideLoader();
                     })
             },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
+            goBack: function (model, formCtrl, form, $event) {
+                $state.go("Page.Engine", {
+                    pageName: 'loans.individual.booking.PendingVerificationQueue',
+                    pageId: null
+                });
             }
         }
     };
