@@ -5,7 +5,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
         "type": "search-list",
         "title": "PENDING_WRITEOFF_QUEUE",
         "subTitle": "",
-        "uri":"Loan WriteOff/Stage 1",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();

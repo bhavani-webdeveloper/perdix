@@ -5,7 +5,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
                 "subTitle": "",
-                "uri":"Loan Disbursement/Ready",
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();

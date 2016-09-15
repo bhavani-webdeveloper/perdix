@@ -5,7 +5,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                 "type": "search-list",
                 "title": "REJECTED_DISBURSEMENT_QUEUE",
                 "subTitle": "",
-                "uri":"Loan Disbursement/Rejected",
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();

@@ -2,9 +2,7 @@ irf.pageCollection.factory(irf.page('loans.ViewLoanDetails'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter","Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
             return {
-                "id": "GroupDisbursement",
                 "type": "schema-form",
-                "name": "GroupDisbursement",
                 "title": "GROUP_LOAN_DISBURSEMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {

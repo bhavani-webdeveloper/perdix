@@ -6,7 +6,7 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
 
     return {
         "type": "schema-form",
-        "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
+        "title": "SUBSEQUENT_TRANCHE_DISBURSEMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Multi Tranche Page got initialized");

@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
 
         return {
             "type": "schema-form",
-            "title": "Roles & Pages",
+            "title": "ROLES_AND_PAGES",
             initialize: function(model, form, formCtrl) {
                 model.address = model.address || {};
             },

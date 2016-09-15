@@ -5,7 +5,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount){
         "type": "search-list",
         "title": "SEARCH_TRANSACTIONS",
         "subTitle": "",
-        "uri":"REVERSAL/Stage 1",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();

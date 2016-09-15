@@ -20939,7 +20939,7 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
 
     return {
         "type": "schema-form",
-        "title": "SUBSEQUENT TRANCHE DISBURSEMENT",
+        "title": "SUBSEQUENT_TRANCHE_DISBURSEMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Multi Tranche Page got initialized");
@@ -21865,7 +21865,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                 "type": "search-list",
                 "title": "REJECTED_DISBURSEMENT_QUEUE",
                 "subTitle": "",
-                "uri":"Loan Disbursement/Rejected",
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();
@@ -24792,9 +24791,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
 ["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
 function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
     return {
-        "id": "TransactionAuthorizationQueue",
         "type": "search-list",
-        "name": "TransactionAuthorizationQueue",
         "title": "TRANSACTION_AUTHORIZATION_QUEUE",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
@@ -26738,7 +26735,7 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
 
         return {
             "type": "schema-form",
-            "title": "Roles & Pages",
+            "title": "ROLES_AND_PAGES",
             initialize: function(model, form, formCtrl) {
                 model.address = model.address || {};
             },
@@ -26923,7 +26920,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
         "type": "search-list",
         "title": "LOAN_BOOKING_QUEUE",
         "subTitle": "",
-        "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();
@@ -27593,7 +27589,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
         "type": "search-list",
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
         "subTitle": "",
-        "uri":"Loan Booking/Stage 2",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();
@@ -29350,7 +29345,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
                 "subTitle": "",
-                "uri":"Loan Disbursement/Ready",
                 initialize: function (model, form, formCtrl) {
 
                     model.branchName = SessionStore.getBranch();
@@ -30137,7 +30131,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
         "type": "search-list",
         "title": "PENDING_WRITEOFF_QUEUE",
         "subTitle": "",
-        "uri":"Loan WriteOff/Stage 1",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();

@@ -2,9 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
 ["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
 function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
     return {
-        "id": "TransactionAuthorizationQueue",
         "type": "search-list",
-        "name": "TransactionAuthorizationQueue",
         "title": "TRANSACTION_AUTHORIZATION_QUEUE",
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
