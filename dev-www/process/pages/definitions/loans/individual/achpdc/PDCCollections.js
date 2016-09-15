@@ -17,7 +17,7 @@ PDCCollections.js does the following
         
         form: [{
             "type":"box",
-            "title":"PDC Submission and Status Update",
+            "title":"PDC_SUBMISSION_AND_STATUS_UPDATE",
             "items":[{
                     "type":"fieldset",
                     "title":"Submit to Bank",
@@ -27,7 +27,7 @@ PDCCollections.js does the following
                             "type":"date"
                         },
                         {
-                            "title":"Download",
+                            "title":"DOWNLOAD",
                             "htmlClass":"btn-block",
                             "icon":"fa fa-download",
                             "type":"button",

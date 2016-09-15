@@ -280,14 +280,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						},
 						{
 							"key": "ach.remarks",
-							"title": "remarks"
+							"title": "REMARKS"
 						},
 						{
 		                    "type":"fieldset",
 		                    "condition": "model.flag",
-		                    "title":"Download ACH Mandate",
+		                    "title":"DOWNLOAD_ACH_MANDATE",
 		                    "items":[{
-		                            "title":"Download",
+		                            "title":"DOWNLOAD",
 		                            "htmlClass":"btn-block",
 		                            "condition": "model.flag",
 		                            "icon":"fa fa-download",
@@ -310,7 +310,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 				"condition": "!model.flag",
 				"items": [{
 					"type": "submit",
-					"title": "Submit"
+					"title": "SUBMIT"
 				}]
 			},
 			{
@@ -318,7 +318,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 				"condition": "model.flag",
 				"items": [{
 					"type": "submit",
-					"title": "Update"
+					"title": "UPDATE"
 				}]
 			}],
 			schema: function() {

@@ -17,17 +17,17 @@ ACHClearingCollection.js does the following
         
         form: [{
             "type":"box",
-            "title":"ACH Submission and Status Update",
+            "title":"ACH_SUBMISSION_AND_STATUS_UPDATE",
             "items":[{
                     "type":"fieldset",
-                    "title":"Submit to Bank",
+                    "title":"SUBMIT_TO_BANK",
                     "items":[{
                             "key":"achCollections.demandDate",
                             "title": "INSTALLMENT_DATE",
                             "type":"date"
                         },
                         {
-                            "title":"Download",
+                            "title":"DOWNLOAD",
                             "htmlClass":"btn-block",
                             "icon":"fa fa-download",
                             "type":"button",
@@ -44,7 +44,7 @@ ACHClearingCollection.js does the following
                     },
                     {
                     "type":"fieldset",
-                    "title":"Upload Status",
+                    "title":"UPLOAD_STATUS",
                     "items":[{
                                 "key": "ach.achDemandListFileId",
                                 "notitle":true,

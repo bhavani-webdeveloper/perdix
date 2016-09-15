@@ -11,13 +11,13 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Search Customers",
+			title: "SEARCH_CUSTOMERS",
 			searchForm: [
 				"*"
 			],
 			searchSchema: {
 				"type": 'object',
-				"title": 'SearchOptions',
+				"title": 'SEARCH_OPTIONS',
 				"properties": {
 					"accountNumber": {
 						"title": "ACCOUNT_NUMBER",
@@ -83,7 +83,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 				getActions: function(){
 					return [
 						{
-							name: "ACH Update",
+							name: "ACH_UPDATE",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
@@ -99,7 +99,7 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 							}
 						},
 						{
-							name: "ACH Mandate",
+							name: "ACH_MANDATE",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){

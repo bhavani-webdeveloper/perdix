@@ -9,7 +9,7 @@ either approved by bank/ rejected by bank)
 
     return {
         "type": "schema-form",
-        "title": "ACH_REGISTRATION",
+        "title": "ACH_MANDATE_UPLOAD",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("ACH Mandate Upload Page got initialized");
@@ -21,7 +21,7 @@ either approved by bank/ rejected by bank)
         form: [{
             
                 "type": "box",
-                "title": "ACH_MANDATE_UPLOAD" ,
+                "title": "ACH_MANDATE_UPLOAD_FROM_BANK" ,
                 "colClass":"col-sm-6",
                 "items": [{
                             "key": "ach.achMandateReverseFileId",

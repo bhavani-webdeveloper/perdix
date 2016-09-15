@@ -100,7 +100,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                             },
                             {
                             "type":"fieldset",
-                            "title": "SECURITY_CHECK",
+                            "title": "SECURITY_CHEQUE",
                             "items":[
                                 // {
                                 //     "key": "pdc.bankAccountNo",
@@ -108,7 +108,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                 // },
                                 // {
                                 //     "key": "pdc.securityCheckNo",
-                                //     "title": "SECURITY_CHECK_NO"
+                                //     "title": "SECURITY_CHEQUE_NO"
                                 // },
                                 // {
                                 //     "key": "pdc.chequeNoFrom",
@@ -143,7 +143,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                 "items":[
                                 {
                                     "key": "pdc.firstInstallmentDate",
-                                    "title": "First Instalment Date",
+                                    "title": "FIRST_INSTALMENT_DATE",
                                     "type": "date"
                                 },
                                 // {
@@ -154,7 +154,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                 //         "key":"pdc.chequeDetails",
                                 //         "add": null,
                                 //         "startEmpty": true,
-                                //         "title":"CHECK_DETAILS",
+                                //         "title":"CHEQUE_DETAILS",
                                 //         "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
                                 //         "items":[{
                                 //                 "key": "pdc.chequeDetails[].bankName",
@@ -183,7 +183,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                     "key":"pdc.addCheque",
                                     "view": "fixed",
                                     "startEmpty": true,
-                                    "title":"CHECK_DETAILS",
+                                    "title":"CHEQUE_DETAILS",
                                     "items":[{
                                             "key": "pdc.addCheque[].bankAccountNo",
                                             "title": "BANK_ACCOUNT_NUMBER"
@@ -262,7 +262,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     "condition":"!model.flag",
                     "items": [{
                         "type": "submit",
-                        "title": "Submit",
+                        "title": "SUBMIT",
                               }]
                 },
                 {
@@ -270,7 +270,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     "condition":"model.flag",
                     "items": [{
                         "type": "submit",
-                        "title": "Update",
+                        "title": "UPDATE",
                               }]
                 }],
         schema: function() {
@@ -301,8 +301,8 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
                     // for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
                     //     $log.info("Leaves No.: " + leavesCount);
-                    //     $log.info("Cheque No.: " + ( model.pdc.addCheque[bankCount].checkStartNo + leavesCount));
-                    //     var currentLeafNo = model.pdc.addCheque[bankCount].checkStartNo + leavesCount;
+                    //     $log.info("Cheque No.: " + ( model.pdc.addCheque[bankCount].chequeStartNo + leavesCount));
+                    //     var currentLeafNo = model.pdc.addCheque[bankCount].chequeStartNo + leavesCount;
                     //     model.pdc.chequeDetails.push({
                     //         bankName: model.pdc.addCheque[bankCount].bankName,
                     //         ifscCode: model.pdc.addCheque[bankCount].ifscCode,

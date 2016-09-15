@@ -99,7 +99,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				getActions: function(){
 					return [
 						{
-							name: "ACH Registration",
+							name: "ACH_REGISTRATION",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){
@@ -119,7 +119,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							}
 						},
 						{
-							name: "PDC Registration",
+							name: "PDC_REGISTRATION",
 							desc: "",
 							icon: "fa fa-user-plus",
 							fn: function(item, index){

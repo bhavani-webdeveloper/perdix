@@ -25,7 +25,7 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
         },
         form: [{
                 "type": "box",
-                "title": "ACH_MANDATE_DOWNLOAD" ,
+                "title": "DOWNLOAD_ACH_MANDATES" ,
                 "colClass":"col-sm-6",
                 "items": [{
                             "type":"fieldset",
