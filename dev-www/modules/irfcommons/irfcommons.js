@@ -148,6 +148,10 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 		getCurrentDateTime:function(){
             return moment().format();
         },
+        convertJSONTimestampToDate: function(jsonTimestamp){
+            var a = moment.utc(jsonTimestamp);
+            return a.format("YYYY-MM-DD");
+        },
 		removeNulls:function(obj, recurse) {
 
 			for (var i in obj) {
