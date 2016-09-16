@@ -96,7 +96,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     },
                     {
                         "type":"fieldset",
-                        "title": "SECURITY_CHEQUE",
+                        "title": "BANK_ACCOUNT_NUMBER",
                         "items":[
                             // {
                             //     "key": "pdc.bankAccountNo",
@@ -137,11 +137,11 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         "type":"fieldset",
                         "title":"PDC_DETAILS",
                         "items":[
-                            {
-                                "key": "pdc.firstInstallmentDate",
-                                "title": "FIRST_INSTALMENT_DATE",
-                                "type": "date"
-                            },
+                            // {
+                            //     "key": "pdc.firstInstallmentDate",
+                            //     "title": "FIRST_INSTALMENT_DATE",
+                            //     "type": "date"
+                            // },
                             // {
                             //     "type": "fieldset",
                             //     "title": "CHEQUE_LEAVES",
@@ -249,15 +249,15 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                         "title": "BRANCH_NAME"
                                     },
                                     {
-                                        "key": "pdc.addCheque[].chequeNoFrom",
-                                        "title": "CHEQUE_NUMBER_FROM",
-                                        "type": "Number"
-                                    },
-                                    {
                                         "key": "pdc.addCheque[].chequeType",
                                         "title": "CHEQUE_TYPE",
                                         "type": "select",
                                         "enumCode": "pdc_cheque_type"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].chequeNoFrom",
+                                        "title": "CHEQUE_NUMBER_FROM",
+                                        "type": "Number"
                                     },
                                     {
                                         "key": "pdc.addCheque[].numberOfCheque",
