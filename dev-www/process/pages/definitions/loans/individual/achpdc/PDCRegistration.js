@@ -16,8 +16,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
             model.pdcGet = model.pdcGet||{};
             model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
          
-            if (model._pdc ) {
-            
+            if (model._pdc ) {      
                 model.pdc.accountId = model._pdc.accountNumber;
                 model.pdc.loanAccountNo = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
@@ -39,15 +38,12 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         $log.info("PDC GET Error : "+res);  
                     }
                 );
-
             } 
             else {
-
                 $state.go("Page.Engine",{
                     pageName:"loans.individual.Queue",
                     pageId:null
                 });
-             
             }
         },
         offline: false,
@@ -298,7 +294,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 model.pdc.pdcSummaryDTO = [];
 
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
-                    
                     model.pdc.pdcSummaryDTO.push({
                         bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
                         bankName: model.pdc.addCheque[bankCount].bankName,
@@ -330,7 +325,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 PageHelper.showLoader();
 
                 if (model.flag) {
-                
                     PDC.update(model.pdc, function(response){
                         PageHelper.hideLoader();
 
@@ -338,10 +332,8 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-                
                 }
                 else {
-                
                     $log.info("Inside Create()");
                     PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
@@ -350,7 +342,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-                
                 }
                 /*$state.go("Page.Engine", {
                     pageName: 'IndividualLoanBookingConfirmation',

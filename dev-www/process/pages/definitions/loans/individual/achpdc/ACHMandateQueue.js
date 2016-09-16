@@ -119,9 +119,10 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if ( (item.registrationStatus == "PENDING") || (item.registrationStatus == "REJECTED") ) {
+								if ((item.registrationStatus == "PENDING") || (item.registrationStatus == "REJECTED")) {
 									return true;
-								} else { 
+								} 
+								else { 
 									return false;
 								}
 							}

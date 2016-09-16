@@ -86,22 +86,16 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "onChange": function(modelValue, form, model){
                                     
                                     if (modelValue)
-                                    {
-                                    
-                                    for ( i = 0; i < model.pdcDemand.demandList.length; i++)
-                                        model.pdcDemand.demandList[i].check = true;  
-                                    
+                                    {   
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = true;  
                                     }
                                     else
                                     {
-                                    
-                                    for ( i = 0; i < model.pdcDemand.demandList.length; i++)
-                                        model.pdcDemand.demandList[i].check = false;
-
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = false;
                                     }
-                                                            
                                 }    
-
                             },
                             {
                                 "type":"array",

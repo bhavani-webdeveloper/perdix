@@ -18,8 +18,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
             ];
 
             for(var i=0;i<docsTitles.length;i++){
-
-
                 model.loanDocs[i]= {
                     "title":docsTitles[i]
                 }

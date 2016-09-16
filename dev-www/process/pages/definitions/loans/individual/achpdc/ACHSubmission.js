@@ -73,7 +73,7 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                 "items": [
                     {
                         "type":"fieldset",
-                        "title":"UPDATE_ACH_DEMANDs",
+                        "title":"UPDATE_ACH_DEMANDS",
                         "items":[
                             {   
                                 "key": "achDemand.checkbox",
@@ -87,17 +87,13 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
 
                                     if (modelValue)
                                     {
-
-                                    for ( i = 0; i < model.achDemand.demandList.length; i++)
-                                        model.achDemand.demandList[i].check = true;  
-
+                                        for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                            model.achDemand.demandList[i].check = true;  
                                     }
                                     else
                                     {
-
-                                    for ( i = 0; i < model.achDemand.demandList.length; i++)
-                                        model.achDemand.demandList[i].check = false;
-
+                                        for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                            model.achDemand.demandList[i].check = false;
                                     }
                                                             
                                 }    
