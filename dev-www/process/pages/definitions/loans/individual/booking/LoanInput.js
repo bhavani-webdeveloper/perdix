@@ -78,35 +78,57 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         return {
             "type": "schema-form",
-            "title": "Loan Input",
+            "title": "LOAN_INPUT",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+                // TODO default values needs more cleanup
+                var init = function(model, form, formCtrl) {
+                    model.loanAccount = model.loanAccount || {branchId :branchId};
+                    model.additional = {branchName : branchName};
+                    model.loanAccount.bankId = bankId;
+                    model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                    model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
+                    model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                    model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
+                    model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
+                    model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
+                    model.loanAccount.commercialCibilCharge = 750;
+                    model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
+                    model.loanAccount.isRestructure = false;
+                    model.loanAccount.partnerCode = model.loanAccount.partnerCode || defaultPartner;
+                    getSanctionedAmount(model);
+                    $log.info(model);
 
-                model.loanAccount = model.loanAccount || {branchId :branchId};
-                model.additional = {branchName : branchName};
-                model.loanAccount.bankId = bankId;
-                model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
-                model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
-                model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
-                model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
-                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
-                model.loanAccount.commercialCibilCharge = 750;
-                model.loanAccount.documentTracking="PENDING";
-                model.loanAccount.isRestructure = false;
-                model.loanAccount.partnerCode = defaultPartner;
-                getSanctionedAmount(model);
-                $log.info(model);
+                    model.additional.minAmountForSecurityEMI = 0;
+                    Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
+                        model.additional.minAmountForSecurityEMI = Number(value);
+                        $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
+                    },function(err){
+                        $log.info("Max Security EMI is not available");
+                    });
+                    if(model.loanAccount.productCode!="")
+                        getProductDetails(model.loanAccount.productCode,model);
+                };
+                // code for existing loan
+                if ($stateParams.pageId) {
+                    PageHelper.showLoader();
+                    IndividualLoan.get({id: $stateParams.pageId}).$promise.then(function(resp){
+                        if (resp.currentStage != 'LoanInitiation') {
+                            PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
+                            $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                            return;
+                        }
+                        model.loanAccount = resp;
+                        init(model, form, formCtrl); // init call
+                    }, function(errResp){
+                        PageHelper.showErrors(errResp);
+                    }).finally(function(){
+                        PageHelper.hideLoader();
+                    });
+                } else {
+                    init(model, form, formCtrl); // init call
+                }
 
-                model.additional.minAmountForSecurityEMI=0;
-                Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
-                    model.additional.minAmountForSecurityEMI = Number(value);
-                    $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
-                },function(err){
-                    $log.info("Max Security EMI is not available");
-                });
-                if(model.loanAccount.productCode!="")
-                    getProductDetails(model.loanAccount.productCode,model);
             },
             offline: true,
             getOfflineDisplayItem: function(item, index){

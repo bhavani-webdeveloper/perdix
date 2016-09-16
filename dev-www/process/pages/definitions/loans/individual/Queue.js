@@ -99,6 +99,63 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				getActions: function(){
 					return [
 						{
+							name: "LOAN_INPUT",
+							desc: "",
+							icon: "fa fa-book",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.booking.LoanInput",{_loan:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.booking.LoanInput",
+									pageId:item.loanId
+								});
+							},
+							isApplicable: function(item, index){
+								if(item.stage == "LoanInitiation") {
+									return true;
+								} else { 
+									return false;
+								}
+							}
+						},
+						{
+							name: "CAPTURE_DATES",
+							desc: "",
+							icon: "fa fa-clock-o",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.booking.LoanBooking",{_loan:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.booking.LoanBooking",
+									pageId:item.loanId
+								});
+							},
+							isApplicable: function(item, index){
+								if(item.stage == "LoanBooking") {
+									return true;
+								} else { 
+									return false;
+								}
+							}
+						},
+						{
+							name: "DOCUMENT_UPLOAD",
+							desc: "",
+							icon: "fa fa-file-excel-o",
+							fn: function(item, index){
+								EntityManager.setModel("loans.individual.booking.DocumentUpload",{_loan:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.booking.DocumentUpload",
+									pageId:item.loanId
+								});
+							},
+							isApplicable: function(item, index){
+								if(item.stage == "DocumentUpload") {
+									return true;
+								} else { 
+									return false;
+								}
+							}
+						},
+						{
 							name: "ACH_REGISTRATION",
 							desc: "",
 							icon: "fa fa-user-plus",
