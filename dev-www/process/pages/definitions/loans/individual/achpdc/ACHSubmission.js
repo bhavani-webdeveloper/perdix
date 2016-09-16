@@ -1,9 +1,24 @@
+/*
+ACHSubmission.js
+----------------
+To download the demand list with date criteria and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To call "ACH.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+
+Services
+--------
+ACH.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
 ["$log", "ACH", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
 function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
-/*
-The ACHSubmission.js is to download the ACH  Demandlist for the given date and to update the status of them.
-*/
+
     return {
         "type": "schema-form",
         "title": "ACH_SUBMISSION",
@@ -52,7 +67,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
                                     PageHelper.showLoader();
-
                                     ACH.getDemandList(model.achDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
                                         model.achSearch = res;

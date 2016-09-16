@@ -1,9 +1,24 @@
+/*
+PDCSubmission.js
+----------------
+To download the demand list with date criteria and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To call "PDC.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+
+Services
+--------
+PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
 ["$log", "PDC", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
 function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
-/*
-The PDCSubmission.js is to download the PDC Demandlist for the given date and to update the status of them. 
-*/
+
     return {
         "type": "schema-form",
         "title": "PDC_SUBMISSION",
@@ -52,7 +67,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
                                     PageHelper.showLoader();
-
                                     PDC.getDemandList(model.pdcDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
                                         model.pdcSearch = res;

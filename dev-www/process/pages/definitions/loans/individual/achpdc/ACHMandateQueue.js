@@ -1,7 +1,27 @@
+/*
+About ACHMandateQueue.js
+-------------------------
+1. Search page that displays all the ACH Loan Accounts based on the sort criteria.
+2. To update ACH Account
+3. To Dounload ACH Mandate Registration file.
+
+Methods
+-------
+Initialize : To decare the required model variables.
+getResultsPromise : TO return the result of ACH.search.
+getListItem : Values to display from search result
+getActions : Menu icon to Update ACH or to Download Mandate.
+
+Services
+--------
+ACH.search : To get all the ACH Accounts.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateQueue"),
 ["$log", "formHelper","entityManager", "ACH","$state", "SessionStore", "Utils",
 function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
+
 	var branch = SessionStore.getBranch();
+
 	return {
 		"type": "search-list",
 		"title": "ACH_MANDATE_QUEUE",
@@ -71,14 +91,12 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 				expandable: true,
 				itemCallback: function(item, index) {
 				},
-
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0) {
 						return response;
 					}
 					return [];
 				},
-
 				getListItem: function(item){
 					return [
 						
@@ -88,7 +106,6 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 						"{{'REGISTRATION_STATUS'|translate}} : " + item.registrationStatus
 					]
 				},
-
 				getActions: function(){
 					return [
 						{

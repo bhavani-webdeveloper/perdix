@@ -1,3 +1,22 @@
+/*
+About PDCRegistration.js
+------------------------
+To register or update PDC loan id. If the user exist, the Update module is called
+else the create field is called. 
+The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+and filled in the screen.
+    
+Methods
+-------
+Initialize : To decare the required model variables.
+submit : To submit the created/updated ACH
+
+Services
+--------
+PDC.get({accountNumber: model.pdc.accountId} : Search for existance of Loan account Number
+PDC.create : TO carete a new PDC account
+PDC.update : TO update an existing PDC account
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
 ["$log", "PDC", "PageHelper", "SessionStore","$state", "CustomerBankBranch", 'formHelper', "$stateParams", 
 function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelper,$stateParams){
@@ -30,7 +49,9 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         model.pdc = model.pdcGet;
                         model.pdc.addCheque = model.pdc.pdcSummaryDTO;
                         $log.info("PDC GET RESP. : "+res);
-                        model.flag = true;
+                        
+                        if(model.pdc.pdcSummaryDTO.accountId)
+                            model.flag = true;
                     },
                     function(res){
                         PageHelper.hideLoader();

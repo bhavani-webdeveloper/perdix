@@ -1,10 +1,21 @@
+/*
+About ACHMandateUpload.js
+-------------------------
+To Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
+either approved by bank/ rejected by bank)
+
+Methods
+-------
+Initialize : To decare the required model variables.
+customHandle : To upload ACH files(Excel).
+
+Services
+--------
+ACH.achMandateUpload(file, progress) : To upload the selected file.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "ACH", function($log, Enrollment, SessionStore,$state,$stateParams, ACH){
-/*
-ACHMandateUpload.js is to Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
-either approved by bank/ rejected by bank) 
 
-*/
     var branch = SessionStore.getBranch();
 
     return {
@@ -17,8 +28,7 @@ either approved by bank/ rejected by bank)
         },
         offline: false,
 
-        getOfflineDisplayItem: function(item, index){
-            
+        getOfflineDisplayItem: function(item, index){            
         },
 
         form: [

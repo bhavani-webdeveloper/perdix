@@ -1,11 +1,27 @@
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
-["$log", "Enrollment", "SessionStore",'Utils', 'PDC', 'AuthTokenHelper',
- function($log, Enrollment, SessionStore,Utils,PDC,AuthTokenHelper){
 /*
-PDCCollections.js does the following
-1. To download the demand due list with date criteria
-2. To upload the status of the demands as received from Bank
+About PDCClearingCollection.js
+------------------------------
+1. To download the demand list with date criteria
+2. To upload the demand list and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To download the Domand List based on date criteria and to call "PDC.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+customHandle : To upload PDC files(Excel).
+
+Services
+--------
+PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+PDC.pdcDemandListUpload : To upload the selected file.
+PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
+["$log", "Enrollment", "SessionStore",'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper',
+ function($log, Enrollment, SessionStore,Utils,PDC,AuthTokenHelper,PageHelper){
+
     return {
         "type": "schema-form",
         "title": "PDC_COLLECTIONS",
@@ -14,6 +30,10 @@ PDCCollections.js does the following
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
+            model.pdcCollections = model.pdcCollections || {};
+            model.flag = false;
+            model.pdcDemand = model.pdcDemand || {};
+            model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
         },
         
         form: [
@@ -38,10 +58,39 @@ PDCCollections.js does the following
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
-                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
-                                            }
-                                //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
+                                    window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
+                                    PageHelper.showLoader();
+                                    PDC.getDemandList(
+                                        {
+                                            demandDate: model.pdcCollections.demandDate,
+                                            branchId: [1,2,3,4,6,7,8,9,11]
+                                        }
+                                    ).$promise.then(function(res) {
+                                        PageHelper.hideLoader();
+                                        model.pdcSearch = res;
+
+                                        if (model.pdcSearch.body.length > 0){
+                                            model.flag = true;
+                                        } else {
+                                            model.flag = false;
+                                        }
+
+                                        for (var i = 0; i < model.pdcSearch.body.length; i++) {
+                                            model.pdcSearch.body[i].repaymentType = "ACH";
+                                            model.pdcSearch.body[i].amount = parseInt(model.pdcSearch.body[i].amount1);
+                                            model.achDemand.demandList.push(model.pdcSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("PDC Search Response : " + httpRes);
+                                        }
+                                    );
+                                }
                             }
                         ]
                     },
@@ -50,7 +99,7 @@ PDCCollections.js does the following
                         "title":"UPLOAD_STATUS",
                         "items":[
                             {
-                                "key": "ach.pdcReverseFeedListFileId",
+                                "key": "pdc.pdcReverseFeedListFileId",
                                 "notitle":true,
                                 "category":"ACH",
                                 "subCategory":"cat2",
@@ -70,6 +119,85 @@ PDCCollections.js does the following
                         ]
                     }
                 ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"UPDATE_PDC_DEMANDS",
+                        "items":[
+                            {   
+                                "key": "pdcDemand.checkbox",
+                                "condition": "model.flag",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = true;  
+                                    }
+                                    else
+                                    {
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = false;
+                                    }                        
+                                }    
+                            },
+                            {
+                                "type":"array",
+                                "key":"pdcDemand.demandList",
+                                "condition": "model.flag",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"CHEQUE_DETAILS",
+                                "titleExpr": "(model.pdcDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.pdcDemand.demandList[arrayIndex].accountId + ' - ' + model.pdcDemand.demandList[arrayIndex].amount1",
+                                "items":[
+                                    {
+                                        "key": "pdcDemand.demandList[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].amount1",
+                                        "title": "LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].customerName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].check",
+                                        "title": "MARK_AS_PAID",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.flag",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
             }
         ],
 
@@ -79,12 +207,15 @@ PDCCollections.js does the following
         
         actions: {
             submit: function(model, form, formName){
-            },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
+                PageHelper.showLoader();
+                PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
+                    PageHelper.hideLoader();
+                    PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.flag = true;
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };

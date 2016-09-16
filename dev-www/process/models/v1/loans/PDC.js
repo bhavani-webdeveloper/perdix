@@ -1,5 +1,6 @@
-    irf.models.factory('PDC', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+irf.models.factory('PDC',
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
         var endpoint = BASE_URL + '/api/ach';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -60,9 +61,11 @@
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
