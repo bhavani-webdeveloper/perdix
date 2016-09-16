@@ -209,10 +209,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             type: "select",
                             "condition":"model.additional.fromBounceQueue==true",
                             titleMap: {
-                                "A": "A",
-                                "B": "B",
-                                "C": "C",
-                                "D": "D"
+                                "A": "A-Under Control",
+                                "B": "B-Tough",
+                                "C": "C-Difficult",
+                                "D": "D-Declared"
                             },
                             
                         },
@@ -222,10 +222,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             type: "select",
                             "condition":"model.additional.fromBouncePromiseQueue==true",
                             titleMap: {
-                                "A": "A",
-                                "B": "B",
-                                "C": "C",
-                                "D": "D"
+                                "A": "A-Under Control",
+                                "B": "B-Tough",
+                                "C": "C-Difficult",
+                                "D": "D-Declared"
                             },
                             
                         },

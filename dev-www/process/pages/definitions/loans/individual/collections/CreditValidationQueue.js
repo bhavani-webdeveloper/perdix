@@ -59,7 +59,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'status': "PENDING"
+                    'status': "Pending"
                 }).$promise;
 
                 return promise;
@@ -85,7 +85,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.overDueAmountInPaisa,
+                        'Amount Due: ' + item.demandAmountInPaisa/100,
                         'Payment Type:' + item.paymentType
                     ]
                 },

@@ -387,7 +387,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showLoader();
                             var postData = _.cloneDeep(model.repayment);
                             postData.amount = parseInt(Number(postData.amount))+"";
-                            //postData.instrument = "CASH";
+                            postData.instrument = model.repayment.instrument;
                             LoanAccount.repay(postData,function(resp,header){
                                 $log.info(resp);
                                 try{

@@ -7,7 +7,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            //model.branchId = SessionStore.getBranchId();
+            model.branchId = SessionStore.getBranchId();
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -53,7 +53,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "branchId": {
                         "title": "BRANCH_NAME",
-                        "type": ["null","integer"],
+                        "type": ["null","number"],
                         "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
@@ -61,11 +61,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ['null', "integer"],
+                        "type": ["null", "number"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode": "branch_id"
+                            "filter": {
+                                "parentCode as branch": "model.branch"
+                            }
                         }
                     }
                 }
@@ -77,7 +79,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId || SessionStore.getBranchId(),
-                    'centreCode': searchOptions.centre,
+                    'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage

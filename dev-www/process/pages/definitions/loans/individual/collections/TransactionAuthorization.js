@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         model.transAuth.applicant_name = data.applicant;
                         model.transAuth.applicant_name = data.coapplicant;
                         model.transAuth.penal_interest = data.totalPenalInterestDue;
+                        model.transAuth.accountOpenDate = data.accountOpenDate;
                         model.transAuth.loanRepaymentDetailsId = model._transAuth.id;
                         model.transAuth.fee = data.totalFeeDue;
 
@@ -244,7 +245,15 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         Utils.confirm("Are You Sure?")
                             .then(function () {
                                 if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {
-
+                                    LoanProcess.waiver({repaymentId: model.transAuth.},{waivefee: model._input.isFeeWaivedOff},{waivePenalty: model._input.isPenalInterestWaivedOff},{fromDate: model.transAuth.accountOpenDate}, null)
+                                        .$promise
+                                        .then(
+                                            function (res) {
+                                                PageHelper.navigateGoBack();
+                                            }, function (httpRes) {
+                                                PageHelper.showErrors(httpRes);
+                                            }
+                                        )
                                     return;
                                 } else {
                                     LoanProcess.approve({loanRepaymentDetailsId: model.transAuth.loanRepaymentDetailsId}, null)

@@ -72,6 +72,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'PUT',
             url:endpoint+ "/partialpayment"
         },
+        waiver:{
+            method:'POST',
+            url:endpoint+ "/waiver"
+        },
         reject:{
             method:'POST',
             url:endpoint+ "/rejectrepayment"
