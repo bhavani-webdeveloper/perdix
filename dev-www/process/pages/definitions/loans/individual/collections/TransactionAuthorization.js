@@ -244,8 +244,9 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         $log.info("Inside submit()");
                         Utils.confirm("Are You Sure?")
                             .then(function () {
+                                debugger;
                                 if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {
-                                    LoanProcess.waiver({repaymentId: model.transAuth.},{waivefee: model._input.isFeeWaivedOff},{waivePenalty: model._input.isPenalInterestWaivedOff},{fromDate: model.transAuth.accountOpenDate}, null)
+                                    LoanProcess.waiver({repaymentId: model.transAuth.loanRepaymentDetailsId, waivefee: model._input.isFeeWaivedOff, waivePenalty: model._input.isPenalInterestWaivedOff, fromDate: model.transAuth.accountOpenDate}, null)
                                         .$promise
                                         .then(
                                             function (res) {
