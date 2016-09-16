@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.writeoff.WriteOffExecution"),
-["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", "LoanAccount", 
-function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
+["$log", "Enrollment", "SessionStore", "$state", "SchemaResource", "LoanAccount", "PageHelper", 
+function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount, PageHelper){
 
     var branch = SessionStore.getBranch();
 
@@ -12,6 +12,8 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
             model.loanAccount = model.loanAccount || [];
             if (model._loanAccount ) {
                 model.loanAccount = model._loanAccount;
+                model.loanAccount.accountNumber = model._loanAccount.accountId;
+                model.loanAccount.writeOffDate = model._loanAccount.transactionDate;
             }
             model.loanAccount.remarks = "";
 
@@ -38,7 +40,7 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
             */
                 {
                     "title": "ACCOUNT_ID",
-                    "key": "loanAccount.accountId",
+                    "key": "loanAccount.accountNumber",
                     "readonly": true
                 },
                 {
@@ -73,7 +75,7 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
                 },
                 {
                     "title": "WRITE_OFF_DATE",
-                    "key": "loanAccount.transactionDate",
+                    "key": "loanAccount.writeOffDate",
                     "type": "date",
                     "required": true
                 },
@@ -97,11 +99,19 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount){
                 // if (model.loanAccount.sanctionDate <= model.loanAccount.scheduledDisbursementDate-30)
                 {
                     // Update information in DB
-                    return LoanAccount.writeOff({
-                        'accountNumber': model.loanAccount.accountId,
-                        'writeOffDate' : model.loanAccount.transactionDate,
+                    PageHelper.showLoader();
+                    LoanAccount.writeOff({
+                        'accountNumber': model.loanAccount.accountNumber,
+                        'writeOffDate' : model.loanAccount.writeOffDate,
                         'remarks' : model.loanAccount.remarks
-                    }).$promise;
+                    }, function(response) {
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init", "Done.", 2000);
+                    }, function(errorResponse) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(errorResponse);
+                    });
+
 
                     $log.info("Redirecting");
                     $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffQueue', pageId: ''});
