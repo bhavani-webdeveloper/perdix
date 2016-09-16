@@ -12,19 +12,19 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
             model.achDemand = model.achDemand || {};
-
-            model.achDemand.demandList = [{
-                accountId: "10010101",
-                amount1: "100",
-                customerName: "aaa",
-                check: false
-            },
-            {
-                accountId: "10010102",
-                amount1: "100",
-                customerName: "bbb",
-                check: true
-            }];
+            model.achDemand.demandList = model.achDemand.demandList ||[];
+            // model.achDemand.demandList = [{
+            //     accountId: "10010101",
+            //     amount1: "100",
+            //     customerName: "aaa",
+            //     check: false
+            // },
+            // {
+            //     accountId: "10010102",
+            //     amount1: "100",
+            //     customerName: "bbb",
+            //     check: true
+            // }];
         },
 
         form:[
@@ -40,7 +40,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                 "key": "achDemand.search.demandDate",
                                 "title": "DEMAND_DATE",
                                 "type": "date"
-
                             },
                             {
                                 "key": "achDemand.search.branchId",
@@ -53,14 +52,25 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
                                     PageHelper.showLoader();
-                                    ACH.getDemandList(model.achDemand.search).$promise.then(function(response) {
-                                        PageHelper.showProgress("page-init", "Done.", 2000);
-                                       // model.achDemand.demandList = response;
-                                    }, function(errorResponse) {
-                                        PageHelper.showErrors(errorResponse);
-                                    }).finally(function(){
+
+                                    ACH.getDemandList(model.achDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
-                                    });
+                                        model.achSearch = res;
+
+                                        for (var i = 0; i < model.achSearch.body.length; i++) {
+                                            model.achSearch.body[i].repaymentType = "ACH";
+                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achDemand.demandList.push(model.achSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("ACH Search Response : " + httpRes);
+                                        }
+                                    );
                                 }
                             }
                         ]
@@ -82,7 +92,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                 "schema":{
                                         "default": false
                                     },
-                                    //
                                 "onChange": function(modelValue, form, model){
 
                                     if (modelValue)
@@ -94,10 +103,8 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                     {
                                         for ( i = 0; i < model.achDemand.demandList.length; i++)
                                             model.achDemand.demandList[i].check = false;
-                                    }
-                                                            
+                                    }                        
                                 }    
-
                             },
                             {
                                 "type":"array",
@@ -106,7 +113,7 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                 "startEmpty": true,
                                 "remove":null,
                                 "title":"CHEQUE_DETAILS",
-                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].customerName",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount1",
                                 "items":[
                                     {
                                         "key": "achDemand.demandList[].accountId",
@@ -131,7 +138,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                             "default": false
                                         }
                                     },
-
                                 ]                                                                           
                             }
                         ]                        
@@ -164,7 +170,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
                 });
-
             }
         }
     };

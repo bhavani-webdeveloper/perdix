@@ -12,19 +12,19 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
             model.pdcDemand = model.pdcDemand || {};
-
-            model.pdcDemand.demandList = [{
-                accountId: "10010101",
-                amount1: "100",
-                customerName: "aaa",
-                check: false
-            },
-            {
-                accountId: "10010102",
-                amount1: "100",
-                customerName: "bbb",
-                check: true
-            }];
+            model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
+            // model.pdcDemand.demandList = [{
+            //     accountId: "10010101",
+            //     amount1: "100",
+            //     customerName: "aaa",
+            //     check: false
+            // },
+            // {
+            //     accountId: "10010102",
+            //     amount1: "100",
+            //     customerName: "bbb",
+            //     check: true
+            // }];
         },
 
         form:[
@@ -40,7 +40,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "key": "pdcDemand.search.demandDate",
                                 "title": "DEMAND_DATE",
                                 "type": "date"
-
                             },
                             {
                                 "key": "pdcDemand.search.branchId",
@@ -53,14 +52,23 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
                                     PageHelper.showLoader();
-                                    PDC.getDemandList(model.pdcDemand.search).$promise.then(function(response) {
-                                        PageHelper.showProgress("page-init", "Done.", 2000);
-                                       // model.pdcDemand.demandList = response;
-                                    }, function(errorResponse) {
-                                        PageHelper.showErrors(errorResponse);
-                                    }).finally(function(){
+
+                                    PDC.getDemandList(model.pdcDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
-                                    });
+                                        model.pdcSearch = res;
+
+                                        for (var i = 0; i < model.pdcSearch.body.length; i++) {
+                                                model.pdcDemand.demandList.push(model.pdcSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("PDC Search Response : " + httpRes);
+                                        }
+                                    );
                                 }
                             }
                         ]
@@ -82,7 +90,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "schema":{
                                         "default": false
                                     },
-                                    //
                                 "onChange": function(modelValue, form, model){
                                     
                                     if (modelValue)
@@ -129,7 +136,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                             "default": false
                                         }
                                     },
-
                                 ]                                                                           
                             }
                         ]                        
@@ -146,9 +152,11 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                 ]
             }
         ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
                 PageHelper.showLoader();

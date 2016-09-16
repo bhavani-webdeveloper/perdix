@@ -256,7 +256,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                     },
                                     {
                                         "key": "pdc.addCheque[].chequeNoFrom",
-                                        "title": "CHEQUE_NUMBER_FROM",
+                                        "title": "CHEQUE_START_NUMBER",
                                         "type": "Number"
                                     },
                                     {

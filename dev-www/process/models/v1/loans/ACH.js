@@ -1,5 +1,6 @@
-irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+irf.models.factory('ACH', 
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -29,10 +30,10 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 method: 'PUT',
                 url: endpoint + '/update'
             },
-            getDemandList: {
+            getDemandList: searchResource({
                 method: 'GET',
                 url: endpoint + '/achdemandList'
-            },
+            }),
             bulkRepay: {
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
@@ -48,9 +49,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
@@ -65,9 +68,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
