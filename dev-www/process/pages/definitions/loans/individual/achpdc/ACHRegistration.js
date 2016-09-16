@@ -2,9 +2,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
 	/*
 	ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
-	else the create field is called. Both Update and Create points to same API. 
+	else the create field is called. Both Update and Create points to same API.
 	The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
-	and filled in the screen. 
+	and filled in the screen.
 	*/
 	var branch = SessionStore.getBranch();
 
@@ -19,27 +19,27 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 			model.ach = model.ach || {};
 			model.achSearch = model.achSearch || {};
 
-			//flag is to identify Create(false) or Update(true), and to update Submit Button Name 
+			//flag is to identify Create(false) or Update(true), and to update Submit Button Name
 			model.flag = false;
-			
+
 			//_ach from loans.individual.achpdc.ACHMandateDownload
 			//_loanAch  from loans.individual.Queue
 
 			if (model._ach || model._loanAch) {
 
 				if (model._ach) {
-			
+
 					model.ach.accountHolderName = model._ach.customerName;
 					model.ach.accountId = model._ach.accountId;
 					model.ach.branchName = model._ach.branchName;
-			
-				} 
+
+				}
 				else if (model._loanAch) {
-				
+
 					model.ach.accountHolderName = model._loanAch.customerName;
 					model.ach.accountId = model._loanAch.accountNumber;
 					model.ach.branchName = model._loanAch.branchName;
-				
+
 				}
 
 				//Search for existance of Loan account Number
@@ -48,14 +48,14 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						model.achSearch = res;
 
 						for (var i = 0; i < model.achSearch.body.length; i++) {
-						
+
 							//$log.info(achSearch.body[i].accountHolderName);
 							if (model.achSearch.body[i].accountId == model.ach.accountId) {
-						
+
 								model.flag = true;
 								model.ach = model.achSearch.body[i];
 								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
-						
+
 							}
 						}
 					},
@@ -66,15 +66,15 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 					}
 				);
 
-			} 
+			}
 			else {
-			
+
 				if (model._ach) {
 					$state.go("Page.Engine", {
 						pageName: "loans.individual.achpdc.ACHMandateQueue",
 						pageId: null
 					});
-				} 
+				}
 				else {
 					$state.go("Page.Engine", {
 						pageName: "loans.individual.Queue",
@@ -92,11 +92,11 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 
 		},
 		offline: false,
-		
+
 		getOfflineDisplayItem: function(item, index) {
 
 		},
-		
+
 		form: [
 			{
 				"type": "box",
@@ -197,7 +197,7 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							},
 							{
 								"key": "ach.mandateStatus",
-								"title": "MANDATE_STATUS"
+								"title": "MANDATE_STATUS",
 								"type": "select",
 								"enumCode": "ach_mandate_stage"
 							},
@@ -288,7 +288,7 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 			                            "onClick": function(model, formCtrl, form, $event){
 			                                            //model.mandate.link= "http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId;
 			                                            window.open("http://115.113.193.49:8080/formsKinara/formPrint.jsp?form_name=ach_loan&record_id=" + model.ach.accountId);
-			                                                            
+
 	                                    }
 			                            //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
 			                        }
