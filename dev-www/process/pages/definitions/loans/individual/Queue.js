@@ -1,14 +1,36 @@
+/*
+About Queue.js
+-------------------------
+1. Search page that displays all the Loan Accounts based on the sort criteria.
+2. To Create/update ACH Account
+3. To Create/update PDC Account.
+
+Methods
+-------
+Initialize : To decare the required model variables.
+getResultsPromise : TO return the result of IndividualLoan.search.
+getListItem : Values to display from search result
+getActions : Menu icon to create/update ACH or create/update PDC.
+
+Services
+--------
+IndividualLoan.search : To get all the Loan Accounts.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.Queue"),
 ["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
 function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+	
 	var branch = SessionStore.getBranch();
+	
 	return {
 		"type": "search-list",
 		"title": "LOANS_SEARCH",
 		"subTitle": "",
+
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 		},
+
 		definition: {
 			title: "SEARCH_LOANS",
 			searchForm: [
@@ -51,11 +73,12 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				},
 				"required":["stage", "branchName"]
 			},
+
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 				var promise = IndividualLoan.search({
 					'stage': searchOptions.stage,
 					'branchName': searchOptions.branchName,
@@ -63,9 +86,9 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					'customerId': searchOptions.customerId,
 					'accountNumber': searchOptions.accountNumber
 				}).$promise;
-
 				return promise;
 			},
+
 			paginationOptions: {
 				"viewMode": "page",
 				"getItemsPerPage": function(response, headers){
@@ -75,6 +98,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					return headers['x-total-count']
 				}
 			},
+
 			listOptions: {
 				expandable: true,
 				itemCallback: function(item, index) {
