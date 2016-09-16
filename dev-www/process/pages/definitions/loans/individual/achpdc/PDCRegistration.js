@@ -186,49 +186,60 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                         "title": "BANK_ACCOUNT_NUMBER"
                                     },
                                     {
-                                        "key": "pdc.addCheque[].ifscCode",
+                                        "key": "ach.ifscCode",
                                         "title": "IFSC_CODE",
                                         "type": "lov",
-                                        "lovonly": true,
                                         "inputMap": {
                                             "ifscCode": {
-                                                "key": "pdc.addCheque[].ifscCode"
-                                            },
-                                            "bankName": {
-                                                "key": "pdc.addCheque[].bankName"
-                                            },
-                                            "branchName": {
-                                                "key": "pdc.addCheque[].branchName"
+                                                "key": "ifscCode",
+                                                "title": "IFSC_CODE"
                                             }
-                                        },
-
-                                        outputMap: {
-                                            "bankName": "pdc.addCheque[arrayIndex].bankName",
-                                            "branchName": "pdc.addCheque[arrayIndex].branchName",
-                                            "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
-                                        },
-
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form) {
-                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                            var promise = CustomerBankBranch.search({
-                                                'bankName': inputModel.bankName,
-                                                'ifscCode': inputModel.ifscCode,
-                                                'branchName': inputModel.branchName
-                                            }).$promise;
-                                            return promise;
-                                        },
-
-                                        getListDisplayItem: function(data, index) {
-                                            return [
-                                                data.ifscCode,
-                                                data.branchName,
-                                                data.bankName
-                                            ];
                                         }
+                                    },
+                                    // {
+                                    //     "key": "pdc.addCheque[].ifscCode",
+                                    //     "title": "IFSC_CODE",
+                                    //     "type": "lov",
+                                    //     "lovonly": true,
+                                    //     "inputMap": {
+                                    //         "ifscCode": {
+                                    //             "key": "pdc.addCheque[].ifscCode"
+                                    //         },
+                                    //         "bankName": {
+                                    //             "key": "pdc.addCheque[].bankName"
+                                    //         },
+                                    //         "branchName": {
+                                    //             "key": "pdc.addCheque[].branchName"
+                                    //         }
+                                    //     },
+
+                                    //     outputMap: {
+                                    //         "bankName": "pdc.addCheque[arrayIndex].bankName",
+                                    //         "branchName": "pdc.addCheque[arrayIndex].branchName",
+                                    //         "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
+                                    //     },
+
+                                    //     searchHelper: formHelper,
+                                    //     search: function(inputModel, form) {
+                                    //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    //         var promise = CustomerBankBranch.search({
+                                    //             'bankName': inputModel.bankName,
+                                    //             'ifscCode': inputModel.ifscCode,
+                                    //             'branchName': inputModel.branchName
+                                    //         }).$promise;
+                                    //         return promise;
+                                    //     },
+
+                                    //     getListDisplayItem: function(data, index) {
+                                    //         return [
+                                    //             data.ifscCode,
+                                    //             data.branchName,
+                                    //             data.bankName
+                                    //         ];
+                                    //     }
                         
 
-                                    },
+                                    // },
                                     {
                                         "key": "pdc.addCheque[].bankName",
                                         "title": "BANK_NAME"
