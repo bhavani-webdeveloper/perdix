@@ -107,14 +107,12 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount, Pa
                     }, function(response) {
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init", "Done.", 2000);
+                        $log.info("Redirecting");
+                        $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffQueue', pageId: ''});
                     }, function(errorResponse) {
                         PageHelper.hideLoader();
                         PageHelper.showErrors(errorResponse);
                     });
-
-
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'loans.individual.writeoff.WriteOffQueue', pageId: ''});
                 }
             }
         }
