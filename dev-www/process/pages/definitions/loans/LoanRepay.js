@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch) {
 
             function backToLoansList(){
                 try {
@@ -163,10 +163,60 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 ]
                             },
                             {
-                                key:"repayment.checqueNumber",
+                                key:"repayment.reference",
                                 title:"CHEQUE_NUMBER",
                                 type:"Number",
                                 required:true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                             {
+                                key: "repayment.ifscCode",
+                                type: "lov",
+                                title: "IFSC_CODE",
+                                lovonly: true,
+                                condition:"model.repayment.instrument=='CHQ'",
+                                inputMap: {
+                                    "ifscCode": {
+                                        "key": "repayment.ifscCode"
+                                    },
+                                    "bankName": {
+                                        "key": "repayment.customerBankName"
+                                    },
+                                    "branchName": {
+                                        "key": "repayment.bankBranchDetails"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "repayment.customerBankName",
+                                    "branchName": "repayment.bankBranchDetails",
+                                    "ifscCode": "repayment.ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.bankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.ifscCode,
+                                        data.branchName,
+                                        data.bankName
+                                    ];
+                                }
+                            },
+                            {
+                                key: "repayment.customerBankName",
+                                readonly: true,
+                                condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key: "repayment.bankBranchDetails",
+                                readonly: true,
                                 condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
@@ -177,25 +227,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
-                                key:"repayment.ifscCode",
-                                title:"IFSC",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key:"repayment.chequeBank",
-                                title:"ISSUING_BANK",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key:"repayment.chequeBranch",
-                                title:"ISSUING_BRANCH",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key: "repayment.chequePhoto",
+                                key: "repayment.photoId",
                                 title: "CHEQUE_PHOTO",
                                 condition:"model.repayment.instrument=='CHQ'",
                                 type: "file",
@@ -204,7 +236,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 subCategory: "absolutlynoidea"
                             },
                             {
-                                key:"repayment.NEFTReferenceNumber",
+                                key:"repayment.reference",
                                 title:"REFERENCE_NUMBER",
                                 type:"number",
                                 required: true,
@@ -216,6 +248,57 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type:"date",
                                 condition:"model.repayment.instrument=='NEFT'"
                             },
+                            {
+                                key: "repayment.ifscCode",
+                                type: "lov",
+                                title: "IFSC_CODE",
+                                lovonly: true,
+                                condition:"model.repayment.instrument=='NEFT'",
+                                inputMap: {
+                                    "ifscCode": {
+                                        "key": "repayment.ifscCode"
+                                    },
+                                    "bankName": {
+                                        "key": "repayment.customerBankName"
+                                    },
+                                    "branchName": {
+                                        "key": "repayment.bankBranchDetails"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "repayment.customerBankName",
+                                    "branchName": "repayment.bankBranchDetails",
+                                    "ifscCode": "repayment.ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.bankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.ifscCode,
+                                        data.branchName,
+                                        data.bankName
+                                    ];
+                                }
+                            },
+                            {
+                                key: "repayment.customerBankName",
+                                readonly: true,
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key: "repayment.bankBranchDetails",
+                                readonly: true,
+                                condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            /*
                             {
                                 key:"repayment.ifscCode",
                                 title:"IFSC",
@@ -233,9 +316,9 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"BRANCH_DETAILS",
                                 type:"text",
                                 condition:"model.repayment.instrument=='NEFT'"
-                            },
+                            },*/
                             {
-                                key:"repayment.RTGSReferenceNumber",
+                                key:"repayment.reference",
                                 title:"REFERENCE_NUMBER",
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
@@ -247,6 +330,56 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='RTGS'"
                             },
                             {
+                                key: "repayment.ifscCode",
+                                type: "lov",
+                                title: "IFSC_CODE",
+                                lovonly: true,
+                                condition:"model.repayment.instrument=='RTGS'",
+                                inputMap: {
+                                    "ifscCode": {
+                                        "key": "repayment.ifscCode"
+                                    },
+                                    "bankName": {
+                                        "key": "repayment.customerBankName"
+                                    },
+                                    "branchName": {
+                                        "key": "repayment.bankBranchDetails"
+                                    }
+                                },
+                                outputMap: {
+                                    "bankName": "repayment.customerBankName",
+                                    "branchName": "repayment.bankBranchDetails",
+                                    "ifscCode": "repayment.ifscCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = CustomerBankBranch.search({
+                                        'bankName': inputModel.bankName,
+                                        'ifscCode': inputModel.ifscCode,
+                                        'branchName': inputModel.branchName
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.ifscCode,
+                                        data.branchName,
+                                        data.bankName
+                                    ];
+                                }
+                            },
+                            {
+                                key: "repayment.customerBankName",
+                                readonly: true,
+                                condition:"model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key: "repayment.bankBranchDetails",
+                                readonly: true,
+                                condition:"model.repayment.instrument=='RTGS'"
+                            }
+                           /* {
                                 key:"repayment.RTGSBankDetails",
                                 title:"BANK_DETAILS",
                                 type:"text",
@@ -257,7 +390,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"BRANCH_DETAILS",
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
-                            }
+                            }*/
                         ]
                     },
                     {
@@ -316,6 +449,18 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "remarks": {
                                     "type": "string",
                                     "title":"REMARKS"
+                                },
+                                "ifscCode": {
+                                    "type": "string",
+                                    "title":"IFSC_CODE"
+                                },
+                                "customerBankName": {
+                                    "type": "string",
+                                    "title":"CUSTOMER_BANK_NAME"
+                                },
+                                "bankBranchDetails": {
+                                    "type": "string",
+                                    "title":"BANK_BRANCH_DETAILS"
                                 },
                                 "repaymentDate": {
                                     "type": "string",
