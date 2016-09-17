@@ -12,7 +12,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
          var resource = $resource(endpoint, null, {
             getSchema:{
             method:'GET',
-            url:'process/schemas/ach.json'
+            url:'process/schemas/pdc.json'
              },
             create:{
                 method:'POST',
@@ -31,7 +31,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
                     url: endpoint + '/search'
             }),
              update:{
-                method:'POST',
+                method:'PUT',
                 url:endpoint+'/editPDCAccount'           
             },
             find:{
