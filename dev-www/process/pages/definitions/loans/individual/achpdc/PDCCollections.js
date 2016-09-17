@@ -58,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+model.pdcCollections.demandDate);
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
                                     PageHelper.showLoader();
                                     PDC.getDemandList(

@@ -33,7 +33,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
             model.pdc.addCheque = model.pdc.addCheque || [];
-            //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdc.existingCheque = model.pdc.existingCheque || [];
             //model to store pdc cheque types
             model.pdcGetPDCType = model.pdcGetPDCType || {};
@@ -52,12 +51,13 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 PDC.getPDCCheque({accountNumber: model.pdc.accountId}).$promise.then(function(res){
                         model.pdcGetPDCType = res;
                         PageHelper.showProgress("page-init","Done.",2000);
-                        model.pdc = model.pdcGetPDCType;
-                        //model.pdc.existingCheque.push(model.pdc.pdcSummaryDTO);
                         $log.info("PDC Type PDC GET RESP. : "+res);
                         for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
-                            model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
-                            model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                            if(model.pdc.accountId == model.pdcGetPDCType.body.pdcSummaryDTO[i].loanAccountNo) {
+
+                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                                model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                            }
                         }
 
                         if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
@@ -70,24 +70,24 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     PageHelper.hideLoader();
                 });
 
-                PDC.getSecurityCheque().$promise.then(function(res){
-                    model.pdcGetSecurityType = res;
-                    PageHelper.showProgress("page-init","Done.",2000);
-                    $log.info("Security Type PDC GET RESP. : "+res);
+                // PDC.getSecurityCheque().$promise.then(function(res){
+                //     model.pdcGetSecurityType = res;
+                //     PageHelper.showProgress("page-init","Done.",2000);
+                //     $log.info("Security Type PDC GET RESP. : "+res);
 
-                    for (var i = 0; i < model.pdcGetSecurityType.body.length; i++) {
-                        if(model.pdc.accountId == model.pdcGetSecurityType.body[i].loanAccountNo) {
-                            model.pdc.existingCheque.push(model.pdcGetSecurityType.body[i]);
-                            model.pdc.customerBankAccountNo = model.pdcGetSecurityType.body[i].customerBankAccountNo;
-                            model.flag = true; 
-                        }
-                    }
-                },
-                function(resError){
-                    $log.info("PDC GET Error : "+resError);  
-                }).finally(function(){
-                    PageHelper.hideLoader();
-                });
+                //     for (var i = 0; i < model.pdcGetSecurityType.body.length; i++) {
+                //         if(model.pdc.accountId == model.pdcGetSecurityType.body[i].loanAccountNo) {
+                //             model.pdc.existingCheque.push(model.pdcGetSecurityType.body[i]);
+                //             model.pdc.customerBankAccountNo = model.pdcGetSecurityType.body[i].customerBankAccountNo;
+                //             model.flag = true; 
+                //         }
+                //     }
+                // },
+                // function(resError){
+                //     $log.info("PDC GET Error : "+resError);  
+                // }).finally(function(){
+                //     PageHelper.hideLoader();
+                // });
             } 
             else {
                 $state.go("Page.Engine",{
@@ -230,6 +230,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                 "add":null,
                                 "condition": "model.flag",
                                 "title":"CHEQUE_DETAILS",
+                                "titleExpr":"model.pdc.existingCheque[arrayIndex].chequeType + ' - ' + model.pdc.existingCheque[arrayIndex].chequeNoFrom + ' - ' + model.pdc.existingCheque[arrayIndex].numberOfCheque",
                                 "items":[
                                     {
                                         "key": "pdc.existingCheque[].bankAccountNo",
@@ -438,7 +439,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 PageHelper.showLoader();
 
                 if (model.flag) {
-                    PDC.update(model.pdc, function(response){
+                    PDC.update(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -448,7 +449,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 }
                 else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc, function(response){
+                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
                         model.flag = true;
                     }, function(errorResponse){

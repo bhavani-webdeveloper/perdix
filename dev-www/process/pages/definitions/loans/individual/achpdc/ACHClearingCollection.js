@@ -58,7 +58,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+model.achCollections.demandDate);
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");    
                                     PageHelper.showLoader();
                                     ACH.getDemandList(
