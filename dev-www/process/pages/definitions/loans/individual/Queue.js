@@ -68,7 +68,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					},
 					"accountNumber": {
 						"title": "ACCOUNT_NUMBER",
-						"type": "number"
+						"type": "string"
 					}
 				},
 				"required":["stage", "branchName"]
