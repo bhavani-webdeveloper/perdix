@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries) {
 
             function backToLoansList(){
                 try {
@@ -169,55 +169,29 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 required:true,
                                 condition:"model.repayment.instrument=='CHQ'"
                             },
-                             {
-                                key: "repayment.ifscCode",
+                            {
+                                key: "repayment.bankAccountNumber",
                                 type: "lov",
-                                title: "IFSC_CODE",
-                                lovonly: true,
+                                autolov: true,
                                 condition:"model.repayment.instrument=='CHQ'",
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "repayment.ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "repayment.customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "repayment.bankBranchDetails"
-                                    }
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
                                 },
                                 outputMap: {
-                                    "bankName": "repayment.customerBankName",
-                                    "branchName": "repayment.bankBranchDetails",
-                                    "ifscCode": "repayment.ifscCode"
+                                    "account_number": "repayment.bankAccountNumber"
                                 },
                                 searchHelper: formHelper,
-                                search: function(inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
                                 },
-                                getListDisplayItem: function(data, index) {
+                                getListDisplayItem: function(item, index) {
                                     return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
                                     ];
                                 }
-                            },
-                            {
-                                key: "repayment.customerBankName",
-                                readonly: true,
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key: "repayment.bankBranchDetails",
-                                readonly: true,
-                                condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
                                 key:"repayment.chequeDate",
@@ -243,59 +217,33 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='NEFT'"
                             },
                             {
-                                key:"repayment.NEFTDate",
-                                title:"DATE",
-                                type:"date",
-                                condition:"model.repayment.instrument=='NEFT'"
-                            },
-                            {
-                                key: "repayment.ifscCode",
+                                key: "repayment.bankAccountNumber",
                                 type: "lov",
-                                title: "IFSC_CODE",
-                                lovonly: true,
+                                autolov: true,
                                 condition:"model.repayment.instrument=='NEFT'",
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "repayment.ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "repayment.customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "repayment.bankBranchDetails"
-                                    }
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
                                 },
                                 outputMap: {
-                                    "bankName": "repayment.customerBankName",
-                                    "branchName": "repayment.bankBranchDetails",
-                                    "ifscCode": "repayment.ifscCode"
+                                    "account_number": "repayment.bankAccountNumber"
                                 },
                                 searchHelper: formHelper,
-                                search: function(inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
                                 },
-                                getListDisplayItem: function(data, index) {
+                                getListDisplayItem: function(item, index) {
                                     return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
                                     ];
                                 }
                             },
                             {
-                                key: "repayment.customerBankName",
-                                readonly: true,
-                                condition:"model.repayment.instrument=='NEFT'"
-                            },
-                            {
-                                key: "repayment.bankBranchDetails",
-                                readonly: true,
+                                key:"repayment.NEFTDate",
+                                title:"DATE",
+                                type:"date",
                                 condition:"model.repayment.instrument=='NEFT'"
                             },
                             /*
@@ -324,61 +272,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='RTGS'"
                             },
                             {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='RTGS'",
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
+                            },
+                            {
                                 key:"repayment.RTGSDate",
                                 title:"DATE",
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
                             },
-                            {
-                                key: "repayment.ifscCode",
-                                type: "lov",
-                                title: "IFSC_CODE",
-                                lovonly: true,
-                                condition:"model.repayment.instrument=='RTGS'",
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "repayment.ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "repayment.customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "repayment.bankBranchDetails"
-                                    }
-                                },
-                                outputMap: {
-                                    "bankName": "repayment.customerBankName",
-                                    "branchName": "repayment.bankBranchDetails",
-                                    "ifscCode": "repayment.ifscCode"
-                                },
-                                searchHelper: formHelper,
-                                search: function(inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
-                                },
-                                getListDisplayItem: function(data, index) {
-                                    return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
-                                    ];
-                                }
-                            },
-                            {
-                                key: "repayment.customerBankName",
-                                readonly: true,
-                                condition:"model.repayment.instrument=='RTGS'"
-                            },
-                            {
-                                key: "repayment.bankBranchDetails",
-                                readonly: true,
-                                condition:"model.repayment.instrument=='RTGS'"
-                            }
                            /* {
                                 key:"repayment.RTGSBankDetails",
                                 title:"BANK_DETAILS",
