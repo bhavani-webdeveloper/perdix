@@ -34,7 +34,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
