@@ -19,9 +19,9 @@ IndividualLoan.search : To get all the Loan Accounts.
 irf.pageCollection.factory(irf.page("loans.individual.Queue"),
 ["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
 function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
-	
+
 	var branch = SessionStore.getBranch();
-	
+
 	return {
 		"type": "search-list",
 		"title": "LOANS_SEARCH",
@@ -84,7 +84,8 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					'branchName': searchOptions.branchName,
 					'centreCode': searchOptions.centreCode,
 					'customerId': searchOptions.customerId,
-					'accountNumber': searchOptions.accountNumber
+					'accountNumber': searchOptions.accountNumber,
+                    'page': pageOpts.pageNo
 				}).$promise;
 				return promise;
 			},
@@ -111,7 +112,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				},
 				getListItem: function(item){
 					return [
-						
+
 						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
 						"{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
 						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
@@ -136,7 +137,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "LoanInitiation") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -155,7 +156,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "LoanBooking") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -174,7 +175,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "DocumentUpload") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -191,10 +192,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 								});
 							},
 							isApplicable: function(item, index){
-								
+
 								if(item.stage == "Completed") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -213,10 +214,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "Completed") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
-								
+
 							}
 						}
 					];
