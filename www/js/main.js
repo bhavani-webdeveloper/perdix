@@ -3999,6 +3999,10 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 		getCurrentDateTime:function(){
             return moment().format();
         },
+        convertJSONTimestampToDate: function(jsonTimestamp){
+            var a = moment.utc(jsonTimestamp);
+            return a.format("YYYY-MM-DD");
+        },
 		removeNulls:function(obj, recurse) {
 
 			for (var i in obj) {
@@ -6867,6 +6871,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         partialPayment:{
             method:'PUT',
             url:endpoint+ "/partialpayment"
+        },
+        waiver:{
+            method:'POST',
+            url:endpoint+ "/waiver"
         },
         reject:{
             method:'POST',
@@ -15676,7 +15684,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             PageHelper.showLoader();
                             var postData = _.cloneDeep(model.repayment);
                             postData.amount = parseInt(Number(postData.amount))+"";
-                            //postData.instrument = "CASH";
+                            postData.instrument = model.repayment.instrument;
                             LoanAccount.repay(postData,function(resp,header){
                                 $log.info(resp);
                                 try{
@@ -15696,6 +15704,266 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 }
             }
         }]);
+
+irf.pageCollection.factory(irf.page('loans.ReferenceCode'),
+    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+    ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
+    function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
+
+
+        return {
+            "type": "schema-form",
+            "title": "UPDATE_REFERENCE_CODE",
+            "subTitle": "",
+            offline: false,
+            form: [
+            {
+                        //"type": "box",
+                        type:"box",
+                        title: "REFERENCE_CODE",
+                        items: [
+                        {
+                            "type": "box",
+                            "title": "UPDATE_REFERENCE_CODE",
+                            "type": "array",
+                            "items": [
+                            {
+                                key: "classifier",
+                                title: "CLASSIFIER_NAME",
+                                type: "lov",
+                                fieldType: "text",//number/text
+                                //autolov: true,
+                                lovonly: true,
+                                inputMap: {
+                                    "id": ".currentRoleId",
+                                },
+                                outputMap: {
+                                    "id": "rolePage.currentRoleId",
+                                    "name": "rolePage.currentRoleName"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return RolesPages.allRoles().$promise;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                    item.id,
+                                    item.name
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    PageHelper.showLoader();
+                                    RolesPages.allPages({roleId:result.id}).$promise.then(function(result){
+                                        if (result && result.body && result.body.length) {
+                                            model.rolePage.access = [];
+                                            for (var i = 0; i < result.body.length; i++) {
+                                                var a = {
+                                                    id: result.body[i].id, // page_id
+                                                    uri: result.body[i].uri,
+                                                    rpa_id: result.body[i].rpa_id,
+                                                    page_config: result.body[i].page_config,
+                                                    access: !!result.body[i].rpa_id
+                                                };
+                                                model.rolePage.access.push(a);
+                                            };
+                                        }
+                                    }).finally(function(){
+                                        PageHelper.hideLoader();
+                                    });
+                                }
+                            },
+                            {
+                                key: "rolePage.access",
+                                condition: "model.rolePage.access.length",
+                                type: "array",
+                                add: null,
+                                remove: null,
+                                titleExpr: "(model.rolePage.access[arrayIndex].access?'⚫ ':'⚪ ') + model.rolePage.access[arrayIndex].uri",
+                                items: [
+                                {
+                                    type: "section",
+                                    htmlClass: "row",
+                                    items: [
+                                    {
+                                        type: "section",
+                                        htmlClass: "col-sm-3",
+                                        items: [
+                                        {
+                                            key: "rolePage.access[].access",
+                                            title: "Allow Access",
+                                            type: "checkbox",
+                                            fullwidth: true,
+                                            schema: { default:true }
+                                        }
+                                        ]
+                                    },
+                                    {
+                                        type: "section",
+                                        htmlClass: "col-sm-9",
+                                        items: [
+                                        {
+                                            key: "rolePage.access[].page_config",
+                                            title: "Config",
+                                            type: "textarea"
+                                        }
+                                        ]
+                                    }
+                                    ]
+                                }
+                                ]
+                            },
+                           /* {
+                                key:".classifierName",
+                                title: "CLASSIFIER_NAME",
+                                readonly:true
+                            },*/
+                            {
+                                key: ".name",
+                                //readonly: true,
+                                title: "NAME",
+                                type: "textarea"
+                            },
+                            {
+                                key: ".code",
+                                title: "CODE",
+                                type: "textarea"
+                            },
+                           // "repayment.repaymentDate",
+                          //  "repayment.cashCollectionRemark",
+                          {
+                            key:".parentClassifier",
+                            title:"PARENT_CLASSIFIER",
+                            "type":"text",
+                            "required": true,
+                            readonly:true   
+                        },
+                        {
+                            key: ".parentCode",
+                            readonly: true,
+                            title: "PARENT_CODE",
+                            type: "text"
+                        },
+                        {
+                            key: ".field1",
+                            title: "FIELD1",
+                            type: "textarea"
+                        },{
+                            key: ".field2",
+                            title: "FIELD2",
+                            type: "textarea"
+                        },{
+                            key: ".field3",
+                            title: "FIELD3",
+                            type: "textarea"
+                        },{
+                            key: ".field4",
+                            title: "FIELD4",
+                            type: "textarea"
+                        },{
+                            key: ".field5",
+                            title: "FIELD5",
+                            type: "textarea"
+                        }
+                        ]
+                    }
+                    ]
+                },
+
+                {
+                    "type":"actionbox",
+                    "items": [
+                    {
+                        "type":"submit",
+                        "style":"btn-theme",
+                        "title":"SUBMIT"
+
+                    }
+                    ]
+                }
+                ],
+                schema: 
+                {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                    "classifier": {
+                      "type": "string"
+                  },
+                  "code": {
+                      "type": "string"
+                  },
+                  "field1": {
+                      "type": "string"
+                  },
+                  "field2": {
+                      "type": "string"
+                  },
+                  "field3": {
+                      "type": "string"
+                  },
+                  "field4": {
+                      "type": "string"
+                  },
+                  "field5": {
+                      "type": "string"
+                  },
+                  "id": {
+                      "type": "integer"
+                  },
+                  "name": {
+                      "type": "string"
+                  },
+                  "parentClassifier": {
+                      "type": "string"
+                  },
+                  "parentReferenceCode": {
+                      "type": "string"
+                  },
+                  "version": {
+                      "type": "integer"
+                  }
+              },
+              "required": [
+              ]
+          },
+          actions: {
+            preSave: function (model, formCtrl) {
+                var deferred = $q.defer();
+                model._storedData = null;
+                deferred.resolve();
+                return deferred.promise;
+            },
+            submit: function (model, formCtrl, formName) {
+                if (model.repayment.demandAmount > 0 && model.repayment.transactionName == "Advance Repayment"){
+                    PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
+                    return false;
+                }
+                $log.info("Inside submit");
+                if(window.confirm("Are you Sure?")){
+                    PageHelper.showLoader();
+                    var postData = _.cloneDeep(model.repayment);
+                    postData.amount = parseInt(Number(postData.amount))+"";
+                    postData.instrument = model.repayment.instrument;
+                    LoanAccount.repay(postData,function(resp,header){
+                        $log.info(resp);
+                        try{
+                            alert(resp.response);
+                            PageHelper.navigateGoBack();
+                        }catch(err){
+
+                        }
+                    },function(resp){
+                        PageHelper.showErrors(resp);
+                    }).$promise.finally(function(){
+                        PageHelper.hideLoader();
+                    });
+
+                }
+            }
+        }
+    }
+}]);
 
 irf.pageCollection.factory(irf.page("loans.PaymentReversal"),
 ["$log", "Queries", "SessionStore", "$state", "formHelper", "LoanAccount", "Utils", "PageHelper",
@@ -23324,7 +23592,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            //model.branchId = SessionStore.getBranchId();
+            model.branchId = SessionStore.getBranchId();
         },
         /*offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -23370,7 +23638,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },*/
                     "branchId": {
                         "title": "BRANCH_NAME",
-                        "type": ["null","integer"],
+                        "type": ["null","number"],
                         "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
@@ -23378,11 +23646,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ['null', "integer"],
+                        "type": ["null", "number"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode": "branch_id"
+                            "filter": {
+                                "parentCode as branch": "model.branch"
+                            }
                         }
                     }
                 }
@@ -23394,7 +23664,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branchId || SessionStore.getBranchId(),
-                    'centreCode': searchOptions.centre,
+                    'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage
@@ -23648,8 +23918,8 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                             $log.info("Inside NoPayment()");
                             var reqParams = {
                                 "loanRepaymentDetailsId":model.creditValidation.loanRepaymentDetailsId,
-                                "remarks":model.creditvalidation.reject_remarks,
-                                "rejectReason":model.creditvalidation.reject_reason
+                                "remarks":model.creditValidation.reject_remarks,
+                                "rejectReason":model.creditValidation.reject_reason
                             };
                             LoanProcess.reject(reqParams,null, function(response){
                                 PageHelper.hideLoader();
@@ -24121,10 +24391,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             type: "select",
                             "condition":"model.additional.fromBounceQueue==true",
                             titleMap: {
-                                "A": "A",
-                                "B": "B",
-                                "C": "C",
-                                "D": "D"
+                                "A": "A-Under Control",
+                                "B": "B-Tough",
+                                "C": "C-Difficult",
+                                "D": "D-Declared"
                             },
                             
                         },
@@ -24134,10 +24404,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             type: "select",
                             "condition":"model.additional.fromBouncePromiseQueue==true",
                             titleMap: {
-                                "A": "A",
-                                "B": "B",
-                                "C": "C",
-                                "D": "D"
+                                "A": "A-Under Control",
+                                "B": "B-Tough",
+                                "C": "C-Difficult",
+                                "D": "D-Declared"
                             },
                             
                         },
@@ -24297,7 +24567,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
-                    'status': "PENDING"
+                    'status': "Pending"
                 }).$promise;
 
                 return promise;
@@ -24323,7 +24593,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.overDueAmountInPaisa,
+                        'Amount Due: ' + item.demandAmountInPaisa/100,
                         'Payment Type:' + item.paymentType
                     ]
                 },
@@ -25311,7 +25581,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.demandAmountInPaisa,
+                        'Amount Due: ' + item.demandAmountInPaisa/100,
                         'Payment Type:' + item.paymentType
                     ]
                 },
@@ -25377,6 +25647,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         model.transAuth.applicant_name = data.applicant;
                         model.transAuth.applicant_name = data.coapplicant;
                         model.transAuth.penal_interest = data.totalPenalInterestDue;
+                        model.transAuth.accountOpenDate = data.accountOpenDate;
                         model.transAuth.loanRepaymentDetailsId = model._transAuth.id;
                         model.transAuth.fee = data.totalFeeDue;
 
@@ -25584,8 +25855,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         $log.info("Inside submit()");
                         Utils.confirm("Are You Sure?")
                             .then(function () {
+                                debugger;
                                 if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {
-
+                                    LoanProcess.waiver({repaymentId: model.transAuth.loanRepaymentDetailsId, waivefee: model._input.isFeeWaivedOff, waivePenalty: model._input.isPenalInterestWaivedOff, fromDate: model.transAuth.accountOpenDate}, null)
+                                        .$promise
+                                        .then(
+                                            function (res) {
+                                                PageHelper.navigateGoBack();
+                                            }, function (httpRes) {
+                                                PageHelper.showErrors(httpRes);
+                                            }
+                                        )
                                     return;
                                 } else {
                                     LoanProcess.approve({loanRepaymentDetailsId: model.transAuth.loanRepaymentDetailsId}, null)
