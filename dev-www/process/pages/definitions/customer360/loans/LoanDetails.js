@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     var loanAccountId = $stateParams.pageId;
+                    PageHelper.showLoader();
                     IndividualLoan.get({id: loanAccountId})
                         .$promise
                         .then(function(res){
@@ -18,11 +19,21 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     .$promise
                                     .then(
                                         function(res){
-                                            model.loanAccount.encore = res;
+                                            model.encoreLoan = res;
+
+                                            for(var i=0;i<model.encoreLoan.transactions.length;i++){
+                                                model.encoreLoan.transactions[i].transactionDate = Utils.convertJSONTimestampToDate(model.encoreLoan.transactions[i].transactionDate);
+                                            }
+                                            for(var i=0;i<model.encoreLoan.repaymentSchedule.length;i++){
+                                                model.encoreLoan.repaymentSchedule[i].valueDate = Utils.convertJSONTimestampToDate(model.encoreLoan.repaymentSchedule[i].valueDate);
+                                            }
                                         }, function(httpRes){
                                             PageHelper.showErrors(httpRes);
                                         }
                                     )
+                                    .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
                             }
                         })
 
@@ -362,6 +373,91 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                      "parentCode as loan_purpose_2":"model.loanAccount.loanPurpose2"
                                      }
                                      }*/
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "TRANSACTIONS",
+                        "readonly": true,
+                        "items": [
+                            {
+                                "type": "array",
+                                "title": "Disbursement Details",
+                                "titleExpr": "'Transaction on ' + model.encoreLoan.transactions[arrayIndex].transactionDate",
+                                "key": "encoreLoan.transactions",
+                                "items": [
+                                    {
+                                        "key": "encoreLoan.accountId",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].transactionDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].valueDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].amount1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part2",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part3",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].transactionId",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "REPAYMENT_SCHEDULE",
+                        "readonly": true,
+                        "items": [
+                            {
+                                "type": "array",
+                                "titleExpr": "'Date : ' + model.encoreLoan.repaymentSchedule[arrayIndex].valueDate",
+                                "key": "encoreLoan.repaymentSchedule",
+                                "items": [
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].transactionDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].amount1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].amount2",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].valueDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].transactionId",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].status",
+                                        "type": "string"
+                                    }
                                 ]
                             }
                         ]
@@ -755,48 +851,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         ]
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "box",
-                        "title": "Deprecated Items",
-                        readonly: "true",
-                        "items": [
-                            {
-                                key: "loanAccount.disbursementFromBankAccountNumber",
-                                title: "DISBURSEMENT_ACCOUNT"
-                            },
-                            {
-                                key: "loanAccount.originalAccountNumber",
-                                title: "ORIGINAL_ACCOUNT"
-                            },
-                            {
-                                "key": "loanAccount.isRestructure",
-                                "title": "IS_RESTRUCTURE"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherFirstName",
-                                "title": "HUSBAND_OR_FATHER_NAME"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherMiddleName"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherLastName"
-                            },
-                            {
-                                "key": "loanAccount.relationFirstName",
-                                "title": "RELATIVE_NAME"
-                            },
-                            {
-                                "key": "loanAccount.relation",
-                                "type": "select",
-                                "title": "T_RELATIONSHIP"
-                            },
-                            {
-                                key: "loanAccount.documentTracking",
-                                "title": "DOCUMENT_TRACKING"
                             }
                         ]
                     },

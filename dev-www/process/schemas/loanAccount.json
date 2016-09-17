@@ -30,10 +30,11 @@
                 }
             }
         },
-        "encoreencore": {
+        "encoreLoan": {
             "type": "object",
             "properties": {
                 "accountId": {
+                    "title": "ACCOUNT_NUMBER",
                     "type": "string"
                 },
                 "productType": {
@@ -351,15 +352,18 @@
                                 "type": "string"
                             },
                             "valueDate": {
+                                "title": "VALUE_DATE",
                                 "type": "string"
                             },
                             "transactionDate": {
+                                "title": "TRANSACTION_DATE",
                                 "type": "string"
                             },
                             "systemDateAndTime": {
                                 "type": "string"
                             },
                             "accountId": {
+                                "title": "ACCOUNT_ID",
                                 "type": "string"
                             },
                             "entityId": {
@@ -369,16 +373,20 @@
                                 "type": "integer"
                             },
                             "transactionName": {
+                                "title": "TRANSACTION_NAME",
                                 "type": "string"
                             },
                             "part1": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "NORMAL_INTEREST"
                             },
                             "part2": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "PRINCIPAL"
                             },
                             "part3": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "PENAL_INTEREST"
                             },
                             "part4": {
                                 "type": "null"
@@ -390,7 +398,8 @@
                                 "type": "null"
                             },
                             "amount1": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "AMOUNT"
                             },
                             "amount2": {
                                 "type": "string"
@@ -494,10 +503,12 @@
                                 "type": "string"
                             },
                             "part1": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "NORMAL INTEREST"
                             },
                             "part2": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "PRINCIPAL"
                             },
                             "part3": {
                                 "type": "string"
@@ -512,13 +523,16 @@
                                 "type": "string"
                             },
                             "amount1": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "AMOUNT"
                             },
                             "amount2": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "Principal Outstanding"
                             },
                             "amount3": {
-                                "type": "string"
+                                "type": "string",
+                                "title": "Due"
                             },
                             "description": {
                                 "type": "string"
