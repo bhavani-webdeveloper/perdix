@@ -1,15 +1,17 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$translate',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $translate){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q){
 
 	var onlineLogin = function(username, password, refresh) {
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
-			irfStorageService.cacheAllMaster(true, refresh).then(function(msg){
+			var p = [
+				irfStorageService.cacheAllMaster(true, refresh),
+				irfTranslateLoader({forceServer: refresh})
+			]
+			$q.all(p).then(function(msg){
 				$log.info(msg);
-				$log.info('$translate.isForceAsyncReloadEnabled(): '+$translate.isForceAsyncReloadEnabled());
-				$translate.refresh();
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
@@ -17,6 +19,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 				}
 			},function(e){
 				$log.error(e)
+			}).finally(function(){
 				$scope.showLoading = false;
 			});
 		}, function(arg){ // Error callback

@@ -242,7 +242,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 "searchHelper": formHelper,
                                 initialize: function(inputModel) {
-                                    $log.warn('in pincode initialize');
+                                    $log.warn('in loanAccount.urnNo initialize');
                                     $log.info(inputModel);
                                 },
                                 "search": function(inputModel, form, model) {
@@ -726,6 +726,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             }
                                         },
                                         outputMap: {
+                                            "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
                                             "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
                                             "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
                                             "state": "loanAccount.nominees[arrayIndex].nomineeState"
@@ -743,6 +744,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         },
                                         getListDisplayItem: function(item, index) {
                                             return [
+                                                item.division + ', ' + item.region,
                                                 item.pincode,
                                                 item.district + ', ' + item.state
                                             ];

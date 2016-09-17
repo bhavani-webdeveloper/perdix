@@ -220,7 +220,7 @@ $templateCache.put("irf/template/adminlte/date.html","<div class=\"form-group fo
     "           ng-change=\"evalExpr('callOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
     "           type=\"hidden\" irf-pikaday=\"form\"\n" +
     "           id=\"{{form.key.slice(-1)[0]}}\" />\n" +
-    "    <input class=\"form-control {{form.fieldHtmlClass}}\" ng-disabled=\"form.readonly\" placeholder=\"DDMMYYYY\"/>\n" +
+    "    <input class=\"form-control {{form.fieldHtmlClass}}\" ng-disabled=\"form.readonly\" placeholder=\"{{form.readonly?'':'DDMMYYYY'}}\"/>\n" +
     "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\">&nbsp;{{\n" +
     "      (form.required ?\n" +
     "        \"Required \" : \"\")\n" +
@@ -867,6 +867,7 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "          irf-list-items=\"listDisplayItems\"\n" +
     "          irf-list-actual-items=\"listResponseItems\"\n" +
     "          callback=\"callback(item)\"></irf-list-view>\n" +
+    "          <span>{{noRecordError|translate}}</span>\n" +
     "      </div>\n" +
     "      <div class=\"modal-footer\">\n" +
     "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
@@ -2835,8 +2836,12 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 
 	var displayListOfResponse = function(out) {
+		$scope.noRecordError = null;
 		$scope.listResponseItems = out.body;
 		$scope.listDisplayItems  =[];
+		if (!out.body || !out.body.length) {
+			$scope.noRecordError = "NO_RECORDS_FOUND";
+		}
 		angular.forEach(out.body, function(value, key) {
 			c = $scope.form.getListDisplayItem(value, key);
 			this.push(c);
@@ -3520,14 +3525,24 @@ function($log, $q, $scope){
 		$scope.listStyle = "basic";
 	}
 
-	$scope.initSF = function(model, form, formCtrl) {
+	var init = function(model, form, formCtrl) {
 		if ($scope.initialize && angular.isFunction($scope.initialize)) {
 			$scope.initialize({model:$scope.model.searchOptions, form:$scope.searchForm, formCtrl:formCtrl});
 		}
-		if (!$scope.definition.searchForm || !$scope.definition.searchForm.length || $scope.definition.autoSearch) {
+		if ($scope.definition.autoSearch) {
+			$log.info('Auto Searching');
 			$scope.loadResults($scope.model.searchOptions);
 		}
 	};
+
+	$scope.initSF = function(model, form, formCtrl) {
+		init(model, form, formCtrl);
+	};
+
+	if (!$scope.definition.searchForm || !$scope.definition.searchForm.length) {
+		$scope.definition.autoSearch = true;
+		init($scope.model.searchOptions, $scope.searchForm, null);
+	}
 
 }])
 
@@ -5012,17 +5027,19 @@ irf.HOME_PAGE = {
 };
 
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', '$translate',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, $translate){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q){
 
 	var onlineLogin = function(username, password, refresh) {
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
-			irfStorageService.cacheAllMaster(true, refresh).then(function(msg){
+			var p = [
+				irfStorageService.cacheAllMaster(true, refresh),
+				irfTranslateLoader({forceServer: refresh})
+			]
+			$q.all(p).then(function(msg){
 				$log.info(msg);
-				$log.info('$translate.isForceAsyncReloadEnabled(): '+$translate.isForceAsyncReloadEnabled());
-				$translate.refresh();
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
@@ -5030,6 +5047,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 				}
 			},function(e){
 				$log.error(e)
+			}).finally(function(){
 				$scope.showLoading = false;
 			});
 		}, function(arg){ // Error callback
@@ -5118,8 +5136,8 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 }])
 
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window", "$rootScope",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window, $rootScope) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -5206,6 +5224,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             });
             return def.promise;
         };
+
+        // Access Rights
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
+            // TODO
+        });
 
     }])
     .factory('PageHelper', ['$rootScope', '$log', '$document', 'irfProgressMessage', function ($rootScope, $log, $document, irfProgressMessage) {
@@ -5501,13 +5524,16 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	/* =================================================================================== */
 
 	$scope.pageName = $stateParams.pageName;
-	$scope.formName = "Form__" + $scope.pageName.replace(/\./g, '$');
+	$scope.formName = irf.form($scope.pageName);
+	$scope.pageNameHtml = $stateParams.pageName.split('.').join('<br/>');
 	$scope.pageId = $stateParams.pageId;
+	$scope.error = false;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
 	} catch (e) {
 		$log.error(e);
-		$state.go('Page.EngineError', {pageName:$scope.pageName});
+		$scope.error = true;
+		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
 	if ($scope.page) {
@@ -6321,6 +6347,30 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
+    pDef.getPageDefinition = function(pageUri) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = userAllowedPages[pageUri];
+            if (p) {
+                deferred.resolve(p);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = userAllowedPages[pageUri];
+                if (p) {
+                    deferred.resolve(p);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
     var readOnlyFormCache = {};
     pDef.setReadOnlyByRole = function(pageUri, form) {
         var deferred = $q.defer();
@@ -7039,8 +7089,9 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
     });
 });
 
-irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+irf.models.factory('ACH', 
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -7070,10 +7121,10 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 method: 'PUT',
                 url: endpoint + '/update'
             },
-            getDemandList: {
+            getDemandList: searchResource({
                 method: 'GET',
                 url: endpoint + '/achdemandList'
-            },
+            }),
             bulkRepay: {
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
@@ -7089,9 +7140,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
@@ -7106,9 +7159,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
@@ -7117,8 +7172,9 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
         return resource;
     }
 ]);
-    irf.models.factory('PDC', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+irf.models.factory('PDC',
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
         var endpoint = BASE_URL + '/api/ach';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
@@ -7130,22 +7186,26 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
          var resource = $resource(endpoint, null, {
             getSchema:{
             method:'GET',
-            url:'process/schemas/ach.json'
+            url:'process/schemas/pdc.json'
              },
             create:{
                 method:'POST',
                 url:endpoint+'/createpdcAccount '
             },
-            get:{
+            getPDCCheque: searchResource({
                 method:'GET',
                 url:endpoint+'/fetchpdcAccount'
-            },
+            }),
+            getSecurityCheque: searchResource({
+                method:'GET',
+                url:endpoint+'/securitychequelist'
+            }),
             search: searchResource({
                     method: 'GET',
                     url: endpoint + '/search'
             }),
              update:{
-                method:'POST',
+                method:'PUT',
                 url:endpoint+'/editPDCAccount'           
             },
             find:{
@@ -7179,9 +7239,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 }
             }).then(function(resp){
                 // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
             }, function(errResp){
                 // TODO handle error
+                PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
             }, progress);
             return deferred.promise;
@@ -8134,15 +8196,19 @@ function($log, $q, SessionStore, languages, $translate, PM,
 		actions: {
 			refreshMasters:function(){
 				PageHelper.showLoader();
-				irfStorageService.cacheAllMaster(true,true).then(function(){
-					PageHelper.hideLoader();
+				var p = [
+					irfStorageService.cacheAllMaster(true,true),
+					irfTranslateLoader({forceServer: true})
+				];
+				$q.all(p).then(function(){
 					PM.pop('cache-master',"Synced Successfully.",5000);
 				},function(){
-					PageHelper.hideLoader();
 					PM.pop('cache-master',"Sync Failed, Please Try Again.",5000);
+				}).finally(function(){
+					PageHelper.hideLoader();
+					window.location.hash = '#/' + irf.HOME_PAGE.url;
+					window.location.reload();
 				});
-
-				irfTranslateLoader({forceServer: true});
 			},
 			preSave: function(model, formCtrl, formName) {
 				var deferred = $q.defer();
@@ -11269,9 +11335,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         outputMap: {
-
-
-
+                            "division": "customer.locality",
+                            "region": "customer.villageName",
                             "pincode": "customer.pincode",
                             "district": "customer.district",
                             "state": "customer.state"
@@ -11282,6 +11347,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         getListDisplayItem: function(item, index) {
                             return [
+                                item.division + ', ' + item.region,
                                 item.pincode,
                                 item.district + ', ' + item.state
                             ];
@@ -11635,6 +11701,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 }
                             },
                             outputMap: {
+                                "division": "customer.locality",
+                                "region": "customer.villageName",
                                 "pincode": "customer.pincode",
                                 "district": "customer.district",
                                 "state": "customer.state"
@@ -11653,6 +11721,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
+                                    item.division + ', ' + item.region,
                                     item.pincode,
                                     item.district + ', ' + item.state
                                 ];
@@ -15298,8 +15367,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries) {
 
             function backToLoansList(){
                 try {
@@ -15460,11 +15529,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 ]
                             },
                             {
-                                key:"repayment.checqueNumber",
+                                key:"repayment.reference",
                                 title:"CHEQUE_NUMBER",
                                 type:"Number",
                                 required:true,
                                 condition:"model.repayment.instrument=='CHQ'"
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='CHQ'",
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
                             },
                             {
                                 key:"repayment.chequeDate",
@@ -15474,25 +15567,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='CHQ'"
                             },
                             {
-                                key:"repayment.ifscCode",
-                                title:"IFSC",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key:"repayment.chequeBank",
-                                title:"ISSUING_BANK",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key:"repayment.chequeBranch",
-                                title:"ISSUING_BRANCH",
-                                type:"text",
-                                condition:"model.repayment.instrument=='CHQ'"
-                            },
-                            {
-                                key: "repayment.chequePhoto",
+                                key: "repayment.photoId",
                                 title: "CHEQUE_PHOTO",
                                 condition:"model.repayment.instrument=='CHQ'",
                                 type: "file",
@@ -15501,11 +15576,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 subCategory: "absolutlynoidea"
                             },
                             {
-                                key:"repayment.NEFTReferenceNumber",
+                                key:"repayment.reference",
                                 title:"REFERENCE_NUMBER",
                                 type:"number",
                                 required: true,
                                 condition:"model.repayment.instrument=='NEFT'"
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='NEFT'",
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
                             },
                             {
                                 key:"repayment.NEFTDate",
@@ -15513,6 +15612,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type:"date",
                                 condition:"model.repayment.instrument=='NEFT'"
                             },
+                            /*
                             {
                                 key:"repayment.ifscCode",
                                 title:"IFSC",
@@ -15530,12 +15630,36 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"BRANCH_DETAILS",
                                 type:"text",
                                 condition:"model.repayment.instrument=='NEFT'"
-                            },
+                            },*/
                             {
-                                key:"repayment.RTGSReferenceNumber",
+                                key:"repayment.reference",
                                 title:"REFERENCE_NUMBER",
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                autolov: true,
+                                condition:"model.repayment.instrument=='RTGS'",
+                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                bindMap: {
+                                    
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccounts();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
                             },
                             {
                                 key:"repayment.RTGSDate",
@@ -15543,7 +15667,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
                             },
-                            {
+                           /* {
                                 key:"repayment.RTGSBankDetails",
                                 title:"BANK_DETAILS",
                                 type:"text",
@@ -15554,7 +15678,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title:"BRANCH_DETAILS",
                                 type:"text",
                                 condition:"model.repayment.instrument=='RTGS'"
-                            }
+                            }*/
                         ]
                     },
                     {
@@ -15613,6 +15737,18 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "remarks": {
                                     "type": "string",
                                     "title":"REMARKS"
+                                },
+                                "ifscCode": {
+                                    "type": "string",
+                                    "title":"IFSC_CODE"
+                                },
+                                "customerBankName": {
+                                    "type": "string",
+                                    "title":"CUSTOMER_BANK_NAME"
+                                },
+                                "bankBranchDetails": {
+                                    "type": "string",
+                                    "title":"BANK_BRANCH_DETAILS"
                                 },
                                 "repaymentDate": {
                                     "type": "string",
@@ -20115,7 +20251,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                     title: "Loans",
                     autoSearch:true,
                     searchForm: [
-                        "*"
+                        //"*"
                     ],
                     searchSchema: {
                         "type": 'object',
@@ -20177,15 +20313,15 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: irf.page('loans.ViewLoanDetails'),
-                                            pageId: item.accountNumber
+                                            pageName: 'customer360.loans.LoanDetails',
+                                            pageId: item.accountId
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        //if (index%2==0){
-                                        //	return false;
-                                        //}
-                                        return true;
+                                        if (item.accountNumber){
+                                        	return true;
+                                        }
+                                        return false;
                                     }
                                 },
                                 {
@@ -20975,17 +21111,39 @@ function($log, formHelper, IndividualLoan, $state, SessionStore){
     };
 }]);
 
+/*
+About Queue.js
+-------------------------
+1. Search page that displays all the Loan Accounts based on the sort criteria.
+2. To Create/update ACH Account
+3. To Create/update PDC Account.
+
+Methods
+-------
+Initialize : To decare the required model variables.
+getResultsPromise : TO return the result of IndividualLoan.search.
+getListItem : Values to display from search result
+getActions : Menu icon to create/update ACH or create/update PDC.
+
+Services
+--------
+IndividualLoan.search : To get all the Loan Accounts.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.Queue"),
 ["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
 function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+
 	var branch = SessionStore.getBranch();
+
 	return {
 		"type": "search-list",
 		"title": "LOANS_SEARCH",
 		"subTitle": "",
+
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 		},
+
 		definition: {
 			title: "SEARCH_LOANS",
 			searchForm: [
@@ -21023,26 +21181,28 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					},
 					"accountNumber": {
 						"title": "ACCOUNT_NUMBER",
-						"type": "number"
+						"type": "string"
 					}
 				},
 				"required":["stage", "branchName"]
 			},
+
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 				var promise = IndividualLoan.search({
 					'stage': searchOptions.stage,
 					'branchName': searchOptions.branchName,
 					'centreCode': searchOptions.centreCode,
 					'customerId': searchOptions.customerId,
-					'accountNumber': searchOptions.accountNumber
+					'accountNumber': searchOptions.accountNumber,
+                    'page': pageOpts.pageNo
 				}).$promise;
-
 				return promise;
 			},
+
 			paginationOptions: {
 				"viewMode": "page",
 				"getItemsPerPage": function(response, headers){
@@ -21052,6 +21212,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					return headers['x-total-count']
 				}
 			},
+
 			listOptions: {
 				expandable: true,
 				itemCallback: function(item, index) {
@@ -21064,7 +21225,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				},
 				getListItem: function(item){
 					return [
-						
+
 						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
 						"{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
 						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
@@ -21089,7 +21250,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "LoanInitiation") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -21108,7 +21269,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "LoanBooking") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -21127,7 +21288,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "DocumentUpload") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -21144,10 +21305,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 								});
 							},
 							isApplicable: function(item, index){
-								
+
 								if(item.stage == "Completed") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
 							}
@@ -21166,10 +21327,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							isApplicable: function(item, index){
 								if(item.stage == "Completed") {
 									return true;
-								} else { 
+								} else {
 									return false;
 								}
-								
+
 							}
 						}
 					];
@@ -23451,7 +23612,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
@@ -24617,14 +24778,29 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), ["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams",
-function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
-	/*
-	ACHRegistration.js is to register or update a loan id. If the user exist, the Update module is called
-	else the create field is called. Both Update and Create points to same API.
-	The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
-	and filled in the screen.
-	*/
+/*
+About ACHRegistration.js
+------------------------
+To register or update ACH loan id. If the user exist, the Update module is called
+else the create field is called(both update and create usessame API).
+Both Update and Create points to same API.
+The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+and filled in the screen.
+	
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To download the Domand Form for the ACH Account
+submit : To submit the created/updated ACH
+
+Services
+--------
+ACH.search({ accountNumber: model.ach.accountId }) : Search for existance of Loan account Number
+*/
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
+["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams", "formHelper", "CustomerBankBranch",
+function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams, formHelper, CustomerBankBranch) {
+
 	var branch = SessionStore.getBranch();
 
 	return {
@@ -24633,61 +24809,44 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 		"subTitle": "",
 
 		initialize: function(model, form, formCtrl) {
-
 			//Create Model ach
 			model.ach = model.ach || {};
 			model.achSearch = model.achSearch || {};
-
 			//flag is to identify Create(false) or Update(true), and to update Submit Button Name
 			model.flag = false;
 
-			//_ach from loans.individual.achpdc.ACHMandateDownload
-			//_loanAch  from loans.individual.Queue
-
 			if (model._ach || model._loanAch) {
-
 				if (model._ach) {
-
 					model.ach.accountHolderName = model._ach.customerName;
 					model.ach.accountId = model._ach.accountId;
 					model.ach.branchName = model._ach.branchName;
-
 				}
 				else if (model._loanAch) {
-
 					model.ach.accountHolderName = model._loanAch.customerName;
 					model.ach.accountId = model._loanAch.accountNumber;
 					model.ach.branchName = model._loanAch.branchName;
-
 				}
 
-				//Search for existance of Loan account Number
 				ACH.search({ accountNumber: model.ach.accountId }).$promise.then(function(res) {
 						$log.info("response: " + res);
 						model.achSearch = res;
 
 						for (var i = 0; i < model.achSearch.body.length; i++) {
-
-							//$log.info(achSearch.body[i].accountHolderName);
 							if (model.achSearch.body[i].accountId == model.ach.accountId) {
-
 								model.flag = true;
 								model.ach = model.achSearch.body[i];
 								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
-
 							}
 						}
 					},
 					function(httpRes) {
-						PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-						PageHelper.showErrors(httpRes);
+						// PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+						// PageHelper.showErrors(httpRes);
 						$log.info("ACH Search Response : " + httpRes);
 					}
 				);
-
 			}
 			else {
-
 				if (model._ach) {
 					$state.go("Page.Engine", {
 						pageName: "loans.individual.achpdc.ACHMandateQueue",
@@ -24700,20 +24859,15 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						pageId: null
 					});
 				}
-
 			}
-
-			//   model.customer.urnNo="1234567890";
 			$log.info("ACH_REGISTRATION got initialized");
 		},
 
 		modelPromise: function(pageId, model) {
-
 		},
 		offline: false,
 
 		getOfflineDisplayItem: function(item, index) {
-
 		},
 
 		form: [
@@ -24776,21 +24930,62 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							{
 								"key": "ach.ifscCode",
 								"title": "IFSC_CODE",
-								"type": "lov",
-								"inputMap": {
-									"ifscCode": {
-										"key": "ifscCode",
-										"title": "IFSC_CODE"
-									}
-								}
+								"condition": "model.flag"
 							},
 							{
+		                        "key": "ach.ifscCode",
+		                        "condition": "!model.flag",
+		                        "title": "IFSC_CODE",
+		                        "type": "lov",
+		                        "lovonly": true,
+		                        "inputMap": {
+		                            "ifscCode": {
+		                                "key": "ach.ifscCode"
+		                            },
+		                            "bankName": {
+		                                "key": "ach.bankName"
+		                            },
+		                            "branchName": {
+		                                "key": "ach.branchName"
+		                            }
+		                        },
+		                        outputMap: {
+		                            "bankName": "ach.bankName",
+		                            "branchName": "ach.branchName",
+		                            "ifscCode": "ach.ifscCode"
+		                        },
+		                        searchHelper: formHelper,
+
+		                        search: function(inputModel, form) {
+		                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+		                            var promise = CustomerBankBranch.search({
+		                                'bankName': inputModel.bankName,
+		                                'ifscCode': inputModel.ifscCode,
+		                                'branchName': inputModel.branchName
+		                            }).$promise;
+		                            return promise;
+		                        },
+
+		                        getListDisplayItem: function(data, index) {
+		                            return [
+		                                data.ifscCode,
+		                                data.branchName,
+		                                data.bankName
+		                            ];
+		                        }
+		        
+
+		                    },
+							{
 								"key": "ach.branchName",
-								"title": "BRANCH_NAME"
+								"title": "BRANCH_NAME",
+								"readonly": true
+
 							},
 							{
 								"key": "ach.bankName",
-								"title": "BANK_NAME"
+								"title": "BANK_NAME",
+								"readonly": true
 							},
 							{
 								"key": "ach.bankCity",
@@ -24826,6 +25021,13 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							},
 							{
 								"key": "ach.frequency",
+								"condition": "model.flag",
+								"title": "FREQUENCY",
+								"readonly": true
+							},
+							{
+								"key": "ach.frequency",
+								"condition": "!model.flag",
 								"title": "FREQUENCY",
 								"type": "select",
 								"enumCode": "ach_frequency"
@@ -24964,9 +25166,29 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 	};
 }]);
 
+/*
+About PDCRegistration.js
+------------------------
+To register or update PDC loan id. If the user exist, the Update module is called
+else the create field is called. 
+The search API is called in iniialize to identify if loan account number exist. If exist, the details are obtained
+and filled in the screen.
+    
+Methods
+-------
+Initialize : To decare the required model variables.
+submit : To submit the created/updated ACH
+
+Services
+--------
+PDC.getPDCCheque({accountNumber: model.pdc.accountId} : Search for existance of "PDC" Cheque types
+PDC.getSecurityCheque({accountNumber: model.pdc.accountId} : Search for existance of "SECURITY" Cheque types
+PDC.create : TO carete a new PDC account
+PDC.update : TO update an existing PDC account
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"),
-["$log", "PDC", "PageHelper", "SessionStore","$state", "CustomerBankBranch", 'formHelper', "$stateParams", 
-function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelper,$stateParams){
+["$log", "PDC", "PageHelper", "SessionStore","$state", "CustomerBankBranch", 'formHelper', "$stateParams", "CustomerBankBranch",
+function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelper,$stateParams,CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
 
@@ -24978,32 +25200,62 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         initialize: function (model, form, formCtrl) {
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
+            model.pdc.addCheque = model.pdc.addCheque || [];
             //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
-            model.pdcGet = model.pdcGet||{};
-            model.flag = false;//false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
-         
+            model.pdc.existingCheque = model.pdc.existingCheque || [];
+            //model to store pdc cheque types
+            model.pdcGetPDCType = model.pdcGetPDCType || {};
+            model.pdcGetPDCType.pdcSummaryDTO = model.pdcGetPDCType.pdcSummaryDTO || [];
+            //model to store security cheque types
+            model.pdcGetSecurityType = model.pdcGetSecurityType || [];
+            //false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
+            model.flag = false;
+
             if (model._pdc ) {      
                 model.pdc.accountId = model._pdc.accountNumber;
                 model.pdc.loanAccountNo = model._pdc.accountNumber;
                 model.pdc.branchName = model._pdc.branchName;
                 model.pdc.customerName = model._pdc.customerName;
                 PageHelper.showLoader();
-                PDC.get({accountNumber: model.pdc.accountId},
-                    function(res){
-                        model.pdcGet = Utils.removeNulls(res,true);
-                        PageHelper.hideLoader();
+                PDC.getPDCCheque({accountNumber: model.pdc.accountId}).$promise.then(function(res){
+                        model.pdcGetPDCType = res;
                         PageHelper.showProgress("page-init","Done.",2000);
-                        model.pdc = model.pdcGet;
-                        model.pdc.addCheque = model.pdc.pdcSummaryDTO;
-                        $log.info("PDC GET RESP. : "+res);
-                        model.flag = true;
+                        model.pdc = model.pdcGetPDCType;
+                        //model.pdc.existingCheque.push(model.pdc.pdcSummaryDTO);
+                        $log.info("PDC Type PDC GET RESP. : "+res);
+                        for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
+                            model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                            model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                        }
+
+                        if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
+                            model.flag = true;
                     },
-                    function(res){
-                        PageHelper.hideLoader();
-                        model.flag = false;
-                        $log.info("PDC GET Error : "+res);  
+                    function(resError){
+                        $log.info("PDC GET Error : "+resError);  
                     }
-                );
+                ).finally(function(){
+                    PageHelper.hideLoader();
+                });
+
+                PDC.getSecurityCheque().$promise.then(function(res){
+                    model.pdcGetSecurityType = res;
+                    PageHelper.showProgress("page-init","Done.",2000);
+                    $log.info("Security Type PDC GET RESP. : "+res);
+
+                    for (var i = 0; i < model.pdcGetSecurityType.body.length; i++) {
+                        if(model.pdc.accountId == model.pdcGetSecurityType.body[i].loanAccountNo) {
+                            model.pdc.existingCheque.push(model.pdcGetSecurityType.body[i]);
+                            model.pdc.customerBankAccountNo = model.pdcGetSecurityType.body[i].customerBankAccountNo;
+                            model.flag = true; 
+                        }
+                    }
+                },
+                function(resError){
+                    $log.info("PDC GET Error : "+resError);  
+                }).finally(function(){
+                    PageHelper.hideLoader();
+                });
             } 
             else {
                 $state.go("Page.Engine",{
@@ -25022,7 +25274,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
             {
                 "type": "box",
                 "notitle": true ,
-                "colClass":"col-sm-8",
                 "items": [
                     {
                         "type":"fieldset",
@@ -25142,77 +25393,114 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                             // },
                             {
                                 "type":"array",
-                                "key":"pdc.addCheque",
-                                "view": "fixed",
+                                "key":"pdc.existingCheque",
                                 "startEmpty": true,
+                                "add":null,
+                                "condition": "model.flag",
                                 "title":"CHEQUE_DETAILS",
+                                "items":[
+                                    {
+                                        "key": "pdc.existingCheque[].bankAccountNo",
+                                        "title": "BANK_ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].ifscCode",
+                                        "title": "IFSC_CODE",
+                                        "type": "string",
+                                        "readonly": true
+
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].bankName",
+                                        "title": "BANK_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].branchName",
+                                        "title": "BRANCH_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].chequeType",
+                                        "title": "CHEQUE_TYPE",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].chequeNoFrom",
+                                        "title": "CHEQUE_START_NUMBER",
+                                        "type": "Number"
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].numberOfCheque",
+                                        "title": "NUMBER_OF_CHEQUE",
+                                        "type": "Number"
+                                    }
+                                ]
+                            },
+                            {
+                                "type":"array",
+                                "key":"pdc.addCheque",
+                                "startEmpty": true,
+                                "title":"ADD_CHEQUE_DETAILS",
                                 "items":[
                                     {
                                         "key": "pdc.addCheque[].bankAccountNo",
                                         "title": "BANK_ACCOUNT_NUMBER"
                                     },
                                     {
-                                        "key": "ach.ifscCode",
+                                        "key": "pdc.addCheque[].ifscCode",
                                         "title": "IFSC_CODE",
                                         "type": "lov",
+                                        "lovonly": true,
                                         "inputMap": {
                                             "ifscCode": {
-                                                "key": "ifscCode",
-                                                "title": "IFSC_CODE"
+                                                "key": "pdc.addCheque[].ifscCode"
+                                            },
+                                            "bankName": {
+                                                "key": "pdc.addCheque[].bankName"
+                                            },
+                                            "branchName": {
+                                                "key": "pdc.addCheque[].branchName"
                                             }
+                                        },
+
+                                        outputMap: {
+                                            "bankName": "pdc.addCheque[arrayIndex].bankName",
+                                            "branchName": "pdc.addCheque[arrayIndex].branchName",
+                                            "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
+                                        },
+
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form) {
+                                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                            var promise = CustomerBankBranch.search({
+                                                'bankName': inputModel.bankName,
+                                                'ifscCode': inputModel.ifscCode,
+                                                'branchName': inputModel.branchName
+                                            }).$promise;
+                                            return promise;
+                                        },
+
+                                        getListDisplayItem: function(data, index) {
+                                            return [
+                                                data.ifscCode,
+                                                data.branchName,
+                                                data.bankName
+                                            ];
                                         }
-                                    },
-                                    // {
-                                    //     "key": "pdc.addCheque[].ifscCode",
-                                    //     "title": "IFSC_CODE",
-                                    //     "type": "lov",
-                                    //     "lovonly": true,
-                                    //     "inputMap": {
-                                    //         "ifscCode": {
-                                    //             "key": "pdc.addCheque[].ifscCode"
-                                    //         },
-                                    //         "bankName": {
-                                    //             "key": "pdc.addCheque[].bankName"
-                                    //         },
-                                    //         "branchName": {
-                                    //             "key": "pdc.addCheque[].branchName"
-                                    //         }
-                                    //     },
-
-                                    //     outputMap: {
-                                    //         "bankName": "pdc.addCheque[arrayIndex].bankName",
-                                    //         "branchName": "pdc.addCheque[arrayIndex].branchName",
-                                    //         "ifscCode": "pdc.addCheque[arrayIndex].ifscCode"
-                                    //     },
-
-                                    //     searchHelper: formHelper,
-                                    //     search: function(inputModel, form) {
-                                    //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    //         var promise = CustomerBankBranch.search({
-                                    //             'bankName': inputModel.bankName,
-                                    //             'ifscCode': inputModel.ifscCode,
-                                    //             'branchName': inputModel.branchName
-                                    //         }).$promise;
-                                    //         return promise;
-                                    //     },
-
-                                    //     getListDisplayItem: function(data, index) {
-                                    //         return [
-                                    //             data.ifscCode,
-                                    //             data.branchName,
-                                    //             data.bankName
-                                    //         ];
-                                    //     }
                         
 
-                                    // },
+                                    },
                                     {
                                         "key": "pdc.addCheque[].bankName",
-                                        "title": "BANK_NAME"
+                                        "title": "BANK_NAME",
+                                        "readonly": true
                                     },
                                     {
                                         "key": "pdc.addCheque[].branchName",
-                                        "title": "BRANCH_NAME"
+                                        "title": "BRANCH_NAME",
+                                        "readonly": true
                                     },
                                     {
                                         "key": "pdc.addCheque[].chequeType",
@@ -25222,7 +25510,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                     },
                                     {
                                         "key": "pdc.addCheque[].chequeNoFrom",
-                                        "title": "CHEQUE_NUMBER_FROM",
+                                        "title": "CHEQUE_START_NUMBER",
                                         "type": "Number"
                                     },
                                     {
@@ -25266,10 +25554,39 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         actions: {
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                //bankCount is the no. of banks added in "pdc.addCheque" array
+                //bankCount is the no. of banks added in "pdc.existingCheque" array
                 //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
                 model.pdc.pdcSummaryDTO = [];
+                //Add existing cheque details
+                for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
+                    model.pdc.pdcSummaryDTO.push({
+                        bankAccountNo: model.pdc.existingCheque[bankCount].bankAccountNo,
+                        bankName: model.pdc.existingCheque[bankCount].bankName,
+                        ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
+                        chequeNoFrom: model.pdc.existingCheque[bankCount].chequeNoFrom,
+                        chequeType: model.pdc.existingCheque[bankCount].chequeType,
+                        numberOfCheque: model.pdc.existingCheque[bankCount].numberOfCheque,
+                        customerBankAccountNo: model.pdc.customerBankAccountNo,
+                        loanAccountNo: model._pdc.accountNumber,
+                        branchName: model.pdc.existingCheque[bankCount].branchName,
+                        id: model._pdc.loanId
+                    });
 
+                    //$log.info("bank no : " + bankCount);
+                    //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
+                    // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
+                    //     $log.info("Leaves No.: " + leavesCount);
+                    //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
+                    //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
+                    //     model.pdc.chequeDetails.push({
+                    //         bankName: model.pdc.existingCheque[bankCount].bankName,
+                    //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
+                    //         chequeNo: currentLeafNo
+                    //     });
+                    // }
+                }
+
+                //add the newly addeed cheque details
                 for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
                     model.pdc.pdcSummaryDTO.push({
                         bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
@@ -25283,22 +25600,9 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         branchName: model.pdc.addCheque[bankCount].branchName,
                         id: model._pdc.loanId
                     });
-
-                    //$log.info("bank no : " + bankCount);
-                    //leavesCount is the no. of leaves in each bank array added in "pdc.addCheque" array
-                    // for (var leavesCount = 0; leavesCount < model.pdc.addCheque[bankCount].noOfLeaves; leavesCount++) {
-                    //     $log.info("Leaves No.: " + leavesCount);
-                    //     $log.info("Cheque No.: " + ( model.pdc.addCheque[bankCount].chequeStartNo + leavesCount));
-                    //     var currentLeafNo = model.pdc.addCheque[bankCount].chequeStartNo + leavesCount;
-                    //     model.pdc.chequeDetails.push({
-                    //         bankName: model.pdc.addCheque[bankCount].bankName,
-                    //         ifscCode: model.pdc.addCheque[bankCount].ifscCode,
-                    //         chequeNo: currentLeafNo
-                    //     });
-                    // }
                 }
 
-                //model.pdc.addCheque = [];
+                //model.pdc.existingCheque = [];
                 PageHelper.showLoader();
 
                 if (model.flag) {
@@ -25312,7 +25616,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 }
                 else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
+                    PDC.create(model.pdc, function(response){
                         PageHelper.hideLoader();
                         model.flag = true;
                     }, function(errorResponse){
@@ -25328,10 +25632,30 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         }
     };
 }]);
+/*
+About ACHMandateQueue.js
+-------------------------
+1. Search page that displays all the ACH Loan Accounts based on the sort criteria.
+2. To update ACH Account
+3. To Dounload ACH Mandate Registration file.
+
+Methods
+-------
+Initialize : To decare the required model variables.
+getResultsPromise : TO return the result of ACH.search.
+getListItem : Values to display from search result
+getActions : Menu icon to Update ACH or to Download Mandate.
+
+Services
+--------
+ACH.search : To get all the ACH Accounts.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateQueue"),
 ["$log", "formHelper","entityManager", "ACH","$state", "SessionStore", "Utils",
 function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
+
 	var branch = SessionStore.getBranch();
+
 	return {
 		"type": "search-list",
 		"title": "ACH_MANDATE_QUEUE",
@@ -25401,14 +25725,12 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 				expandable: true,
 				itemCallback: function(item, index) {
 				},
-
 				getItems: function(response, headers){
 					if (response!=null && response.length && response.length!=0) {
 						return response;
 					}
 					return [];
 				},
-
 				getListItem: function(item){
 					return [
 						
@@ -25418,7 +25740,6 @@ function($log, formHelper,EntityManager, ACH,$state, SessionStore, Utils){
 						"{{'REGISTRATION_STATUS'|translate}} : " + item.registrationStatus
 					]
 				},
-
 				getActions: function(){
 					return [
 						{
@@ -25855,9 +26176,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         $log.info("Inside submit()");
                         Utils.confirm("Are You Sure?")
                             .then(function () {
-                                debugger;
                                 if (model._input.isFeeWaivedOff === true || model._input.isPenalInterestWaivedOff === true) {
-                                    LoanProcess.waiver({repaymentId: model.transAuth.loanRepaymentDetailsId, waivefee: model._input.isFeeWaivedOff, waivePenalty: model._input.isPenalInterestWaivedOff, fromDate: model.transAuth.accountOpenDate}, null)
+                                    LoanProcess.waiver({repaymentId: model.transAuth.loanRepaymentDetailsId, waivefee: model._input.isFeeWaivedOff, waivePenalty: model._input.isPenalInterestWaivedOff, fromDate: Utils.convertJSONTimestampToDate(model.transAuth.accountOpenDate)}, null)
                                         .$promise
                                         .then(
                                             function (res) {
@@ -26211,14 +26531,30 @@ function($log, formHelper, Enrollment, $state, SessionStore,$q, entityManager){
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
-["$log", "SessionStore","Enrollment",'Utils','ACH', 'AuthTokenHelper',
-function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper) {
 /*
-ACHClearingCollection.js does the following
-1. To download the demand due list with date criteria
-2. To upload the status of the demands as received from Bank
+About ACHClearingCollection.js
+------------------------------
+1. To download the demand list with date criteria
+2. To upload the demand list and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To download the Domand List based on date criteria and to call "ACH.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+customHandle : To upload ACH files(Excel).
+
+Services
+--------
+ACH.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+ACH.achDemandListUpload : To upload the selected file.
+ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"),
+["$log", "SessionStore","Enrollment",'Utils','ACH', 'AuthTokenHelper', 'PageHelper',
+function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
+
     return {
         "type": "schema-form",
         "title": "ACH_COLLECTIONS",
@@ -26227,6 +26563,10 @@ ACHClearingCollection.js does the following
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
+            model.achCollections = model.achCollections || {};
+            model.flag = false;
+            model.achDemand = model.achDemand || {};
+            model.achDemand.demandList = model.achDemand.demandList ||[];
         },
         
         form: [
@@ -26251,8 +26591,38 @@ ACHClearingCollection.js does the following
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
-                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");     
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
+                                    window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");    
+                                    PageHelper.showLoader();
+                                    ACH.getDemandList(
+                                        {
+                                            demandDate: model.achCollections.demandDate,
+                                            branchId: [1,2,3,4,6,7,8,9,11]
+                                        }
+                                    ).$promise.then(function(res) {
+                                        PageHelper.hideLoader();
+                                        model.achSearch = res;
+                                       
+                                        if (model.achSearch.body.length > 0){
+                                            model.flag = true;
+                                        } else {
+                                            model.flag = false;
+                                        }
+                                       
+                                        for (var i = 0; i < model.achSearch.body.length; i++) {
+                                            model.achSearch.body[i].repaymentType = "ACH";
+                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achDemand.demandList.push(model.achSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("ACH Search Response : " + httpRes);
+                                        }
+                                    );
                                 }
                             }
                         ]
@@ -26282,94 +26652,6 @@ ACHClearingCollection.js does the following
                         ]
                     }
                 ]
-            }
-        ],
-
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        
-        actions: {
-            submit: function(model, form, formName){
-            },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
-            }
-        }
-    };
-}]);
-
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
-["$log", "ACH", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
-function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
-/*
-The ACHSubmission.js is to download the ACH  Demandlist for the given date and to update the status of them.
-*/
-    return {
-        "type": "schema-form",
-        "title": "ACH_SUBMISSION",
-        "subTitle": "",
-
-        initialize: function (model, form, formCtrl) {
-            $log.info("Demo Customer Page got initialized");
-            model.achDemand = model.achDemand || {};
-
-            model.achDemand.demandList = [{
-                accountId: "10010101",
-                amount1: "100",
-                customerName: "aaa",
-                check: false
-            },
-            {
-                accountId: "10010102",
-                amount1: "100",
-                customerName: "bbb",
-                check: true
-            }];
-        },
-
-        form:[
-            {
-                "type": "box",
-                "notitle": true,
-                "items": [
-                    {
-                        "type":"fieldset",
-                        "title":"SEARCH_ACH_DEMANDS",
-                        "items":[
-                            {
-                                "key": "achDemand.search.demandDate",
-                                "title": "DEMAND_DATE",
-                                "type": "date"
-
-                            },
-                            {
-                                "key": "achDemand.search.branchId",
-                                "title": "BRANCH_CODE",
-                                "type": "select",
-                                "enumCode": "branch_id",
-                            },
-                            {
-                                "title":"SEARCH",
-                                "type":"button",
-                                "onClick": function(model, formCtrl, form, $event){
-                                    PageHelper.showLoader();
-                                    ACH.getDemandList(model.achDemand.search).$promise.then(function(response) {
-                                        PageHelper.showProgress("page-init", "Done.", 2000);
-                                       // model.achDemand.demandList = response;
-                                    }, function(errorResponse) {
-                                        PageHelper.showErrors(errorResponse);
-                                    }).finally(function(){
-                                        PageHelper.hideLoader();
-                                    });
-                                }
-                            }
-                        ]
-                    }
-                ]
             },
             {
                 "type": "box",
@@ -26381,12 +26663,12 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                         "items":[
                             {   
                                 "key": "achDemand.checkbox",
+                                "condition": "model.flag",
                                 "type": "checkbox",
                                 "title": "SELECT_ALL",
                                 "schema":{
                                         "default": false
                                     },
-                                    //
                                 "onChange": function(modelValue, form, model){
 
                                     if (modelValue)
@@ -26398,19 +26680,18 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                     {
                                         for ( i = 0; i < model.achDemand.demandList.length; i++)
                                             model.achDemand.demandList[i].check = false;
-                                    }
-                                                            
+                                    }                        
                                 }    
-
                             },
                             {
                                 "type":"array",
                                 "key":"achDemand.demandList",
+                                "condition": "model.flag",
                                 "add": null,
                                 "startEmpty": true,
                                 "remove":null,
                                 "title":"CHEQUE_DETAILS",
-                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].customerName",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount1",
                                 "items":[
                                     {
                                         "key": "achDemand.demandList[].accountId",
@@ -26435,7 +26716,198 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                                             "default": false
                                         }
                                     },
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.flag",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
 
+        schema: function() {
+            return Enrollment.getSchema().$promise;
+        },
+        
+        actions: {
+            submit: function(model, form, formName){
+                PageHelper.showLoader();
+                ACH.bulkRepay(model.achDemand.demandList, function(response) {
+                    PageHelper.hideLoader();
+                    PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.flag = true;
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
+            }
+        }
+    };
+}]);
+
+/*
+ACHSubmission.js
+----------------
+To download the demand list with date criteria and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To call "ACH.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+
+Services
+--------
+ACH.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
+*/
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHSubmission"),
+["$log", "ACH", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
+function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
+
+    return {
+        "type": "schema-form",
+        "title": "ACH_SUBMISSION",
+        "subTitle": "",
+
+        initialize: function (model, form, formCtrl) {
+            $log.info("Demo Customer Page got initialized");
+            model.achDemand = model.achDemand || {};
+            model.achDemand.demandList = model.achDemand.demandList ||[];
+            // model.achDemand.demandList = [{
+            //     accountId: "10010101",
+            //     amount1: "100",
+            //     customerName: "aaa",
+            //     check: false
+            // },
+            // {
+            //     accountId: "10010102",
+            //     amount1: "100",
+            //     customerName: "bbb",
+            //     check: true
+            // }];
+        },
+
+        form:[
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"SEARCH_ACH_DEMANDS",
+                        "items":[
+                            {
+                                "key": "achDemand.search.demandDate",
+                                "title": "DEMAND_DATE",
+                                "type": "date"
+                            },
+                            {
+                                "key": "achDemand.search.branchId",
+                                "title": "BRANCH_CODE",
+                                "type": "select",
+                                "enumCode": "branch_id",
+                            },
+                            {
+                                "title":"SEARCH",
+                                "type":"button",
+                                "onClick": function(model, formCtrl, form, $event){
+                                    PageHelper.showLoader();
+                                    ACH.getDemandList(model.achDemand.search).$promise.then(function(res) {
+                                        PageHelper.hideLoader();
+                                        model.achSearch = res;
+
+                                        for (var i = 0; i < model.achSearch.body.length; i++) {
+                                            model.achSearch.body[i].repaymentType = "ACH";
+                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achDemand.demandList.push(model.achSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("ACH Search Response : " + httpRes);
+                                        }
+                                    );
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"UPDATE_ACH_DEMANDS",
+                        "items":[
+                            {   
+                                "key": "achDemand.checkbox",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+                                        for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                            model.achDemand.demandList[i].check = true;  
+                                    }
+                                    else
+                                    {
+                                        for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                            model.achDemand.demandList[i].check = false;
+                                    }                        
+                                }    
+                            },
+                            {
+                                "type":"array",
+                                "key":"achDemand.demandList",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"CHEQUE_DETAILS",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount1",
+                                "items":[
+                                    {
+                                        "key": "achDemand.demandList[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].amount1",
+                                        "title": "LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].customerName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achDemand.demandList[].check",
+                                        "title": "MARK_AS_PAID",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
                                 ]                                                                           
                             }
                         ]                        
@@ -26468,7 +26940,6 @@ The ACHSubmission.js is to download the ACH  Demandlist for the given date and t
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
                 });
-
             }
         }
     };
@@ -26548,14 +27019,30 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.Collections"),
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
-["$log", "Enrollment", "SessionStore",'Utils', 'PDC', 'AuthTokenHelper',
- function($log, Enrollment, SessionStore,Utils,PDC,AuthTokenHelper){
 /*
-PDCCollections.js does the following
-1. To download the demand due list with date criteria
-2. To upload the status of the demands as received from Bank
+About PDCClearingCollection.js
+------------------------------
+1. To download the demand list with date criteria
+2. To upload the demand list and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To download the Domand List based on date criteria and to call "PDC.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+customHandle : To upload PDC files(Excel).
+
+Services
+--------
+PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+PDC.pdcDemandListUpload : To upload the selected file.
+PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
+["$log", "Enrollment", "SessionStore",'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper',
+ function($log, Enrollment, SessionStore,Utils,PDC,AuthTokenHelper,PageHelper){
+
     return {
         "type": "schema-form",
         "title": "PDC_COLLECTIONS",
@@ -26564,6 +27051,10 @@ PDCCollections.js does the following
         initialize: function (model, form, formCtrl) {
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
+            model.pdcCollections = model.pdcCollections || {};
+            model.flag = false;
+            model.pdcDemand = model.pdcDemand || {};
+            model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
         },
         
         form: [
@@ -26588,10 +27079,39 @@ PDCCollections.js does the following
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                                //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
-                                                window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
-                                            }
-                                //"onClick": "actions.downloadForm(model, formCtrl, form, $event)"
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
+                                    window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
+                                    PageHelper.showLoader();
+                                    PDC.getDemandList(
+                                        {
+                                            demandDate: model.pdcCollections.demandDate,
+                                            branchId: [1,2,3,4,6,7,8,9,11]
+                                        }
+                                    ).$promise.then(function(res) {
+                                        PageHelper.hideLoader();
+                                        model.pdcSearch = res;
+
+                                        if (model.pdcSearch.body.length > 0){
+                                            model.flag = true;
+                                        } else {
+                                            model.flag = false;
+                                        }
+
+                                        for (var i = 0; i < model.pdcSearch.body.length; i++) {
+                                            model.pdcSearch.body[i].repaymentType = "ACH";
+                                            model.pdcSearch.body[i].amount = parseInt(model.pdcSearch.body[i].amount1);
+                                            model.achDemand.demandList.push(model.pdcSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("PDC Search Response : " + httpRes);
+                                        }
+                                    );
+                                }
                             }
                         ]
                     },
@@ -26600,7 +27120,7 @@ PDCCollections.js does the following
                         "title":"UPLOAD_STATUS",
                         "items":[
                             {
-                                "key": "ach.pdcReverseFeedListFileId",
+                                "key": "pdc.pdcReverseFeedListFileId",
                                 "notitle":true,
                                 "category":"ACH",
                                 "subCategory":"cat2",
@@ -26620,6 +27140,85 @@ PDCCollections.js does the following
                         ]
                     }
                 ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"UPDATE_PDC_DEMANDS",
+                        "items":[
+                            {   
+                                "key": "pdcDemand.checkbox",
+                                "condition": "model.flag",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = true;  
+                                    }
+                                    else
+                                    {
+                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
+                                            model.pdcDemand.demandList[i].check = false;
+                                    }                        
+                                }    
+                            },
+                            {
+                                "type":"array",
+                                "key":"pdcDemand.demandList",
+                                "condition": "model.flag",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"CHEQUE_DETAILS",
+                                "titleExpr": "(model.pdcDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.pdcDemand.demandList[arrayIndex].accountId + ' - ' + model.pdcDemand.demandList[arrayIndex].amount1",
+                                "items":[
+                                    {
+                                        "key": "pdcDemand.demandList[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].amount1",
+                                        "title": "LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].customerName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "pdcDemand.demandList[].check",
+                                        "title": "MARK_AS_PAID",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.flag",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
             }
         ],
 
@@ -26629,24 +27228,38 @@ PDCCollections.js does the following
         
         actions: {
             submit: function(model, form, formName){
-            },
-            approve:function(model,form){
-                alert("Approved");
-            },
-            reject:function(model,form){
-                alert("Rejected");
+                PageHelper.showLoader();
+                PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
+                    PageHelper.hideLoader();
+                    PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.flag = true;
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };
 }]);
 
+/*
+About ACHMandateUpload.js
+-------------------------
+To Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
+either approved by bank/ rejected by bank)
+
+Methods
+-------
+Initialize : To decare the required model variables.
+customHandle : To upload ACH files(Excel).
+
+Services
+--------
+ACH.achMandateUpload(file, progress) : To upload the selected file.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateUpload"),
 ["$log", "Enrollment", "SessionStore","$state", "$stateParams", "ACH", function($log, Enrollment, SessionStore,$state,$stateParams, ACH){
-/*
-ACHMandateUpload.js is to Upload the ACH Mandate Registration Reverse Feed into the system(Status will be 
-either approved by bank/ rejected by bank) 
 
-*/
     var branch = SessionStore.getBranch();
 
     return {
@@ -26659,8 +27272,7 @@ either approved by bank/ rejected by bank)
         },
         offline: false,
 
-        getOfflineDisplayItem: function(item, index){
-            
+        getOfflineDisplayItem: function(item, index){            
         },
 
         form: [
@@ -26708,9 +27320,27 @@ either approved by bank/ rejected by bank)
         }
     };
 }]);
+/*
+About ACHMandateDownload.js
+-------------------------
+1. To Download the ACH Mandate Registration from the system(Status will be PENDING).
+2. Once the file is downloaded, The Mandate Status is changed to "SUBMITTED"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To download the ACH Mandate List whose status are "PENDING" based on date criteria and to call "ACH.getDemandList" service
+customHandle : To upload ACH Mandate Reverse Feed files(Excel).
+
+Services
+--------
+ACH.search({mandateStatus: "PENDING"}) : To get all the ACH Accounts whose status are "PENDING".
+ACH.update : Mandate Status is Updated as to "SUBMITTED".
+ACH.achMandateUpload(file, progress) : To Upload the Mandate Reverse Feed.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"),
-["$log", "Enrollment", "ACH", "SessionStore","$state", "$stateParams", "AuthTokenHelper",
-function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelper){
+["$log", "Enrollment", "ACH", "SessionStore","$state", "$stateParams", "AuthTokenHelper","PageHelper",
+function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelper,PageHelper){
 
     var branch = SessionStore.getBranch();
     return {
@@ -26722,11 +27352,22 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
             $log.info("ACH Mandate Download Page got initialized");
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
+            model.achSearch = model.achSearch || {};
+            //Search for existance of Loan account Number
+            ACH.search({mandateStatus: "PENDING"}).$promise.then(function(res) {
+                    $log.info("response: " + res);
+                    model.achSearch = res;
+                },
+                function(httpRes) {
+                    PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                    PageHelper.showErrors(httpRes);
+                    $log.info("ACH Search Response : " + httpRes);
+                }
+            );
         },
         offline: false,
         
-        getOfflineDisplayItem: function(item, index){
-            
+        getOfflineDisplayItem: function(item, index){  
         },
 
         form: [
@@ -26748,6 +27389,22 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                                 "readonly": false,
                                 "onClick": function(model, formCtrl, form, event){
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
+                                
+                                    for (var i = 0; i < model.achSearch.body.length; i++) {
+                                        model.achSearch.body[i].mandateStatus = "SUBMITTED";
+                                        model.achSearch.body[i].maximumAmount = parseInt(model.achSearch.body[i].maximumAmount);
+                                        model.achSearch.body[i].maximumAmount = model.achSearch.body[i].maximumAmount.toString();
+                                    }
+
+                                    PageHelper.showLoader();
+                                    ACH.update(model.achSearch.body, function(response) {
+                                        PageHelper.hideLoader();
+                                        PageHelper.showProgress("page-init", "Done.", 2000);
+                                        model.flag = true;
+                                    }, function(errorResponse) {
+                                        PageHelper.hideLoader();
+                                        PageHelper.showErrors(errorResponse);
+                                    });
                                 }
                             }
                         ]
@@ -26794,12 +27451,27 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
         }
     };
 }]);
+/*
+PDCSubmission.js
+----------------
+To download the demand list with date criteria and change the status as "MARK AS PAID"
+
+Methods
+-------
+Initialize : To decare the required model variables.
+onClick : To call "PDC.getDemandList" service
+onChange : To select/unselect all demands listed in array.
+
+Services
+--------
+PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+                    parsed so as to get all the demands for the corresponding date.
+PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
+*/
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCSubmission"),
 ["$log", "PDC", "PageHelper", "SessionStore","$state", "Enrollment", 'formHelper', "$stateParams", 
 function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$stateParams){
-/*
-The PDCSubmission.js is to download the PDC Demandlist for the given date and to update the status of them. 
-*/
+
     return {
         "type": "schema-form",
         "title": "PDC_SUBMISSION",
@@ -26808,19 +27480,19 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
         initialize: function (model, form, formCtrl) {
             $log.info("Demo Customer Page got initialized");
             model.pdcDemand = model.pdcDemand || {};
-
-            model.pdcDemand.demandList = [{
-                accountId: "10010101",
-                amount1: "100",
-                customerName: "aaa",
-                check: false
-            },
-            {
-                accountId: "10010102",
-                amount1: "100",
-                customerName: "bbb",
-                check: true
-            }];
+            model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
+            // model.pdcDemand.demandList = [{
+            //     accountId: "10010101",
+            //     amount1: "100",
+            //     customerName: "aaa",
+            //     check: false
+            // },
+            // {
+            //     accountId: "10010102",
+            //     amount1: "100",
+            //     customerName: "bbb",
+            //     check: true
+            // }];
         },
 
         form:[
@@ -26836,7 +27508,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "key": "pdcDemand.search.demandDate",
                                 "title": "DEMAND_DATE",
                                 "type": "date"
-
                             },
                             {
                                 "key": "pdcDemand.search.branchId",
@@ -26849,14 +27520,22 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
                                     PageHelper.showLoader();
-                                    PDC.getDemandList(model.pdcDemand.search).$promise.then(function(response) {
-                                        PageHelper.showProgress("page-init", "Done.", 2000);
-                                       // model.pdcDemand.demandList = response;
-                                    }, function(errorResponse) {
-                                        PageHelper.showErrors(errorResponse);
-                                    }).finally(function(){
+                                    PDC.getDemandList(model.pdcDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
-                                    });
+                                        model.pdcSearch = res;
+
+                                        for (var i = 0; i < model.pdcSearch.body.length; i++) {
+                                                model.pdcDemand.demandList.push(model.pdcSearch.body[i]);
+                                        }
+                                        
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.hideLoader();
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("PDC Search Response : " + httpRes);
+                                        }
+                                    );
                                 }
                             }
                         ]
@@ -26878,7 +27557,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                 "schema":{
                                         "default": false
                                     },
-                                    //
                                 "onChange": function(modelValue, form, model){
                                     
                                     if (modelValue)
@@ -26925,7 +27603,6 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                                             "default": false
                                         }
                                     },
-
                                 ]                                                                           
                             }
                         ]                        
@@ -26942,9 +27619,11 @@ The PDCSubmission.js is to download the PDC Demandlist for the given date and to
                 ]
             }
         ],
+
         schema: function() {
             return Enrollment.getSchema().$promise;
         },
+
         actions: {
             submit: function(model, form, formName){
                 PageHelper.showLoader();
@@ -29349,7 +30028,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 "searchHelper": formHelper,
                                 initialize: function(inputModel) {
-                                    $log.warn('in pincode initialize');
+                                    $log.warn('in loanAccount.urnNo initialize');
                                     $log.info(inputModel);
                                 },
                                 "search": function(inputModel, form, model) {
@@ -29833,6 +30512,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             }
                                         },
                                         outputMap: {
+                                            "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
                                             "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
                                             "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
                                             "state": "loanAccount.nominees[arrayIndex].nomineeState"
@@ -29850,6 +30530,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         },
                                         getListDisplayItem: function(item, index) {
                                             return [
+                                                item.division + ', ' + item.region,
                                                 item.pincode,
                                                 item.district + ', ' + item.state
                                             ];

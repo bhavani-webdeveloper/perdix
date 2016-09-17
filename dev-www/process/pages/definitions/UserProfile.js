@@ -103,15 +103,19 @@ function($log, $q, SessionStore, languages, $translate, PM,
 		actions: {
 			refreshMasters:function(){
 				PageHelper.showLoader();
-				irfStorageService.cacheAllMaster(true,true).then(function(){
-					PageHelper.hideLoader();
+				var p = [
+					irfStorageService.cacheAllMaster(true,true),
+					irfTranslateLoader({forceServer: true})
+				];
+				$q.all(p).then(function(){
 					PM.pop('cache-master',"Synced Successfully.",5000);
 				},function(){
-					PageHelper.hideLoader();
 					PM.pop('cache-master',"Sync Failed, Please Try Again.",5000);
+				}).finally(function(){
+					PageHelper.hideLoader();
+					window.location.hash = '#/' + irf.HOME_PAGE.url;
+					window.location.reload();
 				});
-
-				irfTranslateLoader({forceServer: true});
 			},
 			preSave: function(model, formCtrl, formName) {
 				var deferred = $q.defer();

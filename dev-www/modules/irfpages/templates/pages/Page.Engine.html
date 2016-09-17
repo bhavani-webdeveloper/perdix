@@ -1,5 +1,5 @@
 <div>
-    <section class="content-header">
+    <section ng-hide="error" class="content-header">
         <h1>
             <span><a href ng-click="expandCollapseView()" style="color:#333"><i ng-if="showCollapsedViewButton" class="fa {{collapsedView?'fa-plus-square-o':'fa-minus-square-o'}}">&nbsp;</i>
             {{ page.title | translate }}</a></span> <small>{{ page.subTitle | translate }}</small>
@@ -12,7 +12,7 @@
         </ol> -->
     </section>
 
-    <section class="content">
+    <section ng-hide="error" class="content">
         <div ng-switch="page.type" class="row page-row">
             <irf-sf ng-switch-when="schema-form"
                 initialize="page.initialize(model, form, formCtrl)"
@@ -30,5 +30,21 @@
                 initialize="page.initialize(model, form, formCtrl)"
                 irf-model="model"></irf-resource-search-wrapper>
         </div>
+    </section>
+
+    <section ng-show="error" class="content">
+        <div class="modal-dialog">
+            <div class="modal-content effect2">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{'Page is missing/having errors' | translate}}</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 style="position:absolute;top:10%;left:0;width:100%;text-align:center" ng-bind-html="pageNameHtml"></h4>
+                    <div style="padding:10px">
+                        <img src="img/404.png" class="img-responsive">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </section>
 </div>

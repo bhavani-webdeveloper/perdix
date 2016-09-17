@@ -13,7 +13,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                     title: "Loans",
                     autoSearch:true,
                     searchForm: [
-                        "*"
+                        //"*"
                     ],
                     searchSchema: {
                         "type": 'object',
@@ -75,15 +75,15 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: irf.page('loans.ViewLoanDetails'),
-                                            pageId: item.accountNumber
+                                            pageName: 'customer360.loans.LoanDetails',
+                                            pageId: item.accountId
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        //if (index%2==0){
-                                        //	return false;
-                                        //}
-                                        return true;
+                                        if (item.accountNumber){
+                                        	return true;
+                                        }
+                                        return false;
                                     }
                                 },
                                 {

@@ -1,6 +1,6 @@
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window", "$rootScope",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window, $rootScope) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -87,6 +87,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             });
             return def.promise;
         };
+
+        // Access Rights
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
+            // TODO
+        });
 
     }])
     .factory('PageHelper', ['$rootScope', '$log', '$document', 'irfProgressMessage', function ($rootScope, $log, $document, irfProgressMessage) {

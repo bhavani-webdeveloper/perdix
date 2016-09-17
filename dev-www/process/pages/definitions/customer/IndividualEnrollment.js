@@ -194,6 +194,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 }
                             },
                             outputMap: {
+                                "division": "customer.locality",
+                                "region": "customer.villageName",
                                 "pincode": "customer.pincode",
                                 "district": "customer.district",
                                 "state": "customer.state"
@@ -212,6 +214,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
+                                    item.division + ', ' + item.region,
                                     item.pincode,
                                     item.district + ', ' + item.state
                                 ];

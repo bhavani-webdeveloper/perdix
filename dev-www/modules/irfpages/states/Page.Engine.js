@@ -203,13 +203,16 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	/* =================================================================================== */
 
 	$scope.pageName = $stateParams.pageName;
-	$scope.formName = "Form__" + $scope.pageName.replace(/\./g, '$');
+	$scope.formName = irf.form($scope.pageName);
+	$scope.pageNameHtml = $stateParams.pageName.split('.').join('<br/>');
 	$scope.pageId = $stateParams.pageId;
+	$scope.error = false;
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
 	} catch (e) {
 		$log.error(e);
-		$state.go('Page.EngineError', {pageName:$scope.pageName});
+		$scope.error = true;
+		//$state.go('Page.EngineError', {pageName:$scope.pageName});
 	}
 
 	if ($scope.page) {
