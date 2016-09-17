@@ -20,6 +20,14 @@
 					"title": "ACCOUNT_TYPE"
 
 				},
+				"bankName": {
+					"type": "string",
+					"title": "BANK_NAME"
+				},
+				"branchName": {
+					"type": "string",
+					"title": "BRANCH_NAME"
+				},
 				"amount": {
 					"type": "Number",
 					"title": "AMOUNT"

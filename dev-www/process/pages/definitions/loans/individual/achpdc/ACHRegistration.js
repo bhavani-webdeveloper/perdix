@@ -18,8 +18,8 @@ Services
 ACH.search({ accountNumber: model.ach.accountId }) : Search for existance of Loan account Number
 */
 irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"),
-["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams",
-function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams) {
+["$log", "ACH", "PageHelper", "irfProgressMessage", "SessionStore", "$state", "Utils", "$stateParams", "formHelper", "CustomerBankBranch",
+function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils, $stateParams, formHelper, CustomerBankBranch) {
 
 	var branch = SessionStore.getBranch();
 
@@ -150,21 +150,62 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							{
 								"key": "ach.ifscCode",
 								"title": "IFSC_CODE",
-								"type": "lov",
-								"inputMap": {
-									"ifscCode": {
-										"key": "ifscCode",
-										"title": "IFSC_CODE"
-									}
-								}
+								"condition": "model.flag"
 							},
 							{
+		                        "key": "ach.ifscCode",
+		                        "condition": "!model.flag",
+		                        "title": "IFSC_CODE",
+		                        "type": "lov",
+		                        "lovonly": true,
+		                        "inputMap": {
+		                            "ifscCode": {
+		                                "key": "ach.ifscCode"
+		                            },
+		                            "bankName": {
+		                                "key": "ach.bankName"
+		                            },
+		                            "branchName": {
+		                                "key": "ach.branchName"
+		                            }
+		                        },
+		                        outputMap: {
+		                            "bankName": "ach.bankName",
+		                            "branchName": "ach.branchName",
+		                            "ifscCode": "ach.ifscCode"
+		                        },
+		                        searchHelper: formHelper,
+
+		                        search: function(inputModel, form) {
+		                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+		                            var promise = CustomerBankBranch.search({
+		                                'bankName': inputModel.bankName,
+		                                'ifscCode': inputModel.ifscCode,
+		                                'branchName': inputModel.branchName
+		                            }).$promise;
+		                            return promise;
+		                        },
+
+		                        getListDisplayItem: function(data, index) {
+		                            return [
+		                                data.ifscCode,
+		                                data.branchName,
+		                                data.bankName
+		                            ];
+		                        }
+		        
+
+		                    },
+							{
 								"key": "ach.branchName",
-								"title": "BRANCH_NAME"
+								"title": "BRANCH_NAME",
+								"readonly": true
+
 							},
 							{
 								"key": "ach.bankName",
-								"title": "BANK_NAME"
+								"title": "BANK_NAME",
+								"readonly": true
 							},
 							{
 								"key": "ach.bankCity",
@@ -200,6 +241,13 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 							},
 							{
 								"key": "ach.frequency",
+								"condition": "model.flag",
+								"title": "FREQUENCY",
+								"readonly": true
+							},
+							{
+								"key": "ach.frequency",
+								"condition": "!model.flag",
 								"title": "FREQUENCY",
 								"type": "select",
 								"enumCode": "ach_frequency"

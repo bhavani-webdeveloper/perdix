@@ -18,10 +18,14 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
                 method:'POST',
                 url:endpoint+'/createpdcAccount '
             },
-            get:{
+            getPDCCheque: searchResource({
                 method:'GET',
                 url:endpoint+'/fetchpdcAccount'
-            },
+            }),
+            getSecurityCheque: searchResource({
+                method:'GET',
+                url:endpoint+'/securitychequelist'
+            }),
             search: searchResource({
                     method: 'GET',
                     url: endpoint + '/search'

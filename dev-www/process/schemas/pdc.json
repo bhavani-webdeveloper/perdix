@@ -7,6 +7,14 @@
 			"required": [
 				"ifscCode"
 			],
+			"bankName": {
+					"type": "string",
+					"title": "BANK_NAME"
+			},
+			"branchName": {
+				"type": "string",
+				"title": "BRANCH_NAME"
+			},
 			"addCheque": {
 				"type":"object",
 	            "properties":{
