@@ -18,9 +18,6 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
             }
             model.loanAccountDisbursementSchedule = {};
             model.loanAccountDisbursementSchedule = _.cloneDeep(model._MTQueue);
-            model.loanAccountDisbursementSchedule.actualDisbursementDate = "";
-            model.loanAccountDisbursementSchedule.customerSignatureDate = "";
-            model.loanAccountDisbursementSchedule.scheduledDisbursementDate = "";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
