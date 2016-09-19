@@ -4373,7 +4373,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		$window.localStorage.setItem(key, value);
 	};
 
-	self.getItem = function(key, value){
+	self.getItem = function(key){
 		return JSON.parse($window.localStorage.getItem(key));
 	};
 
@@ -4494,7 +4494,7 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 				return config;
 			},
 			'responseError': function(rejection) {
-				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.grant_type=='password')) {
+				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.skip_relogin=='yes')) {
 					var deferred = $q.defer();
 					AuthPopup.pushToRelogin(deferred, rejection);
 					return deferred.promise;
@@ -6190,6 +6190,7 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 		credentials.scope = 'read write';
 		credentials.client_secret = 'mySecretOAuthSecret';
 		credentials.client_id='application';
+		credentials.skip_relogin = 'yes';
 
 		return resource.login(credentials,function(response){
 			//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
@@ -6237,6 +6238,7 @@ irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
     });
 });
 
+irf.USER_ALLOWED_PAGES = "__userAllowedPages";
 irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
     function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
     var endpoint = BASE_URL + '/api';
@@ -6253,14 +6255,23 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
     pDef.getRoleAllowedPageList = function() {
         var deferred = $q.defer();
         //pDef.getPagesJson().$promise
-        Queries.getPagesDefinition(SessionStore.getLoginname())
+        var localPages = SessionStore.getItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES);
+        Queries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
         .then(function(response){
             delete response.$promise;
             delete response.$resolved;
             userAllowedPages = response;
+            SessionStore.setItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES, userAllowedPages);
             deferred.resolve(response);
         }, function(error) {
-            deferred.reject(error);
+            $log.error(error);
+            if (localPages && localPages.length) {
+                $log.info("old menu in use");
+                userAllowedPages = localPages;
+                deferred.resolve(localPages);
+            } else {
+                deferred.reject(error);
+            }
         });
         return deferred.promise;
     };
@@ -6487,9 +6498,9 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
-	resource.getPagesDefinition = function(userId) {
+	resource.getPagesDefinition = function(userId, skip_relogin) {
 		var deferred = $q.defer();
-		resource.getResult('userpages.list', {user_id:userId}).then(function(records){
+		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
 			if (records && records.results) {
 				var def = {};
 				_.each(records.results, function(v, k){

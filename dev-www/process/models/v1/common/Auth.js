@@ -45,6 +45,7 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 		credentials.scope = 'read write';
 		credentials.client_secret = 'mySecretOAuthSecret';
 		credentials.client_id='application';
+		credentials.skip_relogin = 'yes';
 
 		return resource.login(credentials,function(response){
 			//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;

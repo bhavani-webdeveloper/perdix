@@ -105,7 +105,7 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 				return config;
 			},
 			'responseError': function(rejection) {
-				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.grant_type=='password')) {
+				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.skip_relogin=='yes')) {
 					var deferred = $q.defer();
 					AuthPopup.pushToRelogin(deferred, rejection);
 					return deferred.promise;

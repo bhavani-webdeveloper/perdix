@@ -117,7 +117,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		$window.localStorage.setItem(key, value);
 	};
 
-	self.getItem = function(key, value){
+	self.getItem = function(key){
 		return JSON.parse($window.localStorage.getItem(key));
 	};
 

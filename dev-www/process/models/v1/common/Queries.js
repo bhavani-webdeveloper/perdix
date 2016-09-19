@@ -14,9 +14,9 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
-	resource.getPagesDefinition = function(userId) {
+	resource.getPagesDefinition = function(userId, skip_relogin) {
 		var deferred = $q.defer();
-		resource.getResult('userpages.list', {user_id:userId}).then(function(records){
+		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
 			if (records && records.results) {
 				var def = {};
 				_.each(records.results, function(v, k){
