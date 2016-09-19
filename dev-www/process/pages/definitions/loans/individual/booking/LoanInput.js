@@ -988,6 +988,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     var reqData = _.cloneDeep(model);
+                    model.loanAccount.loanCustomerRelations = [{}];
                     reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
                     Utils.confirm("Are You Sure?").then(function(){
