@@ -130,7 +130,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			$log.debug('irf.loggerCleanerRunning:'+irf.loggerCleanerRunning);
 		}
 
-		PageHelper.scrollToTop()
+		PageHelper.scrollToTop();
 	});
 }]);
 

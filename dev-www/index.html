@@ -88,7 +88,7 @@
 <!-- endbuild -->
 <script src="js/vendor/renderjson.js"></script>
 
-<!-- build:js js/main.js -->
+<!-- build:js js/modules.js -->
 <script src="bower_components/irf-elements/dist/irf.elements-tpls.js"></script>
 <script src="modules/models/irfmodels.js"></script>
 <script src="modules/models/common/Auth.js"></script>
@@ -122,7 +122,9 @@
 <script src="modules/app/MainApp.header.js"></script>
 <script src="modules/app/MainApp.menu.js"></script>
 <script src="modules/app/MainApp.bootstrap.js"></script>
+<!-- endbuild -->
 
+<!-- build:js js/process/models.js -->
 <script src="process/models/models.config.js"></script>
 <script src="process/models/v1/Schema.js"></script>
 <script src="process/models/v1/customer/Enrollment.js"></script>
@@ -137,10 +139,11 @@
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
 
 <script src="process/models/php/BIReports.js"></script>
-
 <script src="process/models/php/management/Masters.js"></script>
 <script src="process/models/php/management/RolesPages.js"></script>
+<!-- endbuild -->
 
+<!-- build:js js/process/pages.js -->
 <script src="process/pages/pages.config.js"></script>
 <script src="process/pages/states/Page.Landing.js"></script>
 <script src="process/pages/states/Page.Customer360.js"></script>
@@ -149,12 +152,12 @@
 <script src="process/pages/states/Page.GroupDashboard.js"></script>
 <script src="process/pages/states/Page.ManagementDashboard.js"></script>
 <script src="process/pages/states/Page.LoansDashboard.js"></script>
+<!-- endbuild -->
 
-<script src="process/pages/definitions/UserProfile.js"></script>
-
+<!-- build:js js/process/pages/definitions.js -->
 <script src="process/pages/definitions/demo/Demo.js"></script>
 <script src="process/pages/definitions/demo/Demo2.js"></script>
-
+<script src="process/pages/definitions/UserProfile.js"></script>
 <script src="process/pages/definitions/bi/BIReports.js"></script>
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
@@ -172,6 +175,7 @@
 <script src="process/pages/definitions/customer360/RequestRecapture.js"></script>
 <script src="process/pages/definitions/customer360/RecaptureQueue.js"></script>
 <script src="process/pages/definitions/customer360/Recapture.js"></script>
+<script src="process/pages/definitions/customer360/loans/View.js"></script>
 <script src="process/pages/definitions/customer360/loans/LoanDetails.js"></script>
 
 <script src="process/pages/definitions/loans/LoanRepay.js"></script>
@@ -197,7 +201,6 @@
 <script src="process/pages/definitions/loans/group/LUC.js"></script>
 <script src="process/pages/definitions/loans/group/CloseGroup.js"></script>
 <script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
-<script src="process/pages/definitions/customer360/loans/View.js"></script>
 <script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
 <script src="process/pages/definitions/loans/group/GroupLoanRepay.js"></script>
 
