@@ -23428,7 +23428,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     {
                         "key": "loanAccountDisbursementSchedule.disbursementAmount",
                         "title":"DISBURSEMENT_AMOUNT",
-                        "type":"amount"
+                        "type":"amount",
+                        "readonly":true
                     },
                     {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",

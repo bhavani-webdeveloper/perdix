@@ -1,6 +1,8 @@
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window", "$rootScope",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window, $rootScope) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper",
+"SessionStore", "$window", "$rootScope", "PagesDefinition",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper,
+    SessionStore, $window, $rootScope, PagesDefinition) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -90,7 +92,12 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         // Access Rights
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-            // TODO
+            if (_.startsWith(toState, 'Page') && toState !== 'Page.Engine') {
+                // Custom Pages
+                PagesDefinition.isStateAllowed(toState).then(function(){
+                    
+                });
+            }
         });
 
     }])

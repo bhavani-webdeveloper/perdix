@@ -10,14 +10,13 @@ themeswitch.changeTheme = function(color, saveOffline) {
 	return false;
 };
 themeswitch.getThemeColor = function(){
-	return localStorage.getItem("irfThemeColor");
+	return localStorage.getItem("irfThemeColor") || 'blue';
 };
 themeswitch.saveThemeColor = function(color){
 	return localStorage.setItem("irfThemeColor", color);
 };
 themeswitch.irfThemeColor = themeswitch.getThemeColor();
 if (!themeswitch.irfThemeColor) {
-	themeswitch.irfThemeColor = "blue";
 	themeswitch.saveThemeColor(themeswitch.irfThemeColor);
 }
 themeswitch.changeTheme(themeswitch.irfThemeColor);

@@ -605,22 +605,6 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -650,6 +634,22 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -4105,6 +4105,38 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
+    var isStateAllowed = function(state) {
+        _.forEach(userAllowedPages, function(v, k){
+            if (v.state === state)
+                return true;
+        });
+        return false;
+    };
+
+    pDef.isStateAllowed = function(state) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = isStateAllowed(state);
+            if (p) {
+                deferred.resolve(p);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = isStateAllowed(state);
+                if (p) {
+                    deferred.resolve(p);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
     var readOnlyFormCache = {};
     pDef.setReadOnlyByRole = function(pageUri, form) {
         var deferred = $q.defer();
@@ -5742,8 +5774,10 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 }])
 
 irf.pages.controller("PageCtrl",
-["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper", "SessionStore", "$window", "$rootScope",
-function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper, SessionStore, $window, $rootScope) {
+["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper",
+"SessionStore", "$window", "$rootScope", "PagesDefinition",
+function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper,
+    SessionStore, $window, $rootScope, PagesDefinition) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -5833,7 +5867,12 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         // Access Rights
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-            // TODO
+            if (_.startsWith(toState, 'Page') && toState !== 'Page.Engine') {
+                // Custom Pages
+                PagesDefinition.isStateAllowed(toState).then(function(){
+                    
+                });
+            }
         });
 
     }])

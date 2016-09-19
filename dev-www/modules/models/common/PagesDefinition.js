@@ -144,6 +144,38 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
+    var isStateAllowed = function(state) {
+        _.forEach(userAllowedPages, function(v, k){
+            if (v.state === state)
+                return true;
+        });
+        return false;
+    };
+
+    pDef.isStateAllowed = function(state) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = isStateAllowed(state);
+            if (p) {
+                deferred.resolve(p);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = isStateAllowed(state);
+                if (p) {
+                    deferred.resolve(p);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
     var readOnlyFormCache = {};
     pDef.setReadOnlyByRole = function(pageUri, form) {
         var deferred = $q.defer();
