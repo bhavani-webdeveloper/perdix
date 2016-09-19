@@ -57,7 +57,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
                     //PageHelper
                     var loanAccountNo = ($stateParams.pageId.split("."))[0];
-                    var promise = LoanAccount.get({accountNumber: loanAccountNo}).$promise;
+                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
                     promise.then(function (data) { /* SUCCESS */
                         model.loanAccount = data;
                         console.log(data);
