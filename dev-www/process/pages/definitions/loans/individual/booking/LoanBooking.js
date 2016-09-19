@@ -108,7 +108,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             "type": "button",
                             "title": "BACK",
                             "onClick": "actions.reenter(model, formCtrl, form, $event)"
-                        }, {
+                        },
+                        {
+                            "type": "button",
+                            "title": "SEND_BACK",
+                            "onClick": "actions.reject(model, formCtrl, form, $event)"
+                        },
+                        {
                             "type": "submit",
                             "title": "CONFIRM_LOAN_CREATION"
                         }]
@@ -329,6 +335,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
 
                             var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED'};
+                            PageHelper.showProgress('update-loan', 'Working...');
+                            return IndividualLoan.update(reqData)
+                                .$promise
+                                .then(
+                                    function(res){
+                                        PageHelper.showProgress('update-loan', 'Done', 2000);
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        return;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                                        PageHelper.showErrors(httpRes);
+                                    }
+                                )
+                        }, function(){
+                            $log.info("User selected No");
+                        })
+                },
+                reject: function (model, form, formName) {
+
+                    $log.info("rejecting");
+                    
+                    Utils.confirm("Are you sure you want to send back to Loan Input?")
+                        .then(function(){
+                            var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED', 'stage':'LoanInitiation'};
                             PageHelper.showProgress('update-loan', 'Working...');
                             return IndividualLoan.update(reqData)
                                 .$promise
