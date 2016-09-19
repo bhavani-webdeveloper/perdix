@@ -79,6 +79,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         reject:{
             method:'POST',
             url:endpoint+ "/rejectrepayment"
+        },
+        processCashDeposit:{
+            method:'POST',
+            url:endpoint+ "/processCashDeposite"
         }
 
     });

@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     $log.info("loanId ::" + loanId);
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
-                    IndividualLoan.getDisbursementList({"currentStage":loanId}, function (resp, head) {
+                    IndividualLoan.getDisbursementList({"loanIdlist":loanId}, function (resp, head) {
                         model.additional.accountNumber = resp[0].accountId;
                         model.additional.customerId = resp[0].customerId;
                         model.additional.numberOfDisbursements = resp[0].numDisbursements;

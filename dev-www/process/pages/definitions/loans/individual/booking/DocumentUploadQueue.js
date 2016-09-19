@@ -3,14 +3,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueu
 function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
     return {
         "type": "search-list",
-        "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
+        "title": "DOCUMENT_EXECUTION",
         "subTitle": "",
         "uri":"Loan Booking/Stage 3",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchName = SessionStore.getBranch();
-            model.stage = 'LoanBooking';
-            console.log(model);
         },
 
         definition: {

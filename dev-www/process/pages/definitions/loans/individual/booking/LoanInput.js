@@ -90,9 +90,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                     model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
-                    model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:""}];
+                    model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
+                    model.loanAccount.nominees[0].nomineeFirstName = model.loanAccount.nominees[0].nomineeFirstName || '';
+                    model.loanAccount.nominees[0].nomineeDoorNo = model.loanAccount.nominees[0].nomineeDoorNo || '';
+                    model.loanAccount.nominees[0].nomineeLocality = model.loanAccount.nominees[0].nomineeLocality || '';
+                    model.loanAccount.nominees[0].nomineeStreet = model.loanAccount.nominees[0].nomineeStreet || '';
+                    model.loanAccount.nominees[0].nomineePincode = model.loanAccount.nominees[0].nomineePincode || '';
+                    model.loanAccount.nominees[0].nomineeDistrict = model.loanAccount.nominees[0].nomineeDistrict || '';
+                    model.loanAccount.nominees[0].nomineeState = model.loanAccount.nominees[0].nomineeState || '';
+                    model.loanAccount.nominees[0].nomineeRelationship = model.loanAccount.nominees[0].nomineeRelationship || '';
                     model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
-                    model.loanAccount.commercialCibilCharge = 750;
+                    model.loanAccount.commercialCibilCharge = 750; //Hard coded. This value to be changed to pickup from global_settings table
                     model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
                     model.loanAccount.isRestructure = false;
                     model.loanAccount.partnerCode = model.loanAccount.partnerCode || defaultPartner;
@@ -106,10 +114,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },function(err){
                         $log.info("Max Security EMI is not available");
                     });
-                    if(model.loanAccount.productCode!="")
+                    if(model.loanAccount.productCode)
                         getProductDetails(model.loanAccount.productCode,model);
                 };
                 // code for existing loan
+                $log.info("Loan Number:::" + $stateParams.pageId);
                 if ($stateParams.pageId) {
                     PageHelper.showLoader();
                     IndividualLoan.get({id: $stateParams.pageId}).$promise.then(function(resp){
@@ -987,44 +996,77 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
+                    model.loanAccount.loanCustomerRelations = [];
+                    model.loanAccount.loanCustomerRelations.push({
+                        urn:model.loanAccount.applicant,
+                        relation:'APPLICANT'
+                    });
+                    model.loanAccount.loanCustomerRelations.push({
+                        urn:model.loanAccount.coBorrowerUrnNo,
+                        relation:'COAPPLICANT'
+                    });
+                    if(model.loanAccount.guarantors.length > 0){
+                        for (var i = model.loanAccount.guarantors.length - 1; i >= 0; i--) {
+                            model.loanAccount.loanCustomerRelations.push({
+                                urn:model.loanAccount.guarantors[i].guaUrnNo,
+                                relation:'GUARANTOR'
+                            });
+                        }
+                    }
                     var reqData = _.cloneDeep(model);
-                    model.loanAccount.loanCustomerRelations = [{}];
-                    reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
                     Utils.confirm("Are You Sure?").then(function(){
                         PageHelper.showLoader();
-                        IndividualLoan.create(reqData,function(resp,headers){
-                            delete resp.$promise;
-                            delete resp.$resolved;
-                            $log.info(resp);
-                            model.loanAccount.id = resp.loanAccount.id;
-                            $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
-                            resp.loanProcessAction="PROCEED";
-                            //reqData.loanProcessAction="PROCEED";
-                            PageHelper.showLoader();
-                            IndividualLoan.create(resp,function(resp,headers){
+                        if (!$stateParams.pageId) {
+                            reqData.loanProcessAction="SAVE";
+                            IndividualLoan.create(reqData,function(resp,headers){
+                                delete resp.$promise;
+                                delete resp.$resolved;
                                 $log.info(resp);
-                                PageHelper.showProgress("loan-create","Loan Created",5000);
-                                $state.go({pageName: 'loans.individual.booking.PendingQueue'})
-                            },function(errresp){
-                                $log.info(errresp);
-                                PageHelper.showErrors(errresp);
+                                model.loanAccount.id = resp.loanAccount.id;
+                                $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
+                                resp.loanProcessAction="PROCEED";
+                                //reqData.loanProcessAction="PROCEED";
+                                PageHelper.showLoader();
+                                IndividualLoan.create(resp,function(resp,headers){
+                                    $log.info(resp);
+                                    PageHelper.showProgress("loan-create","Loan Created",5000);
+                                    $state.go('Page.Engine', {pageName: 'Page.Engine', pageId: null});
+                                },function(errresp){
+                                    $log.info(errresp);
+                                    PageHelper.showErrors(errresp);
+                                    PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
+                                    model = resp;
+
+                                }).$promise.finally(function(){
+                                    PageHelper.hideLoader();
+                                });
+
+
+                            },function(errResp){
+                                $log.info(errResp);
+                                PageHelper.showErrors(errResp);
                                 PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
-                                model = resp;
 
                             }).$promise.finally(function(){
                                 PageHelper.hideLoader();
                             });
+                        }else{
+                            reqData.loanProcessAction="PROCEED";
+                            IndividualLoan.create(reqData,function(resp,headers){
+                                model.loanAccount.id = resp.loanAccount.id;
+                                $log.info("Loan ID Returned on Proceed:" + model.loanAccount.id);
+                                PageHelper.showLoader();
+                                $state.go('Page.Engine', {pageName: 'loans.individual.Queue', pageId: null});
+                            },function(errResp){
+                                $log.info(errResp);
+                                PageHelper.showErrors(errResp);
+                                PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
 
-
-                        },function(errResp){
-                            $log.info(errResp);
-                            PageHelper.showErrors(errResp);
-                            PageHelper.showProgress("loan-create","Oops. An Error Occurred",5000);
-
-                        }).$promise.finally(function(){
-                            PageHelper.hideLoader();
-                        });
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
+                        }
                     });
                 }
             }
