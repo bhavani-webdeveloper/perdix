@@ -235,15 +235,15 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             type:"select",
                             titleMap: [{
                                 "name":"Wilful default",
-                                "value":"Wilfuldefault"
+                                "value":"Wilful default"
                             },
                             {
                                 "name":"Hardship",
-                                "value":"Hardship"
+                                "value":"Hard ship"
                             },
                             {
                                 "name":"Able to Pay",
-                                "value":"AbletoPay"
+                                "value":"Able to Pay"
                             },
                             {
                                 "name":"Others",

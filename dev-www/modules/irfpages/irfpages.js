@@ -129,6 +129,8 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			}, SessionStore.settings.consoleLogAutoClearDuration * 59000);
 			$log.debug('irf.loggerCleanerRunning:'+irf.loggerCleanerRunning);
 		}
+
+		PageHelper.scrollToTop()
 	});
 }]);
 

@@ -137,6 +137,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     scrollTop: $("#errors-wrapper").offset().top - 50
                 }, 500);
             },
+            scrollToTop: function(){
+                jQuery('html, body').animate({
+                    scrollTop: $("#errors-wrapper").offset().top - 50
+                }, 500);
+            },
             showLoader: function(){
                 $log.info("Inside showLoader");
                 $rootScope.$broadcast('page-loader', true);

@@ -57,7 +57,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
                     //PageHelper
                     var loanAccountNo = ($stateParams.pageId.split("."))[0];
-                    var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
+                    var promise = LoanAccount.get({accountNumber: loanAccountNo}).$promise;
                     promise.then(function (data) { /* SUCCESS */
                         model.loanAccount = data;
                         console.log(data);
@@ -67,7 +67,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.instrument='CASH';
                         model.repayment.authorizationUsing='';
                         model.repayment.remarks='';
-                        model.repayment.accountId = data.accountId;
+                        model.repayment.accountNumber = data.accountId;
                         model.repayment.amount = 0;
                         model.repayment.demandAmount = data.totalDemandDue;
                         model.repayment.productCode = data.productCode;
@@ -95,7 +95,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         "title": "REPAY",
                         "items": [
                             {
-                                key:"repayment.accountId",
+                                key:"repayment.accountNumber",
                                 title: "LOAN_ACCOUNT_NUMBER",
                                 readonly:true
                             },
@@ -334,7 +334,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         "repayment": {
                             "type": "object",
                             "properties": {
-                                "accountId": {
+                                "accountNumber": {
                                     "type": "string",
                                     "title":"ACCOUNT_ID"
                                 },
@@ -423,7 +423,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         }
                     },
                     "required": [
-                        "accountId",
+                        "accountNumber",
                         "amount",
                         "authorizationRemark",
                         "authorizationUsing",
