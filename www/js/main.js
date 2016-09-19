@@ -5040,6 +5040,8 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			]
 			$q.all(p).then(function(msg){
 				$log.info(msg);
+                SessionStore.session.offline = false;
+                themeswitch.changeTheme(themeswitch.getThemeColor(), true);
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
@@ -5113,7 +5115,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 
 	var userData = irfStorageService.retrieveJSON('UserData');
 	if (userData && userData.login) {
-		var m = irfStorageService.getMasterJSON("UserProfile");
+		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
 		var km = _.keys(m);
 		if (km.length === 1 && km[0] === userData.login) {
 			if (m[km[0]] && m[km[0]].settings) {
@@ -14458,6 +14460,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     var loanAccountId = $stateParams.pageId;
+                    PageHelper.showLoader();
                     IndividualLoan.get({id: loanAccountId})
                         .$promise
                         .then(function(res){
@@ -14468,11 +14471,21 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     .$promise
                                     .then(
                                         function(res){
-                                            model.loanAccount.encore = res;
+                                            model.encoreLoan = res;
+
+                                            for(var i=0;i<model.encoreLoan.transactions.length;i++){
+                                                model.encoreLoan.transactions[i].transactionDate = Utils.convertJSONTimestampToDate(model.encoreLoan.transactions[i].transactionDate);
+                                            }
+                                            for(var i=0;i<model.encoreLoan.repaymentSchedule.length;i++){
+                                                model.encoreLoan.repaymentSchedule[i].valueDate = Utils.convertJSONTimestampToDate(model.encoreLoan.repaymentSchedule[i].valueDate);
+                                            }
                                         }, function(httpRes){
                                             PageHelper.showErrors(httpRes);
                                         }
                                     )
+                                    .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
                             }
                         })
 
@@ -14812,6 +14825,91 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                      "parentCode as loan_purpose_2":"model.loanAccount.loanPurpose2"
                                      }
                                      }*/
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "TRANSACTIONS",
+                        "readonly": true,
+                        "items": [
+                            {
+                                "type": "array",
+                                "title": "Disbursement Details",
+                                "titleExpr": "'Transaction on ' + model.encoreLoan.transactions[arrayIndex].transactionDate",
+                                "key": "encoreLoan.transactions",
+                                "items": [
+                                    {
+                                        "key": "encoreLoan.accountId",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].transactionDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].valueDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].amount1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part2",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].part3",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.transactions[].transactionId",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "REPAYMENT_SCHEDULE",
+                        "readonly": true,
+                        "items": [
+                            {
+                                "type": "array",
+                                "titleExpr": "'Date : ' + model.encoreLoan.repaymentSchedule[arrayIndex].valueDate",
+                                "key": "encoreLoan.repaymentSchedule",
+                                "items": [
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].transactionDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].amount1",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].amount2",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].valueDate",
+                                        "type": "date"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].transactionId",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "key": "encoreLoan.repaymentSchedule[].status",
+                                        "type": "string"
+                                    }
                                 ]
                             }
                         ]
@@ -15209,48 +15307,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         ]
                     },
                     {
-                        "type": "box",
-                        "title": "Deprecated Items",
-                        readonly: "true",
-                        "items": [
-                            {
-                                key: "loanAccount.disbursementFromBankAccountNumber",
-                                title: "DISBURSEMENT_ACCOUNT"
-                            },
-                            {
-                                key: "loanAccount.originalAccountNumber",
-                                title: "ORIGINAL_ACCOUNT"
-                            },
-                            {
-                                "key": "loanAccount.isRestructure",
-                                "title": "IS_RESTRUCTURE"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherFirstName",
-                                "title": "HUSBAND_OR_FATHER_NAME"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherMiddleName"
-                            },
-                            {
-                                "key": "loanAccount.husbandOrFatherLastName"
-                            },
-                            {
-                                "key": "loanAccount.relationFirstName",
-                                "title": "RELATIVE_NAME"
-                            },
-                            {
-                                "key": "loanAccount.relation",
-                                "type": "select",
-                                "title": "T_RELATIONSHIP"
-                            },
-                            {
-                                key: "loanAccount.documentTracking",
-                                "title": "DOCUMENT_TRACKING"
-                            }
-                        ]
-                    },
-                    {
                         "type": "actionbox",
                         "items": [{
                             "type": "save",
@@ -15364,6 +15420,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
         }
     ]
 );
+
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -25201,7 +25258,6 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
             $log.info("PDC selection Page got initialized");
             model.pdc = model.pdc||{};
             model.pdc.addCheque = model.pdc.addCheque || [];
-            //model.pdc.chequeDetails = model.pdc.chequeDetails||[];
             model.pdc.existingCheque = model.pdc.existingCheque || [];
             //model to store pdc cheque types
             model.pdcGetPDCType = model.pdcGetPDCType || {};
@@ -25220,12 +25276,13 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 PDC.getPDCCheque({accountNumber: model.pdc.accountId}).$promise.then(function(res){
                         model.pdcGetPDCType = res;
                         PageHelper.showProgress("page-init","Done.",2000);
-                        model.pdc = model.pdcGetPDCType;
-                        //model.pdc.existingCheque.push(model.pdc.pdcSummaryDTO);
                         $log.info("PDC Type PDC GET RESP. : "+res);
                         for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
-                            model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
-                            model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                            if(model.pdc.accountId == model.pdcGetPDCType.body.pdcSummaryDTO[i].loanAccountNo) {
+
+                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                                model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                            }
                         }
 
                         if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
@@ -25238,24 +25295,24 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     PageHelper.hideLoader();
                 });
 
-                PDC.getSecurityCheque().$promise.then(function(res){
-                    model.pdcGetSecurityType = res;
-                    PageHelper.showProgress("page-init","Done.",2000);
-                    $log.info("Security Type PDC GET RESP. : "+res);
+                // PDC.getSecurityCheque().$promise.then(function(res){
+                //     model.pdcGetSecurityType = res;
+                //     PageHelper.showProgress("page-init","Done.",2000);
+                //     $log.info("Security Type PDC GET RESP. : "+res);
 
-                    for (var i = 0; i < model.pdcGetSecurityType.body.length; i++) {
-                        if(model.pdc.accountId == model.pdcGetSecurityType.body[i].loanAccountNo) {
-                            model.pdc.existingCheque.push(model.pdcGetSecurityType.body[i]);
-                            model.pdc.customerBankAccountNo = model.pdcGetSecurityType.body[i].customerBankAccountNo;
-                            model.flag = true; 
-                        }
-                    }
-                },
-                function(resError){
-                    $log.info("PDC GET Error : "+resError);  
-                }).finally(function(){
-                    PageHelper.hideLoader();
-                });
+                //     for (var i = 0; i < model.pdcGetSecurityType.body.length; i++) {
+                //         if(model.pdc.accountId == model.pdcGetSecurityType.body[i].loanAccountNo) {
+                //             model.pdc.existingCheque.push(model.pdcGetSecurityType.body[i]);
+                //             model.pdc.customerBankAccountNo = model.pdcGetSecurityType.body[i].customerBankAccountNo;
+                //             model.flag = true; 
+                //         }
+                //     }
+                // },
+                // function(resError){
+                //     $log.info("PDC GET Error : "+resError);  
+                // }).finally(function(){
+                //     PageHelper.hideLoader();
+                // });
             } 
             else {
                 $state.go("Page.Engine",{
@@ -25398,6 +25455,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                 "add":null,
                                 "condition": "model.flag",
                                 "title":"CHEQUE_DETAILS",
+                                "titleExpr":"model.pdc.existingCheque[arrayIndex].chequeType + ' - ' + model.pdc.existingCheque[arrayIndex].chequeNoFrom + ' - ' + model.pdc.existingCheque[arrayIndex].numberOfCheque",
                                 "items":[
                                     {
                                         "key": "pdc.existingCheque[].bankAccountNo",
@@ -25606,7 +25664,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 PageHelper.showLoader();
 
                 if (model.flag) {
-                    PDC.update(model.pdc, function(response){
+                    PDC.update(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -25616,7 +25674,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 }
                 else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc, function(response){
+                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
                         PageHelper.hideLoader();
                         model.flag = true;
                     }, function(errorResponse){
@@ -26591,7 +26649,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+achCollections.demandDate);
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands&date="+model.achCollections.demandDate);
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_demands");    
                                     PageHelper.showLoader();
                                     ACH.getDemandList(
@@ -27079,7 +27137,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
                                 "notitle":true,
                                 "readonly":false,
                                 "onClick": function(model, formCtrl, form, $event){
-                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+pdcCollections.demandDate);
+                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+model.pdcCollections.demandDate);
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
                                     PageHelper.showLoader();
                                     PDC.getDemandList(
@@ -30774,6 +30832,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     var reqData = _.cloneDeep(model);
+                    model.loanAccount.loanCustomerRelations = [{}];
                     reqData.loanProcessAction="SAVE";
                     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
                     Utils.confirm("Are You Sure?").then(function(){

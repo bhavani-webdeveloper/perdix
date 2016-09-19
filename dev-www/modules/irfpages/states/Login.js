@@ -12,6 +12,8 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			]
 			$q.all(p).then(function(msg){
 				$log.info(msg);
+                SessionStore.session.offline = false;
+                themeswitch.changeTheme(themeswitch.getThemeColor(), true);
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
@@ -85,7 +87,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 
 	var userData = irfStorageService.retrieveJSON('UserData');
 	if (userData && userData.login) {
-		var m = irfStorageService.getMasterJSON("UserProfile");
+		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
 		var km = _.keys(m);
 		if (km.length === 1 && km[0] === userData.login) {
 			if (m[km[0]] && m[km[0]].settings) {
