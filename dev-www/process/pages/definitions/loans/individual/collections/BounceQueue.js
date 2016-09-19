@@ -114,9 +114,9 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
                         "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'CHARGES'|translate}}: " + item.part4,                /*Service is missing*/
+                        "{{'CHARGES'|translate}}: " + (item.part4||'-'),                /*Service is missing*/
                         "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                        "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues     /*Service is missing*/
+                       /* "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues   */  /*Service is missing*/
                     ]
                 },
                 getActions: function(){

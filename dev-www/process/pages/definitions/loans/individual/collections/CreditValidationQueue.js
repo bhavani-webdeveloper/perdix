@@ -14,7 +14,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "title": 'SEARCH_OPTIONS',

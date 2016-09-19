@@ -98,6 +98,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 }
             },
             listOptions: {
+                expandable: true,
                 /*itemCallback: function(item, index) {
                     $log.info(item);
                     $log.info("Redirecting");
@@ -114,17 +115,17 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountNumber, /*Service is missing*/
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'INSTALLMENT_DATE'|translate}}: " + item.installmentDate,  /*Service is missing*/
-                        "{{'PAYMENT_MODE'|translate}}: " + item.paymentMode,  /*Service is missing*/
-                        "{{'CHEQUE_NO'|translate}}: " + item.chequeNo,  /*Service is missing*/
-                        "{{'ISSUING_BANK'|translate}}: " + item.issuingBank,  /*Service is missing*/
-                        "{{'ISSUING_BRANCH'|translate}}: " + item.issuingBranch,  /*Service is missing*/
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'PTP_DATE'|translate}}: " + item.PTPDate,              /*Service is missing*/
-                        "{{'REASONS'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
-                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'), /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + (item.amount1||'-'), /*amount1 is TotalDemandDue*/
+                        "{{'INSTALLMENT_DATE'|translate}}: " + (item.installmentDate||'-'),  /*Service is missing*/
+                        "{{'PAYMENT_MODE'|translate}}: " + (item.paymentMode||'-'),  /*Service is missing*/
+                        "{{'CHEQUE_NO'|translate}}: " + (item.chequeNo||'-'),  /*Service is missing*/
+                        "{{'ISSUING_BANK'|translate}}: " + (item.issuingBank||'-'),  /*Service is missing*/
+                        "{{'ISSUING_BRANCH'|translate}}: " + (item.issuingBranch||'-'),  /*Service is missing*/
+                        "{{'PRINCIPAL'|translate}}: " + (item.principal||'-'),          /*Service is missing*/
+                        "{{'PTP_DATE'|translate}}: " + (item.PTPDate||'-'),        /*Service is missing*/
+                        "{{'REASONS'|translate}}: " + (item.reasons||'-'),   /*Service is missing-Loan officer reasons*/
+                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + (item.typeOfCustomer||'-'),  /*Service is missing*/
                     ]
                 },
                 getActions: function(){

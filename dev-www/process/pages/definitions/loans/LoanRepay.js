@@ -174,7 +174,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type: "lov",
                                 autolov: true,
                                 condition:"model.repayment.instrument=='CHQ'",
-                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                title:"REPAYMENT_TO_ACCOUNT",
                                 bindMap: {
                                     
                                 },
@@ -206,8 +206,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='CHQ'",
                                 type: "file",
                                 fileType: "image/*",
-                                category: "noidea",
-                                subCategory: "absolutlynoidea"
+                                category: "Repayment",
+                                subCategory: "Cheque"
                             },
                             {
                                 key:"repayment.reference",
