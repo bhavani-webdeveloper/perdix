@@ -18,8 +18,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
-
-            PageHelper.setError({message:'Spouse ID Proof type is mandatory when Spouse ID Details are given'});
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
