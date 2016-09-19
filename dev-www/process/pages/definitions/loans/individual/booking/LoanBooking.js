@@ -145,8 +145,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.repayment",
-                        "title": "REPAYMENT_TENURE",
+                        "key": "loanAccount.tenure",
+                        "title": "DURATION_IN_MONTHS",
                         "readonly": true
                     },
                     {
@@ -181,28 +181,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.processingFeeInPaisa",
+                        "key": "loanAccount.processingFeePercentage",
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.cibilCharges",
+                        "key": "loanAccount.commercialCibilCharge",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.repayment",
-                        "title": "REPAYMENT_MODE",
-                        "readonly": true
-                    },
-                    {
-                        "key": "loanAccount.sanction_amount",
-                        "title": "SANCTION_AMOUNT",
+                        "key": "loanAccount.loanAmountRequested",
+                        "title": "LOAN_AMOUNT_REQUESTED",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.sanctionDate",
                         "readonly": true
-                    },
+                    }/*,
                     {
                         "type": "fieldset",
                         "title": "GUARANTOR_DETAILS",
@@ -226,10 +221,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 ]
                             }
                         ]
-                    },
+                    }*/,
                     {
                         "type": "fieldset",
-                        "title": "COLLATERAL DETAILS",
+                        "notitle": true,
                         "items": [
                             {
                                 "key":"loanAccount.collateral",

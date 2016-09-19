@@ -16,12 +16,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if(model.loanAccount.commercialCibilCharge)
                 if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                     fee+=model.loanAccount.commercialCibilCharge;
-            if(model.loanAccount.securityEmi)
-                if(!_.isNaN(model.loanAccount.securityEmi))
-                    fee+=model.loanAccount.securityEmi;
             $log.info(model.loanAccount.insuranceFee);
             $log.info(model.loanAccount.commercialCibilCharge);
-            $log.info(model.loanAccount.securityEmi);
 
         };
 
@@ -438,16 +434,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.securityEmi",
-                                type:"amount",
-                                onChange:function(value,form,model){
-                                    getSanctionedAmount(model);
-                                }
+                                key:"loanAccount.securityEmiRequired"
                             },
                             {
-                                key:"additional.processingFee",
-                                type:"amount",
-                                "title":"PROCESSING_FEES"
+                                key:"loanAccount.processingFeePercentage",
+                                type:"number",
+                                "title":"PROCESSING_FEES_IN_PERCENTAGE"
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -949,11 +941,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     if (model.additional.minAmountForSecurityEMI > 0){
-                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == '')){
+                        if (model.additional.securityEmiRequired || model.additional.securityEmiRequired == 'No'){
                             PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
                             return false;
                         }
                     }
+                    else
+                        model.additional.securityEmiRequired = model.additional.securityEmiRequired || 'No';
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                         for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
@@ -963,11 +957,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
-                    if (model.additional.processingFee){
-                        if (model.additional.processingFee > 0){
-                            model.loanAccount.processingFeeInPaisa = Number(model.additional.processingFee) * 100;
-                        }
-                    }
                     //Product specific validations
                     if(model.additional.product){
                         if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
