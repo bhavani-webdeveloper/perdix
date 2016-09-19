@@ -46,11 +46,13 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 					model.ach.accountId = model._loanAch.accountNumber;
 					model.ach.branchName = model._loanAch.branchName;
 				}
-
-				ACH.search({ accountNumber: model.ach.accountId }).$promise.then(function(res) {
+				PageHelper.clearErrors();
+				PageHelper.showLoader();
+				ACH.search({ accountNumber: model.ach.accountId }).$promise.then(
+					function(res) {
+						PageHelper.hideLoader();
 						$log.info("response: " + res);
 						model.achSearch = res;
-
 						for (var i = 0; i < model.achSearch.body.length; i++) {
 							if (model.achSearch.body[i].accountId == model.ach.accountId) {
 								model.flag = true;
@@ -60,6 +62,7 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						}
 					},
 					function(httpRes) {
+						PageHelper.hideLoader();
 						// PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
 						// PageHelper.showErrors(httpRes);
 						$log.info("ACH Search Response : " + httpRes);
@@ -367,6 +370,7 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 
 		actions: {
 			submit: function(model, form, formName) {
+				PageHelper.clearErrors();
 				PageHelper.showLoader();
 				ACH.create(model.ach, function(response) {
 					PageHelper.hideLoader();

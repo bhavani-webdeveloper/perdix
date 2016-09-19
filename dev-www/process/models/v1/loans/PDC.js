@@ -32,7 +32,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
             }),
              update:{
                 method:'PUT',
-                url:endpoint+'/editPDCAccount'           
+                url:endpoint+'/editpdcAccount'           
             },
             find:{
                 method:'GET',

@@ -31,17 +31,11 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
             model.achSearch = model.achSearch || {};
+
+            model.flag = false;
+            model.achMandate = model.achMandate || {};
+            model.achMandate.changeMandateStatus = model.achMandate.changeMandateStatus || [];
             //Search for existance of Loan account Number
-            ACH.search({mandateStatus: "PENDING"}).$promise.then(function(res) {
-                    $log.info("response: " + res);
-                    model.achSearch = res;
-                },
-                function(httpRes) {
-                    PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-                    PageHelper.showErrors(httpRes);
-                    $log.info("ACH Search Response : " + httpRes);
-                }
-            );
         },
         offline: false,
         
@@ -67,22 +61,50 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                                 "readonly": false,
                                 "onClick": function(model, formCtrl, form, event){
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=ach_registration_mandate");
-                                
-                                    for (var i = 0; i < model.achSearch.body.length; i++) {
-                                        model.achSearch.body[i].mandateStatus = "SUBMITTED";
-                                        model.achSearch.body[i].maximumAmount = parseInt(model.achSearch.body[i].maximumAmount);
-                                        model.achSearch.body[i].maximumAmount = model.achSearch.body[i].maximumAmount.toString();
-                                    }
-
+                                    PageHelper.clearErrors();
                                     PageHelper.showLoader();
-                                    ACH.update(model.achSearch.body, function(response) {
-                                        PageHelper.hideLoader();
-                                        PageHelper.showProgress("page-init", "Done.", 2000);
-                                        model.flag = true;
-                                    }, function(errorResponse) {
-                                        PageHelper.hideLoader();
-                                        PageHelper.showErrors(errorResponse);
+                                    ACH.search({mandateStatus: "PENDING"}).$promise.then(
+                                        function(res) {
+                                            $log.info("response: " + res);
+                                            model.achSearch = res;
+                                            if(model.achSearch.body.length >0)
+                                            {
+                                                model.flag = true;
+                                            }
+                                            for (var i = 0; i < model.achSearch.body.length; i++) {
+                                                model.achSearch.body[i].maximumAmount = parseInt(model.achSearch.body[i].maximumAmount);
+                                                model.achSearch.body[i].maximumAmount = model.achSearch.body[i].maximumAmount.toString();
+                                                model.achMandate.changeMandateStatus.push(model.achSearch.body[i]);
+                                                model.achMandate.changeMandateStatus[i].check = false;
+                                           }
+                                        },
+                                        function(httpRes) {
+                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                            PageHelper.showErrors(httpRes);
+                                            $log.info("ACH Search Response : " + httpRes);
+                                        }
+                                    ).finally(function(){
+                                            PageHelper.hideLoader();
                                     });
+
+                                    
+                                    
+                                    // PageHelper.clearErrors();
+                                    // PageHelper.showLoader();
+                                    // ACH.update(model.achSearch.body).$promise.then( 
+                                    //     function(response) {
+                                    //         PageHelper.hideLoader();
+                                    //         PageHelper.showProgress("page-init", "Done.", 2000);
+                                    //         model.flag = true;
+                                    //     },
+                                    //     function(errorResponse) {
+                                    //         PageHelper.hideLoader();
+                                    //         PageHelper.showErrors(errorResponse);
+                                    //     }
+                                    // ).finally(function(){
+                                    //     PageHelper.hideLoader();
+                                    // }
+                                    // );
                                 }
                             }
                         ]
@@ -112,19 +134,124 @@ function($log, Enrollment, ACH, SessionStore,$state,$stateParams, AuthTokenHelpe
                         ]
                     }
                 ]
+            },
+            {
+                "type": "box",
+                "notitle": true,
+                "items": [
+                    {
+                        "type":"fieldset",
+                        "title":"UPDATE_ACH_MANDATE_STATUS",
+                        "items":[
+                            {   
+                                "key": "achMandate.checkbox",
+                                "condition": "model.flag",
+                                "type": "checkbox",
+                                "title": "SELECT_ALL",
+                                "schema":{
+                                        "default": false
+                                    },
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+                                        for (var i = 0; i < model.achSearch.body.length; i++) {
+                                            model.achMandate.changeMandateStatus[i].check = true;
+                                        }  
+                                    }
+                                    else
+                                    {
+                                        for (var i = 0; i < model.achSearch.body.length; i++) {
+                                            model.achMandate.changeMandateStatus[i].check = false;
+                                        }
+                                    }                        
+                                }    
+                            },
+                            {
+                                "type":"array",
+                                "key":"achMandate.changeMandateStatus",
+                                "condition": "model.flag",
+                                "add": null,
+                                "startEmpty": true,
+                                "remove":null,
+                                "title":"PENDING_MANDATE_LIST",
+                                "titleExpr": "(model.achMandate.changeMandateStatus[arrayIndex].check?'⚫ ':'⚪ ') + model.achMandate.changeMandateStatus[arrayIndex].mandateStatus + ' - ' + model.achMandate.changeMandateStatus[arrayIndex].accountId",
+                                "items":[
+                                    {
+                                        "key": "achMandate.changeMandateStatus[].accountId",
+                                        "title": "ACCOUNT_NUMBER",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achMandate.changeMandateStatus[].accountHolderName",
+                                        "title": "CUSTOMER_NAME",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achMandate.changeMandateStatus[].mandateStatus",
+                                        "title": "MANDATE_STATUS",
+                                        "readonly": true
+                                    },
+                                    {
+                                        "key": "achMandate.changeMandateStatus[].check",
+                                        "title": "MARK_AS_SUBMITTED",
+                                        "type": "checkbox",
+                                        "schema":{
+                                            "default": false
+                                        }
+                                    },
+                                ]                                                                           
+                            }
+                        ]                        
+                    },
+                    {
+                        "type": "actionbox",
+                        "condition": "model.flag",
+                        "items": [
+                            {
+                                "type": "submit",
+                                "title": "SUBMIT"
+                            }
+                        ]
+                    }
+                ]
             }
         ],
 
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return ACH.getSchema().$promise;
         },
 
         actions: {
             submit: function(model, form, formName){
-                $state.go("Page.Engine", {
-                    pageName: 'loans.individual.achpdc.ACHMandateUpload',
-                    pageId: model.customer.id
-                });
+
+                for (var i = 0; i < model.achSearch.body.length; i++) {
+                    if (model.achMandate.changeMandateStatus[i].check)
+                    {
+                        model.achSearch.body[i].mandateStatus = "SUBMITTED";        
+                    }
+                    else {
+                     model.achSearch.body[i].mandateStatus = "PENDING"   
+                    }
+                }
+                PageHelper.clearErrors();
+                PageHelper.showLoader();
+                ACH.updateBulk(model.achSearch.body).$promise.then( 
+                    function(response) {
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("page-init", "Done.", 2000);
+                        model.achMandate.changeMandateStatus = [];
+                        model.achSearch.body = [];
+                        model.flag = false;
+                    },
+                    function(errorResponse) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(errorResponse);
+                    }
+                ).finally(function(){
+                    PageHelper.hideLoader();
+                }
+                );
             }
         }
     };

@@ -211,6 +211,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                 ACH.bulkRepay(model.achDemand.demandList, function(response) {
                     PageHelper.hideLoader();
                     PageHelper.showProgress("page-init", "Done.", 2000);
+                    model.achDemand.demandList = [];
                     model.flag = true;
                 }, function(errorResponse) {
                     PageHelper.hideLoader();

@@ -26,9 +26,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 url: endpoint + '/search',
                 isArray: true
             },
-            update: {
+            updateBulk: {
                 method: 'PUT',
-                url: endpoint + '/update'
+                isArray:true,
+                url: endpoint + '/statusupdate'
             },
             getDemandList: searchResource({
                 method: 'GET',

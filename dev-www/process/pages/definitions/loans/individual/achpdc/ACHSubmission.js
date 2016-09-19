@@ -66,6 +66,7 @@ function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$state
                                 "title":"SEARCH",
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
+                                    PageHelper.clearErrors();
                                     PageHelper.showLoader();
                                     ACH.getDemandList(model.achDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
@@ -175,6 +176,7 @@ function($log, ACH, PageHelper, SessionStore,$state,Enrollment,formHelper,$state
 
         actions: {
             submit: function(model, form, formName){
+                PageHelper.clearErrors();
                 PageHelper.showLoader();
                 ACH.bulkRepay(model.achDemand.demandList, function(response) {
                     PageHelper.hideLoader();

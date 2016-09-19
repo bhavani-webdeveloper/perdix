@@ -60,6 +60,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
                                 "onClick": function(model, formCtrl, form, $event){
                                     //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+model.pdcCollections.demandDate);
                                     window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
+                                    PageHelper.clearErrors();
                                     PageHelper.showLoader();
                                     PDC.getDemandList(
                                         {
@@ -207,6 +208,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
         
         actions: {
             submit: function(model, form, formName){
+                PageHelper.clearErrors();
                 PageHelper.showLoader();
                 PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
                     PageHelper.hideLoader();

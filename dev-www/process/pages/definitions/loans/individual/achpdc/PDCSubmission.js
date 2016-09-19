@@ -66,6 +66,7 @@ function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$state
                                 "title":"SEARCH",
                                 "type":"button",
                                 "onClick": function(model, formCtrl, form, $event){
+                                    PageHelper.clearErrors();
                                     PageHelper.showLoader();
                                     PDC.getDemandList(model.pdcDemand.search).$promise.then(function(res) {
                                         PageHelper.hideLoader();
@@ -173,6 +174,7 @@ function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$state
 
         actions: {
             submit: function(model, form, formName){
+                PageHelper.clearErrors();
                 PageHelper.showLoader();
                 PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
                     PageHelper.hideLoader();
