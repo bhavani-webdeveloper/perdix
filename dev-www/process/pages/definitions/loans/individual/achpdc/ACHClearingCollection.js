@@ -78,7 +78,8 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                        
                                         for (var i = 0; i < model.achSearch.body.length; i++) {
                                             model.achSearch.body[i].repaymentType = "ACH";
-                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achSearch.body[i].accountNumber = model.achSearch.body[i].accountId;
+                                            model.achSearch.body[i].amount = toString().parseInt(model.achSearch.body[i].amount1);
                                             model.achDemand.demandList.push(model.achSearch.body[i]);
                                         }
                                         
@@ -212,7 +213,8 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                     PageHelper.hideLoader();
                     PageHelper.showProgress("page-init", "Done.", 2000);
                     model.achDemand.demandList = [];
-                    model.flag = true;
+                    model.flag = false;
+                    model.achDemand.checkbox = false;
                 }, function(errorResponse) {
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);

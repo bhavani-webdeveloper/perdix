@@ -55,9 +55,10 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         $log.info("PDC Type PDC GET RESP. : "+res);
                         for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
                             if(model.pdc.accountId == model.pdcGetPDCType.body.pdcSummaryDTO[i].loanAccountNo) {
-
-                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                                model.pdc.existingCheque.loanAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].accountNumber;
+                                model.pdc.existingCheque.id = model.pdcGetPDCType.body.pdcSummaryDTO[i].loanId;
                                 model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
                             }
                         }
                         if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
@@ -389,58 +390,52 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.existingCheque" array
                 //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
-                model.pdc.pdcSummaryDTO = [];
-                //Add existing cheque details
-                for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
-                    model.pdc.pdcSummaryDTO.push({
-                        bankAccountNo: model.pdc.existingCheque[bankCount].bankAccountNo,
-                        bankName: model.pdc.existingCheque[bankCount].bankName,
-                        ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
-                        chequeNoFrom: model.pdc.existingCheque[bankCount].chequeNoFrom,
-                        chequeType: model.pdc.existingCheque[bankCount].chequeType,
-                        numberOfCheque: model.pdc.existingCheque[bankCount].numberOfCheque,
-                        customerBankAccountNo: model.pdc.customerBankAccountNo,
-                        loanAccountNo: model._pdc.accountNumber,
-                        branchName: model.pdc.existingCheque[bankCount].branchName,
-                        id: model._pdc.loanId
-                    });
 
-                    //$log.info("bank no : " + bankCount);
-                    //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
-                    // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
-                    //     $log.info("Leaves No.: " + leavesCount);
-                    //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
-                    //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
-                    //     model.pdc.chequeDetails.push({
-                    //         bankName: model.pdc.existingCheque[bankCount].bankName,
-                    //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
-                    //         chequeNo: currentLeafNo
-                    //     });
-                    // }
-                }
+                model.pdc.pdcSummaryDTO
+                
+
+                //model.pdc.pdcSummaryDTO = [];
+                //Add existing cheque details
+                // for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
+                //     model.pdc.pdcSummaryDTO.push(model.pdc.existingCheque[bankCount]);
+                //     //$log.info("bank no : " + bankCount);
+                //     //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
+                //     // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
+                //     //     $log.info("Leaves No.: " + leavesCount);
+                //     //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
+                //     //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
+                //     //     model.pdc.chequeDetails.push({
+                //     //         bankName: model.pdc.existingCheque[bankCount].bankName,
+                //     //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
+                //     //         chequeNo: currentLeafNo
+                //     //     });
+                //     // }
+                // }
 
                 //add the newly addeed cheque details
-                for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
-                    model.pdc.pdcSummaryDTO.push({
-                        bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
-                        bankName: model.pdc.addCheque[bankCount].bankName,
-                        ifscCode: model.pdc.addCheque[bankCount].ifscCode,
-                        chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
-                        chequeType: model.pdc.addCheque[bankCount].chequeType,
-                        numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
-                        customerBankAccountNo: model.pdc.customerBankAccountNo,
-                        loanAccountNo: model._pdc.accountNumber,
-                        branchName: model.pdc.addCheque[bankCount].branchName,
-                        id: model._pdc.loanId
-                    });
+                for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+                {
+                    model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
+                    model.pdc.addCheque[bankCount].id = model.pdc.id;
+                    model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
+
+                    if (model.pdc.addCheque[bankCount].chequeType == "PDC")
+                    {
+                        model.pdc.addCheque[bankCount].pdcFrom = 1;
+                        model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
+                       // model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+                    } 
+                    // else {
+                    //     model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+                    // }  
                 }
 
                 //model.pdc.existingCheque = [];
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
 
-                if (model.flag) {
-                    PDC.update(model.pdc.pdcSummaryDTO, function(response){
+                if (!model.flag) {
+                    PDC.update(model.pdc.existingCheque, function(response){
                         PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -450,7 +445,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 }
                 else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
+                    PDC.create(model.pdc.addCheque, function(response){
                         PageHelper.hideLoader();
                         model.flag = true;
                     }, function(errorResponse){
