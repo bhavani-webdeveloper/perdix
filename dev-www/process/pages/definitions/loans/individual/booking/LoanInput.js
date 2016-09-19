@@ -1031,7 +1031,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 IndividualLoan.create(resp,function(resp,headers){
                                     $log.info(resp);
                                     PageHelper.showProgress("loan-create","Loan Created",5000);
-                                    $state.go('Page.Engine', {pageName: 'Page.Engine', pageId: null});
+                                    $state.go('Page.Landing', null);
                                 },function(errresp){
                                     $log.info(errresp);
                                     PageHelper.showErrors(errresp);

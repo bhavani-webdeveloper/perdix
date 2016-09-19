@@ -37,7 +37,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.loanAccountDisbursementSchedule=model._disbursement;
                             $log.info("Printing the loanAccountDisbursementSchedule");
                             $log.info(model.loanAccountDisbursementSchedule);
-                            //model.loanAccountDisbursementSchedule.amountdue=model._bounce.amount1;
                         }
                         model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);

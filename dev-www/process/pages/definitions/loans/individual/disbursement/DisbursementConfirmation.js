@@ -70,9 +70,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "type":"select",
                         "onChange":function (modelValue, form, model){
                             if (modelValue == "Confirmed"){
-                                model.loanAccountDisbursementSchedule.udf4 = "";
-                                model.loanAccountDisbursementSchedule.udf5 = "";
-                                model.loanAccountDisbursementSchedule.udfDate1 = "";
+                                model.loanAccountDisbursementSchedule.udf4 = '';
+                                model.loanAccountDisbursementSchedule.udf5 = '';
+                                model.loanAccountDisbursementSchedule.udfDate1 = '';
                             }
                         },
                         "titleMap":{
