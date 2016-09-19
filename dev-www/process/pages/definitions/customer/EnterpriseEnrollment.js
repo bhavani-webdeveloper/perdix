@@ -397,14 +397,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.fixData(reqData);
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(resp.customer,true);
-                        model.customer = resp.customer;
+                        // Utils.removeNulls(resp.customer,true);
+                        // model.customer = resp.customer;
+                        $state.go('Page.Landing', null);
                     });
                 } else {
                     EnrollmentHelper.saveData(reqData).then(function(res){
                         EnrollmentHelper.proceedData(res).then(function(resp){
-                            Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
+                            // Utils.removeNulls(resp.customer,true);
+                            // model.customer = resp.customer;
+                            $state.go('Page.Landing', null);
                         }, function(err) {
                             Utils.removeNulls(res.customer,true);
                             model.customer = res.customer;
