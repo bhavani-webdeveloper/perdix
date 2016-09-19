@@ -3865,6 +3865,608 @@ irf.models
 ;
 
 var irf = irf || {};
+/* CONSTANTS */
+irf.SESSION_AUTH_KEY = 'AuthData';
+irf.SESSION_USER_KEY = 'User';
+irf.REDIRECT_STATE = 'Login';
+
+irf.models.factory('AuthTokenHelper', ['SessionStore', '$log', function(SessionStore, $log){
+	var authData = {};
+	return {
+		setAuthData: function(data){
+			authData = data;
+			SessionStore.setItem(irf.SESSION_AUTH_KEY, data);
+			$log.info("Setting AuthData into Session");
+		},
+		getAuthData: function(){
+			if (!authData || !authData.access_token) {
+				authData = SessionStore.getItem(irf.SESSION_AUTH_KEY); //authData;
+			}
+			return authData;
+		},
+		clearAuthData:function(){
+			authData={};
+			SessionStore.removeItem(irf.SESSION_AUTH_KEY);
+		}
+	};
+}]);
+
+irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_URL,AuthTokenHelper){
+	var endpoint = BASE_URL + '/oauth/token?cacheBuster=' + Date.now();
+	var resource = $resource(endpoint, {}, {
+		'login':{
+			method: 'POST',
+			headers: {
+				'Accept':'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			transformRequest: function (data) {
+				return $httpParamSerializer(data);
+			}
+		}
+	});
+
+	resource.getToken = function(credentials){
+		credentials.grant_type = 'password';
+		credentials.scope = 'read write';
+		credentials.client_secret = 'mySecretOAuthSecret';
+		credentials.client_id='application';
+		credentials.skip_relogin = 'yes';
+
+		return resource.login(credentials,function(response){
+			//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
+			AuthTokenHelper.setAuthData(response);
+		});
+	};
+
+	return resource;
+});
+
+irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
+    var endpoint = BASE_URL + '/api/account';
+    /*
+     * :service can be {change_expired_password,change_password,reset_password}
+     * :action can be {init,finish}
+     *
+     * POST and SAVE are eqvt
+     *
+     * eg:
+     * /api/account/change_expired_password => {service:'change_expired_password'}
+     * /api/account/reset_password/init => {service:'reset_password',action:'init'}
+     *
+     */
+
+    return $resource(endpoint, null, {
+
+        get:{
+            method:'GET',
+            url:endpoint
+        },
+        query:{
+            method:'GET',
+            url:endpoint,
+            isArray:true
+        },
+        post:{
+            method:'POST',
+            url:endpoint+'/:service/:action'
+
+        },
+        save:{
+            method:'POST',
+            url:endpoint+'/:service/:action'
+        }
+    });
+});
+
+irf.USER_ALLOWED_PAGES = "__userAllowedPages";
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
+    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
+    var endpoint = BASE_URL + '/api';
+
+    var pDef = $resource(endpoint, null, {
+        getPagesJson: {
+            method:'GET',
+            url:'process/pages.json'
+        },
+    });
+
+    var userAllowedPages = null;
+
+    pDef.getRoleAllowedPageList = function() {
+        var deferred = $q.defer();
+        //pDef.getPagesJson().$promise
+        var localPages = SessionStore.getItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES);
+        Queries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
+        .then(function(response){
+            delete response.$promise;
+            delete response.$resolved;
+            userAllowedPages = response;
+            SessionStore.setItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES, userAllowedPages);
+            deferred.resolve(response);
+        }, function(error) {
+            $log.error(error);
+            if (localPages && localPages.length) {
+                $log.info("old menu in use");
+                userAllowedPages = localPages;
+                deferred.resolve(localPages);
+            } else {
+                deferred.reject(error);
+            }
+        });
+        return deferred.promise;
+    };
+
+    var __parseMenuDefinition = function(allowedPages, menuMap, md) {
+        for (var i = md.length - 1; i >= 0; i--) {
+            if (angular.isString(md[i])) {
+                menuMap[md[i]] = allowedPages[md[i]];
+                md[i] = allowedPages[md[i]];
+
+                if (!md[i]) {
+                    md.splice(i, 1);
+                }
+            } else if (angular.isObject(md[i])) {
+                if (md[i].items) {
+                    // SUBMENU
+                    md[i].items = __parseMenuDefinition(allowedPages, menuMap, md[i].items);
+                    if (!md[i].items || md[i].items.length == 0) {
+                        md.splice(i, 1);
+                    }
+                } else if (md[i].link || md[i].linkId) {
+                    // LINKS
+                    var l = md[i].link;
+                    if (md[i].linkId) {
+                        var lid = md[i].linkId;
+                        md[i].onClick = function(event, menu) {
+                            Link[lid](event, menu, l);
+                        };
+                    } else {
+                        md[i].onClick = function(event, menu) {
+                            window.open(event, menu, l);
+                        };
+                    }
+                }
+            }
+        }
+        return md;
+    };
+
+    var parseMenuDefinition = function(allowedPages, menuDef) {
+        var md = _.cloneDeep(menuDef);
+        if (angular.isObject(md)) {
+            var menuMap = {};
+            md.items = __parseMenuDefinition(allowedPages, menuMap, md.items);
+            md.$menuMap = menuMap;
+            return md;
+        }
+        return null;
+    };
+
+    pDef.getUserAllowedDefinition = function(menuDef) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
+    pDef.getRolePageConfig = function(pageUri) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = userAllowedPages[pageUri];
+            if (p) {
+                deferred.resolve(p.config);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = userAllowedPages[pageUri];
+                if (p) {
+                    deferred.resolve(p.config);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
+    pDef.getPageDefinition = function(pageUri) {
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            var p = userAllowedPages[pageUri];
+            if (p) {
+                deferred.resolve(p);
+            } else {
+                deferred.reject("PAGE_ACCESS_RESTRICTED");
+            }
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                var p = userAllowedPages[pageUri];
+                if (p) {
+                    deferred.resolve(p);
+                } else {
+                    deferred.reject("PAGE_ACCESS_RESTRICTED");
+                }
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+        return deferred.promise;
+    };
+
+    var readOnlyFormCache = {};
+    pDef.setReadOnlyByRole = function(pageUri, form) {
+        var deferred = $q.defer();
+        pDef.getRolePageConfig(pageUri).then(function(config){
+            if (config) {
+                $log.info("config:");
+                $log.info(config);
+                if (!readOnlyFormCache[pageUri]) {
+                    readOnlyFormCache[pageUri] = form;
+                }
+                var f = _.cloneDeep(form);
+                for (var i = f.length - 1; i >= 0; i--) {
+                    f[i].readonly = !!config.readonly;
+                };
+                deferred.resolve(f);
+            } else if (readOnlyFormCache[pageUri]) {
+                $log.debug('resetting initial form');
+                deferred.resolve(readOnlyFormCache[pageUri]);
+            } else {
+                deferred.resolve(form);
+            }
+            $log.info("Profile Page got initialized");
+        }, function(){
+            deferred.resolve(form);
+        });
+        return deferred.promise;
+    };
+
+    return pDef;
+}]);
+
+irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q, $http){
+    var endpoint = BASE_URL + '/api';
+
+    var resource =  $resource(endpoint, null, {
+        uploadBase64:{
+            method:'POST',
+            url:endpoint+'/files/upload/base64'
+            /* file, type, subType, extn */
+        }/*,
+        stream:{
+            method:'GET',
+            url:endpoint+'/stream/:fileId'
+        }*/
+    });
+
+    var getDataUrl = function(fileId, params) {
+        if ((fileId+'').indexOf('-') > 1) {
+            return endpoint+'/stream/' + fileId;
+        } else {
+            return endpoint+'/stream/' + '?' + $httpParamSerializer(params);
+        }
+        return null;
+    };
+
+    resource.stream = function(fileId, params) {
+        var deferred = $q.defer();
+        $http.get(getDataUrl(fileId, params)).then(deferred.resolve, deferred.reject);
+        return deferred.promise;
+    };
+
+    resource.getBase64DataFromFileId = function(fileId,params,stripDesctiptors){
+        stripDesctiptors = stripDesctiptors || false;
+        var url = getDataUrl(fileId,params);
+        var deferred = $q.defer();
+        $http({
+            method:'GET',
+            url:url,
+            responseType: "blob"
+        }).then(function(resp){
+
+            var reader = new window.FileReader();
+            reader.readAsDataURL(resp.data);
+            reader.onloadend = function(){
+                console.log(reader.result);
+                if(stripDesctiptors){
+                    deferred.resolve(reader.result.split(",")[1]);
+                }
+                else{
+                    deferred.resolve(reader.result);
+                }
+            };
+
+        },function(resp){
+            deferred.reject(resp);
+        });
+
+        return deferred.promise;
+
+    };
+
+    resource.getFileDownloadURL = function(fileId){
+        return endpoint + "/stream/" + fileId;
+    }
+
+    return resource;
+});
+
+irf.models.factory('Queries',[
+"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log",
+function($resource,$httpParamSerializer,BASE_URL, $q, $log){
+	var endpoint = BASE_URL + '/api';
+
+	var resource =  $resource(endpoint, null, {
+		query:{
+			method:'POST',
+			url:endpoint+'/query'
+		}
+	});
+
+	resource.getResult = function(id, params, limit, offset) {
+		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
+	};
+
+	resource.getPagesDefinition = function(userId, skip_relogin) {
+		var deferred = $q.defer();
+		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
+			if (records && records.results) {
+				var def = {};
+				_.each(records.results, function(v, k){
+					var d = {
+						"uri": v.uri,
+						"offline": v.offline,
+						"directAccess": v.directAccess,
+						"title": v.title,
+						"shortTitle": v.shortTitle,
+						"iconClass": v.iconClass,
+						"state": v.state,
+						"stateParams": {
+							"pageName": v.pageName,
+							"pageId": v.pageId
+						},
+						"config": v.pageConfig
+					};
+					if (v.addlParams) {
+						try {
+							var ap = JSON.parse(v.addlParams);
+							angular.extend(d.stateParams, ap);
+						} catch (e) {}
+					}
+					if (v.pageConfig) {
+						try {
+							var pc = JSON.parse(v.pageConfig);
+							d.config = pc;
+						} catch (e) {}
+					}
+					def[v.uri] = d;
+				});
+				deferred.resolve(def);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	resource.searchPincodes = function(pincode, district, state) {
+		var deferred = $q.defer();
+		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
+		resource.getResult("pincode.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+
+	var prepareTranslationJSON = function(arr, langCode) {
+		var result = {};
+		for (var i = arr.length - 1; i >= 0; i--) {
+			result[arr[i].code] = arr[i][langCode];
+		};
+		return result;
+	};
+	var translationResult = [];
+	var translationLangs = {};
+	resource.downloadTranslations = function() {
+		var deferred = $q.defer();
+		resource.getResult("translations.list", {}).then(function(records){
+			if (records && records.results && records.results.length) {
+				translationResult = records.results;
+				deferred.resolve(translationResult);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+	};
+	resource.getTranslationJSON = function(translationResult, langCode) {
+		if (!translationLangs[langCode] && translationResult && translationResult.length) {
+			$log.info('all translation array avilable in memory for ' + langCode);
+			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
+		}
+		return translationLangs[langCode];
+	};
+
+    resource.getLoanProductDocuments = function(prodCode, process, stage){
+        var deferred = $q.defer();
+        resource.getResult('loan_products.list', {product_code: prodCode, process:process, stage:stage}).then(
+            function(res){
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(res){
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
+
+    resource.getGlobalSettings = function(name){
+        var deferred = $q.defer();
+        resource.getResult('globalSettings.list', {name:name}).then(
+            function(res){
+            	$log.info("checking checking");
+            	$log.info(res);
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results[0].value);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(err){
+                deferred.reject(err);
+            }
+        )
+        return deferred.promise;
+    }
+
+    resource.getCustomerBankAccounts = function(customerId){
+        var deferred = $q.defer();
+		var request = {"customer_id":customerId};
+		resource.getResult("customerBankAccounts.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
+    resource.getBankAccounts = function(){
+        var deferred = $q.defer();
+		var request = {};
+		resource.getResult("bankAccounts.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
+    resource.getLatestLoanRepayment = function(accountNumber) {
+    	var deferred = $q.defer();
+    	resource.getResult("latestLoanRepayments.list", {account_number: accountNumber}, 1).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+    	return deferred.promise;
+    };
+
+    resource.getDepositList = function(depositUser){
+        var deferred = $q.defer();
+		var request = {"deposit_user":depositUser};
+		resource.getResult("depositstage.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
+	return resource;
+}]);
+
+irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializer,BASE_URL){
+    var endpoint = BASE_URL + '/api/_refs/referencecodes';
+    return $resource(endpoint, null, {
+        fetchClassifiers:{
+            method:'GET',
+            url:endpoint+"/classifiers",
+            isArray:"true"
+        },
+        fetchRefCode:{
+            method:"GET",
+            url:endpoint+"/all/codes/:classifiers"
+        },
+        findAll: {
+            method: "GET",
+            url: BASE_URL + "/api/allreferencecodes",
+            isArray:"true"
+        }
+    });
+});
+
+irf.models.factory('Bank', [
+    "$resource", "$httpParamSerializer", "BASE_URL", "searchResource",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource) {
+        var endpoint = BASE_URL + '/api';
+
+        return $resource(endpoint, null, {
+            getBankAccounts: {
+                method: 'GET',
+                url: endpoint + '/bankaccounts',
+                isArray: true
+            }
+        });
+    }
+]);
+irf.models.factory('Link', [
+    "$resource", "$httpParamSerializer", "BASE_URL", "SessionStore",
+    function($resource, $httpParamSerializer, BASE_URL, SessionStore) {
+        var endpoint = BASE_URL + '/api';
+
+        var links = $resource(endpoint, null, {});
+
+        links.BI_LINK1 = function(event, menu, link) {
+            window.open(link);
+        }
+
+        return links;
+    }
+]);
+
+/*
+
+{
+	"title": "BI_LINK",
+	"iconClass": "fa fa-area-chart",
+	"linkId": "BI_LINK1",
+	"link": "http://www.heromotocorp.com/en-in/reach-us/book-bike-service-appointment.html"
+}
+
+*/
+var irf = irf || {};
 var commons = irf.commons = angular.module("IRFCommons", ['IRFModels', 'ui.bootstrap']);
 
 commons.constant("languages", {
@@ -6143,608 +6745,20 @@ irf.models
 	})
 ;
 
-var irf = irf || {};
-/* CONSTANTS */
-irf.SESSION_AUTH_KEY = 'AuthData';
-irf.SESSION_USER_KEY = 'User';
-irf.REDIRECT_STATE = 'Login';
-
-irf.models.factory('AuthTokenHelper', ['SessionStore', '$log', function(SessionStore, $log){
-	var authData = {};
-	return {
-		setAuthData: function(data){
-			authData = data;
-			SessionStore.setItem(irf.SESSION_AUTH_KEY, data);
-			$log.info("Setting AuthData into Session");
-		},
-		getAuthData: function(){
-			if (!authData || !authData.access_token) {
-				authData = SessionStore.getItem(irf.SESSION_AUTH_KEY); //authData;
-			}
-			return authData;
-		},
-		clearAuthData:function(){
-			authData={};
-			SessionStore.removeItem(irf.SESSION_AUTH_KEY);
-		}
-	};
-}]);
-
-irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_URL,AuthTokenHelper){
-	var endpoint = BASE_URL + '/oauth/token?cacheBuster=' + Date.now();
-	var resource = $resource(endpoint, {}, {
-		'login':{
-			method: 'POST',
-			headers: {
-				'Accept':'application/json',
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			transformRequest: function (data) {
-				return $httpParamSerializer(data);
-			}
-		}
-	});
-
-	resource.getToken = function(credentials){
-		credentials.grant_type = 'password';
-		credentials.scope = 'read write';
-		credentials.client_secret = 'mySecretOAuthSecret';
-		credentials.client_id='application';
-		credentials.skip_relogin = 'yes';
-
-		return resource.login(credentials,function(response){
-			//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
-			AuthTokenHelper.setAuthData(response);
-		});
-	};
-
-	return resource;
-});
-
-irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
-    var endpoint = BASE_URL + '/api/account';
-    /*
-     * :service can be {change_expired_password,change_password,reset_password}
-     * :action can be {init,finish}
-     *
-     * POST and SAVE are eqvt
-     *
-     * eg:
-     * /api/account/change_expired_password => {service:'change_expired_password'}
-     * /api/account/reset_password/init => {service:'reset_password',action:'init'}
-     *
-     */
-
-    return $resource(endpoint, null, {
-
-        get:{
-            method:'GET',
-            url:endpoint
-        },
-        query:{
-            method:'GET',
-            url:endpoint,
-            isArray:true
-        },
-        post:{
-            method:'POST',
-            url:endpoint+'/:service/:action'
-
-        },
-        save:{
-            method:'POST',
-            url:endpoint+'/:service/:action'
-        }
-    });
-});
-
-irf.USER_ALLOWED_PAGES = "__userAllowedPages";
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
-    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
-    var endpoint = BASE_URL + '/api';
-
-    var pDef = $resource(endpoint, null, {
-        getPagesJson: {
-            method:'GET',
-            url:'process/pages.json'
-        },
-    });
-
-    var userAllowedPages = null;
-
-    pDef.getRoleAllowedPageList = function() {
-        var deferred = $q.defer();
-        //pDef.getPagesJson().$promise
-        var localPages = SessionStore.getItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES);
-        Queries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
-        .then(function(response){
-            delete response.$promise;
-            delete response.$resolved;
-            userAllowedPages = response;
-            SessionStore.setItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES, userAllowedPages);
-            deferred.resolve(response);
-        }, function(error) {
-            $log.error(error);
-            if (localPages && localPages.length) {
-                $log.info("old menu in use");
-                userAllowedPages = localPages;
-                deferred.resolve(localPages);
-            } else {
-                deferred.reject(error);
-            }
-        });
-        return deferred.promise;
-    };
-
-    var __parseMenuDefinition = function(allowedPages, menuMap, md) {
-        for (var i = md.length - 1; i >= 0; i--) {
-            if (angular.isString(md[i])) {
-                menuMap[md[i]] = allowedPages[md[i]];
-                md[i] = allowedPages[md[i]];
-
-                if (!md[i]) {
-                    md.splice(i, 1);
-                }
-            } else if (angular.isObject(md[i])) {
-                if (md[i].items) {
-                    // SUBMENU
-                    md[i].items = __parseMenuDefinition(allowedPages, menuMap, md[i].items);
-                    if (!md[i].items || md[i].items.length == 0) {
-                        md.splice(i, 1);
-                    }
-                } else if (md[i].link || md[i].linkId) {
-                    // LINKS
-                    var l = md[i].link;
-                    if (md[i].linkId) {
-                        var lid = md[i].linkId;
-                        md[i].onClick = function(event, menu) {
-                            Link[lid](event, menu, l);
-                        };
-                    } else {
-                        md[i].onClick = function(event, menu) {
-                            window.open(event, menu, l);
-                        };
-                    }
-                }
-            }
-        }
-        return md;
-    };
-
-    var parseMenuDefinition = function(allowedPages, menuDef) {
-        var md = _.cloneDeep(menuDef);
-        if (angular.isObject(md)) {
-            var menuMap = {};
-            md.items = __parseMenuDefinition(allowedPages, menuMap, md.items);
-            md.$menuMap = menuMap;
-            return md;
-        }
-        return null;
-    };
-
-    pDef.getUserAllowedDefinition = function(menuDef) {
-        var deferred = $q.defer();
-        if (userAllowedPages) {
-            deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
-        } else {
-            pDef.getRoleAllowedPageList().then(function(response){
-                deferred.resolve(parseMenuDefinition(userAllowedPages, menuDef));
-            }, function(errorResponse){
-                deferred.reject(errorResponse);
-            });
-        }
-        return deferred.promise;
-    };
-
-    pDef.getRolePageConfig = function(pageUri) {
-        var deferred = $q.defer();
-        if (userAllowedPages) {
-            var p = userAllowedPages[pageUri];
-            if (p) {
-                deferred.resolve(p.config);
-            } else {
-                deferred.reject("PAGE_ACCESS_RESTRICTED");
-            }
-        } else {
-            pDef.getRoleAllowedPageList().then(function(response){
-                var p = userAllowedPages[pageUri];
-                if (p) {
-                    deferred.resolve(p.config);
-                } else {
-                    deferred.reject("PAGE_ACCESS_RESTRICTED");
-                }
-            }, function(errorResponse){
-                deferred.reject(errorResponse);
-            });
-        }
-        return deferred.promise;
-    };
-
-    pDef.getPageDefinition = function(pageUri) {
-        var deferred = $q.defer();
-        if (userAllowedPages) {
-            var p = userAllowedPages[pageUri];
-            if (p) {
-                deferred.resolve(p);
-            } else {
-                deferred.reject("PAGE_ACCESS_RESTRICTED");
-            }
-        } else {
-            pDef.getRoleAllowedPageList().then(function(response){
-                var p = userAllowedPages[pageUri];
-                if (p) {
-                    deferred.resolve(p);
-                } else {
-                    deferred.reject("PAGE_ACCESS_RESTRICTED");
-                }
-            }, function(errorResponse){
-                deferred.reject(errorResponse);
-            });
-        }
-        return deferred.promise;
-    };
-
-    var readOnlyFormCache = {};
-    pDef.setReadOnlyByRole = function(pageUri, form) {
-        var deferred = $q.defer();
-        pDef.getRolePageConfig(pageUri).then(function(config){
-            if (config) {
-                $log.info("config:");
-                $log.info(config);
-                if (!readOnlyFormCache[pageUri]) {
-                    readOnlyFormCache[pageUri] = form;
-                }
-                var f = _.cloneDeep(form);
-                for (var i = f.length - 1; i >= 0; i--) {
-                    f[i].readonly = !!config.readonly;
-                };
-                deferred.resolve(f);
-            } else if (readOnlyFormCache[pageUri]) {
-                $log.debug('resetting initial form');
-                deferred.resolve(readOnlyFormCache[pageUri]);
-            } else {
-                deferred.resolve(form);
-            }
-            $log.info("Profile Page got initialized");
-        }, function(){
-            deferred.resolve(form);
-        });
-        return deferred.promise;
-    };
-
-    return pDef;
-}]);
-
-irf.models.factory('Files',function($resource,$httpParamSerializer,BASE_URL, $q, $http){
-    var endpoint = BASE_URL + '/api';
-
-    var resource =  $resource(endpoint, null, {
-        uploadBase64:{
-            method:'POST',
-            url:endpoint+'/files/upload/base64'
-            /* file, type, subType, extn */
-        }/*,
-        stream:{
-            method:'GET',
-            url:endpoint+'/stream/:fileId'
-        }*/
-    });
-
-    var getDataUrl = function(fileId, params) {
-        if ((fileId+'').indexOf('-') > 1) {
-            return endpoint+'/stream/' + fileId;
-        } else {
-            return endpoint+'/stream/' + '?' + $httpParamSerializer(params);
-        }
-        return null;
-    };
-
-    resource.stream = function(fileId, params) {
-        var deferred = $q.defer();
-        $http.get(getDataUrl(fileId, params)).then(deferred.resolve, deferred.reject);
-        return deferred.promise;
-    };
-
-    resource.getBase64DataFromFileId = function(fileId,params,stripDesctiptors){
-        stripDesctiptors = stripDesctiptors || false;
-        var url = getDataUrl(fileId,params);
-        var deferred = $q.defer();
-        $http({
-            method:'GET',
-            url:url,
-            responseType: "blob"
-        }).then(function(resp){
-
-            var reader = new window.FileReader();
-            reader.readAsDataURL(resp.data);
-            reader.onloadend = function(){
-                console.log(reader.result);
-                if(stripDesctiptors){
-                    deferred.resolve(reader.result.split(",")[1]);
-                }
-                else{
-                    deferred.resolve(reader.result);
-                }
-            };
-
-        },function(resp){
-            deferred.reject(resp);
-        });
-
-        return deferred.promise;
-
-    };
-
-    resource.getFileDownloadURL = function(fileId){
-        return endpoint + "/stream/" + fileId;
-    }
-
-    return resource;
-});
-
-irf.models.factory('Queries',[
-"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log",
-function($resource,$httpParamSerializer,BASE_URL, $q, $log){
-	var endpoint = BASE_URL + '/api';
-
-	var resource =  $resource(endpoint, null, {
-		query:{
-			method:'POST',
-			url:endpoint+'/query'
-		}
-	});
-
-	resource.getResult = function(id, params, limit, offset) {
-		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
-	};
-
-	resource.getPagesDefinition = function(userId, skip_relogin) {
-		var deferred = $q.defer();
-		resource.query({identifier:'userpages.list', limit: 0, offset: 0, parameters:{user_id:userId}, skip_relogin: skip_relogin || false}).$promise.then(function(records){
-			if (records && records.results) {
-				var def = {};
-				_.each(records.results, function(v, k){
-					var d = {
-						"uri": v.uri,
-						"offline": v.offline,
-						"directAccess": v.directAccess,
-						"title": v.title,
-						"shortTitle": v.shortTitle,
-						"iconClass": v.iconClass,
-						"state": v.state,
-						"stateParams": {
-							"pageName": v.pageName,
-							"pageId": v.pageId
-						},
-						"config": v.pageConfig
-					};
-					if (v.addlParams) {
-						try {
-							var ap = JSON.parse(v.addlParams);
-							angular.extend(d.stateParams, ap);
-						} catch (e) {}
-					}
-					if (v.pageConfig) {
-						try {
-							var pc = JSON.parse(v.pageConfig);
-							d.config = pc;
-						} catch (e) {}
-					}
-					def[v.uri] = d;
-				});
-				deferred.resolve(def);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-	};
-
-	resource.searchPincodes = function(pincode, district, state) {
-		var deferred = $q.defer();
-		var request = {"pincode":pincode || '', "district":district || '', "state":state || ''};
-		resource.getResult("pincode.list", request, 10).then(function(records){
-			if (records && records.results) {
-				var result = {
-					headers: {
-						"x-total-count": records.results.length
-					},
-					body: records.results
-				};
-				deferred.resolve(result);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-	};
-
-	var prepareTranslationJSON = function(arr, langCode) {
-		var result = {};
-		for (var i = arr.length - 1; i >= 0; i--) {
-			result[arr[i].code] = arr[i][langCode];
-		};
-		return result;
-	};
-	var translationResult = [];
-	var translationLangs = {};
-	resource.downloadTranslations = function() {
-		var deferred = $q.defer();
-		resource.getResult("translations.list", {}).then(function(records){
-			if (records && records.results && records.results.length) {
-				translationResult = records.results;
-				deferred.resolve(translationResult);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-	};
-	resource.getTranslationJSON = function(translationResult, langCode) {
-		if (!translationLangs[langCode] && translationResult && translationResult.length) {
-			$log.info('all translation array avilable in memory for ' + langCode);
-			translationLangs[langCode] = prepareTranslationJSON(translationResult, langCode);
-		}
-		return translationLangs[langCode];
-	};
-
-    resource.getLoanProductDocuments = function(prodCode, process, stage){
-        var deferred = $q.defer();
-        resource.getResult('loan_products.list', {product_code: prodCode, process:process, stage:stage}).then(
-            function(res){
-                if (res && res.results && res.results.length){
-                    deferred.resolve(res.results);
-                } else {
-                    deferred.reject(res);
-                }
-            }, function(res){
-                deferred.reject(res.data);
-            }
-        )
-        return deferred.promise;
-    }
-
-    resource.getGlobalSettings = function(name){
-        var deferred = $q.defer();
-        resource.getResult('globalSettings.list', {name:name}).then(
-            function(res){
-            	$log.info("checking checking");
-            	$log.info(res);
-                if (res && res.results && res.results.length){
-                    deferred.resolve(res.results[0].value);
-                } else {
-                    deferred.reject(res);
-                }
-            }, function(err){
-                deferred.reject(err);
-            }
-        )
-        return deferred.promise;
-    }
-
-    resource.getCustomerBankAccounts = function(customerId){
-        var deferred = $q.defer();
-		var request = {"customer_id":customerId};
-		resource.getResult("customerBankAccounts.list", request, 10).then(function(records){
-			if (records && records.results) {
-				var result = {
-					headers: {
-						"x-total-count": records.results.length
-					},
-					body: records.results
-				};
-				deferred.resolve(result);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-    }
-
-    resource.getBankAccounts = function(){
-        var deferred = $q.defer();
-		var request = {};
-		resource.getResult("bankAccounts.list", request, 10).then(function(records){
-			if (records && records.results) {
-				var result = {
-					headers: {
-						"x-total-count": records.results.length
-					},
-					body: records.results
-				};
-				deferred.resolve(result);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-    }
-
-    resource.getLatestLoanRepayment = function(accountNumber) {
-    	var deferred = $q.defer();
-    	resource.getResult("latestLoanRepayments.list", {account_number: accountNumber}, 1).then(function(records){
-			if (records && records.results) {
-				var result = {
-					headers: {
-						"x-total-count": records.results.length
-					},
-					body: records.results
-				};
-				deferred.resolve(result);
-			}
-    	}, deferred.reject);
-    	return deferred.promise;
-    };
-
-    resource.getDepositList = function(depositUser){
-        var deferred = $q.defer();
-		var request = {"deposit_user":depositUser};
-		resource.getResult("depositstage.list", request, 10).then(function(records){
-			if (records && records.results) {
-				var result = {
-					headers: {
-						"x-total-count": records.results.length
-					},
-					body: records.results
-				};
-				deferred.resolve(result);
-			}
-		}, deferred.reject);
-		return deferred.promise;
-    }
-
-	return resource;
-}]);
-
-irf.models.factory('ReferenceCodeResource',function($resource,$httpParamSerializer,BASE_URL){
+irf.models.factory('SchemaResource',function($resource,$httpParamSerializer,BASE_URL){
     var endpoint = BASE_URL + '/api/_refs/referencecodes';
     return $resource(endpoint, null, {
-        fetchClassifiers:{
+        getLoanAccountSchema: {
+            method: 'GET',
+            url: 'process/schemas/loanAccount.json'
+        },
+        getDisbursementSchema:{
             method:'GET',
-            url:endpoint+"/classifiers",
-            isArray:"true"
-        },
-        fetchRefCode:{
-            method:"GET",
-            url:endpoint+"/all/codes/:classifiers"
-        },
-        findAll: {
-            method: "GET",
-            url: BASE_URL + "/api/allreferencecodes",
-            isArray:"true"
+            url:'process/schemas/disbursement.json'
         }
     });
 });
 
-irf.models.factory('Bank', [
-    "$resource", "$httpParamSerializer", "BASE_URL", "searchResource",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource) {
-        var endpoint = BASE_URL + '/api';
-
-        return $resource(endpoint, null, {
-            getBankAccounts: {
-                method: 'GET',
-                url: endpoint + '/bankaccounts',
-                isArray: true
-            }
-        });
-    }
-]);
-irf.models.factory('Link', [
-    "$resource", "$httpParamSerializer", "BASE_URL", "SessionStore",
-    function($resource, $httpParamSerializer, BASE_URL, SessionStore) {
-        var endpoint = BASE_URL + '/api';
-
-        var links = $resource(endpoint, null, {});
-
-        links.BI_LINK1 = function(event, menu, link) {
-            window.open(link);
-        }
-
-        return links;
-    }
-]);
-
-/*
-
-{
-	"title": "BI_LINK",
-	"iconClass": "fa fa-area-chart",
-	"linkId": "BI_LINK1",
-	"link": "http://www.heromotocorp.com/en-in/reach-us/book-bike-service-appointment.html"
-}
-
-*/
 irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
     /*
@@ -7303,20 +7317,6 @@ irf.models.factory('LoanProducts',function($resource,$httpParamSerializer,BASE_U
     };
 
     return ret;
-});
-
-irf.models.factory('SchemaResource',function($resource,$httpParamSerializer,BASE_URL){
-    var endpoint = BASE_URL + '/api/_refs/referencecodes';
-    return $resource(endpoint, null, {
-        getLoanAccountSchema: {
-            method: 'GET',
-            url: 'process/schemas/loanAccount.json'
-        },
-        getDisbursementSchema:{
-            method:'GET',
-            url:'process/schemas/disbursement.json'
-        }
-    });
 });
 
 irf.models.factory('IndividualLoan',[
