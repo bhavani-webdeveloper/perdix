@@ -35,6 +35,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.penal_interest=data.totalPenalInterestDue;
                         model.creditValidation.fee=data.totalFeeDue;
                         model.creditValidation.loanRepaymentDetailsId = model._credit.id;
+                        model.creditValidation.reference=model._credit.reference;
 
                         model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
 
@@ -71,6 +72,12 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                     {
                         key:"creditValidation.accountNumber",
                         title:"LOAN_ACCOUNT_NUMBER",
+                        readonly:true,
+                        //type:"amount"
+                    },
+                    {
+                        key:"creditValidation.reference",
+                        title:"REFERENCE_NUMBER",
                         readonly:true,
                         //type:"amount"
                     },
