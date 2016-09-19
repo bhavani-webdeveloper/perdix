@@ -1676,6 +1676,7 @@
                             "id",
                             "loanId",
                             "nomineeDOB",
+                            "nomineeDoorNo",
                             "nomineeDistrict",
                             "nomineeFirstName",
                             "nomineeGender",
