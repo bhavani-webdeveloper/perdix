@@ -53,10 +53,10 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						PageHelper.hideLoader();
 						$log.info("response: " + res);
 						model.achSearch = res;
-						for (var i = 0; i < model.achSearch.length; i++) {
-							if (model.achSearch[i].accountId == model.ach.accountId) {
+						for (var i = 0; i < model.achSearch.body.length; i++) {
+							if (model.achSearch.body[i].accountId == model.ach.accountId) {
 								model.flag = true;
-								model.ach = model.achSearch[i];
+								model.ach = model.achSearch.body[i];
 								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
 							}
 						}

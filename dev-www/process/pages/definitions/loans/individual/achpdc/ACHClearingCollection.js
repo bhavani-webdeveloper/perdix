@@ -79,7 +79,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                         for (var i = 0; i < model.achSearch.body.length; i++) {
                                             model.achSearch.body[i].repaymentType = "ACH";
                                             model.achSearch.body[i].accountNumber = model.achSearch.body[i].accountId;
-                                            model.achSearch.body[i].amount = toString().parseInt(model.achSearch.body[i].amount1);
+                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
                                             model.achDemand.demandList.push(model.achSearch.body[i]);
                                         }
                                         
@@ -159,7 +159,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                 "startEmpty": true,
                                 "remove":null,
                                 "title":"CHEQUE_DETAILS",
-                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount1",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount",
                                 "items":[
                                     {
                                         "key": "achDemand.demandList[].accountId",
@@ -167,8 +167,9 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                         "readonly": true
                                     },
                                     {
-                                        "key": "achDemand.demandList[].amount1",
+                                        "key": "achDemand.demandList[].amount",
                                         "title": "LOAN_AMOUNT",
+                                        "type": "string",
                                         "readonly": true
                                     },
                                     {
