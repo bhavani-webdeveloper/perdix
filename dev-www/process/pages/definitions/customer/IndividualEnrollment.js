@@ -18,6 +18,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
+
+            PageHelper.setError({message:'Spouse ID Proof type is mandatory when Spouse ID Details are given'});
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -1134,6 +1136,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 });
             },
             submit: function(model, form, formName){
+                var self = this;
                 var actions = this.actions;
                 $log.info("Inside submit()");
                 $log.warn(model);
@@ -1228,13 +1231,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
                             Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
+                            model = {};
+                            self.initialize(model, form, null);
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
                                 Utils.removeNulls(resp.customer,true);
-                                model.customer = resp.customer;
+                                model = {};
+                                self.initialize(model, form, null);
                             }, function(err) {
                                 Utils.removeNulls(res.customer,true);
                                 model.customer = res.customer;
