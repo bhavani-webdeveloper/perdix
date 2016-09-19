@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
-    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries", 
+    ["$log", "IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "Utils","Queries",
     function ($log, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper, Enrollment, Utils,Queries) {
 
         var branch = SessionStore.getBranch();
@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
         Queries.getGlobalSettings("loan.individual.booking.pendingDisbursementDays").then(function(value){
             pendingDisbursementDays = Number(value);
-            $log.info("pendingDisbursementDays:" + pendingDisbursementDays);                    
+            $log.info("pendingDisbursementDays:" + pendingDisbursementDays);
         },function(err){
             $log.info("pendingDisbursementDays is not available");
         });
@@ -309,11 +309,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 submit: function (model, form, formName) {
 
                     $log.info("submitting");
-                    
+
                     var scheduledDisbursementDate = new Date(model._currentDisbursement.scheduledDisbursementDate);
                     var sanctionDate = new Date(model.loanAccount.sanctionDate);
                     var customerSignatureDate = new Date(model._currentDisbursement.customerSignatureDate);
-                    var diffDays = scheduledDisbursementDate.getDate() - sanctionDate.getDate(); 
+                    var diffDays = scheduledDisbursementDate.getDate() - sanctionDate.getDate();
 
                     if (diffDays > pendingDisbursementDays){
                         PageHelper.showProgress("loan-create","Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days",5000);

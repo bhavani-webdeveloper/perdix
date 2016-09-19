@@ -1134,7 +1134,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 });
             },
             submit: function(model, form, formName){
-                var self = this;
                 var actions = this.actions;
                 $log.info("Inside submit()");
                 $log.warn(model);
@@ -1229,15 +1228,13 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
                             Utils.removeNulls(resp.customer,true);
-                            model = {};
-                            self.initialize(model, form, null);
+                            model.customer = resp.customer;
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
                                 Utils.removeNulls(resp.customer,true);
-                                model = {};
-                                self.initialize(model, form, null);
+                                model.customer = resp.customer;
                             }, function(err) {
                                 Utils.removeNulls(res.customer,true);
                                 model.customer = res.customer;
