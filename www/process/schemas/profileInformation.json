@@ -1404,7 +1404,9 @@
                 "mailingDistrict",
                 "mailingState",
                 "mailingPincode",
-                "mobilePhone"
+                "mobilePhone",
+                "doorNo",
+                "mailingDoorNo"
             ]
         },
         "enrollmentAction": {

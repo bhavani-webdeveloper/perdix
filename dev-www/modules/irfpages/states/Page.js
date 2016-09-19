@@ -146,7 +146,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             },
             scrollToTop: function(){
                 jQuery('html, body').animate({
-                    scrollTop: $("#errors-wrapper").offset().top - 50
+                    scrollTop: 0
                 }, 500);
             },
             showLoader: function(){
