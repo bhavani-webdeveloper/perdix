@@ -3380,6 +3380,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 return deferred.promise;
             },
             submit: function(model, form, formName){
+                var self = this;
                 $log.info("Inside submit()");
                 $log.warn(model);
                 var sortFn = function(unordered){
@@ -3394,13 +3395,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
                         Utils.removeNulls(resp.customer,true);
-                        model.customer = resp.customer;
+                        model = {};
+                        self.initialize(model, form, null);
                     });
                 } else {
                     EnrollmentHelper.saveData(reqData).then(function(res){
                         EnrollmentHelper.proceedData(res).then(function(resp){
                             Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
+                            model = {};
+                            self.initialize(model, form, null);
                         }, function(err) {
                             Utils.removeNulls(res.customer,true);
                             model.customer = res.customer;
@@ -4548,6 +4551,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 });
             },
             submit: function(model, form, formName){
+                var self = this;
                 var actions = this.actions;
                 $log.info("Inside submit()");
                 $log.warn(model);
@@ -4642,13 +4646,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
                             Utils.removeNulls(resp.customer,true);
-                            model.customer = resp.customer;
+                            model = {};
+                            self.initialize(model, form, null);
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
                                 Utils.removeNulls(resp.customer,true);
-                                model.customer = resp.customer;
+                                model = {};
+                                self.initialize(model, form, null);
                             }, function(err) {
                                 Utils.removeNulls(res.customer,true);
                                 model.customer = res.customer;
@@ -7610,7 +7616,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 type: "lov",
                                 autolov: true,
                                 condition:"model.repayment.instrument=='CHQ'",
-                                title:"DISBURSEMENT_FROM_ACCOUNT",
+                                title:"REPAYMENT_TO_ACCOUNT",
                                 bindMap: {
                                     
                                 },
@@ -7642,8 +7648,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.instrument=='CHQ'",
                                 type: "file",
                                 fileType: "image/*",
-                                category: "noidea",
-                                subCategory: "absolutlynoidea"
+                                category: "Repayment",
+                                subCategory: "Cheque"
                             },
                             {
                                 key:"repayment.reference",
@@ -13448,9 +13454,6 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
             }
             model.loanAccountDisbursementSchedule = {};
             model.loanAccountDisbursementSchedule = _.cloneDeep(model._MTQueue);
-            model.loanAccountDisbursementSchedule.actualDisbursementDate = "";
-            model.loanAccountDisbursementSchedule.customerSignatureDate = "";
-            model.loanAccountDisbursementSchedule.scheduledDisbursementDate = "";
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -15638,6 +15641,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 }
             },
             listOptions: {
+                expandable: true,
                 /*itemCallback: function(item, index) {
                     $log.info(item);
                     $log.info("Redirecting");
@@ -15654,17 +15658,17 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                        item.customerName,
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountNumber, /*Service is missing*/
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + item.amount1, /*amount1 is TotalDemandDue*/
-                        "{{'INSTALLMENT_DATE'|translate}}: " + item.installmentDate,  /*Service is missing*/
-                        "{{'PAYMENT_MODE'|translate}}: " + item.paymentMode,  /*Service is missing*/
-                        "{{'CHEQUE_NO'|translate}}: " + item.chequeNo,  /*Service is missing*/
-                        "{{'ISSUING_BANK'|translate}}: " + item.issuingBank,  /*Service is missing*/
-                        "{{'ISSUING_BRANCH'|translate}}: " + item.issuingBranch,  /*Service is missing*/
-                        "{{'PRINCIPAL'|translate}}: " + item.principal,          /*Service is missing*/
-                        "{{'PTP_DATE'|translate}}: " + item.PTPDate,              /*Service is missing*/
-                        "{{'REASONS'|translate}}: " + item.reasons,   /*Service is missing-Loan officer reasons*/
-                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + item.typeOfCustomer,  /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'), /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + (item.amount1||'-'), /*amount1 is TotalDemandDue*/
+                        "{{'INSTALLMENT_DATE'|translate}}: " + (item.installmentDate||'-'),  /*Service is missing*/
+                        "{{'PAYMENT_MODE'|translate}}: " + (item.paymentMode||'-'),  /*Service is missing*/
+                        "{{'CHEQUE_NO'|translate}}: " + (item.chequeNo||'-'),  /*Service is missing*/
+                        "{{'ISSUING_BANK'|translate}}: " + (item.issuingBank||'-'),  /*Service is missing*/
+                        "{{'ISSUING_BRANCH'|translate}}: " + (item.issuingBranch||'-'),  /*Service is missing*/
+                        "{{'PRINCIPAL'|translate}}: " + (item.principal||'-'),          /*Service is missing*/
+                        "{{'PTP_DATE'|translate}}: " + (item.PTPDate||'-'),        /*Service is missing*/
+                        "{{'REASONS'|translate}}: " + (item.reasons||'-'),   /*Service is missing-Loan officer reasons*/
+                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + (item.typeOfCustomer||'-'),  /*Service is missing*/
                     ]
                 },
                 getActions: function(){
@@ -15822,9 +15826,9 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager){
                         "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
                         "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'CHARGES'|translate}}: " + item.part4,                /*Service is missing*/
+                        "{{'CHARGES'|translate}}: " + (item.part4||'-'),                /*Service is missing*/
                         "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                        "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues     /*Service is missing*/
+                       /* "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues   */  /*Service is missing*/
                     ]
                 },
                 getActions: function(){
@@ -16652,7 +16656,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
             searchForm: [
                 "*"
             ],
-            autoSearch:true,
+            autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "title": 'SEARCH_OPTIONS',
@@ -16802,10 +16806,10 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						PageHelper.hideLoader();
 						$log.info("response: " + res);
 						model.achSearch = res;
-						for (var i = 0; i < model.achSearch.body.length; i++) {
-							if (model.achSearch.body[i].accountId == model.ach.accountId) {
+						for (var i = 0; i < model.achSearch.length; i++) {
+							if (model.achSearch[i].accountId == model.ach.accountId) {
 								model.flag = true;
-								model.ach = model.achSearch.body[i];
+								model.ach = model.achSearch[i];
 								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
 							}
 						}
@@ -17196,9 +17200,10 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         $log.info("PDC Type PDC GET RESP. : "+res);
                         for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
                             if(model.pdc.accountId == model.pdcGetPDCType.body.pdcSummaryDTO[i].loanAccountNo) {
-
-                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                                model.pdc.existingCheque.loanAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].accountNumber;
+                                model.pdc.existingCheque.id = model.pdcGetPDCType.body.pdcSummaryDTO[i].loanId;
                                 model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
+                                model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
                             }
                         }
                         if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
@@ -17530,58 +17535,52 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 $log.info("Inside submit()");
                 //bankCount is the no. of banks added in "pdc.existingCheque" array
                 //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
-                model.pdc.pdcSummaryDTO = [];
-                //Add existing cheque details
-                for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
-                    model.pdc.pdcSummaryDTO.push({
-                        bankAccountNo: model.pdc.existingCheque[bankCount].bankAccountNo,
-                        bankName: model.pdc.existingCheque[bankCount].bankName,
-                        ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
-                        chequeNoFrom: model.pdc.existingCheque[bankCount].chequeNoFrom,
-                        chequeType: model.pdc.existingCheque[bankCount].chequeType,
-                        numberOfCheque: model.pdc.existingCheque[bankCount].numberOfCheque,
-                        customerBankAccountNo: model.pdc.customerBankAccountNo,
-                        loanAccountNo: model._pdc.accountNumber,
-                        branchName: model.pdc.existingCheque[bankCount].branchName,
-                        id: model._pdc.loanId
-                    });
 
-                    //$log.info("bank no : " + bankCount);
-                    //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
-                    // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
-                    //     $log.info("Leaves No.: " + leavesCount);
-                    //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
-                    //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
-                    //     model.pdc.chequeDetails.push({
-                    //         bankName: model.pdc.existingCheque[bankCount].bankName,
-                    //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
-                    //         chequeNo: currentLeafNo
-                    //     });
-                    // }
-                }
+                model.pdc.pdcSummaryDTO
+                
+
+                //model.pdc.pdcSummaryDTO = [];
+                //Add existing cheque details
+                // for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
+                //     model.pdc.pdcSummaryDTO.push(model.pdc.existingCheque[bankCount]);
+                //     //$log.info("bank no : " + bankCount);
+                //     //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
+                //     // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
+                //     //     $log.info("Leaves No.: " + leavesCount);
+                //     //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
+                //     //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
+                //     //     model.pdc.chequeDetails.push({
+                //     //         bankName: model.pdc.existingCheque[bankCount].bankName,
+                //     //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
+                //     //         chequeNo: currentLeafNo
+                //     //     });
+                //     // }
+                // }
 
                 //add the newly addeed cheque details
-                for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++) {
-                    model.pdc.pdcSummaryDTO.push({
-                        bankAccountNo: model.pdc.addCheque[bankCount].bankAccountNo,
-                        bankName: model.pdc.addCheque[bankCount].bankName,
-                        ifscCode: model.pdc.addCheque[bankCount].ifscCode,
-                        chequeNoFrom: model.pdc.addCheque[bankCount].chequeNoFrom,
-                        chequeType: model.pdc.addCheque[bankCount].chequeType,
-                        numberOfCheque: model.pdc.addCheque[bankCount].numberOfCheque,
-                        customerBankAccountNo: model.pdc.customerBankAccountNo,
-                        loanAccountNo: model._pdc.accountNumber,
-                        branchName: model.pdc.addCheque[bankCount].branchName,
-                        id: model._pdc.loanId
-                    });
+                for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+                {
+                    model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
+                    model.pdc.addCheque[bankCount].id = model.pdc.id;
+                    model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
+
+                    if (model.pdc.addCheque[bankCount].chequeType == "PDC")
+                    {
+                        model.pdc.addCheque[bankCount].pdcFrom = 1;
+                        model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
+                       // model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+                    } 
+                    // else {
+                    //     model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+                    // }  
                 }
 
                 //model.pdc.existingCheque = [];
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
 
-                if (model.flag) {
-                    PDC.update(model.pdc.pdcSummaryDTO, function(response){
+                if (!model.flag) {
+                    PDC.update(model.pdc.existingCheque, function(response){
                         PageHelper.hideLoader();
 
                     }, function(errorResponse){
@@ -17591,7 +17590,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                 }
                 else {
                     $log.info("Inside Create()");
-                    PDC.create(model.pdc.pdcSummaryDTO, function(response){
+                    PDC.create(model.pdc.addCheque, function(response){
                         PageHelper.hideLoader();
                         model.flag = true;
                     }, function(errorResponse){
@@ -18586,7 +18585,8 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                        
                                         for (var i = 0; i < model.achSearch.body.length; i++) {
                                             model.achSearch.body[i].repaymentType = "ACH";
-                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achSearch.body[i].accountNumber = model.achSearch.body[i].accountId;
+                                            model.achSearch.body[i].amount = toString().parseInt(model.achSearch.body[i].amount1);
                                             model.achDemand.demandList.push(model.achSearch.body[i]);
                                         }
                                         
@@ -18720,7 +18720,8 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                     PageHelper.hideLoader();
                     PageHelper.showProgress("page-init", "Done.", 2000);
                     model.achDemand.demandList = [];
-                    model.flag = true;
+                    model.flag = false;
+                    model.achDemand.checkbox = false;
                 }, function(errorResponse) {
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
@@ -21640,7 +21641,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             "type": "button",
                             "title": "BACK",
                             "onClick": "actions.reenter(model, formCtrl, form, $event)"
-                        }, {
+                        },
+                        {
+                            "type": "button",
+                            "title": "SEND_BACK",
+                            "onClick": "actions.reject(model, formCtrl, form, $event)"
+                        },
+                        {
                             "type": "submit",
                             "title": "CONFIRM_LOAN_CREATION"
                         }]
@@ -21677,8 +21684,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.repayment",
-                        "title": "REPAYMENT_TENURE",
+                        "key": "loanAccount.tenure",
+                        "title": "DURATION_IN_MONTHS",
                         "readonly": true
                     },
                     {
@@ -21713,28 +21720,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.processingFeeInPaisa",
+                        "key": "loanAccount.processingFeePercentage",
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.cibilCharges",
+                        "key": "loanAccount.commercialCibilCharge",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.repayment",
-                        "title": "REPAYMENT_MODE",
-                        "readonly": true
-                    },
-                    {
-                        "key": "loanAccount.sanction_amount",
-                        "title": "SANCTION_AMOUNT",
+                        "key": "loanAccount.loanAmountRequested",
+                        "title": "LOAN_AMOUNT_REQUESTED",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.sanctionDate",
                         "readonly": true
-                    },
+                    }/*,
                     {
                         "type": "fieldset",
                         "title": "GUARANTOR_DETAILS",
@@ -21758,10 +21760,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 ]
                             }
                         ]
-                    },
+                    }*/,
                     {
                         "type": "fieldset",
-                        "title": "COLLATERAL DETAILS",
+                        "notitle": true,
                         "items": [
                             {
                                 "key":"loanAccount.collateral",
@@ -21883,6 +21885,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             $log.info("User selected No");
                         })
                 },
+                reject: function (model, form, formName) {
+
+                    $log.info("rejecting");
+                    
+                    Utils.confirm("Are you sure you want to send back to Loan Input?")
+                        .then(function(){
+                            var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED', 'stage':'LoanInitiation'};
+                            PageHelper.showProgress('update-loan', 'Working...');
+                            return IndividualLoan.update(reqData)
+                                .$promise
+                                .then(
+                                    function(res){
+                                        PageHelper.showProgress('update-loan', 'Done', 2000);
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        return;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                                        PageHelper.showErrors(httpRes);
+                                    }
+                                )
+                        }, function(){
+                            $log.info("User selected No");
+                        })
+                },
                 reenter: function (model, formCtrl, form, $event) {
                     $state.go("Page.Engine", {
                         pageName: 'loans.individual.booking.PendingQueue',
@@ -21911,12 +21937,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if(model.loanAccount.commercialCibilCharge)
                 if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                     fee+=model.loanAccount.commercialCibilCharge;
-            if(model.loanAccount.securityEmi)
-                if(!_.isNaN(model.loanAccount.securityEmi))
-                    fee+=model.loanAccount.securityEmi;
             $log.info(model.loanAccount.insuranceFee);
             $log.info(model.loanAccount.commercialCibilCharge);
-            $log.info(model.loanAccount.securityEmi);
 
         };
 
@@ -22333,16 +22355,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.securityEmi",
-                                type:"amount",
-                                onChange:function(value,form,model){
-                                    getSanctionedAmount(model);
-                                }
+                                key:"loanAccount.securityEmiRequired"
                             },
                             {
-                                key:"additional.processingFee",
-                                type:"amount",
-                                "title":"PROCESSING_FEES"
+                                key:"loanAccount.processingFeePercentage",
+                                type:"number",
+                                "title":"PROCESSING_FEES_IN_PERCENTAGE"
                             },
                             {
                                 key:"loanAccount.otherFee",
@@ -22821,6 +22839,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     return deferred.promise;
                 },
                 submit: function(model, form, formName) {
+                    var self = this;
                     $log.info(model);
                     PageHelper.clearErrors();
 
@@ -22844,11 +22863,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     if (model.additional.minAmountForSecurityEMI > 0){
-                        if (model.loanAccount.loanAmountRequested > model.additional.minAmountForSecurityEMI && (model.loanAccount.securityEmi==0 || model.loanAccount.securityEmi == '')){
+                        if (model.additional.securityEmiRequired || model.additional.securityEmiRequired == 'No'){
                             PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
                             return false;
                         }
                     }
+                    else
+                        model.additional.securityEmiRequired = model.additional.securityEmiRequired || 'No';
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                         for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
@@ -22858,11 +22879,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
-                    if (model.additional.processingFee){
-                        if (model.additional.processingFee > 0){
-                            model.loanAccount.processingFeeInPaisa = Number(model.additional.processingFee) * 100;
-                        }
-                    }
                     //Product specific validations
                     if(model.additional.product){
                         if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
@@ -22926,7 +22942,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 IndividualLoan.create(resp,function(resp,headers){
                                     $log.info(resp);
                                     PageHelper.showProgress("loan-create","Loan Created",5000);
-                                    $state.go('Page.Landing', null);
+                                    model = {};
+                                    self.initialize(model, form, null);
                                 },function(errresp){
                                     $log.info(errresp);
                                     PageHelper.showErrors(errresp);

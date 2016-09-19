@@ -406,6 +406,17 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
             search: searchResource({
                 method: 'GET',
                 url: endpoint + '/search'
+                // transformResponse: function(data, headersGetter, status){
+                //     var deferred = $q.defer();
+                //     data = JSON.parse(data);
+                //     if (status === 200){
+                //         if (_.hasIn(data, 'maximumAmount') && _.isString(data['maximumAmount'])){
+                //             data.maximumAmount = parseInt(data['maximumAmount']);
+                //             alert(data.maximumAmount);
+                //         }
+                //     }
+                //     return data;
+                // }
             }),
             searchHead: {
                 method: 'HEAD',
