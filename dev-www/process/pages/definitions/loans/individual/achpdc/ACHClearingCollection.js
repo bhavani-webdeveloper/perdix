@@ -28,12 +28,17 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
         "subTitle": Utils.getCurrentDate(),
 
         initialize: function (model, form, formCtrl) {
+            //alert($filter('date')(new Date(), 'dd/MM/yyyy'));
+            //alert(moment(new Date()).format("YYYY-MM-DD"));
+            //alert(Utils.getCurrentDate());
             model.authToken = AuthTokenHelper.getAuthData().access_token;
             model.userLogin = SessionStore.getLoginname();
             model.achCollections = model.achCollections || {};
             model.flag = false;
             model.achDemand = model.achDemand || {};
             model.achDemand.demandList = model.achDemand.demandList ||[];
+            model.achDemand.updateDemand = model.achDemand.updateDemand || [];
+            model.achCollections.demandDate = model.achCollections.demandDate || Utils.getCurrentDate();
         },
         
         form: [
@@ -80,6 +85,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                             model.achSearch.body[i].repaymentType = "ACH";
                                             model.achSearch.body[i].accountNumber = model.achSearch.body[i].accountId;
                                             model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
+                                            model.achSearch.body[i].repaymentDate = Utils.getCurrentDate();
                                             model.achDemand.demandList.push(model.achSearch.body[i]);
                                         }
                                         
@@ -129,6 +135,19 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                         "type":"fieldset",
                         "title":"UPDATE_ACH_DEMANDS",
                         "items":[
+                            {
+                                "key":"ach.achDemandListDate",
+                                "title": "INSTALLMENT_DATE",
+                                "type":"date",
+                                "onChange": function(modelValue, form, model){
+
+                                    if (modelValue)
+                                    {
+                                        for ( i = 0; i < model.achDemand.demandList.length; i++)
+                                            model.achDemand.demandList[i].repaymentDate = model.ach.achDemandListDate;  
+                                    }                    
+                                } 
+                            },
                             {   
                                 "key": "achDemand.checkbox",
                                 "condition": "model.flag",
@@ -167,14 +186,14 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                         "readonly": true
                                     },
                                     {
-                                        "key": "achDemand.demandList[].amount",
-                                        "title": "LOAN_AMOUNT",
-                                        "type": "string",
-                                        "readonly": true
+                                        "key": "achDemand.demandList[].repaymentDate",
+                                        "title": "REPAYMENT_DATE",
+                                        "type": "date"
                                     },
                                     {
-                                        "key": "achDemand.demandList[].customerName",
-                                        "title": "CUSTOMER_NAME",
+                                        "key": "achDemand.demandList[].amount",
+                                        "title": "LOAN_AMOUNT",
+                                        "type": "number",
                                         "readonly": true
                                     },
                                     {
@@ -209,8 +228,26 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
         
         actions: {
             submit: function(model, form, formName){
+                model.achDemand.updateDemand = [];
+                for (var i = 0; i <model.achDemand.demandList.length; i++) {
+                    if(model.achDemand.demandList[i].check ==true)
+                    {
+                        model.achDemand.updateDemand.push({
+                            repaymentDate: model.achDemand.demandList[i].repaymentDate,
+                            accountNumber: model.achDemand.demandList[i].accountNumber,
+                            amount: model.achDemand.demandList[i].amount,
+                            transactionName: model.achDemand.demandList[i].transactionName,
+                            productCode: model.achDemand.demandList[i].param1,
+                            instrument: model.achDemand.demandList[i].instrument,
+                            valueDate: model.achDemand.demandList[i].valueDate,
+                            urnNo: model.achDemand.demandList[i].reference
+                        });
+                    }
+                }
+
+                PageHelper.clearErrors();
                 PageHelper.showLoader();
-                ACH.bulkRepay(model.achDemand.demandList, function(response) {
+                ACH.bulkRepay(model.achDemand.updateDemand, function(response) {
                     PageHelper.hideLoader();
                     PageHelper.showProgress("page-init", "Done.", 2000);
                     model.achDemand.demandList = [];

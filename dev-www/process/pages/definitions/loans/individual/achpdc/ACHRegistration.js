@@ -196,8 +196,6 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 		                                data.bankName
 		                            ];
 		                        }
-		        
-
 		                    },
 							{
 								"key": "ach.branchName",

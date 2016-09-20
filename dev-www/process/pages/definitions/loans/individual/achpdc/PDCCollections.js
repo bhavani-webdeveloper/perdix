@@ -34,6 +34,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
             model.flag = false;
             model.pdcDemand = model.pdcDemand || {};
             model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
+            model.pdcDemand.updateDemand = model.pdcDemand.updateDemand || [];
         },
         
         form: [
@@ -78,9 +79,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
                                         }
 
                                         for (var i = 0; i < model.pdcSearch.body.length; i++) {
-                                            model.pdcSearch.body[i].repaymentType = "ACH";
                                             model.pdcSearch.body[i].amount = parseInt(model.pdcSearch.body[i].amount1);
-                                            model.achDemand.demandList.push(model.pdcSearch.body[i]);
+                                            model.pdcDemand.demandList.push(model.pdcSearch.body[i]);
                                         }
                                         
                                         },
@@ -208,9 +208,26 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
         
         actions: {
             submit: function(model, form, formName){
+                model.pdcDemand.updateDemand = [];
+                for (var i = 0; i <model.pdcDemand.demandList.length; i++) {
+                    if(model.pdcDemand.demandList[i].check ==true)
+                    {
+                        model.pdcDemand.updateDemand.push({
+                            repaymentDat: model.pdcDemand.demandList[i].transactionDate,
+                            accountNumber: model.pdcDemand.demandList[i].accountNumber,
+                            amount: model.pdcDemand.demandList[i].amount,
+                            transactionName: model.pdcDemand.demandList[i].transactionName,
+                            productCode: model.pdcDemand.demandList[i].param1,
+                            instrument: model.pdcDemand.demandList[i].instrument,
+                            valueDate: model.pdcDemand.demandList[i].valueDate,
+                            urnNo: model.pdcDemand.demandList[i].reference
+                        });
+                    }
+                }
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
-                PDC.bulkRepay(model.pdcDemand.demandList, function(response) {
+                
+                PDC.bulkRepay(model.pdcDemand.updateDemand, function(response) {
                     PageHelper.hideLoader();
                     PageHelper.showProgress("page-init", "Done.", 2000);
                     model.flag = true;
