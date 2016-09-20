@@ -446,7 +446,7 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                     }
                 } 
 
-                if(model.pdcChequeMatch > 0 && model.pdcNumberMatch.length > 0)
+                if(model.pdcChequeMatch.length > 0 && model.pdcNumberMatch.length > 0)
                 {
                     alert('1. The Following CHEQUE Numbers already exist: \n' + model.pdcChequeMatch.join(", ")+'\n'
                         +'2. The Following PDC Numbers already exist: \n' + model.pdcNumberMatch.join(", "))
