@@ -36,6 +36,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.fee=data.totalFeeDue;
                         model.creditValidation.loanRepaymentDetailsId = model._credit.id;
                         model.creditValidation.reference=model._credit.reference;
+                        model.creditValidation.instrument=data.instrument;
 
                         model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
 
@@ -72,6 +73,12 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                     {
                         key:"creditValidation.accountNumber",
                         title:"LOAN_ACCOUNT_NUMBER",
+                        readonly:true,
+                        //type:"amount"
+                    },
+                    {
+                        key:"creditValidation.instrument",
+                        title:"REPAYMENT_MODE",
                         readonly:true,
                         //type:"amount"
                     },
