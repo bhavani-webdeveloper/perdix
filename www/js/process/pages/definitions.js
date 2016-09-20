@@ -3380,7 +3380,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 return deferred.promise;
             },
             submit: function(model, form, formName){
-                var self = this;
                 $log.info("Inside submit()");
                 $log.warn(model);
                 var sortFn = function(unordered){
@@ -3394,16 +3393,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 EnrollmentHelper.fixData(reqData);
                 if (reqData.customer.id) {
                     EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        Utils.removeNulls(resp.customer,true);
-                        model = {};
-                        self.initialize(model, form, null);
+                        // Utils.removeNulls(resp.customer,true);
+                        // model.customer = resp.customer;
+                        $state.go('Page.Landing', null);
                     });
                 } else {
                     EnrollmentHelper.saveData(reqData).then(function(res){
                         EnrollmentHelper.proceedData(res).then(function(resp){
-                            Utils.removeNulls(resp.customer,true);
-                            model = {};
-                            self.initialize(model, form, null);
+                            // Utils.removeNulls(resp.customer,true);
+                            // model.customer = resp.customer;
+                            $state.go('Page.Landing', null);
                         }, function(err) {
                             Utils.removeNulls(res.customer,true);
                             model.customer = res.customer;
@@ -4551,7 +4550,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 });
             },
             submit: function(model, form, formName){
-                var self = this;
                 var actions = this.actions;
                 $log.info("Inside submit()");
                 $log.warn(model);
@@ -4645,16 +4643,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
-                            Utils.removeNulls(resp.customer,true);
-                            model = {};
-                            self.initialize(model, form, null);
+                            // Utils.removeNulls(resp.customer,true);
+                            // model.customer = resp.customer;
+                            $state.go('Page.Landing', null);
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
-                                Utils.removeNulls(resp.customer,true);
-                                model = {};
-                                self.initialize(model, form, null);
+                                // Utils.removeNulls(resp.customer,true);
+                                // model.customer = resp.customer;
+                                $state.go('Page.Landing', null);
                             }, function(err) {
                                 Utils.removeNulls(res.customer,true);
                                 model.customer = res.customer;
@@ -22839,7 +22837,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     return deferred.promise;
                 },
                 submit: function(model, form, formName) {
-                    var self = this;
                     $log.info(model);
                     PageHelper.clearErrors();
 
@@ -22942,8 +22939,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 IndividualLoan.create(resp,function(resp,headers){
                                     $log.info(resp);
                                     PageHelper.showProgress("loan-create","Loan Created",5000);
-                                    model = {};
-                                    self.initialize(model, form, null);
+                                    $state.go('Page.Landing', null);
                                 },function(errresp){
                                     $log.info(errresp);
                                     PageHelper.showErrors(errresp);
