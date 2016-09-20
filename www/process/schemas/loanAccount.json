@@ -1676,7 +1676,6 @@
                             "id",
                             "loanId",
                             "nomineeDOB",
-                            "nomineeDoorNo",
                             "nomineeDistrict",
                             "nomineeFirstName",
                             "nomineeGender",
@@ -1782,11 +1781,9 @@
                 "processType": {
                     "type": "string"
                 },
-                "processingFeePercentage": {
-                    "title": "PROCESSING_FEES_IN_PERCENTAGE",
-                    "type": "number",
-                    "minimum":0,
-                    "maximum":100
+                "processingFeeInPaisa": {
+                    "title": "PROCESSING_FEES",
+                    "type": "integer"
                 },
 
                 "productCode": {
@@ -1812,21 +1809,9 @@
                 "sbAccountNo": {
                     "type": "string"
                 },
-                "securityEmiRequired": {
-                    "type": "string",
-                    "title": "SECURITY_EMI",
-                    "x-schema-form":{
-                        "type":"radios",
-                        "titleMap":[{
-                            "name":"Yes",
-                            "value":"Yes"
-                            },
-                            {
-                            "name":"No",
-                            "value":"No"
-                            }
-                        ]
-                    }
+                "securityEmi":{
+                    "type":"integer",
+                    "title":"SECURITY_EMI"
                 },
                 "startTime": {
                     "type": "string"

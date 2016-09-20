@@ -15904,6 +15904,7 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                         model.creditValidation.fee=data.totalFeeDue;
                         model.creditValidation.loanRepaymentDetailsId = model._credit.id;
                         model.creditValidation.reference=model._credit.reference;
+                        model.creditValidation.instrument=data.instrument;
 
                         model.creditValidation.amountCollected = model._credit.repaymentAmountInPaisa/100;
 
@@ -15940,6 +15941,12 @@ function($log, $q, ManagementHelper, LoanProcess,LoanAccount, PageHelper,formHel
                     {
                         key:"creditValidation.accountNumber",
                         title:"LOAN_ACCOUNT_NUMBER",
+                        readonly:true,
+                        //type:"amount"
+                    },
+                    {
+                        key:"creditValidation.instrument",
+                        title:"REPAYMENT_MODE",
                         readonly:true,
                         //type:"amount"
                     },
@@ -16804,10 +16811,10 @@ function($log, ACH, PageHelper, irfProgressMessage, SessionStore, $state, Utils,
 						PageHelper.hideLoader();
 						$log.info("response: " + res);
 						model.achSearch = res;
-						for (var i = 0; i < model.achSearch.length; i++) {
-							if (model.achSearch[i].accountId == model.ach.accountId) {
+						for (var i = 0; i < model.achSearch.body.length; i++) {
+							if (model.achSearch.body[i].accountId == model.ach.accountId) {
 								model.flag = true;
-								model.ach = model.achSearch[i];
+								model.ach = model.achSearch.body[i];
 								model.ach.maximumAmount = parseInt(model.ach.maximumAmount);
 							}
 						}
@@ -17182,6 +17189,11 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
             model.pdcGetPDCType.pdcSummaryDTO = model.pdcGetPDCType.pdcSummaryDTO || [];
             //model to store security cheque types
             model.pdcGetSecurityType = model.pdcGetSecurityType || [];
+            //model to store indevidual cheques
+            model.pdc.chequeDetails = model.pdc.chequeDetails || [];
+            //model to check if the creating pdc number already exist
+            model.pdcNumberMatch = model.pdcNumberMatch || [];
+            model.pdcChequeMatch = model.pdcChequeMatch || []; 
             //false if PDC.get({accountId: model._pdc.loanId} fails (No date available), else update
             model.flag = false;
 
@@ -17198,10 +17210,21 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                         $log.info("PDC Type PDC GET RESP. : "+res);
                         for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
                             if(model.pdc.accountId == model.pdcGetPDCType.body.pdcSummaryDTO[i].loanAccountNo) {
+
                                 model.pdc.existingCheque.loanAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].accountNumber;
                                 model.pdc.existingCheque.id = model.pdcGetPDCType.body.pdcSummaryDTO[i].loanId;
                                 model.pdc.customerBankAccountNo = model.pdcGetPDCType.body.pdcSummaryDTO[i].customerBankAccountNo;
                                 model.pdc.existingCheque.push(model.pdcGetPDCType.body.pdcSummaryDTO[i]);
+                            }
+                        }
+
+                        for (var i = 0; i < model.pdcGetPDCType.body.pdcSummaryDTO.length; i++) {
+                            if (model.pdcGetPDCType.body.pdcSummaryDTO[i].accountPDCWSDto)
+                            {
+                                for (var j = 0; j < model.pdcGetPDCType.body.pdcSummaryDTO[i].accountPDCWSDto.length; j++)
+                                {
+                                    model.pdc.chequeDetails.push(model.pdcGetPDCType.body.pdcSummaryDTO[i].accountPDCWSDto[j]);   
+                                }
                             }
                         }
                         if(model.pdcGetPDCType.body.pdcSummaryDTO.length > 0)
@@ -17335,43 +17358,51 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                             //     "title": "FIRST_INSTALMENT_DATE",
                             //     "type": "date"
                             // },
-                            // {
-                            //     "type": "fieldset",
-                            //     "title": "CHEQUE_LEAVES",
-                            //     "items": [{
-                            //         "type":"array",
-                            //         "key":"pdc.chequeDetails",
-                            //         "add": null,
-                            //         "startEmpty": true,
-                            //         "title":"CHEQUE_DETAILS",
-                            //         "titleExpr": "model.pdc.chequeDetails[arrayIndex].bankName + ' - ' + model.pdc.chequeDetails[arrayIndex].chequeNo",
-                            //         "items":[{
-                            //                 "key": "pdc.chequeDetails[].bankName",
-                            //                 "title": "BANK_NAME",
-                            //                 "readonly": true
-                            //             },
-                            //             {
-                            //                 "key": "pdc.chequeDetails[].ifscCode",
-                            //                 "title": "IFSC_CODE",
-                            //                 "type": "lov",
-                            //                 "inputMap": {
-                            //                     "ifscCode": {
-                            //                         "key": "ifscCode",
-                            //                         "title": "IFSC_CODE"
-                            //                     }
-                            //                 }
-                            //             },
-                            //             {
-                            //                 "key": "pdc.chequeDetails[].chequeNo",
-                            //                 "title": "CHEQUE_NUMBER"
-                            //             }]
-                            //     }]
-                            // },
+                            {
+                                "type": "fieldset",
+                                "title": "CHEQUE_LEAVES",
+                                "items": [{
+                                    "type":"array",
+                                    "key":"pdc.chequeDetails",
+                                    "add": null,
+                                    "startEmpty": true,
+                                    "remove":null,
+                                    "title":"CHEQUE_DETAILS",
+                                    "titleExpr": "model.pdc.chequeDetails[arrayIndex].chequeNo + ' - ' + model.pdc.chequeDetails[arrayIndex].pdcNum",
+                                    "items":[
+                                        {
+                                            "key": "pdc.chequeDetails[].chequeNo",
+                                            "title": "CHEQUE_NUMBER",
+                                            "readonly": true
+                                        },{
+                                            "key": "pdc.chequeDetails[].bankAccountNo",
+                                            "title": "BANK_ACCOUNT_NUMBER",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "pdc.chequeDetails[].amount",
+                                            "title": "AMOUNT",
+                                            "type": "string",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "pdc.chequeDetails[].chequeDate",
+                                            "title": "CHEQUE_DATE",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "pdc.chequeDetails[].pdcNum",
+                                            "title": "PDC_NUMBER",
+                                            "readonly": true
+                                        }]
+                                }]
+                            },
                             {
                                 "type":"array",
                                 "key":"pdc.existingCheque",
                                 "startEmpty": true,
                                 "add":null,
+                                "remove":null,
                                 "condition": "model.flag",
                                 "title":"CHEQUE_DETAILS",
                                 "titleExpr":"model.pdc.existingCheque[arrayIndex].chequeType + ' - ' + model.pdc.existingCheque[arrayIndex].chequeNoFrom + ' - ' + model.pdc.existingCheque[arrayIndex].numberOfCheque",
@@ -17411,6 +17442,11 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                     {
                                         "key": "pdc.existingCheque[].numberOfCheque",
                                         "title": "NUMBER_OF_CHEQUE",
+                                        "type": "Number"
+                                    },
+                                    {
+                                        "key": "pdc.existingCheque[].pdcFrom",
+                                        "title": "PDC_FROM",
                                         "type": "Number"
                                     }
                                 ]
@@ -17494,6 +17530,11 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
                                         "key": "pdc.addCheque[].numberOfCheque",
                                         "title": "NUMBER_OF_CHEQUE",
                                         "type": "Number"
+                                    },
+                                    {
+                                        "key": "pdc.addCheque[].pdcFrom",
+                                        "title": "PDC_FROM",
+                                        "type": "Number"
                                     }
                                 ]
                             }
@@ -17527,81 +17568,199 @@ function($log, PDC, PageHelper, SessionStore,$state,CustomerBankBranch,formHelpe
         schema: function() {
             return PDC.getSchema().$promise;
         },
-
         actions: {
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                //bankCount is the no. of banks added in "pdc.existingCheque" array
-                //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
-
                 model.pdc.pdcSummaryDTO
-                
-
-                //model.pdc.pdcSummaryDTO = [];
-                //Add existing cheque details
-                // for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
-                //     model.pdc.pdcSummaryDTO.push(model.pdc.existingCheque[bankCount]);
-                //     //$log.info("bank no : " + bankCount);
-                //     //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
-                //     // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
-                //     //     $log.info("Leaves No.: " + leavesCount);
-                //     //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
-                //     //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
-                //     //     model.pdc.chequeDetails.push({
-                //     //         bankName: model.pdc.existingCheque[bankCount].bankName,
-                //     //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
-                //     //         chequeNo: currentLeafNo
-                //     //     });
-                //     // }
-                // }
-
                 //add the newly addeed cheque details
-                for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+                model.pdcNumberMatch = [];
+                model.pdcChequeMatch = [];
+                //check for the existance of PDC Number 
+                for( var i = 0; i < model.pdc.chequeDetails.length ; i++){
+                    for( var j = 0; j < model.pdc.addCheque.length ; j++){
+                        for( var k = model.pdc.addCheque[j].pdcFrom; k < (model.pdc.addCheque[j].pdcFrom + model.pdc.addCheque[j].numberOfCheque) ; k++){
+                            if(model.pdc.chequeDetails[i].pdcNum == k){
+                                model.pdcNumberMatch.push(model.pdc.chequeDetails[i].pdcNum);
+                            }
+                       }
+                    }
+                }
+                //Check for the existance of the cheque number
+                for( var i = 0; i < model.pdc.chequeDetails.length ; i++){
+                    for( var j = 0; j < model.pdc.addCheque.length ; j++){
+                        for( var k = model.pdc.addCheque[j].chequeNoFrom; k < (model.pdc.addCheque[j].chequeNoFrom + model.pdc.addCheque[j].numberOfCheque) ; k++){
+                            if(model.pdc.chequeDetails[i].chequeNo == k){
+                                model.pdcChequeMatch.push(model.pdc.chequeDetails[i].chequeNo);
+                            }
+                       }
+                    }
+                } 
+
+                if(model.pdcChequeMatch.length > 0 && model.pdcNumberMatch.length > 0)
                 {
-                    model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
-                    model.pdc.addCheque[bankCount].id = model.pdc.id;
-                    model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
+                    alert('1. The Following CHEQUE Numbers already exist: \n' + model.pdcChequeMatch.join(", ")+'\n'
+                        +'2. The Following PDC Numbers already exist: \n' + model.pdcNumberMatch.join(", "))
+                }else if( model.pdcChequeMatch.length > 0)
+                {
+                    alert('1. The Following CHEQUE Numbers already exist: \n' + model.pdcChequeMatch.join(", ")+'\n')
+                }else if(model.pdcNumberMatch.length > 0 )
+                {
+                    
+                    var confirmUpdate = confirm('The Following PDC Numbers already exist: \n' 
+                        + model.pdcNumberMatch.join(", ") + "\nWould you like to replace them");
+                    if (confirmUpdate == true) {
+                        var confirmUpdateAgain = confirm('Are you sure?');
+                        if(confirmUpdateAgain == true)
+                        {
+                            for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+                            {
+                                model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
+                                model.pdc.addCheque[bankCount].id = model.pdc.id;
+                                model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
 
-                    if (model.pdc.addCheque[bankCount].chequeType == "PDC")
-                    {
-                        model.pdc.addCheque[bankCount].pdcFrom = 1;
-                        model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
-                       // model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
-                    } 
-                    // else {
-                    //     model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
-                    // }  
+                                if (model.pdc.addCheque[bankCount].chequeType == "PDC")
+                                {
+                                    model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
+                                } 
+
+                            }
+
+                            //model.pdc.existingCheque = [];
+                            PageHelper.clearErrors();
+                            PageHelper.showLoader();
+
+                            if (model.flag) {
+                                PDC.update(model.pdc.addCheque, function(response){
+                                    PageHelper.hideLoader();
+
+                                }, function(errorResponse){
+                                    PageHelper.hideLoader();
+                                    PageHelper.showErrors(errorResponse);
+                                });
+                            }
+                            else {
+                                $log.info("Inside Create()");
+                                PDC.create(model.pdc.addCheque, function(response){
+                                    PageHelper.hideLoader();
+                                    model.flag = true;
+                                }, function(errorResponse){
+                                    PageHelper.hideLoader();
+                                    PageHelper.showErrors(errorResponse);
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+                        {
+                            model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
+                            model.pdc.addCheque[bankCount].id = model.pdc.id;
+                            model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
+
+                            if (model.pdc.addCheque[bankCount].chequeType == "PDC")
+                            {
+                                model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
+                            } 
+
+                        }
+                    if (model.flag) {
+                        PDC.update(model.pdc.addCheque, function(response){
+                            PageHelper.hideLoader();
+
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    }
+                    else {
+                        $log.info("Inside Create()");
+                        PDC.create(model.pdc.addCheque, function(response){
+                            PageHelper.hideLoader();
+                            model.flag = true;
+                        }, function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+                    }
                 }
-
-                //model.pdc.existingCheque = [];
-                PageHelper.clearErrors();
-                PageHelper.showLoader();
-
-                if (!model.flag) {
-                    PDC.update(model.pdc.existingCheque, function(response){
-                        PageHelper.hideLoader();
-
-                    }, function(errorResponse){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(errorResponse);
-                    });
-                }
-                else {
-                    $log.info("Inside Create()");
-                    PDC.create(model.pdc.addCheque, function(response){
-                        PageHelper.hideLoader();
-                        model.flag = true;
-                    }, function(errorResponse){
-                        PageHelper.hideLoader();
-                        PageHelper.showErrors(errorResponse);
-                    });
-                }
-                /*$state.go("Page.Engine", {
-                    pageName: 'IndividualLoanBookingConfirmation',
-                    pageId: model.customer.accountId
-                });*/
             }
         }
+
+
+        // actions: {
+        //     submit: function(model, form, formName){
+        //         $log.info("Inside submit()");
+        //         //bankCount is the no. of banks added in "pdc.existingCheque" array
+        //         //model.pdc.chequeDetails = model.pdc.chequeDetails || [];
+
+        //         model.pdc.pdcSummaryDTO
+                
+
+        //         //model.pdc.pdcSummaryDTO = [];
+        //         //Add existing cheque details
+        //         // for (var bankCount = 0; bankCount < model.pdc.existingCheque.length; bankCount++) {
+        //         //     model.pdc.pdcSummaryDTO.push(model.pdc.existingCheque[bankCount]);
+        //         //     //$log.info("bank no : " + bankCount);
+        //         //     //leavesCount is the no. of leaves in each bank array added in "pdc.existingCheque" array
+        //         //     // for (var leavesCount = 0; leavesCount < model.pdc.existingCheque[bankCount].noOfLeaves; leavesCount++) {
+        //         //     //     $log.info("Leaves No.: " + leavesCount);
+        //         //     //     $log.info("Cheque No.: " + ( model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount));
+        //         //     //     var currentLeafNo = model.pdc.existingCheque[bankCount].chequeStartNo + leavesCount;
+        //         //     //     model.pdc.chequeDetails.push({
+        //         //     //         bankName: model.pdc.existingCheque[bankCount].bankName,
+        //         //     //         ifscCode: model.pdc.existingCheque[bankCount].ifscCode,
+        //         //     //         chequeNo: currentLeafNo
+        //         //     //     });
+        //         //     // }
+        //         // }
+
+        //         //add the newly addeed cheque details
+        //         for (var bankCount = 0; bankCount < model.pdc.addCheque.length; bankCount++)
+        //         {
+        //             model.pdc.addCheque[bankCount].loanAccountNo = model.pdc.loanAccountNo;
+        //             model.pdc.addCheque[bankCount].id = model.pdc.id;
+        //             model.pdc.addCheque[bankCount].customerBankAccountNo = model.pdc.customerBankAccountNo;
+
+        //             if (model.pdc.addCheque[bankCount].chequeType == "PDC")
+        //             {
+        //                 model.pdc.addCheque[bankCount].pdcFrom = 1;
+        //                 model.pdc.addCheque[bankCount].branchName = model.pdc.branchName;
+        //                // model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+        //             } 
+        //             // else {
+        //             //     model.pdc.pdcSummaryDTO.push(model.pdc.addCheque[bankCount]);
+        //             // }  
+        //         }
+
+        //         //model.pdc.existingCheque = [];
+        //         PageHelper.clearErrors();
+        //         PageHelper.showLoader();
+
+        //         if (model.flag) {
+        //             PDC.update(model.pdc.addCheque, function(response){
+        //                 PageHelper.hideLoader();
+
+        //             }, function(errorResponse){
+        //                 PageHelper.hideLoader();
+        //                 PageHelper.showErrors(errorResponse);
+        //             });
+        //         }
+        //         else {
+        //             $log.info("Inside Create()");
+        //             PDC.create(model.pdc.addCheque, function(response){
+        //                 PageHelper.hideLoader();
+        //                 model.flag = true;
+        //             }, function(errorResponse){
+        //                 PageHelper.hideLoader();
+        //                 PageHelper.showErrors(errorResponse);
+        //             });
+        //         }
+        //         /*$state.go("Page.Engine", {
+        //             pageName: 'IndividualLoanBookingConfirmation',
+        //             pageId: model.customer.accountId
+        //         });*/
+        //     }
+        // }
     };
 }]);
 /*
@@ -18584,7 +18743,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                         for (var i = 0; i < model.achSearch.body.length; i++) {
                                             model.achSearch.body[i].repaymentType = "ACH";
                                             model.achSearch.body[i].accountNumber = model.achSearch.body[i].accountId;
-                                            model.achSearch.body[i].amount = toString().parseInt(model.achSearch.body[i].amount1);
+                                            model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount1);
                                             model.achDemand.demandList.push(model.achSearch.body[i]);
                                         }
                                         
@@ -18664,7 +18823,7 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                 "startEmpty": true,
                                 "remove":null,
                                 "title":"CHEQUE_DETAILS",
-                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount1",
+                                "titleExpr": "(model.achDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demandList[arrayIndex].accountId + ' - ' + model.achDemand.demandList[arrayIndex].amount",
                                 "items":[
                                     {
                                         "key": "achDemand.demandList[].accountId",
@@ -18672,8 +18831,9 @@ function($log, SessionStore, Enrollment, Utils,ACH,AuthTokenHelper,PageHelper) {
                                         "readonly": true
                                     },
                                     {
-                                        "key": "achDemand.demandList[].amount1",
+                                        "key": "achDemand.demandList[].amount",
                                         "title": "LOAN_AMOUNT",
+                                        "type": "string",
                                         "readonly": true
                                     },
                                     {
