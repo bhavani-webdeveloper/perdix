@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
     <link rel="stylesheet" href="bower_components/pikaday/css/pikaday.css" />
     <link rel="stylesheet" href="bower_components/ladda/dist/ladda.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/datatables.net-dt/css/jquery.dataTables.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -84,9 +85,25 @@
 <script src="bower_components/spin.js/spin.js"></script>
 <script src="bower_components/ladda/dist/ladda.min.js"></script>
 <script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script src="bower_components/angular-ui-select/dist/select.js"></script>
 <script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
+
+<!--
+  IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
+  For Firefox 3.6, you will also need to include jQuery and ECMAScript 5 shim
+-->
+<!--[if lt IE 9]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
+<script>
+  document.createElement('ui-select');
+  document.createElement('ui-select-match');
+  document.createElement('ui-select-choices');
+</script>
+<![endif]-->
+
 <script src="js/vendor/renderjson.js"></script>
 
 <!-- build:js js/modules.js -->
@@ -140,8 +157,6 @@
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
 <script src="process/models/v1/lead/Lead.js"></script>
 
-
-
 <script src="process/models/php/BIReports.js"></script>
 <script src="process/models/php/management/Masters.js"></script>
 <script src="process/models/php/management/RolesPages.js"></script>
@@ -164,15 +179,11 @@
 <script src="process/pages/definitions/UserProfile.js"></script>
 <script src="process/pages/definitions/bi/BIReports.js"></script>
 
-
 <script src="process/pages/definitions/lead/LeadGeneration.js"></script>
 <script src="process/pages/definitions/lead/LeadReassign.js"></script>
 <script src="process/pages/definitions/lead/LeadBulkUpload.js"></script>
-
 <script src="process/pages/definitions/lead/LeadSearch_LoanOfficer.js"></script>
 <script src="process/pages/definitions/lead/LeadSearch_Hubmanager.js"></script>
-
-
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
 <script src="process/pages/definitions/customer/CustomerSearch.js"></script>

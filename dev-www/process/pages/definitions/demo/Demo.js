@@ -34,7 +34,7 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                         },
                         {
                             key:"address.city",
-                            type:"select",
+                            type:"selectize",
                             titleMap:{
                                 "city_A":"City A",
                                 "city_B":"City B"

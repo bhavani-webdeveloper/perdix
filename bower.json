@@ -39,6 +39,7 @@
     "Swipe": "swipe#~2.0.0",
     "angular-ladda": "~0.3.4",
     "moment": "^2.13.0",
+    "angular-ui-select": "~0.19.4",
     "datatables.net": "^1.10.12",
     "datatables.net-dt": "^1.10.12"
   },
