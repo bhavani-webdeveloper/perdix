@@ -38,7 +38,9 @@
     "pikaday": "~1.4.0",
     "Swipe": "swipe#~2.0.0",
     "angular-ladda": "~0.3.4",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "datatables.net": "^1.10.12",
+    "datatables.net-dt": "^1.10.12"
   },
   "overrides": {
     "admin-lte": {

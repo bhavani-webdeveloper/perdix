@@ -1,17 +1,17 @@
-irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils){
+irf.pageCollection.factory(irf.page("lead.LeadSearch_LoanOfficer"),
+["$log", "formHelper", "Enrollment","$state","$q", "SessionStore", "Utils",
+function($log, formHelper, Enrollment,$state,$q, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "CUSTOMER_SEARCH",
+		"title": "Lead Search",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Search Customers",
+			title: "Search leads",
 			searchForm: [
 				"*"
 			],
@@ -19,53 +19,39 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"first_name": {
-						"title": "CUSTOMER_NAME",
-						"type": "string"
-					},
-					"lastName": {
-						"title": "LASTNAME",
-						"type": "string"
-					},
-					"kyc_no": {
-						"title": "KYC_NO",
-						"type": "string"
-					},
-					"urnNo": {
-						"title": "URN_NO",
-						"type": "number"
-					},
-					"branch": {
-						"title": "BRANCH_NAME",
-						"type": "string",
-						"enumCode": "branch",
-						"x-schema-form": {
-							"type": "select",
-							"screenFilter": true
-						}
-					},
+
 					"centre": {
-						"title": "CENTRE",
-						"type": "string",
+						"title": "Center",
+						"type":"number",
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
-							"screenFilter": true
+							
 						}
-					}
+					},
+
+					"first_name": {
+						"title": "Customer Name",
+						"type": "string"
+					},
+					
+					"kyc_no": {
+						"title": "Lead Id",
+						"type": "string"
+					},
+					
+
+					
 
 				},
-				"required":["branch"]
+				"required":["center"],
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
-				var promise = Enrollment.search({
+				/*var promise = Enrollment.search({
 					'branchName': searchOptions.branch,
 					'firstName': searchOptions.first_name,
 					'centreCode': searchOptions.centre,
@@ -77,6 +63,46 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}).$promise;
 
 				return promise;
+
+				*/
+
+				return $q.resolve({
+	                headers: {
+	                	"x-total-count": 4
+	                },
+	                body: [
+	                {
+	                	leadName: "Stalin",
+	                	id:"1",
+	                	leadGender: "MALE"
+
+	                },
+	                {
+	                	leadName: "Ravi",
+	                	id:"2",
+	                	leadGender: "MALE"
+	                },
+	                {
+	                	leadName: "Ram",
+	                	id:"3",
+	                	leadGender: "MALE"
+	                },
+	                {
+	                	leadName: "Raj",
+	                	id:"4",
+	                	leadGender: "MALE"
+	                },
+
+	                ]
+                });
+
+
+
+
+
+
+
+				
 			},
 			paginationOptions: {
 				"viewMode": "page",
@@ -87,10 +113,10 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					return headers['x-total-count']
 				}
 			},
+
 			listOptions: {
 				selectable: false,
 				expandable: true,
-				listStyle: "table",
 				itemCallback: function(item, index) {
 				},
 				getItems: function(response, headers){
@@ -101,6 +127,15 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				},
 				getListItem: function(item){
 					return [
+
+
+
+					item.leadName,
+						
+						item.leadGender,
+						item.id,
+						
+					/*
 						Utils.getFullName(item.firstName, item.middleName, item.lastName),
 						'Customer ID : ' + item.id,
 						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
@@ -108,77 +143,36 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						"{{'BRANCH'|translate}} : " + item.kgfsName,
 						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
 						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
-					]
-				},
-				getColumns: function(){
-					return[
-						{
-							title:'NAME',
-							data: 'firstName'
-						},
-						{
-							title:'URN_NO',
-							data: 'urnNo',
-							// type: 'html',
-							render: function(data, type, full, meta) {
-								return '<b>' + data + '</b>';
-							}
-						},
-						{
-							title:'CURRENT_STAGE',
-							data: 'currentStage'
-						}
+
+						*/
+
+
+
 					]
 				},
 				getActions: function(){
 					return [
 						{
-							name: "Enroll Customer",
+
+							name: "Lead View/Update",
 							desc: "",
-							icon: "fa fa-user-plus",
+							icon: "fa fa-pencil",
 							fn: function(item, index){
 								$state.go("Page.Engine",{
-									pageName:"ProfileInformation",
+									pageName:"lead.LeadGeneration",
 									pageId:item.id
 								});
 							},
+
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage01')
-									return true;
-								return false;
+								
+								return true;
 							}
 						},
-						{
-							name: "Do House Verification",
-							desc: "",
-							icon: "fa fa-house",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"AssetsLiabilitiesAndHealth",
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Stage02')
-									return true;
-								return false;
-							}
-						},
-						{
-							name: "Customer 360",
-							desc: "",
-							icon: "fa fa-user",
-							fn: function(item, index){
-								$state.go("Page.Customer360",{
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
-									return true;
-								return false;
-							}
-						}
+
+
+
+						
 					];
 				}
 			}
