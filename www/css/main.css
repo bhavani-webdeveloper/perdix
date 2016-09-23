@@ -30,8 +30,15 @@ select[disabled] {
 .form-control.read-only .radio-label {
   font-weight: bold !important;
 }
+.sf-table td {
+  padding: 0 !important;
+}
+.sf-table td .form-group {
+  margin-bottom: 0;
+}
 .control-label.required::after,
-.control-indicator + .required::after {
+.control-indicator + .required::after,
+.sf-table th.required::after {
   content: ' \0f069';
   vertical-align: middle;
   font-size: 8px;
@@ -1268,6 +1275,13 @@ span.htmlerror {
   padding-right: 4px;
   color: white;
   font-size: 14px;
+}
+
+.irf-table-view table.root-table tr .expand-control i:after {
+  content: '\f138';
+}
+.irf-table-view table.root-table tr.parent .expand-control i:after {
+  content: '\f13a';
 }
 
 /* MIXINS */

@@ -81,7 +81,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 			paginationOptions: {
 				"viewMode": "page",
 				"getItemsPerPage": function(response, headers){
-					return 20;
+					return 10;
 				},
 				"getTotalItemsCount": function(response, headers){
 					return headers['x-total-count']
@@ -111,10 +111,13 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					]
 				},
 				getColumns: function(){
-					return[
+					return [
 						{
 							title:'NAME',
-							data: 'firstName'
+							data: 'firstName',
+							render: function(data, type, full, meta) {
+								return (full.customerType==='Individual'?'<i class="fa fa-user" style="color:#777">&nbsp;</i> ':'<i class="fa fa-industry" style="color:#777"></i> ') + data;
+							}
 						},
 						{
 							title:'URN_NO',

@@ -49,7 +49,10 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		var bankId = null;
 		try {
 			var bankName = SessionStore.getBankName();
-			var bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
+			var bankId = null;
+			try {
+				bankId = $filter('filter')(classifiers['bank'].data, {name:bankName}, true)[0].code;
+			} catch (e) {}
 			if (bankId) {
 				classifiers['branch'].data = $filter('filter')(classifiers['branch'].data, {parentCode:bankId}, true);
 				classifiers['district'].data = $filter('filter')(classifiers['district'].data, {parentCode:bankId}, true);
