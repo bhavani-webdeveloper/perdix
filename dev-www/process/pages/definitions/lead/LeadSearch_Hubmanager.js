@@ -135,6 +135,7 @@ function($log, formHelper, Enrollment,$state,$q, SessionStore, Utils){
 			listOptions: {
 				selectable: false,
 				expandable: true,
+				listStyle: "table",
 				itemCallback: function(item, index) {
 				},
 				getItems: function(response, headers){
