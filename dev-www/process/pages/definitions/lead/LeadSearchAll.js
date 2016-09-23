@@ -117,6 +117,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper"
 				listOptions: {
 					selectable: false,
 					expandable: true,
+					listStyle: "table",
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
@@ -132,6 +133,25 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper"
 							item.id,
 
 						]
+					},
+					getColumns: function() {
+						return [{
+							title: 'LEAD NAME',
+							data: 'leadName',
+							render: function(data, type, full, meta) {
+								return (full.customerType === 'Individual' ? '<i class="fa fa-user" style="color:#777">&nbsp;</i> ' : '<i class="fa fa-industry" style="color:#777"></i> ') + data;
+							}
+						}, {
+							title: 'GENDER',
+							data: 'leadGender',
+							// type: 'html',
+							render: function(data, type, full, meta) {
+								return '<b>' + data + '</b>';
+							}
+						}, {
+							title: 'ID',
+							data: 'id'
+						}]
 					},
 					getActions: function() {
 						return [{
