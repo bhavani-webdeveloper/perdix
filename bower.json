@@ -41,7 +41,6 @@
     "moment": "^2.13.0",
     "angular-ui-select": "~0.19.4",
     "datatables.net": "^1.10.12",
-    "datatables.net-dt": "^1.10.12",
     "jquery": "~3.1.1",
     "datatables.net-responsive": "~2.1.0"
   },
@@ -51,7 +50,8 @@
         "dist/css/skins/_all-skins.min.css",
         "plugins/slimScroll/jquery.slimscroll.min.js",
         "plugins/fastclick/fastclick.min.js",
-        "dist/js/app.min.js"
+        "dist/js/app.min.js",
+        "plugins/datatables/dataTables.bootstrap.css"
       ]
     },
     "irf-elements": {
