@@ -633,6 +633,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -662,22 +678,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
@@ -1101,7 +1101,7 @@ $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-res
     "</div>")
 
 $templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view dataTables_wrapper form-inline dt-bootstrap\">\n" +
-    "    <table class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
+    "    <table id=\"example\" class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
     "</div>\n" +
     "\n" +
     "")
@@ -3734,121 +3734,145 @@ angular.module('irf.table', ['irf.elements.commons'])
 
 
 angular.module('irf.tableView', ['irf.elements.commons'])
-.directive('irfTableView',['$log', function($log){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableOptions: "=",
-			tableData: "="
-		},
-		templateUrl: "irf/template/tableView/table-view.html",
-		link: function(scope, elem, attrs, ctrl) {
-			ctrl.init(elem);
-		},
-		controller: "irftableViewController"
-	}
-}])
-.controller('irftableViewController', ['$scope', '$element', '$filter', '$compile', '$log',
-	function($scope, $element, $filter, $compile, $log){
-	$log.info($scope.tableOptions);
-
-	var datatableConfig = {};
-	var defaultConfig = {
-		"responsive": true,
-		"columnDefs": [{
-			"targets": 0,
-			"responsivePriority": 1
-		},{
-			"targets": -1,
-			"responsivePriority": 2
-		}]
-	};
-
-	var columns = [{
-		"className": 'expand-control',
-		"width": '20px',
-		'title': '',
-		"orderable": false,
-		"data": null,
-		"defaultContent": '<i class="fa color-theme"></i>'
-	}]
-
-	columns = columns.concat(angular.copy($scope.tableOptions.columns));
-	columns.push({
-		"className": '',
-		"width": '20px',
-		'title': '',
-		"orderable": false,
-		"data": null,
-		"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>'
-	});
-	for (var i = 0; i < columns.length; i++) {
-		columns[i].title = $filter('translate')(columns[i].title);
-	};
-
-	var dataConfig = {
-		data: $scope.tableData,
-		columns: columns
-	};
-
-	if (!_.isObject($scope.tableOptions.config)) {
-		$scope.tableOptions.config = {};
-	}
-	angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig);
-	$log.debug(datatableConfig);
-
-	_.each($scope.tableOptions.actions, function(v, k) {
-		v.$name = $filter('translate')(v.name);
-	});
-
-	var renderDetail = function(data, index) {
-		var html = $('<div></div>');
-		$log.info(data);
-		if (data) {
-			var anythingApplicable = false;
-			_.each($scope.tableOptions.actions, function(v, k) {
-				if (v.isApplicable(data, index)) {
-					$('<button class="btn btn-default">' + v.$name + '</button>').on('click', function(e){v.fn(data, index)}).appendTo(html);
-					anythingApplicable = true;
-				}
-			});
-			if (!anythingApplicable) {
-				html.append('No Actions Available..');
-			}
+	.directive('irfTableView', ['$log', function($log) {
+		return {
+			restrict: "E",
+			replace: true,
+			scope: {
+				tableOptions: "=",
+				tableData: "="
+			},
+			templateUrl: "irf/template/tableView/table-view.html",
+			link: function(scope, elem, attrs, ctrl) {
+				ctrl.init(elem);
+			},
+			controller: "irftableViewController"
 		}
-		return html;
-	};
+	}])
+	.controller('irftableViewController', ['$scope', '$element', '$filter', '$compile', '$log',
+		function($scope, $element, $filter, $compile, $log) {
+			$log.info($scope.tableOptions);
 
-	var dataTable;
-	this.init = function(elem) {
-		$log.info($(elem));
-		var tableElem = $(elem).find('table');
-		dataTable = tableElem.DataTable(datatableConfig);
+			var datatableConfig = {};
+			var defaultConfig = {
+				"responsive": true,
+				"deferRender": true,
+				dom: 'Bfrtip',
+				buttons: [
+					'copy', 'excel', 'pdf', 'print', 'selectAll', 'selectNone',{
+						text: 'reject',
+						action: function(e, dt, node, config) {
+							alert('data rejected');
+						}
+					}
+				],
+				"columnDefs": [{
+					"targets": 0,
+					"responsivePriority": 1
+				}, {
+					"targets": -1,
+					"responsivePriority": 2
+				}]
+			};
 
-		// Init code
-		/*tableElem.find('tbody').on('click', 'td.expand-control', function () {
-			var tr = $(this).closest('tr');
-			var row = dataTable.row(tr);
-			if (row.child.isShown()) {
-				row.child.hide();
-				tr.removeClass('shown');
-			} else {
-				row.child(renderDetail(row.data(), row.index())).show();
-				tr.addClass('shown');
+			var columns = [{
+				"className": 'expand-control',
+				"width": '20px',
+				'title': '',
+				"orderable": false,
+				"data": null,
+				"defaultContent": '<i class="fa color-theme"></i>'
+			}]
+
+			columns = columns.concat(angular.copy($scope.tableOptions.columns));
+			columns.push({
+				"className": '',
+				"width": '20px',
+				'title': '',
+				"orderable": false,
+				"data": null,
+				"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>'
+			});
+			for (var i = 0; i < columns.length; i++) {
+				columns[i].title = $filter('translate')(columns[i].title);
+			};
+
+			var dataConfig = {
+				data: $scope.tableData,
+				columns: columns
+			};
+
+
+			if (!_.isObject($scope.tableOptions.config)) {
+				$scope.tableOptions.config = {};
 			}
-		});*/
+			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig);
+			$log.debug(datatableConfig);
 
-		$scope.$watch('tableData', function(n, o) {
-			dataTable.refresh();
-		});
-	};
+			_.each($scope.tableOptions.actions, function(v, k) {
+				v.$name = $filter('translate')(v.name);
+			});
 
-}]);
+			var renderDetail = function(data, index) {
+				var html = $('<div></div>');
+				$log.info(data);
+				if (data) {
+					var anythingApplicable = false;
+					_.each($scope.tableOptions.actions, function(v, k) {
+						if (v.isApplicable(data, index)) {
+							$('<button class="btn btn-default">' + v.$name + '</button>').on('click', function(e) {
+								v.fn(data, index)
+							}).appendTo(html);
+							anythingApplicable = true;
+						}
+					});
+					if (!anythingApplicable) {
+						html.append('No Actions Available..');
+					}
+				}
+				return html;
+			};
 
+			var dataTable;
+			this.init = function(elem) {
+				$log.info($(elem));
+				var tableElem = $(elem).find('table');
+				dataTable = tableElem.DataTable(datatableConfig);
 
+				var selected = [];
+				$('#example tbody').on('click', 'tr', function() {
+					var id = this.id;
+					var index = $.inArray(id, selected);
 
+					if (index === -1) {
+						selected.push(id);
+					} else {
+						selected.splice(index, 1);
+					}
 
+					$(this).toggleClass('selected');
+				});
+
+				// Init code
+				/*tableElem.find('tbody').on('click', 'td.expand-control', function () {
+					var tr = $(this).closest('tr');
+					var row = dataTable.row(tr);
+					if (row.child.isShown()) {
+						row.child.hide();
+						tr.removeClass('shown');
+					} else {
+						row.child(renderDetail(row.data(), row.index())).show();
+						tr.addClass('shown');
+					}
+				});*/
+
+				$scope.$watch('tableData', function(n, o) {
+					dataTable.refresh();
+				});
+			};
+
+		}
+	]);
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
 	return {
