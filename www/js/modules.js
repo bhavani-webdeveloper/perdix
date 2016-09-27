@@ -649,6 +649,12 @@ $templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\
     "  </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
+    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
+    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
+    "  <span class=\"switch-handle\"></span> \n" +
+    "</label>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -681,12 +687,6 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
-    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
-    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
-    "  <span class=\"switch-handle\"></span> \n" +
-    "</label>")
 
 $templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
     "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
@@ -988,7 +988,7 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "  <div ng-if=\"!modalPopup\" class=\"box-col\" ng-class=\"{'col-sm-12':listStyle==='table','col-sm-6':listStyle!=='table'}\">\n" +
     "    <div class=\"box box-theme\" id=\"{{pid}}\" ng-init=\"pid=definition.formName.split(' ').join('_')\">\n" +
     "      <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "          <h3 class=\"box-title\">{{ 'RESULTS' | translate }}</h3>\n" +
+    "          <h3 class=\"box-title\">{{ 'RESULTS' | translate }} <small>{{ getTotalItems() ? 'Showing ' + items.length + ' of ' + getTotalItems() + ' records':'' }}</small></h3>\n" +
     "          <!-- <div class=\"box-tools pull-right\">\n" +
     "              <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\" data-toggle=\"tooltip\" title=\"Collapse\">\n" +
     "                  <i class=\"fa fa-chevron-down\"></i></button>\n" +
@@ -1005,18 +1005,16 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "            {{ 'SEARCH_FAILED' | translate }}...\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"results-loaded\" ng-show=\"!isLoading\">\n" +
-    "         <div ng-if=\"listStyle =='table'\">\n" +
-    "            <irf-table-view ng-if=\"listStyle='table'\"\n" +
-    "              table-options=\"listViewOptions\"\n" +
-    "              table-data=\"items\"\n" +
-    "            ></irf-table-view></div>\n" +
-    "          <div ng-if=\"listStyle !='table'\">\n" +
-    "          <irf-list-view  \n" +
+    "          <irf-table-view ng-if=\"listStyle == 'table'\"\n" +
+    "            table-options=\"listViewOptions\"\n" +
+    "            table-data=\"items\"\n" +
+    "          ></irf-table-view>\n" +
+    "          <irf-list-view ng-if=\"listStyle != 'table'\"\n" +
     "            list-style=\"listStyle\"\n" +
     "            list-info=\"listViewOptions\"\n" +
     "            irf-list-items=\"listItems\"\n" +
     "            irf-list-actual-items=\"items\"\n" +
-    "            callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view></div>\n" +
+    "            callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view>\n" +
     "          <uib-pagination\n" +
     "            ng-change=\"loadResults(model.searchOptions, currentPage)\"\n" +
     "            ng-model=\"pageInfo.currentPage\"\n" +
@@ -1034,7 +1032,7 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "  </div>\n" +
     "  <div ng-if=\"modalPopup\">\n" +
     "    <h4 ng-if=\"definition.searchForm.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
-    "        <span class=\"text\" style=\"padding: 0 5px;\">{{ 'RESULTS' | translate }}</span>\n" +
+    "        <span class=\"text\" style=\"padding: 0 5px;\">{{ 'RESULTS' | translate }} <small>{{ getTotalItems() ? 'Showing ' + items.length + ' of ' + getTotalItems() + ' records':'' }}</small></span>\n" +
     "    </h4>\n" +
     "    <div ng-switch=\"model.view\" class=\"box-body\">\n" +
     "      <div ng-switch-when=\"results-loading\">\n" +
@@ -1100,8 +1098,23 @@ $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-res
     "	</table>\n" +
     "</div>")
 
-$templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view dataTables_wrapper form-inline dt-bootstrap\">\n" +
-    "    <table id=\"example\" class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
+$templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view\">\n" +
+    "    <table class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
+    "    <script type=\"text/html\" id=\"table-dropdownmenu\">\n" +
+    "        <div class=\"dropdown-simple\" ng-if=\"actions.length && !selectable\">\n" +
+    "            <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
+    "                <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
+    "            </button>\n" +
+    "            <ul class=\"dropdown-menu dropdown-menu-right irf-action-dropdown-menu bg-tint-theme\" aria-labelledby=\"dropdownMenu1\">\n" +
+    "                <li ng-repeat=\"action in actions\" ng-if=\"action.isApplicable(actualItem, itemIndex)\">\n" +
+    "                    <a href=\"\" ng-click=\"action.fn(actualItem, itemIndex);\">\n" +
+    "                        <i ng-if=\"action.icon\" class=\"{{action.icon}}\"></i>\n" +
+    "                        {{ action.name | translate }}\n" +
+    "                    </a>\n" +
+    "                </li>\n" +
+    "            </ul>\n" +
+    "        </div>\n" +
+    "    </script>\n" +
     "</div>\n" +
     "\n" +
     "")
@@ -3755,17 +3768,13 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 
 			var datatableConfig = {};
 			var defaultConfig = {
-				"responsive": true,
+				"info": false,
+				"paginate": false,
 				"deferRender": true,
-				dom: 'Bfrtip',
-				buttons: [
-					'copy', 'excel', 'pdf', 'print', 'selectAll', 'selectNone',{
-						text: 'reject',
-						action: function(e, dt, node, config) {
-							alert('data rejected');
-						}
-					}
-				],
+				"responsive": true,
+				"oLanguage": {
+					"sSearch": "<i class='fa fa-search'></i>"
+				},
 				"columnDefs": [{
 					"targets": 0,
 					"responsivePriority": 1
@@ -3774,6 +3783,30 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 					"responsivePriority": 2
 				}]
 			};
+
+			var selectconfig = {
+				"select": {
+					style: 'multi',
+					blurable: true
+				},
+			};
+			var buttonconfig = {
+				dom: 'Bfrtip',
+				buttons: [
+					'copy',
+					'excel',
+					'pdf',
+					'print',
+					'selectAll',
+					'selectNone', {
+						text: 'reject',
+						action: function(e, dt, node, config) {
+							alert('data rejected');
+						}
+					}
+				],
+			};
+
 
 			var columns = [{
 				"className": 'expand-control',
@@ -3791,7 +3824,13 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				'title': '',
 				"orderable": false,
 				"data": null,
-				"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>'
+				"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>',
+				render: function(data, type, full, meta) {
+					// meta.row, meta.col
+					var html = $('#table-dropdownmenu').clone();
+					$compile(html)($scope);
+					return html;
+				}
 			});
 			for (var i = 0; i < columns.length; i++) {
 				columns[i].title = $filter('translate')(columns[i].title);
@@ -3802,11 +3841,10 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				columns: columns
 			};
 
-
 			if (!_.isObject($scope.tableOptions.config)) {
 				$scope.tableOptions.config = {};
 			}
-			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig);
+			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig, selectconfig, buttonconfig);
 			$log.debug(datatableConfig);
 
 			_.each($scope.tableOptions.actions, function(v, k) {
@@ -3839,21 +3877,9 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				var tableElem = $(elem).find('table');
 				dataTable = tableElem.DataTable(datatableConfig);
 
-				var selected = [];
-				$('#example tbody').on('click', 'tr', function() {
-					var id = this.id;
-					var index = $.inArray(id, selected);
-
-					if (index === -1) {
-						selected.push(id);
-					} else {
-						selected.splice(index, 1);
-					}
-
-					$(this).toggleClass('selected');
-				});
-
 				// Init code
+				$('.dataTables_filter input').addClass('form-control');
+				//$($('.dataTables_filter label').contents()[0]);
 				/*tableElem.find('tbody').on('click', 'td.expand-control', function () {
 					var tr = $(this).closest('tr');
 					var row = dataTable.row(tr);

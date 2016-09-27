@@ -1943,15 +1943,24 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						},
 						{
 							title:'URN_NO',
-							data: 'urnNo',
+							data: 'urnNo'
 							// type: 'html',
-							render: function(data, type, full, meta) {
-								return '<b>' + data + '</b>';
-							}
 						},
 						{
 							title:'CURRENT_STAGE',
 							data: 'currentStage'
+						},
+						{
+							title:'BRANCH',
+							data: 'kgfsName'
+						},
+						{
+							title:'CENTRE_CODE',
+							data: 'centreCode'
+						},
+						{
+							title:'FATHERS_NAME',
+							data: 'fatherFirstName'
 						}
 					]
 				},

@@ -1277,6 +1277,9 @@ span.htmlerror {
   font-size: 14px;
 }
 
+.irf-table-view .dataTables_filter {
+  float: right;
+}
 .irf-table-view table.root-table tr .expand-control i:after {
   content: '\f138';
 }
