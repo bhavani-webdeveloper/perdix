@@ -1152,6 +1152,99 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
+.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
+    var _path = "irf/template/adminlte/";
+    var _builders = sfBuilderProvider.stdBuilders;
+
+    var irfAdminlteUI = {
+        "default": "default.html",
+        "number": "default.html",
+        "password": "default.html",
+        "box": "box.html",
+        "actionbox": "actionbox.html",
+        "array": "array.html",
+        "fieldset": "fieldset.html",
+        "file": "input-file.html",
+        "aadhar": "input-aadhar.html",
+        "lov": "input-lov.html",
+        "button": "button.html",
+        "submit": "button.html",
+        "actions": "actions.html",
+        "checkbox": "checkbox.html",
+        "radios": "radios.html",
+        "select": "select.html",
+        "amount": "amount.html",
+        "date": "date.html",
+        "textarea": "textarea.html",
+        "geotag": "geotag.html",
+        "tablebox": "tablebox.html",
+        "tabs": "tabs.html",
+        "help": "help.html",
+        "section": "section.html",
+        "conditional": "section.html",
+        "biometric": "biometric.html",
+        "qrcode": "qrcode.html",
+        "barcode": "qrcode.html",
+        "validatebiometric": "validate-biometric.html"
+    };
+
+    angular.forEach(irfAdminlteUI, function(value, key){
+        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
+        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
+    });
+
+    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
+
+    //console.log(schemaFormProvider.defaults.string[0]);
+})
+.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
+    return {
+        restrict: 'A',
+        transclude: true,
+        template: '<div class="input-group" ng-transclude></div>',
+        link: function(scope, elem, attrs) {
+            var ccy = irfElementsConfig.currency;
+            scope.iconHtml = ccy.iconHtml;
+        }
+    };
+}])
+.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) return;
+/*
+            ngModel.$formatters.push(function(modelValue){
+                $log.info('formatting:'+modelValue);
+                return AccountingUtils.formatMoney(modelValue);
+            });
+
+            ngModel.$parsers.push(function(viewValue){
+                var parsed = AccountingUtils.parseMoney(viewValue);
+                $log.info('parsing:'+viewValue+' to '+parsed);
+                return parsed;
+            });
+
+            ngModel.$render = function() {
+                $log.info($(element).val());
+                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
+            };
+
+            var read = function() {
+                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
+            };
+
+            $(element).on('blur', function() {
+                read();
+            });
+            read();*/
+        }
+    };
+}])
+;
+
 angular.module('irf.elements.commons', ['pascalprecht.translate', 'ngJSONPath'])
 /*
 .filter("titleMapByParent", function() {
@@ -1661,99 +1754,6 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 }])*/
 ;
 
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
-.config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
-    var _path = "irf/template/adminlte/";
-    var _builders = sfBuilderProvider.stdBuilders;
-
-    var irfAdminlteUI = {
-        "default": "default.html",
-        "number": "default.html",
-        "password": "default.html",
-        "box": "box.html",
-        "actionbox": "actionbox.html",
-        "array": "array.html",
-        "fieldset": "fieldset.html",
-        "file": "input-file.html",
-        "aadhar": "input-aadhar.html",
-        "lov": "input-lov.html",
-        "button": "button.html",
-        "submit": "button.html",
-        "actions": "actions.html",
-        "checkbox": "checkbox.html",
-        "radios": "radios.html",
-        "select": "select.html",
-        "amount": "amount.html",
-        "date": "date.html",
-        "textarea": "textarea.html",
-        "geotag": "geotag.html",
-        "tablebox": "tablebox.html",
-        "tabs": "tabs.html",
-        "help": "help.html",
-        "section": "section.html",
-        "conditional": "section.html",
-        "biometric": "biometric.html",
-        "qrcode": "qrcode.html",
-        "barcode": "qrcode.html",
-        "validatebiometric": "validate-biometric.html"
-    };
-
-    angular.forEach(irfAdminlteUI, function(value, key){
-        schemaFormDecoratorsProvider.defineAddOn("bootstrapDecorator", key, _path+value, _builders);
-        //schemaFormDecoratorsProvider.addMapping("bootstrapDecorator", key, _path+value);
-    });
-
-    //schemaFormDecoratorsProvider.defineDecorator("bootstrapDecorator", schemaForms.irfAdminlteUI, []);
-
-    //console.log(schemaFormProvider.defaults.string[0]);
-})
-.directive('irfAmount', ["irfElementsConfig", function(irfElementsConfig){
-    return {
-        restrict: 'A',
-        transclude: true,
-        template: '<div class="input-group" ng-transclude></div>',
-        link: function(scope, elem, attrs) {
-            var ccy = irfElementsConfig.currency;
-            scope.iconHtml = ccy.iconHtml;
-        }
-    };
-}])
-.directive('irfAmountFormatter', ['AccountingUtils', '$log', function(AccountingUtils, $log){
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return;
-/*
-            ngModel.$formatters.push(function(modelValue){
-                $log.info('formatting:'+modelValue);
-                return AccountingUtils.formatMoney(modelValue);
-            });
-
-            ngModel.$parsers.push(function(viewValue){
-                var parsed = AccountingUtils.parseMoney(viewValue);
-                $log.info('parsing:'+viewValue+' to '+parsed);
-                return parsed;
-            });
-
-            ngModel.$render = function() {
-                $log.info($(element).val());
-                $(element).val(AccountingUtils.formatMoney(ngModel.$modelValue));
-            };
-
-            var read = function() {
-                ngModel.$setViewValue(AccountingUtils.formatMoney($(element).val()));
-            };
-
-            $(element).on('blur', function() {
-                read();
-            });
-            read();*/
-        }
-    };
-}])
-;
-
 angular.module('irf.dashboardBox', ['ui.router', 'irf.elements.commons'])
 .directive('irfDashboardBox', function(){
 	return {
@@ -1921,44 +1921,58 @@ function($log, $scope, $q, $element, $parse, elementsUtils) {
 			+ "&style=feature:landscape|color:0xffffff&style=feature:road|element:geometry.fill";
 	};
 
+	var tryGeolocation = function (deferred, options) {
+		var deferred = $q.defer();
+		navigator.geolocation.getCurrentPosition(function(position) {
+			$log.info('Location captured: latitude:' + position.coords.latitude);
+			$log.info('longitude:' + position.coords.longitude);
+			var lat = position.coords.latitude, long = position.coords.longitude;
+
+			/** OUTPUT FORMAT **/
+			var pos = {
+				"latitude": lat,
+				"longitude": long,
+				"geolocation": formatGeolocation(lat, long),
+				"geourl": getGeoUrl(lat, long),
+				"geoimageurl": getGeoImageUrl(lat, long)
+			};
+
+			deferred.resolve(pos);
+		}, function(error){
+			switch(error.code) {
+				case error.PERMISSION_DENIED:
+					error.message = "GPS_USER_DENIED";
+				break;
+				case error.POSITION_UNAVAILABLE:
+					error.message = "GPS_NO_GEOPOSITION";
+				break;
+				case error.TIMEOUT:
+					error.message = "GPS_REQ_TIMEOUT";
+				break;
+				case error.UNKNOWN_ERROR:
+					error.message = "GPS_ERR_UNKNOWN";
+				break;
+			}
+			deferred.reject(error);
+		}, options);
+		return deferred.promise;
+	}
+
 	var getGeolocation = function() {
 		var deferred = $q.defer();
+		$log.info(navigator.geolocation);
 		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				$log.info('Location captured: latitude:' + position.coords.latitude);
-				$log.info('longitude:' + position.coords.longitude);
-				var lat = position.coords.latitude, long = position.coords.longitude;
-
-				/** OUTPUT FORMAT **/
-				var pos = {
-					"latitude": lat,
-					"longitude": long,
-					"geolocation": formatGeolocation(lat, long),
-					"geourl": getGeoUrl(lat, long),
-					"geoimageurl": getGeoImageUrl(lat, long)
-				};
-
-				deferred.resolve(pos);
-			}, function(error){
-				switch(error.code) {
-					case error.PERMISSION_DENIED:
-						error.message = "GPS_USER_DENIED";
-					break;
-					case error.POSITION_UNAVAILABLE:
-						error.message = "GPS_NO_GEOPOSITION";
-					break;
-					case error.TIMEOUT:
-						error.message = "GPS_REQ_TIMEOUT";
-					break;
-					case error.UNKNOWN_ERROR:
-						error.message = "GPS_ERR_UNKNOWN";
-					break;
-				}
-				deferred.reject(error);
-			}, {
+			tryGeolocation({
 				"maximumAge": 3000,
-				"timeout": 30000,
+				"timeout": 5000,
 				"enableHighAccuracy": true
+			}).then(deferred.resolve, function (error) {
+				$log.error(error);
+				tryGeolocation({
+					"maximumAge": 3000,
+					"timeout": 30000,
+					"enableHighAccuracy": false
+				}).then(deferred.resolve, deferred.reject);
 			});
 		} else {
 			deferred.reject('Unsupported feature');
@@ -5788,8 +5802,8 @@ $(document).ready(function(){
 });
 
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
-irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-//irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
+//irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
+irf.BASE_URL = 'http://59.162.104.69:8080/perdix-server';
 //PILOT irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 irf.MANAGEMENT_BASE_URL = 'http://uatperdix.kgfs.co.in:8081/perdixService/index.php';
 //irf.MANAGEMENT_BASE_URL = 'http://localhost/perdixService/index.php';
