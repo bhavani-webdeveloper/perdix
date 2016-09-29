@@ -1286,6 +1286,11 @@ span.htmlerror {
 .irf-table-view table.root-table tr.parent .expand-control i:after {
   content: '\f13a';
 }
+.irf-table-view table.root-table tr.btntg {
+  background-color: transparent;
+  border: 0;
+  padding: 0 12px;
+}
 
 /* MIXINS */
 /*------------------- Skin ------------------*/

@@ -46,7 +46,9 @@
     "datatables.net-buttons": "^1.2.2",
     "datatables.net-buttons-dt": "^1.2.2",
     "datatables.net-select": "^1.2.0",
+    "datatables.net-dt":"^1.10.12",
     "datatables.net-select-dt": "^1.2.0" 
+
   },
   "overrides": {
     "admin-lte": {
@@ -55,6 +57,7 @@
         "plugins/slimScroll/jquery.slimscroll.min.js",
         "plugins/fastclick/fastclick.min.js",
         "dist/js/app.min.js",
+        "bootstrap/css/bootstrap.min.css",
         "plugins/datatables/dataTables.bootstrap.css"
       ]
     },

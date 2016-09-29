@@ -1901,9 +1901,8 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				return promise;
 			},
 			paginationOptions: {
-				"viewMode": "page",
 				"getItemsPerPage": function(response, headers){
-					return 10;
+					return 100;
 				},
 				"getTotalItemsCount": function(response, headers){
 					return headers['x-total-count']
@@ -1931,6 +1930,13 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
 						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
 					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": false,
+						"paginate": true,
+						"pageLength": 10
+					};
 				},
 				getColumns: function(){
 					return [

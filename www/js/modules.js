@@ -649,12 +649,6 @@ $templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\
     "  </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
-    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
-    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
-    "  <span class=\"switch-handle\"></span> \n" +
-    "</label>")
-
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -687,6 +681,12 @@ $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"switch switch-flat {{sgDisabled ? 'switch-flat-disabled' : 'switch-flat-theme'}}\">\n" +
+    "  <input class=\"switch-input\" type=\"checkbox\" ng-model=\"sgModel\" ng-disabled=\"sgDisabled\" />\n" +
+    "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
+    "  <span class=\"switch-handle\"></span> \n" +
+    "</label>")
 
 $templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
     "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
@@ -1016,10 +1016,11 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "            irf-list-actual-items=\"items\"\n" +
     "            callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view>\n" +
     "          <uib-pagination\n" +
+    "            ng-show=\"getTotalItems() > items.length && (listViewOptions.listStyle !== 'table' || listViewOptions.config.serverPaginate !== false)\"\n" +
     "            ng-change=\"loadResults(model.searchOptions, currentPage)\"\n" +
     "            ng-model=\"pageInfo.currentPage\"\n" +
     "            boundary-links=\"true\"\n" +
-    "            total-items=\"getTotalItems();\"\n" +
+    "            total-items=\"getTotalItems()\"\n" +
     "            rotate=\"true\"\n" +
     "            max-size=\"5\"\n" +
     "            force-ellipsis=\"true\"\n" +
@@ -1049,6 +1050,7 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "          irf-list-actual-items=\"items\"\n" +
     "          callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view>\n" +
     "        <uib-pagination\n" +
+    "          ng-show=\"getTotalItems() > items.length && (listViewOptions.listStyle !== 'table' || listViewOptions.config.serverPaginate !== false)\"\n" +
     "          ng-change=\"loadResults(model.searchOptions)\"\n" +
     "          ng-model=\"pageInfo.currentPage\"\n" +
     "          boundary-links=\"true\"\n" +
@@ -1099,23 +1101,8 @@ $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-res
     "</div>")
 
 $templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view\">\n" +
-    "    <table class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
-    "    <script type=\"text/html\" id=\"table-dropdownmenu\">\n" +
-    "        <div class=\"dropdown-simple\" ng-if=\"actions.length && !selectable\">\n" +
-    "            <button class=\"btn btn-lv-item-tool dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" type=\"button\" ng-click=\"c.toggleActionBox()\">\n" +
-    "                <i class=\"glyphicon glyphicon-option-vertical\"></i>\n" +
-    "            </button>\n" +
-    "            <ul class=\"dropdown-menu dropdown-menu-right irf-action-dropdown-menu bg-tint-theme\" aria-labelledby=\"dropdownMenu1\">\n" +
-    "                <li ng-repeat=\"action in actions\" ng-if=\"action.isApplicable(actualItem, itemIndex)\">\n" +
-    "                    <a href=\"\" ng-click=\"action.fn(actualItem, itemIndex);\">\n" +
-    "                        <i ng-if=\"action.icon\" class=\"{{action.icon}}\"></i>\n" +
-    "                        {{ action.name | translate }}\n" +
-    "                    </a>\n" +
-    "                </li>\n" +
-    "            </ul>\n" +
-    "        </div>\n" +
-    "    </script>\n" +
-    "</div>\n" +
+    "    <table id=\"example\" class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
+    "</div> \n" +
     "\n" +
     "")
 
@@ -3429,6 +3416,9 @@ angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource
 				expandable: def.listOptions.expandable,
 				actions: def.listOptions.getActions()
 			};
+			if (angular.isFunction(def.listOptions.getTableConfig)) {
+				scope.listViewOptions.config = def.listOptions.getTableConfig();
+			}
 			if (angular.isFunction(def.listOptions.getColumns)) {
 				scope.listViewOptions.columns = def.listOptions.getColumns();
 			}
@@ -3764,8 +3754,26 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 	}])
 	.controller('irftableViewController', ['$scope', '$element', '$filter', '$compile', '$log',
 		function($scope, $element, $filter, $compile, $log) {
-			$log.info($scope.tableOptions);
 
+			var actionsTemplate = '<div class="dropdown" ng-if="tableOptions.actions.length">' +
+				'    <button class="btn btn-lv-item-tool  btntg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" >' +
+				'        <i class="glyphicon glyphicon-option-vertical"></i>' +
+				'    </button>' +
+				'    <ul class="dropdown-menu dropdown-menu-right " >' +
+				'        <li ng-repeat="action in tableOptions.actions" ng-if="action.isApplicable(tableData[$$itemIndex$$], $$itemIndex$$)">' +
+				'            <a href="" ng-click="action.fn(tableData[$$itemIndex$$], $$itemIndex$$);">' +
+				'                <i ng-if="action.icon" class="{{action.icon}}"></i>' +
+				'                {{ action.name | translate }}' +
+				'            </a>' +
+				'        </li>' +
+				'    </ul>' +
+				'</div>';
+
+			//var html = $('script div.dropdown-simple');
+			// var eHtml = $(actionsTemplate);
+
+
+			$log.info($scope.tableOptions);
 			var datatableConfig = {};
 			var defaultConfig = {
 				"info": false,
@@ -3781,15 +3789,23 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				}, {
 					"targets": -1,
 					"responsivePriority": 2
-				}]
-			};
+				}],
 
-			var selectconfig = {
+
+				fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+					var hNew = actionsTemplate.replace(/\$\$itemIndex\$\$/g, iDisplayIndex);
+					$log.info(aData);
+					var ah = $(nRow).find('td.__actions').html(hNew);
+					$compile(ah.contents())($scope);
+				} 
+			};
+			/*var selectconfig = {
 				"select": {
 					style: 'multi',
 					blurable: true
 				},
-			};
+			}; */
+
 			var buttonconfig = {
 				dom: 'Bfrtip',
 				buttons: [
@@ -3806,8 +3822,6 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 					}
 				],
 			};
-
-
 			var columns = [{
 				"className": 'expand-control',
 				"width": '20px',
@@ -3816,46 +3830,73 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				"data": null,
 				"defaultContent": '<i class="fa color-theme"></i>'
 			}]
-
 			columns = columns.concat(angular.copy($scope.tableOptions.columns));
+
+			_.each($scope.tableOptions.actions, function(v, k) {
+				v.$name = $filter('translate')(v.name);
+			});
+			var actions = $scope.tableOptions.actions;
+
 			columns.push({
-				"className": '',
+				"className": '__actions',
 				"width": '20px',
 				'title': '',
 				"orderable": false,
 				"data": null,
 				"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>',
-				render: function(data, type, full, meta) {
-					// meta.row, meta.col
-					var html = $('#table-dropdownmenu').clone();
-					$compile(html)($scope);
-					return html;
-				}
+				/* render: function(data, type, row, meta) {
+					var index = meta.row;
+					var html = $('<td></td>');
+					if (data) {
+						var anythingApplicable = false;
+						_.each(actions, function(v, k) {
+							if (v.isApplicable(data, index)) {
+
+								$('<button class="btn btn-default">' + '<a   onclick =" + function(){ ' +v.fn(data, index)+  ';}  " >' + v.$name + '</a>' +'</button>')
+								.appendTo(html);
+								anythingApplicable = true;
+							}
+						});
+						if (!anythingApplicable) {
+							html.append('No Actions');
+						}
+					}
+					$log.info(html);
+					return html.html();
+				},*/
+
+				/*render: function(data, type, full, meta) {
+
+					//meta.row, meta.col
+					
+					$scope.itemIndex = meta.row;
+					$compile(eHtml.contents())($scope);
+					return eHtml.html();
+				} */
+
 			});
 			for (var i = 0; i < columns.length; i++) {
 				columns[i].title = $filter('translate')(columns[i].title);
 			};
-
 			var dataConfig = {
 				data: $scope.tableData,
 				columns: columns
 			};
-
 			if (!_.isObject($scope.tableOptions.config)) {
 				$scope.tableOptions.config = {};
 			}
-			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig, selectconfig, buttonconfig);
+			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig, buttonconfig);
 			$log.debug(datatableConfig);
 
 			_.each($scope.tableOptions.actions, function(v, k) {
 				v.$name = $filter('translate')(v.name);
 			});
-
-			var renderDetail = function(data, index) {
-				var html = $('<div></div>');
+			var renderDetail = function(data, meta) {
+				var html = $('<td></td>');
 				$log.info(data);
 				if (data) {
 					var anythingApplicable = false;
+					var index = meta.row;
 					_.each($scope.tableOptions.actions, function(v, k) {
 						if (v.isApplicable(data, index)) {
 							$('<button class="btn btn-default">' + v.$name + '</button>').on('click', function(e) {
@@ -3870,7 +3911,6 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				}
 				return html;
 			};
-
 			var dataTable;
 			this.init = function(elem) {
 				$log.info($(elem));
@@ -3893,7 +3933,7 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 				});*/
 
 				$scope.$watch('tableData', function(n, o) {
-					dataTable.refresh();
+					dataTable.draw();
 				});
 			};
 
