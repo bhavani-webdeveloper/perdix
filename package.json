@@ -11,6 +11,7 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "gulp": "^3.9.0",
+    "npm-git-install": "^0.2.0",
     "wiredep": "^3.0.0"
   },
   "devDependencies": {
