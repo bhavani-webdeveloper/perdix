@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.documents.BatchInTransist"),
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTransist"),
 ["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
 function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();

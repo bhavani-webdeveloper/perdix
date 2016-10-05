@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.documents.SuccessfullyFiled"),
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.SuccessfullyFiled"),
 ["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
 function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();

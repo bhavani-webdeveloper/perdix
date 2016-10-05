@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.documents.IncompleteDispatch"), ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.IncompleteDispatch"), ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
