@@ -1,17 +1,17 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForVerification"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils){
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper,document,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "Pending_For_Dispatch",
+		"title": "PENDING_FOR_VERIFICATION",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("Perding for verification page got initiated");
 		},
 		definition: {
-			title: "Search Customers",
+			title: "SEARCH_CUSTOMERS",
 			searchForm: [
 				"*"
 			],
@@ -31,7 +31,15 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						"title": "LOAN_ID",
 						"type": "string"
 					},
-					
+					"Hub": {
+						"title": "HUB_NAME",
+						"type": "string",
+						"enumCode": "branch",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
 					"spoke_name": {
 						"title": "SPOKE_NAME",
 						"type": "string",
@@ -44,23 +52,32 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 							"screenFilter": true
 						}
 					},
-					"disbursement_date":{
-						"title":"DISBURSEMENT_DATE",
+					"Received_Date":{
+						"title":"RECEIVED_DATE",
 						"type":"string",
 						"x-schema-form": {
 							"type":"date"
 						}
-					}
+					},
+					"Batch_No": {
+						"title": "BATCH_NO",
+						"type": "string"
+					},
+					"POD_No": {
+						"title": "POD_NO",
+						"type": "string"
+					},
+
 
 				},
-				"required":["Loan_id"]
+				"required":["Received_Date"]
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
-				var promise = Document.searchPFD({
+				var promise = document.searchPFD({
 					'customername': searchOptions.customer_name,
 					'businessname': searchOptions.Business_name,
 					'loanid': searchOptions.LOAN_ID,

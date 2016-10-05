@@ -1,14 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTransist"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils){
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper, document,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "Pending_For_Dispatch",
+		"title": "BATCH_IN_TRANSIST",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
-			$log.info("Perding for verification page got initiated");
+			$log.info("Batch in transist page got initiated");
 		},
 		definition: {
 			title: "Search Customers",
@@ -19,56 +19,46 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"customer_name": {
-						"title": "CUSTOMER_NAME",
+					"Batch_No": {
+						"title": "BATCH_NO",
 						"type": "string"
 					},
-					"Business_name": {
-						"title": "Business_NAME",
+					"POD_No": {
+						"title": "POD_NO",
 						"type": "string"
 					},
-					"Loan_id": {
-						"title": "LOAN_ID",
-						"type": "string"
-					},
-					
-					"spoke_name": {
-						"title": "SPOKE_NAME",
+					"Hub": {
+						"title": "HUB_NAME",
 						"type": "string",
-						"enumCode": "centre",
+						"enumCode": "branch",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
 							"screenFilter": true
 						}
 					},
-					"disbursement_date":{
-						"title":"DISBURSEMENT_DATE",
+					"dispatch_date":{
+						"title":"DISPATCH_DATE",
 						"type":"string",
 						"x-schema-form": {
 							"type":"date"
 						}
 					}
-
 				},
-				"required":["Loan_id"]
+				"required":[]
 			},
+			
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+			getResultsPromise: function(searchOptions, pageOpts){   
 
-				var promise = Document.searchPFD({
-					'customername': searchOptions.customer_name,
-					'businessname': searchOptions.Business_name,
-					'loanid': searchOptions.LOAN_ID,
+				var promise = document.searchBIT({
+					'batchNo': searchOptions.Batch_No,
+					'podNo': searchOptions.POD_No,
+					'hub': searchOptions.Hub,
 					'page': pageOpts.pageNo,
 					'itemsPerPage': pageOpts.itemsPerPage,
-					'spokename': searchOptions.spoke_name,
-					'disbursementdate': searchOptions.disbursement_date,
-					
+					'dispatchDate': searchOptions.dispatch_date,
 				}).$promise;
 
 				return promise;

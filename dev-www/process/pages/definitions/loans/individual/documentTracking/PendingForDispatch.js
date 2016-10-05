@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForDispatch"), ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "Utils",
-    function($log, formHelper, Enrollment, $state, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForDispatch"), ["$log", "formHelper", "document", "$state", "SessionStore", "Utils",
+    function($log,formHelper,document,$state,SessionStore,Utils) {
         var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFo
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                $log.info("Perding for verification page got initiated");
+                $log.info("Perding for Dispatch page got initiated");
             },
             definition: {
                 title: "Search Customers",
@@ -54,12 +54,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFo
                     },
                     "required": ["Loan_id"]
                 },
+
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+                getResultsPromise: function(searchOptions, pageOpts) { 
 
-                    var promise = Document.searchPFD({
+                    var promise = document.searchPFD({
                         'customername': searchOptions.customer_name,
                         'businessname': searchOptions.Business_name,
                         'loanid': searchOptions.LOAN_ID,

@@ -2,7 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.Incomplet
 "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
-function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessage,
+function($log,$state,document, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, PagesDefinition, Queries) {
 
     var branch = SessionStore.getBranch();
@@ -68,10 +68,10 @@ function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessag
             preSave: function(model, form, formName) {
                 $log.info("Inside save()");
                 var deferred = $q.defer();
-                if (model.lead.Name) {
+                if (model.doc) {
                     deferred.resolve();
                 } else {
-                    irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                    irfProgressMessage.pop('Dispatch-save', ' PodNumber is required', 3000);
                     deferred.reject();
                 }
                 return deferred.promise;
@@ -79,7 +79,7 @@ function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessag
 
             submit: function(model, form, formName) {
                 $log.info("Inside submit()");
-                irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
+                irfProgressMessage.pop('Dispatch-save', 'Dispatch is successfully created', 3000);
                 $log.warn(model);
             }
         }

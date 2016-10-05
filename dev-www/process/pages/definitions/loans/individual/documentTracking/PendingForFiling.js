@@ -1,14 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForFiling"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils){
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper, document,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "Pending_For_Dispatch",
+		"title": "Pending_For_Filing",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
-			$log.info("Perding for verification page got initiated");
+			$log.info("Perding for Filing page got initiated");
 		},
 		definition: {
 			title: "Search Customers",
@@ -31,7 +31,15 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						"title": "LOAN_ID",
 						"type": "string"
 					},
-					
+					"Hub": {
+						"title": "HUB_NAME",
+						"type": "string",
+						"enumCode": "branch",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
 					"spoke_name": {
 						"title": "SPOKE_NAME",
 						"type": "string",
@@ -44,8 +52,16 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 							"screenFilter": true
 						}
 					},
-					"disbursement_date":{
-						"title":"DISBURSEMENT_DATE",
+					"Batch_No": {
+						"title": "BATCH_NO",
+						"type": "string"
+					},
+					"POD_No": {
+						"title": "POD_NO",
+						"type": "string"
+					},
+					"Verification_date":{
+						"title":"VERIFICATION_DATE",
 						"type":"string",
 						"x-schema-form": {
 							"type":"date"
@@ -53,22 +69,24 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					}
 
 				},
-				"required":["Loan_id"]
+				"required":["Batch_No"]
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
-				var promise = Document.searchPFD({
+				var promise = document.searchPFD({
 					'customername': searchOptions.customer_name,
 					'businessname': searchOptions.Business_name,
 					'loanid': searchOptions.LOAN_ID,
 					'page': pageOpts.pageNo,
 					'itemsPerPage': pageOpts.itemsPerPage,
+					'hubname': searchOptions.hub,
 					'spokename': searchOptions.spoke_name,
-					'disbursementdate': searchOptions.disbursement_date,
-					
+					'batchno': searchOptions.Batch_No,
+					'podno': searchOptions.Pod_No,
+					'verificationdate': searchOptions.Verification_date,	
 				}).$promise;
 
 				return promise;
