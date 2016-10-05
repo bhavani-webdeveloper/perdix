@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("DocumentTracking.PendingForVerification"),
+irf.pageCollection.factory(irf.page("loans.individual.documents.PendingForVerification"),
 ["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
 function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 	var branch = SessionStore.getBranch();

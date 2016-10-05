@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("DocumentTracking.PendingForDispatch"), ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "Utils",
+irf.pageCollection.factory(irf.page("loans.individual.documents.PendingForDispatch"), ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "Utils",
     function($log, formHelper, Enrollment, $state, SessionStore, Utils) {
         var branch = SessionStore.getBranch();
         return {

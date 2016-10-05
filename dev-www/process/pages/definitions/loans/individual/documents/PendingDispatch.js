@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("DocumentTracking.PendingDispatch"), ["$log", "$state", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("loans.individual.documents.PendingDispatch"), ["$log", "$state", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
 
