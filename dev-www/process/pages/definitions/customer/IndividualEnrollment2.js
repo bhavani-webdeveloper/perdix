@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
+irf.pageCollection.factory(irf.page("customer.IndividualEnrollment2"),
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
