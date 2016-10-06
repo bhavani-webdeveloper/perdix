@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-//var wiredep = require('wiredep').stream;
+var wiredep = require('wiredep').stream;
 var chalk = require('chalk');
 var useref = require('gulp-useref');
 var gulpLoadPlugins = require('gulp-load-plugins');

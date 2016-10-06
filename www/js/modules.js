@@ -104,7 +104,7 @@ $templateCache.put("irf/template/adminlte/amount.html","<div class=\"form-group 
     "</div>\n" +
     "")
 
-$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-submit {{form.htmlClass}}\">\n" +
+$templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group schema-form-anchor {{form.htmlClass}}\">\n" +
     "    <label class=\"col-sm-4 hidden-xs control-label\"\n" +
     "        ng-class=\"{'sr-only': form.notitle}\"></label>\n" +
     "    <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\">\n" +
@@ -114,7 +114,8 @@ $templateCache.put("irf/template/adminlte/anchor.html","<div class=\"form-group 
     "            ng-click=\"!form.href && evalExpr('buttonClick(event,form)', {event:$event,form:form})\"\n" +
     "            ng-disabled=\"form.readonly\">\n" +
     "            <i ng-if=\"form.icon\" class=\"{{form.icon}}\">&nbsp;</i>\n" +
-    "            {{form.title | translate}}\n" +
+    "            <span ng-if=\"form.html\" sg-bind-html=\"form.html\"></span>\n" +
+    "            <span ng-if=\"!form.html\">{{ form.titleExpr ? evalExpr(form.titleExpr, {form:form, arrayIndex:arrayIndex}) : (form.title | translate) }}</span>\n" +
     "        </a>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -145,7 +146,7 @@ $templateCache.put("irf/template/adminlte/array.html","<div class=\"box-body for
     "</div>\n" +
     "")
 
-$templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colClass ? form.colClass : 'col-sm-6' }} box-col\" ng-form name=\"BoxForm\">\n" +
+$templateCache.put("irf/template/adminlte/box.html","<div class=\"{{ form.colClass ? form.colClass : 'col-sm-6' }} box-col closed\" ng-form name=\"BoxForm\">\n" +
     "  <div class=\"box\" id=\"{{pid}}\" ng-init=\"pid=form.title.split(' ').join('_');$emit('box-init');$on('$destroy',evalExpr('boxDestroy()'))\"\n" +
     "    ng-class=\"{'box-danger':BoxForm.$dirty && BoxForm.$invalid, 'box-theme':!BoxForm.$dirty || !BoxForm.$invalid}\">\n" +
     "    <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
@@ -504,34 +505,6 @@ $templateCache.put("irf/template/adminlte/select.html","<div class=\"form-group 
     "  </div>\n" +
     "</div>")
 
-$templateCache.put("irf/template/adminlte/selectize.html","<div class=\"form-group {{form.htmlClass}} schema-form-select\" ng-form name=\"SingleInputForm\" ng-init=\"id=form.key.join('$')\">\n" +
-    "  <label for=\"{{id}}\"\n" +
-    "         ng-class=\"{'sr-only': !showTitle(), 'required':form.required&&!form.readonly}\"\n" +
-    "         class=\"col-sm-4 control-label\">\n" +
-    "    {{ form.titleExpr ? evalExpr(form.titleExpr, {form:form}) : (form.title | translate) }}\n" +
-    "  </label>{{helper}}\n" +
-    "  <div class=\"col-sm-{{form.notitle ? '12' : '8'}}\" style=\"position:relative;\" irf-selectize-handler=\"form\">\n" +
-    "    <ui-select\n" +
-    "      sf-field-model=\"replaceAll\"\n" +
-    "      schema-validate=\"form\"\n" +
-    "      ng-model=\"$$value$$\"\n" +
-    "      ng-disabled=\"form.readonly\"\n" +
-    "      ng-change=\"evalExpr('callSelectOnChange(event, form, modelValue)', {form:form, modelValue:$$value$$, event:$event})\"\n" +
-    "      name=\"{{id}}\"\n" +
-    "      id=\"{{id}}\"\n" +
-    "      class=\"form-control {{form.fieldHtmlClass}}\"\n" +
-    "    >\n" +
-    "      <ui-select-match>\n" +
-    "        <span ng-bind=\"$select.selected.name\"></span>\n" +
-    "      </ui-select-match>\n" +
-    "      <ui-select-choices repeat=\"item in (itemArray | filter: $select.search) track by item.value\">\n" +
-    "        <span ng-bind=\"item.name\"></span>\n" +
-    "      </ui-select-choices>\n" +
-    "    </ui-select>\n" +
-    "    <span ng-if=\"SingleInputForm.$dirty && SingleInputForm.$invalid\" sf-message=\"form.description\" class=\"htmlerror\"></span>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/adminlte/table.html","<table class=\"table sf-table {{form.htmlClass}}\" sf-field-model=\"sf-new-array\" sf-new-array=\"$$value$$\">\n" +
     "	<tbody>\n" +
     "		<tr>\n" +
@@ -652,7 +625,10 @@ $templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
-    "      <h3 class=\"box-title\" ng-if=\"!menu.parentMenu\">{{ menu.title | translate }}</h3>\n" +
+    "      <h3 class=\"box-title\" ng-if=\"!menu.parentMenu\">\n" +
+    "        <i class=\"{{ menu.iconClass }}\" ng-if=\"menu.iconClass\" style=\"color:#666\"> </i>\n" +
+    "        {{ menu.title | translate }}\n" +
+    "      </h3>\n" +
     "      <h3 class=\"box-title\" ng-if=\"menu.parentMenu\" ng-click=\"loadPage($event, menu.parentMenu)\" style=\"cursor:pointer\">\n" +
     "        <i class=\"fa fa-arrow-left\" style=\"color:#97a0b3\">&nbsp;&nbsp;</i>\n" +
     "        <i class=\"{{ menu.iconClass }}\" ng-if=\"menu.iconClass\" style=\"color:#666\"> </i>\n" +
@@ -715,11 +691,6 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <div ng-if=\"!isImage && !isBiometric && inputFileDataURL\" class=\"row\" style=\"padding-bottom:7px;\">\n" +
-    "    <div class=\"col-xs-12\" style=\"text-align:center;height:22px;overflow:hidden\">\n" +
-    "      <a href=\"{{ inputFileDataURL }}\" class=\"color-theme\">{{'VIEW_FILE'|translate}}</a>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
     "  <div ng-hide=\"form.readonly\" class=\"row\" style=\"height:21px\">\n" +
     "    <div ng-if=\"!(modelValue || inputFileName) && isImage\" class=\"col-xs-12\" style=\"text-align:center\">\n" +
     "      <button ng-if=\"isCordova\" ng-click=\"startImageUpload($event, 'camera')\" class=\"btn btn-theme btn-xs\" style=\"margin-top:-3px;margin-left:-7px\"><i class=\"fa fa-camera\">&nbsp;</i>{{ 'CAMERA' | translate }}&nbsp;</button>\n" +
@@ -732,7 +703,12 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "      <button ng-click=\"startFileUpload($event)\" class=\"btn btn-theme btn-xs\" style=\"margin-top:-3px;margin-left:-7px\"><i class=\"fa fa-file\">&nbsp;</i>{{ 'CHOOSE_FILE' | translate}}</button>\n" +
     "    </div>\n" +
     "    <div ng-if=\"modelValue || inputFileName\" ng-class=\"{'col-xs-7':showUploadProgress,'col-xs-10':!showUploadProgress}\" style=\"overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\">\n" +
-    "      <span ng-if=\"!fileError\">{{ (modelValue && modelValue!='$$OFFLINE_FILE$$') ? modelValue : inputFileName }}</span>\n" +
+    "      <span ng-if=\"!fileError\">\n" +
+    "        <a ng-show=\"modelValue && modelValue!='$$OFFLINE_FILE$$'\" href=\"{{ inputFileDataURL }}\" class=\"color-theme\">\n" +
+    "          {{'DOWNLOAD'|translate}}\n" +
+    "        </a>\n" +
+    "        <span ng-hide=\"modelValue && modelValue!='$$OFFLINE_FILE$$'\" ng-bind=\"inputFileName\"></span>\n" +
+    "      </span>\n" +
     "      <span ng-if=\"fileError\" style=\"color:tomato\"><i class=\"fa fa-exclamation-circle\">&nbsp;</i>{{ fileError }}</span>\n" +
     "    </div>\n" +
     "    <button ng-if=\"modelValue || inputFileName\" ng-click=\"removeUpload($event)\" class=\"btn btn-box-tool btn-xs pull-right\" style=\"padding-top:0;padding-right:10px\"><i class=\"fa fa-times\"></i></button>\n" +
@@ -743,7 +719,16 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "  <input type=\"file\" id=\"{{::id}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
+    "  <div ng-show=\"form.readonly && !isImage && !isBiometric\">\n" +
+    "    <div class=\"col-xs-12\" style=\"overflow:hidden;text-overflow:ellipsis;white-space:nowrap;\">\n" +
+    "      <a ng-show=\"modelValue && modelValue!='$$OFFLINE_FILE$$' && inputFileDataURL\" href=\"{{ inputFileDataURL }}\" class=\"color-theme\">\n" +
+    "        {{'DOWNLOAD'|translate}}\n" +
+    "      </a>\n" +
+    "      <span ng-hide=\"modelValue && modelValue!='$$OFFLINE_FILE$$' && inputFileDataURL\" style=\"color:tomato\"><i class=\"fa fa-exclamation-circle\">&nbsp;</i>{{ fileError }}</span>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <input type=\"hidden\" autofocus=\"true\" />\n" +
+    "  <input type=\"file\" id=\"{{'input_' + form.key.join('$')}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
@@ -868,6 +853,30 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "    </div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
+    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
+    "\n" +
+    "    </irf-progress-message>\n" +
+    "</div>\n" +
+    "")
+
+$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
+    "    <span class=\"a-wb-K-s\">\n" +
+    "        <span class=\"a-wb-ra-s\">\n" +
+    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
+    "        </span>\n" +
+    "        <div>\n" +
+    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
+    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
+    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
+    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
+    "                </svg>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </span>\n" +
+    "</div>\n" +
+    "")
+
 $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
     "    <div class=\"modal-content\">\n" +
@@ -904,30 +913,6 @@ $templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>")
-
-$templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
-    "    <irf-progress-message data-ng-repeat=\"msg in irfProgressMessages\" irf-progress-msg=\"msg\">\n" +
-    "\n" +
-    "    </irf-progress-message>\n" +
-    "</div>\n" +
-    "")
-
-$templateCache.put("irf/template/progressMessage/progress-message.html","<div class=\"irf-pmc-pm\">\n" +
-    "    <span class=\"a-wb-K-s\">\n" +
-    "        <span class=\"a-wb-ra-s\">\n" +
-    "            <div class=\"wb-x\">{{ msg.text }}</div>\n" +
-    "        </span>\n" +
-    "        <div>\n" +
-    "            <button class=\"wb-ua-I a-wb-Uo-e a-wb-Uo-e-Oa\" ng-click=\"dismiss()\">\n" +
-    "                <svg x=\"0px\" y=\"0px\" width=\"12px\" height=\"12px\" viewBox=\"0 0 10 10\" focusable=\"false\">\n" +
-    "                    <polygon class=\"a-pa-wd-At1hV-Ff\" fill=\"#FFFFFF\"\n" +
-    "                             points=\"10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 \"></polygon>\n" +
-    "                </svg>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "    </span>\n" +
-    "</div>\n" +
-    "")
 
 $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<form\n" +
@@ -985,10 +970,10 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "    irf-helper=\"formHelper\"\n" +
     "    irf-form-name=\"definition.formName\"></irf-sf>\n" +
     "\n" +
-    "  <div ng-if=\"!modalPopup\" class=\"box-col\" ng-class=\"{'col-sm-12':listStyle==='table','col-sm-6':listStyle!=='table'}\">\n" +
+    "  <div ng-if=\"!modalPopup\" class=\"col-sm-6 box-col\">\n" +
     "    <div class=\"box box-theme\" id=\"{{pid}}\" ng-init=\"pid=definition.formName.split(' ').join('_')\">\n" +
     "      <div class=\"box-header with-border\" ng-init=\"id=pid+'_body'\" data-toggle=\"collapse\" data-target=\"#{{id}}\" data-parent=\"#{{pid}}\">\n" +
-    "          <h3 class=\"box-title\">{{ 'RESULTS' | translate }} <small>{{ getTotalItems() ? 'Showing ' + items.length + ' of ' + getTotalItems() + ' records':'' }}</small></h3>\n" +
+    "          <h3 class=\"box-title\">{{ 'RESULTS' | translate }}</h3>\n" +
     "          <!-- <div class=\"box-tools pull-right\">\n" +
     "              <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\" data-toggle=\"tooltip\" title=\"Collapse\">\n" +
     "                  <i class=\"fa fa-chevron-down\"></i></button>\n" +
@@ -1005,22 +990,17 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "            {{ 'SEARCH_FAILED' | translate }}...\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"results-loaded\" ng-show=\"!isLoading\">\n" +
-    "          <irf-table-view ng-if=\"listStyle == 'table'\"\n" +
-    "            table-options=\"listViewOptions\"\n" +
-    "            table-data=\"items\"\n" +
-    "          ></irf-table-view>\n" +
-    "          <irf-list-view ng-if=\"listStyle != 'table'\"\n" +
+    "          <irf-list-view\n" +
     "            list-style=\"listStyle\"\n" +
     "            list-info=\"listViewOptions\"\n" +
     "            irf-list-items=\"listItems\"\n" +
     "            irf-list-actual-items=\"items\"\n" +
     "            callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view>\n" +
     "          <uib-pagination\n" +
-    "            ng-show=\"getTotalItems() > items.length && (listViewOptions.listStyle !== 'table' || listViewOptions.config.serverPaginate !== false)\"\n" +
     "            ng-change=\"loadResults(model.searchOptions, currentPage)\"\n" +
     "            ng-model=\"pageInfo.currentPage\"\n" +
     "            boundary-links=\"true\"\n" +
-    "            total-items=\"getTotalItems()\"\n" +
+    "            total-items=\"getTotalItems();\"\n" +
     "            rotate=\"true\"\n" +
     "            max-size=\"5\"\n" +
     "            force-ellipsis=\"true\"\n" +
@@ -1033,7 +1013,7 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "  </div>\n" +
     "  <div ng-if=\"modalPopup\">\n" +
     "    <h4 ng-if=\"definition.searchForm.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
-    "        <span class=\"text\" style=\"padding: 0 5px;\">{{ 'RESULTS' | translate }} <small>{{ getTotalItems() ? 'Showing ' + items.length + ' of ' + getTotalItems() + ' records':'' }}</small></span>\n" +
+    "        <span class=\"text\" style=\"padding: 0 5px;\">{{ 'RESULTS' | translate }}</span>\n" +
     "    </h4>\n" +
     "    <div ng-switch=\"model.view\" class=\"box-body\">\n" +
     "      <div ng-switch-when=\"results-loading\">\n" +
@@ -1050,7 +1030,6 @@ $templateCache.put("irf/template/searchListWrapper/resource-search-wrapper.html"
     "          irf-list-actual-items=\"items\"\n" +
     "          callback=\"definition.listOptions.itemCallback(item, index)\"></irf-list-view>\n" +
     "        <uib-pagination\n" +
-    "          ng-show=\"getTotalItems() > items.length && (listViewOptions.listStyle !== 'table' || listViewOptions.config.serverPaginate !== false)\"\n" +
     "          ng-change=\"loadResults(model.searchOptions)\"\n" +
     "          ng-model=\"pageInfo.currentPage\"\n" +
     "          boundary-links=\"true\"\n" +
@@ -1099,12 +1078,6 @@ $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-res
     "	    </tbody>\n" +
     "	</table>\n" +
     "</div>")
-
-$templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view\">\n" +
-    "    <table id=\"example\" class=\"root-table table table-condensed no-wrap\" width=\"100%\"></table>\n" +
-    "</div> \n" +
-    "\n" +
-    "")
 
 $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<div ng-class=\"{'read-only':form.readonly}\" style=\"position:relative;height:inherit;\">\n" +
     "  <div class=\"row\" style=\"padding-bottom:7px;\">\n" +
@@ -1233,7 +1206,7 @@ angular.module('irf.aadhar', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons', 'ui.select', 'ngSanitize'])
+angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.elements.commons'])
 .config(function(schemaFormDecoratorsProvider, sfBuilderProvider, schemaFormProvider) {
     var _path = "irf/template/adminlte/";
     var _builders = sfBuilderProvider.stdBuilders;
@@ -1255,7 +1228,6 @@ angular.module('irf.schemaforms.adminlte', ['schemaForm', 'ui.bootstrap', 'irf.e
         "checkbox": "checkbox.html",
         "radios": "radios.html",
         "select": "select.html",
-        "selectize": "selectize.html",
         "amount": "amount.html",
         "date": "date.html",
         "textarea": "textarea.html",
@@ -1792,6 +1764,22 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 			} else {
 				scope.form.filteredTitleMap = scope.form.titleMap;
 			}
+
+			if (scope.form.parentValueExpr){
+				var sfScope = element.parents("[sf-form]").scope();
+				sfScope.$watch(scope.form.parentValueExpr, function(newVal){
+					var finalTitleMap = [];
+					for (var i=0, tLength=scope.form.titleMap.length; i<tLength; i++)
+					{
+						var item = scope.form.titleMap[i];
+						if (item.parentCode == newVal) {
+							finalTitleMap.push(item);
+						}
+					}
+					scope.form.filteredTitleMap = finalTitleMap;
+				})
+			}
+
 			scope.$on('selectbox-value-changed', function(event, args){
 				var parentForm = args[1];
 				if (scope.form.parentEnumCode && scope.form.parentEnumCode==args[1].enumCode && matchParentKey(scope.form.key, parentForm.key)){
@@ -1814,47 +1802,11 @@ function($log, $q, $parse, $rootScope, offlineFileRegistry){
 						}
 						scope.form.filteredTitleMap = finalTitleMap;
 					}
-
 				}
 			})
 		}
 	}
 })
-.factory('irfSelectizeRegistry', [function(){
-	var registry = {};
-	return {
-		put: function(key, data){
-			registry[key] = data;
-		},
-		get: function(key){
-			var c =registry[key];
-			return c;
-		},
-		pop: function(key){
-			var c =registry[key];
-			registry[key] = null;
-			return c;
-		},
-		clear: function(){
-			registry = {};
-		}
-	};
-}])
-.directive('irfSelectizeHandler', ['$log', 'irfSelectizeRegistry', function($log, irfSelectizeRegistry){
-	return {
-		restrict: 'A',
-		scope: {
-			form: '=irfSelectizeHandler'
-		},
-		link: function($scope, elem, attrs, ctrl) {
-			var id = $scope.form.key.join('$');
-			$scope.itemArray = angular.copy($scope.form.titleMap);
-		},
-		controller: function($scope, $element, $compile) {
-
-		}
-	};
-}])
 /*
 .directive('sgParse', ['$log', '$parse', function($log, $parse){
 	return {
@@ -2074,6 +2026,10 @@ function($log, $scope, $q, $element, $parse, elementsUtils) {
 					break;
 				}
 				deferred.reject(error);
+			}, {
+				"maximumAge": 3000,
+				"timeout": 30000,
+				"enableHighAccuracy": true
 			});
 		} else {
 			deferred.reject('Unsupported feature');
@@ -2142,6 +2098,7 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 .controller('irfInputFileController', [
 	"$scope",
+	"$element",
 	"$attrs",
 	"$log",
 	"$q",
@@ -2154,6 +2111,7 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 	"irfOfflineFileRegistry",
 	function(
 		$scope,
+		$element,
 		$attrs,
 		$log,
 		$q,
@@ -2258,7 +2216,7 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 	self.getFileContent = function(mimeType, capture) {
 		var deferred = $q.defer();
-		var fileInput = document.getElementById($scope.id);
+		var fileInput = $element.find('input:file')[0];
 		if (capture == 'camera') {
 			fileInput.setAttribute('capture', 'camera');
 			fileInput.setAttribute('accept', mimeType + ';capture=camera');
@@ -2464,7 +2422,7 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 			$scope.showUploadProgress = false;
 			$scope.fileError = false;
 
-			document.getElementById($scope.id).value = '';
+			$element.find('input:file')[0].value = '';
 		});
 	};
 /*
@@ -2484,7 +2442,7 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 	self.init = function(elem) {
 		$scope.isCordova = (typeof cordova) !== 'undefined';
 
-		$scope.id = $scope.form.key.slice(-1)[0];
+		// $scope.id = 'input_' + $scope.form.key.join('$');
 		$scope.label = $scope.form.title;
 		// $scope.modelValue = "";
 
@@ -3416,12 +3374,6 @@ angular.module('irf.resourceSearchWrapper', ['irf.elements.commons', 'ngResource
 				expandable: def.listOptions.expandable,
 				actions: def.listOptions.getActions()
 			};
-			if (angular.isFunction(def.listOptions.getTableConfig)) {
-				scope.listViewOptions.config = def.listOptions.getTableConfig();
-			}
-			if (angular.isFunction(def.listOptions.getColumns)) {
-				scope.listViewOptions.columns = def.listOptions.getColumns();
-			}
 		}
 	}
 })
@@ -3520,7 +3472,7 @@ function($log, $q, $scope){
 		if (sfc[sfc.length - 1].type !== 'actions') {
 			var actions = null;
 			var submitOnClick = function(model, formCtrl, form, event) {
-				if (window.innerWidth <= 768 || $scope.definition.listOptions.listStyle === 'table') {
+				if (window.innerWidth <= 768) {
 					$(event.target).parents('.box-body.collapse.in').removeClass('in');
 				}
 			};
@@ -3596,15 +3548,11 @@ function($log, $q, $scope){
 		if ($scope.modalPopup) {
 			$scope.searchForm = sfc;
 		} else {
-			var b = {
+			$scope.searchForm = [{
 				"type": "box",
 				"title": $scope.definition.title,
 				"items": sfc
-			};
-			if ($scope.definition.listOptions.listStyle === 'table') {
-				b.colClass = 'col-sm-12';
-			}
-			$scope.searchForm = [b];
+			}];
 		}
 	}
 
@@ -3736,209 +3684,6 @@ angular.module('irf.table', ['irf.elements.commons'])
 ;
 
 
-angular.module('irf.tableView', ['irf.elements.commons'])
-	.directive('irfTableView', ['$log', function($log) {
-		return {
-			restrict: "E",
-			replace: true,
-			scope: {
-				tableOptions: "=",
-				tableData: "="
-			},
-			templateUrl: "irf/template/tableView/table-view.html",
-			link: function(scope, elem, attrs, ctrl) {
-				ctrl.init(elem);
-			},
-			controller: "irftableViewController"
-		}
-	}])
-	.controller('irftableViewController', ['$scope', '$element', '$filter', '$compile', '$log',
-		function($scope, $element, $filter, $compile, $log) {
-
-			var actionsTemplate = '<div class="dropdown" ng-if="tableOptions.actions.length">' +
-				'    <button class="btn btn-lv-item-tool  btntg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" >' +
-				'        <i class="glyphicon glyphicon-option-vertical"></i>' +
-				'    </button>' +
-				'    <ul class="dropdown-menu dropdown-menu-right " >' +
-				'        <li ng-repeat="action in tableOptions.actions" ng-if="action.isApplicable(tableData[$$itemIndex$$], $$itemIndex$$)">' +
-				'            <a href="" ng-click="action.fn(tableData[$$itemIndex$$], $$itemIndex$$);">' +
-				'                <i ng-if="action.icon" class="{{action.icon}}"></i>' +
-				'                {{ action.name | translate }}' +
-				'            </a>' +
-				'        </li>' +
-				'    </ul>' +
-				'</div>';
-
-			//var html = $('script div.dropdown-simple');
-			// var eHtml = $(actionsTemplate);
-
-
-			$log.info($scope.tableOptions);
-			var datatableConfig = {};
-			var defaultConfig = {
-				"info": false,
-				"paginate": false,
-				"deferRender": true,
-				"responsive": true,
-				"oLanguage": {
-					"sSearch": "<i class='fa fa-search'></i>"
-				},
-				"columnDefs": [{
-					"targets": 0,
-					"responsivePriority": 1
-				}, {
-					"targets": -1,
-					"responsivePriority": 2
-				}],
-
-
-				fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-					var hNew = actionsTemplate.replace(/\$\$itemIndex\$\$/g, iDisplayIndex);
-					$log.info(aData);
-					var ah = $(nRow).find('td.__actions').html(hNew);
-					$compile(ah.contents())($scope);
-				} 
-			};
-			/*var selectconfig = {
-				"select": {
-					style: 'multi',
-					blurable: true
-				},
-			}; */
-
-			var buttonconfig = {
-				dom: 'Bfrtip',
-				buttons: [
-					'copy',
-					'excel',
-					'pdf',
-					'print',
-					'selectAll',
-					'selectNone', {
-						text: 'reject',
-						action: function(e, dt, node, config) {
-							alert('data rejected');
-						}
-					}
-				],
-			};
-			var columns = [{
-				"className": 'expand-control',
-				"width": '20px',
-				'title': '',
-				"orderable": false,
-				"data": null,
-				"defaultContent": '<i class="fa color-theme"></i>'
-			}]
-			columns = columns.concat(angular.copy($scope.tableOptions.columns));
-
-			_.each($scope.tableOptions.actions, function(v, k) {
-				v.$name = $filter('translate')(v.name);
-			});
-			var actions = $scope.tableOptions.actions;
-
-			columns.push({
-				"className": '__actions',
-				"width": '20px',
-				'title': '',
-				"orderable": false,
-				"data": null,
-				"defaultContent": '<i class="glyphicon glyphicon-option-vertical"></i>',
-				/* render: function(data, type, row, meta) {
-					var index = meta.row;
-					var html = $('<td></td>');
-					if (data) {
-						var anythingApplicable = false;
-						_.each(actions, function(v, k) {
-							if (v.isApplicable(data, index)) {
-
-								$('<button class="btn btn-default">' + '<a   onclick =" + function(){ ' +v.fn(data, index)+  ';}  " >' + v.$name + '</a>' +'</button>')
-								.appendTo(html);
-								anythingApplicable = true;
-							}
-						});
-						if (!anythingApplicable) {
-							html.append('No Actions');
-						}
-					}
-					$log.info(html);
-					return html.html();
-				},*/
-
-				/*render: function(data, type, full, meta) {
-
-					//meta.row, meta.col
-					
-					$scope.itemIndex = meta.row;
-					$compile(eHtml.contents())($scope);
-					return eHtml.html();
-				} */
-
-			});
-			for (var i = 0; i < columns.length; i++) {
-				columns[i].title = $filter('translate')(columns[i].title);
-			};
-			var dataConfig = {
-				data: $scope.tableData,
-				columns: columns
-			};
-			if (!_.isObject($scope.tableOptions.config)) {
-				$scope.tableOptions.config = {};
-			}
-			angular.extend(datatableConfig, defaultConfig, $scope.tableOptions.config, dataConfig, buttonconfig);
-			$log.debug(datatableConfig);
-
-			_.each($scope.tableOptions.actions, function(v, k) {
-				v.$name = $filter('translate')(v.name);
-			});
-			var renderDetail = function(data, meta) {
-				var html = $('<td></td>');
-				$log.info(data);
-				if (data) {
-					var anythingApplicable = false;
-					var index = meta.row;
-					_.each($scope.tableOptions.actions, function(v, k) {
-						if (v.isApplicable(data, index)) {
-							$('<button class="btn btn-default">' + v.$name + '</button>').on('click', function(e) {
-								v.fn(data, index)
-							}).appendTo(html);
-							anythingApplicable = true;
-						}
-					});
-					if (!anythingApplicable) {
-						html.append('No Actions Available..');
-					}
-				}
-				return html;
-			};
-			var dataTable;
-			this.init = function(elem) {
-				$log.info($(elem));
-				var tableElem = $(elem).find('table');
-				dataTable = tableElem.DataTable(datatableConfig);
-
-				// Init code
-				$('.dataTables_filter input').addClass('form-control');
-				//$($('.dataTables_filter label').contents()[0]);
-				/*tableElem.find('tbody').on('click', 'td.expand-control', function () {
-					var tr = $(this).closest('tr');
-					var row = dataTable.row(tr);
-					if (row.child.isShown()) {
-						row.child.hide();
-						tr.removeClass('shown');
-					} else {
-						row.child(renderDetail(row.data(), row.index())).show();
-						tr.addClass('shown');
-					}
-				});*/
-
-				$scope.$watch('tableData', function(n, o) {
-					dataTable.draw();
-				});
-			};
-
-		}
-	]);
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
 	return {
@@ -4139,7 +3884,7 @@ angular.module('irf.zxing', ['irf.elements.commons'])
 		}
 	};
 }]);
-angular.module('irf.elements',['irf.elements.tpls','irf.elements.commons','irf.aadhar','irf.lov','irf.inputFile','irf.listView','irf.schemaforms.adminlte','irf.schemaforms','irf.searchBox','irf.resourceSearchWrapper','irf.geotag','irf.dashboardBox','irf.pikaday','irf.flipswitch','irf.progressMessage','irf.zxing','irf.tableView','irf.table','irf.validateBiometric'])
+angular.module('irf.elements',['irf.elements.tpls','irf.elements.commons','irf.aadhar','irf.lov','irf.inputFile','irf.listView','irf.schemaforms.adminlte','irf.schemaforms','irf.searchBox','irf.resourceSearchWrapper','irf.geotag','irf.dashboardBox','irf.pikaday','irf.flipswitch','irf.progressMessage','irf.zxing','irf.table','irf.validateBiometric'])
 var irf = irf || {};
 var irfModels = irf.models = angular.module('IRFModels', ['ngResource', 'ngJSONPath', 'irf.SessionManager']);
 

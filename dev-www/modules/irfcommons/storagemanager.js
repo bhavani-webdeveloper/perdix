@@ -245,6 +245,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			$log.error('No record found for enum key: ' + key);
 			return null;
 		},
+		titleMap: function(key) {
+			var ret = this.enum(key);
+			if (ret)
+				return ret.data;
+			return ret;
+		},
 		save: function(model, formCtrl, formName, actions) {
 			var pageName = formName.substring(6).replace(/\$/g, '.');
 			var promise = true;

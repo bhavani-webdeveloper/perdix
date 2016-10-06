@@ -1933,7 +1933,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				},
 				getTableConfig: function() {
 					return {
-						"serverPaginate": false,
+						"serverPaginate": true,
 						"paginate": true,
 						"pageLength": 10
 					};
