@@ -27,23 +27,49 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 item.customer.villageName
             ]
         },
-        form: [{
+        form: [{type:"section",html:"{{model.customer.kgfsName}}"},{
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
                 {
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
-                    type: "select"
+                    type: "uiselect",
+                    selection: "single",
+                    getTitleMap: function(modelValue, form, model) {
+                        return [{
+                            "name": "Branch 1",
+                            "value": "branch1"
+                        }, {
+                            "name": "Branch 2",
+                            "value": "branch2"
+                        }];
+                    },
+                    // getTitleMap: "helper.titleMap('branch')",
                 },
                 {
                     key:"customer.centreId",
-                    type:"select",
+                    type:"uiselect",
                     filter: {
                         "parentCode": "model.branchId"
                     },
-                    parentEnumCode:"branch",
-                    screenFilter: true
+                    filters: [{
+                        "filterOn": "parentCode",
+
+                        // 1.
+                        "filteredBy": "model.customer.kgfsName",
+
+                        // 2.
+                        "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
+
+                        // 3.
+                        "getFilteredBy": "actions.filterCentreId(model, form, filter)",
+
+                        // 4.
+                        "getFilteredBy": function(model, form, filter) {
+                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName}, true)[0].code;
+                        }
+                    }]
                 },
                 {
                     key: "customer.oldCustomerId",
