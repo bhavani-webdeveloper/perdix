@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page("demo.Demo"),
-["$log", "Enrollment", "SessionStore","Files",
-    function($log, Enrollment, SessionStore,Files){
+    irf.pageCollection.factory(irf.page("demo.Demo"),
+    ["$log", "Enrollment", "SessionStore","Files",
+        function($log, Enrollment, SessionStore,Files){
 
         var branch = SessionStore.getBranch();
 
@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
             form: [
                 {
                     "type":"box",
-                    "title":"Details",
+                    "title":"Details Page",
                     "items":[
                         {
                             key: "address.streetAddress",
