@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
-["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["$log", "$filter","$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
-function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
@@ -36,7 +36,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     title:"BRANCH_NAME",
                     type: "uiselect",
                     selection: "single",
-                    getTitleMap: function(modelValue, form, model) {
+                    getTitleMap: "helper.titleMap('branch')",
+                },
+                {
+                    key:"customer.centreId",
+                    type:"uiselect",
+                    getTitleMap: "helper.titleMap('centre')",
+                   /* getTitleMap: function(modelValue, form, model, titleMap) {
+                        if (titleMap && titleMap.length) {
+                            return titleMap;
+                        }
                         return [{
                             "name": "Branch 1",
                             "value": "branch1"
@@ -44,32 +53,30 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             "name": "Branch 2",
                             "value": "branch2"
                         }];
-                    },
-                    // getTitleMap: "helper.titleMap('branch')",
-                },
-                {
-                    key:"customer.centreId",
-                    type:"uiselect",
-                    filter: {
+                    },*/
+                   /* filter: {
                         "parentCode": "model.branchId"
-                    },
+                    },*/
+                    refreshTitleMap: true,
                     filters: [{
                         "filterOn": "parentCode",
-
                         // 1.
-                        "filteredBy": "model.customer.kgfsName",
+                        //"filteredBy": "model.customer.kgfsName",
 
                         // 2.
-                        "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
+                       // "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
 
                         // 3.
-                        "getFilteredBy": "actions.filterCentreId(model, form, filter)",
+                       // "getFilteredBy": "actions.filterCentreId(model, form, filters)",
 
                         // 4.
                         "getFilteredBy": function(model, form, filter) {
-                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName}, true)[0].code;
+                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[1].code;
                         }
-                    }]
+                    }],
+                    onChange: function(modelValue,form, model, event) {
+
+                    }
                 },
                 {
                     key: "customer.oldCustomerId",

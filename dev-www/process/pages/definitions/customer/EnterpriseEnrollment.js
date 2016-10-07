@@ -32,7 +32,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
-                        type: "select"
+                        type: "uiselect", 
+                        selection: "single",
+                       /* getTitleMap: function(modelValue, form, model) {
+                        return [{
+                        "name": "Branch 1",
+                        "value": "branch1"
+                        }, {
+                        "name": "Branch 2",
+                        "value": "branch2"
+                        }];
+                        },*/
+                        getTitleMap: "helper.titleMap('branch')",
+                        filters: [{
+                        }]
                     },
                     {
                         key: "customer.id",
