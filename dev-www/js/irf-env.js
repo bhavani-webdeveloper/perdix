@@ -3,7 +3,7 @@ var irf = irf || {};
 //kgfs-pilot irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/kgfs-pilot';
 //irf.BASE_URL = 'http://works2.sen-sei.in:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/perdix-server';
-irf.BASE_URL = 'http://52.4.230.141:8080/kinara-server';
+irf.BASE_URL = 'http://52.202.57.36:8080/perdix-server';
 //irf.BASE_URL = 'http://uatperdix.kgfs.co.in:8080/pilot-server';
 
 irf.MANAGEMENT_BASE_URL = 'http://52.4.230.141:8081/management';
