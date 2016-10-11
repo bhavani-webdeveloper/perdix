@@ -22,16 +22,15 @@ irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q
 
             modelPromise: function(pageId, _model) {
                 return $q.resolve({
-                    audit: {
-                    Bank:"Bangalore",   
-                    Branch:"Bangalore",
-                    CustomerName:"Ram",
+                    audit: {   
+                    Branch:"akra",
+                    CustomerName:"Ravi",
                     URN:"123654",
                     Product:"Loan",
                     AccountNumber:126589,
                     LoanApplicationDate:"3/8/16",
                     LoanAmount:"1,23,456",
-                    ApplicationStatus:"New",
+                    Status:"Audited",
                     }
                 });
             },
@@ -44,10 +43,7 @@ irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q
             formSource: [ {
                     type: "box",
                     title: "Sample",
-                    items: [{
-                        key: "audit.Bank",
-                        title: "Bank"
-                    }, {
+                    items: [ {
                         key: "audit.Branch",
                         title: "Branch"
                     }, {
@@ -72,8 +68,8 @@ irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q
                         title: "LoanAmount"
                     },
                      {
-                        "key": "audit.ApplicationStatus",
-                        title: "Application Status"
+                        "key": "audit.Status",
+                        title: "Status"
                     }
                      ]
                 },

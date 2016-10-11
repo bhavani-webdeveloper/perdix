@@ -122,7 +122,7 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 				getActions: function(){
 					return [
 						{
-							name: "Edit",
+							name: "Do Audit",
 							desc: "",
 							icon: "fa fa-pencil-square-o ",
 							fn: function(item, index){

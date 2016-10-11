@@ -57,8 +57,8 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 	                },
 	                body: [
 	                {
-	                	Bank:    		     "Bangalore",
-	                    Branch:   		     "Bangalore",
+	                	
+	                    Branch:   		     "Akra",
 	                	CustomerName:  	     "Ravi",
 	                	URN:         	     "1",
 	                	Product:      		 "Loan",
@@ -66,44 +66,42 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 	                	LoanApplicationDate: "12/5/16",
 	                	LoanAmount:          "1,23,345", 
 	                	ApplicationStatus:   "New",
-	                	Status:              "Ok"
+	                	Status:              "-"
 
 	                },
 	                {
-	                	Bank:    		     "Bangalore",
-	                    Branch:   		     "Bangalore",
+	                	
+	                    Branch:   		     "Akra",
 	                	CustomerName:  	     "Ravi",
 	                	URN:         	     "1",
 	                	Product:      		 "Loan",
 	                	AccountNumber:       "12345",
 	                	LoanApplicationDate: "12/5/16",
 	                	LoanAmount:          "1,23,345", 
-	                	ApplicationStatus:   "New",
-	                	Status:              "Ok"
+	                	Status:              "-"
+
 	                },
 	                {
-	                	Bank:    		     "Bangalore",
-	                    Branch:   		     "Bangalore",
+	                	
+	                    Branch:   		     "Akra",
 	                	CustomerName:  	     "Raj",
 	                	URN:         	     "1",
 	                	Product:      		 "Loan",
 	                	AccountNumber:       "12345",
 	                	LoanApplicationDate: "12/5/16",
 	                	LoanAmount:          "1,23,345", 
-	                	ApplicationStatus:   "New",
-	                	Status:              "Ok"
+	                	Status:              "Audited"
 	                },
 	                {
-	                	Bank:    		     "Bangalore",
-	                    Branch:   		     "Bangalore",
+	                	
+	                    Branch:   		     "Akra",
 	                	CustomerName:  	     "Ram",
 	                	URN:         	     "1",
 	                	Product:      		 "Loan",
 	                	AccountNumber:       "12345",
 	                	LoanApplicationDate: "12/5/16",
 	                	LoanAmount:          "1,23,345", 
-	                	ApplicationStatus:   "New",
-	                	Status:              "Ok"
+	                	Status:              "Not Audited"
 	                },
 
 	                ]
@@ -153,10 +151,6 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 				getColumns: function(){
 					return [
 						{
-							title:'Bank',
-							data: 'Bank',
-						},
-						{
 							title:'Branch',
 							data: 'Branch'
 						},
@@ -185,8 +179,8 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 							data: 'LoanAmount'
 						},
 						{
-							title:'ApplicationStatus',
-							data: 'ApplicationStatus'
+							title:'Status',
+							data: 'Status'
 						},
 					]
 				},
@@ -214,7 +208,7 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 							fn: function(item, index){
 								$state.go("Page.Engine",{
 									pageName:"audit.Issues",
-									pageId:item.Bank
+									pageId:item.Branch
 								});
 							},
 							isApplicable: function(item, index){
