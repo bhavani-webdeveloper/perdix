@@ -31,6 +31,10 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
+            {
+                type: "section",
+                html: "<pre>{{model|json}}</pre>"
+            },
                 {
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
