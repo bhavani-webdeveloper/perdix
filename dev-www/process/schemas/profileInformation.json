@@ -205,6 +205,10 @@
                         "customerNumber": {
                             "type": "string"
                         },
+                        "landmark": {
+                            "type": "string",
+                            "title": "LANDMARK"
+                        },
                         "district": {
                             "type": "string"
                         },
@@ -655,14 +659,19 @@
                     "title": "IDENTITY_PROOFNO"
                 },
                 "centreCode": {
-                    "type": "string",
+                    "type": ["null", "number"],
                     "title": "CENTRE",
                     "enumCode": "centre"
                 },
                 "centreId": {
-                    "type": "integer",
+                    "type": ["null", "number"],
                     "title": "CENTRE_ID",
                     "enumCode": "centre"
+                },
+                "customerBranchId": {
+                    "type": "integer",
+                    "title": "BRANCH_NAME",
+                    "enumCode": "branch_id"
                 },
                 "inviteId": {
                     "type": "string",
@@ -1275,6 +1284,22 @@
                                 }
                             }
                         },
+                        "enterpriseUserDefinedFieldValues": {
+                            "type": "object",
+                            "title": "USER_DEFINED_FIELDVALUES",
+                            "properties": {
+                                "udf31": {
+                                    "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
+                                    "type": "string",
+                                    "enumCode": "years_in_present_area"
+                                },
+                                "udf32": {
+                                    "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
+                                    "type": "string",
+                                    "enumCode": "years_in_current_address"
+                                }
+                            }
+                        },
                         "version": {
                             "type": "integer",
                             "title": "Version"
@@ -1283,7 +1308,8 @@
                     "required": [
                         "id",
                         "userDefinedDateFieldValues",
-                        "userDefinedFieldValues"
+                        "userDefinedFieldValues",
+                        "enterpriseUserDefinedFieldValues"
                     ]
                 },
                 "urnNo": {
@@ -1361,6 +1387,10 @@
                             "customerName": {
                                 "type": "string",
                                 "title": "CUSTOMER_NAME"
+                            },
+                            "customerNameAsInBank": {
+                                "type": "string",
+                                "title": "CUSTOMER_NAME_IN_BANK"
                             },
                             "accountNumber": {
                                 "type": "string",
