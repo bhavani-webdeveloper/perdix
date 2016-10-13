@@ -50,61 +50,10 @@
 			"items":[
 				"Page/LoansDashboard",
 				"Page/Engine/loans.individual.Queue",
-				{
-					"title": "BOOKING",
-					"iconClass": "fa fa-book",
-					"items": [
-						"Page/Engine/loans.individual.booking.LoanInput",
-						"Page/Engine/loans.individual.booking.PendingQueue",
-						"Page/Engine/loans.individual.booking.DocumentUploadQueue",
-						"Page/Engine/loans.individual.booking.PendingVerificationQueue"
-					]
-				},
-				{
-					"title": "DISBURSEMENT",
-					"iconClass": "fa fa-share",
-					"items": [
-						"Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
-						"Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
-						"Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
-						"Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
-						"Page/Engine/loans.individual.disbursement.PendingCROQueue",
-						"Page/Engine/loans.individual.disbursement.PendingFROQueue",
-						"Page/Engine/loans.individual.disbursement.EMIScheduleGenQueue",
-						"Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue"
-					]
-				},
-				{
-					"title": "ACH_PDC",
-					"iconClass": "fa fa-cc",
-					"items": [
-						"Page/Engine/loans.individual.achpdc.ACHRegistration",
-						"Page/Engine/loans.individual.achpdc.ACHMandateDownload",
-						"Page/Engine/loans.individual.achpdc.ACHMandateQueue",
-						"Page/Engine/loans.individual.achpdc.ACHMandateUpload",
-						"Page/Engine/loans.individual.achpdc.ACHClearingCollection",
-						"Page/Engine/loans.individual.achpdc.ACHSubmission",
-						"Page/Engine/loans.individual.achpdc.Collections",
-						"Page/Engine/loans.individual.achpdc.PDCRegistration",
-						"Page/Engine/loans.individual.achpdc.PDCSubmission",
-						"Page/Engine/loans.individual.achpdc.PDCCollections"
-					]
-				},
-				{
-					"title": "COLLECTIONS",
-					"iconClass": "fa fa-reply",
-					"items": [
-						"Page/Engine/loans.individual.collections.BounceQueue",
-						"Page/Engine/loans.individual.collections.BouncePromiseQueue",
-						"Page/Engine/loans.individual.collections.BounceRecoveryQueue",
-						"Page/Engine/loans.LoanRepay",
-						"Page/Engine/loans.individual.collections.P2PUpdate",
-						"Page/Engine/loans.individual.collections.CreditValidationQueue",
-						"Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
-						"Page/Engine/loans.individual.collections.DepositQueue",
-						"Page/Engine/loans.individual.collections.DepositStage"
-					]
-				},
+				"Page/LoansBookingDashboard",
+				"Page/LoansDisbursementDashboard",
+				"Page/LoansACHPDCDashboard",
+				"Page/LoansCollectionsDashboard",
 				"Page/Engine/loans.individual.reversal.Search",
 				"Page/Engine/loans.PaymentReversal",
 				"Page/Engine/loans.individual.writeoff.WriteOffQueue",
@@ -118,6 +67,9 @@
 			"title": "MANAGEMENT",
 			"iconClass": "fa fa-cubes",
 			"items":[
+				"Page/Engine/management.Roles",
+				"Page/Engine/management.Pages",
+				"Page/Engine/management.UserRoles",
 				"Page/Engine/management.RolesPages"
 			]
 		},
