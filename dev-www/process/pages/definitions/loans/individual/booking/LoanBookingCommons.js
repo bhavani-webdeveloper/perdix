@@ -13,6 +13,16 @@ irf.commons.factory('LoanBookingCommons', [ 'Queries',
                     }
                 }
                 return null;
+            },
+            getCentreCodeFromId: function(centreId, formHelper){
+                var centres = formHelper.enum('centre');
+                for (var i = 0; i< centres.data.length; i++){
+                    var c = centres.data[i];
+                    if (parseInt(c.code) == centreId){
+                        //console.log(c);
+                        return c.field5;
+                    }
+                }
             }
         }
     }

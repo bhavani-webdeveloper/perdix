@@ -42,7 +42,8 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]+$"
                     },
                     "first_name": {
                         "title": "CUSTOMER_NAME",
@@ -62,7 +63,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "string",
+                        "type": ["null","integer"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
@@ -81,8 +82,8 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     'branchName': searchOptions.branch,
                     'centre': searchOptions.centre,
                     'firstName': searchOptions.first_name,
-                    'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
+                    /*'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage,*/
                     'status': "PartialPayment"
                 }).$promise;
 
@@ -92,7 +93,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
             paginationOptions: {
                 "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return 3;
+                    return headers && headers['x-total-count'];
                 },
                 "getTotalItemsCount": function(response, headers){
                     return headers['x-total-count']

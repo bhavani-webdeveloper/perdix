@@ -1,13 +1,12 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "LoanBookingCommons",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, LoanBookingCommons){
     return {
         "type": "search-list",
         "title": "LOAN_BOOKING_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchName = SessionStore.getBranch();
             model.stage = 'LoanBooking';
             console.log(model);
         },
@@ -17,8 +16,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
             autoSearch: true,
             sorting:true,
             sortByColumns:{
-                "name":"Customer Name",
-                "centre_name":"Centre",
+                "customer name":"Customer Name",
+                "centre id":"Centre",
                 "sanction_date":"Sanction Date"
             },
             searchForm: [
@@ -30,40 +29,22 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                 "required":["branch"],
                 "properties": {
 
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "default": "1",
+                    "branchName": {
+                        "title": "BRANCH_NAME",
+                        "type": ["string", "null"],
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+
+                    },
+                    "centreCode": {
+                        "title": "CENTER_NAME",
+                        "type": ["number", "null"],
+                        "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            /*"titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }*/
-                            "enumCode": "loan_product"
-                        }
-                    },
-
-                    "customer_name": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "entity_name": {
-                        "title": "ENTITY_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
+                            "parentEnumCode":"branch"
                         }
                     },
                     "sanction_date": {
@@ -73,34 +54,46 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                             "type": "date"
                         }
                     },
-                    "branchName": {
-                        "title": "BRANCH_NAME",
+                    "loan_product": {
+                        "title": "Loan Product",
                         "type": "string",
-                        "enumCode": "branch",
+                        "default": "1",
                         "x-schema-form": {
-                            "type": "select"
+                            "type": "select",
+                            "enumCode": "loan_product"
                         }
-                        
                     },
-                    "centreCode": {
-                        "title": "CENTER_NAME",
-                        "type": "string",
-                        "enumCode": "centre",
-                        "x-schema-form": {
-                            "type": "select"
-                        },
-                        "parentEnumCode":"branch"
+                    "account_number": {
+                        "title": "LOAN_ACCOUNT_NUMBER",
+                        "type": "string"
                     }
+                    // "customer_name": {
+                    //     "title": "CUSTOMER_NAME",
+                    //     "type": "string",
+                    //     "x-schema-form": {
+                    //         "type": "select"
+                    //     }
+                    // },
+                    // "entity_name": {
+                    //     "title": "ENTITY_NAME",
+                    //     "type": "string",
+                    //     "x-schema-form": {
+                    //         "type": "select"
+                    //     }
+                    // }
                 }
             },
             getSearchFormHelper: function() {
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
+                if (_.hasIn(searchOptions, 'centreCode')){
+                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+                }
                 return IndividualLoan.search({
                     'stage': 'LoanBooking',
                     'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCode,
+                    'centreCode': searchOptions.centreCodeForSearch,
                     'customerId': null,
                     'accountNumber':null,
                     'page': pageOpts.pageNo,
@@ -114,7 +107,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan)
                     return 20;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers['x-total-count']
+                    return headers['x-total-count'];
                 }
             },
             listOptions: {

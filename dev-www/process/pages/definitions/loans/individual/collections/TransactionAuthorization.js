@@ -36,10 +36,9 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         model.transAuth.applicant_name = data.applicant;
                         model.transAuth.applicant_name = data.coapplicant;
                         model.transAuth.penal_interest = data.totalPenalInterestDue;
-                        model.transAuth.accountOpenDate = data.accountOpenDate;
+                        model.transAuth.accountOpenDate = data.lastDemandRunDate;
                         model.transAuth.loanRepaymentDetailsId = model._transAuth.id;
                         model.transAuth.fee = data.totalFeeDue;
-
                         model.transAuth.amountCollected = model._transAuth.repaymentAmountInPaisa / 100;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                         PageHelper.hideLoader();

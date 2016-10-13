@@ -20,6 +20,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     var disbursementId = ($stateParams['pageId'].split('.'))[1];
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
+
+                    if (!model._disbursementConfirmation) {
+                        $log.info("Page visited directly");
+                        backToQueue();
+                    }
                     IndividualLoan.get({id: loanId}, function (resp, head) {
 
                         var disbExistFlag = false;
@@ -67,37 +72,33 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
 
                     {
                         "key":"loanAccountDisbursementSchedule.udf1",
-                        "type":"select",
-                        "onChange":function (modelValue, form, model){
-                            if (modelValue == "Confirmed"){
-                                model.loanAccountDisbursementSchedule.udf4 = '';
-                                model.loanAccountDisbursementSchedule.udf5 = '';
-                                model.loanAccountDisbursementSchedule.udfDate1 = '';
-                            }
-                        },
-                        "titleMap":{
-                            "Confirmed":"Confirmed",
-                            "Rejected":"Rejected"
-                        }
+                        "type": "radios",
+                        "titleMap":[{
+                                "name":"Confirmed",
+                                "value":"Confirmed"
+                                },
+                                {
+                                "name":"Rejected",
+                                "value":"Rejected"
+                                }
+                        ]
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.actualDisbursementDate",
                         "type":"date",
-                        "title":"ACTUAL_DISBURSEMENT_DATE"
-                    },
-                    {
-                        "key":"loanAccountDisbursementSchedule.udf4",
-                        "title":"FINANCE_TEAM_REJECTION_REMARKS"
+                        "title":"ACTUAL_DISBURSEMENT_DATE",
+                        "readonly":true
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.udf5",
                         "title":"FINANCE_TEAM_REJECTION_REASON",
-                        "type": "select"
+                        "type": "select",
+                        "condition":"model.loanAccountDisbursementSchedule.udf1=='Rejected'"
                     },
                     {
-                        "key":"loanAccountDisbursementSchedule.udfDate1",
-                        "type":"date",
-                        "title":"REJECTION_DATE"
+                        "key":"loanAccountDisbursementSchedule.udf4",
+                        "title":"FINANCE_TEAM_REJECTION_REMARKS",
+                        "condition":"model.loanAccountDisbursementSchedule.udf1=='Rejected'"
                     },
                     {
                         "type": "actionbox",
@@ -120,19 +121,53 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         delete reqData.$promise;
                         delete reqData.$resolved;
                         if(reqData.loanAccountDisbursementSchedule.udf1 == "Rejected"){
-                            reqData.stage = "RejectedDisbursement";
-                        }
-                        reqData.disbursementProcessAction = "PROCEED";
-                        IndividualLoan.updateDisbursement(reqData,function(resp,header){
-                            PageHelper.showProgress("upd-disb","Done.","5000");
-                            backToQueue();
-                        },function(resp){
-                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
-                            PageHelper.showErrors(resp);
+                            reqData.disbursementConfirmations =[];
+                            var targetStage;
+                            if (model.loanAccountDisbursementSchedule.udf5 == 'Internal issue - Wrong bank selection')
+                                targetStage = 'ReadyForDisbursement';
+                            else
+                                targetStage = 'RejectedDisbursement';
+                            reqData.disbursementConfirmations.push({
+                                                accountNumber: model._disbursementConfirmation.accountNumber,
+                                                stage: targetStage,
+                                                status: "REJECT",
+                                                tranchNumber:model._disbursementConfirmation.trancheNumber,
+                                                transactionId: model._disbursementConfirmation.transactionId,
+                                                udf1:model.loanAccountDisbursementSchedule.udf1,
+                                                udf4:model.loanAccountDisbursementSchedule.udf4,
+                                                udf5:model.loanAccountDisbursementSchedule.udf5
+                                            });
+                            delete reqData._disbursementConfirmation;
+                            delete reqData.loanAccountDisbursementSchedule;
+                            IndividualLoan.batchDisbursementConfirmation(reqData,function(resp,header){
+                                PageHelper.showProgress("upd-disb","Done.","5000");
+                                backToQueue();
+                            },function(resp){
+                                PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                                PageHelper.showErrors(resp);
 
-                        }).$promise.finally(function(){
-                            PageHelper.hideLoader();
-                        });
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
+                        }
+                        else{
+                            reqData.loanAccountDisbursementSchedule.udf4 = "";
+                            reqData.loanAccountDisbursementSchedule.udf5 = "";
+                            reqData.loanAccountDisbursementSchedule.udfDate1 = "";
+                            reqData.disbursementProcessAction = "PROCEED";
+
+                            IndividualLoan.updateDisbursement(reqData,function(resp,header){
+                                PageHelper.showProgress("upd-disb","Done.","5000");
+                                backToQueue();
+                            },function(resp){
+                                PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
+                                PageHelper.showErrors(resp);
+
+                            }).$promise.finally(function(){
+                                PageHelper.hideLoader();
+                            });
+                        }
+                        
                     }
                 }
             }

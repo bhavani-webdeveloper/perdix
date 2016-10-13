@@ -241,11 +241,13 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureFingerprint'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureGPS']];
 		_.each(requestMenu, function(v,k){
-			v.onClick = function(event, menu) {
-				menu.stateParams.pageId = $scope.customerId + menu.stateParams.pageId.substring(menu.stateParams.pageId.indexOf(':'));
-				entityManager.setModel(menu.stateParams.pageName, $scope.model);
-				return $q.resolve(menu);
-			};
+			if (v) {
+				v.onClick = function(event, menu) {
+					menu.stateParams.pageId = $scope.customerId + menu.stateParams.pageId.substring(menu.stateParams.pageId.indexOf(':'));
+					entityManager.setModel(menu.stateParams.pageName, $scope.model);
+					return $q.resolve(menu);
+				};
+			}
 		});
 
 		if ($scope.dashboardDefinition.$menuMap['Page/CustomerHistory'])

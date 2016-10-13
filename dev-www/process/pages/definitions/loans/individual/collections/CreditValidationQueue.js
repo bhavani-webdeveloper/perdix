@@ -7,45 +7,43 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
         //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
         },
         definition: {
             title: "SEARCH_PAYMENTS",
             searchForm: [
-                "*"
+                {
+                    "key": "accountNumber"
+                },
+                {
+                    "key": "branch_id",
+                    "type": "select"
+                },
+                {
+                    "key": "centre",
+                    "type": "select",
+                    "parentEnumCode": "branch_id"
+                }
             ],
             autoSearch:false,
             searchSchema: {
                 "type": 'object',
                 "title": 'SEARCH_OPTIONS',
-                "required":["branch"],
+                "required":[],
                 "properties": {
-                    "loan_no": {
+                    "accountNumber": {
                         "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]+$"
                     },
-                    "first_name": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string"
-                    },
-                    "branch": {
+                    "branch_id": {
                         "title": "BRANCH_NAME",
-                        "type": ["null", "string"],
-                        "enumCode": "branch",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
+                        "type": ["null", "number"],
+                        "enumCode": "branch_id"
                     },
                     "centre": {
                         "title": "CENTRE",
                         "type": ['null', 'number'],
-                        "enumCode": "centre",
-                        "x-schema-form": {
-                            "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
-                        }
+                        "enumCode": "centre"
                     }
                 }
             },
@@ -54,12 +52,10 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.repaymentList({
-                    'branchName': searchOptions.branch,
                     'centre': searchOptions.centre,
-                    'customerName': searchOptions.first_name,
-                    'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,
-                    'status': "Pending"
+                    'accountNumber': searchOptions.accountNumber,
+                    'status': "Pending",
+                    'branchId': searchOptions.branch_id
                 }).$promise;
 
                 return promise;
@@ -67,7 +63,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore, $q, entityManager)
             paginationOptions: {
                 "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return 3;
+                    return headers && headers['x-total-count'];
                 },
                 "getTotalItemsCount": function(response, headers){
                     return headers['x-total-count']

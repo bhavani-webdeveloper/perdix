@@ -1,14 +1,13 @@
-irf.pageCollection.factory(irf.page("management.RolesPages"),
-["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils",
-    function($log, SessionStore, PageHelper, formHelper, RolesPages, Utils) {
+irf.pageCollection.factory(irf.page("management.Pages"),
+["$log", "SessionStore", "PageHelper", "formHelper", "RolesPages",
+    function($log, SessionStore, PageHelper, formHelper, RolesPages) {
 
         var branch = SessionStore.getBranch();
 
         return {
             "type": "schema-form",
-            "title": "ROLES_AND_PAGES",
+            "title": "ROLES",
             initialize: function(model, form, formCtrl) {
-                model.address = model.address || {};
             },
             form: [
                 {
@@ -21,7 +20,6 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                             title: "Role ID",
                             type: "lov",
                             lovonly: true,
-                            fieldType: "number",
                             outputMap: {
                                 "id": "rolePage.currentRoleId",
                                 "name": "rolePage.currentRoleName"
@@ -151,15 +149,14 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                             req.pages.push(a);
                         }
                     };
-                    Utils.confirm("Are you sure?").then(function(){
-                        PageHelper.showLoader();
-                        RolesPages.updateRolePageAccess(req).$promise.then(function(resp){
-                            PageHelper.showProgress("roles-pages","Page roles updated", 3000);
-                        }, function(err){
-                            PageHelper.showErrors(err);
-                        }).finally(function(){
-                            PageHelper.hideLoader();
-                        });
+
+                    PageHelper.showLoader();
+                    RolesPages.updateRolePageAccess(req).$promise.then(function(resp){
+                        PageHelper.showProgress("roles-pages","Page roles updated", 3000);
+                    }, function(err){
+                        PageHelper.showErrors(err);
+                    }).finally(function(){
+                        PageHelper.hideLoader();
                     });
                 }
             }

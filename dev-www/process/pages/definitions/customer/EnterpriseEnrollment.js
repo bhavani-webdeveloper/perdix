@@ -16,7 +16,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
         },
-        offline: true,
+        offline: false,
         getOfflineDisplayItem: function(item, index){
             return [
                 item.customer.firstName,
@@ -30,22 +30,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "title": "ENTITY_INFORMATION",
                 "items": [
                     {
-                        key: "customer.kgfsName",
+                        key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
-                        type: "uiselect", 
-                        selection: "single",
-                       /* getTitleMap: function(modelValue, form, model) {
-                        return [{
-                        "name": "Branch 1",
-                        "value": "branch1"
-                        }, {
-                        "name": "Branch 2",
-                        "value": "branch2"
-                        }];
-                        },*/
-                        getTitleMap: "helper.titleMap('branch')",
-                        filters: [{
-                        }]
+                        type: "select"
                     },
                     {
                         key: "customer.id",
@@ -62,10 +49,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.centreId",
                         type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        parentEnumCode:"branch"
+                        /*filter: {
+                            "parentCode": "model.branch_id"
+                        },*/
+                        parentEnumCode:"branch_id"
                     },
                     {
                         key: "customer.oldCustomerId",
@@ -194,8 +181,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         "key": "customer.kgfsName",
                                         "type": "select"
                                     },
-                                    "centreCode": {
-                                        "key": "customer.centreCode",
+                                    "centreId": {
+                                        "key": "customer.centreId",
                                         "type": "select"
                                     }
                                 },
@@ -206,13 +193,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    $log.info("inputModel.centreCode: " + inputModel.centreCode);
+                                    $log.info("inputModel.centreId: " + inputModel.centreId);
                                     if (!inputModel.branchName)
                                         inputModel.branchName = SessionStore.getBranch();
                                     var promise = Enrollment.search({
                                         'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
-                                        'centreCode': inputModel.centreCode,
+                                        'centreId': inputModel.centreId,
                                         'customerType': 'Individual'
                                     }).$promise;
                                     return promise;
@@ -230,6 +217,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "CUSTOMER_NAME"
                             }
                         ]
+                    },
+                    {
+                        key: "customer.enterpriseRegistrations",
+                        type: "array",
+                        title: "ADDITIONAL_REGISTRATION",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationType",
+                                title: "REGISTRATION_TYPE",
+                                type: "select",
+                                enumCode: "business_registration_type"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               title: "REGISTRATION_NUMBER"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                type: "date",
+                                title: "REGISTRATION_DATE"
+                            },
+                        ]
                     }
                 ]
             },
@@ -241,9 +252,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.landLineNo",
                     "customer.doorNo",
                     "customer.street",
-                    "customer.locality",
-                    "customer.villageName",
-                    "customer.landmark",
+                    "customer.enterprise.landmark",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -267,6 +276,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
+                            if (!inputModel.pincode) {
+                                return $q.reject();
+                            }
                             return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                         },
                         getListDisplayItem: function(item, index) {
@@ -277,7 +289,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
-                    // "customer.udf.userDefinedFieldValues.udf9",
+                    "customer.locality",
+                    "customer.villageName",
                     "customer.district",
                     "customer.state",
                     {
@@ -347,7 +360,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 readonly: true
                             },
                             {
-                                key: "customer.customerBankAccounts[].customerName"
+                                key: "customer.customerBankAccounts[].customerNameAsInBank"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountNumber"
@@ -373,10 +386,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "items": [{
+                "items": [/*{
                     "type": "save",
                     "title": "SAVE_OFFLINE",
-                },{
+                },*/{
                     "type": "submit",
                     "title": "SUBMIT"
                 }]

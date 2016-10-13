@@ -1,6 +1,6 @@
-    irf.pageCollection.factory(irf.page("demo.Demo"),
-    ["$log", "Enrollment", "SessionStore","Files",
-        function($log, Enrollment, SessionStore,Files){
+irf.pageCollection.factory(irf.page("demo.Demo"),
+["$log", "Enrollment", "SessionStore","Files",
+    function($log, Enrollment, SessionStore,Files){
 
         var branch = SessionStore.getBranch();
 
@@ -26,7 +26,8 @@
             form: [
                 {
                     "type":"box",
-                    "title":"Details Page",
+                    "title":"Details",
+                    colClass: "col-sm-12",
                     "items":[
                         {
                             key: "address.streetAddress",
@@ -34,14 +35,21 @@
                         },
                         {
                             key:"address.city",
-                            type:"selectize",
+                            type:"select",
                             titleMap:{
                                 "city_A":"City A",
                                 "city_B":"City B"
                             }
-
                         },
-                        "phoneNumber",
+                        {
+                            key: "phoneNumber",
+                            type: "table",
+                            items: [
+                                "phoneNumber[].location",
+                                "phoneNumber[].code",
+                                "phoneNumber[].number"
+                            ]
+                        },
                         {
                             type: "section",
                             html: "<i>asdf</i>{{model.address.streetAddress}}"
@@ -96,6 +104,10 @@
                                 "number":{
                                     "type":"integer",
                                     "title":"Number"
+                                },
+                                "boo": {
+                                    "type": "boolean",
+                                    "title": "Check Done?"
                                 }
                             },
                             "required": [

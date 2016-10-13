@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementConfirmationQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan",
-        function($log, formHelper, $state, SessionStore, $q, IndividualLoan){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","entityManager",
+        function($log, formHelper, $state, SessionStore, $q, IndividualLoan,entityManager){
             return {
                 "type": "search-list",
                 "title": "DISBURSEMENT_CONFIRMATION_QUEUE",
@@ -31,14 +31,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "required":[],
                         "properties": {
 
-                            "customerSignatureDate": {
-                                "title": "CUSTOMER_SIGNATURE_DATE",
-                                "type": "string",
-                                "x-schema-form": {
-                                    "type": "date"
+                            // "customerSignatureDate": {
+                            //     "title": "CUSTOMER_SIGNATURE_DATE",
+                            //     "type": "string",
+                            //     "x-schema-form": {
+                            //         "type": "date"
 
-                                }
-                            },
+                            //     }
+                            // },
 
                             "scheduledDisbursementDate": {
                                 "title": "SCHEDULED_DISBURSEMENT_DATE",
@@ -57,7 +57,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         return IndividualLoan.searchDisbursement({
                             'currentStage': 'DisbursementConfirmation',
                             'customerSignatureDate': searchOptions.customerSignatureDate,
-                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate
+                            'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
+                            'page': pageOpts.pageNo,
+                            'per_page': pageOpts.itemsPerPage,
+                            'sortBy':searchOptions.sortBy
 
                         }).$promise;
 
@@ -95,6 +98,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                                     name: "Confirm Disbursement",
                                     desc: "",
                                     fn: function(item, index){
+                                        entityManager.setModel('loans.individual.disbursement.DisbursementConfirmation', {_disbursementConfirmation:item});
                                         $state.go("Page.Engine",{
                                             pageName:"loans.individual.disbursement.DisbursementConfirmation",
                                             pageId:[item.loanId,item.id].join(".")

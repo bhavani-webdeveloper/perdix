@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
-["$log", "$filter","$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
-function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
@@ -18,9 +18,8 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
-            model.customer.kgfsName = 'Bommasandra';
         },
-        offline: true,
+        offline: false,
         getOfflineDisplayItem: function(item, index){
             return [
                 item.customer.urnNo,
@@ -28,61 +27,23 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                 item.customer.villageName
             ]
         },
-        form: [{type:"section",html:"{{model.customer.kgfsName}}"},{
+        form: [{
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
-            {
-                type: "section",
-                html: "<pre>{{model|json}}</pre>"
-            },
                 {
-                    key: "customer.kgfsName",
+                    key: "customer.customerBranchId",
                     title:"BRANCH_NAME",
-                    type: "uiselect",
-                    selection: "single",
-                    getTitleMap: "helper.titleMap('branch')",
-                   /* getTitleMap: function(modelValue, form, model, titleMap) {
-                        if (titleMap && titleMap.length) {
-                            return titleMap;
-                        }
-                        return [{
-                            "name": "Branch 1",
-                            "value": "branch1"
-                        }, {
-                            "name": "Branch 2",
-                            "value": "branch2"
-                        }];
-                    },*/
-                    onChange: function(modelValue) {
-                        $log.info(modelValue);
-                    },
-                    returns: "value"
+                    type: "select"
                 },
                 {
                     key:"customer.centreId",
-                    type:"uiselect",
-                    getTitleMap: "helper.titleMap('centre')",
-                    refreshTitleMap: true,
-                    filters: [{
-                        "filterOn": "parentCode",
-                        // 1.
-                        //"filteredBy": "model.customer.kgfsName",
-
-                        // 2.
-                       // "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
-
-                        // 3.
-                       // "getFilteredBy": "actions.filterCentreId(model, form, filters)",
-
-                        // 4.
-                        "getFilteredBy": function(model, form, filter) {
-                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[0].code;
-                        }
-                    }],
-                    onChange: function(modelValue,form, model, event) {
-
-                    }
+                    type:"select",
+                    /*filter: {
+                        "parentCode": "branch_id"
+                    },*/
+                    parentEnumCode:"branch_id",
+                    screenFilter: true
                 },
                 {
                     key: "customer.oldCustomerId",
@@ -214,8 +175,6 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                     items: [
                         "customer.doorNo",
                         "customer.street",
-                        "customer.locality",
-                        "customer.villageName",
                         "customer.postOffice",
                         "customer.landmark",
                         {
@@ -245,6 +204,9 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                                 $log.info(inputModel);
                             },
                             search: function(inputModel, form, model) {
+                                if (!inputModel.pincode) {
+                                    return $q.reject();
+                                }
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
                                     inputModel.district,
@@ -262,6 +224,8 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                                 $log.info(result);
                             }
                         },
+                        "customer.locality",
+                        "customer.villageName",
                         "customer.district",
                         "customer.state",
                         "customer.mailSameAsResidence"
@@ -274,9 +238,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                     items: [
                         "customer.mailingDoorNo",
                         "customer.mailingStreet",
-                        "customer.mailingLocality",
                         "customer.mailingPostoffice",
-                        "customer.mailingDistrict",
                         {
                             key: "customer.mailingPincode",
                             type: "lov",
@@ -298,6 +260,9 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
+                                if (!inputModel.pincode) {
+                                    return $q.reject();
+                                }
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
                                     inputModel.district,
@@ -311,6 +276,8 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                                 ];
                             }
                         },
+                        "customer.mailingLocality",
+                        "customer.mailingDistrict",
                         "customer.mailingState"
                     ]
                 }
@@ -340,6 +307,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                         {
                             key:"customer.identityProofImageId",
                             type:"file",
+                            required: false,
                             fileType:"image/*"
                         },
                         {
@@ -380,6 +348,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                         {
                             key:"customer.addressProofImageId",
                             type:"file",
+                            required: false,
                             fileType:"image/*"
                         },
                         {
@@ -1013,10 +982,10 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                        "latitude": "customer.latitude",
                        "longitude": "customer.longitude"
                     },
-                    {
-                       key: "customer.nameOfRo",
-                       readonly: true
-                    },
+                    //{
+                    //   key: "customer.nameOfRo",
+                    //   readonly: true
+                    //},
                     {
                        key:"customer.houseVerificationPhoto",
                        type:"file",
@@ -1086,7 +1055,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                                 readonly: true
                             },
                             {
-                                key: "customer.customerBankAccounts[].customerName"
+                                key: "customer.customerBankAccounts[].customerNameAsInBank"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountNumber"
@@ -1113,10 +1082,10 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             {
                 "type": "actionbox",
                 "condition": "!model.customer.id",
-                "items": [{
+                "items": [/*{
                     "type": "save",
                     "title": "SAVE"
-                },{
+                },*/{
                     "type": "submit",
                     "title": "SUBMIT"
                 }]
@@ -1124,10 +1093,10 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             {
                 "type": "actionbox",
                 "condition": "model.customer.id",
-                "items": [{
+                "items": [/*{
                     "type": "save",
                     "title": "SAVE"
-                },{
+                },*/{
                     "type": "submit",
                     "title": "SUBMIT"
                 },{

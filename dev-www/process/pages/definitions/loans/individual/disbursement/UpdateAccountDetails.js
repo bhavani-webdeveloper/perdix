@@ -36,7 +36,12 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "key": "loanAccountDisbursementSchedule.udfDate2",
                     "title": "REQUESTED_DATE",
                     "type": "date",
-                    "readonly":true
+                    "readonly":true,
+                    "condition":"model.loanAccountDisbursementSchedule.udfDate2!=null"
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.customerNameInBank",
+                    "title": "CUSTOMER_NAME_IN_BANK"
                 },
                 {
                     "key": "loanAccountDisbursementSchedule.customerAccountNumber",
@@ -87,6 +92,16 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                 {
                     "key": "loanAccountDisbursementSchedule.customerBankBranchName",
                     "title": "BRANCH_NAME",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.udf5",
+                    "title": "REJECTED_REASON",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.udf4",
+                    "title": "REJECT_REMARKS",
                     "readonly":true
                 },
                 {

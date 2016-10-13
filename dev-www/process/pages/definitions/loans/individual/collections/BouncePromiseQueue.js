@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BouncePromiseQueue"),
-["$log", "entityManager", "formHelper", "LoanProcess", "$state", "SessionStore", "$q",
-function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
+["$log", "entityManager", "formHelper", "LoanProcess", "$state", "SessionStore", "$q","Utils",
+function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,Utils){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
@@ -21,7 +21,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]+$"
                     },
                     "first_name": {
                         "title": "CUSTOMER_NAME",
@@ -59,8 +60,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
                     'branchId': searchOptions.branch,
-                    'centreCode': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
+                    'centreId': searchOptions.centre,
+                    'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage
                 }).$promise;
@@ -68,12 +69,11 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return promise;
             },
             paginationOptions: {
-                "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return 3;
+                    return 10;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers['x-total-count']
+                    return headers && headers['x-total-count'] || 10;
                 }
             },
             listOptions: {
@@ -91,7 +91,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}} : " +  item.accountId,  /*Service missing_27082016*/
                         // "{{'BANK'|translate}} : " + item.bankName,
                         // "{{'BRANCH_ID'|translate}} : " + item.branchName,
-                        "{{'AMOUNT_DUE'|translate}} : " + item.amount1,
+                        "{{'AMOUNT_DUE'|translate}} : " + Utils.ceil(item.amount1),
                         "{{'PRINCIPAL'|translate}} : " + item.part1,
                         "{{'INTEREST'|translate}} : " + item.part2,
                         "{{'PENAL_INTEREST'|translate}} : " + item.part3,
@@ -124,7 +124,28 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             }
                         },*/
                         {
-                            name: "PROMISE_TO_PAY",
+                            name: "COLLECT_PAYMENT",
+                            desc: "",
+                            fn: function(item, index){
+                                entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
+                                $state.go('Page.Engine',
+                                    {
+                                        pageName: 'loans.LoanRepay',
+                                        pageId: item.accountId,
+                                        pageData: {
+                                            'onlyDemandAllowed': true
+                                        }
+                                    }
+                                );
+                            },
+                            isApplicable: function(item, index){
+                                //if (index%2==0){
+                                //  return false;
+                                //}
+                                return true;
+                            }
+                        },{
+                            name: "COLLECTION_STATUS",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");

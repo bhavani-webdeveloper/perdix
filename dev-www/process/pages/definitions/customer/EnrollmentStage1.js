@@ -101,6 +101,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 return false;
             }
         }
+        if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
+            PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
+            return false;
+        }
         return true;
     };
     /*

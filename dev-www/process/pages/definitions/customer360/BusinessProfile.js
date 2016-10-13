@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer360.BusinessProfile"),
 ["$log", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService", "PagesDefinition", "$stateParams", "$timeout",
+"PageHelper", "Utils", "BiometricService", "PagesDefinition", "$stateParams", "$timeout", "Queries", "CustomerBankBranch",
 function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService, PagesDefinition, $stateParams, $timeout){
+    PageHelper, Utils, BiometricService, PagesDefinition, $stateParams, $timeout, Queries, CustomerBankBranch){
 
     var branch = SessionStore.getBranch();
 
@@ -12,24 +12,50 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
             var self = this;
-            model.customer = model.customer || {};
-            model.branchId = SessionStore.getBranchId() + '';
-            model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = "Enterprise";
+            var init = function() {
+                var deferred = $q.defer();
+                model.customer = model.customer || {};
+                model.branchId = SessionStore.getBranchId() + '';
+                model.customer.kgfsName = SessionStore.getBranch();
+                model.customer.customerType = "Enterprise";
 
-            if (!model.customer.id && $stateParams.pageId) {
-                PageHelper.showLoader();
-                Enrollment.get({id: $stateParams.pageId}).$promise.then(function(response){
-                    model.customer = response;
-                }, function(errorResponse){
-                    PageHelper.showErrors(errorResponse);
-                }).finally(function(){
-                    PageHelper.hideLoader();
-                });
-            }
+                if (model.customer.id) {
+                    deferred.resolve();
+                } else if ($stateParams.pageId) {
+                    PageHelper.showLoader();
+                    Enrollment.get({id: $stateParams.pageId}).$promise.then(function(response){
+                        model.customer = response;
+                        deferred.resolve();
+                    }, function(errorResponse){
+                        PageHelper.showErrors(errorResponse);
+                    }).finally(function(){
+                        PageHelper.hideLoader();
+                    });
+                }
+                return deferred.promise;
+            };
             self.form = [];
-            PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.BusinessProfile", self.formSource).then(function(form){
-                self.form = form;
+            init().finally(function() {
+                PagesDefinition.setReadOnlyByRole("Page/Engine/customer360.BusinessProfile", self.formSource).then(function(form){
+                    self.form = form;
+                });
+                if (model.customer.enterpriseCustomerRelations && model.customer.enterpriseCustomerRelations.length) {
+                    var linkedIds = [];
+                    for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
+                        linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
+                    };
+                    $log.debug(linkedIds);
+                    Queries.getCustomerBasicDetails({"ids":linkedIds}).then(function(result) {
+                        if (result && result.ids) {
+                            for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
+                                var cust = result.ids[model.customer.enterpriseCustomerRelations[i].linkedToCustomerId];
+                                if (cust) {
+                                    model.customer.enterpriseCustomerRelations[i].linkedToCustomerName = cust.first_name;
+                                }
+                            }
+                        }
+                    });
+                }
             });
         },
         form: [],
@@ -144,28 +170,29 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
                         type: "select",
-                        enumCode: "businessType"
+                        enumCode: "businessType",
+                        readonly: true
                     },
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
                         enumCode: "businessLine",
-                        parentEnumCode: "businessType"
+                        readonly: true
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
-                        parentEnumCode: "businessType"
+                        readonly: true
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector",
-                        parentEnumCode: "businessSector"
+                        readonly: true
                     },
                     {
                         key: "customer.enterpriseCustomerRelations",
@@ -227,6 +254,30 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title: "CUSTOMER_NAME"
                             }
                         ]
+                    },
+                    {
+                        key: "customer.enterpriseRegistrations",
+                        type: "array",
+                        title: "ADDITIONAL_REGISTRATION",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationType",
+                                title: "REGISTRATION_TYPE",
+                                type: "select",
+                                enumCode: "business_registration_type"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               title: "REGISTRATION_NUMBER"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                type: "date",
+                                title: "REGISTRATION_DATE"
+                            },
+                        ]
                     }
                 ]
             },
@@ -239,11 +290,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     "customer.landLineNo",
                     "customer.doorNo",
                     "customer.street",
-                    "customer.locality",
-                    "customer.landmark",
-                    "customer.villageName",
-                    // "customer.udf.userDefinedFieldValues.udf9",
-                    "customer.district",
+                    "customer.enterprise.landmark",
                     {
                         key: "customer.pincode",
                         type: "lov",
@@ -259,21 +306,30 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             }
                         },
                         outputMap: {
+                            "division": "customer.locality",
+                            "region": "customer.villageName",
                             "pincode": "customer.pincode",
                             "district": "customer.district",
                             "state": "customer.state"
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
+                            if (!inputModel.pincode) {
+                                return $q.reject();
+                            }
                             return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                         },
                         getListDisplayItem: function(item, index) {
                             return [
+                                item.division + ', ' + item.region,
                                 item.pincode,
                                 item.district + ', ' + item.state
                             ];
                         }
                     },
+                    "customer.locality",
+                    "customer.villageName",
+                    "customer.district",
                     "customer.state",
                     {
                        key: "customer.udf.userDefinedFieldValues.udf31", // customer.enterprise.businessInPresentAreaSince
@@ -288,7 +344,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "readonly": true,
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -343,7 +398,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 readonly: true
                             },
                             {
-                                key: "customer.customerBankAccounts[].customerName"
+                                key: "customer.customerBankAccounts[].customerNameAsInBank"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountNumber"

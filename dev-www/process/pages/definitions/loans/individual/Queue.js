@@ -114,7 +114,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					return [
 
 						"{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
-						"{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
+						"{{'ENTITY_NAME'|translate}} : " + item.customerName,
 						"{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
 						"{{'LOAN_TYPE'|translate}} : " + item.loanType,
 						"{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
@@ -181,18 +181,37 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							}
 						},
 						{
-							name: "ACH_REGISTRATION",
+							name: "COLLECT_ADHOC_CHARGES",
 							desc: "",
-							icon: "fa fa-user-plus",
+							icon: "fa fa-rupee",
 							fn: function(item, index){
-								EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loanAch:item});
+								EntityManager.setModel("loans.individual.collections.ChargeFee", {"_loan": item});
 								$state.go("Page.Engine",{
-									pageName:"loans.individual.achpdc.ACHRegistration",
-									pageId:item.loanId
+									pageName:"loans.individual.collections.ChargeFee",
+									pageId:item.accountNumber
 								});
 							},
 							isApplicable: function(item, index){
-
+								if(item.stage == "Completed") {
+									return true;
+								} else {
+									return false;
+								}
+							}
+						},
+						{
+							name: "ACH_REGISTRATION",
+							desc: "",
+							icon: "fa fa-cc",
+							fn: function(item, index){
+								//EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loanAch:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.individual.achpdc.ACHRegistration",
+									pageId:item.loanId, 
+									pageData: item
+								});
+							},
+							isApplicable: function(item, index){
 								if(item.stage == "Completed") {
 									return true;
 								} else {
@@ -203,12 +222,13 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						{
 							name: "PDC_REGISTRATION",
 							desc: "",
-							icon: "fa fa-user-plus",
+							icon: "fa fa-cc",
 							fn: function(item, index){
-								EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
+								//EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
 								$state.go("Page.Engine",{
 									pageName:"loans.individual.achpdc.PDCRegistration",
-									pageId:item.loanId
+									pageId:item.loanId,
+									pageData: item
 								});
 							},
 							isApplicable: function(item, index){

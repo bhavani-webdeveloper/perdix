@@ -103,6 +103,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "required": true
                     },
                     {
+                        "key": "loanAccount.firstRepaymentDate",
+                        "title": "REPAYMENT_DATE",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
                         "type": "actionbox",
                         "items": [{
                             "type": "button",
@@ -156,8 +162,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
-                        "key": "loanAccount.customer.firstName",
+                        "key": "loanAccount.loanAmount",
                         "title": "LOAN_AMOUNT",
+                        "type":"amount",
                         "readonly": true
                     },
                     {
@@ -191,6 +198,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "readonly": true
                     },
                     {
+                        "key": "loanAccount.portfolioInsurancePremium",
+                        "title": "INSURANCE",
+                        "readonly": true
+                    },
+                    {
                         "key": "loanAccount.commercialCibilCharge",
                         "title": "CIBIL_CHARGES",
                         "readonly": true
@@ -198,6 +210,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "loanAccount.loanAmountRequested",
                         "title": "LOAN_AMOUNT_REQUESTED",
+                        "type":"amount",
+                        "readonly": true
+                    },
+                    {
+                        "key": "loanAccount.securityEmiRequired",
                         "readonly": true
                     },
                     {
@@ -310,23 +327,44 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                     $log.info("submitting");
 
-                    var scheduledDisbursementDate = new Date(model._currentDisbursement.scheduledDisbursementDate);
-                    var sanctionDate = new Date(model.loanAccount.sanctionDate);
-                    var customerSignatureDate = new Date(model._currentDisbursement.customerSignatureDate);
-                    var diffDays = scheduledDisbursementDate.getDate() - sanctionDate.getDate();
+                    if(model._currentDisbursement.scheduledDisbursementDate)
+                        var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if(model.loanAccount.sanctionDate)
+                        var sanctionDate = moment(model.loanAccount.sanctionDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.customerSignatureDate)
+                        var customerSignatureDate = moment(model._currentDisbursement.customerSignatureDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.scheduledDisbursementDate && model.loanAccount.sanctionDate)
+                        var diffDays = scheduledDisbursementDate.diff(sanctionDate, "days");
+                    if(model.loanAccount.firstRepaymentDate)
+                        var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                    if (model.loanAccount.firstRepaymentDate){
+                        var date = firstRepaymentDate.get("date");
+                        if(date != 5 && date != 15){
+                            PageHelper.showProgress("loan-create","First repayment date should be 5 or 15",5000);
+                            return false;
+                        }
+                    }
+
 
                     if (diffDays > pendingDisbursementDays){
                         PageHelper.showProgress("loan-create","Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days",5000);
                         return false;
                     }
-                    if (customerSignatureDate<=sanctionDate){
+                    if (customerSignatureDate.isBefore(sanctionDate)){
                         PageHelper.showProgress("loan-create","Customer sign date should be greater than the Loan sanction date",5000);
                         return false;
                     }
 
-                    if (scheduledDisbursementDate<=customerSignatureDate){
+                    if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
                         PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
                         return false;
+                    }
+
+                    if (model.loanAccount.firstRepaymentDate){
+                        if (firstRepaymentDate.diff(scheduledDisbursementDate,"days") <= 0){
+                            PageHelper.showProgress("loan-create","Repayment date should be greater than sanction date",5000);
+                            return false;
+                        }
                     }
 
                     Utils.confirm("Ready to book the loan?")
@@ -355,7 +393,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 reject: function (model, form, formName) {
 
                     $log.info("rejecting");
-                    
+
                     Utils.confirm("Are you sure you want to send back to Loan Input?")
                         .then(function(){
                             var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED', 'stage':'LoanInitiation'};

@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceRecoveryQueue"),
-["$log", "entityManager","formHelper", "LoanProcess", "$state", "SessionStore", "$q",
-function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
+["$log", "entityManager","formHelper", "LoanProcess", "$state", "SessionStore", "$q","Utils",
+function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,Utils){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
@@ -41,7 +41,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]+$"
                     },
                     "first_name": {
                         "title": "CUSTOMER_NAME",
@@ -89,12 +90,11 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                 return promise;
             },
             paginationOptions: {
-                "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return 3;
+                    return 10;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers['x-total-count']
+                    return headers && headers['x-total-count'] || 10;
                 }
             },
             listOptions: {
@@ -116,16 +116,13 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                         // "{{'APPLICANT'|translate}}: " + item.applicant,
                         // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'), /*Service is missing*/
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + (item.amount1||'-'), /*amount1 is TotalDemandDue*/
-                        "{{'INSTALLMENT_DATE'|translate}}: " + (item.installmentDate||'-'),  /*Service is missing*/
-                        "{{'PAYMENT_MODE'|translate}}: " + (item.paymentMode||'-'),  /*Service is missing*/
-                        "{{'CHEQUE_NO'|translate}}: " + (item.chequeNo||'-'),  /*Service is missing*/
-                        "{{'ISSUING_BANK'|translate}}: " + (item.issuingBank||'-'),  /*Service is missing*/
-                        "{{'ISSUING_BRANCH'|translate}}: " + (item.issuingBranch||'-'),  /*Service is missing*/
-                        "{{'PRINCIPAL'|translate}}: " + (item.principal||'-'),          /*Service is missing*/
-                        "{{'PTP_DATE'|translate}}: " + (item.PTPDate||'-'),        /*Service is missing*/
-                        "{{'REASONS'|translate}}: " + (item.reasons||'-'),   /*Service is missing-Loan officer reasons*/
-                        "{{'TYPE_OF_CUSTOMER'|translate}}: " + (item.typeOfCustomer||'-'),  /*Service is missing*/
+                        "{{'AMOUNT_DUE'|translate}}: " + (Utils.ceil(item.amount1) ||'-'), /*amount1 is TotalDemandDue*/
+                        "{{'PRINCIPAL'|translate}} : " + item.part1,
+                        "{{'INTEREST'|translate}} : " + item.part2,
+                        "{{'PENAL_INTEREST'|translate}} : " + item.part3,
+                        "{{'CHARGES'|translate}} : " + item.part4,
+                        "{{'FEES'|translate}} : " + item.amount2,
+                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues
                     ]
                 },
                 getActions: function(){
@@ -146,7 +143,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q){
                             }
                         },
                         {
-                            name: "PROMISE_TO_PAY",
+                            name: "COLLECTION_STATUS",
                             desc: "",
                             fn: function(item, index){
                                 $log.info("Redirecting");

@@ -6,7 +6,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
 
 	return {
 		"type": "schema-form",
-		"title": "PROMISE_TO_PAY_FOR_LOAN",
+		"title": "COLLECTION_STATUS_FOR_LOAN",
 		initialize: function (model, form, formCtrl) {
             PageHelper.showLoader();
             irfProgressMessage.pop('loading-P2PUpdate', 'Loading P2PUpdate');
@@ -20,6 +20,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 console.log(data);
                 model.promise = model.promise || {};
                 model.promise.customerName=data.customer1FirstName;
+                model.promise.applicant = data.customer2FirstName;
                 model.promise.productCode=data.productCode;
                 //model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
                 //model.promise.urnNo=data.customerId1;
@@ -156,7 +157,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
             },
             {
 				"type":"box",
-				"title":"PROMISE_TO_PAY",
+				"title":"COLLECTION_STATUS",
 				"items":[
                     {
                         key:"promise.customerName",
@@ -166,13 +167,14 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key:"promise.applicant",
                         title:"APPLICANT",
-                        readonly:true
-                    },
+                        readonly:true,
+                        "condition":"model.promise.applicant"
+                    }/*,
                     {
                         key:"promise.coApplicant",
                         title:"CO_APPLICANT",
                         readonly:true
-                    },
+                    }*/,
                     {
                         key: "promise.accountNumber",
                         title: "LOAN_ACCOUNT_NUMBER",
@@ -194,11 +196,11 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
                     {
                      "type": "fieldset",
-                     "title": "PROMISE_TO_PAY_DETAILS",
+                     "title": "COLLECTION_STATUS_DETAILS",
                      "items": [
                         {
                             key:"promise.promiseToPayDate",
-                            title:"PROMISE_TO_PAY_DATE",
+                            title:"NEXT_ACTION_DATE",
                             readonly:false,
                             type:"date",
                             
@@ -208,12 +210,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             title: "CUSTOMER_CATEGORY",
                             type: "select",
                             "condition":"model.additional.fromBounceQueue==true",
-                            titleMap: {
-                                "A": "A-Under Control",
-                                "B": "B-Tough",
-                                "C": "C-Difficult",
-                                "D": "D-Declared"
-                            },
+                            enumCode : "p2p_customer_category"
                             
                         },
                         {
@@ -221,12 +218,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                             title: "CUSTOMER_CATEGORY",
                             type: "select",
                             "condition":"model.additional.fromBouncePromiseQueue==true",
-                            titleMap: {
-                                "A": "A-Under Control",
-                                "B": "B-Tough",
-                                "C": "C-Difficult",
-                                "D": "D-Declared"
-                            },
+                            enumCode : "p2p_customer_category"
                             
                         },
                         {

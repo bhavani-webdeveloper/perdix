@@ -17,13 +17,13 @@ irf.pages.config([
 	var statesDefinition = [{
 		name: "Page.Landing", // Favorites
 		url: "/Landing",
-		templateUrl: "process/pages/templates/Page.Landing.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageLandingCtrl"
 	},{
-		name: "Page.Dashboard", // BI Dashboard
-		url: "/Dashboard",
-		templateUrl: "process/pages/templates/Page.Dashboard.html",
-		controller: "PageDashboardCtrl"
+		name: "Page.BIDashboard", // BI Dashboard
+		url: "/BIDashboard",
+		templateUrl: "process/pages/templates/Page.BIDashboard.html",
+		controller: "PageBIDashboardCtrl"
 	},{
 		name: "Page.Customer360", // Customer360
 		url: "/Customer360/:pageId",
@@ -42,12 +42,32 @@ irf.pages.config([
 	},{
 		name: "Page.LoansDashboard",
 		url: "/LoansDashboard",
-		templateUrl: "process/pages/templates/Page.LoansDashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LoansDashboardCtrl"
+	},{
+		name: "Page.LoansBookingDashboard",
+		url: "/LoansBookingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansBookingDashboardCtrl"
+	},{
+		name: "Page.LoansDisbursementDashboard",
+		url: "/LoansDisbursementDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansDisbursementDashboardCtrl"
+	},{
+		name: "Page.LoansACHPDCDashboard",
+		url: "/LoansACHPDCDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansACHPDCDashboardCtrl"
+	},{
+		name: "Page.LoansCollectionsDashboard",
+		url: "/LoansCollectionsDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansCollectionsDashboardCtrl"
 	},{
 		name: "Page.ManagementDashboard",
 		url: "/ManagementDashboard",
-		templateUrl: "process/pages/templates/Page.ManagementDashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageManagementDashboardCtrl"
 	}];
 

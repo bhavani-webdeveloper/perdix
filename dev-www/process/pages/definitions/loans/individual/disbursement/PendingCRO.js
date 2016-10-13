@@ -44,6 +44,12 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "readonly":true
                 },
                 {
+                    "key": "loanAccountDisbursementSchedule.tranchCondition",
+                    "title": "TRACHE_CONDITION",
+                    "type": "textarea",
+                    "readonly":true
+                },
+                {
                     "key": "loanAccountDisbursementSchedule.cro_status",
                     "title": "Status",
                     "type": "radios",
@@ -52,7 +58,7 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                                 "2": "Reject"
                             }
                 },
-                 {
+                {
                     "key": "loanAccountDisbursementSchedule.remarks2",
                     "title": "REMARKS"
                 },
@@ -93,6 +99,9 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     delete reqData.$resolved;
                     delete reqData._FROQueue;
                     reqData.disbursementProcessAction = "PROCEED";
+                    if (model.loanAccountDisbursementSchedule.cro_status =="2"){
+                        reqData.stage = "FROApproval";
+                    }
                     IndividualLoan.updateDisbursement(reqData,function(resp,header){
                         PageHelper.showProgress("upd-disb","Done.","5000");
                         PageHelper.hideLoader();

@@ -1,8 +1,16 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "Enrollment", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries", 
-function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig,Queries){
+["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanProcess","PageHelper",
+function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanProcess,PageHelper){
 
     var branch = SessionStore.getBranch();
+
+    var computeTotal = function(model){
+        model.totalAmount=0;
+        for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
+            model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
+        }
+        model.amountDeposited = model.totalAmount;
+    }
 
     return {
         "type": "schema-form",
@@ -13,42 +21,36 @@ function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig,Qu
             model.loggedInUser = SessionStore.getLoginname();
 
             Queries.getDepositList(SessionStore.getLoginname())
-            .$promise
             .then(function (res){
-
+                $log.info(res);
+                model.pendingCashDeposits = [];
+                model.loanAccounts = [];
+                for (var i=0; i< res.body.length;i++){
+                    var cashDeposit = res.body[i];
+                    if(cashDeposit.repayment_amount_in_paisa>0)
+                        cashDeposit.repayment_amount_in_paisa = cashDeposit.repayment_amount_in_paisa / 100;
+                    model.pendingCashDeposits.push(
+                        {
+                            loan_ac_no: cashDeposit.account_number,
+                            repaymentId: cashDeposit.id,
+                            customer_name: cashDeposit.customer_name,
+                            amount_collected: cashDeposit.repayment_amount_in_paisa
+                        }
+                    );
+                    model.loanAccounts.push(cashDeposit.id);
+                }
+                computeTotal(model);
             },
-            function(){
-                
+            function(httpRes){
+                PageHelper.showProgress('deposit-stage', 'Failed to load the deposit details. Try again.', 4000);
+                PageHelper.showErrors(httpRes);
+                PageHelper.hideLoader();
             });
 
-
-            model.pendingCashDeposits = [{
-                "loan_ac_no":"508640101335",
-                "customer_name":"GeeKay Industries",
-                "amount_collected": 10000
-            },
-            {
-                "loan_ac_no":"508640108276",
-                "customer_name":"Manjunatha Hydroflexibles",
-                "amount_collected":6000
-            },
-            {
-                "loan_ac_no":"5010001229347869",
-                "customer_name":"VSR Engineering",
-                "amount_collected":49816
-            }];
-            model.depositBank = "HDFC Bank";
-            model.depositBranch = "Nungambakkam";
-
-            model.totalAmount=0;
-            for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-                model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
-            }
-            model.amountDeposited = model.totalAmount;
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
-            
+
         },
         form: [{
             "type": "box",
@@ -111,12 +113,68 @@ function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig,Qu
                 "title":"AMOUNT_DEPOSITED"
             },
             {
-                "key":"depositBank",
-                "title":"DEPOSITED_BANK"
+                key: "bankDepositSummary.bankAccountNumber",
+                type: "lov",
+                autolov: true,
+                title:"DEPOSITED_TO_ACCOUNT",
+                bindMap: {
+                },
+                outputMap: {
+                    "account_number": "bankDepositSummary.bankAccountNumber"
+                },
+                searchHelper: formHelper,
+                search: function(inputModel, form, model) {
+                    return Queries.getBankAccounts();
+                },
+                getListDisplayItem: function(item, index) {
+                    return [
+                        item.account_number,
+                        item.ifsc_code + ', ' + item.bank_name,
+                        item.branch_name
+                    ];
+                }
             },
             {
-                "key":"depositBranch",
-                "title":"DEPOSITED_BRANCH"
+                key: "bankDepositSummary.ifscCode",
+                type: "lov",
+                "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
+                lovonly: true,
+                inputMap: {
+                    "ifscCode": {
+                        "key": "bankDepositSummary.ifscCode"
+                    },
+                    "bankName": {
+                        "key": "bankDepositSummary.depositBank"
+                    },
+                    "branchName": {
+                        "key": "bankDepositSummary.depositBranch"
+                    }
+                },
+                onSelect:function(results,model,context) {
+                    model.bankDepositSummary.ifscCode = results.ifscCode;
+                    model.bankDepositSummary.bankBranchDetails = results.bankName + ' ' + results.branchName;
+                },
+                searchHelper: formHelper,
+                search: function(inputModel, form) {
+                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                    var promise = CustomerBankBranch.search({
+                        'bankName': inputModel.depositBank,
+                        'ifscCode': inputModel.ifscCode,
+                        'branchName': inputModel.depositBranch
+                    }).$promise;
+                    return promise;
+                },
+                getListDisplayItem: function(data, index) {
+                    return [
+                        data.ifscCode,
+                        data.branchName,
+                        data.bankName
+                    ];
+                },
+            },
+            {
+                "key":"bankDepositSummary.bankBranchDetails",
+                "title":"DEPOSITED_BANK_BRANCH"
             }
             ]
         },{
@@ -126,15 +184,140 @@ function($log, Enrollment, SessionStore,$state,$stateParams,irfElementsConfig,Qu
                 "title": "SUBMIT"
             }]
         }],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
+        schema: {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                /*"repayment": {
+                    "type": "object",
+                    "properties": {
+                        "repaymentId": {
+                            "type": "string",
+                            "title":"ACCOUNT_ID"
+                        },
+                        "amount": {
+                            "type": "number",
+                            "title":"AMOUNT_PAID"
+
+                        },
+                        "authorizationRemark": {
+                            "type": "string",
+                            "title":"AUTHORIZATION_REMARK"
+                        },
+                        "authorizationUsing": {
+                            "type": "string",
+                            "title":"AUTHORIZATION_USING"
+                        },
+                        "cashCollectionRemark": {
+                            "type": "string",
+                            "title":"CASH_COLLECTION_REMARK"
+                        },
+                        "groupCode": {
+                            "type": "string",
+                            "title":"GROUP_CODE"
+                        },
+                        "instrument": {
+                            "type": "string",
+                            "title": "INSTRUMENT_TYPE",
+                            "required": true
+                        },
+                        "productCode": {
+                            "type": "string",
+                            "title":"PRODUCT_CODE"
+                        },
+                        "remarks": {
+                            "type": "string",
+                            "title":"REMARKS"
+                        },
+                        "repaymentDate": {
+                            "type": "string",
+                            "title":"REPAYMENT_DATE",
+                            readonly:true,
+                            "x-schema-form": {
+                                "type": "date"
+                            }
+                        },
+                        "transactionId": {
+                            "type": "string",
+                            "title":"TRANSACTION_ID"
+                        },
+                        "transactionName": {
+                            "type": "string",
+                            "title":"TRANSACTION_NAME",
+                            "enumCode":"repayment_transaction_name",
+
+                        },
+                        "urnNo": {
+                            "type": "string",
+                            "title":"URN_NO"
+                        }
+                    },
+                    required: [
+                        'instrument'
+                    ]
+                },*/
+                "repayments": [{
+                    "type": "string"
+                }],
+                "bankDepositSummary": {
+                    "type": "object",
+                    "properties": {
+                        "bankAccountNumber": {
+                            "type": "string"
+
+                        },
+                        "bankBranchDetails": {
+                            "type": "string"
+                        },
+                        "ifscCode": {
+                            "type": "string",
+                            "title":"IFSC_CODE"
+                        },
+                        "depositBank": {
+                            "type": "string",
+                            "title":"DEPOSITED_BANK"
+                        },
+                        "depositBranch": {
+                            "type": "string",
+                            "title":"DEPOSITED_BRANCH"
+                        },
+                    }
+                }
+            },
+            "required": [
+                "repaymentId",
+                "amount",
+                "authorizationRemark",
+                "authorizationUsing",
+                "cashCollectionRemark",
+                "groupCode",
+                "productCode",
+                "remarks",
+                "repaymentDate",
+                "transactionId",
+                "transactionName",
+                "urnNo"
+            ]
         },
         actions: {
             submit: function(model, form, formName){
-                    $state.go("Page.Engine", {
-                        pageName: 'IndividualLoanBookingConfirmation',
-                        pageId: model.customer.id
-                    });
+                var reqData = {
+                    'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
+                    'repayments':_.cloneDeep(model.loanAccounts)
+                };
+
+                PageHelper.showProgress('update-loan', 'Working...');
+                PageHelper.showLoader();
+                $log.info(reqData);
+                console.log(JSON.stringify(reqData));
+                LoanProcess.processCashDeposit(reqData, function(response){
+                    PageHelper.hideLoader();
+                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+
+                }, function(errorResponse){
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                });
             }
         }
     };

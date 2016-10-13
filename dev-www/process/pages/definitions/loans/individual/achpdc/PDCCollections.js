@@ -18,224 +18,283 @@ PDC.getDemandList : To get all the demands for the entered date. And all the bra
 PDC.pdcDemandListUpload : To upload the selected file.
 PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"),
-["$log", "Enrollment", "SessionStore",'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper',
- function($log, Enrollment, SessionStore,Utils,PDC,AuthTokenHelper,PageHelper){
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), ["$log", "SessionStore", 'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state',
+    function($log, SessionStore, Utils, PDC, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state) {
 
-    return {
-        "type": "schema-form",
-        "title": "PDC_COLLECTIONS",
-        "subTitle": Utils.getCurrentDate(),
+        var allDemands = [];
+        var branchIDArray = [];
+        return {
+            "type": "schema-form",
+            "title": "PDC_COLLECTIONS",
+            "subTitle": Utils.getCurrentDate(),
 
-        initialize: function (model, form, formCtrl) {
-            model.authToken = AuthTokenHelper.getAuthData().access_token;
-            model.userLogin = SessionStore.getLoginname();
-            model.pdcCollections = model.pdcCollections || {};
-            model.flag = false;
-            model.pdcDemand = model.pdcDemand || {};
-            model.pdcDemand.demandList = model.pdcDemand.demandList ||[];
-            model.pdcDemand.updateDemand = model.pdcDemand.updateDemand || [];
-        },
-        
-        form: [
-            {
-                "type":"box",
-                "title":"PDC_SUBMISSION_AND_STATUS_UPDATE",
-                "items":[
-                    {
-                        "type":"fieldset",
-                        "title":"SUBMIT_TO_BANK",
-                        "items":[
-                            {
-                                "key":"pdcCollections.demandDate",
-                                "title": "INSTALLMENT_DATE",
-                                "type":"date"
-                            },
-                            {
-                                "title":"DOWNLOAD",
-                                "htmlClass":"btn-block",
-                                "icon":"fa fa-download",
-                                "type":"button",
-                                "notitle":true,
-                                "readonly":false,
-                                "onClick": function(model, formCtrl, form, $event){
-                                    //window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands&date="+model.pdcCollections.demandDate);
-                                    window.open(irf.BI_BASE_URL+"/download.php?user_id="+model.userLogin+"&auth_token="+model.authToken+"&report_name=pdc_demands");
-                                    PageHelper.clearErrors();
-                                    PageHelper.showLoader();
-                                    PDC.getDemandList(
-                                        {
-                                            demandDate: model.pdcCollections.demandDate,
-                                            branchId: [1,2,3,4,6,7,8,9,11]
-                                        }
-                                    ).$promise.then(function(res) {
-                                        PageHelper.hideLoader();
-                                        model.pdcSearch = res;
-
-                                        if (model.pdcSearch.body.length > 0){
-                                            model.flag = true;
-                                        } else {
-                                            model.flag = false;
-                                        }
-
-                                        for (var i = 0; i < model.pdcSearch.body.length; i++) {
-                                            model.pdcSearch.body[i].amount = parseInt(model.pdcSearch.body[i].amount1);
-                                            model.pdcDemand.demandList.push(model.pdcSearch.body[i]);
-                                        }
-                                        
-                                        },
-                                        function(httpRes) {
-                                            PageHelper.hideLoader();
-                                            PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
-                                            PageHelper.showErrors(httpRes);
-                                            $log.info("PDC Search Response : " + httpRes);
-                                        }
-                                    );
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "type":"fieldset",
-                        "title":"UPLOAD_STATUS",
-                        "items":[
-                            {
-                                "key": "pdc.pdcReverseFeedListFileId",
-                                "notitle":true,
-                                "category":"ACH",
-                                "subCategory":"cat2",
-                                "type": "file",
-                                "fileType":"application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                customHandle: function(file, progress, modelValue, form, model) {
-                                    PDC.pdcReverseFeedListUpload(file, progress);
-                                }
-                            }
-                            // ,
-                            // {
-                            //     "type": "button",
-                            //     "icon": "fa fa-user-plus",
-                            //     "title": "UPLOAD",
-                            //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                            // }
-                        ]
-                    }
-                ]
+            initialize: function(model, form, formCtrl) {
+                //alert($filter('date')(new Date(), 'dd/MM/yyyy'));
+                //alert(moment(new Date()).format("YYYY-MM-DD"));
+                //alert(Utils.getCurrentDate());
+                allDemands = [];
+                model.authToken = AuthTokenHelper.getAuthData().access_token;
+                model.userLogin = SessionStore.getLoginname();
+                model.pdcSearch = model.pdcSearch || {};
+                //model.pdcCollections = model.pdcCollections || {};
+                model.showUpdateSection = false;
+                model.searchAccountId = false;
+                model.searchDemarkAccountId = false;
+                model.pdcDemand = model.pdcDemand || {};
+                model.pdcDemand.demarkList = model.pdcDemand.demarkList || [];
+                model.updateDemand = model.updateDemand || [];
+                //model.pdcCollections.demandDate = model.pdcCollections.demandDate || Utils.getCurrentDate();
+                console.log(formHelper.enum('branch_id'));
+                for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
+                    branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
+                }
             },
-            {
+            form: [{
                 "type": "box",
-                "notitle": true,
-                "items": [
-                    {
-                        "type":"fieldset",
-                        "title":"UPDATE_PDC_DEMANDS",
-                        "items":[
-                            {   
-                                "key": "pdcDemand.checkbox",
-                                "condition": "model.flag",
-                                "type": "checkbox",
-                                "title": "SELECT_ALL",
-                                "schema":{
-                                        "default": false
-                                    },
-                                "onChange": function(modelValue, form, model){
-
-                                    if (modelValue)
-                                    {
-                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
-                                            model.pdcDemand.demandList[i].check = true;  
-                                    }
-                                    else
-                                    {
-                                        for ( i = 0; i < model.pdcDemand.demandList.length; i++)
-                                            model.pdcDemand.demandList[i].check = false;
-                                    }                        
-                                }    
+                "title": "UPDATE_PDC_DEMANDS",
+                "items": [{
+                    "key": "pdc.pdcDemandListDate",
+                    "title": "INSTALLMENT_DATE",
+                    "type": "date"
+                }, {
+                    "type": "button",
+                    "title": "SEARCH_ALL_DEMAND",
+                    "onClick": function(model, formCtrl, form) {
+                        PageHelper.clearErrors();
+                        if (!model.pdc || !model.pdc.pdcDemandListDate) {
+                            PageHelper.setError({
+                                'message': 'Installment Date is mandatory.'
+                            });
+                            return false;
+                        }
+                        model.showUpdateSection = false;
+                        PageHelper.showLoader();
+                        PDC.getDemandList({
+                            demandDate: model.pdc.pdcDemandListDate,
+                            branchId: branchIDArray
+                        }).$promise.then(function(res) {
+                                PageHelper.hideLoader();
+                                model.pdcSearch = res;
+                                if (model.pdcSearch.length) {
+                                    model.showUpdateSection = true;
+                                    model.chosenRecordCountText = model.pdcSearch.length + ' Record(s) found.';
+                                } else {
+                                    model.showUpdateSection = false;
+                                    model.chosenRecordCountText = 'No Records found..!';
+                                }
+                                // Clear the existing array whenever the user clicks on download,
+                                // to prevent the value getting appended to the existing
+                                allDemands = [];
+                                for (var i = 0; i < model.pdcSearch.length; i++) {
+                                    model.pdcSearch[i].repaymentType = "PDC";
+                                    // model.pdcSearch[i].accountId = model.pdcSearch[i].accountId;
+                                    model.pdcSearch[i].amount = parseInt(model.pdcSearch[i].amount3);
+                                    model.pdcSearch[i].repaymentDate = Utils.convertJSONTimestampToDate(model.pdcSearch[i].valueDate);
+                                    model.pdcSearch[i].check = true;
+                                    allDemands.push(model.pdcSearch[i]);
+                                }
                             },
-                            {
-                                "type":"array",
-                                "key":"pdcDemand.demandList",
-                                "condition": "model.flag",
-                                "add": null,
-                                "startEmpty": true,
-                                "remove":null,
-                                "title":"CHEQUE_DETAILS",
-                                "titleExpr": "(model.pdcDemand.demandList[arrayIndex].check?'⚫ ':'⚪ ') + model.pdcDemand.demandList[arrayIndex].accountId + ' - ' + model.pdcDemand.demandList[arrayIndex].amount1",
-                                "items":[
-                                    {
-                                        "key": "pdcDemand.demandList[].accountId",
-                                        "title": "ACCOUNT_NUMBER",
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "pdcDemand.demandList[].amount1",
-                                        "title": "LOAN_AMOUNT",
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "pdcDemand.demandList[].customerName",
-                                        "title": "CUSTOMER_NAME",
-                                        "readonly": true
-                                    },
-                                    {
-                                        "key": "pdcDemand.demandList[].check",
-                                        "title": "MARK_AS_PAID",
-                                        "type": "checkbox",
-                                        "schema":{
-                                            "default": false
-                                        }
-                                    },
-                                ]                                                                           
+                            function(httpRes) {
+                                PageHelper.hideLoader();
+                                PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
+                                PageHelper.showErrors(httpRes);
+                                $log.info("PDC Search Response : " + httpRes);
+                            });
+                    }
+                }, {
+                    "type": "help",
+                    "helpExpr": "model.chosenRecordCountText"
+                }]
+            }, {
+                "type": "box",
+                "condition": "model.showUpdateSection",
+                "title": "SEARCH_DAMANDS_TO_DEMARK",
+                "items": [{
+                        "key": "pdcDemand.chosenToMark.accountId",
+                        "title": "ACCOUNT_NUMBER",
+                        "type": "lov",
+                        "lovonly": true,
+                        "inputMap": {
+                            "loanAccountNumber": "pdc.loanAccountNumber",
+                            "reference": "pdc.reference"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(model, formCtrl, form) {
+                            var filteredDemandList = $filter('filter')(allDemands, {
+                                accountId: model.loanAccountNumber,
+                                reference: model.reference
+                            });
+                            return $q.resolve({
+                                "header": {
+                                    "x-total-count": filteredDemandList.length
+                                },
+                                "body": filteredDemandList
+                            });
+
+
+
+                        },
+                        "getListDisplayItem": function(item, index) {
+                            return [
+                                '{{"ACCOUNT_NUMBER"|translate}}: ' + item.accountId + ' <small><i class="fa fa-rupee"></i> ' + item.amount + '</small>',
+                                '{{"INSTRUMENT_REFERENCE"|translate}}: ' + item.reference,
+                                '{{"ENTITY_NAME"|translate}}: ' + item.customerName
+                            ];
+                        },
+                        "onSelect": function(result, model, context) {
+                            model.searchAccountId = false;
+                            if (!model.pdcDemand.demarkList) {
+                                model.pdcDemand.demarkList = [];
                             }
-                        ]                        
+                            for (var i = 0; i < model.pdcDemand.demarkList.length; i++) {
+                                if (result.accountId == model.pdcDemand.demarkList[i].accountId) {
+                                    model.searchAccountId = true;
+                                    PageHelper.showProgress("page-init", "ACCOUNT ID exist in Demarked Demand", 5000);
+                                }
+                            }
+                            if (model.searchAccountId == false) {
+                                model.pdcDemand.chosenToMark = result;
+                            }
+
+                        }
                     },
+
                     {
-                        "type": "actionbox",
-                        "condition": "model.flag",
-                        "items": [
-                            {
-                                "type": "submit",
-                                "title": "SUBMIT"
+                        "key": "pdcDemand.chosenToMark.amount",
+                        "title": "LOAN_AMOUNT",
+                        "type": "number",
+                        "readonly": true
+                    }, {
+                        "key": "pdcDemand.chosenToMark.demark",
+                        "title": "MARK_AS_UNPAID",
+                        "condition": "model.pdcDemand.chosenToMark.accountId",
+                        "type": "button",
+                        "schema": {
+                            "default": false
+                        },
+                        "onClick": function(model, form, formName) {
+                            model.searchDemarkAccountId = false;
+                            if (model.pdcDemand.demarkList) {
+                                for (var i = 0; i < model.pdcDemand.demarkList; i++) {
+                                    if (model.pdcDemand.chosenToMark.accountId == model.pdcDemand.demarkList[i].accountId) {
+                                        model.searchDemarkAccountId = true;
+                                    }
+                                }
+                                if (!model.searchDemarkAccountId) {
+                                    model.pdcDemand.chosenToMark.check = false;
+                                    model.pdcDemand.demarkList.push(model.pdcDemand.chosenToMark);
+                                    model.pdcDemand.chosenToMark = null;
+                                }
                             }
-                        ]
+                        }
                     }
                 ]
-            }
-        ],
+            }, {
+                "type": "box",
+                "condition": "model.showUpdateSection",
+                "title": "DEMARKED_DEMANDS",
+                "items": [{
+                    "type": "array",
+                    "key": "pdcDemand.demarkList",
+                    //"condition": "!model.pdcDemand.demarkList[arrayIndex].check",
+                    "add": null,
+                    "startEmpty": true,
+                    "remove": null,
+                    "title": "CHEQUE_DETAILS",
+                    "titleExpr": "(model.pdcDemand.demarkList[arrayIndex].check?'⚫ ':'⚪ ') + model.pdcDemand.demarkList[arrayIndex].accountId + ' - ' + model.pdcDemand.demarkList[arrayIndex].amount",
+                    "items": [{
+                            "key": "pdcDemand.demarkList[].accountId",
+                            //"condition": "!model.pdcDemand.demarkList[arrayIndex].check",
+                            "title": "ACCOUNT_NUMBER",
+                            "readonly": true
+                        }, {
+                            "key": "pdcDemand.demarkList[].amount",
+                            //"condition": "!model.pdcDemand.demarkList[arrayIndex].check",
+                            "title": "LOAN_AMOUNT",
+                            "type": "number",
+                            "readonly": true
+                        }, {
+                            "key": "pdcDemand.demarkList[].demark",
+                            //"condition": "!model.pdcDemand.demarkList[arrayIndex].check",
+                            "title": "MARK_AS_PAID",
+                            "type": "button",
+                            "schema": {
+                                "default": false
+                            },
+                            "onClick": function(model, form, formName) {
 
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        
-        actions: {
-            submit: function(model, form, formName){
-                model.pdcDemand.updateDemand = [];
-                for (var i = 0; i <model.pdcDemand.demandList.length; i++) {
-                    if(model.pdcDemand.demandList[i].check ==true)
-                    {
-                        model.pdcDemand.updateDemand.push({
-                            repaymentDat: model.pdcDemand.demandList[i].transactionDate,
-                            accountNumber: model.pdcDemand.demandList[i].accountNumber,
-                            amount: model.pdcDemand.demandList[i].amount,
-                            transactionName: model.pdcDemand.demandList[i].transactionName,
-                            productCode: model.pdcDemand.demandList[i].param1,
-                            instrument: model.pdcDemand.demandList[i].instrument,
-                            valueDate: model.pdcDemand.demandList[i].valueDate,
-                            urnNo: model.pdcDemand.demandList[i].reference
+
+                                model.pdcDemand.demarkList[formName.arrayIndex].check = true;
+                                model.pdcDemand.demarkList.splice(formName.arrayIndex, 1);
+
+                            }
+                        }
+                    ]
+                }]
+            }, {
+                "type": "actionbox",
+                "condition": "model.showUpdateSection",
+                "items": [{
+                    "type": "button",
+                    "notitle": true,
+                    "condition": "model.showUpdateSection",
+                    "title": "SUBMIT",
+                    "onClick": "actions.submit(model, formCtrl)"
+                }]
+            }],
+            schema: function() {
+                return PDC.getSchema().$promise;
+            },
+            actions: {
+                submit: function(model, form, formName) {
+                    PageHelper.clearErrors();
+                    model.updateDemand = [];
+                    for (var i = 0; i < allDemands.length; i++) {
+                        var transName = "Scheduled Demand";
+                        if (allDemands[i].check == true) {
+                            if ((new Date(Utils.getCurrentDate()).getTime()) == (new Date(allDemands[i].repaymentDate).getTime())) {
+                                transName = "Scheduled Demand";
+                            } else if ((new Date(allDemands[i].transactionDate).getTime()) > (new Date(allDemands[i].repaymentDate).getTime())) {
+                                transName = "Scheduled Demand";
+                            } else if ((new Date(allDemands[i].transactionDate).getTime()) < (new Date(allDemands[i].repaymentDate).getTime())) {
+                                transName = "Scheduled Demand";
+                            }
+                            model.updateDemand.push({
+                                repaymentDate: Utils.convertJSONTimestampToDate(allDemands[i].valueDate),
+                                accountNumber: allDemands[i].accountId,
+                                amount: parseInt(allDemands[i].amount3),
+                                transactionName: transName,
+                                productCode: allDemands[i].param1,
+                                instrument: "PDC",
+                                valueDate: allDemands[i].valueDate,
+                                urnNo: allDemands[i].customerName,
+                                instrumentDate: Utils.convertJSONTimestampToDate(allDemands[i].valueDate),
+                                pdcNo: allDemands[i].sequenceNum,
+                                reference: allDemands[i].reference,
+                                ifscCode: allDemands[i].responseCode,
+                                demandAmount: parseInt(allDemands[i].amount3) 
+                            });
+                        }
+                    }
+                    if (model.updateDemand.length > 0) {
+                        console.log(model.updateDemand);
+                        PageHelper.clearErrors();
+                        PageHelper.showLoader();
+                        PDC.bulkRepay(model.updateDemand).$promise.then(function(response) {
+                            PageHelper.showProgress("page-init", "Done.", 2000);
+                            $state.reload();
+                            // allDemands = [];
+                            // model.showUpdateSection = false;
+                        }, function(errorResponse) {
+                            PageHelper.showErrors(errorResponse);
+                        }).finally(function() {
+                            PageHelper.hideLoader();
                         });
+                    } else {
+                        PageHelper.showProgress("page-init", "No account seected for repayment", 5000);
                     }
                 }
-                PageHelper.clearErrors();
-                PageHelper.showLoader();
-                
-                PDC.bulkRepay(model.pdcDemand.updateDemand, function(response) {
-                    PageHelper.hideLoader();
-                    PageHelper.showProgress("page-init", "Done.", 2000);
-                    model.flag = true;
-                }, function(errorResponse) {
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                });
             }
-        }
-    };
-}]);
+        };
+    }
+]);

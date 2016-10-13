@@ -30,14 +30,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                         "required":[],
                         "properties": {
 
-                            "customerSignatureDate": {
-                                "title": "CUSTOMER_SIGNATURE_DATE",
-                                "type": "string",
-                                "x-schema-form": {
-                                    "type": "date"
+                            // "customerSignatureDate": {
+                            //     "title": "CUSTOMER_SIGNATURE_DATE",
+                            //     "type": "string",
+                            //     "x-schema-form": {
+                            //         "type": "date"
 
-                                }
-                            },
+                            //     }
+                            // },
 
                             "scheduledDisbursementDate": {
                                 "title": "SCHEDULED_DISBURSEMENT_DATE",

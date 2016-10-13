@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUploadQueue"),
-["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan",
-function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
+["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons",
+function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons){
     return {
         "type": "search-list",
         "title": "DOCUMENT_EXECUTION",
@@ -8,7 +8,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
         "uri":"Loan Booking/Stage 3",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchName = SessionStore.getBranch();
+            // model.branchName = SessionStore.getBranch();
         },
 
         definition: {
@@ -16,8 +16,8 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
             autoSearch: true,
             sorting:true,
             sortByColumns:{
-                "name":"Customer Name",
-                "centre_name":"Centre",
+                "customer name":"Customer Name",
+                "centre id":"Centre",
                 "sanction_date":"Sanction Date"
             },
             searchForm: [
@@ -28,7 +28,24 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
+                    "branchName": {
+                        "title": "BRANCH_NAME",
+                        "type": ["string", "null"],
+                        "enumCode": "branch",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
 
+                    },
+                    "centreCode": {
+                        "title": "CENTER_NAME",
+                        "type": ["number", "null"],
+                        "enumCode": "centre",
+                        "x-schema-form": {
+                            "type": "select",
+                            "parentEnumCode":"branch"
+                        }
+                    },
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
@@ -49,55 +66,41 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
                             }*/
                             "enumCode": "loan_product"
                         }
-                    },
-
-                    "customer_name": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "entity_name": {
-                        "title": "ENTITY_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "sanction_date": {
-                        "title": "SANCTION_DATE",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "date"
-                        }
-                    },
-                    "branchName": {
-                        "title": "BRANCH_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        },
-                        "enumCode": "branch"
-                    },
-                    "centreCode": {
-                        "title": "CENTRE_NAME",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        },
-                        "enumCode": "centre"
                     }
+                    // "customer_name": {
+                    //     "title": "CUSTOMER_NAME",
+                    //     "type": "string",
+                    //     "x-schema-form": {
+                    //         "type": "select"
+                    //     }
+                    // },
+                    // "entity_name": {
+                    //     "title": "ENTITY_NAME",
+                    //     "type": "string",
+                    //     "x-schema-form": {
+                    //         "type": "select"
+                    //     }
+                    // },
+                    // "sanction_date": {
+                    //     "title": "SANCTION_DATE",
+                    //     "type": "string",
+                    //     "x-schema-form": {
+                    //         "type": "date"
+                    //     }
+                    // }
                 }
             },
             getSearchFormHelper: function() {
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
+                if (_.hasIn(searchOptions, 'centreCode')){
+                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+                }
                 return IndividualLoan.search({
                     'stage': 'DocumentUpload',
                     'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCode,
+                    'centreCode': searchOptions.centreCodeForSearch,
                     'customerId': searchOptions.customerId,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
@@ -134,7 +137,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan){
                             name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
-                                $log.info("Redirecting");
+                                entityManager.setModel('loans.individual.booking.DocumentUpload', {_queue:item});
                                 $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageId: item.loanId});
                             },
                             isApplicable: function(item, index){

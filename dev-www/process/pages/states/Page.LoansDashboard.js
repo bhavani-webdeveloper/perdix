@@ -4,7 +4,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     $log.info("Page.LoansDashboard.html loaded");
     PageHelper.clearErrors();
     var fullDefinition = {
-        "title": "Actions",
+        "title": "Loans Dashboard",
         "items": [
             "Page/Engine/loans.individual.booking.LoanBookingQueue",
             "Page/Engine/loans.individual.PendingClearingQueue",
@@ -16,7 +16,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
-        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10;
+        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10; // TODO remove hardcoding
     });
 
 }]);
