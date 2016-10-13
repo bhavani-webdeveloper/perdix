@@ -9,12 +9,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 
 	$scope.isCordova = typeof(cordova) !== 'undefined';
 
-	$.getJSON("app_manifest.json", function(json) {
-		$scope.$apply(function(){
-			$scope.app_manifest = json;
-			$scope.appName = json.title;
-			document.mainTitle = json.name;
-		});
+	var checkLatestVersion = function() {
 		if ($scope.isCordova) {
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
 				$scope.latest_version = value;
@@ -26,6 +21,9 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 				}
 			});
 		}
+	};
+
+	var connectPerdix7 = function() {
 		if ($scope.app_manifest.connect_perdix7) {
 			$timeout(function() {
 				$scope.connect_perdix7 = true;
@@ -35,6 +33,20 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 				}
 			});
 		}
+	};
+
+	$.getJSON("app_manifest.json", function(json) {
+		$scope.$apply(function(){
+			$scope.app_manifest = json;
+			$scope.appName = json.title;
+			document.mainTitle = json.name;
+		});
+		checkLatestVersion();
+		connectPerdix7();
+	});
+
+	$scope.$on('irf-login-success', function($event){
+		checkLatestVersion();
 	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;
