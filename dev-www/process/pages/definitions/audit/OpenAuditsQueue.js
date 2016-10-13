@@ -148,6 +148,20 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 							isApplicable: function(item, index){
 								return item.$synced;
 							}
+						},
+						{
+							name: "Sync",
+							desc: "",
+							icon: "fa fa-refresh",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.SampleSets",
+									//pageId:item.AuditType
+								});
+							},
+							isApplicable: function(item, index){
+								return !item.$synced;
+							}
 						}
 					];
 				},

@@ -89,7 +89,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 			listOptions: {
 				selectable: true,
 				expandable: true,
-				//listStyle: "table",
+				listStyle: "table",
 				itemCallback: function(item, index) {
 				},
 				getItems: function(response, headers){
@@ -161,7 +161,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage01')
+								if (item.currentStage==='BasicEnrolment')
 									return true;
 								return false;
 							}

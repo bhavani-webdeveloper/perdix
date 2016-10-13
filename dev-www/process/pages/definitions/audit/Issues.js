@@ -17,6 +17,9 @@ irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q
                 $log.info("Issues page ");
                 var form = _.cloneDeep(this.formSource);
                 form[0].readonly = $stateParams.pageId !== 'edit';
+                if (!form[0].readonly) {
+                    model.audit = {};
+                }
                 this.form = form;
             },
 
