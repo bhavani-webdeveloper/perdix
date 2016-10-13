@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrollment2"),
+irf.pageCollection.factory(irf.page("demo.IndividualEnrollment2"),
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
@@ -86,25 +86,14 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.dateOfBirth",
                     type:"date",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
+                    "onChange": "actions.dateOfBirthOnChange(modelValue, form, model)" 
                 },
                 {
                     key:"customer.age",
                     title: "AGE",
                     type:"number",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.age > 0) {
-                            if (model.customer.dateOfBirth) {
-                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                            }
-                        }
-                    }
+                    "onChange": "actions.ageOnChange(modelValue, form, model)"
+                   
                 },
                 {
                     key:"customer.religion",
@@ -123,45 +112,24 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     title: "SPOUSE_FULL_NAME",
                     condition:"model.customer.maritalStatus==='MARRIED'",
                     type:"qrcode",
-                    onCapture: function(result, model, form) {
-                        $log.info(result); // spouse id proof
-                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                        $log.info(aadhaarData);
-                        model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
-                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                        model.customer.spouseFirstName = aadhaarData.name;
-                        if (aadhaarData.yob) {
-                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
+                    onCapture: "actions.spouseFirstNameOnCapture(result, model, form)"
+
                 },
                 {
                     key:"customer.spouseAge",
                     title: "SPOUSE_AGE",
                     type:"number",
                     condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseAge > 0) {
-                            if (model.customer.spouseDateOfBirth) {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                            }
-                        }
-                    }
+                    "onChange": "actions.spouseAgeOnChange(modelValue, form, model)"
                 },
                 {
                     key:"customer.spouseDateOfBirth",
                     type:"date",
                     condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseDateOfBirth) {
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
+                    "onChange": "actions.spouseDateOfBirthOnChange(modelValue, form, model)"
                 }
-            ]
+
+                ]
         },
         {
             "type": "box",
@@ -285,10 +253,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     "key": "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
-                    onCapture: function(result, model, form) {
-                        EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
-                        this.actions.setProofs(model);
-                    }
+                    onCapture: "actions.aadhaarNoOnCapture(result, model, form)"
+
+                    
                 },
                 {
                     type:"fieldset",
@@ -311,10 +278,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.identityProofNo",
                             type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.identityProofNo = result.text;
-                            }
+                            onCapture: "actions.identityProofNoOnCapture(result, model, form)"
                         },
                         {
                             key:"customer.idProofIssueDate",
@@ -351,10 +315,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.addressProofNo",
                             type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.addressProofNo = result.text;
-                            }
+                            onCapture: "actions.addressProofNoOnCapture(result, model, form)"
+
                         },
                         {
                             key:"customer.addressProofIssueDate",
@@ -374,9 +336,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.udf.userDefinedFieldValues.udf33",
                             type:"select",
-                            onChange: function(modelValue) {
-                                $log.info(modelValue);
-                            }
+                            onChange: "actions.udf33OnChange(modelValue)"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf34",
@@ -392,26 +353,15 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             key:"customer.udf.userDefinedFieldValues.udf36",
                             condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
                             type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result); // spouse id proof
-                                model.customer.udf.userDefinedFieldValues.udf36 = result.text;
-                            }
+                            onCapture: "actions.udf36OnCaptureBarcode(result, model, form)"
+
                         },
                         {
                             key:"customer.udf.userDefinedFieldValues.udf36",
                             condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
                             type:"qrcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result); // spouse id proof
-                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                $log.info(aadhaarData);
-                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                                model.customer.spouseFirstName = aadhaarData.name;
-                                if (aadhaarData.yob) {
-                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
+                            onCapture: "actions.udf36OnCaptureQrcode(result, model, form)"
+
                         }
                     ]
                 }
@@ -495,34 +445,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key:"customer.familyMembers[].relationShip",
                             type:"select",
-                            onChange: function(modelValue, form, model, formCtrl, event) {
-                                if (modelValue && modelValue.toLowerCase() === 'self') {
-                                    if (model.customer.id)
-                                        model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                    if (model.customer.firstName)
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                    if (model.customer.gender)
-                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                    if (model.customer.dateOfBirth)
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                    if (model.customer.maritalStatus)
-                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                    if (model.customer.mobilePhone)
-                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
-                                    if (model.customer.spouseFirstName)
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                    if (model.customer.gender)
-                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
-                                            (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
-                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
-                                    if (model.customer.spouseDateOfBirth)
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                    if (model.customer.maritalStatus)
-                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                }
-                            },
+                            onChange: "actions.relationShipOnChange(modelValue, form, model, formCtrl, event)",
                             title: "T_RELATIONSHIP"
                         },
                         {
@@ -580,26 +503,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title: "AGE",
                             type:"number",
-                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                    } else {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                    }
-                                }
-                            }
+                            "onChange": "actions.familyMembersAgeOnChange(modelValue, form, model, formCtrl, event)"
+
                         },
                         {
                             key: "customer.familyMembers[].dateOfBirth",
                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             type:"date",
                             title: "T_DATEOFBIRTH",
-                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
+                            "onChange": "actions.familyMembersDateOfBirthOnChange(modelValue, form, model, formCtrl, event)"
+
                         },
                         {
                             key:"customer.familyMembers[].educationStatus",
@@ -1113,6 +1026,132 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
                 }
             },
+
+            aadhaarNoOnCapture: function(result, model, form) {
+                        EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                        this.actions.setProofs(model);
+                    },
+            
+            identityProofNoOnCapture: function(result, model, form) {
+                                $log.info(result);
+                                model.customer.identityProofNo = result.text;
+                            },
+
+            addressProofNoOnCapture: function(result, model, form) {
+                                $log.info(result);
+                                model.customer.addressProofNo = result.text;
+                            },
+
+            dateOfBirthOnChange: function(modelValue, form, model) {
+                        if (model.customer.dateOfBirth) {
+                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+
+            },
+            ageOnChange: function(modelValue, form, model) {
+                        if (model.customer.age > 0) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                            } else {
+                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                            }
+                        }
+                   },
+            spouseFirstNameOnCapture: function(result, model, form) {
+                        $log.info(result); // spouse id proof
+                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                        $log.info(aadhaarData);
+                        model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                        model.customer.spouseFirstName = aadhaarData.name;
+                        if (aadhaarData.yob) {
+                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    },
+
+            spouseAgeOnChange: function(modelValue, form, model) {
+                        if (model.customer.spouseAge > 0) {
+                            if (model.customer.spouseDateOfBirth) {
+                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                            } else {
+                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
+                            }
+                        }
+                    },
+
+            spouseDateOfBirthOnChange: function(modelValue, form, model) {
+                        if (model.customer.spouseDateOfBirth) {
+                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    },
+
+            udf33OnChange: function(modelValue) {
+                                $log.info(modelValue);
+                            },
+                
+            udf36OnCaptureBarcode: function(result, model, form) {
+                                $log.info(result); // spouse id proof
+                                model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                            },
+
+            udf36OnCaptureQrcode: function(result, model, form) {
+                                $log.info(result); // spouse id proof
+                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                $log.info(aadhaarData);
+                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                model.customer.spouseFirstName = aadhaarData.name;
+                                if (aadhaarData.yob) {
+                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            },
+
+            relationShipOnChange: function(modelValue, form, model, formCtrl, event) {
+                                if (modelValue && modelValue.toLowerCase() === 'self') {
+                                    if (model.customer.id)
+                                        model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                    if (model.customer.firstName)
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                    if (model.customer.gender)
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                    if (model.customer.dateOfBirth)
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                    if (model.customer.maritalStatus)
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    if (model.customer.mobilePhone)
+                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                    if (model.customer.spouseFirstName)
+                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                    if (model.customer.gender)
+                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                            (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                    if (model.customer.spouseDateOfBirth)
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                    if (model.customer.maritalStatus)
+                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                }
+                            },
+
+            familyMembersAgeOnChange: function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                    } else {
+                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                    }
+                                }
+                            },
+
+            familyMembersDateOfBirthOnChange: function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            },
+
             preSave: function(model, form, formName) {
                 var deferred = $q.defer();
                 if (model.customer.firstName) {
