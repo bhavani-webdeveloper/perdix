@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page("demo.Demo"),
-["$log", "Enrollment", "SessionStore","Files",
-    function($log, Enrollment, SessionStore,Files){
+    irf.pageCollection.factory(irf.page("demo.Demo"),
+    ["$log", "Enrollment", "SessionStore","Files",
+        function($log, Enrollment, SessionStore,Files){
 
         var branch = SessionStore.getBranch();
 
@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
             form: [
                 {
                     "type":"box",
-                    "title":"Details",
+                    "title":"Details Page",
                     "items":[
                         {
                             key: "address.streetAddress",
@@ -1909,7 +1909,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}
 			},
 			listOptions: {
-				selectable: false,
+				selectable: true,
 				expandable: true,
 				listStyle: "table",
 				itemCallback: function(item, index) {
@@ -1983,7 +1983,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage01')
+								if (item.currentStage==='BasicEnrolment')
 									return true;
 								return false;
 							}
@@ -4179,7 +4179,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.kgfsName",
                         title:"BRANCH_NAME",
-                        type: "select"
+                        type: "uiselect", 
+                        selection: "single",
+                       /* getTitleMap: function(modelValue, form, model) {
+                        return [{
+                        "name": "Branch 1",
+                        "value": "branch1"
+                        }, {
+                        "name": "Branch 2",
+                        "value": "branch2"
+                        }];
+                        },*/
+                        getTitleMap: "helper.titleMap('branch')",
+                        filters: [{
+                        }]
                     },
                     {
                         key: "customer.id",
@@ -4566,9 +4579,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 }]);
 
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
-["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["$log", "$filter","$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
-function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
@@ -4585,6 +4598,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
+            model.customer.kgfsName = 'Bommasandra';
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -4594,23 +4608,61 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 item.customer.villageName
             ]
         },
-        form: [{
+        form: [{type:"section",html:"{{model.customer.kgfsName}}"},{
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
+            {
+                type: "section",
+                html: "<pre>{{model|json}}</pre>"
+            },
                 {
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
-                    type: "select"
+                    type: "uiselect",
+                    selection: "single",
+                    getTitleMap: "helper.titleMap('branch')",
+                   /* getTitleMap: function(modelValue, form, model, titleMap) {
+                        if (titleMap && titleMap.length) {
+                            return titleMap;
+                        }
+                        return [{
+                            "name": "Branch 1",
+                            "value": "branch1"
+                        }, {
+                            "name": "Branch 2",
+                            "value": "branch2"
+                        }];
+                    },*/
+                    onChange: function(modelValue) {
+                        $log.info(modelValue);
+                    },
+                    returns: "value"
                 },
                 {
                     key:"customer.centreId",
-                    type:"select",
-                    filter: {
-                        "parentCode": "model.branchId"
-                    },
-                    parentEnumCode:"branch",
-                    screenFilter: true
+                    type:"uiselect",
+                    getTitleMap: "helper.titleMap('centre')",
+                    refreshTitleMap: true,
+                    filters: [{
+                        "filterOn": "parentCode",
+                        // 1.
+                        //"filteredBy": "model.customer.kgfsName",
+
+                        // 2.
+                       // "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
+
+                        // 3.
+                       // "getFilteredBy": "actions.filterCentreId(model, form, filters)",
+
+                        // 4.
+                        "getFilteredBy": function(model, form, filter) {
+                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[0].code;
+                        }
+                    }],
+                    onChange: function(modelValue,form, model, event) {
+
+                    }
                 },
                 {
                     key: "customer.oldCustomerId",
@@ -21140,6 +21192,1479 @@ function($log, PDC, PageHelper, SessionStore,$state,Enrollment,formHelper,$state
     };
 }]);
 
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTransist"),
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper, document,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "BATCH_IN_TRANSIST",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("Batch in transist page got initiated");
+		},
+		definition: {
+			title: "Search Customers",
+			searchForm: [
+				"*"
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"Batch_No": {
+						"title": "BATCH_NO",
+						"type": "string"
+					},
+					"POD_No": {
+						"title": "POD_NO",
+						"type": "string"
+					},
+					"Hub": {
+						"title": "HUB_NAME",
+						"type": "string",
+						"enumCode": "branch",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
+					"dispatch_date":{
+						"title":"DISPATCH_DATE",
+						"type":"string",
+						"x-schema-form": {
+							"type":"date"
+						}
+					}
+				},
+				"required":[]
+			},
+			
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){   
+
+				var promise = document.searchBIT({
+					'batchNo': searchOptions.Batch_No,
+					'podNo': searchOptions.POD_No,
+					'hub': searchOptions.Hub,
+					'page': pageOpts.pageNo,
+					'itemsPerPage': pageOpts.itemsPerPage,
+					'dispatchDate': searchOptions.dispatch_date,
+				}).$promise;
+
+				return promise;
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+						Utils.getFullName(item.firstName, item.middleName, item.lastName),
+						'Customer ID : ' + item.id,
+						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
+							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
+						"{{'BRANCH'|translate}} : " + item.kgfsName,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				getColumns: function(){
+					return [
+						{
+							title:'NAME',
+							data: 'firstName',
+							render: function(data, type, full, meta) {
+								return (full.customerType==='Individual'?'<i class="fa fa-user" style="color:#777">&nbsp;</i> ':'<i class="fa fa-industry" style="color:#777"></i> ') + data;
+							}
+						},
+						{
+							title:'URN_NO',
+							data: 'urnNo'
+							// type: 'html',
+						},
+						{
+							title:'CURRENT_STAGE',
+							data: 'currentStage'
+						},
+						{
+							title:'BRANCH',
+							data: 'kgfsName'
+						},
+						{
+							title:'CENTRE_CODE',
+							data: 'centreCode'
+						},
+						{
+							title:'FATHERS_NAME',
+							data: 'fatherFirstName'
+						}
+					]
+				},
+				getActions: function(){
+					return [
+						{
+							name: "Enroll Customer",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"ProfileInformation",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage01')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Do House Verification",
+							desc: "",
+							icon: "fa fa-house",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"AssetsLiabilitiesAndHealth",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage02')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Customer 360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, index){
+								$state.go("Page.Customer360",{
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								return false;
+							}
+						}
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForDispatch"), ["$log", "formHelper", "document", "$state", "SessionStore", "Utils",
+    function($log,formHelper,document,$state,SessionStore,Utils) {
+        var branch = SessionStore.getBranch();
+        return {
+            "type": "search-list",
+            "title": "Pending_For_Dispatch",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                model.branch = branch;
+                $log.info("Perding for Dispatch page got initiated");
+            },
+            definition: {
+                title: "Search Customers",
+                searchForm: [
+                    "*"
+                ],
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        "customer_name": {
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
+                        },
+                        "Business_name": {
+                            "title": "Business_NAME",
+                            "type": "string"
+                        },
+                        "Loan_id": {
+                            "title": "LOAN_ID",
+                            "type": "string"
+                        },
+
+                        "spoke_name": {
+                            "title": "SPOKE_NAME",
+                            "type": "string",
+                            "enumCode": "centre",
+                            "x-schema-form": {
+                                "type": "select",
+                                "filter": {
+                                    "parentCode as branch": "model.branch"
+                                },
+                                "screenFilter": true
+                            }
+                        },
+                        "disbursement_date": {
+                            "title": "DISBURSEMENT_DATE",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
+                        }
+
+                    },
+                    "required": ["Loan_id"]
+                },
+
+                getSearchFormHelper: function() {
+                    return formHelper;
+                },
+                getResultsPromise: function(searchOptions, pageOpts) { 
+
+                    var promise = document.searchPFD({
+                        'customername': searchOptions.customer_name,
+                        'businessname': searchOptions.Business_name,
+                        'loanid': searchOptions.LOAN_ID,
+                        'page': pageOpts.pageNo,
+                        'itemsPerPage': pageOpts.itemsPerPage,
+                        'spokename': searchOptions.spoke_name,
+                        'disbursementdate': searchOptions.disbursement_date,
+
+                    }).$promise;
+
+                    return promise;
+                },
+                paginationOptions: {
+                    "getItemsPerPage": function(response, headers) {
+                        return 100;
+                    },
+                    "getTotalItemsCount": function(response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+                listOptions: {
+                    selectable: false,
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function(item, index) {},
+                    getItems: function(response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
+                        }
+                        return [];
+                    },
+                    getListItem: function(item) {
+                        return [
+                            Utils.getFullName(item.firstName, item.middleName, item.lastName),
+                            'Customer ID : ' + item.id,
+                            item.urnNo ? ('URN : ' + item.urnNo) : ("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage === 'Stage02' ? 'House verification' :
+                                (item.currentStage === 'Stage01' ? 'Enrollment' : item.currentStage))),
+                            "{{'BRANCH'|translate}} : " + item.kgfsName,
+                            "{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+                            "{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
+                        ]
+                    },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
+                    },
+                    getColumns: function() {
+                        return [{
+                            title: 'NAME',
+                            data: 'firstName',
+                            render: function(data, type, full, meta) {
+                                return (full.customerType === 'Individual' ? '<i class="fa fa-user" style="color:#777">&nbsp;</i> ' : '<i class="fa fa-industry" style="color:#777"></i> ') + data;
+                            }
+                        }, {
+                            title: 'URN_NO',
+                            data: 'urnNo'
+                                // type: 'html',
+                        }, {
+                            title: 'CURRENT_STAGE',
+                            data: 'currentStage'
+                        }, {
+                            title: 'BRANCH',
+                            data: 'kgfsName'
+                        }, {
+                            title: 'CENTRE_CODE',
+                            data: 'centreCode'
+                        }, {
+                            title: 'FATHERS_NAME',
+                            data: 'fatherFirstName'
+                        }]
+                    },
+                    getActions: function() {
+                        return [{
+                            name: "Enroll Customer",
+                            desc: "",
+                            icon: "fa fa-user-plus",
+                            fn: function(item, index) {
+                                $state.go("Page.Engine", {
+                                    pageName: "ProfileInformation",
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Stage01')
+                                    return true;
+                                return false;
+                            }
+                        }, {
+                            name: "Do House Verification",
+                            desc: "",
+                            icon: "fa fa-house",
+                            fn: function(item, index) {
+                                $state.go("Page.Engine", {
+                                    pageName: "AssetsLiabilitiesAndHealth",
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Stage02')
+                                    return true;
+                                return false;
+                            }
+                        }, {
+                            name: "Customer 360",
+                            desc: "",
+                            icon: "fa fa-user",
+                            fn: function(item, index) {
+                                $state.go("Page.Customer360", {
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Completed')
+                                    return true;
+                                return false;
+                            }
+                        }];
+                    }
+                }
+            }
+        };
+    }
+]);
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForVerification"),
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper,document,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "PENDING_FOR_VERIFICATION",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("Perding for verification page got initiated");
+		},
+		definition: {
+			title: "SEARCH_CUSTOMERS",
+			searchForm: [
+				"*"
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"customer_name": {
+						"title": "CUSTOMER_NAME",
+						"type": "string"
+					},
+					"Business_name": {
+						"title": "Business_NAME",
+						"type": "string"
+					},
+					"Loan_id": {
+						"title": "LOAN_ID",
+						"type": "string"
+					},
+					"Hub": {
+						"title": "HUB_NAME",
+						"type": "string",
+						"enumCode": "branch",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
+					"spoke_name": {
+						"title": "SPOKE_NAME",
+						"type": "string",
+						"enumCode": "centre",
+						"x-schema-form": {
+							"type": "select",
+							"filter": {
+								"parentCode as branch": "model.branch"
+							},
+							"screenFilter": true
+						}
+					},
+					"Received_Date":{
+						"title":"RECEIVED_DATE",
+						"type":"string",
+						"x-schema-form": {
+							"type":"date"
+						}
+					},
+					"Batch_No": {
+						"title": "BATCH_NO",
+						"type": "string"
+					},
+					"POD_No": {
+						"title": "POD_NO",
+						"type": "string"
+					},
+
+
+				},
+				"required":["Received_Date"]
+			},
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				var promise = document.searchPFD({
+					'customername': searchOptions.customer_name,
+					'businessname': searchOptions.Business_name,
+					'loanid': searchOptions.LOAN_ID,
+					'page': pageOpts.pageNo,
+					'itemsPerPage': pageOpts.itemsPerPage,
+					'spokename': searchOptions.spoke_name,
+					'disbursementdate': searchOptions.disbursement_date,
+					
+				}).$promise;
+
+				return promise;
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+						Utils.getFullName(item.firstName, item.middleName, item.lastName),
+						'Customer ID : ' + item.id,
+						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
+							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
+						"{{'BRANCH'|translate}} : " + item.kgfsName,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				getColumns: function(){
+					return [
+						{
+							title:'NAME',
+							data: 'firstName',
+							render: function(data, type, full, meta) {
+								return (full.customerType==='Individual'?'<i class="fa fa-user" style="color:#777">&nbsp;</i> ':'<i class="fa fa-industry" style="color:#777"></i> ') + data;
+							}
+						},
+						{
+							title:'URN_NO',
+							data: 'urnNo'
+							// type: 'html',
+						},
+						{
+							title:'CURRENT_STAGE',
+							data: 'currentStage'
+						},
+						{
+							title:'BRANCH',
+							data: 'kgfsName'
+						},
+						{
+							title:'CENTRE_CODE',
+							data: 'centreCode'
+						},
+						{
+							title:'FATHERS_NAME',
+							data: 'fatherFirstName'
+						}
+					]
+				},
+				getActions: function(){
+					return [
+						{
+							name: "Enroll Customer",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"ProfileInformation",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage01')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Do House Verification",
+							desc: "",
+							icon: "fa fa-house",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"AssetsLiabilitiesAndHealth",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage02')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Customer 360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, index){
+								$state.go("Page.Customer360",{
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								return false;
+							}
+						}
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.IncompleteDispatch"), ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+"PageHelper", "Utils", "PagesDefinition", "Queries",
+
+
+function($log,$state,document, SessionStore, formHelper, $q, irfProgressMessage,
+    PageHelper, Utils, PagesDefinition, Queries) {
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "type": "schema-form",
+        "title": "DISPATCH_INCOMPLETE_DOCUMENTS",
+        "subTitle": "",
+        initialize: function(model, form, formCtrl) {
+            model.doc = model.doc || {};
+            $log.info("Dispatch Incomplete documents is initiated ");
+        },
+
+        modelPromise: function(pageId, _model) {
+
+        },
+
+        offline: true,
+        getOfflineDisplayItem: function(item, index) {
+            return []
+        },
+
+         form: [{
+                "type": "box",
+                "title": "DISPATCH_DETAILS",
+                "items": [{
+                    key: "doc.Dispatch[].CourierSentDate",
+                    title: "COURIER_SENT_DATE",
+                    type:"date"
+                }, {
+                    key: "doc.Dispatch[].CourierCompanyName",
+                    title: "CourierCompanyName",
+                }, {
+                    key: "doc.Dispatch[].PodNumber",
+                    title: "POD_NUMBER",
+                }, {
+                    key: "doc.Dispatch[].BatchNumber",
+                    title: "BATCHNUMBER",
+                    readonly: true
+                }, {
+                    key: "doc.Dispatch[].Remarks",
+                    title: "REMARKS",
+                }]
+
+
+            },
+
+
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "submit",
+                    "title": "Submit"
+                }]
+            },
+        ],
+
+        schema: function() {
+            return document.getSchema().$promise;
+        },
+
+        actions: {
+            preSave: function(model, form, formName) {
+                $log.info("Inside save()");
+                var deferred = $q.defer();
+                if (model.doc) {
+                    deferred.resolve();
+                } else {
+                    irfProgressMessage.pop('Dispatch-save', ' PodNumber is required', 3000);
+                    deferred.reject();
+                }
+                return deferred.promise;
+            },
+
+            submit: function(model, form, formName) {
+                $log.info("Inside submit()");
+                irfProgressMessage.pop('Dispatch-save', 'Dispatch is successfully created', 3000);
+                $log.warn(model);
+            }
+        }
+    };
+
+}]);
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDispatch"), 
+    ["$log", "$state", "document",  "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils","PagesDefinition", "Queries",
+
+
+    function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils,PagesDefinition, Queries) {
+
+        var branch = SessionStore.getBranch();
+
+        return {
+            "type": "schema-form",
+            "title": "DISPATCH_PENDING_DOCUMENTS",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                model.doc = model.doc || {};
+                $log.info("Dispatch pending documents is initiated ");
+            },
+
+            modelPromise: function(pageId, _model) {
+
+            },
+
+            offline: true,
+            getOfflineDisplayItem: function(item, index) {
+                return []
+            },
+
+            form: [{
+                    "type": "box",
+                    "title": "DISPATCH_DETAILS",
+                    "items": [{
+                        key: "doc.Dispatch[].CourierSentDate",
+                        title: "COURIER_SENT_DATE",
+                        type: "date"
+                    }, {
+                        key: "doc.Dispatch[].CourierCompanyName",
+                        title: "CourierCompanyName",
+                    }, {
+                        key: "doc.Dispatch[].PodNumber",
+                        title: "POD_NUMBER",
+                    }, {
+                        key: "doc.Dispatch[].BatchNumber",
+                        title: "BATCHNUMBER",
+                        readonly: true
+                    }, {
+                        key: "doc.Dispatch[].Remarks",
+                        title: "REMARKS",
+                    }]
+
+
+                },
+
+
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
+                },
+            ],
+
+            schema: function() {
+                return document.getSchema().$promise;
+            },
+
+            actions: {
+                preSave: function(model, form, formName) {
+                    $log.info("Inside save()");
+                    var deferred = $q.defer();
+                    if (model.doc) {
+                        deferred.resolve();
+                    } else {
+                        irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                        deferred.reject();
+                    }
+                    return deferred.promise;
+                },
+
+                submit: function(model, form, formName) {
+                    $log.info("Inside submit()");
+                    irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
+                    $log.warn(model);
+                }
+            }
+        };
+
+    }
+]);
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingForFiling"),
+["$log", "formHelper", "document","$state", "SessionStore", "Utils",
+function($log, formHelper, document,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "Pending_For_Filing",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("Perding for Filing page got initiated");
+		},
+		definition: {
+			title: "Search Customers",
+			searchForm: [
+				"*"
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"customer_name": {
+						"title": "CUSTOMER_NAME",
+						"type": "string"
+					},
+					"Business_name": {
+						"title": "Business_NAME",
+						"type": "string"
+					},
+					"Loan_id": {
+						"title": "LOAN_ID",
+						"type": "string"
+					},
+					"Hub": {
+						"title": "HUB_NAME",
+						"type": "string",
+						"enumCode": "branch",
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true
+						}
+					},
+					"spoke_name": {
+						"title": "SPOKE_NAME",
+						"type": "string",
+						"enumCode": "centre",
+						"x-schema-form": {
+							"type": "select",
+							"filter": {
+								"parentCode as branch": "model.branch"
+							},
+							"screenFilter": true
+						}
+					},
+					"Batch_No": {
+						"title": "BATCH_NO",
+						"type": "string"
+					},
+					"POD_No": {
+						"title": "POD_NO",
+						"type": "string"
+					},
+					"Verification_date":{
+						"title":"VERIFICATION_DATE",
+						"type":"string",
+						"x-schema-form": {
+							"type":"date"
+						}
+					}
+
+				},
+				"required":["Batch_No"]
+			},
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				var promise = document.searchPFD({
+					'customername': searchOptions.customer_name,
+					'businessname': searchOptions.Business_name,
+					'loanid': searchOptions.LOAN_ID,
+					'page': pageOpts.pageNo,
+					'itemsPerPage': pageOpts.itemsPerPage,
+					'hubname': searchOptions.hub,
+					'spokename': searchOptions.spoke_name,
+					'batchno': searchOptions.Batch_No,
+					'podno': searchOptions.Pod_No,
+					'verificationdate': searchOptions.Verification_date,	
+				}).$promise;
+
+				return promise;
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+						Utils.getFullName(item.firstName, item.middleName, item.lastName),
+						'Customer ID : ' + item.id,
+						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
+							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
+						"{{'BRANCH'|translate}} : " + item.kgfsName,
+						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				getColumns: function(){
+					return [
+						{
+							title:'NAME',
+							data: 'firstName',
+							render: function(data, type, full, meta) {
+								return (full.customerType==='Individual'?'<i class="fa fa-user" style="color:#777">&nbsp;</i> ':'<i class="fa fa-industry" style="color:#777"></i> ') + data;
+							}
+						},
+						{
+							title:'URN_NO',
+							data: 'urnNo'
+							// type: 'html',
+						},
+						{
+							title:'CURRENT_STAGE',
+							data: 'currentStage'
+						},
+						{
+							title:'BRANCH',
+							data: 'kgfsName'
+						},
+						{
+							title:'CENTRE_CODE',
+							data: 'centreCode'
+						},
+						{
+							title:'FATHERS_NAME',
+							data: 'fatherFirstName'
+						}
+					]
+				},
+				getActions: function(){
+					return [
+						{
+							name: "Enroll Customer",
+							desc: "",
+							icon: "fa fa-user-plus",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"ProfileInformation",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage01')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Do House Verification",
+							desc: "",
+							icon: "fa fa-house",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"AssetsLiabilitiesAndHealth",
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Stage02')
+									return true;
+								return false;
+							}
+						},
+						{
+							name: "Customer 360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, index){
+								$state.go("Page.Customer360",{
+									pageId:item.id
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								return false;
+							}
+						}
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.SuccessfullyFiled"),
+ ["$log", "formHelper", "document", "$state", "SessionStore", "Utils",
+    function($log, formHelper,document, $state, SessionStore, Utils) {
+        var branch = SessionStore.getBranch();
+        return {
+            "type": "search-list",
+            "title": "SUCCESSFULLY_FILED_DOCUMENTS",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                model.branch = branch;
+                $log.info("Successfully filed page got initiated");
+            },
+            definition: {
+                title: "SEARCH_CUSTOMERS",
+                searchForm: [
+                    "*"
+                ],
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        "customer_name": {
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
+                        },
+                        "Business_name": {
+                            "title": "Business_NAME",
+                            "type": "string"
+                        },
+                        "Loan_id": {
+                            "title": "LOAN_ID",
+                            "type": "string"
+                        },
+                        "Hub": {
+                            "title": "HUB_NAME",
+                            "type": "string",
+                            "enumCode": "branch",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "spoke_name": {
+                            "title": "SPOKE_NAME",
+                            "type": "string",
+                            "enumCode": "centre",
+                            "x-schema-form": {
+                                "type": "select",
+                                "filter": {
+                                    "parentCode as branch": "model.branch"
+                                },
+                                "screenFilter": true
+                            }
+                        },
+                        "Filing_Id": {
+                            "title": "FILING_ID",
+                            "type": "string"
+                        },
+                        "Filing_Date" :{
+                            "title": "FILING_DATE",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["Loan_id"]
+                },
+                getSearchFormHelper: function() {
+                    return formHelper;
+                },
+                getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+
+                    var promise = document.searchPFD({
+                        'customername': searchOptions.customer_name,
+                        'businessname': searchOptions.Business_name,
+                        'loanid': searchOptions.LOAN_ID,
+                        'page': pageOpts.pageNo,
+                        'itemsPerPage': pageOpts.itemsPerPage,
+                        'spokename': searchOptions.spoke_name,
+                        
+
+                    }).$promise;
+
+                    return promise;
+                },
+                paginationOptions: {
+                    "getItemsPerPage": function(response, headers) {
+                        return 100;
+                    },
+                    "getTotalItemsCount": function(response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+                listOptions: {
+                    selectable: false,
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function(item, index) {},
+                    getItems: function(response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
+                        }
+                        return [];
+                    },
+                    getListItem: function(item) {
+                        return [
+                            Utils.getFullName(item.firstName, item.middleName, item.lastName),
+                            'Customer ID : ' + item.id,
+                            item.urnNo ? ('URN : ' + item.urnNo) : ("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage === 'Stage02' ? 'House verification' :
+                                (item.currentStage === 'Stage01' ? 'Enrollment' : item.currentStage))),
+                            "{{'BRANCH'|translate}} : " + item.kgfsName,
+                            "{{'CENTRE_CODE'|translate}} : " + item.centreCode,
+                            "{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
+                        ]
+                    },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
+                    },
+                    getColumns: function() {
+                        return [{
+                            title: 'NAME',
+                            data: 'firstName',
+                            render: function(data, type, full, meta) {
+                                return (full.customerType === 'Individual' ? '<i class="fa fa-user" style="color:#777">&nbsp;</i> ' : '<i class="fa fa-industry" style="color:#777"></i> ') + data;
+                            }
+                        }, {
+                            title: 'URN_NO',
+                            data: 'urnNo'
+                                // type: 'html',
+                        }, {
+                            title: 'CURRENT_STAGE',
+                            data: 'currentStage'
+                        }, {
+                            title: 'BRANCH',
+                            data: 'kgfsName'
+                        }, {
+                            title: 'CENTRE_CODE',
+                            data: 'centreCode'
+                        }, {
+                            title: 'FATHERS_NAME',
+                            data: 'fatherFirstName'
+                        }]
+                    },
+                    getActions: function() {
+                        return [{
+                            name: "Enroll Customer",
+                            desc: "",
+                            icon: "fa fa-user-plus",
+                            fn: function(item, index) {
+                                $state.go("Page.Engine", {
+                                    pageName: "ProfileInformation",
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Stage01')
+                                    return true;
+                                return false;
+                            }
+                        }, {
+                            name: "Do House Verification",
+                            desc: "",
+                            icon: "fa fa-house",
+                            fn: function(item, index) {
+                                $state.go("Page.Engine", {
+                                    pageName: "AssetsLiabilitiesAndHealth",
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Stage02')
+                                    return true;
+                                return false;
+                            }
+                        }, {
+                            name: "Customer 360",
+                            desc: "",
+                            icon: "fa fa-user",
+                            fn: function(item, index) {
+                                $state.go("Page.Customer360", {
+                                    pageId: item.id
+                                });
+                            },
+                            isApplicable: function(item, index) {
+                                if (item.currentStage === 'Completed')
+                                    return true;
+                                return false;
+                            }
+                        }];
+                    }
+                }
+            }
+        };
+    }
+]);
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.DocumentFiling"),
+  ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "PagesDefinition", "Queries",
+
+
+   function($log, $state,document, SessionStore, formHelper, $q, irfProgressMessage,
+    PageHelper, Utils, PagesDefinition, Queries) {
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "type": "schema-form",
+        "title": "DOCUMENT_FILING",
+        "subTitle": "",
+        initialize: function(model, form, formCtrl) {
+            model.doc = model.doc || {};
+            $log.info("filing documents is initiated ");
+        },
+
+        modelPromise: function(pageId, _model) {
+
+        },
+
+        offline: true,
+        getOfflineDisplayItem: function(item, index) {
+            return []
+        },
+
+         form: [
+
+           {
+                "type": "box",
+                "title": "Document_DETAILS",
+                "items": [{
+                    key: "doc.CustomerName",
+                    title: "CUSTOMER_NAME"
+                }, {
+                    key: "doc.BusinessName",
+                    title: "BUSINESS_NAME"
+                }, {
+                    key: "doc.LoanId",
+                    title: "LOAN_ID"
+                }, {
+                    key: "doc.DocumentName",
+                    title: "DOCUMENT_NAME"
+                }, {
+                    key: "doc.hubName",
+                    title: "HUB_NAME"
+                },
+                {
+                    key: "doc.spokeName",
+                    title: "SPOKE_NAME"
+                },
+                {
+                    key: "doc.Disbursementdate",
+                    title: "DISBURSEMENT_DATE",
+                    type:"date"
+                },
+                ]
+
+
+            },
+
+
+           {
+              
+                "type": "box",
+                "title": "DISPATCH_DETAILS",
+                "items": [{
+                    key: "doc.Dispatch[].CourierSentDate",
+                    title: "COURIER_SENT_DATE"
+                }, {
+                    key: "doc.Dispatch[].CourierCompanyName",
+                    title: "COURIER_COMPANY_NAME"
+                }, {
+                    key: "doc.Dispatch[].PodNumber",
+                    title: "POD_NUMBER"
+                }, {
+                    key: "doc.Dispatch[].BatchNumber",
+                    title: "BATCHNUMBER",
+                    readonly: true
+                }, 
+                {
+                    key: "doc.ReceivedDate",
+                    title: "RECEIVED_DATE",
+                    type:"date"
+                },
+                {
+                    key: "doc.VerificationDate",
+                    title: "VERIFIED_DATE",
+                    type:"date"
+                },
+                {
+                    key: "doc.FilingDate",
+                    title: "FILING_DATE",
+                    type:"date"
+                },
+                {
+                    key: "doc.Dispatch[].Remarks",
+                    title: "REMARKS",
+                }
+                ]
+
+
+            },
+
+
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "submit",
+                    "title": "File"
+                },
+                 {
+                    "type": "submit",
+                    "title": "Reject"
+                }]
+            },
+        ],
+
+        schema: function() {
+            return document.getSchema().$promise;
+        },
+
+        actions: {
+            preSave: function(model, form, formName) {
+                $log.info("Inside save()");
+                var deferred = $q.defer();
+                if (model.doc) {
+                    deferred.resolve();
+                } else {
+                    irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                    deferred.reject();
+                }
+                return deferred.promise;
+            },
+
+            submit: function(model, form, formName) {
+                $log.info("Inside submit()");
+                irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
+                $log.warn(model);
+            }
+        }
+    };
+
+}]);
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.DocumentVerification"),
+ ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "PagesDefinition", "Queries",
+
+
+   function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessage,
+    PageHelper, Utils, PagesDefinition, Queries) {
+
+    var branch = SessionStore.getBranch();
+
+    return {
+        "type": "schema-form",
+        "title": "DOCUMENT_VERIFICATION",
+        "subTitle": "",
+        initialize: function(model, form, formCtrl) {
+            model.doc = model.doc || {};
+            $log.info("Dispatch Incomplete documents is initiated ");
+        },
+
+        modelPromise: function(pageId, _model) {
+
+        },
+
+        offline: true,
+        getOfflineDisplayItem: function(item, index) {
+            return []
+        },
+
+         form: [
+         {
+                "type": "box",
+                "title": "Document_DETAILS",
+                "items": [{
+                    key: "doc.CustomerName",
+                    title: "CUSTOMER_NAME"
+                }, {
+                    key: "doc.BusinessName",
+                    title: "BUSINESS_NAME"
+                }, {
+                    key: "doc.LoanId",
+                    title: "LOAN_ID"
+                }, {
+                    key: "doc.DocumentName",
+                    title: "DOCUMENT_NAME"
+                }, {
+                    key: "doc.hubName",
+                    title: "HUB_NAME"
+                },
+                {
+                    key: "doc.spokeName",
+                    title: "SPOKE_NAME"
+                },
+                {
+                    key: "doc.Disbursementdate",
+                    title: "DISBURSEMENT_DATE",
+                    type:"date"
+                },
+                ]
+
+
+            },
+            {
+                "type": "box",
+                "title": "DISPATCH_DETAILS",
+                "items": [{
+                    key: "doc.Dispatch[].CourierSentDate",
+                    title: "COURIER_SENT_DATE"
+                }, {
+                    key: "doc.Dispatch[].CourierCompanyName",
+                    title: "COURIER_COMPANY_NAME"
+                }, {
+                    key: "doc.Dispatch[].PodNumber",
+                    title: "POD_NUMBER"
+                }, {
+                    key: "doc.Dispatch[].BatchNumber",
+                    title: "BATCHNUMBER",
+                    readonly: true
+                }, 
+                {
+                    key: "doc.ReceivedDate",
+                    title: "RECEIVED_DATE",
+                    type:"date"
+                },
+                {
+                    key: "doc.VerificationDate",
+                    title: "VERIFIED_DATE",
+                    type:"date"
+                },
+                {
+                    key: "doc.Dispatch[].Remarks",
+                    title: "REMARKS",
+                }
+                ]
+            },
+
+
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "submit",
+                    "title": "Accept"
+                },
+                {
+                    "type": "submit",
+                    "title": "Reject"
+                }]
+            },
+        ],
+
+        schema: function() {
+            return document.getSchema().$promise;
+        },
+
+        actions: {
+            preSave: function(model, form, formName) {
+                $log.info("Inside save()");
+                var deferred = $q.defer();
+                if (model.doc) {
+                    deferred.resolve();
+                } else {
+                    irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                    deferred.reject();
+                }
+                return deferred.promise;
+            },
+
+            submit: function(model, form, formName) {
+                $log.info("Inside submit()");
+                irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
+                $log.warn(model);
+            }
+        }
+    };
+
+}]);
 irf.pageCollection.factory('Pages_ManagementHelper', ["$state", "$q",function($state, $q){
     return {
         backToDashboard : function(){
@@ -21978,6 +23503,785 @@ irf.pageCollection.factory(irf.page("management.RolesPages"),
                     }).finally(function(){
                         PageHelper.hideLoader();
                     });
+                }
+            }
+        };
+    }
+]);
+irf.pageCollection.factory(irf.page("audit.OpenAuditsQueue"),
+["$log", "$q","formHelper","$state", "SessionStore", "Utils",
+function($log,$q, formHelper,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "Open Audits",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("Open Audit Queue got initialized");
+		},
+		definition: {
+			title: "",
+			searchForm: [
+				
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"Branch": {
+						"title": "SelectBranch",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							 titleMap: {
+                                        "Branch1": "Branch1",
+                                        "Branch2": "Branch2"
+                                    }
+						}
+			
+					},
+					"AuditType": {
+						"title": "SelectAuditType",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							 titleMap: {
+                                        "Audittype1": "Audittype1",
+                                        "Audittype2": "Audittype2"
+                                    }
+						}
+					},
+					
+				},
+				"required":["Branch"]
+			},
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				return $q.resolve({
+	                headers: {
+	                	"x-total-count": 4
+	                },
+	                body: [
+	                {
+	                	BranchName:    "Akra",
+	                    AuditStartedOn:"9-10-2016 3:30:00 ",
+	                	AuditType:     "fixed",
+	                	$synced: true,
+	                	$syncedOn: "10-10-2016 4:30:00"
+
+	                },
+	                {
+	                	BranchName:    "Baranagar",
+	                    AuditStartedOn:"9-10-2016 4:30:00 ",
+	                	AuditType:     "fixed"
+	                },
+	                {
+	                	BranchName:    "Bolpur",
+	                    AuditStartedOn:"10-10-2016 1:30:00 ",
+	                	AuditType:     "fixed"
+	                },
+	                {
+	                	BranchName:    "Kholapata",
+	                    AuditStartedOn:"10-10-2016 3:30:00 ",
+	                	AuditType:     "fixed"
+	                },
+
+	                ]
+                });
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				//listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+						(item.$synced ? '<i class="fa fa-check text-green">&nbsp;</i>':'<i class="fa fa-warning text-yellow">&nbsp;</i>') + "Branch Name: " + item.BranchName,	
+						"Audit Start Date: " + item.AuditStartedOn,
+					    "Audit Type: " + item.AuditType,
+					    item.$synced ? "Synced On:" + item.$syncedOn : ""
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				
+				getActions: function(){
+					return [
+						{
+							name: "Do Audit",
+							desc: "",
+							icon: "fa fa-pencil-square-o ",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.SampleSets",
+									//pageId:item.AuditType
+								});
+							},
+							isApplicable: function(item, index){
+								return item.$synced;
+							}
+						},
+						{
+							name: "Upload",
+							desc: "",
+							icon: "fa fa-upload",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.SampleSets",
+									//pageId:item.AuditType
+								});
+							},
+							isApplicable: function(item, index){
+								return item.$synced;
+							}
+						},
+						{
+							name: "Sync",
+							desc: "",
+							icon: "fa fa-refresh",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.SampleSets",
+									//pageId:item.AuditType
+								});
+							},
+							isApplicable: function(item, index){
+								return !item.$synced;
+							}
+						}
+					];
+				},
+				getBulkActions: function(){
+					return [
+						{
+							name: "Sync All",
+							desc: "",
+							icon: "fa fa-refresh",
+							fn: function(items){
+							},
+							isApplicable: function(items){
+								return true;
+							}
+						}
+						
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("audit.SampleSets"),
+["$log","$q", "formHelper","$state", "SessionStore", "Utils",
+function($log,$q, formHelper,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "Sample Sets",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("SampleSets Queue got initialized");
+		},
+		definition: {
+			title: "",
+			searchForm: [
+	
+			],
+			searchSchema: {	
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"Branch": {
+						"title": "SelectBranch",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							"titlemap": {
+                                        "Branch1": "Branch1",
+                                        "Branch2": "Branch2"
+                                    }
+						}
+			
+					},
+					"AuditType": {
+						"title": "SelectAuditType",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							"titlemap": {
+                                        "Audittype1": "Audittype1",
+                                        "Audittype2": "Audittype2"
+                                    }
+						}
+					},
+					
+				},
+				"required":["Branch"]
+			},
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				return $q.resolve({
+	                headers: {
+	                	"x-total-count": 4
+	                },
+	                body: [
+	                {
+	                	SampleSet:   "Verification",
+	                    NoOfSamples:  "15",
+	                	TotalRecords: "30"
+
+	                },
+	               {
+	                	SampleSet:   "CGT",
+	                    NoOfSamples:  "5",
+	                	TotalRecords: "20"
+
+	                },
+	               {
+	                	SampleSet:   "GRT",
+	                    NoOfSamples:  "5",
+	                	TotalRecords: "10"
+
+	                },
+	               {
+	                	SampleSet:   "Documentation",
+	                    NoOfSamples:  "-",
+	                	TotalRecords: "-"
+
+	                },
+
+	                ]
+
+                });
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				//listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+					item.SampleSet,	
+					"No. of samples: " + item.NoOfSamples,
+				    "Total Records: " + item.TotalRecords,	
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				
+				getActions: function(){
+					return [
+						{
+							name: "Audit Sample",
+							desc: "",
+							icon: "fa fa-pencil-square-o ",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.Samples",
+								});
+							},
+							isApplicable: function(item, index){
+								return true;
+							}
+						}
+						
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("audit.Samples"),
+["$log", "$q","formHelper","$state", "SessionStore", "Utils",
+function($log,$q, formHelper,$state, SessionStore, Utils){
+	var branch = SessionStore.getBranch();
+	return {
+		"type": "search-list",
+		"title": "Samples",
+		"subTitle": "",
+		initialize: function (model, form, formCtrl) {
+			model.branch = branch;
+			$log.info("Samples queue got initialized");
+		},
+		definition: {
+			title: "",
+			searchForm: [
+				
+			],
+			searchSchema: {
+				"type": 'object',
+				"title": 'SearchOptions',
+				"properties": {
+					"Branch": {
+						"title": "SelectBranch",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							 "titlemap": {
+                                        "Branch1": "Branch1",
+                                        "Branch2": "Branch2"
+                                    }
+						}
+			
+					},
+					"AuditType": {
+						"title": "SelectAuditType",
+						"type": "string",
+						"x-schema-form": {
+							"type": "select",
+							 "titlemap": {
+                                        "Audittype1": "Audittype1",
+                                        "Audittype2": "Audittype2"
+                                    }
+						}
+					},
+					
+				},
+				"required":["Branch"]
+			},
+			getSearchFormHelper: function() {
+				return formHelper;
+			},
+			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+
+				return $q.resolve({
+	                headers: {
+	                	"x-total-count": 4
+	                },
+	                body: [
+	                {
+	                	
+	                    Branch:   		     "Akra",
+	                	CustomerName:  	     "Ravi",
+	                	URN:         	     "1",
+	                	Product:      		 "Loan",
+	                	AccountNumber:       "12345",
+	                	LoanApplicationDate: "12/5/16",
+	                	LoanAmount:          "1,23,345", 
+	                	ApplicationStatus:   "New",
+	                	Status:              "-"
+
+	                },
+	                {
+	                	
+	                    Branch:   		     "Akra",
+	                	CustomerName:  	     "Ravi",
+	                	URN:         	     "1",
+	                	Product:      		 "Loan",
+	                	AccountNumber:       "12345",
+	                	LoanApplicationDate: "12/5/16",
+	                	LoanAmount:          "1,23,345", 
+	                	Status:              "-"
+
+	                },
+	                {
+	                	
+	                    Branch:   		     "Akra",
+	                	CustomerName:  	     "Raj",
+	                	URN:         	     "1",
+	                	Product:      		 "Loan",
+	                	AccountNumber:       "12345",
+	                	LoanApplicationDate: "12/5/16",
+	                	LoanAmount:          "1,23,345", 
+	                	Status:              "Audited"
+	                },
+	                {
+	                	
+	                    Branch:   		     "Akra",
+	                	CustomerName:  	     "Ram",
+	                	URN:         	     "1",
+	                	Product:      		 "Loan",
+	                	AccountNumber:       "12345",
+	                	LoanApplicationDate: "12/5/16",
+	                	LoanAmount:          "1,23,345", 
+	                	Status:              "Not Audited"
+	                },
+
+	                ]
+                });
+			},
+			paginationOptions: {
+				"getItemsPerPage": function(response, headers){
+					return 100;
+				},
+				"getTotalItemsCount": function(response, headers){
+					return headers['x-total-count']
+				}
+			},
+			listOptions: {
+				selectable: false,
+				expandable: true,
+				listStyle: "table",
+				itemCallback: function(item, index) {
+				},
+				getItems: function(response, headers){
+					if (response!=null && response.length && response.length!=0){
+						return response;
+					}
+					return [];
+				},
+				getListItem: function(item){
+					return [
+					item.Bank,	
+					item.Branch,
+				    item.CustomerName,
+				    item.URN,
+				    item.Product,
+				    item.AccountNumber,
+				    item.LoanApplicationDate,
+				    item.LoanAmount,
+				    item.ApplicationStatus,
+				    item.Status,
+					]
+				},
+				getTableConfig: function() {
+					return {
+						"serverPaginate": true,
+						"paginate": true,
+						"pageLength": 10
+					};
+				},
+				getColumns: function(){
+					return [
+						{
+							title:'Branch',
+							data: 'Branch'
+						},
+						{
+							title:'CustomerName',
+							data: 'CustomerName'
+						},
+						{
+							title:'URN',
+							data: 'URN'
+						},
+						{
+							title:'Product',
+							data: 'Product'
+						},
+						{
+							title:'AccountNumber',
+							data: 'AccountNumber'
+						},
+						{
+							title:'LoanApplicationDate',
+							data: 'LoanApplicationDate'
+						},
+						{
+							title:'LoanAmount',
+							data: 'LoanAmount'
+						},
+						{
+							title:'Status',
+							data: 'Status'
+						},
+					]
+				},
+				
+				getActions: function(){
+					return [
+						{
+							name: "NA",
+							desc: "",
+							icon: "",
+							/*fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"ProfileInformation",
+									pageId:item.id
+								});
+							},*/
+							isApplicable: function(item, index){
+								return true;
+							}
+						},
+						{
+							name: "Not OK",
+							desc: "",
+							icon: "",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"audit.Issues",
+									pageId:item.Branch
+								});
+							},
+							isApplicable: function(item, index){
+								return true;
+							}
+						}
+						
+					];
+				},
+				getBulkActions: function(){
+					return [
+						{
+							name: "New Sample",
+							desc: "",
+							icon: "fa fa-plus",
+							fn: function(items){
+								$state.go("Page.Engine",{
+									pageName:"audit.Issues",
+									pageId:'edit'
+								});
+							},
+							isApplicable: function(items){
+								return true;
+							}
+						}
+						
+					];
+				}
+			}
+		}
+	};
+}]);
+
+irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q","$state","SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+
+
+    function($log,$stateParams,$q, $state, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
+
+        var branch = SessionStore.getBranch();
+
+        return {
+            "type": "schema-form",
+            "title": "Issues",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                this.form = [];
+                model.audit = model.audit || {};
+                $log.info("Issues page ");
+                var form = _.cloneDeep(this.formSource);
+                form[0].readonly = $stateParams.pageId !== 'edit';
+                if (!form[0].readonly) {
+                    model.audit = {};
+                } else {
+                    model.audit = {  
+                        Branch:"akra",
+                        CustomerName:"Ravi",
+                        URN:"123654",
+                        Product:"Loan",
+                        AccountNumber:126589,
+                        LoanApplicationDate:"3/8/16",
+                        LoanAmount:"1,23,456",
+                        Status:"Audited",
+                    };
+                }
+                this.form = form;
+            },
+            offline: true,
+            getOfflineDisplayItem: function(item, index) {
+                return []
+            },
+            form: [],
+            formSource: [ {
+                    type: "box",
+                    title: "Sample",
+                    items: [ {
+                        key: "audit.Branch",
+                        title: "Branch"
+                    }, {
+                        key: "audit.CustomerName",
+                        title: "CustomerName"
+                    }, {
+                        key: "audit.URN",
+                        title: "URN"
+                    }, {
+                        key: "audit.Product",
+                        title: "Product"
+                    }, {
+                        "key": "audit.AccountNumber",
+                        "title": "AccountNumber"
+                     }, {
+                        "key": "audit.LoanApplicationDate",
+                        title: "LoanApplicationdate",
+                        type: "date"
+                    }, 
+                    {
+                        "key": "audit.LoanAmount",
+                        title: "LoanAmount"
+                    },
+                     {
+                        "key": "audit.Status",
+                        title: "Status"
+                    }
+                     ]
+                },
+
+                {
+                    type: "box",
+                    title: "Issues",
+                    items: [{
+                         type: "help",
+                         "title":"1",
+                         helpvalue: "1.Does the CSR verify original identity proof and address proof during verification?"  
+                    },
+                    {
+                        "key":"",
+                        "title":"Answer",
+                        "type":"select",
+                         titleMap: {
+                                        "Y": "Yes",
+                                        "N": "No",
+                                        "NA":"NA"
+                                    }
+                    },
+                    {
+                         type: "help",
+                         "title":"2",
+                         helpvalue: "2.Does the CSR ask the client to show loan repayment book(s)  of other companies?"  
+                    },
+                    {
+                        "key":"",
+                        "title":"Answer",
+                        "type":"select",
+                         titleMap: {
+                                        "Y": "Yes",
+                                        "N": "No",
+                                        "NA":"NA"
+                                    }
+                    },
+                    {
+                         type: "help",
+                         helpvalue: "3.Are the spelling of the name, mentioned in BIS, and unique ID of the customer matching with CB report?"  
+                    },
+                    {
+                        "key":"",
+                        "title":"No of Deviation",
+                        
+                    },
+                    {
+                        "key":"",
+                        "title":"No of Customer (min 30)",
+                        
+                    }
+                    ]
+                },
+
+                {
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }, ]
+                },
+            ],
+
+            schema: {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "customerMinAge" : 18,
+            "customerMaxAge" : 60,
+            "isMinimumFingerPrintRequired" : 1,
+            "properties": {
+            "audit": {
+            "type": "object",
+            "required":[  
+
+             ],
+            "properties": {
+                "Bank": {
+                    "type": "string"
+                },
+                "Branch":{
+                    "type":"string"
+                },
+                "CustomerName":{
+                    "type":"string"
+                },
+                 "URN":{
+                    "type":"string"
+                },
+                 "Product":{
+                    "type":"string"
+                },
+                 "AccountNumber":{
+                    "type":"number"
+                },
+                 "LoanApplicationDate":{
+                    "type":"string"
+                },
+                 "LoanAmount":{
+                    "type":"string"
+                },
+                 "ApplicationStatus":{
+                    "type":"string"
+                },
+                 "Status":{
+                    "type":"string"
+                },
+            }
+        }
+    }
+},
+
+            actions: {
+                preSave: function(model, form, formName) {
+                    $log.info("Inside save()");
+                    var deferred = $q.defer();
+                    if (model.lead.Name) {
+                        deferred.resolve();
+                    } else {
+                        irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                        deferred.reject();
+                    }
+                    return deferred.promise;
+                },
+
+                submit: function(model, form, formName) {
+                    $log.info("Inside submit()");
+                    irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
+                    $log.warn(model);
                 }
             }
         };

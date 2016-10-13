@@ -13,31 +13,26 @@ irf.pageCollection.factory(irf.page("audit.Issues"), ["$log","$stateParams", "$q
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 this.form = [];
-                model.audit = model.audit|| {};
+                model.audit = model.audit || {};
                 $log.info("Issues page ");
                 var form = _.cloneDeep(this.formSource);
                 form[0].readonly = $stateParams.pageId !== 'edit';
                 if (!form[0].readonly) {
                     model.audit = {};
+                } else {
+                    model.audit = {  
+                        Branch:"akra",
+                        CustomerName:"Ravi",
+                        URN:"123654",
+                        Product:"Loan",
+                        AccountNumber:126589,
+                        LoanApplicationDate:"3/8/16",
+                        LoanAmount:"1,23,456",
+                        Status:"Audited",
+                    };
                 }
                 this.form = form;
             },
-
-            modelPromise: function(pageId, _model) {
-                return $q.resolve({
-                    audit: {   
-                    Branch:"akra",
-                    CustomerName:"Ravi",
-                    URN:"123654",
-                    Product:"Loan",
-                    AccountNumber:126589,
-                    LoanApplicationDate:"3/8/16",
-                    LoanAmount:"1,23,456",
-                    Status:"Audited",
-                    }
-                });
-            },
-
             offline: true,
             getOfflineDisplayItem: function(item, index) {
                 return []

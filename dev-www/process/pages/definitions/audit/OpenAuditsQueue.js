@@ -105,7 +105,7 @@ function($log,$q, formHelper,$state, SessionStore, Utils){
 				},
 				getListItem: function(item){
 					return [
-						(item.$synced ? '<i class="fa fa-check text-green">&nbsp;</i>':'<i class="fa fa-warning text-yellow">&nbsp;</i>') + "Branch NAme: " + item.BranchName,	
+						(item.$synced ? '<i class="fa fa-check text-green">&nbsp;</i>':'<i class="fa fa-warning text-yellow">&nbsp;</i>') + "Branch Name: " + item.BranchName,	
 						"Audit Start Date: " + item.AuditStartedOn,
 					    "Audit Type: " + item.AuditType,
 					    item.$synced ? "Synced On:" + item.$syncedOn : ""

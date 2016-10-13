@@ -710,6 +710,17 @@ irf.models.factory('lead',function($resource,$httpParamSerializer,BASE_URL){
     });
 });
 
+irf.models.factory('document',function($resource,$httpParamSerializer,BASE_URL){
+    var endpoint = BASE_URL + '/api/document';
+    return $resource(endpoint, null, {
+        getSchema: {
+            method: 'GET',
+            url: 'process/schemas/DocumentTracking.json'
+        },
+       
+    });
+});
+
 irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource) {
     var endpoint = irf.BI_BASE_URL;
 

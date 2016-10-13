@@ -18,6 +18,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
+            model.customer.kgfsName = 'Bommasandra';
         },
         offline: true,
         getOfflineDisplayItem: function(item, index){
@@ -41,11 +42,6 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                     type: "uiselect",
                     selection: "single",
                     getTitleMap: "helper.titleMap('branch')",
-                },
-                {
-                    key:"customer.centreId",
-                    type:"uiselect",
-                    getTitleMap: "helper.titleMap('centre')",
                    /* getTitleMap: function(modelValue, form, model, titleMap) {
                         if (titleMap && titleMap.length) {
                             return titleMap;
@@ -58,9 +54,15 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                             "value": "branch2"
                         }];
                     },*/
-                   /* filter: {
-                        "parentCode": "model.branchId"
-                    },*/
+                    onChange: function(modelValue) {
+                        $log.info(modelValue);
+                    },
+                    returns: "value"
+                },
+                {
+                    key:"customer.centreId",
+                    type:"uiselect",
+                    getTitleMap: "helper.titleMap('centre')",
                     refreshTitleMap: true,
                     filters: [{
                         "filterOn": "parentCode",
@@ -75,7 +77,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
 
                         // 4.
                         "getFilteredBy": function(model, form, filter) {
-                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[1].code;
+                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[0].code;
                         }
                     }],
                     onChange: function(modelValue,form, model, event) {
