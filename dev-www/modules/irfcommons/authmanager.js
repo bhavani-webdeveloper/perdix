@@ -38,9 +38,13 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 	var getUser = function() {
 		var deferred = $q.defer();
 		Account.get({'service': 'account'}, function(accountResponse){
-			setUserData(accountResponse);
-			irfStorageService.storeJSON('UserData', accountResponse);
-			deferred.resolve(accountResponse);
+			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
+				accountResponse.centres = resp;
+			}).finally(function() {
+				setUserData(accountResponse);
+				irfStorageService.storeJSON('UserData', accountResponse);
+				deferred.resolve(accountResponse);
+			});
 		}, function(response){
 			deferred.reject({
 				'status': response.status,

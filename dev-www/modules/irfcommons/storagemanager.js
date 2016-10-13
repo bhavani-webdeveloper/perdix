@@ -237,6 +237,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						}
 						// console.warn(ret);
 						break;
+					case 'p2p_customer_category':
+			            ret.data = _.clone(r.data);
+			            for (var i = 0; i< ret.data.length; i++){
+			              ret.data[i].value = ret.data[i].code;
+			            }
+			            break;
 					default:
 						ret.data = r.data; // value <-- name
 				}
@@ -288,7 +294,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 		submit: function(model, formCtrl, formName, actions) {
 			$log.info("on systemSubmit");
 			// entityManager.setModel(formName, null);
-			$log.warn(formCtrl);
+			//$log.warn(formCtrl);
 			if (formCtrl && formCtrl.$invalid) {
 				irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 				return false;

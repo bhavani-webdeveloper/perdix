@@ -96,6 +96,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		return session.bankName;
 	};
 
+	self.getCentres = function() {
+		return session.centres;
+	}
+
 	self.getPhoto = function() {
 		return session.photo;
 	};

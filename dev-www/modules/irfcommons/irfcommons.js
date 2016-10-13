@@ -178,7 +178,39 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 				}
 			}
 			return obj;
-		}
+		},
+        ceil: function(x){
+            if (!_.isNumber(x)){
+                try{
+                    x = x * 1;
+                } catch(e){
+                    return x;
+                }
+
+            }
+
+            if (_.isNumber(x)){
+                return Math.ceil(x);
+            }
+
+        },
+        /**
+         * Compare two dates and return 1 if aData>bDate, 0 if equals, -1 otherwise
+         * @param  {string} aDate In format "Y-m-d". E.g : 2016-12-12
+         * @param  {string} bDate In format "Y-m-d"
+         * @return {int}       [description]
+         */
+        compareDates: function(aDate, bDate){
+    		var aMDate = moment(aDate);
+    		var bMDate = moment(bDate);
+    		if (aDate > bDate){
+    			return 1;
+    		} else if (aDate == bDate){
+    			return 0
+    		} else {
+    			return -1;
+    		}
+        }
 
 	};
 }]);
