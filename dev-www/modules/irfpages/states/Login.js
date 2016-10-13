@@ -19,10 +19,11 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
 					window.location.reload();
 				}
-			},function(e){
-				$log.error(e)
-			}).finally(function(){
+			},function(e){ // Error callback
+				$log.error(e);
 				$scope.showLoading = false;
+			}).finally(function(){
+				// $scope.showLoading = false;
 			});
 		}, function(arg){ // Error callback
 			$scope.showLoading = false;

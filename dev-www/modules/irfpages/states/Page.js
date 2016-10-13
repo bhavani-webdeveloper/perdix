@@ -6,6 +6,8 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
+        $rootScope.$broadcast('irf-login-success');
+
         $scope.loginPipe = AuthPopup.promisePipe;
 
         $scope.$watch(function (scope) {

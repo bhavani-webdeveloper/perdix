@@ -103,7 +103,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			$('<div id="bottom-card-selector"><span class="title"></span></div>').appendTo('.page-row>.page-form');
 		}
 
-		boxcols.find('.box-header').on('click', function(event){
+		boxcols.find('.box-header').off('click').on('click', function(event){
 			event.preventDefault();
 			event.stopPropagation();
 			var tt = $(this);
@@ -114,7 +114,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				showAllCards();
 			}
 		});
-		$('#bottom-card-selector').on('click', showAllCards);
+		$('#bottom-card-selector').off('click').on('click', showAllCards);
 		return true;
 	};
 
