@@ -114,6 +114,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
+    resource.getLoanProductDocumentsRejectReasons = function(){
+        var deferred = $q.defer();
+        resource.getResult('loan_doc_reject_reasons.list', {}).then(
+            function(res){
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(res){
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
+
     resource.getGlobalSettings = function(name){
         var deferred = $q.defer();
         resource.getResult('globalSettings.list', {name:name}).then(
@@ -197,6 +213,136 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 			}
 		}, deferred.reject);
 		return deferred.promise;
+    }
+
+    resource.getCustomerBasicDetails = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        request.urns = _.hasIn(filter, 'urns')?filter.urns:[""];
+        request.ids = _.hasIn(filter, 'ids')?filter.ids:[""];
+        resource.getResult("customerBasicDetails.list", request, 10).then(function(records){
+            if (records && records.results) {
+                var buildOutputObj = {
+                    urns: {},
+                    ids: {}
+                };
+                for (var i=0; i<records.results.length; i++){
+                    var currResult = records.results[i];
+                    var reqUrn = null;
+                    /* URN */
+                    for (var j=0; j<request.urns.length; j++){
+                        reqUrn = request.urns[j];
+                        if (reqUrn == currResult.urn_no){
+                            buildOutputObj.urns[currResult.urn_no] = currResult;
+                            break;
+                        }
+                    }
+
+                    /* IDS */
+                    for (var j=0; j<request.ids.length; j++){
+                        reqUrn = request.ids[j];
+                        if (reqUrn == currResult.id){
+                            buildOutputObj.ids[currResult.id] = currResult;
+                            break;
+                        }
+                    }
+
+                }
+
+                deferred.resolve(buildOutputObj);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.getCustomerBankDetails = function(filter){
+       var deferred = $q.defer();
+		var request = filter;
+        request.branchId = _.hasIn(filter, 'branchId')?filter.branchId:'';
+        request.mandate_status = _.hasIn(filter, 'mandate_status') && !_.isUndefined(filter.mandate_status)?filter.mandate_status:'';
+        request.accountNumber = _.hasIn(filter, 'accountNumber') && !_.isUndefined(filter.accountNumber)?filter.accountNumber:'';
+        var limit = _.hasIn(filter, 'per_page') ? filter.per_page : 20;
+        var offset = _.hasIn(filter, 'page') ? (filter.page - 1 ) * limit : 0;
+		resource.getResult("achregistrationloanaccount.list", request, limit, offset).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
+    resource.getLoanPurpose1 = function(product) {
+    	var deferred = $q.defer();
+    	resource.getResult("loanpurpose1.list", {"product": product}).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+    	return deferred.promise;
+    };
+
+    resource.getLoanPurpose2 = function(product, purpose1) {
+    	var deferred = $q.defer();
+    	resource.getResult("loanpurpose2.list", {"product": product, "purpose1":purpose1}).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+    	return deferred.promise;
+    };
+
+    resource.getCustomersBankAccounts = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        request.customer_urns = _.hasIn(filter, 'customer_urns')?filter.customer_urns:[""];
+        request.customer_ids = _.hasIn(filter, 'customer_ids')?filter.customer_ids:[""];
+        resource.getResult("customersBankAccounts.list", request, 20)
+            .then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+
+        return deferred.promise;
+    };
+
+    resource.getLoanCustomerRelations = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        if (_.isUndefined(filter.accountNumber) || _.isNull(filter.accountNumber)){
+            return;
+        }
+        request.accountNumber = _.hasIn(filter, 'accountNumber')?filter.accountNumber:null;
+        resource.getResult("loanCustomerRelations.list", request, 20)
+            .then(function(response){
+                return deferred.resolve(response.results);
+            }, deferred.reject);
+
+        return deferred.promise;
     }
 
 	return resource;

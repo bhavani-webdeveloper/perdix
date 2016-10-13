@@ -1,4 +1,6 @@
-irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
+irf.models.factory('Account',
+["$resource", "$httpParamSerializer", "BASE_URL", "$q",
+function($resource,$httpParamSerializer,BASE_URL, $q){
     var endpoint = BASE_URL + '/api/account';
     /*
      * :service can be {change_expired_password,change_password,reset_password}
@@ -12,8 +14,7 @@ irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
      *
      */
 
-    return $resource(endpoint, null, {
-
+    var resource = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint
@@ -31,6 +32,31 @@ irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
         save:{
             method:'POST',
             url:endpoint+'/:service/:action'
+        },
+        getCentresForBranch: {
+            method: 'GET',
+            url: BASE_URL + '/api/enrollments/centres/:branchId',
+            isArray: true
         }
     });
-});
+
+    resource.getCentresForUser = function(branchId, userId) {
+        var deferred = $q.defer();
+        resource.getCentresForBranch({"branchId":branchId}).$promise.then(function(response) {
+            if (response && response.length) {
+                var centres = [];
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].employee == userId) {
+                        centres.push(_.clone(response[i]));
+                    }
+                };
+                deferred.resolve(centres);
+            } else {
+                deferred.reject(response);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    return resource;
+}]);
