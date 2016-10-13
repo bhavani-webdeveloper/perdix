@@ -55,7 +55,10 @@
         <div class="cantina-loader-wrapper"><div class="cantina-loader"></div></div>
     </ui-view>
 
-    <script src="js/irf-env.js"></script>
+<script src="js/irf-env.js"></script>
+
+<!--Cordova-->
+<script type="text/javascript" src="cordova.js"></script>
 
 <!-- build:js js/vendor.js -->
 <!-- bower:js -->
@@ -89,6 +92,7 @@
 <script src="bower_components/spin.js/spin.js"></script>
 <script src="bower_components/ladda/dist/ladda.min.js"></script>
 <script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script src="bower_components/accounting/accounting.js"></script>
 <script src="bower_components/angular-ui-select/dist/select.js"></script>
 <script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
 <script src="bower_components/datatables.net-responsive/js/dataTables.responsive.js"></script>
@@ -163,9 +167,9 @@
 <script src="process/models/v1/loans/PDC.js"></script>
 <script src="process/models/v1/loans/LoanProducts.js"></script>
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
+<script src="process/models/v1/management/ReferenceCode.js"></script>
 <script src="process/models/v1/lead/Lead.js"></script>
 <script src="process/models/v1/documentTracking/document.js"></script>
-
 
 <script src="process/models/php/BIReports.js"></script>
 <script src="process/models/php/management/Masters.js"></script>
@@ -177,10 +181,14 @@
 <script src="process/pages/states/Page.Landing.js"></script>
 <script src="process/pages/states/Page.Customer360.js"></script>
 <script src="process/pages/states/Page.CustomerHistory.js"></script>
-<script src="process/pages/states/Page.Dashboard.js"></script>
+<script src="process/pages/states/Page.BIDashboard.js"></script>
 <script src="process/pages/states/Page.GroupDashboard.js"></script>
 <script src="process/pages/states/Page.ManagementDashboard.js"></script>
 <script src="process/pages/states/Page.LoansDashboard.js"></script>
+<script src="process/pages/states/Page.LoansBookingDashboard.js"></script>
+<script src="process/pages/states/Page.LoansDisbursementDashboard.js"></script>
+<script src="process/pages/states/Page.LoansACHPDCDashboard.js"></script>
+<script src="process/pages/states/Page.LoansCollectionsDashboard.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/process/pages/definitions.js -->
@@ -194,6 +202,17 @@
 <script src="process/pages/definitions/lead/LeadBulkUpload.js"></script>
 <script src="process/pages/definitions/lead/LeadSearchLimited.js"></script>
 <script src="process/pages/definitions/lead/LeadSearchAll.js"></script>
+
+<script src="process/pages/definitions/management/ManagementHelper.js"></script>
+<script src="process/pages/definitions/management/VillageCRU.js"></script>
+<script src="process/pages/definitions/management/CentreCRU.js"></script>
+<script src="process/pages/definitions/management/VillageSearch.js"></script>
+<script src="process/pages/definitions/management/CentreSearch.js"></script>
+<script src="process/pages/definitions/management/Roles.js"></script>
+<script src="process/pages/definitions/management/Pages.js"></script>
+<script src="process/pages/definitions/management/RolesPages.js"></script>
+<script src="process/pages/definitions/management/UserRoles.js"></script>
+<script src="process/pages/definitions/management/ReferenceCodes.js"></script>
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
 <script src="process/pages/definitions/customer/CustomerSearch.js"></script>
@@ -241,67 +260,8 @@
 
 <script src="process/pages/definitions/loans/individual/LoanBookingQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/Queue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/MultiTrancheQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/MultiTranche.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/PendingFROQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/PendingCROQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/PendingCRO.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/PendingFRO.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/EMIScheduleGenQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/GenerateEMISchedule.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/RejectedDisbursementsQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/UpdateAccountDetails.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/MultiDocVerificationQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/disbursement/MultiDocVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/PendingClearingQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/PendingCashQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/BouncePromiseQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/BounceRecoveryQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/BounceQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/CreditValidation.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/CollectPayment.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/P2PUpdate.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/CreditValidationQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHRegistration.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/PDCRegistration.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/TransactionAuthorizationQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/TransactionAuthorization.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/DepositStage.js"></script>
-<script src="process/pages/definitions/loans/individual/collections/DepositQueue.js"></script>
-
-<script src="process/pages/definitions/loans/individual/achpdc/ACHClearingCollection.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHSubmission.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/Collections.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/PDCCollections.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHRegistration.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/PDCRegistration.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateUpload.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateDownload.js"></script>
-<script src="process/pages/definitions/loans/individual/achpdc/PDCSubmission.js"></script>
-
-<script src="process/pages/definitions/loans/individual/documentTracking/BatchInTransist.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingForDispatch.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingForVerification.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/IncompleteDispatch.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingDispatch.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingForFiling.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/SuccessfullyFiled.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/DocumentFiling.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/DocumentVerification.js"></script>
-
-<script src="process/pages/definitions/management/ManagementHelper.js"></script>
-<script src="process/pages/definitions/management/VillageCRU.js"></script>
-<script src="process/pages/definitions/management/CentreCRU.js"></script>
-<script src="process/pages/definitions/management/VillageSearch.js"></script>
-<script src="process/pages/definitions/management/CentreSearch.js"></script>
-<script src="process/pages/definitions/management/RolesPages.js"></script>
-
-
-<script src="process/pages/definitions/audit/OpenAuditsQueue.js"></script>
-<script src="process/pages/definitions/audit/SampleSets.js"></script>
-<script src="process/pages/definitions/audit/Samples.js"></script>
-<script src="process/pages/definitions/audit/Issues.js"></script>
 
 <script src="process/pages/definitions/loans/individual/booking/LoanBookingCommons.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/PendingQueue.js"></script>
@@ -314,18 +274,72 @@
 <script src="process/pages/definitions/loans/individual/booking/LoanInput.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/DocumentUploadQueue.js"></script>
 
+<script src="process/pages/definitions/loans/individual/disbursement/MultiTrancheQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/MultiTranche.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/PendingFROQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/PendingCROQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/PendingCRO.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/PendingFRO.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/EMIScheduleGenQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/GenerateEMISchedule.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/RejectedDisbursementsQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/UpdateAccountDetails.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/MultiDocVerificationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/MultiDocVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/ReadyForDisbursementQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmation.js"></script>
 
+<script src="process/pages/definitions/loans/individual/collections/BouncePromiseQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/BounceRecoveryQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/BounceQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/CreditValidation.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/CollectPayment.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/P2PUpdate.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/CreditValidationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/TransactionAuthorizationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/TransactionAuthorization.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/DepositStage.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/ChargeFee.js"></script>
 
+<script src="process/pages/definitions/loans/individual/achpdc/ACHRegistration.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHUpdate.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/PDCRegistration.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHClearingCollection.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHDemandDownload.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/PDCDemandDownload.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHSubmission.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/Collections.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/PDCCollections.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateUpload.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHMandateDownload.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/PDCSubmission.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/ACHPDCQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/PDCQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/achpdc/DemandDownloads.js"></script>
+
+
+<script src="process/pages/definitions/audit/OpenAuditsQueue.js"></script>
+<script src="process/pages/definitions/audit/SampleSets.js"></script>
+<script src="process/pages/definitions/audit/Samples.js"></script>
+<script src="process/pages/definitions/audit/Issues.js"></script>
+
+<script src="process/pages/definitions/loans/individual/documentTracking/BatchInTransist.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingForDispatch.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingForVerification.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/IncompleteDispatch.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingDispatch.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingForFiling.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/SuccessfullyFiled.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/DocumentFiling.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/DocumentVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/writeoff/WriteOffQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/writeoff/WriteOffExecution.js"></script>
 
 <!-- endbuild -->
 <!--Cordova-->
-<script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
