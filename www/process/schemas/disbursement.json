@@ -106,6 +106,12 @@
         "customerBankBranchName": {
           "type":"string"
         },
+        "party":{
+           "type":"string"
+        },
+        "customerNameInBank":{
+           "type":"string"
+        },
         "loanId": {
           "type": "integer"
         },
@@ -118,13 +124,16 @@
         "trancheNumber": {
           "type": "string"
         },
+        "tranchCondition": {
+          "type": "string"
+        },
         "udf1": {
           "title":"DISBURSEMENT_STATUS",
           "type": "string"
         },
         "udf2": {
           "title":"REJECTION_REMARKS",
-          "type": "string",
+          "type": ["null", "string"],
           "enumCode": "reject_reason"
         },
         "udf3": {
@@ -156,6 +165,12 @@
         },
         "udfDate5": {
           "type": "string"
+        },
+        "referenceDate": {
+          "type": "string"
+        },
+        "referenceNumber": {
+          "type": "string"
         }
       },
       "required": [
@@ -175,7 +190,6 @@
         "scheduledDisbursementDate",
         "trancheNumber",
         "udf1",
-        "udfDate2",
         "udfDate3",
         "udfDate4",
         "udfDate5"

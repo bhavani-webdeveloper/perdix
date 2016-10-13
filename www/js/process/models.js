@@ -180,10 +180,14 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:'process/schemas/pldc.json'
         },
         /*bounceCollectionDemand will show all the loans which has some overdue amount*/
-        bounceCollectionDemand:searchResource({
+        bounceCollectionDemand: searchResource({
             method:'GET',
             url:BASE_URL + '/api/scheduledemandlist'
-        }),
+        }),/*
+        bounceCollectionDemandHead: {
+            method:'HEAD',
+            url:BASE_URL + '/api/scheduledemandlist'
+        },*/
         repaymentList:searchResource({
             method:'GET',
             url:endpoint+'/repaymentlist'
@@ -223,9 +227,19 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         processCashDeposit:{
             method:'POST',
-            url:endpoint+ "/processCashDeposite"
+            url:endpoint+ "/processCashDeposite",
+            isArray:true
+        },
+        generatedefaultschedule:{
+            method:'GET',
+            url:endpoint+'/generatedefaultschedule',
+            isArray:true
+        },
+        generateScheduleForSpecifiedDate:{
+            method:'GET',
+            url:endpoint+'/generateScheduleForSpecifiedDate',
+            isArray:true
         }
-
     });
 }]);
 
@@ -250,29 +264,52 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             method: 'GET',
             url: endpoint + '/show/:accountId',
             transformResponse: function(data, headersGetter, status){
-                data = JSON.parse(data);
-                if (status === 200){
-                    // debugger;
+                if (status === 200 && data){
+                    data = JSON.parse(data);
                     if (_.hasIn(data, 'accountBalance') && _.isString(data['accountBalance'])){
-                        data.accountBalance = parseInt(data['accountBalance']);
+                        data.accountBalance = parseFloat(data['accountBalance']);
                     }
                     if (_.hasIn(data, 'totalPrincipalDue') && _.isString(data['totalPrincipalDue'])){
-                        data.totalPrincipalDue = parseInt(data['totalPrincipalDue']);
+                        data.totalPrincipalDue = parseFloat(data['totalPrincipalDue']);
                     }
                     if (_.hasIn(data, 'totalNormalInterestDue') && _.isString(data['totalNormalInterestDue'])){
-                        data.totalNormalInterestDue = parseInt(data['totalNormalInterestDue']);
+                        data.totalNormalInterestDue = parseFloat(data['totalNormalInterestDue']);
                     }
                     if (_.hasIn(data, 'totalPenalInterestDue') && _.isString(data['totalPenalInterestDue'])){
-                        data.totalPenalInterestDue = parseInt(data['totalPenalInterestDue']);
+                        data.totalPenalInterestDue = parseFloat(data['totalPenalInterestDue']);
                     }
                     if (_.hasIn(data, 'totalFeeDue') && _.isString(data['totalFeeDue'])){
-                        data.totalFeeDue = parseInt(data['totalFeeDue']);
+                        data.totalFeeDue = parseFloat(data['totalFeeDue']);
                     }
                     if (_.hasIn(data, 'totalDemandDue') && _.isString(data['totalDemandDue'])){
-                        data.totalDemandDue = parseInt(data['totalDemandDue']);
+                        data.totalDemandDue = parseFloat(data['totalDemandDue']);
+                    }
+                    if (_.hasIn(data, 'payOffAndDueAmount') && _.isString(data['payOffAndDueAmount'])){
+                        data.payOffAndDueAmount = parseFloat(data['payOffAndDueAmount']);
+                    }
+                    if (_.hasIn(data, 'totalFeeDue') && _.isString(data['totalFeeDue'])){
+                        data.totalFeeDue = parseFloat(data['totalFeeDue']);
+                    }
+                    if (_.hasIn(data, 'recoverableInterest') && _.isString(data['recoverableInterest'])){
+                        data.recoverableInterest = parseFloat(data['recoverableInterest']);
+                    }
+                    if (_.hasIn(data, 'principalNotDue') && _.isString(data['principalNotDue'])){
+                        data.principalNotDue = parseFloat(data['principalNotDue']);
+                    }
+                    if (_.hasIn(data, 'preclosureFee') && _.isString(data['preclosureFee'])){
+                        data.preclosureFee = parseFloat(data['preclosureFee']);
+                    }
+                    if (_.hasIn(data, 'payOffAmount') && _.isString(data['payOffAmount'])){
+                        data.payOffAmount = parseFloat(data['payOffAmount']);
+                    }
+                    if (_.hasIn(data, 'bookedNotDueNormalInterest') && _.isString(data['bookedNotDueNormalInterest'])){
+                        data.bookedNotDueNormalInterest = parseFloat(data['bookedNotDueNormalInterest']);
+                    }
+                    if (_.hasIn(data, 'bookedNotDuePenalInterest') && _.isString(data['bookedNotDuePenalInterest'])){
+                        data.bookedNotDuePenalInterest = parseFloat(data['bookedNotDuePenalInterest']);
                     }
                 }
-                
+
                 return data;
 
             }
@@ -310,8 +347,11 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         manualReversal:{
             method:'POST',
             url:endpoint+'/manualreversal'
+        },
+        "chargeFee": {
+            "method": "POST",
+            "url": endpoint + "/chargefee"
         }
-
     });
 });
 
@@ -388,6 +428,8 @@ irf.models.factory('ACH',
 ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
 function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
+        var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
+        var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
          *  eg: /enrollments/definitions -> $get({service:'definition'})
@@ -423,7 +465,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 url: endpoint + '/search',
                 isArray: true
             },
-            updateBulk: {
+            updateMandateStatus: {
                 method: 'PUT',
                 isArray:true,
                 url: endpoint + '/statusupdate'
@@ -432,10 +474,18 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 method: 'GET',
                 url: endpoint + '/achdemandList'
             }),
-            bulkRepay: {
+            bulkRepay:  searchResource({
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
-            }
+            }),
+            demandDownloadStatus: searchResource({
+                method: 'GET',
+                url: endpintManagement + "demandDate=:demandDate&branchId=:branchId"
+            }),
+            achpdcDemandDownload: searchResource({
+                method: 'GET',
+                url: endpintManagementACHPDC + "demandDate=:demandDate&branchId=:branchId"
+            })
         });
 
         resource.achMandateUpload = function(file, progress) {
@@ -479,10 +529,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
         return resource;
     }
 ]);
-irf.models.factory('PDC',
-["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q",
-function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) {
+irf.models.factory('PDC', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
+        var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/pdcdemandlist.php?';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
          *  eg: /enrollments/definitions -> $get({service:'definition'})
@@ -490,50 +540,59 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
          * $post will send data as form data, save will send it as request payload
          */
 
-         var resource = $resource(endpoint, null, {
-            getSchema:{
-            method:'GET',
-            url:'process/schemas/pdc.json'
-             },
-            create:{
-                method:'POST',
-                url:endpoint+'/createpdcAccount '
+        var resource = $resource(endpoint, null, {
+            getSchema: {
+                method: 'GET',
+                url: 'process/schemas/pdc.json'
+            },
+            create: {
+                method: 'POST',
+                url: endpoint + '/createpdcAccount '
             },
             getPDCCheque: searchResource({
-                method:'GET',
-                url:endpoint+'/fetchpdcAccount'
+                method: 'GET',
+                url: endpoint + '/fetchpdcAccount'
             }),
             getSecurityCheque: searchResource({
-                method:'GET',
-                url:endpoint+'/securitychequelist'
+                method: 'GET',
+                url: endpoint + '/securitychequelist'
             }),
             search: searchResource({
-                    method: 'GET',
-                    url: endpoint + '/search'
+                method: 'GET',
+                url: endpoint + '/search'
             }),
-             update:{
-                method:'PUT',
-                url:endpoint+'/editpdcAccount'           
+            update: {
+                method: 'PUT',
+                url: endpoint + '/editpdcAccount'
             },
-            find:{
-                method:'GET',
-                url:endpoint+'/findAssignedpdc'           
+            find: {
+                method: 'GET',
+                url: endpoint + '/findAssignedpdc'
             },
-            demandList:{
-                method:'GET',
-                url:endpoint+'/pdcdemandList'           
+            demandList: {
+                method: 'GET',
+                url: endpoint + '/pdcdemandList'
             },
-            securitycheque:{
-                method:'GET',
-                url:endpoint+'/securitychequelist'           
+            securitycheque: {
+                method: 'GET',
+                url: endpoint + '/securitychequelist'
             },
             getDemandList: {
                 method: 'GET',
+                isArray: true,
                 url: endpoint + '/pdcdemandList'
             },
             bulkRepay: {
                 method: 'POST',
                 url: endpoint + '/pdcbulkrepay'
+            },
+            demandDownloadStatus: searchResource({
+                method: 'GET',
+                url: endpintManagement + "demandDate=:demandDate&branchId=:branchId"
+            }),
+            deleteSecurity: {
+                method: 'POST',
+                url: endpoint + '/deletepdc'
             }
         });
 
@@ -544,11 +603,11 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q) 
                 data: {
                     file: file
                 }
-            }).then(function(resp){
+            }).then(function(resp) {
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
-            }, function(errResp){
+            }, function(errResp) {
                 // TODO handle error
                 PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
@@ -628,8 +687,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         batchDisburse:{
             method:'PUT',
-            url:endpoint+'/batchDisbursement',
-            isArray:true
+            url:endpoint+'/batchDisbursement'
+        },
+        batchDisbursementConfirmation:{
+            method:'POST',
+            url:endpoint+'/batchDisbursementConfirmation'
         },
         multiTrancheDisbursement:{
             method:'GET',
@@ -679,9 +741,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/:id',
             transformResponse: function(data, headersGetter, status){
-                data = JSON.parse(data);
-                if (status === 200){
-                    // debugger;
+                if (status === 200 && data){
+                    data = JSON.parse(data);
                     if (!_.isUndefined(data.nominees) && !_.isNull(data.nominees) && _.isArray(data.nominees) && data.nominees.length>0){
                         for (var i=0;i<data.nominees.length; i++){
                             var n = data.nominees[i];
@@ -699,6 +760,25 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
     });
 }]);
 
+irf.models.factory('ReferenceCode', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+        var endpoint = BASE_URL + '/api/_refs';
+
+        var res = $resource(endpoint, null, {
+            allClassifier: searchResource({
+                method: 'GET',
+                url: endpoint + '/referencecodes/classifiers'
+            }),
+            allCodes: searchResource({
+                method: 'GET',
+                url: BASE_URL + '/api/referencecodes'   
+            }),
+            
+        });
+
+        return res;
+    }
+]);
 irf.models.factory('lead',function($resource,$httpParamSerializer,BASE_URL){
     var endpoint = BASE_URL + '/api/lead';
     return $resource(endpoint, null, {
@@ -776,9 +856,21 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
             method: 'PUT',
             url: endpoint + '/updateRolePageAccess.php'
         },
+        updateRole: {
+            method: 'PUT',
+            url: endpoint + '/updateRole.php'
+        },
         getPage: {
             method: 'GET',
             url: endpoint + '/getPage.php'
+        },
+        searchUsers: searchResource({
+            method: 'GET',
+            url: endpoint + '/findUsers.php'
+        }),
+        updateUserRole: {
+            method: 'PUT',
+            url: endpoint + '/updateUserRole.php'
         }
     });
 

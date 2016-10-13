@@ -7,18 +7,36 @@
 			"required": [
 				"loanAccountNumber",
 				"mandateDate",
+				"bankAccountNumber",
 				"mandateStatus",
-				"ifscCode"
+				"ifscCode",
+				"micr",
+				"bankName",
+				"branchName",
+				"accountHolderName",
+				"accountType",
+				"mandateOpenDate",
+				"maximumAmount",
+				"frequency",
+				"reference1",
+				"reference2"
 			],
 			"properties": {
 				"accountHolderName": {
 					"type": "string",
 					"title": "ACCOUNT_HOLDER_NAME"
 				},
+				"accountHolderName": {
+					"type": "string",
+					"title": "ACCOUNT_HOLDER_NAME"
+				},
+				"bankAccountNumber": {
+					"title": "BANK_ACCOUNT_NUMBER",
+					"type": "string"
+				},
 				"accountType": {
 					"type": "string",
 					"title": "ACCOUNT_TYPE"
-
 				},
 				"bankName": {
 					"type": "string",
@@ -31,6 +49,18 @@
 				"amount": {
 					"type": "Number",
 					"title": "AMOUNT"
+				},
+				"micr": {
+					"type": "string",
+					"title": "MICR"
+				},
+				"mandateOpenDate": {
+					"title": "MANDATE_OPEN_DATE",
+					"type": "date"
+				},
+				"maximumAmount": {
+					"title": "MAX_ACH_AMOUNT",
+					"type": "string"
 				},
 				"consumerReferenceNumber": {
 					"type": "string",
@@ -45,7 +75,11 @@
 					"title": "DEBIT_AMOUNT_OF"
 				},
 				"emailId": {
-					"type": "string",
+					"type": ["null","string"],
+					"title": "E-mail_Id"
+				},
+				"phoneNo": {
+					"type": ["null","string"],
 					"title": "E-mail_Id"
 				},
 				"endDate": {
@@ -83,10 +117,6 @@
 					"x-schema-form": {
 						"type": "select"
 					}
-				},
-				"micrCode": {
-					"type": "string",
-					"title": "MICRO_CODE"
 				},
 				"mobilNumber": {
 					"type": "string",
@@ -147,6 +177,14 @@
 				"version": {
 					"type": "Number",
 					"title": "version"
+				},
+				"reference1": {
+					"title": "REFERENCE1",
+					"type": "string"
+				},
+				"reference2": {
+					"title": "REFERENCE2",
+					"type": "string"
 				}
 
 			}

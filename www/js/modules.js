@@ -5,22 +5,6 @@ catch(err) { app = angular.module("irf.elements.tpls", []); }
 app.run(["$templateCache", function($templateCache) {
 "use strict";
 
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
-
 $templateCache.put("irf/template/adminlte/actionbox.html","<div class=\"col-xs-12 action-box-col\">\n" +
     "  <div class=\"box no-border\" ng-init=\"$emit('box-init')\">\n" +
     "    <div class=\"box-body\">\n" +
@@ -641,6 +625,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -933,11 +933,6 @@ $templateCache.put("irf/template/progressMessage/progress-message.html","<div cl
     "</div>\n" +
     "")
 
-$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
-    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
-    "</div>\n" +
-    "")
-
 $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<form\n" +
     "		name=\"{{formName}}\"\n" +
@@ -949,6 +944,11 @@ $templateCache.put("irf/template/schemaforms/schemaforms.html","<div>\n" +
     "	<div ng-if=\"showLoading\" class=\"cantina-loader-wrapper\"><div class=\"cantina-loader\"></div></div>\n" +
     "	<div ng-if=\"maskSchemaForm\" class=\"spinner-section-far-wrapper\"><div class=\"spinner-section-far\"></div></div>\n" +
     "</div>")
+
+$templateCache.put("irf/template/searchBox/search-box.html","<div>\n" +
+    "	<form sf-schema=\"def.searchSchema\" sf-form=\"def.searchForm\" sf-model=\"searchOptions\" ng-submit=\"startSearch()\"></form>\n" +
+    "</div>\n" +
+    "")
 
 $templateCache.put("irf/template/searchListWrapper/modal-resource-queue.html","<div class=\"lov\">\n" +
     "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
@@ -2133,6 +2133,354 @@ angular.module('irf.flipswitch', ['irf.elements.commons'])
 		templateUrl: 'irf/template/flipswitch/flipswitch.html'
 	};
 })
+angular.module('irf.geotag', ['pascalprecht.translate'])
+.directive('irfGeotag', function(){
+	return {
+		restrict: "E",
+		replace: false,
+		scope: { // 
+			// { lat, long, geolocation /* readable format */, geourl /* url to map */ }
+			watchValue: "=",
+			model: "=",
+			latitude: "=",
+			longitude: "=",
+			readOnly: "="
+		},
+		templateUrl: 'irf/template/geotag/geotag.html',
+		controller: 'irfGeotagCtrl',
+		controllerAs: 'c'
+	}
+})
+.controller('irfGeotagCtrl',
+["$log", "$scope", "$q", "$element", "$parse", "elementsUtils",
+function($log, $scope, $q, $element, $parse, elementsUtils) {
+
+	var formatGeolocation = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var ConvertDDToDMS = function(D, lng) {
+			var coord = {
+				dir : D<0?lng?'W':'S':lng?'E':'N',
+				deg : 0|(D<0?D=-D:D),
+				min : 0|D%1*60,
+				sec :(0|D*60%1*6000)/100
+			};
+			return coord.deg + "\xB0 " + coord.min + "' " + coord.sec + '" ' + coord.dir;
+		};
+		return ConvertDDToDMS(lat, false) + ', ' + ConvertDDToDMS(long, true);
+	};
+
+	var getGeoUrl = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var geo = lat + ',' + long + '?q=' + lat + '+' + long + '&zoom=12.75'; // encodeURIComponent
+		return (typeof cordova === 'undefined') ? ('//www.google.com/maps/@' + geo) : ('geo:' + geo);
+	};
+
+	var getGeoImageUrl = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var color = localStorage.getItem("irfThemeColor");
+		return "//maps.googleapis.com/maps/api/staticmap?size=360x160&zoom=16&markers=color:"
+			+ color + "|" + lat + ',' + long
+			+ "&style=feature:landscape|color:0xffffff&style=feature:road|element:geometry.fill";
+	};
+
+	var tryGeolocation = function (deferred, options) {
+		var deferred = $q.defer();
+		navigator.geolocation.getCurrentPosition(function(position) {
+			$log.info('Location captured: latitude:' + position.coords.latitude);
+			$log.info('longitude:' + position.coords.longitude);
+			var lat = position.coords.latitude, long = position.coords.longitude;
+
+			/** OUTPUT FORMAT **/
+			var pos = {
+				"latitude": lat,
+				"longitude": long,
+				"geolocation": formatGeolocation(lat, long),
+				"geourl": getGeoUrl(lat, long),
+				"geoimageurl": getGeoImageUrl(lat, long)
+			};
+
+			deferred.resolve(pos);
+		}, function(error){
+			switch(error.code) {
+				case error.PERMISSION_DENIED:
+					error.message = "GPS_USER_DENIED";
+				break;
+				case error.POSITION_UNAVAILABLE:
+					error.message = "GPS_NO_GEOPOSITION";
+				break;
+				case error.TIMEOUT:
+					error.message = "GPS_REQ_TIMEOUT";
+				break;
+				case error.UNKNOWN_ERROR:
+					error.message = "GPS_ERR_UNKNOWN";
+				break;
+			}
+			deferred.reject(error);
+		}, options);
+		return deferred.promise;
+	}
+
+	var getGeolocation = function() {
+		var deferred = $q.defer();
+		$log.info(navigator.geolocation);
+		if (navigator.geolocation) {
+			tryGeolocation({
+				"maximumAge": 3000,
+				"timeout": 5000,
+				"enableHighAccuracy": true
+			}).then(deferred.resolve, function (error) {
+				$log.error(error);
+				tryGeolocation({
+					"maximumAge": 3000,
+					"timeout": 30000,
+					"enableHighAccuracy": false
+				}).then(deferred.resolve, deferred.reject);
+			});
+		} else {
+			deferred.reject('Unsupported feature');
+		}
+		return deferred.promise;
+	};
+
+	$scope.refreshLocation = function() {
+		$scope.position = null;
+		$scope.error = null;
+		$element.find(".fa-refresh").addClass("fa-spin");
+		getGeolocation().then(function(position){
+			$scope.position = position;
+			elementsUtils.mapValue($scope.latitude, $scope.model, position.latitude);
+			elementsUtils.mapValue($scope.longitude, $scope.model, position.longitude);
+			$element.find(".fa-refresh").removeClass("fa-spin");
+		}).catch(function(error){
+			$log.error(error);
+			$scope.error = error;
+			$element.find(".fa-refresh").removeClass("fa-spin");
+		});
+	};
+
+	//if ($scope.readOnly) {
+		$scope.$watch(function(scope){ return scope.watchValue; }, function(newValue, oldValue){
+			var lat = $parse($scope.latitude)($scope.model);
+			var long = $parse($scope.longitude)($scope.model);
+			if (lat && long && lat > 0 && long > 0) {
+				$scope.error = null;
+				$scope.position = $scope.position || {};
+				$scope.position.latitude = lat;
+				$scope.position.longitude = long;
+				$scope.position.geolocation = formatGeolocation($scope.position.latitude, $scope.position.longitude);
+				$scope.position.geourl = getGeoUrl($scope.position.latitude, $scope.position.longitude);
+				$scope.position.geoimageurl = getGeoImageUrl(lat, long);
+			} else {
+				$scope.error = {};
+				$scope.error.message = "GPS_NO_LOCATION_INFO";
+			}
+		});
+	/*} else {
+		$scope.refreshLocation();
+	}*/
+}])
+;
+angular.module('irf.listViewRestWrapper', ['irf.elements.commons'])
+    .directive('irfListViewRestWrapper', ['$log', function($log){
+        return {
+            restrict: "E",
+            replace: true,
+            scope: {
+                def: "=irfLvrWrapperDef",
+                QueryURL: "=irfLvrQueryUrl"
+            },
+            templateUrl: 'irf/template/listView/list-view-rest-wrapper.html',
+            link: function(scope, elem, attrs){
+
+            },
+            controller: 'irfListViewRestWrapperController',
+            controllerAs: 'c'
+        }
+    }])
+    .controller('irfListViewRestWrapperController', ['$scope', '$log', '$http',function($scope, $log, $http){
+        /**
+         * TODO: Handle all kinds of HTTP Request
+         * TODO: Think about letting users intercept success and error
+         * before the wrapper generic code handles it.
+         *
+         */
+
+        /* INIT */
+        var workingURL;
+        var rawResponse = null;
+        var currentResults = [];
+        var baseQuery = "";
+        $scope.items = null;
+        $scope.resultsLoaded = false;
+        $scope.page = {
+            currentPage: null,
+            totalItemsCount: null,
+            itemsPerPage: null
+        };
+        //$scope.currentPage = 3;
+        $scope.isLoading = false;
+
+
+        var buildUibPaginationOpts = function(){
+            var uibPaginationOpts = {
+                'boundary_links': false,
+                'direction_links': false,
+                'items_per_page': 10,
+                'rotate': true,
+                'total_items': null,
+                'is_any_page_url_builder_available': false
+            };
+            var def = $scope.def.paginationOptions;
+            if (def.getTotalItemsCount!=null && def.getNthPageUrl!=null){
+                uibPaginationOpts['boundary_links'] = true;
+            }
+
+            if (def.getPreviousPageUrl!=null && def.getPreviousPageUrl!=null){
+                uibPaginationOpts['direction_links'] = true;
+            }
+
+            if (def.getTotalItemsCount!=null) {
+                $scope.page.totalItemsCount = uibPaginationOpts['total_items'] = def.getTotalItemsCount(rawResponse);
+            }
+
+            if (def.getItemsPerPage!=null) {
+                $scope.page.itemsPerPage = uibPaginationOpts['items_per_page'] = def.getItemsPerPage(rawResponse);
+            }
+
+            if (def.getNthPageUrl!=null){
+                uibPaginationOpts['is_any_page_url_builder_available'] = true;
+            }
+
+            $scope.paginationOpts = uibPaginationOpts;
+        };
+
+        function updateListViewDefn(newItems){
+            $log.info("Updating List View Definition");
+            $scope.listViewDefn = {
+                actions: $scope.def.listOptions.getActions()
+            }
+            $scope.listViewItems = newItems;
+        }
+
+        function resetAll(){
+            $scope.listViewDefn = null;
+            $scope.paginationDefn = null;
+            $scope.isAvailable = false;
+            $scope.page.currentPage = 1;
+        }
+
+        function loadData(url){
+            if (url){
+                $scope.isLoading = true;
+                $http.get(url)
+                    .success(function(data){
+                        rawResponse = data;
+                        currentResults = $scope.def.listOptions.getListItems(data);
+                        $scope.resultsLoaded = false;
+                        updateListViewDefn(currentResults);
+                        $scope.items = $scope.def.listOptions.getItems(data);
+                        buildUibPaginationOpts();
+                    })
+                    .error(function(data){
+
+                    })
+                    .finally(function(){
+                        $scope.isLoading = false;
+                        $scope.isAvailable = true;
+                    })
+            }
+        }
+
+        resetAll();
+
+        $scope.$watch('QueryURL', function(newVal){
+            $log.info("QueryURL changed. Resetting the Wrapper");
+            baseQuery = newVal;
+            resetAll();
+            loadData(baseQuery);
+        })
+
+        /* HANDLERS */
+
+        this.pageChanged = function(){
+            $log.info("New page is ::" + $scope.page.currentPage);
+            var pageUrl = $scope.def.paginationOptions.getNthPageUrl($scope.page.currentPage, baseQuery, rawResponse);
+            loadData(pageUrl);
+        }
+
+    }])
+angular.module('irf.listView', ['irf.elements.commons'])
+.directive('irfListView',['$log', function($log){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			listStyle: "=?",
+			listInfo: "=listInfo",
+			listItems: "=irfListItems",
+			listActualItems: "=irfListActualItems",
+			cb: "&?callback"
+		},
+		templateUrl: "irf/template/listView/list-view.html",
+		link: function(scope, elem, attrs) {
+
+		},
+		controller: "irfListViewController"
+	}
+}])
+.controller('irfListViewController', ['$scope', function($scope){
+
+	$scope.callback = function(item, index) {
+		$scope.cb ? $scope.cb({"item":item, "index":index}) : '';
+	}
+}])
+
+.directive('irfListViewItem', ['$log',function($log){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			listStyle: "=",
+			item: "=listItem",
+			actualItem: "=listActualItem",
+			actions: "=listActions",
+			itemIndex: "=listItemIndex",
+			selectable: "=",
+			expandable: "=",
+			cb: "&?callback"
+		},
+		templateUrl: "irf/template/listView/list-view-item.html",
+		link: function(scope, elem, attrs){
+
+		},
+		controller: "irfListViewItemController",
+		controllerAs: "c"
+	}
+}])
+.controller('irfListViewItemController', ['$scope', function($scope){
+	/* INIT */
+	$scope.isActionBoxShown = false;
+
+	this.toggleActionBox = function(){
+		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
+	}
+
+	$scope.expanded = false;
+	$scope.expand = function($event) {
+		if ($scope.item && $scope.item.length > 3) {
+			$scope.expandItems = $scope.item.slice(3);
+			$scope.expanded = !$scope.expanded;
+		}
+	}
+}])
+;
+
 angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 .directive('irfInputFile', function(){
@@ -2591,354 +2939,80 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 }]);
 
-angular.module('irf.geotag', ['pascalprecht.translate'])
-.directive('irfGeotag', function(){
+angular.module('irf.pikaday', ['irf.elements.commons'])
+.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
+	// Runs during compile
 	return {
-		restrict: "E",
-		replace: false,
-		scope: { // 
-			// { lat, long, geolocation /* readable format */, geourl /* url to map */ }
-			watchValue: "=",
-			model: "=",
-			latitude: "=",
-			longitude: "=",
-			readOnly: "="
+		restrict: 'A',
+		require: '^ngModel',
+		scope: {
+			ngModel: '=',
+			form: '=irfPikaday'
 		},
-		templateUrl: 'irf/template/geotag/geotag.html',
-		controller: 'irfGeotagCtrl',
-		controllerAs: 'c'
-	}
-})
-.controller('irfGeotagCtrl',
-["$log", "$scope", "$q", "$element", "$parse", "elementsUtils",
-function($log, $scope, $q, $element, $parse, elementsUtils) {
-
-	var formatGeolocation = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var ConvertDDToDMS = function(D, lng) {
-			var coord = {
-				dir : D<0?lng?'W':'S':lng?'E':'N',
-				deg : 0|(D<0?D=-D:D),
-				min : 0|D%1*60,
-				sec :(0|D*60%1*6000)/100
+		link: function($scope, element, attrs, ctrl) {
+			var elem = $(element);
+			var datepicker = 'pikaday';
+			var pikadayOptions = {
+				// minDate: new Date(1800, 0, 1),
+				// maxDate: new Date(2050, 12, 31),
+				// yearRange: [1800,2050],
+				// format: 'YYYY-MM-DD'
 			};
-			return coord.deg + "\xB0 " + coord.min + "' " + coord.sec + '" ' + coord.dir;
-		};
-		return ConvertDDToDMS(lat, false) + ', ' + ConvertDDToDMS(long, true);
-	};
-
-	var getGeoUrl = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var geo = lat + ',' + long + '?q=' + lat + '+' + long + '&zoom=12.75'; // encodeURIComponent
-		return (typeof cordova === 'undefined') ? ('//www.google.com/maps/@' + geo) : ('geo:' + geo);
-	};
-
-	var getGeoImageUrl = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var color = localStorage.getItem("irfThemeColor");
-		return "//maps.googleapis.com/maps/api/staticmap?size=360x160&zoom=16&markers=color:"
-			+ color + "|" + lat + ',' + long
-			+ "&style=feature:landscape|color:0xffffff&style=feature:road|element:geometry.fill";
-	};
-
-	var tryGeolocation = function (deferred, options) {
-		var deferred = $q.defer();
-		navigator.geolocation.getCurrentPosition(function(position) {
-			$log.info('Location captured: latitude:' + position.coords.latitude);
-			$log.info('longitude:' + position.coords.longitude);
-			var lat = position.coords.latitude, long = position.coords.longitude;
-
-			/** OUTPUT FORMAT **/
-			var pos = {
-				"latitude": lat,
-				"longitude": long,
-				"geolocation": formatGeolocation(lat, long),
-				"geourl": getGeoUrl(lat, long),
-				"geoimageurl": getGeoImageUrl(lat, long)
-			};
-
-			deferred.resolve(pos);
-		}, function(error){
-			switch(error.code) {
-				case error.PERMISSION_DENIED:
-					error.message = "GPS_USER_DENIED";
-				break;
-				case error.POSITION_UNAVAILABLE:
-					error.message = "GPS_NO_GEOPOSITION";
-				break;
-				case error.TIMEOUT:
-					error.message = "GPS_REQ_TIMEOUT";
-				break;
-				case error.UNKNOWN_ERROR:
-					error.message = "GPS_ERR_UNKNOWN";
-				break;
+			angular.extend(pikadayOptions, elemConfig.pikaday);
+			if (!$scope.form.readonly) {
+				if (typeof cordova !== 'undefined' && window.datePicker) {
+					elem.next().on('click', function(){
+						window.datePicker.show({
+							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
+							mode: 'date'
+						}, function(date){
+							$log.info(date);
+							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
+							elem.val($scope.ngModel);
+							elem.controller('ngModel').$setViewValue($scope.ngModel);
+						});
+					});
+				} else {
+					var setValue = function(value) {
+						$scope.ngModel = value;
+						elem.val($scope.ngModel);
+						elem.controller('ngModel').$setViewValue($scope.ngModel);
+					};
+					pikadayOptions.field = elem.next()[0];
+					pikadayOptions.onSelect = function(date) {
+						setValue(this.getMoment().format(pikadayOptions.format));
+					};
+					pikadayOptions.onDraw = function() {
+						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
+					};
+					var picker = new Pikaday(pikadayOptions);
+					elem.next().on('blur', function(e){
+						if (this.value && this.value.length == 8) {
+							var m = moment(this.value, 'DDMMYYYY');
+							setValue(m.format('YYYY-MM-DD'));
+						} else if (!this.value) {
+							setValue('');
+						}
+					}).on('focus', function(e){
+						this.select();
+					});
+				}
 			}
-			deferred.reject(error);
-		}, options);
-		return deferred.promise;
-	}
-
-	var getGeolocation = function() {
-		var deferred = $q.defer();
-		$log.info(navigator.geolocation);
-		if (navigator.geolocation) {
-			tryGeolocation({
-				"maximumAge": 3000,
-				"timeout": 5000,
-				"enableHighAccuracy": true
-			}).then(deferred.resolve, function (error) {
-				$log.error(error);
-				tryGeolocation({
-					"maximumAge": 3000,
-					"timeout": 30000,
-					"enableHighAccuracy": false
-				}).then(deferred.resolve, deferred.reject);
+			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
+			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
+				if (n) {
+					if (pikadayOptions.dateDisplayFormat) {
+						elem.next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
+					} else {
+						elem.next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+					}
+				} else {
+					elem.next().val('');
+				}
 			});
-		} else {
-			deferred.reject('Unsupported feature');
 		}
-		return deferred.promise;
 	};
-
-	$scope.refreshLocation = function() {
-		$scope.position = null;
-		$scope.error = null;
-		$element.find(".fa-refresh").addClass("fa-spin");
-		getGeolocation().then(function(position){
-			$scope.position = position;
-			elementsUtils.mapValue($scope.latitude, $scope.model, position.latitude);
-			elementsUtils.mapValue($scope.longitude, $scope.model, position.longitude);
-			$element.find(".fa-refresh").removeClass("fa-spin");
-		}).catch(function(error){
-			$log.error(error);
-			$scope.error = error;
-			$element.find(".fa-refresh").removeClass("fa-spin");
-		});
-	};
-
-	//if ($scope.readOnly) {
-		$scope.$watch(function(scope){ return scope.watchValue; }, function(newValue, oldValue){
-			var lat = $parse($scope.latitude)($scope.model);
-			var long = $parse($scope.longitude)($scope.model);
-			if (lat && long && lat > 0 && long > 0) {
-				$scope.error = null;
-				$scope.position = $scope.position || {};
-				$scope.position.latitude = lat;
-				$scope.position.longitude = long;
-				$scope.position.geolocation = formatGeolocation($scope.position.latitude, $scope.position.longitude);
-				$scope.position.geourl = getGeoUrl($scope.position.latitude, $scope.position.longitude);
-				$scope.position.geoimageurl = getGeoImageUrl(lat, long);
-			} else {
-				$scope.error = {};
-				$scope.error.message = "GPS_NO_LOCATION_INFO";
-			}
-		});
-	/*} else {
-		$scope.refreshLocation();
-	}*/
-}])
-;
-angular.module('irf.listViewRestWrapper', ['irf.elements.commons'])
-    .directive('irfListViewRestWrapper', ['$log', function($log){
-        return {
-            restrict: "E",
-            replace: true,
-            scope: {
-                def: "=irfLvrWrapperDef",
-                QueryURL: "=irfLvrQueryUrl"
-            },
-            templateUrl: 'irf/template/listView/list-view-rest-wrapper.html',
-            link: function(scope, elem, attrs){
-
-            },
-            controller: 'irfListViewRestWrapperController',
-            controllerAs: 'c'
-        }
-    }])
-    .controller('irfListViewRestWrapperController', ['$scope', '$log', '$http',function($scope, $log, $http){
-        /**
-         * TODO: Handle all kinds of HTTP Request
-         * TODO: Think about letting users intercept success and error
-         * before the wrapper generic code handles it.
-         *
-         */
-
-        /* INIT */
-        var workingURL;
-        var rawResponse = null;
-        var currentResults = [];
-        var baseQuery = "";
-        $scope.items = null;
-        $scope.resultsLoaded = false;
-        $scope.page = {
-            currentPage: null,
-            totalItemsCount: null,
-            itemsPerPage: null
-        };
-        //$scope.currentPage = 3;
-        $scope.isLoading = false;
-
-
-        var buildUibPaginationOpts = function(){
-            var uibPaginationOpts = {
-                'boundary_links': false,
-                'direction_links': false,
-                'items_per_page': 10,
-                'rotate': true,
-                'total_items': null,
-                'is_any_page_url_builder_available': false
-            };
-            var def = $scope.def.paginationOptions;
-            if (def.getTotalItemsCount!=null && def.getNthPageUrl!=null){
-                uibPaginationOpts['boundary_links'] = true;
-            }
-
-            if (def.getPreviousPageUrl!=null && def.getPreviousPageUrl!=null){
-                uibPaginationOpts['direction_links'] = true;
-            }
-
-            if (def.getTotalItemsCount!=null) {
-                $scope.page.totalItemsCount = uibPaginationOpts['total_items'] = def.getTotalItemsCount(rawResponse);
-            }
-
-            if (def.getItemsPerPage!=null) {
-                $scope.page.itemsPerPage = uibPaginationOpts['items_per_page'] = def.getItemsPerPage(rawResponse);
-            }
-
-            if (def.getNthPageUrl!=null){
-                uibPaginationOpts['is_any_page_url_builder_available'] = true;
-            }
-
-            $scope.paginationOpts = uibPaginationOpts;
-        };
-
-        function updateListViewDefn(newItems){
-            $log.info("Updating List View Definition");
-            $scope.listViewDefn = {
-                actions: $scope.def.listOptions.getActions()
-            }
-            $scope.listViewItems = newItems;
-        }
-
-        function resetAll(){
-            $scope.listViewDefn = null;
-            $scope.paginationDefn = null;
-            $scope.isAvailable = false;
-            $scope.page.currentPage = 1;
-        }
-
-        function loadData(url){
-            if (url){
-                $scope.isLoading = true;
-                $http.get(url)
-                    .success(function(data){
-                        rawResponse = data;
-                        currentResults = $scope.def.listOptions.getListItems(data);
-                        $scope.resultsLoaded = false;
-                        updateListViewDefn(currentResults);
-                        $scope.items = $scope.def.listOptions.getItems(data);
-                        buildUibPaginationOpts();
-                    })
-                    .error(function(data){
-
-                    })
-                    .finally(function(){
-                        $scope.isLoading = false;
-                        $scope.isAvailable = true;
-                    })
-            }
-        }
-
-        resetAll();
-
-        $scope.$watch('QueryURL', function(newVal){
-            $log.info("QueryURL changed. Resetting the Wrapper");
-            baseQuery = newVal;
-            resetAll();
-            loadData(baseQuery);
-        })
-
-        /* HANDLERS */
-
-        this.pageChanged = function(){
-            $log.info("New page is ::" + $scope.page.currentPage);
-            var pageUrl = $scope.def.paginationOptions.getNthPageUrl($scope.page.currentPage, baseQuery, rawResponse);
-            loadData(pageUrl);
-        }
-
-    }])
-angular.module('irf.listView', ['irf.elements.commons'])
-.directive('irfListView',['$log', function($log){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			listStyle: "=?",
-			listInfo: "=listInfo",
-			listItems: "=irfListItems",
-			listActualItems: "=irfListActualItems",
-			cb: "&?callback"
-		},
-		templateUrl: "irf/template/listView/list-view.html",
-		link: function(scope, elem, attrs) {
-
-		},
-		controller: "irfListViewController"
-	}
-}])
-.controller('irfListViewController', ['$scope', function($scope){
-
-	$scope.callback = function(item, index) {
-		$scope.cb ? $scope.cb({"item":item, "index":index}) : '';
-	}
-}])
-
-.directive('irfListViewItem', ['$log',function($log){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			listStyle: "=",
-			item: "=listItem",
-			actualItem: "=listActualItem",
-			actions: "=listActions",
-			itemIndex: "=listItemIndex",
-			selectable: "=",
-			expandable: "=",
-			cb: "&?callback"
-		},
-		templateUrl: "irf/template/listView/list-view-item.html",
-		link: function(scope, elem, attrs){
-
-		},
-		controller: "irfListViewItemController",
-		controllerAs: "c"
-	}
-}])
-.controller('irfListViewItemController', ['$scope', function($scope){
-	/* INIT */
-	$scope.isActionBoxShown = false;
-
-	this.toggleActionBox = function(){
-		$scope.isActionBoxShown = !!!$scope.isActionBoxShown;
-	}
-
-	$scope.expanded = false;
-	$scope.expand = function($event) {
-		if ($scope.item && $scope.item.length > 3) {
-			$scope.expandItems = $scope.item.slice(3);
-			$scope.expanded = !$scope.expanded;
-		}
-	}
-}])
-;
-
+}]);
 angular.module('irf.lov', ['irf.elements.commons', 'schemaForm'])
 .directive('irfLov', ["$q", "$log", "$uibModal", "elementsUtils", "schemaForm", function($q, $log, $uibModal, elementsUtils, schemaForm){
 	return {
@@ -3125,80 +3199,6 @@ function($scope, $q, $log, $uibModal, elementsUtils, schemaForm, $element){
 	};
 }])
 ;
-angular.module('irf.pikaday', ['irf.elements.commons'])
-.directive('irfPikaday', ["$log", "irfElementsConfig", function($log, elemConfig){
-	// Runs during compile
-	return {
-		restrict: 'A',
-		require: '^ngModel',
-		scope: {
-			ngModel: '=',
-			form: '=irfPikaday'
-		},
-		link: function($scope, element, attrs, ctrl) {
-			var elem = $(element);
-			var datepicker = 'pikaday';
-			var pikadayOptions = {
-				// minDate: new Date(1800, 0, 1),
-				// maxDate: new Date(2050, 12, 31),
-				// yearRange: [1800,2050],
-				// format: 'YYYY-MM-DD'
-			};
-			angular.extend(pikadayOptions, elemConfig.pikaday);
-			if (!$scope.form.readonly) {
-				if (typeof cordova !== 'undefined' && window.datePicker) {
-					elem.next().on('click', function(){
-						window.datePicker.show({
-							date: $scope.ngModel ? moment($scope.ngModel, 'YYYY-MM-DD').toDate() : new Date(),
-							mode: 'date'
-						}, function(date){
-							$log.info(date);
-							$scope.ngModel = moment(date, 'YYYY-MM-DD').format(pikadayOptions.format);
-							elem.val($scope.ngModel);
-							elem.controller('ngModel').$setViewValue($scope.ngModel);
-						});
-					});
-				} else {
-					var setValue = function(value) {
-						$scope.ngModel = value;
-						elem.val($scope.ngModel);
-						elem.controller('ngModel').$setViewValue($scope.ngModel);
-					};
-					pikadayOptions.field = elem.next()[0];
-					pikadayOptions.onSelect = function(date) {
-						setValue(this.getMoment().format(pikadayOptions.format));
-					};
-					pikadayOptions.onDraw = function() {
-						$('.pika-label').contents().filter(function(){return this.nodeType===3}).remove();
-					};
-					var picker = new Pikaday(pikadayOptions);
-					elem.next().on('blur', function(e){
-						if (this.value && this.value.length == 8) {
-							var m = moment(this.value, 'DDMMYYYY');
-							setValue(m.format('YYYY-MM-DD'));
-						} else if (!this.value) {
-							setValue('');
-						}
-					}).on('focus', function(e){
-						this.select();
-					});
-				}
-			}
-			// $scope.$parent.datePattern = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/i;
-			$scope.$watch(function(scope){return scope.ngModel}, function(n,o){
-				if (n) {
-					if (pikadayOptions.dateDisplayFormat) {
-						elem.next().val(moment(n, 'YYYY-MM-DD').format(pikadayOptions.dateDisplayFormat));
-					} else {
-						elem.next().val(moment(n, 'YYYY-MM-DD').format('DD-MM-YYYY'));
-					}
-				} else {
-					elem.next().val('');
-				}
-			});
-		}
-	};
-}]);
 angular.module('irf.progressMessage',[])
     .run(['$document', '$log', '$rootScope', '$compile', function($document, $log, $rootScope, $compile){
         $log.info("Inside run() of irf.progressMessage");
@@ -4038,29 +4038,6 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 			};
 		}
 	]);
-angular.module('irf.table', ['irf.elements.commons'])
-.directive('irfSimpleTable', function(){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableKey: "=",
-			tablePromise: "&"
-		},
-		templateUrl: 'irf/template/table/SimpleTable.html',
-		controller: 'irfSimpleTableCtrl'
-	}
-})
-.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
-	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
-		$scope.definition = data;
-	});
-
-	$scope.isObject = angular.isObject;
-}])
-;
-
-
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
 	return {
@@ -4261,6 +4238,29 @@ angular.module('irf.zxing', ['irf.elements.commons'])
 		}
 	};
 }]);
+angular.module('irf.table', ['irf.elements.commons'])
+.directive('irfSimpleTable', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			tableKey: "=",
+			tablePromise: "&"
+		},
+		templateUrl: 'irf/template/table/SimpleTable.html',
+		controller: 'irfSimpleTableCtrl'
+	}
+})
+.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
+	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
+		$scope.definition = data;
+	});
+
+	$scope.isObject = angular.isObject;
+}])
+;
+
+
 angular.module('irf.elements',['irf.elements.tpls','irf.elements.commons','irf.aadhar','irf.lov','irf.inputFile','irf.listView','irf.schemaforms.adminlte','irf.schemaforms','irf.searchBox','irf.resourceSearchWrapper','irf.geotag','irf.dashboardBox','irf.pikaday','irf.flipswitch','irf.progressMessage','irf.zxing','irf.tableView','irf.table','irf.validateBiometric'])
 var irf = irf || {};
 var irfModels = irf.models = angular.module('IRFModels', ['ngResource', 'ngJSONPath', 'irf.SessionManager']);
@@ -4339,7 +4339,9 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 	return resource;
 });
 
-irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
+irf.models.factory('Account',
+["$resource", "$httpParamSerializer", "BASE_URL", "$q",
+function($resource,$httpParamSerializer,BASE_URL, $q){
     var endpoint = BASE_URL + '/api/account';
     /*
      * :service can be {change_expired_password,change_password,reset_password}
@@ -4353,8 +4355,7 @@ irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
      *
      */
 
-    return $resource(endpoint, null, {
-
+    var resource = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint
@@ -4372,11 +4373,36 @@ irf.models.factory('Account',function($resource,$httpParamSerializer,BASE_URL){
         save:{
             method:'POST',
             url:endpoint+'/:service/:action'
+        },
+        getCentresForBranch: {
+            method: 'GET',
+            url: BASE_URL + '/api/enrollments/centres/:branchId',
+            isArray: true
         }
     });
-});
 
-irf.USER_ALLOWED_PAGES = "__userAllowedPages";
+    resource.getCentresForUser = function(branchId, userId) {
+        var deferred = $q.defer();
+        resource.getCentresForBranch({"branchId":branchId}).$promise.then(function(response) {
+            if (response && response.length) {
+                var centres = [];
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].employee == userId) {
+                        centres.push(_.clone(response[i]));
+                    }
+                };
+                deferred.resolve(centres);
+            } else {
+                deferred.reject(response);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    return resource;
+}]);
+
+irf.USER_ALLOWED_PAGES = "UserAllowedPages__";
 irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
     function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
     var endpoint = BASE_URL + '/api';
@@ -4393,13 +4419,13 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
     pDef.getRoleAllowedPageList = function() {
         var deferred = $q.defer();
         //pDef.getPagesJson().$promise
-        var localPages = SessionStore.getItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES);
+        var localPages = SessionStore.getItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname());
         Queries.getPagesDefinition(SessionStore.getLoginname(), (localPages && localPages.length))
         .then(function(response){
             delete response.$promise;
             delete response.$resolved;
             userAllowedPages = response;
-            SessionStore.setItem(SessionStore.getLoginname() + irf.USER_ALLOWED_PAGES, userAllowedPages);
+            SessionStore.setItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname(), userAllowedPages);
             deferred.resolve(response);
         }, function(error) {
             $log.error(error);
@@ -4768,6 +4794,22 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
+    resource.getLoanProductDocumentsRejectReasons = function(){
+        var deferred = $q.defer();
+        resource.getResult('loan_doc_reject_reasons.list', {}).then(
+            function(res){
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(res){
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    }
+
     resource.getGlobalSettings = function(name){
         var deferred = $q.defer();
         resource.getResult('globalSettings.list', {name:name}).then(
@@ -4851,6 +4893,136 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 			}
 		}, deferred.reject);
 		return deferred.promise;
+    }
+
+    resource.getCustomerBasicDetails = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        request.urns = _.hasIn(filter, 'urns')?filter.urns:[""];
+        request.ids = _.hasIn(filter, 'ids')?filter.ids:[""];
+        resource.getResult("customerBasicDetails.list", request, 10).then(function(records){
+            if (records && records.results) {
+                var buildOutputObj = {
+                    urns: {},
+                    ids: {}
+                };
+                for (var i=0; i<records.results.length; i++){
+                    var currResult = records.results[i];
+                    var reqUrn = null;
+                    /* URN */
+                    for (var j=0; j<request.urns.length; j++){
+                        reqUrn = request.urns[j];
+                        if (reqUrn == currResult.urn_no){
+                            buildOutputObj.urns[currResult.urn_no] = currResult;
+                            break;
+                        }
+                    }
+
+                    /* IDS */
+                    for (var j=0; j<request.ids.length; j++){
+                        reqUrn = request.ids[j];
+                        if (reqUrn == currResult.id){
+                            buildOutputObj.ids[currResult.id] = currResult;
+                            break;
+                        }
+                    }
+
+                }
+
+                deferred.resolve(buildOutputObj);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.getCustomerBankDetails = function(filter){
+       var deferred = $q.defer();
+		var request = filter;
+        request.branchId = _.hasIn(filter, 'branchId')?filter.branchId:'';
+        request.mandate_status = _.hasIn(filter, 'mandate_status') && !_.isUndefined(filter.mandate_status)?filter.mandate_status:'';
+        request.accountNumber = _.hasIn(filter, 'accountNumber') && !_.isUndefined(filter.accountNumber)?filter.accountNumber:'';
+        var limit = _.hasIn(filter, 'per_page') ? filter.per_page : 20;
+        var offset = _.hasIn(filter, 'page') ? (filter.page - 1 ) * limit : 0;
+		resource.getResult("achregistrationloanaccount.list", request, limit, offset).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
+    resource.getLoanPurpose1 = function(product) {
+    	var deferred = $q.defer();
+    	resource.getResult("loanpurpose1.list", {"product": product}).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+    	return deferred.promise;
+    };
+
+    resource.getLoanPurpose2 = function(product, purpose1) {
+    	var deferred = $q.defer();
+    	resource.getResult("loanpurpose2.list", {"product": product, "purpose1":purpose1}).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+    	return deferred.promise;
+    };
+
+    resource.getCustomersBankAccounts = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        request.customer_urns = _.hasIn(filter, 'customer_urns')?filter.customer_urns:[""];
+        request.customer_ids = _.hasIn(filter, 'customer_ids')?filter.customer_ids:[""];
+        resource.getResult("customersBankAccounts.list", request, 20)
+            .then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+    	}, deferred.reject);
+
+        return deferred.promise;
+    };
+
+    resource.getLoanCustomerRelations = function(filter){
+        var deferred = $q.defer();
+        var request = {};
+        if (_.isUndefined(filter.accountNumber) || _.isNull(filter.accountNumber)){
+            return;
+        }
+        request.accountNumber = _.hasIn(filter, 'accountNumber')?filter.accountNumber:null;
+        resource.getResult("loanCustomerRelations.list", request, 20)
+            .then(function(response){
+                return deferred.resolve(response.results);
+            }, deferred.reject);
+
+        return deferred.promise;
     }
 
 	return resource;
@@ -5095,7 +5267,39 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 				}
 			}
 			return obj;
-		}
+		},
+        ceil: function(x){
+            if (!_.isNumber(x)){
+                try{
+                    x = x * 1;
+                } catch(e){
+                    return x;
+                }
+
+            }
+
+            if (_.isNumber(x)){
+                return Math.ceil(x);
+            }
+
+        },
+        /**
+         * Compare two dates and return 1 if aData>bDate, 0 if equals, -1 otherwise
+         * @param  {string} aDate In format "Y-m-d". E.g : 2016-12-12
+         * @param  {string} bDate In format "Y-m-d"
+         * @return {int}       [description]
+         */
+        compareDates: function(aDate, bDate){
+    		var aMDate = moment(aDate);
+    		var bMDate = moment(bDate);
+    		if (aDate > bDate){
+    			return 1;
+    		} else if (aDate == bDate){
+    			return 0
+    		} else {
+    			return -1;
+    		}
+        }
 
 	};
 }]);
@@ -5403,6 +5607,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		return session.bankName;
 	};
 
+	self.getCentres = function() {
+		return session.centres;
+	}
+
 	self.getPhoto = function() {
 		return session.photo;
 	};
@@ -5478,9 +5686,13 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 	var getUser = function() {
 		var deferred = $q.defer();
 		Account.get({'service': 'account'}, function(accountResponse){
-			setUserData(accountResponse);
-			irfStorageService.storeJSON('UserData', accountResponse);
-			deferred.resolve(accountResponse);
+			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
+				accountResponse.centres = resp;
+			}).finally(function() {
+				setUserData(accountResponse);
+				irfStorageService.storeJSON('UserData', accountResponse);
+				deferred.resolve(accountResponse);
+			});
 		}, function(response){
 			deferred.reject({
 				'status': response.status,
@@ -5845,6 +6057,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 						}
 						// console.warn(ret);
 						break;
+					case 'p2p_customer_category':
+			            ret.data = _.clone(r.data);
+			            for (var i = 0; i< ret.data.length; i++){
+			              ret.data[i].value = ret.data[i].code;
+			            }
+			            break;
 					default:
 						ret.data = r.data; // value <-- name
 				}
@@ -5896,7 +6114,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 		submit: function(model, formCtrl, formName, actions) {
 			$log.info("on systemSubmit");
 			// entityManager.setModel(formName, null);
-			$log.warn(formCtrl);
+			//$log.warn(formCtrl);
 			if (formCtrl && formCtrl.$invalid) {
 				irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
 				return false;
@@ -6125,10 +6343,11 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
 					window.location.reload();
 				}
-			},function(e){
-				$log.error(e)
-			}).finally(function(){
+			},function(e){ // Error callback
+				$log.error(e);
 				$scope.showLoading = false;
+			}).finally(function(){
+				// $scope.showLoading = false;
 			});
 		}, function(arg){ // Error callback
 			$scope.showLoading = false;
@@ -6222,6 +6441,8 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
     SessionStore, $window, $rootScope, PagesDefinition) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
+
+        $rootScope.$broadcast('irf-login-success');
 
         $scope.loginPipe = AuthPopup.promisePipe;
 
@@ -6516,7 +6737,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			$('<div id="bottom-card-selector"><span class="title"></span></div>').appendTo('.page-row>.page-form');
 		}
 
-		boxcols.find('.box-header').on('click', function(event){
+		boxcols.find('.box-header').off('click').on('click', function(event){
 			event.preventDefault();
 			event.stopPropagation();
 			var tt = $(this);
@@ -6527,7 +6748,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				showAllCards();
 			}
 		});
-		$('#bottom-card-selector').on('click', showAllCards);
+		$('#bottom-card-selector').off('click').on('click', showAllCards);
 		return true;
 	};
 
@@ -6983,12 +7204,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 
 	$scope.isCordova = typeof(cordova) !== 'undefined';
 
-	$.getJSON("app_manifest.json", function(json) {
-		$scope.$apply(function(){
-			$scope.app_manifest = json;
-			$scope.appName = json.title;
-			document.mainTitle = json.name;
-		});
+	var checkLatestVersion = function() {
 		if ($scope.isCordova) {
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
 				$scope.latest_version = value;
@@ -7000,6 +7216,9 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 				}
 			});
 		}
+	};
+
+	var connectPerdix7 = function() {
 		if ($scope.app_manifest.connect_perdix7) {
 			$timeout(function() {
 				$scope.connect_perdix7 = true;
@@ -7009,6 +7228,20 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 				}
 			});
 		}
+	};
+
+	$.getJSON("app_manifest.json", function(json) {
+		$scope.$apply(function(){
+			$scope.app_manifest = json;
+			$scope.appName = json.title;
+			document.mainTitle = json.name;
+		});
+		checkLatestVersion();
+		connectPerdix7();
+	});
+
+	$scope.$on('irf-login-success', function($event){
+		checkLatestVersion();
 	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;

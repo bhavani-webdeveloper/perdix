@@ -16,13 +16,12 @@
                     "enumCode":"branch",
                     "title":"BRANCH"
                 },
-                "centreCode":{
-                    "type":"string",
+                "centreId":{
+                    "type": ["null", "number"],
                     "enumCode":"centre",
                     "title":"CENTRE"
                 },
                 "applicantName":{
-
                     "type":"string"
                 },
                 "customerType":{
@@ -1004,7 +1003,7 @@
                     "type": "string"
                 },
                 "coBorrowerUrnNo": {
-                    "type": "string"
+                    "type": ["null", "string"]
                 },
                 "collateral": {
                     "type": "array",
@@ -1061,7 +1060,7 @@
                                 "title":"MANUFACTURER"
                             },
                             "marginValue": {
-                                "type": "integer"
+                                "type": ["null", "integer"]
                             },
                             "photoFilePath": {
                                 "type": ["null", "string"],
@@ -1088,9 +1087,11 @@
                             }
                         },
                         "required": [
-
+                            "loanToValue",
+                            "collateralValue",
                             "collateralType",
-                            "collateralDescription"
+                            "collateralDescription",
+                            "quantity"
 
                         ]
                     }
@@ -1168,17 +1169,15 @@
                             },
                             "trancheNumber": {
                                 "type": "string"
+                            },
+                            "tranchCondition": {
+                                "type": "string"
                             }
                         },
                         "required": [
-                            "actualDisbursementDate",
-                            "currentStage",
                             "customerSignatureDate",
-                            "disbursedAmount",
                             "disbursementAmount",
                             "disbursementFromBankAccountNumber",
-                            "id",
-                            "loanId",
                             "scheduledDisbursementDate",
                             "trancheNumber"
                         ]
@@ -1302,7 +1301,7 @@
                     "type": "integer"
                 },
                 "insuranceFee":{
-                    "type":"integer",
+                    "type":["null", "integer"],
                     "title":"INSURANCE"
 
                 },
@@ -1438,7 +1437,7 @@
                                 "type": "string"
                             },
                             "documentStatus": {
-                                "type": "string"
+                                "type": ["null","string"]
                             },
                             "id": {
                                 "type": "integer"
@@ -1447,7 +1446,7 @@
                                 "type": "integer"
                             },
                             "remarks": {
-                                "type": "string"
+                                "type": ["null","string"]
                             },
                             "version": {
                                 "type": "integer"
@@ -1455,12 +1454,7 @@
                         },
                         "required": [
                             "document",
-                            "documentId",
-                            "documentStatus",
-                            "id",
-                            "loanId",
-                            "remarks",
-                            "version"
+                            "documentId"
                         ]
                     }
                 },
@@ -1763,7 +1757,7 @@
                     }
                 },
                 "otherFee":{
-                    "type":"integer",
+                    "type":["null", "integer"],
                     "title":"OTHER_FEE"
                 },
                 "partnerCode": {
@@ -1775,15 +1769,23 @@
                     "type": "string"
                 },
                 "portfolioInsuranceUrn":{
-                    "type":"string"
+                    "type":["null", "string"]
 
+                },
+                "portfolioInsurancePremiumCalculated":{
+                    "type":"string"
+                },
+                "portfolioInsurancePremium":{
+                    "type":"number"
                 },
                 "processType": {
                     "type": "string"
                 },
-                "processingFeeInPaisa": {
-                    "title": "PROCESSING_FEES",
-                    "type": "integer"
+                "processingFeePercentage": {
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
                 },
 
                 "productCode": {
@@ -1809,9 +1811,21 @@
                 "sbAccountNo": {
                     "type": "string"
                 },
-                "securityEmi":{
-                    "type":"integer",
-                    "title":"SECURITY_EMI"
+                "securityEmiRequired": {
+                    "type": "string",
+                    "title": "SECURITY_EMI",
+                    "x-schema-form":{
+                        "type":"radios",
+                        "titleMap":[{
+                            "name":"Yes",
+                            "value":"Yes"
+                            },
+                            {
+                            "name":"No",
+                            "value":"No"
+                            }
+                        ]
+                    }
                 },
                 "startTime": {
                     "type": "string"
@@ -1861,13 +1875,10 @@
                 "chk1UploadFilePath",
                 "closed",
                 "coApplicant",
-                "coBorrowerUrnNo",
                 "collateral",
                 "createdAt",
                 "createdBy",
                 "currentStage",
-                "customerBank",
-                "customerBranch",
                 "commercialCibilCharge",
                 "customerId",
                 "disbursedAmountInPaisa",

@@ -17,13 +17,13 @@ irf.pages.config([
 	var statesDefinition = [{
 		name: "Page.Landing", // Favorites
 		url: "/Landing",
-		templateUrl: "process/pages/templates/Page.Landing.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageLandingCtrl"
 	},{
-		name: "Page.Dashboard", // BI Dashboard
-		url: "/Dashboard",
-		templateUrl: "process/pages/templates/Page.Dashboard.html",
-		controller: "PageDashboardCtrl"
+		name: "Page.BIDashboard", // BI Dashboard
+		url: "/BIDashboard",
+		templateUrl: "process/pages/templates/Page.BIDashboard.html",
+		controller: "PageBIDashboardCtrl"
 	},{
 		name: "Page.Customer360", // Customer360
 		url: "/Customer360/:pageId",
@@ -42,12 +42,32 @@ irf.pages.config([
 	},{
 		name: "Page.LoansDashboard",
 		url: "/LoansDashboard",
-		templateUrl: "process/pages/templates/Page.LoansDashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LoansDashboardCtrl"
+	},{
+		name: "Page.LoansBookingDashboard",
+		url: "/LoansBookingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansBookingDashboardCtrl"
+	},{
+		name: "Page.LoansDisbursementDashboard",
+		url: "/LoansDisbursementDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansDisbursementDashboardCtrl"
+	},{
+		name: "Page.LoansACHPDCDashboard",
+		url: "/LoansACHPDCDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansACHPDCDashboardCtrl"
+	},{
+		name: "Page.LoansCollectionsDashboard",
+		url: "/LoansCollectionsDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LoansCollectionsDashboardCtrl"
 	},{
 		name: "Page.ManagementDashboard",
 		url: "/ManagementDashboard",
-		templateUrl: "process/pages/templates/Page.ManagementDashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageManagementDashboardCtrl"
 	}];
 
@@ -331,11 +351,13 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureFingerprint'],
 			$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.RequestRecaptureGPS']];
 		_.each(requestMenu, function(v,k){
-			v.onClick = function(event, menu) {
-				menu.stateParams.pageId = $scope.customerId + menu.stateParams.pageId.substring(menu.stateParams.pageId.indexOf(':'));
-				entityManager.setModel(menu.stateParams.pageName, $scope.model);
-				return $q.resolve(menu);
-			};
+			if (v) {
+				v.onClick = function(event, menu) {
+					menu.stateParams.pageId = $scope.customerId + menu.stateParams.pageId.substring(menu.stateParams.pageId.indexOf(':'));
+					entityManager.setModel(menu.stateParams.pageName, $scope.model);
+					return $q.resolve(menu);
+				};
+			}
 		});
 
 		if ($scope.dashboardDefinition.$menuMap['Page/CustomerHistory'])
@@ -552,7 +574,7 @@ irf.pages.controller("PageManagementDashboardCtrl",
 	$scope.role = SessionStore.getRole();
 
 	$scope.dashboardDefinition = {
-		"title": "OPERATIONS",
+		"title": "MANAGEMENT_DASHBOARD",
 		"items": [
 			{
 				"id": "VillageSearch",
@@ -604,7 +626,7 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     $log.info("Page.LoansDashboard.html loaded");
     PageHelper.clearErrors();
     var fullDefinition = {
-        "title": "Actions",
+        "title": "Loans Dashboard",
         "items": [
             "Page/Engine/loans.individual.booking.LoanBookingQueue",
             "Page/Engine/loans.individual.PendingClearingQueue",
@@ -616,7 +638,326 @@ irf.pages.controller("LoansDashboardCtrl", ['$log', '$scope','PageHelper', '$sta
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp){
         $scope.dashboardDefinition = resp;
         $log.info(resp);
-        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10;
+        $scope.dashboardDefinition.$menuMap['Page/Engine/loans.individual.booking.LoanBookingQueue'].data=10; // TODO remove hardcoding
+    });
+
+}]);
+
+irf.pages.controller("LoansBookingDashboardCtrl",
+['$log', '$scope', 'PagesDefinition', 'SessionStore', 'IndividualLoan',
+function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
+    $log.info("Page.LoansBookingDashboard.html loaded");
+
+    var fullDefinition = {
+        "title": "Loan Booking Dashboard",
+        "iconClass": "fa fa-book",
+        "items": [
+            "Page/Engine/loans.individual.booking.LoanInput",
+            "Page/Engine/loans.individual.booking.PendingQueue",
+            "Page/Engine/loans.individual.booking.DocumentUploadQueue",
+            "Page/Engine/loans.individual.booking.PendingVerificationQueue"
+        ]
+    };
+
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        $scope.dashboardDefinition = resp;
+        var branchId = SessionStore.getBranchId();
+        var branchName = SessionStore.getBranch();
+
+        var pqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.PendingQueue"];
+        if (pqMenu) {
+            IndividualLoan.search({
+                'stage': 'LoanBooking',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                pqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var duqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.DocumentUploadQueue"];
+        if (duqMenu) {
+            IndividualLoan.search({
+                'stage': 'DocumentUpload',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                duqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var pvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.PendingVerificationQueue"];
+        if (pvqMenu) {
+            IndividualLoan.search({
+                'stage': 'DocumentVerification',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                pvqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+    });
+
+}]);
+irf.pages.controller("LoansDisbursementDashboardCtrl",
+['$log', '$scope', 'PagesDefinition', 'SessionStore', 'IndividualLoan',
+function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
+    $log.info("Page.LoansDisbursementDashboard.html loaded");
+
+    var fullDefinition = {
+        "title": "Disbursement Dashboard",
+        "iconClass": "fa fa-share",
+        "items": [
+            "Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
+            "Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
+            "Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
+            "Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
+            "Page/Engine/loans.individual.disbursement.PendingFROQueue",
+            "Page/Engine/loans.individual.disbursement.PendingCROQueue",
+            "Page/Engine/loans.individual.disbursement.EMIScheduleGenQueue",
+            "Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue"
+        ]
+    };
+
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        $scope.dashboardDefinition = resp;
+        var branchId = SessionStore.getBranchId();
+        var branchName = SessionStore.getBranch();
+
+        var rfdqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue"];
+        if (rfdqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'ReadyForDisbursement',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                rfdqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var dcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue"];
+        if (dcqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'DisbursementConfirmation',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                dcqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var rdqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue"];
+        if (rdqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'RejectedDisbursement',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                rdqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var mtqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.MultiTrancheQueue"];
+        if (mtqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'MTDisbursementDataCapture',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                mtqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var pfroqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.PendingFROQueue"];
+        if (pfroqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'FROApproval',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                pfroqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var pcroqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.PendingCROQueue"];
+        if (pcroqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'CROApproval',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                pcroqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var emisgqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.EMIScheduleGenQueue"];
+        if (emisgqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'DocumentUpload',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                emisgqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var mdvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue"];
+        if (mdvqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'DocumentVerification',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                mdvqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+    });
+
+}]);
+irf.pages.controller("LoansACHPDCDashboardCtrl",
+['$log', '$scope', 'PagesDefinition', 'SessionStore', 'IndividualLoan',
+function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
+    $log.info("Page.LoansACHPDCDashboard.html loaded");
+
+    var fullDefinition = {
+        "title": "ACH / PDC Dashboard",
+        "iconClass": "fa fa-cc",
+        "items": [
+            "Page/Engine/loans.individual.achpdc.ACHPDCQueue",
+            "Page/Engine/loans.individual.achpdc.ACHRegistration",
+            "Page/Engine/loans.individual.achpdc.ACHMandateDownload",
+            "Page/Engine/loans.individual.achpdc.ACHMandateQueue",
+            "Page/Engine/loans.individual.achpdc.ACHDemandDownload",
+            "Page/Engine/loans.individual.achpdc.ACHClearingCollection",
+            "Page/Engine/loans.individual.achpdc.PDCRegistration",
+            "Page/Engine/loans.individual.achpdc.PDCDemandDownload",
+            "Page/Engine/loans.individual.achpdc.PDCCollections",
+            "Page/Engine/loans.individual.achpdc.DemandDownloads"
+        ]
+    };
+
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        $scope.dashboardDefinition = resp;
+        var branchId = SessionStore.getBranchId();
+        var branchName = SessionStore.getBranch();
+
+        var qMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.achpdc.ACHPDCQueue"];
+        if (qMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'ReadyForDisbursement',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                qMenu.data = response.headers['x-total-count'];
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+    });
+
+}]);
+irf.pages.controller("LoansCollectionsDashboardCtrl",
+['$log', '$scope', 'PagesDefinition', 'SessionStore', 'LoanProcess',
+function($log, $scope, PagesDefinition, SessionStore, LoanProcess) {
+    $log.info("Page.LoansCollectionsDashboard.html loaded");
+
+    var fullDefinition = {
+        "title": "Collections Dashboard",
+        "iconClass": "fa fa-reply",
+        "items": [
+            "Page/Engine/loans.individual.collections.BounceQueue",
+            "Page/Engine/loans.individual.collections.BouncePromiseQueue",
+            "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
+            "Page/Engine/loans.individual.collections.CreditValidationQueue",
+            "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
+            "Page/Engine/loans.individual.collections.DepositStage"
+        ]
+    };
+
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        $scope.dashboardDefinition = resp;
+        var branchId = SessionStore.getBranchId();
+
+        var bqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceQueue"];
+        if (bqMenu) {
+            var centres = SessionStore.getCentres();
+            bqMenu.data = 0;
+            for (var i = 0; i < centres.length; i++) {
+                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id }).$promise.then(function(response,headerGetter){
+                    bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
+                }, function() {
+                    cvqMenu.data = '-';
+                });
+            };
+        }
+
+        var bpqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BouncePromiseQueue"];
+        if (bpqMenu) {
+            LoanProcess.bounceCollectionDemand({ 'branchId': branchId }).$promise.then(function(response,headerGetter){
+                bpqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var brqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceRecoveryQueue"];
+        if (brqMenu) {
+            LoanProcess.p2pKGFSList({
+                'branchId': branchId,
+                'customerCategoryHubManager':'C,D'
+            }).$promise.then(function(response,headerGetter){
+                brqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var cvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CreditValidationQueue"];
+        if (cvqMenu) {
+            LoanProcess.repaymentList({
+                'status': 'Pending'
+            }).$promise.then(function(response,headerGetter){
+                cvqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
+            }, function() {
+                cvqMenu.data = '-';
+            });
+        }
+
+        var taqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.TransactionAuthorizationQueue"];
+        if (taqMenu) {
+            LoanProcess.repaymentList({
+                'status': 'PartialPayment'
+            }).$promise.then(function(response,headerGetter){
+                taqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
+            }, function() {
+                taqMenu.data = '-';
+            });
+        }
     });
 
 }]);

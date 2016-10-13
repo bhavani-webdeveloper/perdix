@@ -1373,6 +1373,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-blue-light .bg-active-theme {
+  color: #fff;
   background-color: #65A1CC;
 }
 .skin-blue-light .bg-tint-theme {
@@ -1530,6 +1531,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-green-light .bg-active-theme {
+  color: #fff;
   background-color: #65CC9C;
 }
 .skin-green-light .bg-tint-theme {
@@ -1687,6 +1689,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-purple-light .bg-active-theme {
+  color: #fff;
   background-color: #6565CC;
 }
 .skin-purple-light .bg-tint-theme {
@@ -1844,6 +1847,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-red-light .bg-active-theme {
+  color: #fff;
   background-color: #CC7665;
 }
 .skin-red-light .bg-tint-theme {
@@ -2001,6 +2005,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-yellow-light .bg-active-theme {
+  color: #fff;
   background-color: #CCA465;
 }
 .skin-yellow-light .bg-tint-theme {
@@ -2184,6 +2189,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-fuchsia-light .bg-active-theme {
+  color: #fff;
   background-color: #CC65B7;
 }
 .skin-fuchsia-light .bg-tint-theme {
@@ -2367,6 +2373,7 @@ span.htmlerror {
   /* END OF FLIPSWITCH colors */
 }
 .skin-deepteal-light .bg-active-theme {
+  color: #fff;
   background-color: #8FB7B1;
 }
 .skin-deepteal-light .bg-tint-theme {

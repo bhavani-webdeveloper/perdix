@@ -46,7 +46,8 @@ gulp.task('assets', function(){
         'dev-www/css/fonts/**/*',
         'dev-www/js/vendor/renderjson.js',
         'dev-www/js/themeswitch.js',
-        'dev-www/js/index.js'
+        'dev-www/js/index.js',
+        'dev-www/app_manifest.json'
         ], {base: 'dev-www/'})
         .pipe(gulp.dest('www/'));
 })
