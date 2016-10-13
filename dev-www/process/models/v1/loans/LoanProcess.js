@@ -39,10 +39,14 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:'process/schemas/pldc.json'
         },
         /*bounceCollectionDemand will show all the loans which has some overdue amount*/
-        bounceCollectionDemand:searchResource({
+        bounceCollectionDemand: searchResource({
             method:'GET',
             url:BASE_URL + '/api/scheduledemandlist'
-        }),
+        }),/*
+        bounceCollectionDemandHead: {
+            method:'HEAD',
+            url:BASE_URL + '/api/scheduledemandlist'
+        },*/
         repaymentList:searchResource({
             method:'GET',
             url:endpoint+'/repaymentlist'
@@ -82,8 +86,18 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         processCashDeposit:{
             method:'POST',
-            url:endpoint+ "/processCashDeposite"
+            url:endpoint+ "/processCashDeposite",
+            isArray:true
+        },
+        generatedefaultschedule:{
+            method:'GET',
+            url:endpoint+'/generatedefaultschedule',
+            isArray:true
+        },
+        generateScheduleForSpecifiedDate:{
+            method:'GET',
+            url:endpoint+'/generateScheduleForSpecifiedDate',
+            isArray:true
         }
-
     });
 }]);

@@ -14,9 +14,21 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
             method: 'PUT',
             url: endpoint + '/updateRolePageAccess.php'
         },
+        updateRole: {
+            method: 'PUT',
+            url: endpoint + '/updateRole.php'
+        },
         getPage: {
             method: 'GET',
             url: endpoint + '/getPage.php'
+        },
+        searchUsers: searchResource({
+            method: 'GET',
+            url: endpoint + '/findUsers.php'
+        }),
+        updateUserRole: {
+            method: 'PUT',
+            url: endpoint + '/updateUserRole.php'
         }
     });
 

@@ -2,6 +2,8 @@ irf.models.factory('ACH',
 ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
 function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
+        var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
+        var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';
         /*
          * $get : /api/enrollments/{blank/withhistory/...}/{id}
          *  eg: /enrollments/definitions -> $get({service:'definition'})
@@ -37,7 +39,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 url: endpoint + '/search',
                 isArray: true
             },
-            updateBulk: {
+            updateMandateStatus: {
                 method: 'PUT',
                 isArray:true,
                 url: endpoint + '/statusupdate'
@@ -46,10 +48,18 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 method: 'GET',
                 url: endpoint + '/achdemandList'
             }),
-            bulkRepay: {
+            bulkRepay:  searchResource({
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
-            }
+            }),
+            demandDownloadStatus: searchResource({
+                method: 'GET',
+                url: endpintManagement + "demandDate=:demandDate&branchId=:branchId"
+            }),
+            achpdcDemandDownload: searchResource({
+                method: 'GET',
+                url: endpintManagementACHPDC + "demandDate=:demandDate&branchId=:branchId"
+            })
         });
 
         resource.achMandateUpload = function(file, progress) {

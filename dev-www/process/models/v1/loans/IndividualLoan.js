@@ -27,8 +27,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         },
         batchDisburse:{
             method:'PUT',
-            url:endpoint+'/batchDisbursement',
-            isArray:true
+            url:endpoint+'/batchDisbursement'
+        },
+        batchDisbursementConfirmation:{
+            method:'POST',
+            url:endpoint+'/batchDisbursementConfirmation'
         },
         multiTrancheDisbursement:{
             method:'GET',
@@ -78,9 +81,8 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/:id',
             transformResponse: function(data, headersGetter, status){
-                data = JSON.parse(data);
-                if (status === 200){
-                    // debugger;
+                if (status === 200 && data){
+                    data = JSON.parse(data);
                     if (!_.isUndefined(data.nominees) && !_.isNull(data.nominees) && _.isArray(data.nominees) && data.nominees.length>0){
                         for (var i=0;i<data.nominees.length; i++){
                             var n = data.nominees[i];
