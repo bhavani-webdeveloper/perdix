@@ -22,7 +22,7 @@ irf.pages.factory("config", function(){
 	};
 });
 
-irf.pages.constant('ALLOWED_STATES', ['Login']);
+irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 
 irf.pages.run(
 ["$rootScope", "$log", "$timeout", "$q", "$state", "authService", "$location", "ALLOWED_STATES",
@@ -144,6 +144,12 @@ irf.pages.config([
 		url: "/Login",
 		templateUrl: "modules/irfpages/templates/Login.html",
 		controller: 'LoginCtrl',
+		controllerAs: 'c'
+	},{
+		name: "Reset",
+		url: "/Reset",
+		templateUrl: "modules/irfpages/templates/Reset.html",
+		controller: 'ResetCtrl',
 		controllerAs: 'c'
 	},{
 		name: "Page",

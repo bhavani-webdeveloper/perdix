@@ -33,6 +33,9 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			} else {
 				$scope.errorMessage = arg.statusText || (arg.status + " Unknown Error");
 			}
+			if ($scope.errorMessage.trim() === 'User credentials have expired') {
+				$state.go("Reset", {"type": "reset"});
+			}
 		});
 	};
 

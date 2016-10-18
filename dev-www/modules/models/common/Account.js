@@ -37,6 +37,13 @@ function($resource,$httpParamSerializer,BASE_URL, $q){
             method: 'GET',
             url: BASE_URL + '/api/enrollments/centres/:branchId',
             isArray: true
+        },
+        changeExpiredPassword: {
+            method: 'POST',
+            url: endpoint + '/change_expired_password',
+            headers: {
+                $no_auth: true
+            }
         }
     });
 

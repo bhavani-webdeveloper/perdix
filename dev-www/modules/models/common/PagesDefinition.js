@@ -1,6 +1,6 @@
 irf.USER_ALLOWED_PAGES = "UserAllowedPages__";
-irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link",
-    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link){
+irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Queries", "SessionStore", "Link", "$rootScope",
+    function($resource, $log, BASE_URL, $q, Queries, SessionStore, Link, $rootScope) {
     var endpoint = BASE_URL + '/api';
 
     var pDef = $resource(endpoint, null, {
@@ -203,6 +203,10 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         });
         return deferred.promise;
     };
+
+    $rootScope.$on('irf-login-success', function() {
+        pDef.getRoleAllowedPageList();
+    });
 
     return pDef;
 }]);

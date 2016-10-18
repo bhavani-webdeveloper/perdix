@@ -105,7 +105,8 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 			'request': function(config) {
 				var authToken = AuthTokenHelper.getAuthData();
 				authToken = authToken ? authToken.access_token : authToken;
-				config.headers['Authorization']= 'Bearer '+ authToken;
+				if (!config.headers || !config.headers['$no_auth'])
+					config.headers['Authorization']= 'Bearer '+ authToken;
 				return config;
 			},
 			'responseError': function(rejection) {

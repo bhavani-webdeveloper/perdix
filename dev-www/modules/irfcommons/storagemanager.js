@@ -251,28 +251,6 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			$log.error('No record found for enum key: ' + key);
 			return null;
 		},
-		titleMap: function(key) {
-			var ret = this.enum(key);
-			if (ret)
-				return ret.data;
-			return ret;
-		},
-		filterByParentCode: function(modelValue, classifier) {
-			if (modelValue) {
-				$log.debug(modelValue+" as "+classifier);
-				var r = $scope.helper.enum(classifier);
-				if (r) {
-					var d = $filter('filter')(r.data, {value:modelValue}, true);
-					if (d && d.length == 1 && _.isObject(d[0])) {
-						return d[0].code;
-					} else if (d.length > 1) {
-						$log.debug('TOO MANY parent REFCODES for '+classifier+' value:'+modelValue);
-						$log.debug(d);
-					}
-				}
-			}
-			return null;
-		},
 		save: function(model, formCtrl, formName, actions) {
 			var pageName = formName.substring(6).replace(/\$/g, '.');
 			var promise = true;
