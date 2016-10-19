@@ -3,7 +3,7 @@ irf.models.factory('lead',function($resource,$httpParamSerializer,BASE_URL){
     return $resource(endpoint, null, {
         getLeadSchema: {
             method: 'GET',
-            url: 'process/schemas/LeadGeneration.json'
+            url: 'process/schemas/Leadgeneration.json'
         },
        
     });
