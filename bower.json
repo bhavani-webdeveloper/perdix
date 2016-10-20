@@ -46,6 +46,7 @@
     "selectize": "~0.12.3",
     "select2": "~4.0.3",
     "datatables.net-bs": "^1.10.12"
+    
   },
   "overrides": {
     "admin-lte": {
