@@ -1,0 +1,50 @@
+<div>
+    <section ng-hide="error" class="content-header">
+        <h1>
+            <span><a href ng-click="expandCollapseView()" style="color:#333"><i ng-if="showCollapsedViewButton" class="fa {{collapsedView?'fa-plus-square-o':'fa-minus-square-o'}}">&nbsp;</i>
+            {{ page.title | translate }}</a></span> <small>{{ page.subTitle | translate }}</small>
+            <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
+        </h1>
+<!--         <ol ng-if="breadcrumb" class="breadcrumb">
+            <li ng-repeat="bc in breadcrumb" ng-class="{active:$last}">
+                <a ng-if="!$last" href="#"><i ng-if="$first" class="fa fa-map-signs"></i>{{ bc }}</a>{{ $last ? bc : '' }}
+            </li>
+        </ol> -->
+    </section>
+
+    <section ng-hide="error" class="content">
+        <div ng-switch="page.type" class="row page-row">
+            <irf-sf ng-switch-when="schema-form"
+                initialize="page.initialize(model, form, formCtrl)"
+                irf-schema="page.schema"
+                irf-form="page.form"
+                irf-actions="page.actions"
+                irf-model="model"
+                irf-helper="formHelper"
+                irf-form-name="formName"
+                class="page-form">
+                <div class="cantina-loader-wrapper"><div classs="cantina-loader"></div></div>
+            </irf-sf>
+            <irf-resource-search-wrapper ng-switch-when="search-list"
+                definition="page.definition"
+                initialize="page.initialize(model, form, formCtrl)"
+                irf-model="model"></irf-resource-search-wrapper>
+        </div>
+    </section>
+
+    <section ng-show="error" class="content">
+        <div class="modal-dialog">
+            <div class="modal-content effect2">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{'Page is missing/having errors' | translate}}</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 style="position:absolute;top:10%;left:0;width:100%;text-align:center" ng-bind-html="pageNameHtml"></h4>
+                    <div style="padding:10px">
+                        <img src="img/404.png" class="img-responsive">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </section>
+</div>

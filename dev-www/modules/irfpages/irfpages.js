@@ -167,6 +167,16 @@ irf.pages.config([
 		templateUrl: "modules/irfpages/templates/pages/Page.Engine.html",
 		controller: "PageEngineCtrl"
 	},{
+		name: "Page.Bundle",
+		url: "/Bundle/:bundleName/:bundleId",
+		params: {
+			bundleName: {value: null},
+			bundleId: {value: null, squash: true},
+			bundleData: null
+		},
+		templateUrl: "modules/irfpages/templates/pages/Page.Bundle.html",
+		controller: "PageBundleCtrl"
+	},{
 		name: "Page.EngineError",
 		url: "/EngineError/:pageName",
 		templateUrl: "modules/irfpages/templates/pages/Page.EngineError.html",
