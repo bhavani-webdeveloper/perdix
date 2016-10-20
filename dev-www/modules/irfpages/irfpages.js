@@ -10,7 +10,7 @@ irf.form = function(path) {
 
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
-var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection"], function ($compileProvider) {
+var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","ngAnimate", "ngSanitize","ui.bootstrap"], function ($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
 
