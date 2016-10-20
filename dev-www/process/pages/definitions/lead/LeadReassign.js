@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration_Reassign"), ["$log", "$state", "$stateParams", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
 
