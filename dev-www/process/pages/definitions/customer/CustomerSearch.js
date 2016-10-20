@@ -11,6 +11,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
+			autoSearch: true,
 			title: "Search Customers",
 			searchForm: [
 				"*"
@@ -87,7 +88,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}
 			},
 			listOptions: {
-				selectable: false,
+				selectable: true,
 				expandable: true,
 				listStyle: "table",
 				itemCallback: function(item, index) {
@@ -122,7 +123,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 							title:'NAME',
 							data: 'firstName',
 							render: function(data, type, full, meta) {
-								return (full.customerType==='Individual'?'<i class="fa fa-user" style="color:#777">&nbsp;</i> ':'<i class="fa fa-industry" style="color:#777"></i> ') + data;
+								return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
 							}
 						},
 						{
@@ -169,7 +170,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						{
 							name: "Do House Verification",
 							desc: "",
-							icon: "fa fa-house",
+							icon: "fa fa-building",
 							fn: function(item, index){
 								$state.go("Page.Engine",{
 									pageName:"AssetsLiabilitiesAndHealth",
@@ -177,13 +178,13 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Stage02')
+								if (item.currentStage==='Completed')
 									return true;
 								return false;
 							}
 						},
 						{
-							name: "Customer 360",
+							name: "CUSTOMER_360",
 							desc: "",
 							icon: "fa fa-user",
 							fn: function(item, index){
