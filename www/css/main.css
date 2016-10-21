@@ -335,6 +335,8 @@ span.htmlerror {
   position: absolute;
   z-index: -1;
   opacity: 0;
+  width: 0;
+  height: 0;
 }
 .checkbox label.checkbox-inline .control-indicator {
   position: absolute;
@@ -1307,19 +1309,44 @@ span.htmlerror {
   background-color: transparent;
   background: none !important;
 }
+.irf-table-view table.root-table th:after {
+  top: auto !important;
+  bottom: 0;
+  right: 3px !important;
+}
+.irf-table-view table.root-table th.expand-control {
+  padding-right: 0;
+}
 .irf-table-view table.root-table tr .expand-control i:after {
   content: '\f138';
 }
 .irf-table-view table.root-table tr.parent .expand-control i:after {
   content: '\f13a';
 }
+.irf-table-view table.root-table tr.bg-active-theme .expand-control i.color-theme {
+  color: #fff;
+}
+.irf-table-view table.root-table tr.child {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,eeeeee+100&0+10,0.65+100 */
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(253, 253, 253, 0) 10%, rgba(238, 238, 238, 0.65) 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(253, 253, 253, 0) 10%, rgba(238, 238, 238, 0.65) 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(253, 253, 253, 0) 10%, rgba(238, 238, 238, 0.65) 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#a6eeeeee', GradientType=0);
+  /* IE6-9 */
+}
+.irf-table-view table.root-table tr.child td {
+  border-top: none !important;
+}
+.irf-table-view table.root-table td {
+  padding: 3px 10px;
+}
 .irf-table-view table.root-table td.actions-control button {
   background-color: transparent;
   border: 0;
   padding: 0 12px;
-}
-.irf-table-view table.root-table td {
-  padding: 3px 10px;
 }
 .irf-table-view table.root-table .dtr-title {
   font-weight: bold;
@@ -1342,24 +1369,28 @@ span.htmlerror {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-.irf-table-view table.root-table .dt-buttons a {
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid ;
-  border-left: 1px solid ;
+.irf-table-view table.root-table .selectall-toggle {
+  position: absolute;
 }
-.irf-table-view table.root-table .irf-action-dropdown-menu li a {
+.irf-table-view table.root-table .irf-action-dropdown-menu {
+  border-radius: 3px;
+  white-space: nowrap;
+  /* background-color: #ececec; */
+  /* z-index: 3; */
+  -webkit-transition: opacity 0.218s;
+  transition: opacity 0.218s;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 6px 0;
+  border: 1px solid #dcdcdc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 0;
+}
+.irf-table-view table.root-table .irf-action-dropdown-menu > li > a {
   display: block;
-  padding: 5px 16px 5px 12px;
+  padding: 8px 20px 8px 16px;
   font-size: 1.1em;
   font-weight: bold;
-}
-.irf-table-view table.root-table .selectalltoggle {
-  top: 2px;
-  left: 0;
-  height: 18px;
-  width: 18px;
-  background: #e6e6e6;
 }
 
 /* MIXINS */
@@ -1690,7 +1721,7 @@ span.htmlerror {
 }
 .skin-purple-light .bg-active-theme {
   color: #fff;
-  background-color: #6565CC;
+  background-color: #7d7de8;
 }
 .skin-purple-light .bg-tint-theme {
   background-color: #EBEBF7;
@@ -2006,7 +2037,7 @@ span.htmlerror {
 }
 .skin-yellow-light .bg-active-theme {
   color: #fff;
-  background-color: #CCA465;
+  background-color: #f5b247;
 }
 .skin-yellow-light .bg-tint-theme {
   background-color: #F3F0EB;
@@ -2190,7 +2221,7 @@ span.htmlerror {
 }
 .skin-fuchsia-light .bg-active-theme {
   color: #fff;
-  background-color: #CC65B7;
+  background-color: #dd88cc;
 }
 .skin-fuchsia-light .bg-tint-theme {
   background-color: #f5f0f4;
