@@ -30,7 +30,10 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
         }
         ];
 
+
+
         $scope.pages = [];
+        $scope.tabs = [];
         for (i in $scope.pageNames) {
             var obj = {};
             
@@ -38,6 +41,7 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
             obj.formName = irf.form($scope.pageNames[i].pageName);
             obj.pageNameHtml = $scope.pageNames[i].pageName.split('.').join('<br/>');
             obj.title = $scope.pageNames[i].title;
+            obj.id=$scope.pageNames[i].id;
 
             obj.error = false;
             try {
@@ -112,7 +116,23 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
                 }
             }
             $scope.pages.push(obj);
+            $scope.tabs.push(obj);
         }
         $log.info($scope.pages);
+
+        $scope.removeTab = function (item) {
+        $log.info(item);
+        $scope.pages.splice(item, 1);
+        $log.info($scope.pages);
+        };
+
+        $scope.addTab = function (item) {
+        var temp=$scope.tabs.splice(item, 1);
+        var tobj=temp[0]
+        $scope.pages.push(tobj);
+        $log.info($scope.pages);
+
+        $scope.tabs.push(tobj);
+        };
     }
 ]);
