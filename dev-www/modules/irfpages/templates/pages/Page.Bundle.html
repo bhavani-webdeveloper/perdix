@@ -2,7 +2,8 @@
   <uib-tabset active="activeForm">
     <uib-tab index="$index + 1" ng-repeat="obj in pages track by $index" >
       <uib-tab-heading>
-      {{ obj.title | translate }}  <a ng-click="removeTab($index)" href=''><i class="fa fa-times"></i></a>
+      {{ obj.title | translate }}   
+       <a ng-click="removeTab($index)" href='' ng-if="obj.repeatflag"><i class="fa fa-times"></i></a>
       </uib-tab-heading>
 
       <section ng-hide="obj.error" class="content-header">
@@ -75,9 +76,9 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-right " uib-dropdown-menu aria-labelledby="simple-dropdown">
-        <li ng-repeat="obj in tabs">
-            <a ng-click="addTab($index)" href="" > <button class="btn-theme">
-             <i class="fa fa-plus"></i> </button> {{ obj.title | translate }}</a>   
+        <li ng-repeat="obj in tabs track by $index">
+            <a ng-click="addTab($index)" href="" > 
+             {{ obj.title | translate }}</a>   
         </li>
       </ul>
     </div>
