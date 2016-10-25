@@ -1,5 +1,5 @@
-irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
-    function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
+irf.pages.controller("PageBundleCtrl", ["$log","$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
+    function($log,$filter,$scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
         var self = this;
 
         /*var bundle = {
@@ -12,21 +12,26 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
 
         $scope.pageNames = [{
             pageName: 'lead.LeadGeneration',
-            title: 'Lead Generation'
+            title: 'Lead Generation',
+            repeat:3
         }, {
             pageName: 'CustomerSearch',
-            title: 'Customer Search'
+            title: 'Customer Search',
+            repeat:2
         }, {
             pageName: 'lead.LeadBulkUpload',
-            title: 'Bulk Upload'
+            title: 'Bulk Upload',
+            repeat:1
         },
         {
             pageName: 'customer.IndividualEnrollment',
-            title: 'Applicant'
+            title: 'Applicant',
+            repeat:1
         },
         {
             pageName: 'customer.EnterpriseEnrollment',
-            title: 'Enterprise Enrollment'
+            title: 'Enterprise Enrollment',
+            repeat:1
         }
         ];
 
@@ -42,6 +47,7 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
             obj.pageNameHtml = $scope.pageNames[i].pageName.split('.').join('<br/>');
             obj.title = $scope.pageNames[i].title;
             obj.id=$scope.pageNames[i].id;
+            obj.repeat=$scope.pageNames[i].repeat;
 
             obj.error = false;
             try {
@@ -116,23 +122,40 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParam
                 }
             }
             $scope.pages.push(obj);
-            $scope.tabs.push(obj);
+
+            $log.info(obj.repeat);
+
+            if(obj.repeat>1)
+            {
+            	$scope.tabs.push(obj);	
+            }
         }
-        $log.info($scope.pages);
+
+        
+       
 
         $scope.removeTab = function (item) {
-        $log.info(item);
-        $scope.pages.splice(item, 1);
-        $log.info($scope.pages);
+        var title=$scope.pages.splice(item, 1)[0].title;
+        var item=$filter('filter')($scope.tabs, title,true)[0];
+        var index=$scope.tabs.indexOf(item);
+        var temp=$scope.tabs.splice(index, 1)[0];
+        temp.repeat=temp.repeat+1;
+        $scope.tabs.push(temp);
         };
 
         $scope.addTab = function (item) {
-        var temp=$scope.tabs.splice(item, 1);
-        var tobj=temp[0]
-        $scope.pages.push(tobj);
+        var temp=$scope.tabs.splice(item, 1)[0];
         $log.info($scope.pages);
+        $log.info(temp);
+        $scope.tabs.push(temp);
 
-        $scope.tabs.push(tobj);
+        if(temp.repeat>1)
+        {
+            temp.repeatflag=true;
+            $scope.pages.push(temp);
+            --temp.repeat
+        }
+
         };
     }
 ]);
