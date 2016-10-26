@@ -186,6 +186,14 @@ irf.pages.config([
 		url: "/Offline/:pageName",
 		templateUrl: "modules/irfpages/templates/pages/Page.EngineOffline.html",
 		controller: "PageEngineOfflineCtrl"
+	},{
+		name: "Page.Timeline",
+		url: "/Timeline/:timelineName/:timelineId",
+		params: {
+			timelineId: {value: null, squash: true}
+		},
+		templateUrl: "modules/irfpages/templates/pages/Page.Timeline.html",
+		controller: "PageTimelineCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){

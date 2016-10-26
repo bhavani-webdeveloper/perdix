@@ -9,9 +9,9 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("search-list sample got initialized");
+			formCtrl.submit();
 		},
 		definition: {
-			autoSearch: true,
 			title: "Search Customers",
 			searchForm: [
 				"*"
