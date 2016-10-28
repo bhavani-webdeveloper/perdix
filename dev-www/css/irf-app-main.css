@@ -332,6 +332,61 @@ label {
   }
 }
 /* Card Layout ENDS */
+/* Page Bundle starts */
+.bundle-tabset {
+  background-color: transparent;
+  position: relative;
+}
+.bundle-tabset ul.nav-tabs {
+  padding-top: 3px;
+}
+.bundle-tabset ul.nav-tabs > li:first-child {
+  padding-left: 42px;
+}
+.bundle-tabset ul.nav-tabs li a {
+  color: #666;
+}
+.bundle-tabset ul.nav-tabs li.active a {
+  color: #000;
+}
+.bundle-tabset .bundle-dropdown {
+  position: absolute;
+  top: 15px;
+  left: 0;
+}
+.bundle-tabset .bundle-dropdown > a {
+  padding: 15px;
+}
+.bundle-tabset .tab-content {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
+  background: -moz-linear-gradient(top, #ffffff 0, rgba(255, 255, 255, 0) 100px);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #ffffff 0, rgba(255, 255, 255, 0) 100px);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #ffffff 0, rgba(255, 255, 255, 0) 100px);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.bundle-tabset .irf-action-dropdown-menu {
+  border-radius: 3px;
+  white-space: nowrap;
+  /* background-color: #ececec; */
+  /* z-index: 3; */
+  -webkit-transition: opacity 0.218s;
+  transition: opacity 0.218s;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 6px 0;
+  border: 1px solid #dcdcdc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 0;
+}
+.bundle-tabset .irf-action-dropdown-menu > li > a {
+  display: block;
+  padding: 8px 20px 8px 16px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+/* Page Bundle ends */
 /*** THEME BUTTONS ***/
 /*----------------- blue --------------------*/
 .btn-theme-blue {
