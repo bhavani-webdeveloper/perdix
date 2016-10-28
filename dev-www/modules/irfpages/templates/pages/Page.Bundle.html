@@ -1,9 +1,9 @@
 <div>
   <uib-tabset active="activeForm" class="bundle-tabset">
-    <uib-tab index="$index + 1" ng-repeat="pageObj in pages track by $index">
+    <uib-tab index="$index + 1" ng-repeat="pageObj in pages track by $index" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
       <uib-tab-heading>
         {{ pageObj.title | translate }}   
-        <a ng-click="removeTab($index)" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times"></i></a>
+        <a ng-click="removeTab($index)" href="" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times color-theme"></i></a>
       </uib-tab-heading>
 
       <section ng-hide="pageObj.error" class="content-header">
@@ -35,7 +35,8 @@
             irf-actions="pageObj.page.actions"
             irf-model="pageObj.model"
             irf-helper="pageObj.formHelper"
-            irf-form-name="formName"
+            irf-form-name="pageObj.formName"
+            irf-form-ctrl="pageObj.formCtrl"
             class="page-form">
             <div class="cantina-loader-wrapper">
               <div classs="cantina-loader"></div>

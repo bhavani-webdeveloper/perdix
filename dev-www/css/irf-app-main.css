@@ -332,6 +332,21 @@ label {
   }
 }
 /* Card Layout ENDS */
+ul.nav-tabs > li.tab-danger > a {
+  background-color: #dd4b39;
+  color: #fff !important;
+}
+ul.nav-tabs > li.tab-danger > a:hover,
+ul.nav-tabs > li.tab-danger > a:focus {
+  border-color: transparent;
+}
+ul.nav-tabs > li.tab-danger.active > a,
+ul.nav-tabs > li.tab-danger.active > a:hover,
+ul.nav-tabs > li.tab-danger.active > a:focus {
+  background-color: #fff;
+  color: #000 !important;
+  border-top-color: #dd4b39 !important;
+}
 /* Page Bundle starts */
 .bundle-tabset {
   background-color: transparent;
@@ -341,13 +356,24 @@ label {
   padding-top: 3px;
 }
 .bundle-tabset ul.nav-tabs > li:first-child {
-  padding-left: 42px;
+  margin-left: 42px;
 }
-.bundle-tabset ul.nav-tabs li a {
+.bundle-tabset ul.nav-tabs > li > a {
   color: #666;
+  margin-right: 0;
 }
-.bundle-tabset ul.nav-tabs li.active a {
+.bundle-tabset ul.nav-tabs > li > a,
+.bundle-tabset ul.nav-tabs > li > a:hover,
+.bundle-tabset ul.nav-tabs > li > a:focus {
+  border-top: 3px solid transparent;
+}
+.bundle-tabset ul.nav-tabs > li.active > a {
   color: #000;
+}
+.bundle-tabset ul.nav-tabs > li.active > a,
+.bundle-tabset ul.nav-tabs > li.active > a:hover,
+.bundle-tabset ul.nav-tabs > li.active > a:focus {
+  border-top: 3px solid;
 }
 .bundle-tabset .bundle-dropdown {
   position: absolute;
