@@ -1,9 +1,9 @@
 <div>
-  <uib-tabset active="activeForm" class="bundle-tabset">
-    <uib-tab index="$index + 1" ng-repeat="pageObj in pages track by $index" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
+  <uib-tabset active="activeIndex" class="bundle-tabset">
+    <uib-tab index="$index" ng-repeat="pageObj in pages track by $index" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
       <uib-tab-heading>
         {{ pageObj.title | translate }}   
-        <a ng-click="removeTab($index)" href="" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times color-theme"></i></a>
+        <a ng-click="removeTab($index)" href="" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times-circle {{((activeIndex == $index) || !(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid)) ? 'color-theme' : ''}}"></i></a>
       </uib-tab-heading>
 
       <section ng-hide="pageObj.error" class="content-header">
