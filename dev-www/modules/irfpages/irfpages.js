@@ -5,7 +5,7 @@ irf.page = function(path) {
 };
 
 irf.form = function(path) {
-	return "Form__" + path.replace(/\./g, '$');
+	return "Form__" + path.replace(/\./g, '_');
 };
 
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
@@ -168,11 +168,11 @@ irf.pages.config([
 		controller: "PageEngineCtrl"
 	},{
 		name: "Page.Bundle",
-		url: "/Bundle/:bundleName/:bundleId",
+		url: "/Bundle/:pageName/:pageId",
 		params: {
-			bundleName: {value: null},
-			bundleId: {value: null, squash: true},
-			bundleData: null
+			pageName: {value: null},
+			pageId: {value: null, squash: true},
+			pageData: null
 		},
 		templateUrl: "modules/irfpages/templates/pages/Page.Bundle.html",
 		controller: "PageBundleCtrl"
@@ -188,9 +188,9 @@ irf.pages.config([
 		controller: "PageEngineOfflineCtrl"
 	},{
 		name: "Page.Timeline",
-		url: "/Timeline/:timelineName/:timelineId",
+		url: "/Timeline/:pageName/:pageId",
 		params: {
-			timelineId: {value: null, squash: true}
+			pageId: {value: null, squash: true}
 		},
 		templateUrl: "modules/irfpages/templates/pages/Page.Timeline.html",
 		controller: "PageTimelineCtrl"

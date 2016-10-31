@@ -380,10 +380,10 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
 }
 .bundle-tabset .bundle-dropdown {
   position: absolute;
-  top: 15px;
   left: 0;
 }
 .bundle-tabset .bundle-dropdown > a {
+  display: inline-block;
   padding: 15px;
 }
 .bundle-tabset .tab-content {

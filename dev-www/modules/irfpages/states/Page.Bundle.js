@@ -3,12 +3,12 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     var self = this;
 
     var bundle = {
-        bundleName: "loans.Screening",
+        bundlePageName: "loans.Screening",
         pages: [{
             pageName: 'customer.IndividualEnrollment',
             title: 'APPLICANT',
-            minimum: 2,
-            maximum: 2
+            minimum: 1,
+            maximum: 1
         }, {
             pageName: 'customer.IndividualEnrollment',
             title: 'CO_APPLICANT',
@@ -34,10 +34,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         pageObj.title = bundlePage.title;
         pageObj.id = bundlePage.id;
         pageObj.bundlePage = bundlePage;
+        pageObj.model = {};
 
         pageObj.error = false;
         try {
-            pageObj.page = $injector.get(irf.page(pageObj.pageName));
+            pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
         } catch (e) {
             $log.error(e);
             pageObj.error = true;
@@ -45,7 +46,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
         if (pageObj.page) {
             if (pageObj.page.type == 'schema-form') {
-                pageObj.model = entityManager.getModel(pageObj.pageName);
+                // pageObj.model = entityManager.getModel(pageObj.pageName);
                 if (angular.isFunction(pageObj.page.schema)) {
                     var promise = pageObj.page.schema();
                     promise.then((function(data) {
@@ -76,7 +77,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     //setTimeout(renderLayout);
                 });
             } else if (pageObj.page.type == 'search-list') {
-                pageObj.model = entityManager.getModel(pageObj.pageName);
+                // pageObj.model = entityManager.getModel(pageObj.pageName);
                 pageObj.page.definition.formName = pageObj.formName;
                 if (pageObj.page.offline === true) {
                     pageObj.page.definition.offline = true;
@@ -133,8 +134,8 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.removeTab = function(index) {
         var bundlePage = $scope.pages[index].bundlePage;
         --bundlePage.openPagesCount;
-        $scope.pages.splice(index, 1);
-        if (!$filter('filter')($scope.addTabMenu, {"pageName":bundlePage.pageName}, true).length) {
+        $log.info($scope.pages.splice(index, 1));
+        if ($scope.addTabMenu.indexOf(bundlePage) == -1) {
             $scope.addTabMenu.push(bundlePage);
         }
     };
@@ -143,10 +144,20 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         var bundlePage = $scope.addTabMenu[index];
         $log.info(bundlePage);
         var openPage = initializePage(bundlePage);
-        $scope.pages.push(openPage);
+        var insertIndex = -1;
+        for (var i = 0; i < $scope.pages.length; i++) {
+            if ($scope.pages[i].bundlePage == bundlePage) {
+                insertIndex = i;
+            }
+        };
+        if (insertIndex > -1) {
+            $scope.pages.splice(insertIndex, 0, openPage);
+        } else {
+            $scope.pages.push(openPage);
+        }
         ++bundlePage.openPagesCount;
         if (bundlePage.maximum <= bundlePage.openPagesCount) {
-            $scope.addTabMenu.splice(index, 1);
+            $log.debug($scope.addTabMenu.splice(index, 1));
         }
     };
 
