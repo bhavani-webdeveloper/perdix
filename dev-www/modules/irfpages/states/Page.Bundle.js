@@ -7,13 +7,13 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         pages: [{
             pageName: 'customer.IndividualEnrollment',
             title: 'APPLICANT',
-            minimum: 1,
-            maximum: 1
+            minimum: 2,
+            maximum: 2
         }, {
             pageName: 'customer.IndividualEnrollment',
             title: 'CO_APPLICANT',
-            minimum: 0,
-            maximum: 2
+            minimum: 1,
+            maximum: 3
         }, {
             pageName: 'customer.EnterpriseEnrollment',
             title: 'BUSINESS',
@@ -115,11 +115,13 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         var bundlePage = _.cloneDeep(bundle.pages[i]);
         bundlePage.openPagesCount = 0;
         if (bundlePage.minimum > 0) {
-            var openPage = initializePage(bundlePage);
-            $scope.pages.push(openPage);
-            bundlePage.openPagesCount = 1;
+            for (var i = 0; i < bundlePage.minimum; i++) {
+                var openPage = initializePage(bundlePage);
+                $scope.pages.push(openPage);
+            };
+            bundlePage.openPagesCount = bundlePage.minimum;
         }
-        if (bundlePage.minimum == 0 || bundlePage.maximum > 1) {
+        if (bundlePage.maximum > bundlePage.minimum) {
             $scope.addTabMenu.push(bundlePage);
         }
     }
