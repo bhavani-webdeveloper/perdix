@@ -489,6 +489,18 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   background-color: #B5369C;
   border-color: #ff73e4;
 }
+/*------------------- fuchsia ------------------*/
+.btn-theme-gray {
+  color: #fff;
+  background-color: #727376;
+  border-color: #595a5c;
+}
+.btn-theme-gray:hover,
+.btn-theme-gray:active,
+.btn-theme-gray:focus {
+  background-color: #595a5c;
+  border-color: #595a5c;
+}
 /**** END OF THEME BUTTONS ****/
 .errors-container {
   padding: 15px 15px 0 15px;
