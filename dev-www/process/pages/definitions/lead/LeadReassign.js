@@ -1,9 +1,9 @@
-irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Lead", "SessionStore",
+ "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
-    function($log, $state, $stateParams, Enrollment, lead, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
+    function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
 
@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
             initialize: function(model, form, formCtrl) {
 
                 model.lead = model.lead || {};
+                model.branch = branch;
                 model.branchId = SessionStore.getBranchId() + '';
 
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
@@ -29,14 +30,9 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 return $q.resolve({
                     lead: {
                         Name: "Ram",
-                        id: 1,
-                        Applicant: {
-                            MobileNumber1: 9888888888
-                        },
-
-                        gender: "Male"
-
-
+                        leadId: 1,
+                        branchName:"madurai",
+                        mobileNo: 9888888888
                     }
                 });
             },
@@ -56,17 +52,15 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         type: "date",
                         readonly: true
                     }, {
-                        key: "lead.BranchName",
+                        key: "lead.branchName",
                         title: "BRANCH_NAME",
                         readonly: true
                     }, {
-                        key: "lead.id",
-
-                        title: "LEAD_ID",
+                        key: "lead.leadId",
                         readonly: true
                     }, {
-                        key: "lead.Applicant.MobileNumber1",
-                        title: "MOBILE_NUMBER"
+                        key: "lead.mobileNo",
+                        readonly: true
                     }]
                 },
 
@@ -79,12 +73,17 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         title: "LOAN_OFFICER",
                         inputMap: {
                             "HubName": {
-                                "key": "lead.branch_s",
-                                "title": "BRANCH_NAME"
+                                "key": "lead.branchName",
+                                type: "select",
+                                "enumCode": "branch" 
                             },
                             "SpokeName": {
-                                "key": "lead.centre_s",
-                                "title": "CENTER"
+                               key: "lead.spokeName",
+                               "enumCode": "centre",
+                               type: "select",
+                               "filter": {
+                                    "parentCode as branch": "model.branch"
+                                }
                             },
                         },
                         outputMap: {
@@ -131,9 +130,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                             ];
                         }
                     }, ]
-                },
-
-                {
+                }, {
                     "type": "actionbox",
 
                     "items": [
@@ -142,16 +139,12 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                             "type": "submit",
                             "title": "ASSIGN"
                         },
-
                     ]
                 },
-
             ],
-
             schema: function() {
-                return lead.getLeadSchema().$promise;
+                return Lead.getLeadSchema().$promise;
             },
-
             actions: {
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");

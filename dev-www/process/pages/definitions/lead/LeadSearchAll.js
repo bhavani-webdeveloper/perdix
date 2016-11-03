@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper", "Enrollment", "$state", "$q", "SessionStore", "Utils",
-	function($log, formHelper, Enrollment, $state, $q, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
+ ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils",
+	function($log, formHelper,Lead , $state, $q, SessionStore, Utils) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -176,7 +177,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper"
 								icon: "fa fa-pencil-square-o",
 								fn: function(item, index) {
 									$state.go("Page.Engine", {
-										pageName: "lead.LeadGeneration_Reassign",
+										pageName: "lead.LeadReassign",
 										pageId: item.id
 									});
 								},

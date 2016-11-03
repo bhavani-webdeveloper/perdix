@@ -5,57 +5,70 @@
       "lead":{  
          "type":"object",
          "required":[  
-            "InterestedInLoan",
-            "InterestedInProduct",
-            "ProductCategory",
-            "productsubcategory",
-            "ProductRequiredBy",
-            "LoanPurpose",
-            "LoanamountRequested",
-            "LoanRequiredBy",
-            "DateOfScreening",
-            "ReasonForRejection",
-            "Reason",
-            "DateOfInteraction",
-            "ActionTakenBy",
-            "TypeOfInteraction",
-            "CustomerResponse",
-            "photo",
-            "latitude",
-            "FollowUpdate",
+            "interestedInProduct",
+            "productCategory",
+            "productSubCategory",
+            "productRequiredBy",
+            "loanPurpose1",
+            "loanAmountRequested",
+            "screeningDate",
+            "productRejectReason",
+            "productAcceptReason",
+            "followUpDate",
             "currentDate",
-            "HubName",
-            "Name",
-            "SpokeName"
+            "branchName",
+            "leadName",
+            "centerId",
+            "incomeEarned",
+            "incomeSource",
+            "frequency",
+            "loanOfficerId",
+            "customerType",
+            "mobileNo",
+            "addressLine1",
+            "area",
+            "pincode",
+            "businessName",
+            "businessType",
+            "businessActivity"
          ],
          "properties":{  
-            "Interaction":{  
+            "leadInteractions":{  
                "type":"array",
                "title":"Interaction History",
                "items":{  
                   "type":"object",
+                  "required":[  
+                     "interactionDate",
+                     "loanOfficerId",
+                     "leadStatus",
+                     "typeOfInteraction",
+                     "customerResponse",
+                     "picture",
+                     "additionalRemarks"
+                  ],
                   "properties":{  
-                     "DateOfInteraction":{  
+                     "interactionDate":{  
                         "type":"string",
-                        "title":"DATE_OF_INTERACTION"
+                        "title":"INTERACTION_DATE"
                      },
-                     "ActionTakenBy":{  
+                     "loanOfficerId":{  
                         "type":"string",
                         "title":"ACTION_TAKEN_BY"
                      },
-                     "Status":{  
+                     "leadStatus":{  
                         "type":"string",
                         "title":"LEAD_STATUS"
                      },
-                     "TypeOfInteraction":{  
+                     "typeOfInteraction":{  
                         "type":"string",
                         "title":"TYPE_OF_INTERACTION"
                      },
-                     "CustomerResponse":{  
+                     "customerResponse":{  
                         "type":"string",
                         "title":"CUSTOMER_RESPONSE"
                      },
-                     "photo":{  
+                     "picture":{  
                         "type":"string",
                         "title":"PHOTO",
                         "category":"Loan",
@@ -63,13 +76,13 @@
                      },
                      "latitude":{  
                         "type":"string",
-                        "title":"LATITUDE"
+                        "title":"LOCATION"
                      },
                      "longitude":{  
                         "type":"string",
                         "title":"LONGITUDE"
                      },
-                     "AdditionalRemarks":{  
+                     "additionalRemarks":{  
                         "type":"string",
                         "title":"ADDITIONAL_REMARKS"
                      }
@@ -78,86 +91,88 @@
             },
             "currentDate":{  
                "type":"string",
-               "title":"DATE"
+               "title":"CURRENT_DATE"
             },
-            "BranchName":{  
+            "branchName":{  
                "type":"string",
-               "title":"HUB_NAME"
+               "title":"BRANCH_NAME"
             },
-            "Sender":{  
-               "type":"string",
-               "title":"AMOUNT"
+            "spokeName":{  
+               "type":"number",
+               "title":"SPOKE_NAME"
+            },
+            "centerId":{  
+               "type":"number",
+               "title":"CENTRE"
             },
             "urnNo":{  
                "type":"string",
                "title":"URN_NO"
             },
-            "id":{  
+            "leadId":{  
                "type":"integer",
-               "title":"Id "
+               "title":"LEAD_ID"
             },
-            "Name":{  
+            "leadName":{  
                "type":"string",
                "title":"LEAD_NAME"
             },
-            "LastName":{  
-               "type":"string",
-               "title":"LAST_NAME"
-            },
-            "InterestedInProduct":{  
+            "interestedInProduct":{  
                "type":"string",
                "title":"INTERESTED_IN_PRODUCT"
             },
-            "ProductCategory":{  
+            "productCategory":{  
                "type":"string",
                "title":"PRODUCT_CATEGORY"
             },
-            "productsubcategory":{  
+            "productSubCategory":{  
                "type":"string",
                "title":"PRODUCT_SUBCATEGORY"
             },
-            "LoanPurpose":{  
+            "loanPurpose1":{  
                "type":"string",
                "title":"LOAN_PURPOSE"
             },
-            "LoanamountRequested":{  
-               "type":"number"
+            "loanAmountRequested":{  
+               "type":"number",
+               "title":"LOAN_AMOUNT_REQUESTED"
             },
-            "ProductRequiredBy":{  
+            "productRequiredBy":{  
                "type":"string",
                "title":"PRODUCT_REQUIRED_BY"
             },
-            "DateOfScreening":{  
+            "screeningDate":{  
                "type":"string",
-               "title":"DATE_OF_SCREENING"
+               "title":"SCREENING_DATE"
             },
-            "FollowUpdate":{  
+            "followUpDate":{  
                "type":"string",
                "title":"FOLLOWUP_DATE"
             },
-            "Status":{  
+            "leadStatus":{  
                "type":"string",
                "title":"LEAD_STATUS"
             },
-            "EligibleForProduct":{  
+            "eligibleForProduct":{  
                "type":"string",
                "title":"ELIGIBLE_FOR_PRODUCT"
             },
-            "ReasonForRejection":{  
+            "productRejectReason":{  
                "type":"string",
                "title":"PRODUCT_REJECTION_REASON"
             },
-            "Reason":{  
+            "productAcceptReason":{  
                "type":"string",
-               "title":"REASON_FOR_REJECTION"
+               "title":"PRODUCT_REJECTION_REASON"
             },
-            "dateOfBirth":{  
+            "dob":{  
                "type":"string",
                "title":"DATE_OF_BIRTH",
                "format":"date"
             },
             "age":{  
-               "type":"number"
+               "type":"number",
+               "title":"AGE"
             },
             "educationStatus":{  
                "type":"string",
@@ -169,190 +184,157 @@
                "title":"GENDER",
                "enumCode":"gender"
             },
-            "incomes":{  
-               "type":"array",
-               "title":"INCOMES",
-               "items":{  
-                  "type":"object",
-                  "properties":{  
-                     "frequency":{  
-                        "type":"string",
-                        "title":"FREQUENCY",
-                        "enumCode":"frequency",
-                        "captureStages":[  
-                           "Stage02"
-                        ]
-                     },
-                     "incomeEarned":{  
-                        "type":"integer",
-                        "title":"INCOME_EARNED",
-                        "minimum":1,
-                        "maximum":100000000,
-                        "captureStages":[  
-                           "Stage02"
-                        ],
-                        "x-schema-form":{  
-                           "type":"amount"
-                        }
-                     },
-                     "incomeSource":{  
-                        "type":"string",
-                        "title":"OCCUPATION",
-                        "enumCode":"occupation",
-                        "captureStages":[  
-                           "Stage02"
-                        ]
-                     },
-                     "monthsPerYear":{  
-                        "type":"integer",
-                        "title":"PER_YEAR",
-                        "minimum":1,
-                        "maximum":366,
-                        "captureStages":[  
-                           "Stage02"
-                        ]
-                     }
-                  },
-                  "required":[  
-                     "incomeEarned",
-                     "incomeSource",
-                     "frequency"
-                  ]
+            "frequency":{  
+               "type":"string",
+               "title":"FREQUENCY",
+               "enumCode":"frequency",
+               "captureStages":[  
+                  "Stage02"
+               ]
+            },
+            "incomeEarned":{  
+               "type":"integer",
+               "title":"INCOME_EARNED",
+               "minimum":1,
+               "maximum":100000000,
+               "captureStages":[  
+                  "Stage02"
+               ],
+               "x-schema-form":{  
+                  "type":"amount"
                }
+            },
+            "incomeSource":{  
+               "type":"string",
+               "title":"OCCUPATION",
+               "enumCode":"occupation",
+               "captureStages":[  
+                  "Stage02"
+               ]
             },
             "maritalStatus":{  
                "type":"string",
                "title":"MARITAL_STATUS",
                "enumCode":"marital_status"
             },
-
-            "DateOfInteraction":{  
-            "type":"string",
-            "title":"DATE_OF_INTERACTION"
-            },
-            "ActionTakenBy":{  
+            "customerType":{  
                "type":"string",
-               "title":"ACTION_TAKEN_BY"
+               "title":"ENTITY_TYPE"
             },
-            "TypeOfInteraction":{  
+            "mobileNo":{  
                "type":"string",
-               "title":"TYPE_OF_INTERACTION"
+               "maxLength":10,
+               "minLength":10,
+               "title":"MOBILE_NUMBER1"
             },
-            "CustomerResponse":{  
+            "alternateMobileNo":{  
                "type":"string",
-               "title":"CUSTOMER_RESPONSE"
+               "title":"ALTERNATE_MOBILE_NUMBER",
+               "maxLength":10,
+               "minLength":10
             },
-            "AdditionalRemarks":{  
+            "businessName":{  
                "type":"string",
-               "title":"ADDITIONAL_REMARKS"
+               "title":"BUSINESS_NAME"
             },
-            "photo":{  
+            "businessType":{  
                "type":"string",
-               "title":"PHOTO",
-               "category":"Loan",
-               "subCategory":"COLLATERALPHOTO"
+               "title":"BUSINESS_TYPE"
+            },
+            "businessActivity":{  
+               "type":"string",
+               "title":"BUSINESS_ACTIVITY"
+            },
+            "companyOperatingSince":{  
+               "type":"string",
+               "title":"OPERATING_SINCE"
+            },
+            "companyRegistered":{  
+               "type":"string",
+               "title":"IS_REGISTERED"
+            },
+            "ownership":{  
+               "type":"string",
+               "title":"OWNERSHIP"
+            },
+            "addressLine1":{  
+               "type":"string",
+               "title":"ADDRESS_LINE1"
+            },
+            "addressLine2":{  
+               "type":"string",
+               "title":"ADDRESS_LINE2"
+            },
+            "pincode":{  
+               "title":"PIN_CODE",
+               "type":"integer"
+            },
+            "state":{  
+               "type":"string",
+               "title":"STATE"
+            },
+            "district":{  
+               "type":"string",
+               "title":"DISTRICT"
+            },
+            "location":{  
+               "type":"string",
+               "title":"LOCATION"
             },
             "latitude":{  
                "type":"string",
-               "title":"LATITUDE"
+               "title":"LOCATION"
             },
             "longitude":{  
                "type":"string",
                "title":"LONGITUDE"
             },
-            "Applicant":{  
-               "type":"object",
-               "required":[  
-                  "Name",
-                  "Entitytype",
-                  "MobileNumber1"
-               ],
-               "title":"APPLICANT",
-               "properties":{  
-                  "Entitytype":{  
-                     "type":"string",
-                     "title":"ENTITY_TYPE"
-                  },
-                  "MobileNumber1":{  
-                     "type":"string",
-                     "maxLength":10,
-                     "minLength":10,
-                     "title":"MOBILE_NUMBER1"
-                  },
-                  "AlternateMobileNumber":{  
-                     "type":"string",
-                     "title":"ALTERNATE_MOBILE_NUMBER",
-                     "maxLength":10,
-                     "minLength":10
-                  }
-               }
+            "area":{  
+               "type":"string",
+               "title":"AREA"
             },
-            "Business":{  
+            "loanOfficer":{  
+               "type":"string",
+               "title":"LOAN_OFFICER"
+            },
+            "udf":{  
                "type":"object",
-               "required":[  
-                  "BusinessAddressLine1",
-                  "Area",
-                  "PinCode",
-                  "BusinessName",
-                  "BusinessType",
-                  "BusinessActivity"
-               ],
-               "title":"Business",
+               "title":"UDF",
                "properties":{  
-                  "BusinessName":{  
-                     "type":"string",
-                     "title":"BUSINESS_NAME"
+                  "id":{  
+                     "type":"integer",
+                     "title":"Id "
                   },
-                  "BusinessType":{  
-                     "type":"number",
-                     "title":"BUSINESS_TYPE"
+                  "userDefinedDateFieldValues":{  
+                     "type":"object",
+                     "title":"USER_DEFINED_DATE_FIELDVALUES",
+                     "properties":{  
+                        "udfDate1":{  
+                           "title":"OPERATING_SINCE",
+                           "type":"string",
+                           "format":"date"
+                        }
+                     }
                   },
-                  "BusinessActivity":{  
-                     "type":"string",
-                     "title":"BUSINESS_ACTIVITY"
-                  },
-                  "CompanyOperatingSince":{  
-                     "type":"string",
-                     "title":"OPERATING_SINCE"
-                  },
-                  "companyRegistered":{  
-                     "type":"string"
-                  },
-                  "ownership":{  
-                     "type":"string"
-                  },
-                  "BusinessAddressLine1":{  
-                     "type":"string",
-                     "title":"ADDRESS_LINE1"
-                  },
-                  "AddressLine2":{  
-                     "type":"number",
-                     "title":"ADDRESS_LINE2"
-                  },
-                  "PinCode":{  
-                     "title":"PIN_CODE",
-                     "type":"number",
-                     "maxLength":6,
-                     "minLength":6
-                  },
-                  "State":{  
-                     "type":"string",
-                     "title":"STATE"
-                  },
-                  "District":{  
-                     "type":"string",
-                     "title":"DISTRICT"
-                  },
-                  "Location":{  
-                     "type":"string",
-                     "title":"LOCATION"
-                  },
-                  "Area":{  
-                     "type":"string",
-                     "title":"AREA"
+                  "userDefinedFieldValues":{  
+                     "type":"object",
+                     "title":"USER_DEFINED_FIELDVALUES",
+                     "properties":{  
+                        "udf1":{  
+                           "title":"OWNERSHIP",
+                           "type":"string",
+                           "enumCode":"ownership"
+                        }
+                     }
                   }
-               }
+               },
+               "required":[  
+                  "id",
+                  "userDefinedDateFieldValues",
+                  "userDefinedFieldValues"
+               ]
             }
+
          }
       }
    }

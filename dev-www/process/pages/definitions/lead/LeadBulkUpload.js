@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "lead", function($log, Enrollment, SessionStore, $state, $stateParams, lead) {
+irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "SessionStore", "$state", "$stateParams", "Lead", function($log,SessionStore, $state, $stateParams, Lead) {
 
     var branch = SessionStore.getBranch();
 
@@ -24,17 +24,12 @@ irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "Enrollment
                 "type": "file",
                 "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 customHandle: function(file, progress, modelValue, form, model) {
-                    ACH.achMandateUpload(file, progress);
+                    Lead.leadBulkUpload(file, progress);
                 }
-            }, {
-                "type": "button",
-                "icon": "fa fa-user-plus",
-                "title": "UPLOAD",
-                "onClick": "actions.proceed(model, formCtrl, form, $event)"
             }]
         }],
         schema: function() {
-            return lead.getLeadSchema().$promise;
+            return Lead.getLeadSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName) {
