@@ -2,28 +2,15 @@ irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "
 function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
     var self = this;
 
-    var bundle = {
-        bundlePageName: "loans.Screening",
-        pages: [{
-            pageName: 'customer.IndividualEnrollment',
-            title: 'APPLICANT',
-            minimum: 1,
-            maximum: 1
-        }, {
-            pageName: 'customer.IndividualEnrollment',
-            title: 'CO_APPLICANT',
-            minimum: 1,
-            maximum: 3
-        }, {
-            pageName: 'customer.EnterpriseEnrollment',
-            title: 'BUSINESS',
-            minimum: 1,
-            maximum: 1
-        }]
-    };
+    
 
     $scope.pages = [];
     $scope.addTabMenu = [];
+    $scope.pageName = $stateParams.pageName;
+
+    var bundle = {
+        'pageName': $stateParams.pageName
+    }
 
     var initializePage = function(bundlePage) {
         var pageObj = {};
@@ -110,22 +97,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         return pageObj;
     };
 
-    for (i in bundle.pages) {
-        bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
-        bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
-        var bundlePage = _.cloneDeep(bundle.pages[i]);
-        bundlePage.openPagesCount = 0;
-        if (bundlePage.minimum > 0) {
-            for (var i = 0; i < bundlePage.minimum; i++) {
-                var openPage = initializePage(bundlePage);
-                $scope.pages.push(openPage);
-            };
-            bundlePage.openPagesCount = bundlePage.minimum;
-        }
-        if (bundlePage.maximum > bundlePage.minimum) {
-            $scope.addTabMenu.push(bundlePage);
-        }
-    }
+    
 
     $scope.isRemovable = function(bundlePage) {
         return bundlePage.minimum < bundlePage.openPagesCount;
@@ -161,9 +133,42 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
+
+
     $scope.$on('$viewContentLoaded', function(event) {
+        $log.info('$viewContentLoaded');
         $('a[href^="#"]').click(function(e){
             e.preventDefault();
         });
+
+        /* Loading the page */
+        try {
+            $scope.page = $injector.get(irf.page($scope.pageName));
+        } catch (e) {
+            $log.error(e);
+            $scope.error = true;
+            //$state.go('Page.EngineError', {pageName:$scope.pageName});
+        }
+        /* Done loading the page. */
+
+        bundle.pages = $scope.page.bundlePages;
+
+        for (i in bundle.pages) {
+            bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
+            bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
+            var bundlePage = _.cloneDeep(bundle.pages[i]);
+            bundlePage.openPagesCount = 0;
+            if (bundlePage.minimum > 0) {
+                for (var i = 0; i < bundlePage.minimum; i++) {
+                    var openPage = initializePage(bundlePage);
+                    $scope.pages.push(openPage);
+                };
+                bundlePage.openPagesCount = bundlePage.minimum;
+            }
+            if (bundlePage.maximum > bundlePage.minimum) {
+                $scope.addTabMenu.push(bundlePage);
+            }
+        }
+
     });
 }]);
