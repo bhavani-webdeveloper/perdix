@@ -1,10 +1,10 @@
-{  
-   "$schema":"http://json-schema.org/draft-04/schema#",
-   "type":"object",
-   "properties":{  
-      "lead":{  
-         "type":"object",
-         "required":[  
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "properties": {
+      "lead": {
+         "type": "object",
+         "required": [
             "interestedInProduct",
             "productCategory",
             "productSubCategory",
@@ -32,13 +32,13 @@
             "businessType",
             "businessActivity"
          ],
-         "properties":{  
-            "leadInteractions":{  
-               "type":"array",
-               "title":"Interaction History",
-               "items":{  
-                  "type":"object",
-                  "required":[  
+         "properties": {
+            "leadInteractions": {
+               "type": "array",
+               "title": "Interaction History",
+               "items": {
+                  "type": "object",
+                  "required": [
                      "interactionDate",
                      "loanOfficerId",
                      "leadStatus",
@@ -47,288 +47,289 @@
                      "picture",
                      "additionalRemarks"
                   ],
-                  "properties":{  
-                     "interactionDate":{  
-                        "type":"string",
-                        "title":"INTERACTION_DATE"
+                  "properties": {
+                     "interactionDate": {
+                        "type": "string",
+                        "title": "INTERACTION_DATE"
                      },
-                     "loanOfficerId":{  
-                        "type":"string",
-                        "title":"ACTION_TAKEN_BY"
+                     "loanOfficerId": {
+                        "type": "string",
+                        "title": "LOAN_OFFICER_NAME"
                      },
-                     "leadStatus":{  
-                        "type":"string",
-                        "title":"LEAD_STATUS"
+                     "leadStatus": {
+                        "type": "string",
+                        "title": "LEAD_STATUS"
                      },
-                     "typeOfInteraction":{  
-                        "type":"string",
-                        "title":"TYPE_OF_INTERACTION"
+                     "typeOfInteraction": {
+                        "type": "string",
+                        "title": "TYPE_OF_INTERACTION"
                      },
-                     "customerResponse":{  
-                        "type":"string",
-                        "title":"CUSTOMER_RESPONSE"
+                     "customerResponse": {
+                        "type": "string",
+                        "title": "CUSTOMER_RESPONSE"
                      },
-                     "picture":{  
-                        "type":"string",
-                        "title":"PHOTO",
-                        "category":"Loan",
-                        "subCategory":"COLLATERALPHOTO"
+                     "picture": {
+                        "type": "string",
+                        "title": "PHOTO",
+                        "category": "Loan",
+                        "subCategory": "COLLATERALPHOTO"
                      },
-                     "latitude":{  
-                        "type":"string",
-                        "title":"LOCATION"
+                     "latitude": {
+                        "type": "string",
+                        "title": "LOCATION"
                      },
-                     "longitude":{  
-                        "type":"string",
-                        "title":"LONGITUDE"
+                     "longitude": {
+                        "type": "string",
+                        "title": "LONGITUDE"
                      },
-                     "additionalRemarks":{  
-                        "type":"string",
-                        "title":"ADDITIONAL_REMARKS"
+                     "additionalRemarks": {
+                        "type": "string",
+                        "title": "ADDITIONAL_REMARKS"
                      }
                   }
                }
             },
-            "currentDate":{  
-               "type":"string",
-               "title":"CURRENT_DATE"
+            "currentDate": {
+               "type": "string",
+               "title": "CURRENT_DATE"
             },
-            "branchName":{  
-               "type":"string",
-               "title":"BRANCH_NAME"
+            "branchName": {
+               "type": "string",
+               "title": "HUB_NAME"
             },
-            "spokeName":{  
-               "type":"number",
-               "title":"SPOKE_NAME"
+            "spokeName": {
+               "type": "number",
+               "title": "SPOKE_NAME",
+               "enumCode": "centre"
             },
-            "centerId":{  
-               "type":"number",
-               "title":"CENTRE"
+            "centerId": {
+               "type": "number",
+               "title": "CENTRE"
             },
-            "urnNo":{  
-               "type":"string",
-               "title":"URN_NO"
+            "urnNo": {
+               "type": "string",
+               "title": "URN_NO"
             },
-            "leadId":{  
-               "type":"integer",
-               "title":"LEAD_ID"
+            "leadId": {
+               "type": "integer",
+               "title": "LEAD_ID"
             },
-            "leadName":{  
-               "type":"string",
-               "title":"LEAD_NAME"
+            "leadName": {
+               "type": "string",
+               "title": "LEAD_NAME"
             },
-            "interestedInProduct":{  
-               "type":"string",
-               "title":"INTERESTED_IN_PRODUCT"
+            "interestedInProduct": {
+               "type": "string",
+               "title": "INTERESTED_IN_PRODUCT"
             },
-            "productCategory":{  
-               "type":"string",
-               "title":"PRODUCT_CATEGORY"
+            "productCategory": {
+               "type": "string",
+               "title": "PRODUCT_CATEGORY"
             },
-            "productSubCategory":{  
-               "type":"string",
-               "title":"PRODUCT_SUBCATEGORY"
+            "productSubCategory": {
+               "type": "string",
+               "title": "PRODUCT_SUBCATEGORY"
             },
-            "loanPurpose1":{  
-               "type":"string",
-               "title":"LOAN_PURPOSE"
+            "loanPurpose1": {
+               "type": "string",
+               "title": "LOAN_PURPOSE"
             },
-            "loanAmountRequested":{  
-               "type":"number",
-               "title":"LOAN_AMOUNT_REQUESTED"
+            "loanAmountRequested": {
+               "type": "number",
+               "title": "LOAN_AMOUNT_REQUESTED"
             },
-            "productRequiredBy":{  
-               "type":"string",
-               "title":"PRODUCT_REQUIRED_BY"
+            "productRequiredBy": {
+               "type": "string",
+               "title": "PRODUCT_REQUIRED_BY"
             },
-            "screeningDate":{  
-               "type":"string",
-               "title":"SCREENING_DATE"
+            "screeningDate": {
+               "type": "string",
+               "title": "SCREENING_DATE"
             },
-            "followUpDate":{  
-               "type":"string",
-               "title":"FOLLOWUP_DATE"
+            "followUpDate": {
+               "type": "string",
+               "title": "FOLLOWUP_DATE"
             },
-            "leadStatus":{  
-               "type":"string",
-               "title":"LEAD_STATUS"
+            "leadStatus": {
+               "type": "string",
+               "title": "LEAD_STATUS"
             },
-            "eligibleForProduct":{  
-               "type":"string",
-               "title":"ELIGIBLE_FOR_PRODUCT"
+            "eligibleForProduct": {
+               "type": "string",
+               "title": "ELIGIBLE_FOR_PRODUCT"
             },
-            "productRejectReason":{  
-               "type":"string",
-               "title":"PRODUCT_REJECTION_REASON"
+            "productRejectReason": {
+               "type": "string",
+               "title": "PRODUCT_REJECTION_REASON"
             },
-            "productAcceptReason":{  
-               "type":"string",
-               "title":"PRODUCT_REJECTION_REASON"
+            "productAcceptReason": {
+               "type": "string",
+               "title": "PRODUCT_REJECTION_REASON"
             },
-            "dob":{  
-               "type":"string",
-               "title":"DATE_OF_BIRTH",
-               "format":"date"
+            "dob": {
+               "type": "string",
+               "title": "DATE_OF_BIRTH",
+               "format": "date"
             },
-            "age":{  
-               "type":"number",
-               "title":"AGE"
+            "age": {
+               "type": "number",
+               "title": "AGE"
             },
-            "educationStatus":{  
-               "type":"string",
-               "title":"EDUCATION_STATUS",
-               "enumCode":"education"
+            "educationStatus": {
+               "type": "string",
+               "title": "EDUCATION_STATUS",
+               "enumCode": "education"
             },
-            "gender":{  
-               "type":"string",
-               "title":"GENDER",
-               "enumCode":"gender"
+            "gender": {
+               "type": "string",
+               "title": "GENDER",
+               "enumCode": "gender"
             },
-            "frequency":{  
-               "type":"string",
-               "title":"FREQUENCY",
-               "enumCode":"frequency",
-               "captureStages":[  
+            "frequency": {
+               "type": "string",
+               "title": "FREQUENCY",
+               "enumCode": "frequency",
+               "captureStages": [
                   "Stage02"
                ]
             },
-            "incomeEarned":{  
-               "type":"integer",
-               "title":"INCOME_EARNED",
-               "minimum":1,
-               "maximum":100000000,
-               "captureStages":[  
+            "incomeEarned": {
+               "type": "integer",
+               "title": "INCOME_EARNED",
+               "minimum": 1,
+               "maximum": 100000000,
+               "captureStages": [
                   "Stage02"
                ],
-               "x-schema-form":{  
-                  "type":"amount"
+               "x-schema-form": {
+                  "type": "amount"
                }
             },
-            "incomeSource":{  
-               "type":"string",
-               "title":"OCCUPATION",
-               "enumCode":"occupation",
-               "captureStages":[  
+            "incomeSource": {
+               "type": "string",
+               "title": "OCCUPATION",
+               "enumCode": "occupation",
+               "captureStages": [
                   "Stage02"
                ]
             },
-            "maritalStatus":{  
-               "type":"string",
-               "title":"MARITAL_STATUS",
-               "enumCode":"marital_status"
+            "maritalStatus": {
+               "type": "string",
+               "title": "MARITAL_STATUS",
+               "enumCode": "marital_status"
             },
-            "customerType":{  
-               "type":"string",
-               "title":"ENTITY_TYPE"
+            "customerType": {
+               "type": "string",
+               "title": "ENTITY_TYPE"
             },
-            "mobileNo":{  
-               "type":"string",
-               "maxLength":10,
-               "minLength":10,
-               "title":"MOBILE_NUMBER1"
+            "mobileNo": {
+               "type": "string",
+               "maxLength": 10,
+               "minLength": 10,
+               "title": "MOBILE_NUMBER1"
             },
-            "alternateMobileNo":{  
-               "type":"string",
-               "title":"ALTERNATE_MOBILE_NUMBER",
-               "maxLength":10,
-               "minLength":10
+            "alternateMobileNo": {
+               "type": "string",
+               "title": "ALTERNATE_MOBILE_NUMBER",
+               "maxLength": 10,
+               "minLength": 10
             },
-            "businessName":{  
-               "type":"string",
-               "title":"BUSINESS_NAME"
+            "businessName": {
+               "type": "string",
+               "title": "BUSINESS_NAME"
             },
-            "businessType":{  
-               "type":"string",
-               "title":"BUSINESS_TYPE"
+            "businessType": {
+               "type": "string",
+               "title": "BUSINESS_TYPE"
             },
-            "businessActivity":{  
-               "type":"string",
-               "title":"BUSINESS_ACTIVITY"
+            "businessActivity": {
+               "type": "string",
+               "title": "BUSINESS_ACTIVITY"
             },
-            "companyOperatingSince":{  
-               "type":"string",
-               "title":"OPERATING_SINCE"
+            "companyOperatingSince": {
+               "type": "string",
+               "title": "OPERATING_SINCE"
             },
-            "companyRegistered":{  
-               "type":"string",
-               "title":"IS_REGISTERED"
+            "companyRegistered": {
+               "type": "string",
+               "title": "IS_REGISTERED"
             },
-            "ownership":{  
-               "type":"string",
-               "title":"OWNERSHIP"
+            "ownership": {
+               "type": "string",
+               "title": "OWNERSHIP"
             },
-            "addressLine1":{  
-               "type":"string",
-               "title":"ADDRESS_LINE1"
+            "addressLine1": {
+               "type": "string",
+               "title": "ADDRESS_LINE1"
             },
-            "addressLine2":{  
-               "type":"string",
-               "title":"ADDRESS_LINE2"
+            "addressLine2": {
+               "type": "string",
+               "title": "ADDRESS_LINE2"
             },
-            "pincode":{  
-               "title":"PIN_CODE",
-               "type":"integer"
+            "pincode": {
+               "title": "PIN_CODE",
+               "type": "integer"
             },
-            "state":{  
-               "type":"string",
-               "title":"STATE"
+            "state": {
+               "type": "string",
+               "title": "STATE"
             },
-            "district":{  
-               "type":"string",
-               "title":"DISTRICT"
+            "district": {
+               "type": "string",
+               "title": "DISTRICT"
             },
-            "location":{  
-               "type":"string",
-               "title":"LOCATION"
+            "location": {
+               "type": "string",
+               "title": "LOCATION"
             },
-            "latitude":{  
-               "type":"string",
-               "title":"LOCATION"
+            "latitude": {
+               "type": "string",
+               "title": "LOCATION"
             },
-            "longitude":{  
-               "type":"string",
-               "title":"LONGITUDE"
+            "longitude": {
+               "type": "string",
+               "title": "LONGITUDE"
             },
-            "area":{  
-               "type":"string",
-               "title":"AREA"
+            "area": {
+               "type": "string",
+               "title": "AREA"
             },
-            "loanOfficer":{  
-               "type":"string",
-               "title":"LOAN_OFFICER"
+            "loanOfficer": {
+               "type": "string",
+               "title": "LOAN_OFFICER"
             },
-            "udf":{  
-               "type":"object",
-               "title":"UDF",
-               "properties":{  
-                  "id":{  
-                     "type":"integer",
-                     "title":"Id "
+            "udf": {
+               "type": "object",
+               "title": "UDF",
+               "properties": {
+                  "id": {
+                     "type": "integer",
+                     "title": "Id "
                   },
-                  "userDefinedDateFieldValues":{  
-                     "type":"object",
-                     "title":"USER_DEFINED_DATE_FIELDVALUES",
-                     "properties":{  
-                        "udfDate1":{  
-                           "title":"OPERATING_SINCE",
-                           "type":"string",
-                           "format":"date"
+                  "userDefinedDateFieldValues": {
+                     "type": "object",
+                     "title": "USER_DEFINED_DATE_FIELDVALUES",
+                     "properties": {
+                        "udfDate1": {
+                           "title": "OPERATING_SINCE",
+                           "type": "string",
+                           "format": "date"
                         }
                      }
                   },
-                  "userDefinedFieldValues":{  
-                     "type":"object",
-                     "title":"USER_DEFINED_FIELDVALUES",
-                     "properties":{  
-                        "udf1":{  
-                           "title":"OWNERSHIP",
-                           "type":"string",
-                           "enumCode":"ownership"
+                  "userDefinedFieldValues": {
+                     "type": "object",
+                     "title": "USER_DEFINED_FIELDVALUES",
+                     "properties": {
+                        "udf1": {
+                           "title": "OWNERSHIP",
+                           "type": "string",
+                           "enumCode": "ownership"
                         }
                      }
                   }
                },
-               "required":[  
+               "required": [
                   "id",
                   "userDefinedDateFieldValues",
                   "userDefinedFieldValues"

@@ -35,8 +35,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             readonly: true
                         }, {
                             key: "lead.spokeName",
-                            "enumCode": "centre",
-                            type: "select",
+                            type: "select"
                         }, {
                             key: "lead.leadId",
                             condition: "model.lead.leadId",
@@ -62,11 +61,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
                                     items: [{
-                                        key: "lead.businessName",
+                                        key: "lead.businessName"
                                     }, {
-                                        key: "lead.businessType",
+                                        key: "lead.businessType"
                                     }, {
-                                        key: "lead.businessActivity",
+                                        key: "lead.businessActivity"
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type:"date"

@@ -6,8 +6,8 @@
 			"title": "Lead",
 			"items": [
 				"Page/Engine/lead.LeadGeneration",
-				"Page/Engine/lead.LeadSearch_LoanOfficer",
-				"Page/Engine/lead.LeadSearch_Hubmanager"
+				"Page/Engine/lead.LeadSearchLimited",
+				"Page/Engine/lead.LeadSearchAll"
 			]
 		},
 		{

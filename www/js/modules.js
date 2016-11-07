@@ -625,6 +625,22 @@ $templateCache.put("irf/template/adminlte/validate-biometric.html","<div class=\
     "	</div>\n" +
     "</div>")
 
+$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/dashboardBox/dashboard-box.html","<div class=\"col-md-12 dashboard-box\">\n" +
     "  <div class=\"box box-theme no-border\">\n" +
     "    <div class=\"box-header\">\n" +
@@ -666,22 +682,6 @@ $templateCache.put("irf/template/flipswitch/flipswitch.html","<label class=\"swi
     "  <span class=\"switch-label\" data-on=\"{{(before || 'ON')|translate}}\" data-off=\"{{(after || 'OFF')|translate}}\"></span> \n" +
     "  <span class=\"switch-handle\"></span> \n" +
     "</label>")
-
-$templateCache.put("irf/template/commons/SimpleModal.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\" ng-bind-html=\"title\"></h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\" ng-bind-html=\"body\"></div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>")
 
 $templateCache.put("irf/template/geotag/geotag.html","<div ng-if=\"!error.message\" class=\"geotag-fallback-image\">\n" +
     "	<div style=\"height:120px\" ng-style=\"{background: position.geoimageurl ? 'url(\\'' + position.geoimageurl + '\\') no-repeat center' : ''}\"></div>\n" +
@@ -748,43 +748,6 @@ $templateCache.put("irf/template/inputFile/input-file.html","<div class=\"form-c
     "  </div>\n" +
     "  <input type=\"hidden\" autofocus=\"true\" />\n" +
     "  <input type=\"file\" id=\"{{'input_' + form.key.join('$')}}\" style=\"width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;\" />\n" +
-    "</div>")
-
-$templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
-    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
-    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
-    "        <h4 class=\"modal-title\">{{ 'Pick' | translate }} - {{ form.title | translate }}</h4>\n" +
-    "      </div>\n" +
-    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
-    "      <div class=\"modal-body form-horizontal\">\n" +
-    "        <irf-sf\n" +
-    "          ng-if=\"inputForm.length\"\n" +
-    "          irf-form-name=\"formName\"\n" +
-    "          irf-schema=\"inputSchema\"\n" +
-    "          irf-form=\"inputForm\"\n" +
-    "          irf-actions=\"inputActions\"\n" +
-    "          irf-model=\"inputModel\"\n" +
-    "          irf-helper=\"inputFormHelper\"\n" +
-    "        ></irf-sf>\n" +
-    "        <h4 ng-if=\"inputForm.length && listDisplayItems.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
-    "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
-    "        </h4>\n" +
-    "        <irf-list-view\n" +
-    "          list-style=\"simple\"\n" +
-    "          list-info=\"listViewOptions\"\n" +
-    "          irf-list-items=\"listDisplayItems\"\n" +
-    "          irf-list-actual-items=\"listResponseItems\"\n" +
-    "          callback=\"callback(item)\"></irf-list-view>\n" +
-    "          <span>{{noRecordError|translate}}</span>\n" +
-    "      </div>\n" +
-    "      <div class=\"modal-footer\">\n" +
-    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
-    "        <!-- <button type=\"button\" class=\"btn btn-theme\" ng-click=\"$close()\">Save changes</button> -->\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
     "</div>")
 
 $templateCache.put("irf/template/listView/list-view-item.html","<ng-switch on=\"listStyle\">\n" +
@@ -907,6 +870,43 @@ $templateCache.put("irf/template/listView/list-view.html","<div class=\"irf-list
     "            expandable=\"listInfo.expandable\"\n" +
     "        ></irf-list-view-item>\n" +
     "    </div>\n" +
+    "</div>")
+
+$templateCache.put("irf/template/lov/modal-lov.html","<div class=\"lov\">\n" +
+    "  <div class=\"modal-dialog\" style=\"margin-left:0;margin-right:0\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "      <div class=\"modal-header\" ng-style=\"{'border-bottom':(showLoader?'none':''), 'margin-bottom':(showLoader?'0':'1px')}\">\n" +
+    "        <button type=\"button\" class=\"close\" ng-click=\"$close()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n" +
+    "        <h4 class=\"modal-title\">{{ 'Pick' | translate }} - {{ form.title | translate }}</h4>\n" +
+    "      </div>\n" +
+    "      <div ng-if=\"showLoader\" class=\"loader-bar\"></div>\n" +
+    "      <div class=\"modal-body form-horizontal\">\n" +
+    "        <irf-sf\n" +
+    "          ng-if=\"inputForm.length\"\n" +
+    "          irf-form-name=\"formName\"\n" +
+    "          irf-schema=\"inputSchema\"\n" +
+    "          irf-form=\"inputForm\"\n" +
+    "          irf-actions=\"inputActions\"\n" +
+    "          irf-model=\"inputModel\"\n" +
+    "          irf-helper=\"inputFormHelper\"\n" +
+    "        ></irf-sf>\n" +
+    "        <h4 ng-if=\"inputForm.length && listDisplayItems.length\" class=\"box-title box-title-theme\" style=\"text-align:center; margin: 20px 5px 10px\">\n" +
+    "          <span class=\"text\" style=\"padding: 0 5px;\">{{ 'Results' | translate }}</span>\n" +
+    "        </h4>\n" +
+    "        <irf-list-view\n" +
+    "          list-style=\"simple\"\n" +
+    "          list-info=\"listViewOptions\"\n" +
+    "          irf-list-items=\"listDisplayItems\"\n" +
+    "          irf-list-actual-items=\"listResponseItems\"\n" +
+    "          callback=\"callback(item)\"></irf-list-view>\n" +
+    "          <span>{{noRecordError|translate}}</span>\n" +
+    "      </div>\n" +
+    "      <div class=\"modal-footer\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default pull-left\" ng-click=\"$close()\">Close</button>\n" +
+    "        <!-- <button type=\"button\" class=\"btn btn-theme\" ng-click=\"$close()\">Save changes</button> -->\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>")
 
 $templateCache.put("irf/template/progressMessage/progress-message-container.html","<div class=\"irf-p-m-c\" style=\"z-index:10000\">\n" +
@@ -1114,6 +1114,10 @@ $templateCache.put("irf/template/table/SimpleTable.html","<div class=\"table-res
     "	</table>\n" +
     "</div>")
 
+$templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view table-responsive table-hover\" style=\"overflow: visible;\">\n" +
+    "  <table id=\"example\" class=\"root-table dt-responsive table table-condensed  width=\"100\" no-wrap role=\"grid\"\" ></table>\n" +
+    "</div>")
+
 $templateCache.put("irf/template/uiselect/uiselect.html"," <ui-select\n" +
     "      ng-if=\"form.selection!=='multiple'\"\n" +
     "      theme=\"selectize\"\n" +
@@ -1166,10 +1170,6 @@ $templateCache.put("irf/template/validateBiometric/validate-biometric.html","<di
     "      <button ng-click=\"validateFinger($event)\" class=\"btn btn-theme btn-xs btn-block\" ng-disabled=\"disabled\"><i class=\"fa fa-hand-pointer-o\">&nbsp;</i>{{ buttonTitle | translate}}</button>\n" +
     "    </div>\n" +
     "  </div>\n" +
-    "</div>")
-
-$templateCache.put("irf/template/tableView/table-view.html","<div class=\"irf-table-view table-responsive table-hover\" style=\"overflow: visible;\">\n" +
-    "  <table id=\"example\" class=\"root-table dt-responsive table table-condensed  width=\"100\" no-wrap role=\"grid\"\" ></table>\n" +
     "</div>")
 }]);
 })();
@@ -2126,6 +2126,159 @@ angular.module('irf.flipswitch', ['irf.elements.commons'])
 		templateUrl: 'irf/template/flipswitch/flipswitch.html'
 	};
 })
+angular.module('irf.geotag', ['pascalprecht.translate'])
+.directive('irfGeotag', function(){
+	return {
+		restrict: "E",
+		replace: false,
+		scope: { // 
+			// { lat, long, geolocation /* readable format */, geourl /* url to map */ }
+			watchValue: "=",
+			model: "=",
+			latitude: "=",
+			longitude: "=",
+			readOnly: "="
+		},
+		templateUrl: 'irf/template/geotag/geotag.html',
+		controller: 'irfGeotagCtrl',
+		controllerAs: 'c'
+	}
+})
+.controller('irfGeotagCtrl',
+["$log", "$scope", "$q", "$element", "$parse", "elementsUtils",
+function($log, $scope, $q, $element, $parse, elementsUtils) {
+
+	var formatGeolocation = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var ConvertDDToDMS = function(D, lng) {
+			var coord = {
+				dir : D<0?lng?'W':'S':lng?'E':'N',
+				deg : 0|(D<0?D=-D:D),
+				min : 0|D%1*60,
+				sec :(0|D*60%1*6000)/100
+			};
+			return coord.deg + "\xB0 " + coord.min + "' " + coord.sec + '" ' + coord.dir;
+		};
+		return ConvertDDToDMS(lat, false) + ', ' + ConvertDDToDMS(long, true);
+	};
+
+	var getGeoUrl = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var geo = lat + ',' + long + '?q=' + lat + '+' + long + '&zoom=12.75'; // encodeURIComponent
+		return (typeof cordova === 'undefined') ? ('//www.google.com/maps/@' + geo) : ('geo:' + geo);
+	};
+
+	var getGeoImageUrl = function(lat, long) {
+		if (!lat || !long) {
+			return null;
+		}
+		var color = localStorage.getItem("irfThemeColor");
+		return "//maps.googleapis.com/maps/api/staticmap?size=360x160&zoom=16&markers=color:"
+			+ color + "|" + lat + ',' + long
+			+ "&style=feature:landscape|color:0xffffff&style=feature:road|element:geometry.fill";
+	};
+
+	var tryGeolocation = function (deferred, options) {
+		var deferred = $q.defer();
+		navigator.geolocation.getCurrentPosition(function(position) {
+			$log.info('Location captured: latitude:' + position.coords.latitude);
+			$log.info('longitude:' + position.coords.longitude);
+			var lat = position.coords.latitude, long = position.coords.longitude;
+
+			/** OUTPUT FORMAT **/
+			var pos = {
+				"latitude": lat,
+				"longitude": long,
+				"geolocation": formatGeolocation(lat, long),
+				"geourl": getGeoUrl(lat, long),
+				"geoimageurl": getGeoImageUrl(lat, long)
+			};
+
+			deferred.resolve(pos);
+		}, function(error){
+			switch(error.code) {
+				case error.PERMISSION_DENIED:
+					error.message = "GPS_USER_DENIED";
+				break;
+				case error.POSITION_UNAVAILABLE:
+					error.message = "GPS_NO_GEOPOSITION";
+				break;
+				case error.TIMEOUT:
+					error.message = "GPS_REQ_TIMEOUT";
+				break;
+				case error.UNKNOWN_ERROR:
+					error.message = "GPS_ERR_UNKNOWN";
+				break;
+			}
+			deferred.reject(error);
+		}, options);
+		return deferred.promise;
+	}
+
+	var getGeolocation = function() {
+		var deferred = $q.defer();
+		$log.info(navigator.geolocation);
+		if (navigator.geolocation) {
+			tryGeolocation({
+				"maximumAge": 3000,
+				"timeout": 5000,
+				"enableHighAccuracy": true
+			}).then(deferred.resolve, function (error) {
+				$log.error(error);
+				tryGeolocation({
+					"maximumAge": 3000,
+					"timeout": 30000,
+					"enableHighAccuracy": false
+				}).then(deferred.resolve, deferred.reject);
+			});
+		} else {
+			deferred.reject('Unsupported feature');
+		}
+		return deferred.promise;
+	};
+
+	$scope.refreshLocation = function() {
+		$scope.position = null;
+		$scope.error = null;
+		$element.find(".fa-refresh").addClass("fa-spin");
+		getGeolocation().then(function(position){
+			$scope.position = position;
+			elementsUtils.mapValue($scope.latitude, $scope.model, position.latitude);
+			elementsUtils.mapValue($scope.longitude, $scope.model, position.longitude);
+			$element.find(".fa-refresh").removeClass("fa-spin");
+		}).catch(function(error){
+			$log.error(error);
+			$scope.error = error;
+			$element.find(".fa-refresh").removeClass("fa-spin");
+		});
+	};
+
+	//if ($scope.readOnly) {
+		$scope.$watch(function(scope){ return scope.watchValue; }, function(newValue, oldValue){
+			var lat = $parse($scope.latitude)($scope.model);
+			var long = $parse($scope.longitude)($scope.model);
+			if (lat && long && lat > 0 && long > 0) {
+				$scope.error = null;
+				$scope.position = $scope.position || {};
+				$scope.position.latitude = lat;
+				$scope.position.longitude = long;
+				$scope.position.geolocation = formatGeolocation($scope.position.latitude, $scope.position.longitude);
+				$scope.position.geourl = getGeoUrl($scope.position.latitude, $scope.position.longitude);
+				$scope.position.geoimageurl = getGeoImageUrl(lat, long);
+			} else {
+				$scope.error = {};
+				$scope.error.message = "GPS_NO_LOCATION_INFO";
+			}
+		});
+	/*} else {
+		$scope.refreshLocation();
+	}*/
+}])
+;
 angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 .directive('irfInputFile', function(){
@@ -2584,159 +2737,6 @@ angular.module('irf.inputFile', ['ngFileUpload', 'irf.elements.commons'])
 
 }]);
 
-angular.module('irf.geotag', ['pascalprecht.translate'])
-.directive('irfGeotag', function(){
-	return {
-		restrict: "E",
-		replace: false,
-		scope: { // 
-			// { lat, long, geolocation /* readable format */, geourl /* url to map */ }
-			watchValue: "=",
-			model: "=",
-			latitude: "=",
-			longitude: "=",
-			readOnly: "="
-		},
-		templateUrl: 'irf/template/geotag/geotag.html',
-		controller: 'irfGeotagCtrl',
-		controllerAs: 'c'
-	}
-})
-.controller('irfGeotagCtrl',
-["$log", "$scope", "$q", "$element", "$parse", "elementsUtils",
-function($log, $scope, $q, $element, $parse, elementsUtils) {
-
-	var formatGeolocation = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var ConvertDDToDMS = function(D, lng) {
-			var coord = {
-				dir : D<0?lng?'W':'S':lng?'E':'N',
-				deg : 0|(D<0?D=-D:D),
-				min : 0|D%1*60,
-				sec :(0|D*60%1*6000)/100
-			};
-			return coord.deg + "\xB0 " + coord.min + "' " + coord.sec + '" ' + coord.dir;
-		};
-		return ConvertDDToDMS(lat, false) + ', ' + ConvertDDToDMS(long, true);
-	};
-
-	var getGeoUrl = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var geo = lat + ',' + long + '?q=' + lat + '+' + long + '&zoom=12.75'; // encodeURIComponent
-		return (typeof cordova === 'undefined') ? ('//www.google.com/maps/@' + geo) : ('geo:' + geo);
-	};
-
-	var getGeoImageUrl = function(lat, long) {
-		if (!lat || !long) {
-			return null;
-		}
-		var color = localStorage.getItem("irfThemeColor");
-		return "//maps.googleapis.com/maps/api/staticmap?size=360x160&zoom=16&markers=color:"
-			+ color + "|" + lat + ',' + long
-			+ "&style=feature:landscape|color:0xffffff&style=feature:road|element:geometry.fill";
-	};
-
-	var tryGeolocation = function (deferred, options) {
-		var deferred = $q.defer();
-		navigator.geolocation.getCurrentPosition(function(position) {
-			$log.info('Location captured: latitude:' + position.coords.latitude);
-			$log.info('longitude:' + position.coords.longitude);
-			var lat = position.coords.latitude, long = position.coords.longitude;
-
-			/** OUTPUT FORMAT **/
-			var pos = {
-				"latitude": lat,
-				"longitude": long,
-				"geolocation": formatGeolocation(lat, long),
-				"geourl": getGeoUrl(lat, long),
-				"geoimageurl": getGeoImageUrl(lat, long)
-			};
-
-			deferred.resolve(pos);
-		}, function(error){
-			switch(error.code) {
-				case error.PERMISSION_DENIED:
-					error.message = "GPS_USER_DENIED";
-				break;
-				case error.POSITION_UNAVAILABLE:
-					error.message = "GPS_NO_GEOPOSITION";
-				break;
-				case error.TIMEOUT:
-					error.message = "GPS_REQ_TIMEOUT";
-				break;
-				case error.UNKNOWN_ERROR:
-					error.message = "GPS_ERR_UNKNOWN";
-				break;
-			}
-			deferred.reject(error);
-		}, options);
-		return deferred.promise;
-	}
-
-	var getGeolocation = function() {
-		var deferred = $q.defer();
-		$log.info(navigator.geolocation);
-		if (navigator.geolocation) {
-			tryGeolocation({
-				"maximumAge": 3000,
-				"timeout": 5000,
-				"enableHighAccuracy": true
-			}).then(deferred.resolve, function (error) {
-				$log.error(error);
-				tryGeolocation({
-					"maximumAge": 3000,
-					"timeout": 30000,
-					"enableHighAccuracy": false
-				}).then(deferred.resolve, deferred.reject);
-			});
-		} else {
-			deferred.reject('Unsupported feature');
-		}
-		return deferred.promise;
-	};
-
-	$scope.refreshLocation = function() {
-		$scope.position = null;
-		$scope.error = null;
-		$element.find(".fa-refresh").addClass("fa-spin");
-		getGeolocation().then(function(position){
-			$scope.position = position;
-			elementsUtils.mapValue($scope.latitude, $scope.model, position.latitude);
-			elementsUtils.mapValue($scope.longitude, $scope.model, position.longitude);
-			$element.find(".fa-refresh").removeClass("fa-spin");
-		}).catch(function(error){
-			$log.error(error);
-			$scope.error = error;
-			$element.find(".fa-refresh").removeClass("fa-spin");
-		});
-	};
-
-	//if ($scope.readOnly) {
-		$scope.$watch(function(scope){ return scope.watchValue; }, function(newValue, oldValue){
-			var lat = $parse($scope.latitude)($scope.model);
-			var long = $parse($scope.longitude)($scope.model);
-			if (lat && long && lat > 0 && long > 0) {
-				$scope.error = null;
-				$scope.position = $scope.position || {};
-				$scope.position.latitude = lat;
-				$scope.position.longitude = long;
-				$scope.position.geolocation = formatGeolocation($scope.position.latitude, $scope.position.longitude);
-				$scope.position.geourl = getGeoUrl($scope.position.latitude, $scope.position.longitude);
-				$scope.position.geoimageurl = getGeoImageUrl(lat, long);
-			} else {
-				$scope.error = {};
-				$scope.error.message = "GPS_NO_LOCATION_INFO";
-			}
-		});
-	/*} else {
-		$scope.refreshLocation();
-	}*/
-}])
-;
 angular.module('irf.listViewRestWrapper', ['irf.elements.commons'])
     .directive('irfListViewRestWrapper', ['$log', function($log){
         return {
@@ -3325,6 +3325,7 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			model: "=irfModel",
 			helper: "=irfHelper",
 			formName: "=irfFormName",
+			schemaForm: "=?irfFormCtrl",
 			initialize: "&?"
 		},
 		templateUrl: "irf/template/schemaforms/schemaforms.html",
@@ -3334,7 +3335,7 @@ angular.module('irf.schemaforms', ['irf.schemaforms.adminlte'])
 			if ($scope.schemaForm) {
 				$scope.schemaForm.scope = $scope;
 				$scope.schemaForm.submit = function() {
-					document.forms[$scope.formName].submit();
+					$scope.submit();
 				};
 			}
 			if (angular.isFunction($scope.initialize)) {
@@ -3883,6 +3884,29 @@ angular.module('irf.searchListWrapper', ['irf.elements.commons', 'ngResource'])
 	})
 ;
 
+angular.module('irf.table', ['irf.elements.commons'])
+.directive('irfSimpleTable', function(){
+	return {
+		restrict: "E",
+		replace: true,
+		scope: {
+			tableKey: "=",
+			tablePromise: "&"
+		},
+		templateUrl: 'irf/template/table/SimpleTable.html',
+		controller: 'irfSimpleTableCtrl'
+	}
+})
+.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
+	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
+		$scope.definition = data;
+	});
+
+	$scope.isObject = angular.isObject;
+}])
+;
+
+
 angular.module('irf.tableView', ['irf.elements.commons'])
 	.directive('irfTableView', ['$log', function($log) {
 		return {
@@ -3966,11 +3990,13 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 
 					if($scope.tableOptions.selectable) {
 						$(nRow).find('td:not(.actions-control):not(.expand-control)').off('click').on('click', function(e) {
-							aData.$selected = !aData.$selected;
-							if (aData.$selected)
+							if (!aData.$selected)
 								$(nRow).addClass('bg-active-theme');
 							else
 								$(nRow).removeClass('bg-active-theme');
+							$timeout(function() {
+								aData.$selected = !aData.$selected;
+							});
 						});
 					}
 
@@ -3985,7 +4011,9 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 						$('.selectall-toggle').off('change').change(function() {
 							var condition = $(this).is(':checked');
 							for (var i = 0; i < $scope.tableData.length; i++) {
-								$scope.tableData[i].$selected = condition;
+								$timeout(function() {
+									$scope.tableData[i].$selected = condition;
+								});
 							}
 							if (condition)
 								$element.find('table tr:has("td")').addClass('bg-active-theme');
@@ -4056,29 +4084,6 @@ angular.module('irf.tableView', ['irf.elements.commons'])
 			};
 		}
 	]);
-angular.module('irf.table', ['irf.elements.commons'])
-.directive('irfSimpleTable', function(){
-	return {
-		restrict: "E",
-		replace: true,
-		scope: {
-			tableKey: "=",
-			tablePromise: "&"
-		},
-		templateUrl: 'irf/template/table/SimpleTable.html',
-		controller: 'irfSimpleTableCtrl'
-	}
-})
-.controller('irfSimpleTableCtrl', ["$log", "$scope", function($log, $scope) {
-	$scope.tablePromise({key:$scope.tableKey}).then(function(data){
-		$scope.definition = data;
-	});
-
-	$scope.isObject = angular.isObject;
-}])
-;
-
-
 angular.module('irf.validateBiometric', ['irf.elements.commons'])
 .directive('irfValidateBiometric', function(){
 	return {
@@ -6151,7 +6156,7 @@ irf.page = function(path) {
 };
 
 irf.form = function(path) {
-	return "Form__" + path.replace(/\./g, '$');
+	return "Form__" + path.replace(/\./g, '_');
 };
 
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
@@ -6314,11 +6319,11 @@ irf.pages.config([
 		controller: "PageEngineCtrl"
 	},{
 		name: "Page.Bundle",
-		url: "/Bundle/:bundleName/:bundleId",
+		url: "/Bundle/:pageName/:pageId",
 		params: {
-			bundleName: {value: null},
-			bundleId: {value: null, squash: true},
-			bundleData: null
+			pageName: {value: null},
+			pageId: {value: null, squash: true},
+			pageData: null
 		},
 		templateUrl: "modules/irfpages/templates/pages/Page.Bundle.html",
 		controller: "PageBundleCtrl"
@@ -6332,6 +6337,14 @@ irf.pages.config([
 		url: "/Offline/:pageName",
 		templateUrl: "modules/irfpages/templates/pages/Page.EngineOffline.html",
 		controller: "PageEngineOfflineCtrl"
+	},{
+		name: "Page.Timeline",
+		url: "/Timeline/:pageName/:pageId",
+		params: {
+			pageId: {value: null, squash: true}
+		},
+		templateUrl: "modules/irfpages/templates/pages/Page.Timeline.html",
+		controller: "PageTimelineCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){
@@ -7022,135 +7035,175 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 }]);
 
-irf.pages.controller("PageBundleCtrl", ["$log", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
-    function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
-        var self = this;
+irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
+    var self = this;
 
-        /*var bundle = {
-            bundleName: "loans.Screening",
-            pages: [{
-                pageName: 'lead.LeadGeneration',
-                title: 'LeadGeneration'
-            }]
-        };*/
-
-        $scope.pageNames = [{
-            pageName: 'lead.LeadGeneration',
-            title: 'Lead Generation'
-        }, {
-            pageName: 'CustomerSearch',
-            title: 'Customer Search'
-        }, {
-            pageName: 'lead.LeadBulkUpload',
-            title: 'Bulk Upload'
-        },
-        {
+    var bundle = {
+        bundlePageName: "loans.Screening",
+        pages: [{
             pageName: 'customer.IndividualEnrollment',
-            title: 'Applicant'
-        },
-        {
+            title: 'APPLICANT',
+            minimum: 1,
+            maximum: 1
+        }, {
+            pageName: 'customer.IndividualEnrollment',
+            title: 'CO_APPLICANT',
+            minimum: 1,
+            maximum: 3
+        }, {
             pageName: 'customer.EnterpriseEnrollment',
-            title: 'Enterprise Enrollment'
+            title: 'BUSINESS',
+            minimum: 1,
+            maximum: 1
+        }]
+    };
+
+    $scope.pages = [];
+    $scope.addTabMenu = [];
+
+    var initializePage = function(bundlePage) {
+        var pageObj = {};
+
+        pageObj.pageName = bundlePage.pageName;
+        pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
+        pageObj.formName = irf.form(bundlePage.pageName);
+        pageObj.title = bundlePage.title;
+        pageObj.id = bundlePage.id;
+        pageObj.bundlePage = bundlePage;
+        pageObj.model = {};
+
+        pageObj.error = false;
+        try {
+            pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
+        } catch (e) {
+            $log.error(e);
+            pageObj.error = true;
+            //$state.go('Page.EngineError', {pageName:$scope.pageName});
         }
-        ];
+        if (pageObj.page) {
+            if (pageObj.page.type == 'schema-form') {
+                // pageObj.model = entityManager.getModel(pageObj.pageName);
+                if (angular.isFunction(pageObj.page.schema)) {
+                    var promise = pageObj.page.schema();
+                    promise.then((function(data) {
+                        var _pageObj = pageObj;
+                        return function(data) {
+                            _pageObj.page.schema = data;
 
-
-
-        $scope.pages = [];
-        $scope.tabs = [];
-        for (i in $scope.pageNames) {
-            var obj = {};
-            
-            obj.pageName = $scope.pageNames[i].pageName;
-            obj.formName = irf.form($scope.pageNames[i].pageName);
-            obj.pageNameHtml = $scope.pageNames[i].pageName.split('.').join('<br/>');
-            obj.title = $scope.pageNames[i].title;
-            obj.id=$scope.pageNames[i].id;
-
-            obj.error = false;
-            try {
-                obj.page = $injector.get(irf.page(obj.pageName));
-            } catch (e) {
-                $log.error(e);
-                obj.error = true;
-                //$state.go('Page.EngineError', {pageName:$scope.pageName});
-            }
-
-            if (obj.page) {
-                if (obj.page.type == 'schema-form') {
-                    obj.model = entityManager.getModel(obj.pageName);
-                    if (angular.isFunction(obj.page.schema)) {
-                        var promise = obj.page.schema();
-                        promise.then((function(data) {
-                            var _obj = obj;
-                            return function(data) {
-                                _obj.page.schema = data;
-
-                                if (angular.isFunction(_obj.page.form)) {
-                                    var promise = _obj.page.form();
-                                    promise.then(function(data) {
-                                         var obj = _obj;
-                                        obj.page.form = data;
-                                        $timeout(function() {
-                                            obj.page.initialize(obj.page.model, $scope.page.form, $scope.formCtrl);
-                                        });
+                            if (angular.isFunction(_pageObj.page.form)) {
+                                var promise = _pageObj.page.form();
+                                promise.then(function(data) {
+                                    var pageObj = _pageObj;
+                                    pageObj.page.form = data;
+                                    $timeout(function() {
+                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl);
                                     });
-                                }
-                            };
-                        })());
-                    }
-                    obj.formHelper = formHelper;
-
-                    $scope.$on('irf-sf-init', function(event) {
-                        $scope.formCtrl = event.targetScope[$scope.formName];
-                    });
-                    $scope.$on('sf-render-finished', function(event) {
-                        $log.warn("on sf-render-finished on page, rendering layout");
-                        setTimeout(renderLayout);
-                    });
-                } else if (obj.page.type == 'search-list') {
-                    obj.model = entityManager.getModel(obj.pageName);
-                    obj.page.definition.formName = obj.formName;
-                    if (obj.page.offline === true) {
-                        obj.page.definition.offline = true;
-                        var acts = obj.page.definition.actions = obj.page.definition.actions || {};
-                        acts.preSave = function(model, formCtrl, formName) {
-                            var deferred = $q.defer();
-                            $log.warn('on pageengine preSave');
-                            var offlinePromise = obj.page.getOfflinePromise(model);
-                            if (offlinePromise && _.isFunction(offlinePromise.then)) {
-                                offlinePromise.then(function(out) {
-                                    $log.warn('offline results:');
-                                    $log.warn(out.body.length);
-                                    /* Build results */
-                                    var items = obj.page.definition.listOptions.getItems(out.body, out.headers);
-                                    model._result = model._result || {};
-                                    model._result.items = items;
-
-                                    deferred.resolve();
-                                }).catch(function() {
-                                    deferred.reject();
                                 });
-                            } else {
-                                deferred.reject();
                             }
-                            return deferred.promise;
                         };
-                    }
+                    })());
+                }
+                pageObj.formHelper = formHelper;
+
+                $scope.$on('irf-sf-init', function(event) {
+                    $scope.formCtrl = event.targetScope[$scope.formName];
+                });
+                $scope.$on('sf-render-finished', function(event) {
+                    $log.warn("on sf-render-finished on page, rendering layout");
+                    //setTimeout(renderLayout);
+                });
+            } else if (pageObj.page.type == 'search-list') {
+                // pageObj.model = entityManager.getModel(pageObj.pageName);
+                pageObj.page.definition.formName = pageObj.formName;
+                if (pageObj.page.offline === true) {
+                    pageObj.page.definition.offline = true;
+                    var acts = pageObj.page.definition.actions = pageObj.page.definition.actions || {};
+                    acts.preSave = function(model, formCtrl, formName) {
+                        var deferred = $q.defer();
+                        $log.warn('on pageengine preSave');
+                        var offlinePromise = pageObj.page.getOfflinePromise(model);
+                        if (offlinePromise && _.isFunction(offlinePromise.then)) {
+                            offlinePromise.then(function(out) {
+                                $log.warn('offline results:');
+                                $log.warn(out.body.length);
+                                /* Build results */
+                                var items = pageObj.page.definition.listOptions.getItems(out.body, out.headers);
+                                model._result = model._result || {};
+                                model._result.items = items;
+
+                                deferred.resolve();
+                            }).catch(function() {
+                                deferred.reject();
+                            });
+                        } else {
+                            deferred.reject();
+                        }
+                        return deferred.promise;
+                    };
                 }
             }
-            $scope.pages.push(obj);
-            $scope.tabs.push(obj);
         }
-        $log.info($scope.pages);
+        return pageObj;
+    };
 
-        $scope.removeTab = function (item) {
-        $log.info(item);
-        $scope.pages.splice(item, 1);
-        $log.info($scope.pages);
-        };
+    for (i in bundle.pages) {
+        bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
+        bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
+        var bundlePage = _.cloneDeep(bundle.pages[i]);
+        bundlePage.openPagesCount = 0;
+        if (bundlePage.minimum > 0) {
+            for (var i = 0; i < bundlePage.minimum; i++) {
+                var openPage = initializePage(bundlePage);
+                $scope.pages.push(openPage);
+            };
+            bundlePage.openPagesCount = bundlePage.minimum;
+        }
+        if (bundlePage.maximum > bundlePage.minimum) {
+            $scope.addTabMenu.push(bundlePage);
+        }
     }
-]);
+
+    $scope.isRemovable = function(bundlePage) {
+        return bundlePage.minimum < bundlePage.openPagesCount;
+    };
+
+    $scope.removeTab = function(index) {
+        var bundlePage = $scope.pages[index].bundlePage;
+        --bundlePage.openPagesCount;
+        $log.info($scope.pages.splice(index, 1));
+        if ($scope.addTabMenu.indexOf(bundlePage) == -1) {
+            $scope.addTabMenu.push(bundlePage);
+        }
+    };
+
+    $scope.addTab = function(index) {
+        var bundlePage = $scope.addTabMenu[index];
+        $log.info(bundlePage);
+        var openPage = initializePage(bundlePage);
+        var insertIndex = -1;
+        for (var i = 0; i < $scope.pages.length; i++) {
+            if ($scope.pages[i].bundlePage == bundlePage) {
+                insertIndex = i;
+            }
+        };
+        if (insertIndex > -1) {
+            $scope.pages.splice(insertIndex, 0, openPage);
+        } else {
+            $scope.pages.push(openPage);
+        }
+        ++bundlePage.openPagesCount;
+        if (bundlePage.maximum <= bundlePage.openPagesCount) {
+            $log.debug($scope.addTabMenu.splice(index, 1));
+        }
+    };
+
+    $scope.$on('$viewContentLoaded', function(event) {
+        $('a[href^="#"]').click(function(e){
+            e.preventDefault();
+        });
+    });
+}]);
 irf.pages.controller("PageEngineErrorCtrl", ["$log", "$scope", "$state", "$stateParams", "$injector", "entityManager", "formHelper", function($log, $scope, $state, $stateParams, $injector, entityManager, formHelper) {
 	var self = this;
 	$log.info("Page.Engine.Error.html loaded");
@@ -7239,6 +7292,13 @@ function(
 			}
 		}]
 	};
+}]);
+
+irf.pages.controller("PageTimelineCtrl", ["$log", "$scope", "$state", "$stateParams", function($log, $scope, $state, $stateParams) {
+	var self = this;
+	$log.info("Page.Timeline.html loaded");
+
+	$scope.timelineName = $stateParams.timelineName;
 }]);
 
 /*

@@ -424,9 +424,8 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
     });
 });
 
-irf.models.factory('ACH', 
-["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
-function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
         var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
         var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';
@@ -448,17 +447,17 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
             search: searchResource({
                 method: 'GET',
                 url: endpoint + '/search'
-                // transformResponse: function(data, headersGetter, status){
-                //     var deferred = $q.defer();
-                //     data = JSON.parse(data);
-                //     if (status === 200){
-                //         if (_.hasIn(data, 'maximumAmount') && _.isString(data['maximumAmount'])){
-                //             data.maximumAmount = parseInt(data['maximumAmount']);
-                //             alert(data.maximumAmount);
-                //         }
-                //     }
-                //     return data;
-                // }
+                    // transformResponse: function(data, headersGetter, status){
+                    //     var deferred = $q.defer();
+                    //     data = JSON.parse(data);
+                    //     if (status === 200){
+                    //         if (_.hasIn(data, 'maximumAmount') && _.isString(data['maximumAmount'])){
+                    //             data.maximumAmount = parseInt(data['maximumAmount']);
+                    //             alert(data.maximumAmount);
+                    //         }
+                    //     }
+                    //     return data;
+                    // }
             }),
             searchHead: {
                 method: 'HEAD',
@@ -467,14 +466,14 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
             },
             updateMandateStatus: {
                 method: 'PUT',
-                isArray:true,
+                isArray: true,
                 url: endpoint + '/statusupdate'
             },
             getDemandList: searchResource({
                 method: 'GET',
                 url: endpoint + '/achdemandList'
             }),
-            bulkRepay:  searchResource({
+            bulkRepay: searchResource({
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
             }),
@@ -495,11 +494,11 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 data: {
                     file: file
                 }
-            }).then(function(resp){
+            }).then(function(resp) {
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
-            }, function(errResp){
+            }, function(errResp) {
                 // TODO handle error
                 PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
@@ -514,11 +513,11 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 data: {
                     file: file
                 }
-            }).then(function(resp){
+            }).then(function(resp) {
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
-            }, function(errResp){
+            }, function(errResp) {
                 // TODO handle error
                 PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
@@ -779,17 +778,48 @@ irf.models.factory('ReferenceCode', ["$resource", "$httpParamSerializer", "BASE_
         return res;
     }
 ]);
-irf.models.factory('lead',function($resource,$httpParamSerializer,BASE_URL){
-    var endpoint = BASE_URL + '/api/lead';
-    return $resource(endpoint, null, {
-        getLeadSchema: {
-            method: 'GET',
-            url: 'process/schemas/Leadgeneration.json'
-        },
-       
-    });
-});
+irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+	function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
 
+		var endpoint = BASE_URL + '/api/leads';
+		var resource = $resource(endpoint, null, {
+			getLeadSchema: {
+				method: 'GET',
+				url: 'process/schemas/Leadgeneration.json'
+			},
+			save: {
+				method: 'POST',
+				url: endpoint
+			},
+			updateLead: {
+				method: 'PUT',
+				url: endpoint
+			},
+		});
+
+
+		resource.leadBulkUpload = function(file, progress) {
+			var deferred = $q.defer();
+			Upload.upload({
+				url: BASE_URL + "/api/leads/upload",
+				data: {
+					file: file
+				}
+			}).then(function(resp) {
+				// TODO handle success
+				PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+				deferred.resolve(resp);
+			}, function(errResp) {
+				// TODO handle error
+				PageHelper.showErrors(errResp);
+				deferred.reject(errResp);
+			}, progress);
+			return deferred.promise;
+		};
+
+		return resource;
+	}
+]);
 irf.models.factory('document',function($resource,$httpParamSerializer,BASE_URL){
     var endpoint = BASE_URL + '/api/document';
     return $resource(endpoint, null, {

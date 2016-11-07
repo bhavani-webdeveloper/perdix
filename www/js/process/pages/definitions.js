@@ -576,11 +576,11 @@ irf.pageCollection.factory(irf.page("bi.BIReports"),
         };
     }
 ]);
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
 
-    function($log, $state, Enrollment, lead, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -593,63 +593,44 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 model.lead = model.lead || {};
                 model.branchId = SessionStore.getBranchId() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
-                model.lead.ActionTakenBy = model.lead.ActionTakenBy || SessionStore.getLoginname();
                 model = Utils.removeNulls(model, true);
-                model.lead.BranchName = SessionStore.getBranch();
+                model.lead.branchName = SessionStore.getBranch();
                 $log.info("create new lead generation page ");
-            },
-
-            modelPromise: function(pageId, _model) {
-                return $q.resolve({
-                    lead: {
-                        Name: "Ram",
-                        id: 1,
-                        Applicant: {
-                            MobileNumber1: 9888888888
-                        },
-                        gender: "Male"
-                    }
-                });
             },
 
             offline: true,
             getOfflineDisplayItem: function(item, index) {
-                return []
+                return [
+                    item.lead.leadName
+                ]
             },
 
             form: [{
                     "type": "box",
                     "title": "LEAD_PROFILE",
                     "items": [{
-                            key: "lead.BranchName",
-                            title: "BRANCH_NAME",
+                            key: "lead.branchName",
                             readonly: true
                         }, {
-                            key: "lead.Sender",
-                            title: "CENTER",
+                            key: "lead.spokeName",
                             "enumCode": "centre",
                             type: "select",
                         }, {
-                            key: "lead.id",
-                            condition: "model.lead.id",
-                            title: "LEAD_ID",
+                            key: "lead.leadId",
+                            condition: "model.lead.leadId",
                             readonly: true
                         }, {
                             key: "lead.urnNo",
                             condition: "model.lead.urnNo",
-                            title: "URN_NO",
                             readonly: true
                         }, {
                             type: "fieldset",
                             title: "LEAD_DETAILS",
                             items: [{
-                                    key: "lead.Name",
-                                    title: "LEAD_NAME"
-
+                                    key: "lead.leadName",
                                 }, {
-                                    key: "lead.Applicant.Entitytype",
+                                    key: "lead.customerType",
                                     type: "select",
-                                    title: "ENTITY_TYPE",
                                     titleMap: {
                                         "Individual": "Individual",
                                         "Enterprise": "Enterprise"
@@ -658,121 +639,96 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
-                                    condition: "model.lead.Applicant.Entitytype === 'Enterprise'",
                                     items: [{
-                                        key: "lead.Business.BusinessName",
-                                        title: "BUSINESS_NAME"
+                                        key: "lead.businessName",
                                     }, {
-                                        key: "lead.Business.BusinessType",
-                                        title: "BUSINESS_TYPE"
+                                        key: "lead.businessType",
                                     }, {
-                                        key: "lead.Business.BusinessActivity",
-                                        title: "BUSINESS_ACTIVITY"
+                                        key: "lead.businessActivity",
                                     }, {
-                                        key: "lead.Business.CompanyOperatingSince",
-                                        type: "DATE"
+                                        key: "lead.companyOperatingSince",
+                                        type:"date"
                                     }, {
-                                        key: "lead.Business.ownership",
-                                        title: "OWNERSHIP",
+                                        key: "lead.ownership",
                                         type: "select",
-                                        enumCode: "ownership"
+                                        "enumCode":"ownership"
                                     }, {
-                                        key: "lead.Business.companyRegistered",
+                                        key: "lead.companyRegistered",
                                         type: "radios",
-                                        titleMap: {
-                                            "YES": "Yes",
-                                            "NO": "No"
-                                        },
-                                        title: "IS REGISTERED"
+                                        enumCode: "decisionmaker"
                                     }]
                                 }, {
                                     type: "fieldset",
                                     title: "INDIVIDUAL_DETAILS",
-                                    condition: "model.lead.Applicant.Entitytype === 'Individual'",
                                     items: [{
                                             key: "lead.gender",
-                                            title: "GENDER",
                                             type: "radios"
                                         }, {
                                             key: "lead.age",
-                                            title: "AGE",
                                             type: "number",
                                             "onChange": function(modelValue, form, model) {
                                                 if (model.lead.age > 0) {
-                                                    if (model.lead.dateOfBirth) {
-                                                        model.lead.dateOfBirth = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                                    if (model.lead.dob) {
+                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
                                                     } else {
-                                                        model.lead.dateOfBirth = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                                     }
                                                 }
                                             }
                                         }, {
-                                            key: "lead.dateOfBirth",
-                                            title: "DATE_OF_BIRTH",
+                                            key: "lead.dob",
                                             type: "date",
                                             "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dateOfBirth) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                                 }
                                             }
                                         }, {
                                             key: "lead.maritalStatus",
-                                            title: "MARITAL_STATUS",
                                             type: "select"
                                         }, {
                                             key: "lead.educationStatus",
                                             type: "select",
-                                            title: "EDUCATION_STATUS"
                                         }, {
-                                            key: "lead.incomes[].incomeSource",
+                                            key: "lead.incomeSource",
                                             type: "select",
-                                            titleMap: {
-                                                "Occupation1": "Occupation1",
-                                                "Occupation2": "Occupation2",
-                                            }
                                         },
-                                        "lead.incomes[].incomeEarned", {
-                                            key: "lead.incomes[].frequency",
+                                        "lead.incomeEarned", {
+                                            key: "lead.frequency",
                                             type: "select"
                                         }
                                     ]
                                 }, {
                                     type: "fieldset",
                                     title: "CONTACT_DETAILS",
-                                    condition: "model.lead.Applicant.Entitytype === 'Individual'||model.lead.Applicant.Entitytype === 'Enterprise'",
+                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
                                     items: [{
-                                            key: "lead.Applicant.MobileNumber1",
-                                            title: "MOBILE_NUMBER1"
+                                            key: "lead.mobileNo",
                                         }, {
-                                            key: "lead.Applicant.AlternateMobileNumber",
-                                            title: "ALTERNATE_MOBILE_NUMBER"
+                                            key: "lead.alternateMobileNo",
                                         }, {
-                                            key: "lead.Business.BusinessAddressLine1",
-                                            title: "ADDRESS_LINE1"
+                                            key: "lead.addressLine1",
                                         }, {
-                                            key: "lead.Business.AddressLine2",
-                                            title: "ADDRESS_LINE2"
+                                            key: "lead.addressLine2",
                                         },
-                                        "lead.Business.District", {
-                                            key: "lead.Business.PinCode",
-                                            title: "PINCODE",
+                                        "lead.district", {
+                                            key: "lead.pincode",
                                             type: "lov",
-                                            fieldType: "number",
                                             autolov: true,
                                             inputMap: {
-                                                "pincode": "lead.Business.PinCode",
+                                                "pincode": "lead.pincode",
                                                 "district": {
-                                                    key: "lead.Business.District"
+                                                    key: "lead.district"
                                                 },
                                                 "state": {
-                                                    key: "lead.Business.State"
+                                                    key: "lead.state"
                                                 }
                                             },
                                             outputMap: {
 
-                                                "pincode": "lead.Business.PinCode",
-                                                "district": "lead.Business.District",
-                                                "state": "lead.Business.State"
+                                                "pincode": "lead.pincode",
+                                                "district": "lead.district",
+                                                "state": "lead.state"
                                             },
                                             searchHelper: formHelper,
                                             search: function(inputModel, form, model) {
@@ -785,34 +741,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                                 ];
                                             }
                                         },
-                                        "lead.Business.State", {
+                                        "lead.state", {
                                             "key": "lead.latitude",
-                                            "title": "LOCATION",
                                             "type": "geotag",
                                             "latitude": "latitude",
                                             "longitude": "longitude",
                                         },
-                                        "lead.Business.Area",
+                                        "lead.area",
+
                                     ]
-
-
-
                                 },
-
                             ]
                         },
-
-
                     ]
                 },
-
-
                 {
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     items: [{
-                        key: "lead.ProductCategory",
-                        title: "PRODUCT_CATEGORY",
+                        key: "lead.productCategory",
                         type: "select",
                         titleMap: {
                             "Asset": "Asset",
@@ -820,45 +767,20 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             "others": "others"
                         }
                     }, {
-                        key: "lead.productsubcategory",
-                        title: "PRODUCT_SUBCATEGORY",
+                        key: "lead.productSubCategory",
                         type: "select",
                         titleMap: {
                             "Loan": "Loan",
-                            "SA1": "SA1",
-                            "SA2": "SA2",
-                            "SL1": "SL1",
-                            "SL2": "SL2",
-                            "SL3": "SL3",
-                            "SO1": "SO1",
-                            "SO2": "SO2",
-                            "SO3": "SO3",
+                            "investment": "investment"
                         }
                     }, {
-                        key: "lead.InterestedInProduct",
-                        title: "INTERESTED_IN_PRODUCT",
-                        type: "select",
-                        titleMap: {
-                            "Yes": "Yes",
-                            "No": "No"
-                        },
-                        "onChange": function(modelValue, form, model) {
-                            if (model.lead.InterestedInProduct == 'No' || model.lead.EligibleForProduct == 'No') {
-                                model.lead.Status = "Reject";
-                            } else if (model.lead.ProductRequiredBy == 'In this week') {
-                                model.lead.Status = "Screening";
-                            } else if (model.lead.InterestedInProduct =='Yes' && model.lead.ProductRequiredBy == 'In this month' || model.lead.ProductRequiredBy == 'Next 2 -3 months' || model.lead.ProductRequiredBy == 'Next 4-6 months') {
-                                model.lead.Status = "FollowUp";
-
-                            } else {
-                                model.lead.Status = "Incomplete";
-                            }
-                        }
+                        key: "lead.interestedInProduct",
+                        type: "radios",
+                        enumCode: "decisionmaker",
                     }, {
-                        key: "lead.ProductRequiredBy",
+                        key: "lead.productRequiredBy",
                         type: "select",
-                        title: "PRODUCT_REQUIRED_BY",
-                        condition: "model.lead.InterestedInProduct==='Yes'",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         titleMap: {
                             "In this week": "In this week",
                             "In this month": "In this month",
@@ -866,35 +788,18 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             "Next 4-6 months": "Next 4-6 months",
 
                         },
-                        "onChange": function(modelValue, form, model) {
-                            if (model.lead.InterestedInProduct == 'No' || model.lead.EligibleForProduct == 'No') {
-                                model.lead.Status = "Reject";
-                            } else if (model.lead.ProductRequiredBy == 'In this week') {
-                                model.lead.Status = "Screening";
-                            } else if (model.lead.InterestedInProduct === 'Yes' && model.lead.ProductRequiredBy === 'In this month' || model.lead.ProductRequiredBy === 'Next 2 -3 months' || model.lead.ProductRequiredBy === 'Next 4-6 months') {
-                                model.lead.Status = "FollowUp";
-
-                            } else {
-                                model.lead.Status = "Incomplete";
-                            }
-                        }
                     }, {
-                        key: "lead.DateOfScreening",
-                        title: "DATE_OF_SCREENING",
-                        condition: "(model.lead.InterestedInProduct==='Yes' && model.lead.ProductRequiredBy ==='In this week')",
+                        key: "lead.screeningDate",
+                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
                         type: "date",
-
-
                     }, {
-                        key: "lead.FollowUpdate",
-                        title: "FOLLOW_UP_DATE",
-                        condition: "(model.lead.InterestedInProduct==='Yes' && model.lead.ProductRequiredBy === 'In this month'||model.lead.ProductRequiredBy ==='Next 2 -3 months'|| model.lead.ProductRequiredBy === 'Next 4-6 months')",
+                        key: "lead.followUpDate",
+                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy === 'In this month'||model.lead.ProductRequiredBy ==='Next 2 -3 months'|| model.lead.ProductRequiredBy === 'Next 4-6 months')",
                         type: "date",
 
                     }, {
-                        key: "lead.LoanPurpose",
-                        title: "LOAN_PURPOSE",
-                        condition: "model.lead.InterestedInProduct==='Yes'",
+                        key: "lead.loanPurpose1",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         type: "select",
                         titleMap: {
                             "AssetPurchase": "AssetPurchase",
@@ -904,56 +809,36 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
                         }
                     }, {
-                        key: "lead.LoanamountRequested",
-                        title: "LOAN_AMOUNT_REQUIRED",
-                        condition: "model.lead.InterestedInProduct==='Yes'",
+                        key: "lead.loanAmountRequested",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         title: "Loan_Amount_Requested"
 
                     }, {
                         type: "fieldset",
                         title: "PRODUCT_REJECTION_REASON",
-                        condition: "model.lead.InterestedInProduct==='No'",
+                        condition: "model.lead.interestedInProduct==='NO'",
                         items: [{
-                            key: "lead.Reason",
-                            title: "Reason For Rejection",
+                            key: "lead.productRejectReason",
                             type: "select",
                             titleMap: {
                                 "Reason1": "Reason1",
                                 "Reason2": "Reason2"
                             }
                         }, {
-                            key: "lead.AdditionalRemarks",
-                            title: "Additional Remarks"
+                            key: "lead.additionalRemarks",
                         }, ]
                     }, {
                         type: "fieldset",
-                        condition: "model.lead.InterestedInProduct==='Yes'",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         title: "PRODUCT_ELIGIBILITY",
                         items: [{
-                                key: "lead.EligibleForProduct",
-                                title: "ELIGIBLE_FOR_PRODUCT ?",
+                                key: "lead.eligibleForProduct",
                                 type: "radios",
-                                titleMap: {
-                                    "Yes": "Yes",
-                                    "No": "No"
-                                },
-                                "onChange": function(modelValue, form, model) {
-                                    if (model.lead.InterestedInProduct == 'No' || model.lead.EligibleForProduct == 'No') {
-                                        model.lead.Status = "Reject";
-                                    } else if (model.lead.ProductRequiredBy == 'In this week') {
-                                        model.lead.Status = "Screening";
-                                    } else if (model.lead.InterestedInProduct === 'Yes' && model.lead.ProductRequiredBy === 'In this month' || model.lead.ProductRequiredBy === 'Next 2 -3 months' || model.lead.ProductRequiredBy === 'Next 4-6 months') {
-                                        model.lead.Status = "FollowUp";
-
-                                    } else {
-                                        model.lead.Status = "Incomplete";
-                                    }
-                                }
+                                enumCode: "decisionmaker",
                             }, {
-                                key: "lead.ReasonForRejection",
-                                condition: "model.lead.EligibleForProduct ==='No'",
+                                key: "lead.productAcceptReason",
+                                condition: "model.lead.eligibleForProduct ==='NO'",
                                 type: "select",
-                                title: "REASON_FOR_REJECTION",
                                 titleMap: {
                                     "Reason1": "Reason1",
                                     "Reason2": "Reason2"
@@ -966,8 +851,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         type: "fieldset",
                         title: "LEAD_STATUS",
                         items: [{
-                            key: "lead.Status",
-                            title: "LEAD_STATUS",
+                            key: "lead.leadStatus",
                             type: "select",
                             titleMap: {
                                 "Screening": "Screening",
@@ -981,42 +865,45 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     type: "box",
                     title: "CUSTOMER_INTERACTIONS",
                     items: [{
-                        key: "lead.currentDate",
-                        title: "DATE_OF_INTERACTION",
-                        type: "date",
-                        readonly: true
-                    }, {
-                        key: "lead.ActionTakenBy",
-                        title: "ACTION_TAKEN_BY",
-                    }, {
-                        key: "lead.TypeOfInteraction",
-                        title: "TYPE_OF_INTERACTION",
-                        type: "select",
-                        titleMap: {
-                            "Call": "Call",
-                            "Visit": "Visit",
-                        }
-                    }, {
-                        key: "lead.CustomerResponse",
-                        title: "CUSTOMER_RESPONSE"
-                    }, {
-                        key: "lead.AdditionalRemark",
+                        key: "lead.leadInteractions",
+                        title: "INTERACTION_HISTORY",
+                        type: "array",
+                        remove: null,
+                        add: null,
 
-                        title: "ADDITIONAL_REMARKS"
-                    }, {
-                        "key": "lead.latitude",
-                        "title": "LOCATION_OF_INTERACTION",
-                        "type": "geotag",
-                        "latitude": "latitude",
-                        "longitude": "longitude",
-                        "condition": "model.lead.TypeOfInteraction === 'Visit'"
-                    }, {
-                        "key": "lead.photo",
-                        title: "CUSTOMER_PHOTO",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "condition": "model.lead.TypeOfInteraction === 'Visit'"
-                    }, ]
+                        items: [{
+                            key: "lead.leadInteractions[].interactionDate",
+                            type: "date",
+                        }, {
+                            key: "lead.leadInteractions[].loanOfficerId",
+                        }, {
+                            key: "lead.leadInteractions[].leadStatus",
+                        }, {
+                            key: "lead.leadInteractions[].typeOfInteraction",
+                            type: "select",
+                            titleMap: {
+                                "Call": "Call",
+                                "Visit": "Visit",
+
+                            },
+                        }, {
+                            key: "lead.leadInteractions[].customerResponse",
+                        }, {
+                            key: "lead.leadInteractions[].additionalRemarks",
+                        }, {
+                            "key": "lead.leadInteractions[].latitude",
+                            "type": "geotag",
+                            "latitude": "latitude",
+                            "longitude": "longitude",
+                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
+                        }, {
+                            "key": "lead.leadInteractions[].picture",
+                            "type": "file",
+                            "fileType": "image/*",
+                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
+                        }, ]
+                    }]
+
                 },
 
                 {
@@ -1024,29 +911,24 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     title: "PREVIOUS_INTERACTIONS",
                     condition: "model.lead.id",
                     items: [{
-                        key: "lead.Interaction",
+                        key: "lead.leadInteractions",
                         title: "INTERACTION_HISTORY",
                         type: "array",
                         remove: null,
                         add: null,
                         /* startEmpty: true, */
                         items: [{
-                            key: "lead.Interaction[].DateOfInteraction",
-                            title: "DATE_OF_INTERACTIONS",
+                            key: "lead.leadInteractions[].interactionDate",
                             type: "date",
                             readonly: true
                         }, {
-                            key: "lead.Interaction[].ActionTakenBy",
-
-                            title: "ACTION_TAKEN_BY",
+                            key: "lead.leadInteractions[].loanOfficerId",
                             readonly: true
                         }, {
-                            key: "lead.Interaction[].Status",
-                            title: "LEAD_STATUS",
+                            key: "lead.leadInteractions[].leadStatus",
                             readonly: true
                         }, {
-                            key: "lead.Interaction[].TypeOfInteraction",
-                            title: "TYPE_OF_INTERACTION",
+                            key: "lead.leadInteractions[].typeOfInteraction",
                             type: "select",
                             titleMap: {
                                 "Call": "Call",
@@ -1055,53 +937,52 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             },
                             readonly: true
                         }, {
-                            key: "lead.Interaction[].CustomerResponse",
-                            title: "CUSTOMER_RESPONSE",
+                            key: "lead.leadInteractions[].customerResponse",
                             readonly: true
                         }, {
-                            key: "lead.Interaction[].AdditionalRemark",
-                            title: "ADDITIONAL_REMARKS",
+                            key: "lead.leadInteractions[].additionalRemarks",
                             readonly: true
                         }, {
-                            "key": "lead.Interaction[].latitude",
-                            "title": "LOCATION_OF_INTERACTION",
+                            "key": "lead.leadInteractions[].latitude",
                             "type": "geotag",
                             "latitude": "latitude",
                             "longitude": "longitude",
-                            "condition": "model.lead.TypeOfInteraction === 'Visit'",
+                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
                             readonly: true
                         }, {
-                            "key": "lead.Interaction[].photo",
-                            "title": "CUSTOMER_PHOTO",
+                            "key": "lead.leadInteractions[].picture",
                             "type": "file",
                             "fileType": "image/*",
-                            "condition": "model.lead.TypeOfInteraction === 'Visit'",
+                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
                             readonly: true
                         }, ]
                     }]
                 },
 
+
                 {
                     "type": "actionbox",
                     "items": [{
+                        "type": "save",
+                        "title": "SAVE_OFFLINE",
+                    }, {
                         "type": "submit",
                         "title": "Submit"
-                    }, ]
+                    }]
                 },
             ],
 
             schema: function() {
-                return lead.getLeadSchema().$promise;
+                return Lead.getLeadSchema().$promise;
             },
 
             actions: {
                 preSave: function(model, form, formName) {
-                    $log.info("Inside save()");
                     var deferred = $q.defer();
-                    if (model.lead.Name) {
+                    if (model.lead.leadName) {
                         deferred.resolve();
                     } else {
-                        irfProgressMessage.pop('LeadGeneration-save', 'Applicant Name is required', 3000);
+                        irfProgressMessage.pop('lead-save', 'lead Name is required', 3000);
                         deferred.reject();
                     }
                     return deferred.promise;
@@ -1109,19 +990,43 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
                     $log.warn(model);
+                    var sortFn = function(unordered) {
+                        var out = {};
+                        Object.keys(unordered).sort().forEach(function(key) {
+                            out[key] = unordered[key];
+                        });
+                        return out;
+                    };
+                    var reqData = _.cloneDeep(model);
+                    if (reqData.lead.id) {
+                        LeadHelper.proceedData(reqData).then(function(resp) {
+                            // $state.go('Page.Landing', null);
+                        });
+                    } else {
+                        LeadHelper.saveData(reqData).then(function(res) {
+                            LeadHelper.proceedData(res).then(function(resp) {
+                                //$state.go('Page.Landing', null);
+                            }, function(err) {
+                                Utils.removeNulls(res.lead, true);
+                                model.lead = res.lead;
+                            });
+                        });
+                    }
+
+
+
                 }
             }
         };
     }
 ]);
-irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Enrollment", "lead", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Lead", "SessionStore",
+ "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
-    function($log, $state, $stateParams, Enrollment, lead, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
+    function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
 
@@ -1132,6 +1037,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
             initialize: function(model, form, formCtrl) {
 
                 model.lead = model.lead || {};
+                model.branch = branch;
                 model.branchId = SessionStore.getBranchId() + '';
 
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
@@ -1147,14 +1053,9 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 return $q.resolve({
                     lead: {
                         Name: "Ram",
-                        id: 1,
-                        Applicant: {
-                            MobileNumber1: 9888888888
-                        },
-
-                        gender: "Male"
-
-
+                        leadId: 1,
+                        branchName:"madurai",
+                        mobileNo: 9888888888
                     }
                 });
             },
@@ -1174,17 +1075,15 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         type: "date",
                         readonly: true
                     }, {
-                        key: "lead.BranchName",
+                        key: "lead.branchName",
                         title: "BRANCH_NAME",
                         readonly: true
                     }, {
-                        key: "lead.id",
-
-                        title: "LEAD_ID",
+                        key: "lead.leadId",
                         readonly: true
                     }, {
-                        key: "lead.Applicant.MobileNumber1",
-                        title: "MOBILE_NUMBER"
+                        key: "lead.mobileNo",
+                        readonly: true
                     }]
                 },
 
@@ -1197,12 +1096,17 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         title: "LOAN_OFFICER",
                         inputMap: {
                             "HubName": {
-                                "key": "lead.branch_s",
-                                "title": "BRANCH_NAME"
+                                "key": "lead.branchName",
+                                type: "select",
+                                "enumCode": "branch" 
                             },
                             "SpokeName": {
-                                "key": "lead.centre_s",
-                                "title": "CENTER"
+                               key: "lead.spokeName",
+                               "enumCode": "centre",
+                               type: "select",
+                               "filter": {
+                                    "parentCode as branch": "model.branch"
+                                }
                             },
                         },
                         outputMap: {
@@ -1249,9 +1153,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                             ];
                         }
                     }, ]
-                },
-
-                {
+                }, {
                     "type": "actionbox",
 
                     "items": [
@@ -1260,16 +1162,12 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                             "type": "submit",
                             "title": "ASSIGN"
                         },
-
                     ]
                 },
-
             ],
-
             schema: function() {
-                return lead.getLeadSchema().$promise;
+                return Lead.getLeadSchema().$promise;
             },
-
             actions: {
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
@@ -1281,7 +1179,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
         };
     }
 ]);
-irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "Enrollment", "SessionStore", "$state", "$stateParams", "lead", function($log, Enrollment, SessionStore, $state, $stateParams, lead) {
+irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "SessionStore", "$state", "$stateParams", "Lead", function($log,SessionStore, $state, $stateParams, Lead) {
 
     var branch = SessionStore.getBranch();
 
@@ -1307,17 +1205,12 @@ irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "Enrollment
                 "type": "file",
                 "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 customHandle: function(file, progress, modelValue, form, model) {
-                    ACH.achMandateUpload(file, progress);
+                    Lead.leadBulkUpload(file, progress);
                 }
-            }, {
-                "type": "button",
-                "icon": "fa fa-user-plus",
-                "title": "UPLOAD",
-                "onClick": "actions.proceed(model, formCtrl, form, $event)"
             }]
         }],
         schema: function() {
-            return lead.getLeadSchema().$promise;
+            return Lead.getLeadSchema().$promise;
         },
         actions: {
             submit: function(model, form, formName) {
@@ -1492,8 +1385,9 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchLimited"), ["$log", "formHel
 		};
 	}
 ]);
-irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper", "Enrollment", "$state", "$q", "SessionStore", "Utils",
-	function($log, formHelper, Enrollment, $state, $q, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
+ ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils",
+	function($log, formHelper,Lead , $state, $q, SessionStore, Utils) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -1670,7 +1564,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper"
 								icon: "fa fa-pencil-square-o",
 								fn: function(item, index) {
 									$state.go("Page.Engine", {
-										pageName: "lead.LeadGeneration_Reassign",
+										pageName: "lead.LeadReassign",
 										pageId: item.id
 									});
 								},
@@ -1688,6 +1582,90 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper"
 		};
 	}
 ]);
+irf.pageCollection.factory("LeadHelper",
+["$log", "$q","Lead", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+function($log, $q, Lead, PageHelper, irfProgressMessage, Utils, SessionStore){
+
+    
+    /*
+    * function saveData:
+    *
+    * if cust id is not set, data is saved and the promise is resolved with SAVE's response
+    * if cust id is set, promise is rejected with true (indicates doProceed)
+    * if error occurs during save, promise is rejected with false (indicates don't proceed
+    * */
+    var saveData = function(reqData){
+
+        var deferred = $q.defer();
+        $log.info("Attempting Save");
+        reqData.lead.udf = {};
+        reqData.lead.udfDate = {};
+        reqData.lead.udf.userDefinedFieldValues = {};
+        $log.info(reqData);
+        PageHelper.clearErrors();
+        PageHelper.showLoader();
+        irfProgressMessage.pop('lead-save', 'Working...');
+        reqData['leadAction'] = 'SAVE';
+        /* TODO fix for KYC not saving **/
+        var action = reqData.lead.id ? 'update' : 'save';
+        Lead[action](reqData, function (res, headers) {
+            irfProgressMessage.pop('lead-save', 'Data Saved', 2000);
+            $log.info(res);
+            PageHelper.hideLoader();
+            deferred.resolve(res);
+        }, function (res) {
+            PageHelper.hideLoader();
+            irfProgressMessage.pop('lead-save', 'Oops. Some error.', 2000);
+            PageHelper.showErrors(res);
+            deferred.reject(res);
+        });
+        return deferred.promise;
+
+    };
+    /*
+    * fn proceedData:
+    *
+    * if cust id not set, promise rejected with null
+    * if cust id set, promise resolved with PROCEED response
+    * if error occurs, promise rejected with null.
+    * */
+    var proceedData = function(res){
+
+        var deferred = $q.defer();
+        $log.info("Attempting Proceed");
+        $log.info(res);
+        if(res.lead.id===undefined || res.lead.id===null){
+            $log.info("lead id null, cannot proceed");
+            deferred.reject(null);
+        }
+        else {
+            PageHelper.clearErrors();
+            PageHelper.showLoader();
+            irfProgressMessage.pop('lead-save', 'Working...');
+            res.leadAction = "PROCEED";
+            Lead.updateLead(res, function (res, headers) {
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('lead-save', 'Done. lead created with ID: ' + res.lead.id, 5000);
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('lead-save', 'Oops. Some error.', 2000);
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+        }
+        return deferred.promise;
+
+    };
+
+   
+    return {
+        saveData: saveData,
+        proceedData: proceedData,
+    };
+}]);
+
+
 irf.pageCollection.factory('Pages_ManagementHelper', ["$state", "$q",function($state, $q){
     return {
         backToDashboard : function(){
@@ -3299,9 +3277,9 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 		initialize: function (model, form, formCtrl) {
 			model.branch = branch;
 			$log.info("search-list sample got initialized");
+			formCtrl.submit();
 		},
 		definition: {
-			autoSearch: true,
 			title: "Search Customers",
 			searchForm: [
 				"*"
