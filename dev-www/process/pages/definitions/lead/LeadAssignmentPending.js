@@ -1,6 +1,5 @@
-irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"),
- ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils","entityManager",
-	function($log, formHelper, Lead, $state, $q, SessionStore, Utils,entityManager) {
+irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
+	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -36,7 +35,6 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"),
 							"title": "Business_NAME",
 							"type": "string"
 						}
-
 					},
 					"required": []
 				},
@@ -120,7 +118,9 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"),
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadReassign', {_request: item});
+								entityManager.setModel('lead.LeadReassign', {
+									_request: item
+								});
 								$state.go("Page.Engine", {
 									pageName: "lead.LeadReassign",
 									pageId: item.id
@@ -131,7 +131,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"),
 
 								return true;
 							}
-						}, ];
+						}];
 					}
 				}
 			}
