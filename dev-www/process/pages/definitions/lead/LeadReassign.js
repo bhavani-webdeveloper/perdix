@@ -1,155 +1,123 @@
 irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Lead", "SessionStore",
- "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries",
-
+    "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper",
 
     function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries) {
+        PageHelper, Utils, PagesDefinition, Queries, LeadHelper) {
 
         var branch = SessionStore.getBranch();
-
         return {
             "type": "schema-form",
             "title": "LEAD_ASSIGN",
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
-
                 model.lead = model.lead || {};
-                model.branch = branch;
-                model.branchId = SessionStore.getBranchId() + '';
-
-                model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
-                model.lead.ActionTakenBy = model.lead.ActionTakenBy || SessionStore.getLoginname();
-
                 model = Utils.removeNulls(model, true);
-                model.lead.BranchName = SessionStore.getBranch();
-
-                $log.info("create new lead generation page ");
-
+                $log.info("create new lead assign page ");
+                model.lead.branchName = SessionStore.getBranch();
+                if (model._request) {
+                    model.lead.id = model._request.id;
+                    model.lead.leadName = model._request.leadName;
+                    model.lead.businessName = model._request.businessName;
+                    model.lead.addressLine1 = model._request.addressLine1;
+                    model.lead.pincode = model._request.pincode;
+                    model.lead.mobileNo = 9878765678;
+                } else {
+                    $state.go("Page.Engine", {
+                        pageName: "lead.leadAssignmentPending",
+                        pageId: null
+                    });
+                }
+                $log.info("I got initialized");
             },
-            modelPromise: function(pageId, _model) {
-                return $q.resolve({
-                    lead: {
-                        Name: "Ram",
-                        leadId: 1,
-                        branchName:"madurai",
-                        mobileNo: 9888888888
-                    }
-                });
-            },
 
-            offline: true,
+            offline: false,
             getOfflineDisplayItem: function(item, index) {
                 return []
             },
 
             form: [{
-                    "type": "box",
-                    readonly: true,
-                    "title": "",
-                    "items": [{
-                        key: "lead.currentDate",
-                        title: "CURRENT_DATE",
-                        type: "date",
-                        readonly: true
-                    }, {
-                        key: "lead.branchName",
-                        title: "BRANCH_NAME",
-                        readonly: true
-                    }, {
-                        key: "lead.leadId",
-                        readonly: true
-                    }, {
-                        key: "lead.mobileNo",
-                        readonly: true
-                    }]
-                },
-
-                {
-                    type: "box",
-                    title: "ASSIGN_LEAD",
-                    items: [{
-                        key: "lead.LoanOfficer",
-                        type: "lov",
-                        title: "LOAN_OFFICER",
-                        inputMap: {
-                            "HubName": {
-                                "key": "lead.branchName",
-                                type: "select",
-                                "enumCode": "branch" 
-                            },
-                            "SpokeName": {
-                               key: "lead.spokeName",
-                               "enumCode": "centre",
-                               type: "select",
-                               "filter": {
-                                    "parentCode as branch": "model.branch"
-                                }
-                            },
-                        },
-                        outputMap: {
-
-                            "LoanOfficer": "lead.LoanOfficer"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            /*
-                                 if (!inputModel.branchName)
-                                     inputModel.branchName = SessionStore.getBranch();
-                                 var promise = Enrollment.search({
-                                     'branchName': inputModel.branchName,
-                                     'firstName': inputModel.firstName,
-                                     'centreCode': inputModel.centreCode,
-                                     'customerType': 'Individual'
-                                 }).$promise;
-
-                                 */
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": 4
-                                },
-                                body: [{
-
-                                        "LoanOfficer": "Stalin",
-
-                                    }, {
-                                        "LoanOfficer": "Ravi",
-
-                                    }, {
-                                        "LoanOfficer": "Raj",
-
-                                    }, {
-                                        "LoanOfficer": "Ram",
-                                    },
-
-                                ]
-                            });
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                data.LoanOfficer,
-                            ];
-                        }
-                    }, ]
+                "type": "box",
+                readonly: true,
+                "title": "",
+                "items": [{
+                    key: "lead.id",
+                    title: "LEAD_ID",
+                    readonly: true
                 }, {
-                    "type": "actionbox",
+                    key: "lead.leadName",
+                    title: "LEAD_NAME",
+                    readonly: true
+                }, {
+                    key: "lead.businessName",
+                    title: "Business_Name",
+                    readonly: true
+                }, {
+                    key: "lead.addressLine1",
+                    title: "ADDRESS_LINE1",
+                    readonly: true
+                }, {
+                    key: "lead.pincode",
+                    title: "PINCODE",
+                    readonly: true
+                }, {
+                    key: "lead.mobileNo",
+                    title: "MOBILE_NO",
+                    readonly: true
+                }]
+            }, {
+                type: "box",
+                title: "ASSIGN_SPOKE",
+                items: [{
+                    "key": "lead.branchName",
+                    readonly: true
+                }, {
+                    key: "lead.spokeName",
+                    "enumCode": "centre",
+                    type: "select",
+                    "filter": {
+                        "parentCode as branch": "model.branch"
+                    }
+                }, ]
+            }, {
+                "type": "actionbox",
 
-                    "items": [
+                "items": [
 
-                        {
-                            "type": "submit",
-                            "title": "ASSIGN"
-                        },
-                    ]
-                },
-            ],
+                    {
+                        "type": "submit",
+                        "title": "ASSIGN"
+                    },
+                ]
+            }, ],
             schema: function() {
                 return Lead.getLeadSchema().$promise;
             },
             actions: {
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    irfProgressMessage.pop('Lead-ASSIGN', 'Lead is successfully assigned to LoanOfficer', 3000);
                     $log.warn(model);
+                    var sortFn = function(unordered) {
+                        var out = {};
+                        Object.keys(unordered).sort().forEach(function(key) {
+                            out[key] = unordered[key];
+                        });
+                        return out;
+                    };
+                    var reqData = _.cloneDeep(model);
+                    if (reqData.lead.id) {
+                        LeadHelper.proceedData(reqData).then(function(resp) {
+                            // $state.go('Page.Landing', null);
+                        });
+                    } else {
+                        LeadHelper.saveData(reqData).then(function(res) {
+                            LeadHelper.proceedData(res).then(function(resp) {
+                                //$state.go('Page.Landing', null);
+                            }, function(err) {
+                                Utils.removeNulls(res.lead, true);
+                                model.lead = res.lead;
+                            });
+                        });
+                    }
                 }
             }
 

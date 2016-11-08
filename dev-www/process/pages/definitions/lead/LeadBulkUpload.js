@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "SessionSto
 
     return {
         "type": "schema-form",
-        "title": "LEAD_BULK_UPLOAD",
+        "title": "LEAD_DATA_BULK_UPLOAD",
         "subTitle": "",
         initialize: function(model, form, formCtrl) {
             $log.info("LeadBulkUpload  Page got initialized");
@@ -13,12 +13,12 @@ irf.pageCollection.factory(irf.page("lead.LeadBulkUpload"), ["$log", "SessionSto
         getOfflineDisplayItem: function(item, index) {},
         form: [{
             "type": "box",
-            "title": "LEAD_BULK_UPLOAD",
+            "title": "LEAD_UPLOAD",
             "colClass": "col-sm-6",
             "items": [{
                 "key": "lead.Bulkfile",
                 "notitle": true,
-                "title": "UPLOAD_THE_FILE",
+                "title": "LEAD_UPLOAD",
                 "category": "ACH",
                 "subCategory": "cat2",
                 "type": "file",
