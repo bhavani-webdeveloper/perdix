@@ -15,8 +15,16 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 				method: 'PUT',
 				url: endpoint
 			},
-		});
+			search: searchResource({
+				method: 'GET',
+				url: endpoint
+			}),
+			get: {
+				method: 'GET',
+				url: endpoint + '/:id'
+			},
 
+		});
 
 		resource.leadBulkUpload = function(file, progress) {
 			var deferred = $q.defer();
@@ -36,7 +44,6 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			}, progress);
 			return deferred.promise;
 		};
-
 		return resource;
 	}
 ]);
