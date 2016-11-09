@@ -1,7 +1,8 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), 
+    ["$log", "$state","$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state,$stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -15,15 +16,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                 model = Utils.removeNulls(model, true);
                 model.lead.branchName = SessionStore.getBranch();
-                if (model._request) {
-                    model.lead.id = model._request.id;
-                    model.lead.leadName = model._request.leadName;
-                    model.lead.businessName = model._request.businessName;
-                    model.lead.addressLine1 = model._request.addressLine1;
-                    model.lead.pincode = model._request.pincode;
-                    model.lead.mobileNo = 9878765678;
-                }
                 $log.info("lead generation page got initiated");
+
+                if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("page-init", "Loading...");
+                    var leadId = $stateParams.pageId;
+                    if (!leadId) {
+                        PageHelper.hideLoader();
+                    }
+                    Lead.get({
+                            id: leadId
+                        },
+                        function(res) {
+                            _.assign(model.lead, res);
+                            model = Utils.removeNulls(model, true);
+                            PageHelper.hideLoader();
+                        }
+                    );
+                }
             },
             offline: true,
             getOfflineDisplayItem: function(item, index) {
