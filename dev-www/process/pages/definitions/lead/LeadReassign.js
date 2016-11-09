@@ -14,20 +14,24 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 model = Utils.removeNulls(model, true);
                 $log.info("create new lead assign page ");
                 model.lead.branchName = SessionStore.getBranch();
-                if (model._request) {
-                    model.lead.id = model._request.id;
-                    model.lead.leadName = model._request.leadName;
-                    model.lead.businessName = model._request.businessName;
-                    model.lead.addressLine1 = model._request.addressLine1;
-                    model.lead.pincode = model._request.pincode;
-                    model.lead.mobileNo = 9878765678;
-                } else {
-                    $state.go("Page.Engine", {
-                        pageName: "lead.leadAssignmentPending",
-                        pageId: null
-                    });
+
+                if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("page-init", "Loading...");
+                    var leadId = $stateParams.pageId;
+                    if (!leadId) {
+                        PageHelper.hideLoader();
+                    }
+                    Lead.get({
+                            id: leadId
+                        },
+                        function(res) {
+                            _.assign(model.lead, res);
+                            model = Utils.removeNulls(model, true);
+                            PageHelper.hideLoader();
+                        }
+                    );
                 }
-                $log.info("I got initialized");
             },
 
             offline: false,
