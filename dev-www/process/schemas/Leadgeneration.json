@@ -110,6 +110,10 @@
                "type": "string",
                "title": "URN_NO"
             },
+            "id": {
+               "type": "integer",
+               "title": "LEAD_ID"
+            },
             "leadId": {
                "type": "integer",
                "title": "LEAD_ID"
@@ -136,7 +140,7 @@
             },
             "loanAmountRequested": {
                "type": "number",
-               "title": "LOAN_AMOUNT_REQUESTED"
+               "title": "REQUESTED_LOAN_AMOUNT"
             },
             "productRequiredBy": {
                "type": "string",
@@ -165,6 +169,10 @@
             "productAcceptReason": {
                "type": "string",
                "title": "PRODUCT_REJECTION_REASON"
+            },
+            "additionalRemarks": {
+               "type": "string",
+               "title": "ADDITIONAL_REMARKS"
             },
             "dob": {
                "type": "string",
@@ -293,6 +301,10 @@
             "area": {
                "type": "string",
                "title": "AREA"
+            },
+            "cityTownVillage": {
+               "type": "string",
+               "title": "CITY/_TOWN_VILLAGE"
             },
             "loanOfficer": {
                "type": "string",
