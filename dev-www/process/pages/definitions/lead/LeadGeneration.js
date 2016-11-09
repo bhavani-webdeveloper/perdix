@@ -1,8 +1,7 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), 
-    ["$log", "$state","$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state,$stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -47,144 +46,147 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     "type": "box",
                     "title": "LEAD_PROFILE",
                     "items": [{
-                        key: "lead.branchName",
-                        readonly: true
-                    }, {
-                        key: "lead.spokeName",
-                        type: "select"
-                    }, {
-                        key: "lead.id",
-                        condition: "model.lead.id",
-                        readonly: true
-                    }, {
-                        key: "lead.urnNo",
-                        condition: "model.lead.urnNo",
-                        readonly: true
-                    }, {
-                        type: "fieldset",
-                        title: "LEAD_DETAILS",
-                        items: [{
-                                key: "lead.leadName",
-                            }, {
-                                key: "lead.customerType",
-                                type: "select",
-                                titleMap: {
-                                    "Individual": "Individual",
-                                    "Enterprise": "Enterprise"
-                                }
+                            key: "lead.branchName",
+                            readonly: true
+                        }, {
+                            key: "lead.spokeName",
+                            type: "select"
+                        }, {
+                            key: "lead.id",
+                            condition: "model.lead.id",
+                            readonly: true
+                        }, {
+                            key: "lead.urnNo",
+                            condition: "model.lead.urnNo",
+                            readonly: true
+                        },
 
-                            }, {
-                                type: "fieldset",
-                                title: "ENTERPRISE_DETAILS",
-                                items: [{
-                                    key: "lead.businessName"
+                        {
+                            type: "fieldset",
+                            title: "LEAD_DETAILS",
+                            items: [{
+                                    key: "lead.leadName",
                                 }, {
-                                    key: "lead.businessType"
-                                }, {
-                                    key: "lead.businessActivity"
-                                }, {
-                                    key: "lead.companyOperatingSince",
-                                    type: "date"
-                                }, {
-                                    key: "lead.ownership",
+                                    key: "lead.customerType",
                                     type: "select",
-                                    "enumCode": "ownership"
-                                }, {
-                                    key: "lead.companyRegistered",
-                                    type: "radios",
-                                    enumCode: "decisionmaker"
-                                }]
-                            },
+                                    titleMap: {
+                                        "Individual": "Individual",
+                                        "Enterprise": "Enterprise"
+                                    }
 
-                            {
-                                type: "fieldset",
-                                title: "INDIVIDUAL_DETAILS",
-                                items: [{
-                                    key: "lead.gender",
-                                    type: "radios"
                                 }, {
-                                    key: "lead.age",
-                                    type: "number",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.lead.age > 0) {
+                                    type: "fieldset",
+                                    title: "ENTERPRISE_DETAILS",
+                                    items: [{
+                                        key: "lead.businessName"
+                                    }, {
+                                        key: "lead.businessType"
+                                    }, {
+                                        key: "lead.businessActivity"
+                                    }, {
+                                        key: "lead.companyOperatingSince",
+                                        type: "date"
+                                    }, {
+                                        key: "lead.ownership",
+                                        type: "select",
+                                        "enumCode": "ownership"
+                                    }, {
+                                        key: "lead.companyRegistered",
+                                        type: "radios",
+                                        enumCode: "decisionmaker"
+                                    }]
+                                },
+
+                                {
+                                    type: "fieldset",
+                                    title: "INDIVIDUAL_DETAILS",
+                                    items: [{
+                                        key: "lead.gender",
+                                        type: "radios"
+                                    }, {
+                                        key: "lead.age",
+                                        type: "number",
+                                        "onChange": function(modelValue, form, model) {
+                                            if (model.lead.age > 0) {
+                                                if (model.lead.dob) {
+                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                                } else {
+                                                    model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                                }
+                                            }
+                                        }
+                                    }, {
+                                        key: "lead.dob",
+                                        type: "date",
+                                        "onChange": function(modelValue, form, model) {
                                             if (model.lead.dob) {
-                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                             }
                                         }
-                                    }
-                                }, {
-                                    key: "lead.dob",
-                                    type: "date",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.lead.dob) {
-                                            model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                    }
-                                }, {
-                                    key: "lead.maritalStatus",
-                                    type: "select"
-                                }, {
-                                    key: "lead.educationStatus",
-                                    type: "select",
-                                }, ]
-                            },
+                                    }, {
+                                        key: "lead.maritalStatus",
+                                        type: "select"
+                                    }, {
+                                        key: "lead.educationStatus",
+                                        type: "select",
+                                    }, ]
+                                },
 
-                            {
-                                type: "fieldset",
-                                title: "CONTACT_DETAILS",
-                                condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
-                                items: [{
-                                        key: "lead.mobileNo",
-                                    }, {
-                                        key: "lead.alternateMobileNo",
-                                    }, {
-                                        key: "lead.addressLine1",
-                                    }, {
-                                        key: "lead.addressLine2",
-                                    },
-                                    "lead.district", {
-                                        key: "lead.pincode",
-                                        type: "lov",
-                                        autolov: true,
-                                        inputMap: {
-                                            "pincode": "lead.pincode",
-                                            "district": {
-                                                key: "lead.district"
+                                {
+                                    type: "fieldset",
+                                    title: "CONTACT_DETAILS",
+                                    condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
+                                    items: [{
+                                            key: "lead.mobileNo",
+                                        }, {
+                                            key: "lead.alternateMobileNo",
+                                        }, {
+                                            key: "lead.addressLine1",
+                                        }, {
+                                            key: "lead.addressLine2",
+                                        },
+                                        "lead.district", {
+                                            key: "lead.pincode",
+                                            type: "lov",
+                                            autolov: true,
+                                            inputMap: {
+                                                "pincode": "lead.pincode",
+                                                "district": {
+                                                    key: "lead.district"
+                                                },
+                                                "state": {
+                                                    key: "lead.state"
+                                                }
                                             },
-                                            "state": {
-                                                key: "lead.state"
+                                            outputMap: {
+
+                                                "pincode": "lead.pincode",
+                                                "district": "lead.district",
+                                                "state": "lead.state"
+                                            },
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model) {
+                                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.pincode,
+                                                    item.district + ', ' + item.state
+                                                ];
                                             }
                                         },
-                                        outputMap: {
-
-                                            "pincode": "lead.pincode",
-                                            "district": "lead.district",
-                                            "state": "lead.state"
+                                        "lead.state", {
+                                            "key": "lead.latitude",
+                                            "type": "geotag",
+                                            "latitude": "latitude",
+                                            "longitude": "longitude",
                                         },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model) {
-                                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.pincode,
-                                                item.district + ', ' + item.state
-                                            ];
-                                        }
-                                    },
-                                    "lead.state", {
-                                        "key": "lead.latitude",
-                                        "type": "geotag",
-                                        "latitude": "latitude",
-                                        "longitude": "longitude",
-                                    },
-                                    "lead.area",
-                                ]
-                            },
-                        ]
-                    }]
+                                        "lead.area",
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
                 },
 
                 {

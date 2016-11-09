@@ -142,7 +142,6 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchLimited"), ["$log", "formHel
 					},
 					getActions: function() {
 						return [{
-
 							name: "Lead View/Update",
 							desc: "",
 							icon: "fa fa-pencil",
@@ -156,7 +155,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchLimited"), ["$log", "formHel
 
 								return true;
 							}
-						}, ];
+						}];
 					}
 				}
 			}

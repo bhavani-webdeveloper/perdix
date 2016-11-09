@@ -33,8 +33,18 @@ INSERT INTO `translations` (`id`, `label_code`, `category`, `sub_category`, `typ
 (NULL, 'INTERACTION_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Lead Generation', '', ''),
 (NULL, 'LEAD_BULK_UPLOAD ', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Lead Bulk Upload', '', ''),
 (NULL, 'UPLOAD_THE_FILE', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Upload The File', '', ''),
-('', 'LEAD_DATA_BULK_UPLOAD', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Lead Bulk Upload', '', ''),
-('', 'LEAD_UPLOAD', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Lead Upload', '', '');
+(NULL, 'LEAD_DATA_BULK_UPLOAD', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Lead Bulk Upload', '', ''),
+(NULL, 'LEAD_UPLOAD', 'LEAD', 'UPLOAD', 'FIELD_LABEL', 'Lead Upload', '', ''),
+(NULL, 'LEAD_ASSIGNMENT_PENDING', 'LEAD', 'ASSIGNMENT PENDING', 'FIELD_LABEL', 'Lead Assignment Pending', '', ''),
+(NULL, 'CITY/_TOWN_VILLAGE', 'LEAD', 'ASSIGNMENT PENDING', 'FIELD_LABEL', 'City/Town Village', '', ''),
+(NULL, 'LEAD_ASSIGN', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Lead Assign', '', ''),
+(NULL, 'LEAD_ID', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Lead Id', '', ''),
+(NULL, 'ASSIGN_SPOKE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Assign Spoke', '', ''),
+(NULL, 'SEARCH_LEAD', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Search Lead', '', ''),
+(NULL, 'INCOMPLETE_LEAD', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Incomplete Lead', '', ''),
+(NULL, 'LEAD_FOLLOW_UP', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Lead Follow Up', '', ''),
+(NULL, 'FOLLOWUP_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Follow Up Date', '', ''),
+(NULL, 'SCREENING_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Screening Date', '', ''),
 (NULL, 'ADDITIONAL_REMARKS', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Additional Remarks', '', '');
 
 

@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "for
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "ASSIGNMENT_PENDING",
+			"title": "LEAD_ASSIGNMENT_PENDING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -16,7 +16,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "for
 				],
 				searchSchema: {
 					"type": 'object',
-					"title": 'SEARCH_OPTIONS',
+					"title": 'searchOptions',
 					"properties": {
 						"branch": {
 							"title": "HUB_NAME",
@@ -32,7 +32,15 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "for
 							"type": "string"
 						},
 						"businessName": {
-							"title": "Business_NAME",
+							"title": "BUSINESS_NAME",
+							"type": "string"
+						},
+						"area": {
+							"title": "AREA",
+							"type": "string"
+						},
+						"cityTownVillage": {
+							"title": "CITY/_TOWN_VILLAGE",
 							"type": "string"
 						}
 					},
@@ -113,7 +121,6 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "for
 					},
 					getActions: function() {
 						return [{
-
 							name: "Assign Lead",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
@@ -126,9 +133,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPending"), ["$log", "for
 									pageId: item.id
 								});
 							},
-
 							isApplicable: function(item, index) {
-
 								return true;
 							}
 						}];

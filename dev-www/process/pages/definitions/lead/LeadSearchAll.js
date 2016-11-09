@@ -1,6 +1,5 @@
-irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
- ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils",
-	function($log, formHelper,Lead , $state, $q, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("lead.LeadSearchAll"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils",
+	function($log, formHelper, Lead, $state, $q, SessionStore, Utils) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -130,9 +129,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
 						return [
 							item.leadName,
 							item.leadGender,
-
-							item.id,
-
+							item.id
 						]
 					},
 					getColumns: function() {
@@ -156,7 +153,6 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
 					},
 					getActions: function() {
 						return [{
-
 								name: "Lead View/Update",
 								desc: "",
 								icon: "fa fa-pencil",
@@ -166,9 +162,7 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
 										pageId: item.id
 									});
 								},
-
 								isApplicable: function(item, index) {
-
 									return true;
 								}
 							}, {
@@ -183,7 +177,6 @@ irf.pageCollection.factory(irf.page("lead.LeadSearchAll"),
 								},
 
 								isApplicable: function(item, index) {
-
 									return true;
 								}
 							},

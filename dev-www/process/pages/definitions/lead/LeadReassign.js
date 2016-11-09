@@ -13,7 +13,6 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 model.lead = model.lead || {};
                 model = Utils.removeNulls(model, true);
                 $log.info("create new lead assign page ");
-                model.lead.branchName = SessionStore.getBranch();
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -33,66 +32,63 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     );
                 }
             },
-
             offline: false,
             getOfflineDisplayItem: function(item, index) {
                 return []
             },
 
             form: [{
-                "type": "box",
-                readonly: true,
-                "title": "",
-                "items": [{
-                    key: "lead.id",
-                    title: "LEAD_ID",
-                    readonly: true
-                }, {
-                    key: "lead.leadName",
-                    title: "LEAD_NAME",
-                    readonly: true
-                }, {
-                    key: "lead.businessName",
-                    title: "Business_Name",
-                    readonly: true
-                }, {
-                    key: "lead.addressLine1",
-                    title: "ADDRESS_LINE1",
-                    readonly: true
-                }, {
-                    key: "lead.pincode",
-                    title: "PINCODE",
-                    readonly: true
-                }, {
-                    key: "lead.mobileNo",
-                    title: "MOBILE_NO",
-                    readonly: true
-                }]
-            }, {
-                type: "box",
-                title: "ASSIGN_SPOKE",
-                items: [{
-                    "key": "lead.branchName",
-                    readonly: true
-                }, {
-                    key: "lead.spokeName",
-                    "enumCode": "centre",
-                    type: "select",
-                    "filter": {
-                        "parentCode as branch": "model.branch"
-                    }
-                }, ]
-            }, {
-                "type": "actionbox",
+                    "type": "box",
+                    readonly: true,
+                    "title": "LEAD_PROFILE",
+                    "items": [{
+                        key: "lead.id",
+                        readonly: true
+                    }, {
+                        key: "lead.leadName",
+                        readonly: true
+                    }, {
+                        key: "lead.businessName",
+                        readonly: true
+                    }, {
+                        key: "lead.addressLine1",
+                        readonly: true
+                    }, {
+                        key: "lead.area",
+                        readonly: true
+                    }, {
+                        key: "lead.cityTownVillage",
+                        readonly: true
+                    }, {
+                        key: "lead.mobileNo",
+                        readonly: true
+                    }]
+                },
 
-                "items": [
+                {
+                    type: "box",
+                    title: "ASSIGN_SPOKE",
+                    items: [{
+                        "key": "lead.branchName",
+                        readonly: true
+                    }, {
+                        key: "lead.spokeName",
+                        "enumCode": "centre",
+                        type: "select",
+                        "filter": {
+                            "parentCode as branch": "model.branch"
+                        }
+                    }, ]
+                },
 
-                    {
+                {
+                    "type": "actionbox",
+                    "items": [{
                         "type": "submit",
                         "title": "ASSIGN"
-                    },
-                ]
-            }, ],
+                    }, ]
+                }
+            ],
             schema: function() {
                 return Lead.getLeadSchema().$promise;
             },

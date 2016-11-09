@@ -27,12 +27,36 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUp"), ["$log", "formHelper",
 								"screenFilter": true
 							}
 						},
+						"centre": {
+							"title": "SPOKE_NAME",
+							"type": "string",
+							"enumCode": "centre",
+							"x-schema-form": {
+								"type": "select",
+								"filter": {
+									"parentCode as branch": "model.branch"
+								},
+								"screenFilter": true
+							}
+						},
 						"leadName": {
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
 						"businessName": {
-							"title": "Business_NAME",
+							"title": "BUSINESS_NAME",
+							"type": "string"
+						},
+						"area": {
+							"title": "AREA",
+							"type": "string"
+						},
+						"cityTownVillage": {
+							"title": "CITY/_TOWN_VILLAGE",
+							"type": "string"
+						},
+						"followUpDate": {
+							"title": "FOLLOWUP_DATE",
 							"type": "string"
 						}
 
@@ -114,7 +138,6 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUp"), ["$log", "formHelper",
 					},
 					getActions: function() {
 						return [{
-
 							name: "Additional Lead Details",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
@@ -127,7 +150,6 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUp"), ["$log", "formHelper",
 									pageId: item.id
 								});
 							},
-
 							isApplicable: function(item, index) {
 
 								return true;
