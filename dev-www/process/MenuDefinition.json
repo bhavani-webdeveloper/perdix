@@ -6,9 +6,10 @@
 			"title": "Lead",
 			"items": [
 				"Page/Engine/lead.LeadGeneration",
-				"Page/Engine/lead.LeadSearchLimited",
-				"Page/Engine/lead.LeadSearchAll",
-				"Page/Engine/lead.LeadBulkUpload"
+				"Page/Engine/lead.LeadBulkUpload",
+				"Page/Engine/lead.LeadFollowUp",
+				"Page/Engine/lead.leadAssignmentPending",
+				"Page/Engine/lead.IncompleteLead"
 			]
 		},
 		{
