@@ -1,8 +1,39 @@
-irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
-    var self = this;
+/**
+ * ================================================================
+ * BundleManager
+ * ================================================================
+ *
+ * BundleManager provides interface to the Bundle Helpers and actions.
+ *
+ *
+ */
+irf.pages.factory('BundleManager', ['$log', function($log){
 
-    
+    var currentInstance = null;
+
+    return {
+        register: function(pageName){
+            var newInstance = {
+                name: pageName,
+                createdAt: Date.now()
+            };
+            currentInstance = newInstance;
+            return currentInstance;
+        },
+        /**
+         * Returns a new bundleInstance
+         *
+         * @return {[type]}
+         */
+        getInstance: function(){
+            return currentInstance;
+        }
+    }
+}]);
+
+irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "BundleManager",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, BundleManager) {
+    var self = this;
 
     $scope.pages = [];
     $scope.addTabMenu = [];
@@ -97,8 +128,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         return pageObj;
     };
 
-    
-
     $scope.isRemovable = function(bundlePage) {
         return bundlePage.minimum < bundlePage.openPagesCount;
     };
@@ -133,13 +162,13 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
-
-
     $scope.$on('$viewContentLoaded', function(event) {
         $log.info('$viewContentLoaded');
         $('a[href^="#"]').click(function(e){
             e.preventDefault();
         });
+
+        var bundleInstance = BundleManager.register();
 
         /* Loading the page */
         try {

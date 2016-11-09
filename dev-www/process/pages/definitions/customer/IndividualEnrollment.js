@@ -39,7 +39,7 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                 {
                     key: "customer.kgfsName",
                     title:"BRANCH_NAME",
-                    type: "uiselect",
+                    type: "select",
                     selection: "single",
                     getTitleMap: "helper.titleMap('branch')",
                    /* getTitleMap: function(modelValue, form, model, titleMap) {
@@ -61,9 +61,10 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                 },
                 {
                     key:"customer.centreId",
-                    type:"uiselect",
+                    type:"select",
                     getTitleMap: "helper.titleMap('centre')",
                     refreshTitleMap: true,
+                    parentEnumCode: "branch",
                     filters: [{
                         "filterOn": "parentCode",
                         // 1.
