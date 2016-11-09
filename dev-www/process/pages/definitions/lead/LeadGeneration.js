@@ -35,7 +35,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     );
                 }
             },
-            offline: true,
+            offline: false,
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item.lead.leadName
@@ -71,18 +71,24 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     type: "select",
                                     titleMap: {
                                         "Individual": "Individual",
-                                        "Enterprise": "Enterprise"
+                                        "Enterprise": "Individual and Enterprise"
                                     }
 
                                 }, {
                                     type: "fieldset",
                                     title: "ENTERPRISE_DETAILS",
+                                    condition: "model.lead.customerType === 'Enterprise'",
                                     items: [{
                                         key: "lead.businessName"
                                     }, {
-                                        key: "lead.businessType"
+                                        key: "lead.businessType",
+                                        type: "select",
+                                        enumCode: "businessType"
                                     }, {
-                                        key: "lead.businessActivity"
+                                        key: "lead.businessActivity",
+                                        type: "select",
+                                        enumCode: "businessSector",
+                                        parentEnumCode: "businessType"
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type: "date"
@@ -94,12 +100,46 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         key: "lead.companyRegistered",
                                         type: "radios",
                                         enumCode: "decisionmaker"
+                                    }, {
+                                        type: "fieldset",
+                                        title: "INDIVIDUAL_DETAILS",
+                                        items: [{
+                                            key: "lead.gender",
+                                            type: "radios"
+                                        }, {
+                                            key: "lead.age",
+                                            type: "number",
+                                            "onChange": function(modelValue, form, model) {
+                                                if (model.lead.age > 0) {
+                                                    if (model.lead.dob) {
+                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-') + moment(model.lead.dob, 'YYYY-MM-DD').format('MM-DD');
+                                                    } else {
+                                                        model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
+                                                    }
+                                                }
+                                            }
+                                        }, {
+                                            key: "lead.dob",
+                                            type: "date",
+                                            "onChange": function(modelValue, form, model) {
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                }
+                                            }
+                                        }, {
+                                            key: "lead.maritalStatus",
+                                            type: "select"
+                                        }, {
+                                            key: "lead.educationStatus",
+                                            type: "select",
+                                        }]
                                     }]
                                 },
 
                                 {
                                     type: "fieldset",
                                     title: "INDIVIDUAL_DETAILS",
+                                    condition: "model.lead.customerType === 'Individual'",
                                     items: [{
                                         key: "lead.gender",
                                         type: "radios"
@@ -333,17 +373,17 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             "type": "geotag",
                             "latitude": "latitude",
                             "longitude": "longitude",
-                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
+                            "condition": "model.lead.leadInteractions[arrayIndex].TypeOfInteraction === 'Visit'",
                         }, {
                             "key": "lead.leadInteractions[].picture",
                             "type": "file",
                             "fileType": "image/*",
-                            //"condition": "model.lead.leadInteractions[].TypeOfInteraction === 'Visit'",
+                            "condition": "model.lead.leadInteractions[arrayIndex].TypeOfInteraction === 'Visit'",
                         }, ]
                     }]
                 },
 
-                {
+                /*{
                     type: "box",
                     title: "PREVIOUS_INTERACTIONS",
                     condition: "model.lead.id",
@@ -353,7 +393,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         type: "array",
                         remove: null,
                         add: null,
-                        /* startEmpty: true, */
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
                             type: "date",
@@ -395,13 +434,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         }, ]
                     }]
                 },
-
+*/
                 {
                     "type": "actionbox",
                     "items": [{
-                        "type": "save",
-                        "title": "SAVE_OFFLINE",
-                    }, {
                         "type": "submit",
                         "title": "Submit"
                     }]
