@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLead"), ["$log", "formHelper
 								"screenFilter": true
 							}
 						},
-						"centre": {
+						"centreName": {
 							"title": "SPOKE_NAME",
 							"type": "string",
 							"enumCode": "centre",
@@ -67,6 +67,8 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLead"), ["$log", "formHelper
 						'currentStage': "Incomplete",
 						'leadName': searchOptions.first_name,
 						'businessName': searchOptions.businessName,
+						'centreName': searchOptions.centreName,
+						'area': searchOptions.area,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 					}).$promise;

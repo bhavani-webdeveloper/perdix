@@ -39,18 +39,11 @@
                "items": {
                   "type": "object",
                   "required": [
-                     "interactionDate",
-                     "loanOfficerId",
-                     "leadStatus",
-                     "typeOfInteraction",
-                     "customerResponse",
-                     "picture",
-                     "additionalRemarks"
                   ],
                   "properties": {
                      "interactionDate": {
                         "type": "string",
-                        "title": "INTERACTION_DATE"
+                        "title": "INTER_ACTION_DATE"
                      },
                      "loanOfficerId": {
                         "type": "string",

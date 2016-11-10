@@ -10,6 +10,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
+
                 model.lead = model.lead || {};
                 model.branchId = SessionStore.getBranchId() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
@@ -263,15 +264,17 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 "Next 4-6 months": "Next 4-6 months",
 
                             },
+                            onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             key: "lead.screeningDate",
                             condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
                             type: "date",
+                            onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             key: "lead.followUpDate",
-                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy === 'In this month'||model.lead.ProductRequiredBy ==='Next 2 -3 months'|| model.lead.ProductRequiredBy === 'Next 4-6 months')",
+                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                             type: "date",
-
+                            onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             key: "lead.loanPurpose1",
                             condition: "model.lead.interestedInProduct==='YES'",
@@ -327,13 +330,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             title: "LEAD_STATUS",
                             items: [{
                                 key: "lead.leadStatus",
-                                type: "select",
-                                titleMap: {
+                                //type: "select",
+                                readonly: true,
+                                /*titleMap: {
                                     "Screening": "Screening",
-                                    "FollowUP": "FollowUp",
+                                    "FollowUp": "FollowUp",
                                     "Incomplete": "Incomplete",
                                     "Reject": "Reject"
-                                },
+                                },*/
                                 onChange: "actions.changeStatus(modelValue, form, model)"
                             }]
                         }
@@ -373,12 +377,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             "type": "geotag",
                             "latitude": "latitude",
                             "longitude": "longitude",
-                            "condition": "model.lead.leadInteractions[arrayIndex].TypeOfInteraction === 'Visit'",
+                            "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction == 'Visit'",
                         }, {
                             "key": "lead.leadInteractions[].picture",
                             "type": "file",
                             "fileType": "image/*",
-                            "condition": "model.lead.leadInteractions[arrayIndex].TypeOfInteraction === 'Visit'",
+                            "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction === 'Visit'",
                         }, ]
                     }]
                 },
@@ -449,17 +453,18 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             },
 
             actions: {
-                /* changeStatus: function(modelValue, form, model) {
-                     if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO'){
-                         model.lead.leadStatus = "Reject";
-                     } else if (model.lead.interestedInProduct == 'YES' && model.productRequiredBy == 'In this week') {
-                         model.lead.leadStatus = "Screening";
-                     } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
-                         model.lead.leadStatus = "FollowUp";
-                     } else {
-                         model.lead.leadStatus = "Incomplete";
-                     }
-                 },*/
+                changeStatus: function(modelValue, form, model) {
+
+                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                model.lead.leadStatus = "Reject";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                model.lead.leadStatus = "Screening";
+                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                                model.lead.leadStatus = "FollowUp";
+                            } else {
+                                model.lead.leadStatus = "Incomplete";
+                            }
+                },
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
                     if (model.lead.leadName) {
