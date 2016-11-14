@@ -41,7 +41,30 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         /*bounceCollectionDemand will show all the loans which has some overdue amount*/
         bounceCollectionDemand: searchResource({
             method:'GET',
-            url:BASE_URL + '/api/scheduledemandlist'
+            url:BASE_URL + '/api/scheduledemandlist',
+            transformResponse: function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status === 200 && data){
+                    var demandLength = data.length;
+                    for (var i=0; i<demandLength; i++){
+                        var demand = data[i];
+                        if (_.hasIn(demand, 'amount1') && _.isString(demand['amount1'])){
+                            demand.amount1 = parseFloat(demand['amount1']);
+                        }
+
+                        if (_.hasIn(demand, 'amount2') && _.isString(demand['amount2'])){
+                            demand.amount2 = parseFloat(demand['amount2']);
+                        }
+                    }
+                }
+
+                var headers = headersGetter();
+                var response = {
+                    body: data,
+                    headers: headers
+                }
+                return response;
+            }
         }),/*
         bounceCollectionDemandHead: {
             method:'HEAD',

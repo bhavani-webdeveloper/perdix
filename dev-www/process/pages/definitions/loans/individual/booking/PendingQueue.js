@@ -7,6 +7,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
+            model.branchName = SessionStore.getBranch();
+            model.branchId = SessionStore.getBranchId();
             model.stage = 'LoanBooking';
             console.log(model);
         },
@@ -28,24 +30,15 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-
-                    "branchName": {
-                        "title": "BRANCH_NAME",
-                        "type": ["string", "null"],
-                        "enumCode": "branch",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-
-                    },
                     "centreCode": {
                         "title": "CENTER_NAME",
                         "type": ["number", "null"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode":"branch"
-                        }
+                            "parentValueExpr": "model.branchId"
+                        },
+                        
                     },
                     "sanction_date": {
                         "title": "SANCTION_DATE",

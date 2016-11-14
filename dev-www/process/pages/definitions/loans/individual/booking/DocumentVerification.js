@@ -59,8 +59,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     }, {
                         key: "loanAccount.disbursementSchedules[0].customerNameInBank",
                         title: "CUSTOMER_NAME_IN_BANK",
-                        "readonly":true,
-                        "condition": "model.loanAccount.disbursementSchedules[0].party=='VENDOR'"
+                        "readonly":true
                     }, {
                         key: "loanAccount.customerBankAccountNumber",
                         title: "CUSTOMER_BANK_ACC_NO",

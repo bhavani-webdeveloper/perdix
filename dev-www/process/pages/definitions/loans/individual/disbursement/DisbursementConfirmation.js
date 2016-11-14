@@ -21,6 +21,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     PageHelper.showLoader();
                     PageHelper.showProgress('loan-fetch', 'Fetching Loan Details');
 
+
                     if (!model._disbursementConfirmation) {
                         $log.info("Page visited directly");
                         backToQueue();
@@ -59,6 +60,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     console.error(err);
                     PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
                 }
+
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -88,6 +90,22 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         "type":"date",
                         "title":"ACTUAL_DISBURSEMENT_DATE",
                         "readonly":true
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.modeOfDisbursement",
+                        "title": "MODE_OF_DISBURSEMENT",
+                        "readonly":true
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.referenceDate",
+                        "title": "DATE",
+                        "type":"date",
+                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.referenceNumber",
+                        "title": "REFERENCE_NO",
+                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.udf5",

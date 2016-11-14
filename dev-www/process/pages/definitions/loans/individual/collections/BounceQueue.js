@@ -1,37 +1,41 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils){
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition",
+function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition){
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
-        //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branchId = SessionStore.getBranchId();
-        },
-        /*offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
+            model.pageConfig = {
+                isAllBranchAllowed: false,
+                centresRestricted: false
+            };
 
-            return promise;
-        },*/
+            PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+                .then(
+                function(config){
+                    if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
+                        model.pageConfig.isAllBranchAllowed = true;
+                    }
+
+                    if (model.pageConfig.isAllBranchAllowed === false){
+                        model.centres = SessionStore.getCentres();
+
+                        /* Default centre */
+                        if (model.centres && model.centres.length>0){
+                            model.centre = model.centres[0].centreCode;
+                            model.centreName = model.centres[0].centreName;
+                        }
+                    }
+                }, function(err){
+                    model.pageConfig.isAllBranchAllowed = false;
+                }
+            )
+        },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
-            autoSearch: true,
+            autoSearch: false,
             sorting:true,
             sortByColumns:{
                 "name":"Customer Name",
@@ -39,11 +43,50 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "sanction_date":"Sanction Date"
             },
             searchForm: [
-                "*"
+                "loan_no",
+                "first_name",
+                {
+                    "key": "branchId",
+                    "condition": "model.pageConfig.isAllBranchAllowed"
+                },
+                {
+                    "key": "centre",
+                    "condition": "model.pageConfig.isAllBranchAllowed"
+                },
+                {
+                    key: "centreName",
+                    type: "lov",
+                    autolov: false,
+                    title:"CENTRE",
+                    condition: "model.pageConfig.isAllBranchAllowed===false",
+                    bindMap: {
+                    },
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var centres = SessionStore.getCentres();
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": centres.length
+                            },
+                            body: centres
+                        });
+                    },
+                    onSelect: function(valueObj, model, context){
+                        model.centre = valueObj.centreCode;
+                        model.centreName = valueObj.centreName;
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.centreName
+                        ];
+                    }
+                },
+                {
+                    "key": "promisreToPayDate"
+                }
             ],
             searchSchema: {
                 "type": 'object',
-               // "required":["branch"],
                 "properties": {
                     "loan_no": {
                         "title": "LOAN_ACCOUNT_NUMBER",
@@ -54,25 +97,20 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    /*"kyc_no": {
-                        "title": "KYC_NO",
-                        "type": "string"
-                    },*/
-                    // "branchId": {
-                    //     "title": "BRANCH_NAME",
-                    //     "type": ["null","number"],
-                    //     "enumCode": "branch_id",
-                    //     "x-schema-form": {
-                    //         "type": "select"
-                    //     }
-                    // },
+                    "branchId": {
+                        "title": "BRANCH_NAME",
+                        "type": ["null","number"],
+                        "enumCode": "branch_id",
+                        "x-schema-form": {
+                            "type": "select"
+                        }
+                    },
                     "centre": {
                         "title": "CENTRE",
                         "type": ["null", "number"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            // "parentEnumCode": "branch",
                             "parentValueExpr": "model.branchId"
                         }
                     },
@@ -118,18 +156,24 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     return [];
                 },
                 getListItem: function(item){
+                    if (_.hasIn(item, 'amount1') && _.isString(item['amount1'])){
+                        item.amount1 = parseFloat(item['amount1']);
+                    }
+                    if (_.hasIn(item, 'amount3') && _.isString(item['amount3'])){
+                        item.amount3 = parseFloat(item['amount3']);
+                    }
+                    if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
+                        item.amount2 = parseFloat(item['amount2']);
+                    }
                     return [
                         item.customerName,
-                        // "{{'APPLICANT'|translate}}: " + item.applicant,
-                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1), /*amount1 is TotalDemandDue*/
-                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'CHARGES'|translate}}: " + (item.part4||'-'),                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                       /* "{{'NUMBER_OF_DUES'|translate}}: " + item.numberOfDues   */  /*Service is missing*/
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3),
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,         
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,             
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,  
+                        "{{'FEES_DUE'|translate}}: " + item.amount2,
+                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
                     ]
                 },
                 getActions: function(){
@@ -150,9 +194,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                                 );
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         },
@@ -164,9 +205,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                                 $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }

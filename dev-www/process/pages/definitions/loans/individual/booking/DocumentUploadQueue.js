@@ -8,7 +8,8 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
         "uri":"Loan Booking/Stage 3",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            // model.branchName = SessionStore.getBranch();
+            model.branchName = SessionStore.getBranch();
+            model.branchId = SessionStore.getBranchId();
         },
 
         definition: {
@@ -28,22 +29,22 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    "branchName": {
-                        "title": "BRANCH_NAME",
-                        "type": ["string", "null"],
-                        "enumCode": "branch",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
+                    // "branchName": {
+                    //     "title": "BRANCH_NAME",
+                    //     "type": ["string", "null"],
+                    //     "enumCode": "branch",
+                    //     "x-schema-form": {
+                    //         "type": "select"
+                    //     }
 
-                    },
+                    // },
                     "centreCode": {
                         "title": "CENTER_NAME",
                         "type": ["number", "null"],
                         "enumCode": "centre",
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode":"branch"
+                            "parentValueExpr": "model.branchId"
                         }
                     },
                     "loan_product": {

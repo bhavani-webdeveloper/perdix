@@ -13,13 +13,13 @@ customHandle : To upload PDC files(Excel).
 
 Services
 --------
-PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are 
+PDC.getDemandList : To get all the demands for the entered date. And all the branch ID's are
                     parsed so as to get all the demands for the corresponding date.
 PDC.pdcDemandListUpload : To upload the selected file.
 PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), ["$log", "SessionStore", 'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state',
-    function($log, SessionStore, Utils, PDC, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), ["$log", "SessionStore", 'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state', 'Queries',
+    function($log, SessionStore, Utils, PDC, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state, Queries) {
 
         var allDemands = [];
         var branchIDArray = [];
@@ -56,7 +56,79 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     "key": "pdc.pdcDemandListDate",
                     "title": "INSTALLMENT_DATE",
                     "type": "date"
-                }, {
+                },
+                    {
+                        key: "pdc.branchSetCode",
+                        type: "lov",
+                        autolov: true,
+                        title:"COLLECTIONS_BRANCH_SET",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "branchSetCode": "pdc.branchSetCode"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getCollectionBranchSets();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.branch_set_name
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            console.log(result);
+                            console.log(model);
+                            model.pdc.branchSetCode = result.branch_set_code;
+                            model.pdc.branchSetName = result.branch_set_name;
+                            model.pdc.branchIdArray = JSON.parse(result.branch_ids);
+                            model.chosenRecordCountText = "";
+
+                            var branches = formHelper.enum('branch_id').data;
+
+                            model.pdc.branchNames = "";
+
+                            var branchIdObj = {};
+
+                            for (var i=0; i<branches.length;i++){
+                                branchIdObj[branches[i].code] = branches[i];
+                                //model.ach.branchNames = model.ach.branchNames + branches[i].name + ( (i+1)==branches.length?"":", ") ;
+                            }
+
+                            for (var i=0; i< model.pdc.branchIdArray.length;i++){
+                                model.pdc.branchNames = model.pdc.branchNames + branchIdObj[model.pdc.branchIdArray[i]].name+ ( (i+1)==model.pdc.branchIdArray.length?"":", ");
+                            }
+                        }
+                    },
+                    {
+                        "title": "BRANCHSET_DETAILS",
+                        "type": "section",
+                        "condition": "model.pdc.branchSetCode",
+                        "items": [
+                            {
+                                "key": "pdc.branchSetName",
+                                "title": "COLLECTIONS_BRANCHSET_NAME",
+                                "type": "string"
+                            },
+                            {
+                                "type": "fieldset",
+                                "title": "BRANCHES",
+                            },
+                            {
+                                "key": "pdc.branchList",
+                                "type": "section",
+                                "html": '<div class="row"> <div class="col-xs-12">' +
+                                "<div ng-bind-html='model.pdc.branchNames'></div>" +
+                                '</div></div>'
+                            }
+                        ]
+                    },
+                    {
+                        "title": "",
+                        "type": "section",
+                        "html": "<br/><br />"
+                    },
+                    {
                     "type": "button",
                     "title": "SEARCH_ALL_DEMAND",
                     "onClick": function(model, formCtrl, form) {
@@ -71,7 +143,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         PageHelper.showLoader();
                         PDC.getDemandList({
                             demandDate: model.pdc.pdcDemandListDate,
-                            branchId: branchIDArray
+                            branchId: model.pdc.branchIdArray.join(',')
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.pdcSearch = res;
@@ -89,7 +161,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                                     model.pdcSearch[i].repaymentType = "PDC";
                                     // model.pdcSearch[i].accountId = model.pdcSearch[i].accountId;
                                     model.pdcSearch[i].amount = parseInt(model.pdcSearch[i].amount3);
-                                    model.pdcSearch[i].repaymentDate = Utils.convertJSONTimestampToDate(model.pdcSearch[i].valueDate);
+                                    model.pdcSearch[i].repaymentDate = moment.utc(model.pdcSearch[i].valueDate).utcOffset(330).format("YYYY-MM-DD");
                                     model.pdcSearch[i].check = true;
                                     allDemands.push(model.pdcSearch[i]);
                                 }
@@ -252,27 +324,21 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     for (var i = 0; i < allDemands.length; i++) {
                         var transName = "Scheduled Demand";
                         if (allDemands[i].check == true) {
-                            if ((new Date(Utils.getCurrentDate()).getTime()) == (new Date(allDemands[i].repaymentDate).getTime())) {
-                                transName = "Scheduled Demand";
-                            } else if ((new Date(allDemands[i].transactionDate).getTime()) > (new Date(allDemands[i].repaymentDate).getTime())) {
-                                transName = "Scheduled Demand";
-                            } else if ((new Date(allDemands[i].transactionDate).getTime()) < (new Date(allDemands[i].repaymentDate).getTime())) {
-                                transName = "Scheduled Demand";
-                            }
+                            transName = "Scheduled Demand";
                             model.updateDemand.push({
-                                repaymentDate: Utils.convertJSONTimestampToDate(allDemands[i].valueDate),
+                                repaymentDate: allDemands[i].repaymentDate,
                                 accountNumber: allDemands[i].accountId,
                                 amount: parseInt(allDemands[i].amount3),
                                 transactionName: transName,
                                 productCode: allDemands[i].param1,
                                 instrument: "PDC",
-                                valueDate: allDemands[i].valueDate,
+                                valueDate: allDemands[i].repaymentDate,
                                 urnNo: allDemands[i].customerName,
-                                instrumentDate: Utils.convertJSONTimestampToDate(allDemands[i].valueDate),
+                                instrumentDate: allDemands[i].repaymentDate,
                                 pdcNo: allDemands[i].sequenceNum,
                                 reference: allDemands[i].reference,
                                 ifscCode: allDemands[i].responseCode,
-                                demandAmount: parseInt(allDemands[i].amount3) 
+                                demandAmount: parseInt(allDemands[i].amount3)
                             });
                         }
                     }

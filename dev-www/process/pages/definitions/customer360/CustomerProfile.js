@@ -66,11 +66,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
                         type: "select",
+                        enumCode: "branch_id",
                         readonly: true
                     },
                     {
                         key:"customer.centreId",
                         type:"select",
+                        enumCode: "centre",
                         readonly: true
                     },
                     {

@@ -1,8 +1,9 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.PendingFRO"),
-["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper", 
-function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper){
+["$log", "IndividualLoan", "SessionStore","$state", "$stateParams","SchemaResource","PageHelper","Queries", 
+function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,PageHelper,Queries){
 
     var branch = SessionStore.getBranch();
+    var branchId = SessionStore.getBranchId();
 
     return {
         "type": "schema-form",
@@ -19,6 +20,14 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
             }
             model.loanAccountDisbursementSchedule = {};
             model.loanAccountDisbursementSchedule = _.cloneDeep(model._FROQueue);
+
+            Queries.getLoanAccount(model.loanAccountDisbursementSchedule.accountNumber, branchId).then(function(value){
+                $log.info("Loan account record received");
+                model.loanAccountRec = value;
+                $log.info(model.loanAccountRec);
+            },function(err){
+                $log.info("Error while fetching Loan Account");
+            });
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -95,7 +104,10 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     delete reqData._FROQueue;
                     reqData.disbursementProcessAction = "PROCEED";
                     if (model.loanAccountDisbursementSchedule.fro_status =="2"){
-                        reqData.stage = "MTDisbursementDataCapture";
+                        if (model.loanAccountRec.product_type == 'OD')
+                            reqData.stage = "LOCDisbursement";
+                        else
+                            reqData.stage = "MTDisbursementDataCapture";
                     }
                     IndividualLoan.updateDisbursement(reqData,function(resp,header){
                         PageHelper.showProgress("upd-disb","Done.","5000");

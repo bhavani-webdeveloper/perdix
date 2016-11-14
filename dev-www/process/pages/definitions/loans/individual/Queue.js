@@ -71,7 +71,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						"type": "string"
 					}
 				},
-				"required":["stage", "branchName"]
+				"required":["stage"]
 			},
 
 			getSearchFormHelper: function() {
@@ -233,6 +233,27 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							},
 							isApplicable: function(item, index){
 								if(item.stage == "Completed") {
+									return true;
+								} else {
+									return false;
+								}
+
+							}
+						},
+						{
+							name: "CLOSE_LOAN",
+							desc: "",
+							icon: "fa fa-close",
+							fn: function(item, index){
+								//EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
+								$state.go("Page.Engine",{
+									pageName:"loans.CloseLoan",
+									pageId:item.loanId,
+									pageData: item
+								});
+							},
+							isApplicable: function(item, index){
+								if(item.stage != "Completed") {
 									return true;
 								} else {
 									return false;

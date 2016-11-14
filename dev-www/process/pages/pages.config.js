@@ -3,8 +3,7 @@ irf.HOME_PAGE = {
 	"url": "Page/Landing",
 	"to": "Page.Landing",
 	"params": {
-		"pageName": null,
-		"pageId": null
+
 	},
 	"options": {
 
@@ -57,7 +56,7 @@ irf.pages.config([
 	},{
 		name: "Page.LoansACHPDCDashboard",
 		url: "/LoansACHPDCDashboard",
-		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		templateUrl: "process/pages/templates/Page.LoansACHPDCDashboard.html",
 		controller: "LoansACHPDCDashboardCtrl"
 	},{
 		name: "Page.LoansCollectionsDashboard",

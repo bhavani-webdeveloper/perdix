@@ -17,10 +17,6 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
         definition: {
             title: "SEARCH",
             autoSearch: false,
-            sorting:true,
-            sortByColumns:{
-                "days":"OD Days"
-            },
             searchForm: [
                 "*"
             ],
@@ -29,22 +25,14 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-
-                    "loan_product": {
-                        "title": "Loan Product",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select",
-                            "enumCode": "loan_product"
-                        }
-                    },
-                    "branchName": {
+                    "branchId": {
                         "title": "BRANCH_NAME",
                         "type": "integer",
                         "x-schema-form": {
                             "type": "select"
                         },
-                        "enumCode": "branch_id"
+                        "enumCode": "branch_id",
+                        "required": true
                     }
                 }
             },
@@ -53,7 +41,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
             },
             getResultsPromise: function(searchOptions, pageOpts){
                 return LoanAccount.writeOffQueue({
-                    'Branches': searchOptions.branchName
+                    'Branches': searchOptions.branchId
                 }).$promise;
 
             },
@@ -78,8 +66,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, LoanAccount, En
                 },
                 getListItem: function(item){
                     return [
-                        "<em>Account ID:" + item.accountId + " | Customer Name:" + item.customerName + " | Customer URN:" + item.description + "</em>",
-                        "<em>Total Demand Due:" + item.amount1 + " | Principal Due:" + item.part1 + " | Interest Due:" + item.part2 + "</em>",
+                        "<em>Account ID:" + item.accountId, //+ " | Customer Name:" + item.customerName + " | Customer URN:" + item.description + "</em>",
+                        "<em>Total Demand Due:" + item.amount1 + " | Principal Due:" + item.part1 ,// + " | Interest Due:" + item.part2 + "</em>",
                         "<em>Product Code:" + item.param1 + "</em>"
                     ]
                 },

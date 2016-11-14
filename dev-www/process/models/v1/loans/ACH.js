@@ -1,5 +1,6 @@
-irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
-    function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+irf.models.factory('ACH', 
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
         var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
         var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';
@@ -21,17 +22,17 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
             search: searchResource({
                 method: 'GET',
                 url: endpoint + '/search'
-                    // transformResponse: function(data, headersGetter, status){
-                    //     var deferred = $q.defer();
-                    //     data = JSON.parse(data);
-                    //     if (status === 200){
-                    //         if (_.hasIn(data, 'maximumAmount') && _.isString(data['maximumAmount'])){
-                    //             data.maximumAmount = parseInt(data['maximumAmount']);
-                    //             alert(data.maximumAmount);
-                    //         }
-                    //     }
-                    //     return data;
-                    // }
+                // transformResponse: function(data, headersGetter, status){
+                //     var deferred = $q.defer();
+                //     data = JSON.parse(data);
+                //     if (status === 200){
+                //         if (_.hasIn(data, 'maximumAmount') && _.isString(data['maximumAmount'])){
+                //             data.maximumAmount = parseInt(data['maximumAmount']);
+                //             alert(data.maximumAmount);
+                //         }
+                //     }
+                //     return data;
+                // }
             }),
             searchHead: {
                 method: 'HEAD',
@@ -40,14 +41,14 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
             },
             updateMandateStatus: {
                 method: 'PUT',
-                isArray: true,
+                isArray:true,
                 url: endpoint + '/statusupdate'
             },
             getDemandList: searchResource({
                 method: 'GET',
                 url: endpoint + '/achdemandList'
             }),
-            bulkRepay: searchResource({
+            bulkRepay:  searchResource({
                 method: 'POST',
                 url: endpoint + '/achbulkrepay'
             }),
@@ -68,11 +69,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 data: {
                     file: file
                 }
-            }).then(function(resp) {
+            }).then(function(resp){
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
-            }, function(errResp) {
+            }, function(errResp){
                 // TODO handle error
                 PageHelper.showErrors(errResp);
                 deferred.reject(errResp);
@@ -87,11 +88,11 @@ irf.models.factory('ACH', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 data: {
                     file: file
                 }
-            }).then(function(resp) {
+            }).then(function(resp){
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);
                 deferred.resolve(resp);
-            }, function(errResp) {
+            }, function(errResp){
                 // TODO handle error
                 PageHelper.showErrors(errResp);
                 deferred.reject(errResp);

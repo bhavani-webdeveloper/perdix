@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorizationQueue"),
-["$log", "formHelper","entityManager", "LoanProcess", "$state", "SessionStore", "$q",
-function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
+["$log", "formHelper","entityManager", "LoanCollection", "$state", "SessionStore", "$q",
+function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$q){
     return {
         "type": "search-list",
         "title": "TRANSACTION_AUTHORIZATION_QUEUE",
@@ -78,13 +78,11 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.repaymentList({
-                    'branchName': searchOptions.branch,
-                    'centre': searchOptions.centre,
-                    'firstName': searchOptions.first_name,
-                    /*'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage,*/
-                    'status': "PartialPayment"
+                var promise = LoanCollection.query({
+                    'currentStage':"PartialPayment",
+                    'accountCentreId': searchOptions.centre,
+                    'accountBranchId': searchOptions.branch_id,
+                    'accountNumber': searchOptions.accountNumber
                 }).$promise;
 
                 return promise;
@@ -93,7 +91,7 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
             paginationOptions: {
                 "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return headers && headers['x-total-count'];
+                    return 20;
                 },
                 "getTotalItemsCount": function(response, headers){
                     return headers['x-total-count']
@@ -116,8 +114,9 @@ function($log, formHelper, entityManager, LoanProcess, $state, SessionStore,$q){
                     return [
                         item.customerName,
                         'Loan Number: ' + item.accountNumber,
-                        'Amount Due: ' + item.demandAmountInPaisa/100,
-                        'Payment Type:' + item.paymentType
+                        'Amount Due: ' + item.demandAmount,
+                        'Amount Paid: ' + item.repaymentAmount,
+                        'Payment Type: ' + item.instrumentType
                     ]
                 },
                 getActions: function(){

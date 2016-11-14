@@ -1,6 +1,6 @@
 {
 	"name": "Perdix Mobility",
 	"title": "Perdix",
-	"version": "1.1",
-	"connect_perdix7": true
+	"version": "v8.1.14-production",
+	"connect_perdix7": false
 }

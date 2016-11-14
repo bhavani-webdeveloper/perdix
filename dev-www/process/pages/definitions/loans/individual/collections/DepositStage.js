@@ -1,13 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanProcess","PageHelper",
-function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanProcess,PageHelper){
+["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper",
+function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper){
 
     var branch = SessionStore.getBranch();
 
     var computeTotal = function(model){
         model.totalAmount=0;
         for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
-            model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
+            if(model.pendingCashDeposits[i].check)
+                model.totalAmount+=model.pendingCashDeposits[i].amount_collected;
         }
         model.amountDeposited = model.totalAmount;
     }
@@ -19,6 +20,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
             model.loggedInUser = SessionStore.getLoginname();
+            PageHelper.showLoader();
 
             Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
@@ -27,19 +29,22 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 model.loanAccounts = [];
                 for (var i=0; i< res.body.length;i++){
                     var cashDeposit = res.body[i];
-                    if(cashDeposit.repayment_amount_in_paisa>0)
-                        cashDeposit.repayment_amount_in_paisa = cashDeposit.repayment_amount_in_paisa / 100;
                     model.pendingCashDeposits.push(
                         {
                             loan_ac_no: cashDeposit.account_number,
                             repaymentId: cashDeposit.id,
                             customer_name: cashDeposit.customer_name,
-                            amount_collected: cashDeposit.repayment_amount_in_paisa
+                            amount_collected: cashDeposit.repayment_amount
                         }
                     );
                     model.loanAccounts.push(cashDeposit.id);
                 }
+                model.additional={};
+                model.additional.selectAll = true;
+                for ( i = 0; i < model.pendingCashDeposits.length; i++)
+                            model.pendingCashDeposits[i].check = true;
                 computeTotal(model);
+                PageHelper.hideLoader();
             },
             function(httpRes){
                 PageHelper.showProgress('deposit-stage', 'Failed to load the deposit details. Try again.', 4000);
@@ -58,22 +63,62 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             "colClass": "col-sm-12", // col-sm-6 is default, optional
             //"readonly": false, // default-false, optional, this & everything under items becomes readonly
             "items": [
+            {   
+                "key": "additional.selectAll",
+                "type": "checkbox",
+                "title": "SELECT_ALL",
+                "schema":{
+                        "default": false
+                    },
+                "onChange": function(modelValue, form, model){
+
+                    if (modelValue)
+                    {
+                        for ( i = 0; i < model.pendingCashDeposits.length; i++)
+                        model.pendingCashDeposits[i].check = true;
+                    }
+                    else
+                    {
+                        for ( i = 0; i < model.pendingCashDeposits.length; i++)
+                        model.pendingCashDeposits[i].check = false;
+                    }
+                    computeTotal(model);
+                }    
+            },
             {
                 "type":"array",
                 "key":"pendingCashDeposits",
                 "add":null,
                 "remove":null,
                 "view": "fixed",
-                "readonly":true,
+                //"readonly":true,
                 "notitle":true,
                 "items":[{
                     "type":"section",
                     "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "col-xs-8 col-md-8",
+                        "htmlClass": "col-xs-2 col-md-2",
+                        "items": [{
+                            "key":"pendingCashDeposits[].check",
+                            "title":" ",
+                            "readonly":false,
+                            "type": "checkbox",
+                            "schema":{
+                                "default": false
+                            },
+                            "onChange": function(modelValue, form, model){
+                                model.additional.selectAll=false;
+                                computeTotal(model);
+                            }
+                        }]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "col-xs-6 col-md-6",
                         "items": [{
                             "key":"pendingCashDeposits[].customer_name",
+                            "readonly":true,
                             "titleExpr":"model.pendingCashDeposits[arrayIndex].loan_ac_no",
                             "title":" "
                         }]
@@ -83,6 +128,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                         "htmlClass": "col-xs-4 col-md-4",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
+                            "readonly":true,
                             "type":"amount",
                             "title": " "
                         }]
@@ -117,6 +163,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 type: "lov",
                 autolov: true,
                 title:"DEPOSITED_TO_ACCOUNT",
+                required: true,
                 bindMap: {
                 },
                 outputMap: {
@@ -188,74 +235,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             "$schema": "http://json-schema.org/draft-04/schema#",
             "type": "object",
             "properties": {
-                /*"repayment": {
-                    "type": "object",
-                    "properties": {
-                        "repaymentId": {
-                            "type": "string",
-                            "title":"ACCOUNT_ID"
-                        },
-                        "amount": {
-                            "type": "number",
-                            "title":"AMOUNT_PAID"
-
-                        },
-                        "authorizationRemark": {
-                            "type": "string",
-                            "title":"AUTHORIZATION_REMARK"
-                        },
-                        "authorizationUsing": {
-                            "type": "string",
-                            "title":"AUTHORIZATION_USING"
-                        },
-                        "cashCollectionRemark": {
-                            "type": "string",
-                            "title":"CASH_COLLECTION_REMARK"
-                        },
-                        "groupCode": {
-                            "type": "string",
-                            "title":"GROUP_CODE"
-                        },
-                        "instrument": {
-                            "type": "string",
-                            "title": "INSTRUMENT_TYPE",
-                            "required": true
-                        },
-                        "productCode": {
-                            "type": "string",
-                            "title":"PRODUCT_CODE"
-                        },
-                        "remarks": {
-                            "type": "string",
-                            "title":"REMARKS"
-                        },
-                        "repaymentDate": {
-                            "type": "string",
-                            "title":"REPAYMENT_DATE",
-                            readonly:true,
-                            "x-schema-form": {
-                                "type": "date"
-                            }
-                        },
-                        "transactionId": {
-                            "type": "string",
-                            "title":"TRANSACTION_ID"
-                        },
-                        "transactionName": {
-                            "type": "string",
-                            "title":"TRANSACTION_NAME",
-                            "enumCode":"repayment_transaction_name",
-
-                        },
-                        "urnNo": {
-                            "type": "string",
-                            "title":"URN_NO"
-                        }
-                    },
-                    required: [
-                        'instrument'
-                    ]
-                },*/
                 "repayments": [{
                     "type": "string"
                 }],
@@ -301,16 +280,26 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         },
         actions: {
             submit: function(model, form, formName){
+                if (!model.amountDeposited || model.amountDeposited <=0){
+                    PageHelper.showProgress("deposit-cash","Amount deposited cannot be zero",5000);
+                    return false;
+                }
+                var loanCollectionIds = [];
+                for (var i = model.pendingCashDeposits.length - 1; i >= 0; i--) {
+                    if(model.pendingCashDeposits[i].check){
+                        loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
+                    }
+                }
                 var reqData = {
                     'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
-                    'repayments':_.cloneDeep(model.loanAccounts)
+                    'loanCollectionIds':_.cloneDeep(loanCollectionIds)
                 };
 
-                PageHelper.showProgress('update-loan', 'Working...');
+                PageHelper.showProgress('deposit-cash', 'Working...');
                 PageHelper.showLoader();
                 $log.info(reqData);
                 console.log(JSON.stringify(reqData));
-                LoanProcess.processCashDeposit(reqData, function(response){
+                LoanCollection.processCashDeposite(reqData, function(response){
                     PageHelper.hideLoader();
                     $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
 

@@ -96,6 +96,14 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
                 return data;
 
             }
+        },
+        addTranch:{
+            method:'PUT',
+            url:endpoint+'/addTranch'
+        },
+        close: {
+            method: 'PUT',
+            url: endpoint + "/close"
         }
     });
 }]);

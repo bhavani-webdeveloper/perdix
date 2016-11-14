@@ -18,8 +18,8 @@ ACH.getDemandList : To get all the demands for the entered date. And all the bra
 ACH.achDemandListUpload : To upload the selected file.
 ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state',
-    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state', 'Queries',
+    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state, Queries) {
 
         var allUpdateDemands = [];
         var branchIDArray = [];
@@ -56,7 +56,79 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "key": "ach.achDemandListDate",
                     "title": "INSTALLMENT_DATE",
                     "type": "date"
-                }, {
+                },
+                    {
+                        key: "ach.branchSetCode",
+                        type: "lov",
+                        autolov: true,
+                        title:"COLLECTIONS_BRANCH_SET",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "branchSetCode": "ach.branchSetCode"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getCollectionBranchSets();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.branch_set_name
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            console.log(result);
+                            console.log(model);
+                            model.ach.branchSetCode = result.branch_set_code;
+                            model.ach.branchSetName = result.branch_set_name;
+                            model.ach.branchIdArray = JSON.parse(result.branch_ids);
+                            model.chosenRecordCountText = "";
+
+                            var branches = formHelper.enum('branch_id').data;
+
+                            model.ach.branchNames = "";
+
+                            var branchIdObj = {};
+
+                            for (var i=0; i<branches.length;i++){
+                                branchIdObj[branches[i].code] = branches[i];
+                                //model.ach.branchNames = model.ach.branchNames + branches[i].name + ( (i+1)==branches.length?"":", ") ;
+                            }
+
+                            for (var i=0; i< model.ach.branchIdArray.length;i++){
+                                model.ach.branchNames = model.ach.branchNames + branchIdObj[model.ach.branchIdArray[i]].name+ ( (i+1)==model.ach.branchIdArray.length?"":", ");
+                            }
+                        }
+                    },
+                    {
+                        "title": "BRANCHSET_DETAILS",
+                        "type": "section",
+                        "condition": "model.ach.branchSetCode",
+                        "items": [
+                            {
+                                "key": "ach.branchSetName",
+                                "title": "COLLECTIONS_BRANCHSET_NAME",
+                                "type": "string"
+                            },
+                            {
+                                "type": "fieldset",
+                                "title": "BRANCHES",
+                            },
+                            {
+                                "key": "ach.branchList",
+                                "type": "section",
+                                "html": '<div class="row"> <div class="col-xs-12">' +
+                                "<div ng-bind-html='model.ach.branchNames'></div>" +
+                                '</div></div>'
+                            }
+                        ]
+                    },
+                    {
+                        "title": "",
+                        "type": "section",
+                        "html": "<br/><br />"
+                    },
+                    {
                     "type": "button",
                     "title": "SEARCH_DEMAND",
                     "onClick": function(model, formCtrl, form) {
@@ -71,7 +143,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         PageHelper.showLoader();
                         ACH.getDemandList({
                             demandDate: model.ach.achDemandListDate,
-                            branchId: branchIDArray // TODO should it be hardcoded?
+                            branchId: model.ach.branchIdArray.join(',')
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.achSearch = res;
@@ -89,7 +161,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                                     model.achSearch.body[i].repaymentType = "ACH";
                                     // model.achSearch.body[i].accountId = model.achSearch.body[i].accountId;
                                     model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount3);
-                                    model.achSearch.body[i].repaymentDate = Utils.convertJSONTimestampToDate(model.achSearch.body[i].valueDate);
+                                    model.achSearch.body[i].repaymentDate = moment.utc(model.achSearch.body[i].valueDate).utcOffset(330).format("YYYY-MM-DD");
                                     model.achSearch.body[i].check = true;
                                     allUpdateDemands.push(model.achSearch.body[i]);
                                 }
@@ -291,13 +363,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     for (var i = 0; i < allUpdateDemands.length; i++) {
                         var transName = "Scheduled Demand";
                         if (allUpdateDemands[i].check == true) {
-                            if ((new Date(allUpdateDemands[i].valueDate).getTime()) == (new Date(allUpdateDemands[i].repaymentDate).getTime())) {
-                                transName = "Scheduled Demand";
-                            } else if ((new Date(allUpdateDemands[i].valueDate).getTime()) > (new Date(allUpdateDemands[i].repaymentDate).getTime())) {
-                                transName = "Prepayment";
-                            } else if ((new Date(allUpdateDemands[i].valueDate).getTime()) < (new Date(allUpdateDemands[i].repaymentDate).getTime())) {
-                                transName = "Scheduled Demand";
-                            }
+                            transName = "Scheduled Demand";
                             model.achDemand.updateDemand.push({
                                 repaymentDate: allUpdateDemands[i].repaymentDate,
                                 accountNumber: allUpdateDemands[i].accountId,
@@ -305,7 +371,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                                 transactionName: transName,
                                 productCode: allUpdateDemands[i].param1,
                                 instrument: "ACH",
-                                valueDate: allUpdateDemands[i].valueDate,
+                                valueDate: allUpdateDemands[i].repaymentDate,
                                 urnNo: allUpdateDemands[i].customerName
                             });
                         }

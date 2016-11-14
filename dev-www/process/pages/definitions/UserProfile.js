@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("UserProfile"),
 ["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
-	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader",
+	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader", "Account",
 function($log, $q, SessionStore, languages, $translate, PM,
-	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader) {
+	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader, Account) {
 
 	var languageTitleMap = [];
 	_.each(languages, function(v, k){
@@ -29,6 +29,8 @@ function($log, $q, SessionStore, languages, $translate, PM,
 				model.profile = m.profile;
 				model.settings = m.settings;
 			}
+			model.profile.userName = SessionStore.getUsername();
+			model.profile.openChangePassword = false;
 		},
 		modelPromise: function(pageId) {
 			var deferred = $q.defer();
@@ -48,13 +50,32 @@ function($log, $q, SessionStore, languages, $translate, PM,
 					readonly: true
 				},
 				{
-					key: "profile.firstName",
+					key: "profile.userName",
 					readonly: true
 				},
 				{
-					title: "EDIT_FAVORITES",
+					title: "CHANGE_PASSWORD",
+					condition: "!model.profile.openChangePassword",
 					type: "button",
-					onClick: "actions.editFavorites(model, formCtrl, form)"
+					onClick: "model.profile.openChangePassword = true"
+				},
+				{
+					key: "profile.oldPassword",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					key: "profile.newPassword",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					key: "profile.newPassword2",
+					condition: "model.profile.openChangePassword"
+				},
+				{
+					title: "CHANGE_PASSWORD",
+					condition: "model.profile.openChangePassword",
+					type: "button",
+					onClick: "actions.changePassword(model, formCtrl, form)"
 				}
 			]
 		},{
@@ -135,21 +156,20 @@ function($log, $q, SessionStore, languages, $translate, PM,
 				// deferred.reject();
 				return deferred.promise;
 			},
-			editFavorites: function(model, formCtrl, form) {
-				var titleHtml = '<i class="fa fa-heart">&nbsp;</i>Choose Favorites';
-				var bodyHtml = '\
-<div class="row">\
-	<div class="small-box bg-theme" style="cursor:pointer;">\
-		<div class="inner">\
-			<h3><i class="fa fa-tasks"></i></h3>\
-			<p>title</p>\
-		</div>\
-		<div class="icon"><i class="fa fa-tasks"></i></div>\
-	</div>\
-</div>\
-				';
-				irfSimpleModal(titleHtml, bodyHtml).opened.then(function(){
-					
+			changePassword: function(model, formCtrl, form) {
+				PageHelper.clearErrors();
+				if (model.profile.newPassword !== model.profile.newPassword2) {
+					PageHelper.setError({message:'New password & re-enter password are different.'});
+					return false;
+				}
+				Account.changeExpiredPassword({
+					"username": model.profile.login,
+					"oldPassword": model.profile.oldPassword,
+					"newPassword": model.profile.newPassword
+				}).$promise.then(function() {
+					PageHelper.showProgress('user-profile', 'Password changed successfully, Pl Relogin to continue..', 5000);
+				}, function(err) {
+					PageHelper.showErrors(err);
 				});
 			}
 		},
@@ -163,13 +183,34 @@ function($log, $q, SessionStore, languages, $translate, PM,
 							"title": "LOGIN",
 							"type": "string"
 						},
-						firstName: {
+						userName: {
 							"title": "USERNAME",
 							"type": "string"
 						},
 						lastName: {
 							"title": "LASTNAME",
 							"type": "string"
+						},
+						oldPassword: {
+							"title": "CURRENT_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
+						},
+						newPassword: {
+							"title": "NEW_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
+						},
+						newPassword2: {
+							"title": "REENTER_PASSWORD",
+							"type": "string",
+							"x-schema-form": {
+								"type": "password"
+							}
 						}
 					}
 				},

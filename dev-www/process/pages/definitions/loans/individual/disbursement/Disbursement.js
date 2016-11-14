@@ -51,8 +51,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
-                        model.loanAccountDisbursementSchedule.udf2= model.loanAccountDisbursementSchedule.udf2 || '';
-                        model.loanAccountDisbursementSchedule.udf3= model.loanAccountDisbursementSchedule.udf3 || '';
 
                     },
                     function (resp) {
@@ -116,17 +114,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         }]
                     },
                     {
-                        "key": "loanAccountDisbursementSchedule.referenceDate",
-                        "title": "DATE",
-                        "type":"date",
-                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
-                    },
-                    {
-                        "key": "loanAccountDisbursementSchedule.referenceNumber",
-                        "title": "REFERENCE_NO",
-                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
-                    },
-                    {
                         key: "loanAccountDisbursementSchedule.disbursementFromBankAccountNumber",
                         type: "lov",
                         autolov: true,
@@ -148,6 +135,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 item.branch_name
                             ];
                         }
+                    }, 
+                    {
+                        key: "loanAccountDisbursementSchedule.customerNameInBank",
+                        title: "CUSTOMER_NAME_IN_BANK",
+                        "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.customerAccountNumber",
@@ -188,7 +180,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 ]
             }],
             schema: function() {
-                //return SchemaResource.getLoanAccountSchema().$promise;
                 return SchemaResource.getDisbursementSchema().$promise;
             },
             actions: {
@@ -201,16 +192,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
                         return;
                     }
-                    if(model.loanAccountDisbursementSchedule.udf2 || model.loanAccountDisbursementSchedule.udf3){
-                        PageHelper.showProgress('disbursement', "Reject reason and reject remarks are not applicable during disbursement",3000);
-                        return;
-                    }
 
                     if(window.confirm("Perform Disbursement?")){
 
                         PageHelper.showLoader();
                         var accountNumber = model.additional.accountNumber;
                         var accountId = model.loanAccountDisbursementSchedule.loanId;
+
                         model.loanAccountDisbursementSchedule.udf1 = "Sent to Bank";
                         PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
 
@@ -267,44 +255,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     }
 
                 },
-                /*rejectLoan:function(model, formCtrl, form){
-                    formCtrl.scope.$broadcast("schemaFormValidate");
-                    if(!formCtrl.$valid){
-                        PageHelper.showProgress('disbursement', "Errors found in the form. Please fix to continue",3000);
-                        return;
-                    }
-                    if(!model.loanAccountDisbursementSchedule.udf2){
-                        PageHelper.showProgress('disbursement', "Reject reason is required for rejection",3000);
-                        return;
-                    }
-
-                    if(window.confirm("Are you sure to reject the loan disbursement?")){
-
-                        PageHelper.showLoader();
-                        var accountNumber = model.additional.accountNumber;
-                        var accountId = model.loanAccountDisbursementSchedule.loanId;
-                        model.loanAccountDisbursementSchedule.udf1 = "Rejected";
-                        PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
-                        var reqloanAccountDisbursementSchedule = _.cloneDeep(model.loanAccountDisbursementSchedule);
-
-                        var reqData = {};
-                        reqData.disbursementProcessAction = "PROCEED";
-                        reqData.stage = "RejectedDisbursement";
-                        reqData.loanAccountDisbursementSchedule = reqloanAccountDisbursementSchedule;
-                        IndividualLoan.updateDisbursement(reqData,function(resp,header){
-                            PageHelper.showProgress("upd-disb","Done.","5000");
-                            backToQueue();
-                        },function(resp){
-                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
-                            PageHelper.showErrors(resp);
-
-                        }).$promise.finally(function(){
-                            PageHelper.hideLoader();
-                        });
-
-                    }
-
-                },*/
                 submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
                         PageHelper.showLoader();
@@ -312,6 +262,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         reqData.disbursementProcessAction = "SAVE";
                         model.loanAccountDisbursementSchedule.udf1 = "";
                         reqData.stage = "DisbursementConfirmation";
+
                         IndividualLoan.updateDisbursement(reqData,function(resp,header){
 
                             reqData = _.cloneDeep(resp);

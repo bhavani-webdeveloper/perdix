@@ -59,9 +59,14 @@ irf.models.factory('PDC', ["$resource", "$httpParamSerializer", "BASE_URL", "sea
                 method: 'GET',
                 url: endpintManagement + "demandDate=:demandDate&branchId=:branchId"
             }),
-            deleteSecurity: {
+            deleteSecurity: searchResource({
                 method: 'POST',
-                url: endpoint + '/deletepdc'
+                url: endpoint + '/updatePdcSecurityAccount'
+            }),
+            updateSecurityPDC: {
+                method: "POST",
+                url: endpoint + "/updatePdcSecurityAccount",
+                isArray: true
             }
         });
 

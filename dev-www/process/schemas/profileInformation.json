@@ -821,7 +821,7 @@
                     "title": "LOCALITY"
                 },
                 "mailingPincode": {
-                    "type": "string",
+                    "type": "number",
                     "title": "PIN_CODE",
                     "minLength": 6,
                     "maxLength": 6

@@ -104,7 +104,7 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount, Pa
                         'accountNumber': model.loanAccount.accountNumber,
                         'writeOffDate' : model.loanAccount.writeOffDate,
                         'remarks' : model.loanAccount.remarks
-                    }, function(response) {
+                    }, null, function(response) {
                         PageHelper.hideLoader();
                         PageHelper.showProgress("page-init", "Done.", 2000);
                         $log.info("Redirecting");

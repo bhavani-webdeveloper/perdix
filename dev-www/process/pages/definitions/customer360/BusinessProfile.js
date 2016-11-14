@@ -15,10 +15,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             var init = function() {
                 var deferred = $q.defer();
                 model.customer = model.customer || {};
-                model.branchId = SessionStore.getBranchId() + '';
-                model.customer.kgfsName = SessionStore.getBranch();
-                model.customer.customerType = "Enterprise";
-
                 if (model.customer.id) {
                     deferred.resolve();
                 } else if ($stateParams.pageId) {
@@ -66,9 +62,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 "readonly": true,
                 "items": [
                     {
-                        key: "customer.kgfsName",
+                        key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
-                        type: "select"
+                        type: "select",
+                        enumCode: "branch_id",
+                        readonly: true
                     },
                     {
                         key: "customer.id",
@@ -85,10 +83,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.centreId",
                         type:"select",
-                        filter: {
-                            "parentCode": "model.branchId"
-                        },
-                        parentEnumCode:"branch"
+                        readonly: true
                     },
                     {
                         key: "customer.oldCustomerId",

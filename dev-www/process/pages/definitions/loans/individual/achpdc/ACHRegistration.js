@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							model.ach.bankAccountNumber = model.achIndividualLoanSearch.customerBankAccountNumber;
 							//model.ach.ifscCode = model.achIndividualLoanSearch.customerBankIfscCode;
 							//model.ach.sponsorBankCode = "HDFC0999999";
-							model.ach.sponsorAccountCode = "Cash";
+							model.ach.sponsorAccountCode = null;
 							model.ach.mandateStatus = "PENDING";
 							//model.ach.branch = model.achIndividualLoanSearch.branch;
 							model.ach.id = model.ach.loanId;
@@ -75,19 +75,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							//model.ach.accountType = model.achIndividualLoanSearch.loanType;
 							model.ach.accountNumber = model.achIndividualLoanSearch.accountNumber;
 							model.ach.centreId = model.achIndividualLoanSearch.loanCentre.centreId;
-
-							if (model.achIndividualLoanSearch.disbursementSchedules && model.achIndividualLoanSearch.disbursementSchedules.length > 0) {
-								if (model.achIndividualLoanSearch.disbursementSchedules[0].actualDisbursementDate && model.achIndividualLoanSearch.disbursementSchedules[0].actualDisbursementDate != null) {
-									model.ach.achStartDate = model.achIndividualLoanSearch.disbursementSchedules[0].actualDisbursementDate;
-									model.ach.mandateOpenDate = model.achIndividualLoanSearch.disbursementSchedules[0].actualDisbursementDate;
-								} else if (model.achIndividualLoanSearch.disbursementSchedules[0].scheduledDisbursementDate && model.achIndividualLoanSearch.disbursementSchedules[0].scheduledDisbursementDate != null) {
-									model.ach.achStartDate = model.achIndividualLoanSearch.disbursementSchedules[0].scheduledDisbursementDate;
-									model.ach.mandateOpenDate = model.achIndividualLoanSearch.disbursementSchedules[0].scheduledDisbursementDate;
-								}
-							}
-
-
-
+							model.ach.achStartDate = model.achIndividualLoanSearch.loanDisbursementDate;
+							model.ach.mandateOpenDate = model.achIndividualLoanSearch.loanDisbursementDate;
 							for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
 								if (parseInt(formHelper.enum('branch_id').data[i].code) == parseInt(model.achIndividualLoanSearch.branchId)) {
 									model.ach.branch = formHelper.enum('branch_id').data[i].name;
@@ -354,7 +343,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							},
 							outputMap: {
 								"sponsor_bank_code": "ach.sponsorBankCode",
-								"utility_code": "ach.utilityCode"
+								"utility_code": "ach.utilityCode",
+								"account_code": "ach.sponsorAccountCode"
 							},
 							searchHelper: formHelper,
 							search: function(inputModel, form, model) {
@@ -363,7 +353,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 									function(res) {
 										var newBody = [];
 										for (var i = 0; i < res.body.length; i++) {
-											if (res.body[i].sponsor_bank_code != null && res.body[i].utility_code != null) {
+											if (res.body[i].sponsor_bank_code != null && res.body[i].utility_code != null && res.body[i].sponsor_bank_code!='' && res.body[i].utility_code != '') {
 												newBody.push(res.body[i])
 											}
 										}
@@ -421,6 +411,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 					PageHelper.clearErrors();
 					PageHelper.showLoader();
 					model.ach.bankCity = model.ach.branchName;
+					if (model.ach.sponsorAccountCode==null){
+						PageHelper.showProgress("submit", 'Selected bank doesn not have a valid account code. Please check.');
+						return;
+					}
 					ACH.create(model.ach, function(response) {
 						PageHelper.hideLoader();
 						PageHelper.showProgress("page-init", "ACH Registration Successful", 5000);

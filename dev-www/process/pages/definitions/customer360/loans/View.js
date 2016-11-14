@@ -64,8 +64,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         getListItem: function(item){
                             return [
                                 item.accountNumber,
-                                'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode,
-                                'Application Status: ' + item.applicationStatus
+                                'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode
                             ]
                         },
                         getActions: function(){

@@ -4,31 +4,10 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
-        //"subTitle": "T_ENROLLMENTS_PENDING",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranchId();
         },
-        /*offline: true,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                "Branch: " + item["branch"],
-                "Centre: " + item["centre"]
-            ]
-        },
-        getOfflinePromise: function(searchOptions){      \* Should return the Promise *\
-            var promise = Enrollment.search({
-                'branchName': searchOptions.branch,
-                'centreCode': searchOptions.centre,
-                'firstName': searchOptions.first_name,
-                'lastName': searchOptions.last_name,
-                'page': 1,
-                'per_page': 100,
-                'stage': "Stage02"
-            }).$promise;
-
-            return promise;
-        },*/
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
             searchForm: [
@@ -48,18 +27,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    /*"kyc_no": {
-                        "title": "KYC_NO",
-                        "type": "string"
-                    },
-                    "branch": {
-                        "title": "BRANCH_NAME",
-                        "type": "string",
-                        "enumCode": "branch",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },*/
                     "centre": {
                         "title": "CENTRE",
                         "type": "integer",
@@ -77,12 +44,21 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-                var promise = LoanProcess.p2pKGFSList({
-                    'accountNumber': searchOptions.loan_no,  /*Service missing_27082016*/
+                /*var promise = LoanProcess.p2pKGFSList({
+                    'accountNumber': searchOptions.loan_no,  
                     'branchId': searchOptions.branchId,
                     'centreCode': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'customerCategoryHubManager':'C,D',
+                    'page': pageOpts.pageNo,
+                    'per_page': pageOpts.itemsPerPage
+                }).$promise;*/
+                var promise = LoanProcess.bounceCollectionDemand({
+                    'accountNumbers': searchOptions.loan_no,
+                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
+                    'centreId': searchOptions.centre,
+                    'customerName': searchOptions.first_name,
+                    'promisreToPayDate': searchOptions.promisreToPayDate,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage
                 }).$promise;
@@ -99,11 +75,6 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
             },
             listOptions: {
                 expandable: true,
-                /*itemCallback: function(item, index) {
-                    $log.info(item);
-                    $log.info("Redirecting");
-                    $state.go('Page.Engine', {pageName: 'AssetsLiabilitiesAndHealth', pageId: item.id});
-                },*/
                 getItems: function(response, headers){
                     if (response!=null && response.length && response.length!=0){
                         return response;
@@ -112,17 +83,25 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 },
                 getListItem: function(item){
                     return [
-                       item.customerName,
-                        // "{{'APPLICANT'|translate}}: " + item.applicant,
-                        // "{{'CO_APPLICANT'|translate}}: " + item.coApplicant,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'), /*Service is missing*/
-                        "{{'AMOUNT_DUE'|translate}}: " + (Utils.ceil(item.amount1) ||'-'), /*amount1 is TotalDemandDue*/
+                       /*item.customerName,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'),
+                        "{{'AMOUNT_DUE'|translate}}: " + (Utils.ceil(item.amount1) ||'-'), 
                         "{{'PRINCIPAL'|translate}} : " + item.part1,
                         "{{'INTEREST'|translate}} : " + item.part2,
                         "{{'PENAL_INTEREST'|translate}} : " + item.part3,
                         "{{'CHARGES'|translate}} : " + item.part4,
                         "{{'FEES'|translate}} : " + item.amount2,
-                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues
+                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues*/
+
+                        item.customerName,
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1), /*amount1 is TotalDemandDue*/
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
+                        "{{'CHARGES'|translate}}: " + (item.part4||'-'),                /*Service is missing*/
+                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
+                        "{{'AMOUNT_PAID'|translate}}: " + item.repaidAmountSum
                     ]
                 },
                 getActions: function(){
@@ -133,12 +112,9 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item,_screen:"BounceRecoveryQueue"});
-                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountNumber});
+                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         },
@@ -148,12 +124,9 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item,_screen:"BounceRecoveryQueue"});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountNumber});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountId});
                             },
                             isApplicable: function(item, index){
-                                //if (index%2==0){
-                                //  return false;
-                                //}
                                 return true;
                             }
                         }

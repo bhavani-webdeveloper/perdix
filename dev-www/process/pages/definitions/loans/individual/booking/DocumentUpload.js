@@ -87,31 +87,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                             }, function(data) {
                                                 $log.info("Inside success of activateLoan");
                                                 LoanProcess.generateScheduleForSpecifiedDate({
-                                                "accountNumber": model._queue.accountNumber,
-                                                "amount":model.loanAccount.disbursementSchedules[0].disbursementAmount,
-                                                "scheduledDisbursementDate":model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,
-                                                "firstRepaymentDate":model.loanAccount.firstRepaymentDate
-                                            })
+                                                        "accountNumber": model._queue.accountNumber,
+                                                        "amount":model.loanAccount.disbursementSchedules[0].disbursementAmount,
+                                                        "scheduledDisbursementDate":model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate,
+                                                        "firstRepaymentDate":model.loanAccount.firstRepaymentDate
+                                                    })
                                                     .$promise
                                                     .then(function(resp) {}, function(httpRes) {
                                                         PageHelper.showProgress('loan-load', 'Failed to load the EMI Schedule. Try again.', 4000);
                                                         PageHelper.showErrors(httpRes);
+                                                    }).finally(function(){
+                                                        PageHelper.hideLoader();
                                                     });
                                             }, function(res) {
                                                 PageHelper.hideLoader();
                                                 PageHelper.showErrors(res);
                                                 PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
                                             });
+                                        } else {
+                                            PageHelper.hideLoader();
                                         }
                                     },
                                     function(httpRes) {
-
+                                        PageHelper.hideLoader();
                                     }
                                 )
-                                .finally(function(httpRes) {
-
-                                })
-                            PageHelper.hideLoader();
                         },
                         function(httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);

@@ -7,9 +7,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 		"title": "CUSTOMER_SEARCH",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-			model.branch = branch;
 			$log.info("search-list sample got initialized");
-			formCtrl.submit();
 		},
 		definition: {
 			title: "Search Customers",
@@ -47,15 +45,13 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "string",
+						"type": ["null", "number"],
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
-							"screenFilter": true
-						}
+                            "parentEnumCode": "branch"
+						},
+                        "parentEnumCode": "branch"
 					}
 
 				},
@@ -69,7 +65,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				var promise = Enrollment.search({
 					'branchName': searchOptions.branch,
 					'firstName': searchOptions.first_name,
-					'centreCode': searchOptions.centre,
+					'centreId': searchOptions.centre,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
 					'kycNumber': searchOptions.kyc_no,
@@ -81,16 +77,15 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 			},
 			paginationOptions: {
 				"getItemsPerPage": function(response, headers){
-					return 100;
+					return 20;
 				},
 				"getTotalItemsCount": function(response, headers){
 					return headers['x-total-count']
 				}
 			},
 			listOptions: {
-				selectable: true,
+				selectable: false,
 				expandable: true,
-				listStyle: "table",
 				itemCallback: function(item, index) {
 				},
 				getItems: function(response, headers){
@@ -101,52 +96,14 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				},
 				getListItem: function(item){
 					return [
-						Utils.getFullName(item.firstName, item.middleName, item.lastName),
+						(item.customerType === 'Enterprise'?'<i class="fa fa-industry" style="color:#777">&nbsp;</i> ':'<i class="fa fa-user" style="color:#777">&nbsp;</i> ') +
+							Utils.getFullName(item.firstName, item.middleName, item.lastName),
 						'Customer ID : ' + item.id,
 						item.urnNo?('URN : ' + item.urnNo):("{{'CURRENT_STAGE'|translate}} : " + (item.currentStage==='Stage02'?'House verification':
 							(item.currentStage==='Stage01'?'Enrollment':item.currentStage))),
 						"{{'BRANCH'|translate}} : " + item.kgfsName,
 						"{{'CENTRE_CODE'|translate}} : " + item.centreCode,
 						"{{'FATHERS_NAME'|translate}} : " + Utils.getFullName(item.fatherFirstName, item.fatherMiddleName, item.fatherLastName)
-					]
-				},
-				getTableConfig: function() {
-					return {
-						"serverPaginate": true,
-						"paginate": true,
-						"pageLength": 10
-					};
-				},
-				getColumns: function(){
-					return [
-						{
-							title:'NAME',
-							data: 'firstName',
-							render: function(data, type, full, meta) {
-								return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
-							}
-						},
-						{
-							title:'URN_NO',
-							data: 'urnNo'
-							// type: 'html',
-						},
-						{
-							title:'CURRENT_STAGE',
-							data: 'currentStage'
-						},
-						{
-							title:'BRANCH',
-							data: 'kgfsName'
-						},
-						{
-							title:'CENTRE_CODE',
-							data: 'centreCode'
-						},
-						{
-							title:'FATHERS_NAME',
-							data: 'fatherFirstName'
-						}
 					]
 				},
 				getActions: function(){
@@ -162,7 +119,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='BasicEnrolment')
+								if (item.currentStage==='Stage01')
 									return true;
 								return false;
 							}
@@ -170,7 +127,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						{
 							name: "Do House Verification",
 							desc: "",
-							icon: "fa fa-building",
+							icon: "fa fa-house",
 							fn: function(item, index){
 								$state.go("Page.Engine",{
 									pageName:"AssetsLiabilitiesAndHealth",
@@ -178,13 +135,13 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
+								if (item.currentStage==='Stage02')
 									return true;
 								return false;
 							}
 						},
 						{
-							name: "CUSTOMER_360",
+							name: "Customer 360",
 							desc: "",
 							icon: "fa fa-user",
 							fn: function(item, index){

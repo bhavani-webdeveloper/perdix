@@ -77,7 +77,7 @@
           "type": "string"
         },
         "customerAccountNumber": {
-          "type": "string"
+          "type": ["null", "string"]
         },
         "customerName": {
           "type": "string"
@@ -98,19 +98,19 @@
           "type": "integer"
         },
         "ifscCode": {
-          "type": "string"
+          "type": ["null", "string"]
         },
         "customerBankName": {
-          "type":"string"
+          "type": ["null", "string"]
         },
         "customerBankBranchName": {
-          "type":"string"
+          "type": ["null", "string"]
         },
         "party":{
            "type":"string"
         },
         "customerNameInBank":{
-           "type":"string"
+           "type":["null", "string"]
         },
         "loanId": {
           "type": "integer"
@@ -177,14 +177,11 @@
         "accountNumber",
         "actualDisbursementDate",
         "currentStage",
-        "customerAccountNumber",
-        "customerName",
         "customerSignatureDate",
         "disbursedAmount",
         "disbursementAmount",
         "disbursementFromBankAccountNumber",
         "id",
-        "ifscCode",
         "loanId",
         "remarks",
         "scheduledDisbursementDate",

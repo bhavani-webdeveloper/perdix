@@ -14,7 +14,9 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.disbursement.PendingFROQueue",
             "Page/Engine/loans.individual.disbursement.PendingCROQueue",
             "Page/Engine/loans.individual.disbursement.EMIScheduleGenQueue",
-            "Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue"
+            "Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue",
+            "Page/Engine/loans.individual.disbursement.LOCDisbursement",
+            "Page/Engine/loans.individual.disbursement.LOCDisbursementQueue"
         ]
     };
 

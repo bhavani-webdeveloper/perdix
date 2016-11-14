@@ -48,6 +48,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					"accountNumber": {
 						"title": "ACCOUNT_NUMBER",
 						"type": "string"
+					},
+					"customerName": {
+						"title": "ENTITY_NAME",
+						"type": "string"
 					}
 				},
 				"required":["branchName"]
@@ -64,6 +68,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					'centreCode': searchOptions.centreCode,
 					'customerId': searchOptions.customerId,
 					'accountNumber': searchOptions.accountNumber,
+					'customerName': searchOptions.customerName,
                     'page': pageOpts.pageNo
 				}).$promise;
 				return promise;

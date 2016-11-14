@@ -98,6 +98,23 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		return translationLangs[langCode];
 	};
 
+    resource.getAccountDetails = function(accountNumbers){
+        var deferred = $q.defer();
+        var request = {"account_numbers":accountNumbers};
+        resource.getResult("loanAccountIn.list", request, 1).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
     resource.getLoanProductDocuments = function(prodCode, process, stage){
         var deferred = $q.defer();
         resource.getResult('loan_products.list', {product_code: prodCode, process:process, stage:stage}).then(
@@ -343,6 +360,83 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
             }, deferred.reject);
 
         return deferred.promise;
+    }
+
+    resource.getLoanAccount = function(account_number,branch_id){
+        var deferred = $q.defer();
+        resource.getResult('loanAccount.list', {account_number:account_number,branch_id:branch_id}).then(
+            function(res){
+            	$log.info("checking checking");
+            	$log.info(res);
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results[0]);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(err){
+                deferred.reject(err);
+            }
+        )
+        return deferred.promise;
+    }
+
+    resource.getCollectionBranchSets = function(){
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("collectionsBranchSet.list", request)
+            .then(function(records){
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+
+        return deferred.promise;
+    }
+
+    resource.getUnApprovedPaymentsForAccount = function(accountNumber){
+        var deferred = $q.defer();
+        var request = {
+            'account_number': accountNumber
+        };
+        resource.getResult("unApprovedPaymentForAccount.list", request)
+            .then(function(records){
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+
+        return deferred.promise;
+    }
+
+    resource.getCBSBanks = function(){
+    	var deferred = $q.defer();
+    	var request = {};
+    	resource.getResult("cbsBanks.list", request)
+    		.then(function(records){
+    			if (records && records.results) {
+    				var result = {
+    					headers: {
+    						"x-total-count": records.results.length
+    					},
+    					body: records.results
+    				};
+    				deferred.resolve(result);
+    			}
+    		}, deferred.reject);
+
+    	return deferred.promise;
     }
 
 	return resource;

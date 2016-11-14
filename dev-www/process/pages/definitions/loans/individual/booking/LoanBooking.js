@@ -339,8 +339,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                     if (model.loanAccount.firstRepaymentDate){
                         var date = firstRepaymentDate.get("date");
-                        if(date != 5 && date != 15){
-                            PageHelper.showProgress("loan-create","First repayment date should be 5 or 15",5000);
+                        if(date != 5 && date != 10 && date != 15){
+                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
                             return false;
                         }
                     }

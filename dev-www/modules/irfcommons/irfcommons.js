@@ -63,7 +63,7 @@ irf.commons.filter("initcap", function() {
 });
 
 
-irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
+irf.commons.factory("Utils", ["$log", "$q", "$http", "Queries", function($log, $q, $http, Queries){
 	var isCordovaFlag = typeof cordova !== 'undefined';
 	return {
 		isCordova: isCordovaFlag,
@@ -83,7 +83,26 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
 			}
 			return false;
 		},
+		roundToDecimal: function(amount){
+			return (Math.round( amount * 1e2 ) / 1e2);
+		},
+		getCBSDate: function(){
+			var deferred = $q.defer();
+			Queries.getCBSBanks()
+				.then(function(results){
+					var results = results.body;
+					if (results && results.length > 0){
+						var result = results[0];
+						deferred.resolve(result.current_working_date);
 
+					} else {
+						deferred.reject("Date not available");
+					}
+				}, function(){
+					deferred.reject("Unknown Error");
+				});
+			return deferred.promise;
+		},
 		getFullName: function(f, m, l) {
 			return f + (m&l?' '+m:'') + (l?' '+l:'');
 		},
@@ -210,6 +229,10 @@ irf.commons.factory("Utils", ["$log", "$q","$http", function($log, $q,$http){
     		} else {
     			return -1;
     		}
+        },
+        dateToLocalTZ: function(mysqlDate){
+        	var localUtcOffset = moment().utcOffset();
+        	return moment.utc(mysqlDate).utcOffset(localUtcOffset);
         }
 
 	};

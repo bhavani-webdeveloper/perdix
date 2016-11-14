@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.PaymentReversal"),
-["$log", "Queries", "SessionStore", "$state", "formHelper", "LoanAccount", "Utils", "PageHelper",
-function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, PageHelper) {
+["$log", "Queries", "SessionStore", "$state", "formHelper", "LoanAccount", "Utils", "PageHelper", "$q",
+function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, PageHelper, $q) {
 
     var branch = SessionStore.getBranch();
 
@@ -17,8 +17,10 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                 "title": "LAST_REPAYMENT",
                 "items": [
                     {
-                        "key": "repayment.branchName",
+                        "key": "repayment.branchId",
                         "title": "BRANCH",
+                        "enumCode": "branch_id",
+                        "type": "select",
                         "readonly": true
                     },
                     {
@@ -27,26 +29,36 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                         "type": "lov",
                         "autolov": true,
                         "inputMap": {
-                            "account_number":{
+                            "accountId":{
                                 "key":"repayment.accountId",
                                 "title":"ACCOUNT_NUMBER"
                             }
                         },
                         "outputMap": {
-                            "account_number": "repayment.accountId",
-                            "branch_name": "repayment.branchName",
-                            "urn_no":"repayment.urnNo",
-                            "first_name":"repayment.customerName",
-                            "transaction_id":"repayment.transactionId",
-                            "repayment_type":"repayment.transactionName",
-                            "repayment_date":"repayment.transactionDate",
-                            "repayment_amount":"repayment.repaymentAmount"
+                            "accountId": "repayment.accountId",
+                            "branchName": "repayment.branchName",
+                            "urnNo":"repayment.urnNo",
+                            "customerName":"repayment.customerName",
+                            "transactionId":"repayment.transactionId",
+                            "transactionName":"repayment.transactionName",
+                            "transactionDate":"repayment.transactionDate",
+                            "amount":"repayment.amount"
                         },
                         "searchHelper": formHelper,
                         initialize: function(inputModel) {
                         },
                         search: function(inputModel, form, model) {
-                            return Queries.getLatestLoanRepayment(inputModel.account_number || model.repayment.accountId);
+                            var deferred = $q.defer();
+                            LoanAccount.getTransactionForReversal({accountId: (inputModel.accountId || model.repayment.accountId), "accountNo": (inputModel.accountId || model.repayment.accountId)}).$promise
+                            .then(function(resp) {
+                                deferred.resolve({
+                                    "headers": {
+                                        "x-total-count": 1
+                                    },
+                                    body: [resp]
+                                });
+                            }, deferred.reject);
+                            return deferred.promise;
                         },
                         getListDisplayItem: function(item, index) {
                             return [
@@ -56,16 +68,45 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                             ];
                         },
                         onSelect: function(result, model, context) {
+                            PageHelper.showProgress("loading-account-details", "Loading Account Details...");
+                            PageHelper.showLoader();
+                            Queries.getAccountDetails([result.accountId])
+                                .then(
+                                    function(res){
+                                        if (res.body.length == 0){
+                                            PageHelper.showProgress("loading-account-details", "Unable to load loan details", 5000);
+                                        }
+                                        if (res.body.length > 0){
+                                            PageHelper.showProgress("loading-account-details", "Done", 5000);
+                                            model.repayment.branchId = res.body[0].branch_id;
+                                            model.repayment.customerName = res.body[0].first_name;  
+                                            model.repayment.customerType = res.body[0].customer_type;  
+                                        }
+                                    }, function(httpRes){
+                                        PageHelper.showProgress("loading-account-details", "Unable to load loan details", 5000);
+                                    }
+                                )
+                                .finally(function(){
+                                    PageHelper.hideLoader();
+                                })
+
                         }
                     },
                     {
                         "key": "repayment.urnNo",
-                        "title": "CUSTOMER_URN",
+                        "title": "URN",
                         "readonly": true
                     },
                     {
                         "key": "repayment.customerName",
                         "title": "CUSTOMER_NAME",
+                        "condition": "model.repayment.customerType == 'Individual'",
+                        "readonly": true
+                    },
+                    {
+                        "key": "repayment.customerName",
+                        "title": "ENTERPRISE_NAME",
+                        "condition": "model.repayment.customerType == 'Enterprise'",
                         "readonly": true
                     },
                     {
@@ -85,9 +126,8 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                         "type": "date"
                     },
                     {
-                        "key": "repayment.repaymentAmount",
+                        "key": "repayment.amount",
                         "title": "AMOUNT",
-                        "type": "amount",
                         "readonly": true
                     }
                 ]
@@ -122,7 +162,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                 Utils.confirm("Are you sure?").then(function(){
                     PageHelper.showLoader();
                     PageHelper.showProgress("payment-reversal","Processing Reversal",3000);
-                    LoanAccount.manualReversal(model.repayment).$promise.then(function(resp) {
+                    LoanAccount.manualReversalOfRepayments(model.repayment).$promise.then(function(resp) {
                         PageHelper.showProgress("payment-reversal","Transaction reversed successfully",3000);
                         var accountId = model.repayment.accountId;
                         model.repayment = {};

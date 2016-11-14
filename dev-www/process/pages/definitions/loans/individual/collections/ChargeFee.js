@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.ChargeFee"),
-["$log", "SchemaResource", "SessionStore", "Utils", "$stateParams", "LoanAccount", "PageHelper",
-    function($log, SchemaResource, SessionStore, Utils, $stateParams, LoanAccount, PageHelper) {
+["$log", "SchemaResource", "SessionStore", "Utils", "$stateParams", "LoanAccount", "PageHelper", "$state",
+    function($log, SchemaResource, SessionStore, Utils, $stateParams, LoanAccount, PageHelper, $state) {
 
         return {
             "type": "schema-form",
@@ -12,6 +12,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.ChargeFee"),
                 model.chargeFee.accountNumber = $stateParams.pageId;
                 model.chargeFee.transactionDate = Utils.getCurrentDate();
                 model.chargeFee.userId = SessionStore.getLoginname();
+                model.chargeFee.urnNo = "";
             },
             form: [{
                 "type": "box",
@@ -31,12 +32,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.ChargeFee"),
                     "readonly": true,
                     "condition": "model._loan.loanAmount"
                 }, {
-                    "key": "chargeFee.transactionDate",
+                    "key": "chargeFee.repaymentDate",
                     "title": "FEE_DATE",
                     "type": "date",
-                    "readonly": true
+                    "required": true
                 }, {
-                    "key": "chargeFee.transactionName",
+                    "key": "chargeFee.remarks",
                     "title": "FEE_TYPE",
                     "type": "select",
                     "enumCode": "charge_fee_type",

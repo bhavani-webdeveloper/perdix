@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
-["$log", "$filter","$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch",
-function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch){
 
     return {
@@ -18,7 +18,6 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
-            model.customer.kgfsName = 'Bommasandra';
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -32,58 +31,19 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
             "type": "box",
             "title": "PERSONAL_INFORMATION",
             "items": [
-            {
-                type: "section",
-                html: "<pre>{{model|json}}</pre>"
-            },
                 {
-                    key: "customer.kgfsName",
+                    key: "customer.customerBranchId",
                     title:"BRANCH_NAME",
-                    type: "select",
-                    selection: "single",
-                    getTitleMap: "helper.titleMap('branch')",
-                   /* getTitleMap: function(modelValue, form, model, titleMap) {
-                        if (titleMap && titleMap.length) {
-                            return titleMap;
-                        }
-                        return [{
-                            "name": "Branch 1",
-                            "value": "branch1"
-                        }, {
-                            "name": "Branch 2",
-                            "value": "branch2"
-                        }];
-                    },*/
-                    onChange: function(modelValue) {
-                        $log.info(modelValue);
-                    },
-                    returns: "value"
+                    type: "select"
                 },
                 {
                     key:"customer.centreId",
                     type:"select",
-                    getTitleMap: "helper.titleMap('centre')",
-                    refreshTitleMap: true,
-                    parentEnumCode: "branch",
-                    filters: [{
-                        "filterOn": "parentCode",
-                        // 1.
-                        //"filteredBy": "model.customer.kgfsName",
-
-                        // 2.
-                       // "getFilteredBy": "helper.filterByParentCode(model.customer.kgfsName, 'branch')",
-
-                        // 3.
-                       // "getFilteredBy": "actions.filterCentreId(model, form, filters)",
-
-                        // 4.
-                        "getFilteredBy": function(model, form, filter) {
-                            return $filter('filter')(formHelper.enum('branch').data, {value: model.customer.kgfsName},true)[0].code;
-                        }
-                    }],
-                    onChange: function(modelValue,form, model, event) {
-
-                    }
+                    /*filter: {
+                        "parentCode": "branch_id"
+                    },*/
+                    parentEnumCode:"branch_id",
+                    screenFilter: true
                 },
                 {
                     key: "customer.oldCustomerId",
@@ -285,35 +245,47 @@ function($log,$filter, $state, Enrollment, EnrollmentHelper, SessionStore, formH
                             fieldType: "number",
                             autolov: true,
                             inputMap: {
-                                "pincode": "customer.mailingPincode",
-                                "district": {
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": {
                                     key: "customer.mailingDistrict"
                                 },
-                                "state": {
+                                "mailingState": {
                                     key: "customer.mailingState"
                                 }
                             },
                             outputMap: {
-                                "pincode": "customer.mailingPincode",
-                                "district": "customer.mailingDistrict",
-                                "state": "customer.mailingState"
+                                "mailingDivision": "customer.mailingLocality",
+                                "mailingPincode": "customer.mailingPincode",
+                                "mailingDistrict": "customer.mailingDistrict",
+                                "mailingState": "customer.mailingState"
                             },
                             searchHelper: formHelper,
+                            initialize: function(inputModel) {
+                                $log.warn('in pincode initialize');
+                                $log.info(inputModel);
+                            },
                             search: function(inputModel, form, model) {
-                                if (!inputModel.pincode) {
+                                if (!inputModel.mailingPincode) {
                                     return $q.reject();
                                 }
                                 return Queries.searchPincodes(
-                                    inputModel.pincode,
-                                    inputModel.district,
-                                    inputModel.state
+                                    inputModel.mailingPincode,
+                                    inputModel.mailingDistrict,
+                                    inputModel.mailingState
                                 );
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
+                                    item.division + ', ' + item.region,
                                     item.pincode,
                                     item.district + ', ' + item.state
                                 ];
+                            },
+                            onSelect: function(result, model, context) {
+                                model.customer.mailingPincode = result.pincode;
+                                model.customer.mailingLocality = result.division;
+                                model.customer.mailingState = result.state;
+                                model.customer.mailingDistrict = result.district;
                             }
                         },
                         "customer.mailingLocality",

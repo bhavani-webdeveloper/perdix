@@ -864,9 +864,44 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         type:"amount"
                                     },
                                     {
-                                        key:"loanAccount.disbursementSchedules[].tranchCondition",
-                                        title:"TRACHE_CONDITION",
-                                        type:"textarea"
+                                        key: "loanAccount.disbursementSchedules[].tranchCondition",
+                                        type: "lov",
+                                        autolov: true,
+                                        title:"TRANCHE_CONDITION",
+                                        bindMap: {
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            
+                                            var trancheConditions = formHelper.enum('tranche_conditions').data;
+                                            var out = [];
+                                            for (var i=0;i<trancheConditions.length; i++){
+                                                var t = trancheConditions[i];
+                                                var min = _.hasIn(t, "field1")?parseInt(t.field1) - 1: 0;
+                                                var max = _.hasIn(t, "field2")?parseInt(t.field2) - 1: 100;
+
+                                                if (context.arrayIndex>=min && context.arrayIndex <=max){
+                                                    out.push({
+                                                        name: trancheConditions[i].name,
+                                                        value: trancheConditions[i].value
+                                                    })    
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
                                     }
                                 ]
                             }
@@ -944,6 +979,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 submit: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
+
+                    if (!_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
+                        if (!_.isArray(model.loanAccount.guarantors) || model.loanAccount.guarantors.length == 0){
+                            PageHelper.showProgress('loan-product-guarantor-required', 'Guarantor is mandatory for the selected product', 5000);
+                            return;    
+                        }
+                    }
 
                     model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2;
                     if (model.loanAccount.applicant === model.loanAccount.coBorrowerUrnNo) {
