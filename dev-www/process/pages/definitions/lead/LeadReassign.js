@@ -4,7 +4,6 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
     function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, LeadHelper) {
 
-        var branch = SessionStore.getBranch();
         return {
             "type": "schema-form",
             "title": "LEAD_ASSIGN",
@@ -72,11 +71,11 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         "key": "lead.branchName",
                         readonly: true
                     }, {
-                        key: "lead.spokeName",
+                        key: "lead.centreId",
                         "enumCode": "centre",
                         type: "select",
                         "filter": {
-                            "parentCode as branch": "model.branch"
+                            "parentCode": "branch"
                         }
                     }, ]
                 },
