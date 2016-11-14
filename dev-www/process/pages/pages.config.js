@@ -1,9 +1,9 @@
 
 irf.HOME_PAGE = {
-	"url": "Page/Engine",
-	"to": "Page.Engine",
+	"url": "Page/Landing",
+	"to": "Page.Landing",
 	"params": {
-		"pageName": "audit.OpenAuditsQueue",
+		"pageName": null,
 		"pageId": null
 	},
 	"options": {
