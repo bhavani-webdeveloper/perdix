@@ -7,9 +7,9 @@
 			"items": [
 				"Page/Engine/lead.LeadGeneration",
 				"Page/Engine/lead.LeadBulkUpload",
-				"Page/Engine/lead.LeadFollowUp",
-				"Page/Engine/lead.leadAssignmentPending",
-				"Page/Engine/lead.IncompleteLead"
+				"Page/Engine/lead.LeadFollowUpQueue",
+				"Page/Engine/lead.leadAssignmentPendingQueue",
+				"Page/Engine/lead.IncompleteLeadQueue"
 			]
 		},
 		{
