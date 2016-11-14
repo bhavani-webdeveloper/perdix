@@ -7,15 +7,15 @@
  *
  *
  */
-irf.pages.factory('BundleManager', ['$log', function($log){
+irf.pages.factory('BundleManager', ['BundleLog', function(BundleLog){
 
     var currentInstance = null;
 
     return {
-        register: function(pageName){
+        register: function(bundlePage){
             var newInstance = {
-                name: pageName,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                bundlePage: bundlePage
             };
             currentInstance = newInstance;
             return currentInstance;
@@ -27,12 +27,33 @@ irf.pages.factory('BundleManager', ['$log', function($log){
          */
         getInstance: function(){
             return currentInstance;
+        },
+        pushEvent: function(eventName, obj){
+            BundleLog.info("Recieved event [" + eventName + "]");
+            BundleLog.info(obj);
         }
     }
 }]);
 
-irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "BundleManager",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, BundleManager) {
+irf.pages.factory('BundleLog', ['$log', function($log){
+    return {
+        "info": function(msg){
+            $log.info("<<BUNDLE>> :: " + msg);    
+        },
+        "debug": function(msg){
+            $log.debug("<<BUNDLE>> :: " + msg);    
+        },
+        "error": function(msg){
+            $log.error("<<BUNDLE>> :: " + msg);    
+        },
+        "warn": function(msg){
+            $log.warn("<<BUNDLE>> :: " + msg);    
+        }
+    }
+}]);
+
+irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "BundleManager", "BundleLog",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, BundleManager, BundleLog) {
     var self = this;
 
     $scope.pages = [];
@@ -58,7 +79,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         try {
             pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
         } catch (e) {
-            $log.error(e);
+            BundleLog.error(e);
             pageObj.error = true;
             //$state.go('Page.EngineError', {pageName:$scope.pageName});
         }
@@ -91,7 +112,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     $scope.formCtrl = event.targetScope[$scope.formName];
                 });
                 $scope.$on('sf-render-finished', function(event) {
-                    $log.warn("on sf-render-finished on page, rendering layout");
+                    BundleLog.warn("on sf-render-finished on page, rendering layout");
                     //setTimeout(renderLayout);
                 });
             } else if (pageObj.page.type == 'search-list') {
@@ -102,12 +123,12 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     var acts = pageObj.page.definition.actions = pageObj.page.definition.actions || {};
                     acts.preSave = function(model, formCtrl, formName) {
                         var deferred = $q.defer();
-                        $log.warn('on pageengine preSave');
+                        BundleLog.warn('on pageengine preSave');
                         var offlinePromise = pageObj.page.getOfflinePromise(model);
                         if (offlinePromise && _.isFunction(offlinePromise.then)) {
                             offlinePromise.then(function(out) {
-                                $log.warn('offline results:');
-                                $log.warn(out.body.length);
+                                BundleLog.warn('offline results:');
+                                BundleLog.warn(out.body.length);
                                 /* Build results */
                                 var items = pageObj.page.definition.listOptions.getItems(out.body, out.headers);
                                 model._result = model._result || {};
@@ -135,7 +156,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.removeTab = function(index) {
         var bundlePage = $scope.pages[index].bundlePage;
         --bundlePage.openPagesCount;
-        $log.info($scope.pages.splice(index, 1));
+        BundleLog.info($scope.pages.splice(index, 1));
         if ($scope.addTabMenu.indexOf(bundlePage) == -1) {
             $scope.addTabMenu.push(bundlePage);
         }
@@ -143,7 +164,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
     $scope.addTab = function(index) {
         var bundlePage = $scope.addTabMenu[index];
-        $log.info(bundlePage);
+        BundleLog.info(bundlePage);
         var openPage = initializePage(bundlePage);
         var insertIndex = -1;
         for (var i = 0; i < $scope.pages.length; i++) {
@@ -158,27 +179,29 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
         ++bundlePage.openPagesCount;
         if (bundlePage.maximum <= bundlePage.openPagesCount) {
-            $log.debug($scope.addTabMenu.splice(index, 1));
+            BundleLog.debug($scope.addTabMenu.splice(index, 1));
         }
     };
 
     $scope.$on('$viewContentLoaded', function(event) {
-        $log.info('$viewContentLoaded');
+        BundleLog.info('$viewContentLoaded');
         $('a[href^="#"]').click(function(e){
             e.preventDefault();
         });
-
-        var bundleInstance = BundleManager.register();
-
+        
         /* Loading the page */
         try {
             $scope.page = $injector.get(irf.page($scope.pageName));
         } catch (e) {
-            $log.error(e);
+            BundleLog.error(e);
             $scope.error = true;
             //$state.go('Page.EngineError', {pageName:$scope.pageName});
         }
         /* Done loading the page. */
+        BundleLog.info("Bundle Page Loaded");
+        var bundleInstance = BundleManager.register($scope.page);
+        BundleLog.info("Ready to accept events");
+
 
         bundle.pages = $scope.page.bundlePages;
 
@@ -198,6 +221,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 $scope.addTabMenu.push(bundlePage);
             }
         }
+        
 
     });
 }]);

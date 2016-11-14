@@ -30,8 +30,13 @@ irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
 			            maximum: 1
 			        }
         		],
-        		"initialize": function(model, form, formCtrl){
+        		"initialize": function(model, form, formCtrl, bundleManager){
 
+        		},
+        		eventListeners: {
+        			"on-customer-load": function(params){
+        				
+        			}
         		}
         	}
         }

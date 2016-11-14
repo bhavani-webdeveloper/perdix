@@ -25,11 +25,11 @@
           </span>
         </h1>
       </section>
-
       <section ng-hide="pageObj.error" class="content">
+      
         <div ng-switch="pageObj.page.type" class="row page-row">
           <irf-sf ng-switch-when="schema-form"
-            initialize="pageObj.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
+            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
             irf-schema="pageObj.page.schema"
             irf-form="pageObj.page.form"
             irf-actions="pageObj.page.actions"
