@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var wiredep = require('wiredep').stream;
 var chalk = require('chalk');
 var useref = require('gulp-useref');
+var del = require('del');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var $ = gulpLoadPlugins();
 
@@ -15,6 +16,8 @@ var $ = gulpLoadPlugins();
  | file for our application, as well as publishing vendor resources.
  |
  */
+
+var buildDirectory = "www";
 
 
 gulp.task('bower', function () {
@@ -31,11 +34,16 @@ gulp.task('bower', function () {
         .pipe(gulp.dest('./'))
 });
 
+gulp.task('clean', function(){
+    return del([
+            buildDirectory + "/**/*"
+        ])
+})
 
 gulp.task('fonts', function(){
     return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {}))
         .pipe($.print())
-        .pipe(gulp.dest('www/fonts'));
+        .pipe(gulp.dest(buildDirectory + '/fonts'));
 })
 
 gulp.task('assets', function(){
@@ -49,7 +57,7 @@ gulp.task('assets', function(){
         'dev-www/js/index.js',
         'dev-www/app_manifest.json'
         ], {base: 'dev-www/'})
-        .pipe(gulp.dest('www/'));
+        .pipe(gulp.dest(buildDirectory));
 })
 
 gulp.task('cordovaAssets', function(){
@@ -60,8 +68,12 @@ gulp.task('cordovaAssets', function(){
 gulp.task('html', function(){
     return gulp.src('dev-www/index.html')
         .pipe($.useref())
+        .pipe($.if('*.js', $.rev()))
+        .pipe($.if('*.css', $.rev()))
+        .pipe($.revReplace())
         .pipe($.print())
-        .pipe(gulp.dest('www/'))
+        .pipe(gulp.dest(buildDirectory))
 })
 
 gulp.task('build', ['html', 'assets', 'fonts']);
+
