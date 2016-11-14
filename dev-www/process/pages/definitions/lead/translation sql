@@ -46,6 +46,7 @@ INSERT INTO `translations` (`id`, `label_code`, `category`, `sub_category`, `typ
 (NULL, 'FOLLOWUP_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Follow Up Date', '', ''),
 (NULL, 'SCREENING_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Screening Date', '', ''),
 (NULL, 'INTER_ACTION_DATE', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Interaction Date', '', ''),
+(NULL, 'LEAD_INTERACTIONS', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Lead Interactions', '', ''),
 (NULL, 'ADDITIONAL_REMARKS', 'LEAD', 'LEAD GENERATION', 'FIELD_LABEL', 'Additional Remarks', '', '');
 
 
