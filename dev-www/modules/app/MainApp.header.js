@@ -52,9 +52,14 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 	};
 
 	$scope.logout = function() {
-		authService.logout();
-
-		$state.go("Login");
+		var promise = authService.logout();
+		promise.then(
+			function(){
+				$state.go("Login");
+			}, function(){
+				alert('Logout failed');
+			}
+		)
 	};
 
 	$scope.languages = languages;

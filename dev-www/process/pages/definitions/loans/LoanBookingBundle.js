@@ -12,20 +12,23 @@ irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [
         			{
-			            pageName: 'customer.IndividualEnrollment',
+			            pageName: 'customer.IndividualEnrollment2',
 			            title: 'APPLICANT',
+			            type: 'applicant',
 			            minimum: 1,
 			            maximum: 1
 			        }, 
 			        {
-			            pageName: 'customer.IndividualEnrollment',
+			            pageName: 'customer.IndividualEnrollment2',
 			            title: 'CO_APPLICANT',
+			            type: 'co-applicant',
 			            minimum: 1,
 			            maximum: 3
 			        }, 
 			        {
 			            pageName: 'customer.EnterpriseEnrollment',
 			            title: 'BUSINESS',
+			            type: 'business',
 			            minimum: 1,
 			            maximum: 1
 			        }
@@ -35,7 +38,7 @@ irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
         		},
         		eventListeners: {
         			"on-customer-load": function(params){
-        				
+
         			}
         		}
         	}

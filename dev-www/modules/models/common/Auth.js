@@ -26,9 +26,10 @@ irf.models.factory('AuthTokenHelper', ['SessionStore', '$log', function(SessionS
 }]);
 
 irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_URL,AuthTokenHelper){
-	var endpoint = BASE_URL + '/oauth/token?cacheBuster=' + Date.now();
+	var endpoint = BASE_URL;
 	var resource = $resource(endpoint, {}, {
 		'login':{
+			url: endpoint + "/oauth/token?cacheBuster=" + Date.now(),
 			method: 'POST',
 			headers: {
 				'Accept':'application/json',
@@ -37,6 +38,10 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 			transformRequest: function (data) {
 				return $httpParamSerializer(data);
 			}
+		},
+		'logout': {
+			method: 'POST',
+			url: endpoint + '/api/logout?cacheBuster=' + Date.now()
 		}
 	});
 

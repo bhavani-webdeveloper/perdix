@@ -93,8 +93,17 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		},
 		setUserData: setUserData,
 		logout: function() {
-			removeUserData();
-			AuthTokenHelper.clearAuthData();
+			var deferred = $q.defer();
+			Auth.logout().$promise.then(
+				function(res){
+					removeUserData();
+					AuthTokenHelper.clearAuthData();
+					deferred.resolve("SUCCESS");
+				}, function(httpRes){
+					deferred.reject(httpRes);
+				}
+			)
+			return deferred.promise;
 		}
 	}
 }]);
