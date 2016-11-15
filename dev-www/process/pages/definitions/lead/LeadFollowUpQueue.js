@@ -146,7 +146,7 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 					},
 					getActions: function() {
 						return [{
-							name: "Additional Lead Details",
+							name: "Follow Up Lead",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
