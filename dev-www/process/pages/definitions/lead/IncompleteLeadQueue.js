@@ -27,17 +27,15 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 								"screenFilter": true
 							}
 						},
-						"centreId": {
-							"title": "SPOKE_NAME",
-							"type": "number",
+						"centre": {
+							"title": "CENTRE",
+							"type": ["null", "number"],
 							"enumCode": "centre",
 							"x-schema-form": {
 								"type": "select",
-								"filter": {
-									"parentCode": "branch"
-								},
-								"screenFilter": true
-							}
+								"parentEnumCode": "branch"
+							},
+							"parentEnumCode": "branch"
 						},
 						"leadName": {
 							"title": "LEAD_NAME",
@@ -129,15 +127,18 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 						}, {
 							title: 'CityTownVillage',
 							data: 'cityTownVillage'
-						},{
+						}, {
 							title: 'Area',
 							data: 'area'
-						},{
+						}, {
 							title: 'Spoke',
-							data: 'centreName'
+							data: 'centreId'
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
+						}, {
+							title: 'Mobile No',
+							data: 'mobileNo'
 						}]
 					},
 					getActions: function() {

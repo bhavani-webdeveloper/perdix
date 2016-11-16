@@ -75,7 +75,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         "enumCode": "centre",
                         type: "select",
                         "filter": {
-                            "parentCode": "branch"
+                            "parentCode": "model.lead.branchName"
                         }
                     }, ]
                 },

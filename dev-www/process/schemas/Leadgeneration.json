@@ -79,7 +79,8 @@
          },
          "branchName": {
             "type": "string",
-            "title": "HUB_NAME"
+            "title": "HUB_NAME",
+            "enumCode": "branch_id"
          },
          "centreName": {
             "type": "number",

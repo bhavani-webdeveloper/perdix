@@ -122,6 +122,9 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
+						},{
+							title: 'Mobile No',
+							data: 'mobileNo'
 						}]
 					},
 					getActions: function() {
