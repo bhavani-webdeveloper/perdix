@@ -1,0 +1,19 @@
+INSERT INTO `role_page_access` (`id`, `role_id`, `page_id`, `page_config`) VALUES 
+(NULL, '14', '140', NULL),
+(NULL, '14', '137', NULL),
+(NULL, '14', '141', NULL),
+(NULL, '14', '142', NULL),
+(NULL, '14', '143', NULL);
+
+
+// make sure in pages table 
+140- Page/Engine/lead.LeadBulkUpload                
+141- Page/Engine/lead.LeadFollowUpQueue
+142- Page/Engine/lead.leadAssignmentPendingQueue
+143- Page/Engine/lead.IncompleteLeadQueue
+137- Page/Engine/lead.LeadGeneration
+
+otherwise change the 'page_id' as per pages table and execute the above query in the `role_page_access` table.
+
+assign the role 14 to the user VIS0003
+
