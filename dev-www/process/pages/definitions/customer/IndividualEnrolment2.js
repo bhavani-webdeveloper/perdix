@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrollment2"),
+irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
@@ -27,484 +27,447 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 item.customer.villageName
             ]
         },
-        form: [{
-            "type": "box",
-            "title": "PERSONAL_INFORMATION",
-            "items": [
-                {
-                    key: "customer.customerBranchId",
-                    title:"BRANCH_NAME",
-                    type: "select"
-                },
-                {
-                    key:"customer.centreId",
-                    type:"select",
-                    /*filter: {
-                        "parentCode": "branch_id"
-                    },*/
-                    parentEnumCode:"branch_id",
-                    screenFilter: true
-                },
-                {
-                    key: "customer.oldCustomerId",
-                    title:"CUSTOMER_ID",
-                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
-                    condition: "model.customer.oldCustomerId",
-                    readonly: true
-                },
-                {
-                    key: "customer.id",
-                    condition: "model.customer.id",
-                    title:"CUSTOMER_ID",
-                    readonly: true
-                },
-                {
-                    key: "customer.urnNo",
-                    condition: "model.customer.urnNo",
-                    title:"URN_NO",
-                    readonly: true
-                },
-                {
-                    key:"customer.photoImageId",
-                    type:"file",
-                    fileType:"image/*"
-                },
-                {
-                    key: "customer.firstName",
-                    title:"FULL_NAME",
-                    type:"qrcode",
-                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
-                },
-                {
-                    key:"customer.enrolledAs",
-                    type:"radios"
-                },
-                {
-                    key:"customer.gender",
-                    type:"radios"
-                },
-                {
-                    key:"customer.dateOfBirth",
-                    type:"date",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+        form: [
+            {
+                "type":"box",
+                "title":"KYC",
+                "items":[
+                    {
+                        "key": "customer.aadhaarNo",
+                        "type":"qrcode",
+                        "required": true,
+                        "onChange":"actions.setProofs(model)",
+                        "onCapture": function(result, model, form) {
+                            EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            this.actions.setProofs(model);
                         }
-                    }
-                },
-                {
-                    key:"customer.age",
-                    title: "AGE",
-                    type:"number",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.age > 0) {
-                            if (model.customer.dateOfBirth) {
-                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                            }
-                        }
-                    }
-                },
-                {
-                    key:"customer.religion",
-                    type:"select"
-                },
-                {
-                    key: "customer.fatherFirstName",
-                    title: "FATHER_FULL_NAME"
-                },
-                {
-                    key:"customer.maritalStatus",
-                    type:"select"
-                },
-                {
-                    key: "customer.spouseFirstName",
-                    title: "SPOUSE_FULL_NAME",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    type:"qrcode",
-                    onCapture: function(result, model, form) {
-                        $log.info(result); // spouse id proof
-                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                        $log.info(aadhaarData);
-                        model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
-                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                        model.customer.spouseFirstName = aadhaarData.name;
-                        if (aadhaarData.yob) {
-                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
-                },
-                {
-                    key:"customer.spouseAge",
-                    title: "SPOUSE_AGE",
-                    type:"number",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseAge > 0) {
-                            if (model.customer.spouseDateOfBirth) {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                            } else {
-                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                            }
-                        }
-                    }
-                },
-                {
-                    key:"customer.spouseDateOfBirth",
-                    type:"date",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseDateOfBirth) {
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "type": "box",
-            "title": "CONTACT_INFORMATION",
-            "items": [
-                "customer.mobilePhone",
-                "customer.landLineNo",
-                {
-                    type: "fieldset",
-                    title: "CUSTOMER_RESIDENTIAL_ADDRESS",
-                    items: [
-                        "customer.doorNo",
-                        "customer.street",
-                        "customer.postOffice",
-                        "customer.landmark",
-                        {
-                            key: "customer.pincode",
-                            type: "lov",
-                            fieldType: "number",
-                            autolov: true,
-                            inputMap: {
-                                "pincode": "customer.pincode",
-                                "district": {
-                                    key: "customer.district"
-                                },
-                                "state": {
-                                    key: "customer.state"
+                    },
+                    {
+                        "key": "customer.panNo",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        type:"fieldset",
+                        title:"IDENTITY_PROOF",
+                        items:[
+                            {
+                                key:"customer.identityProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.identityProofImageId",
+                                type:"file",
+                                required: true,
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.identityProofReverseImageId",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.identityProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
                                 }
                             },
-                            outputMap: {
-                                "division": "customer.locality",
-                                "region": "customer.villageName",
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state"
+                            {
+                                key:"customer.idProofIssueDate",
+                                type:"date"
                             },
-                            searchHelper: formHelper,
-                            initialize: function(inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
+                            {
+                                key:"customer.idProofValidUptoDate",
+                                type:"date"
                             },
-                            search: function(inputModel, form, model) {
-                                if (!inputModel.pincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.pincode,
-                                    inputModel.district,
-                                    inputModel.state
-                                );
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            },
-                            onSelect: function(result, model, context) {
-                                $log.info(result);
+                            {
+                                key:"customer.addressProofSameAsIdProof"
                             }
-                        },
-                        "customer.locality",
-                        "customer.villageName",
-                        "customer.district",
-                        "customer.state",
-                        "customer.mailSameAsResidence"
-                    ]
-                },
-                {
-                    type: "fieldset",
-                    title: "CUSTOMER_PERMANENT_ADDRESS",
-                    condition:"!model.customer.mailSameAsResidence",
-                    items: [
-                        "customer.mailingDoorNo",
-                        "customer.mailingStreet",
-                        "customer.mailingPostoffice",
-                        {
-                            key: "customer.mailingPincode",
-                            type: "lov",
-                            fieldType: "number",
-                            autolov: true,
-                            inputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": {
-                                    key: "customer.mailingDistrict"
-                                },
-                                "mailingState": {
-                                    key: "customer.mailingState"
+                        ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"ADDRESS_PROOF",
+                        condition:"!model.customer.addressProofSameAsIdProof",
+                        items:[
+                            {
+                                key:"customer.addressProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.addressProofImageId",
+                                type:"file",
+                                required: false,
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.addressProofReverseImageId",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.addressProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.addressProofNo = result.text;
                                 }
                             },
-                            outputMap: {
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                            {
+                                key:"customer.addressProofIssueDate",
+                                type:"date"
                             },
-                            searchHelper: formHelper,
-                            initialize: function(inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
+                            {
+                                key:"customer.addressProofValidUptoDate",
+                                type:"date"
                             },
-                            search: function(inputModel, form, model) {
-                                if (!inputModel.mailingPincode) {
-                                    return $q.reject();
+                        ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"SPOUSE_IDENTITY_PROOF",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        items:[
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf33",
+                                type:"select",
+                                onChange: function(modelValue) {
+                                    $log.info(modelValue);
                                 }
-                                return Queries.searchPincodes(
-                                    inputModel.mailingPincode,
-                                    inputModel.mailingDistrict,
-                                    inputModel.mailingState
-                                );
                             },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf34",
+                                type:"file",
+                                fileType:"image/*"
                             },
-                            onSelect: function(result, model, context) {
-                                model.customer.mailingPincode = result.pincode;
-                                model.customer.mailingLocality = result.division;
-                                model.customer.mailingState = result.state;
-                                model.customer.mailingDistrict = result.district;
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf35",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf36",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf36",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                type:"qrcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    $log.info(aadhaarData);
+                                    model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                    model.customer.spouseFirstName = aadhaarData.name;
+                                    if (aadhaarData.yob) {
+                                        model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                        model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
                             }
-                        },
-                        "customer.mailingLocality",
-                        "customer.mailingDistrict",
-                        "customer.mailingState"
-                    ]
-                }
-            ]
-        },
-        {
-            type:"box",
-            title:"KYC",
-            items:[
-                {
-                    "key": "customer.aadhaarNo",
-                    type:"qrcode",
-                    onChange:"actions.setProofs(model)",
-                    onCapture: function(result, model, form) {
-                        EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
-                        this.actions.setProofs(model);
+                        ]
                     }
-                },
-                {
-                    type:"fieldset",
-                    title:"IDENTITY_PROOF",
-                    items:[
-                        {
-                            key:"customer.identityProof",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.identityProofImageId",
-                            type:"file",
-                            required: false,
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.identityProofReverseImageId",
-                            type:"file",
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.identityProofNo",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.identityProofNo = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.idProofIssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.idProofValidUptoDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.addressProofSameAsIdProof"
-                        }
-                    ]
-                },
-                {
-                    type:"fieldset",
-                    title:"ADDRESS_PROOF",
-                    condition:"!model.customer.addressProofSameAsIdProof",
-                    items:[
-                        {
-                            key:"customer.addressProof",
-                            type:"select"
-                        },
-                        {
-                            key:"customer.addressProofImageId",
-                            type:"file",
-                            required: false,
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.addressProofReverseImageId",
-                            type:"file",
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.addressProofNo",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result);
-                                model.customer.addressProofNo = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.addressProofIssueDate",
-                            type:"date"
-                        },
-                        {
-                            key:"customer.addressProofValidUptoDate",
-                            type:"date"
-                        },
-                    ]
-                },
-                {
-                    type:"fieldset",
-                    title:"SPOUSE_IDENTITY_PROOF",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    items:[
-                        {
-                            key:"customer.udf.userDefinedFieldValues.udf33",
-                            type:"select",
-                            onChange: function(modelValue) {
-                                $log.info(modelValue);
-                            }
-                        },
-                        {
-                            key:"customer.udf.userDefinedFieldValues.udf34",
-                            type:"file",
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.udf.userDefinedFieldValues.udf35",
-                            type:"file",
-                            fileType:"image/*"
-                        },
-                        {
-                            key:"customer.udf.userDefinedFieldValues.udf36",
-                            condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
-                            type:"barcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result); // spouse id proof
-                                model.customer.udf.userDefinedFieldValues.udf36 = result.text;
-                            }
-                        },
-                        {
-                            key:"customer.udf.userDefinedFieldValues.udf36",
-                            condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
-                            type:"qrcode",
-                            onCapture: function(result, model, form) {
-                                $log.info(result); // spouse id proof
-                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                $log.info(aadhaarData);
-                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                                model.customer.spouseFirstName = aadhaarData.name;
-                                if (aadhaarData.yob) {
-                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        }
-                    ]
-                }
 
-            ]
-        },
-            //{
-            //"type":"box",
-            //"title":"ADDITIONAL_KYC",
-            //"items":[
-            //    {
-            //        "key":"customer.additionalKYCs",
-            //        "type":"array",
-            //        "add":null,
-            //        "remove":null,
-            //        "title":"ADDITIONAL_KYC",
-            //        "items":[
-            //            {
-            //                key:"customer.additionalKYCs[].kyc1ProofNumber",
-            //                type:"barcode",
-            //                onCapture: function(result, model, form) {
-            //                    $log.info(result);
-            //                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
-            //                }
-            //
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc1ProofType",
-            //                type:"select"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc1ImagePath",
-            //                type:"file",
-            //                fileType:"image/*"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc1IssueDate",
-            //                type:"date"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-            //                type:"date"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc2ProofNumber",
-            //                type:"barcode",
-            //                onCapture: function(result, model, form) {
-            //                    $log.info(result);
-            //                    model.customer.additionalKYCs[form.arrayIndex].kyc2ProofNumber = result.text;
-            //                }
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc2ProofType",
-            //                type:"select"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc2ImagePath",
-            //                type:"file",
-            //                fileType:"image/*"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc2IssueDate",
-            //                type:"date"
-            //            },
-            //            {
-            //                key:"customer.additionalKYCs[].kyc2ValidUptoDate",
-            //                type:"date"
-            //            }
-            //        ]
-            //    }
-            //]
-            //},
-        {
+                ]
+            },
+            {
+                "type": "box",
+                "title": "PERSONAL_INFORMATION",
+                "items": [
+                    {
+                        key: "customer.customerBranchId",
+                        title:"BRANCH_NAME",
+                        type: "select"
+                    },
+                    {
+                        key:"customer.centreId",
+                        type:"select",
+                        /*filter: {
+                            "parentCode": "branch_id"
+                        },*/
+                        parentEnumCode:"branch_id",
+                        screenFilter: true
+                    },
+                    {
+                        key: "customer.oldCustomerId",
+                        title:"CUSTOMER_ID",
+                        titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
+                        readonly: true
+                    },
+                    {
+                        "key": "customer.title",
+                        "title": "TITLE"
+                    },
+                    {
+                        key: "customer.id",
+                        condition: "model.customer.id",
+                        title:"CUSTOMER_ID",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.urnNo",
+                        condition: "model.customer.urnNo",
+                        title:"URN_NO",
+                        readonly: true
+                    },
+                    {
+                        key:"customer.photoImageId",
+                        type:"file",
+                        fileType:"image/*"
+                    },
+                    {
+                        key: "customer.firstName",
+                        title:"FULL_NAME",
+                        type:"qrcode",
+                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    },
+                    {
+                        key:"customer.enrolledAs",
+                        type:"radios"
+                    },
+                    {
+                        key:"customer.gender",
+                        type:"radios"
+                    },
+                    {
+                        key:"customer.dateOfBirth",
+                        type:"date",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.age",
+                        title: "AGE",
+                        type:"number",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.religion",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.language",
+                        title: "LANGUAGE"
+                    },
+                    {
+                        key: "customer.fatherFirstName",
+                        title: "FATHER_FULL_NAME"
+                    },
+                    {
+                        key: "customer.motherName",
+                        title: "MOTHER_NAME"
+                    },
+                    {
+                        key:"customer.maritalStatus",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.spouseFirstName",
+                        title: "SPOUSE_FULL_NAME",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        type:"qrcode",
+                        onCapture: function(result, model, form) {
+                            $log.info(result); // spouse id proof
+                            var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                            $log.info(aadhaarData);
+                            model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                            model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                            model.customer.spouseFirstName = aadhaarData.name;
+                            if (aadhaarData.yob) {
+                                model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.spouseAge",
+                        title: "SPOUSE_AGE",
+                        type:"number",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.spouseAge > 0) {
+                                if (model.customer.spouseDateOfBirth) {
+                                    model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    },
+                    {
+                        key:"customer.spouseDateOfBirth",
+                        type:"date",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.spouseDateOfBirth) {
+                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "CONTACT_INFORMATION",
+                "items": [
+                    "customer.mobilePhone",
+                    "customer.landLineNo",
+                    {
+                        "type": "string",
+                        "key": "customer.whatsAppMobileNo",
+                        "title": "WHATSAPP_MOBILE_NO"
+                    },
+                    {
+                        "type": "string",
+                        "key": "customer.email",
+                        "title": "EMAIL"
+                    },
+                    {
+                        type: "fieldset",
+                        title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                        items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            "customer.postOffice",
+                            "customer.landmark",
+                            {
+                                key: "customer.pincode",
+                                type: "lov",
+                                fieldType: "number",
+                                autolov: true,
+                                inputMap: {
+                                    "pincode": "customer.pincode",
+                                    "district": {
+                                        key: "customer.district"
+                                    },
+                                    "state": {
+                                        key: "customer.state"
+                                    }
+                                },
+                                outputMap: {
+                                    "division": "customer.locality",
+                                    "region": "customer.villageName",
+                                    "pincode": "customer.pincode",
+                                    "district": "customer.district",
+                                    "state": "customer.state"
+                                },
+                                searchHelper: formHelper,
+                                initialize: function(inputModel) {
+                                    $log.warn('in pincode initialize');
+                                    $log.info(inputModel);
+                                },
+                                search: function(inputModel, form, model) {
+                                    if (!inputModel.pincode) {
+                                        return $q.reject();
+                                    }
+                                    return Queries.searchPincodes(
+                                        inputModel.pincode,
+                                        inputModel.district,
+                                        inputModel.state
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    $log.info(result);
+                                }
+                            },
+                            "customer.locality",
+                            "customer.villageName",
+                            "customer.district",
+                            "customer.state",
+                            "customer.mailSameAsResidence"
+                        ]
+                    },
+                    {
+                        type: "fieldset",
+                        title: "CUSTOMER_PERMANENT_ADDRESS",
+                        condition:"!model.customer.mailSameAsResidence",
+                        items: [
+                            "customer.mailingDoorNo",
+                            "customer.mailingStreet",
+                            "customer.mailingPostoffice",
+                            {
+                                key: "customer.mailingPincode",
+                                type: "lov",
+                                fieldType: "number",
+                                autolov: true,
+                                inputMap: {
+                                    "mailingPincode": "customer.mailingPincode",
+                                    "mailingDistrict": {
+                                        key: "customer.mailingDistrict"
+                                    },
+                                    "mailingState": {
+                                        key: "customer.mailingState"
+                                    }
+                                },
+                                outputMap: {
+                                    "mailingDivision": "customer.mailingLocality",
+                                    "mailingPincode": "customer.mailingPincode",
+                                    "mailingDistrict": "customer.mailingDistrict",
+                                    "mailingState": "customer.mailingState"
+                                },
+                                searchHelper: formHelper,
+                                initialize: function(inputModel) {
+                                    $log.warn('in pincode initialize');
+                                    $log.info(inputModel);
+                                },
+                                search: function(inputModel, form, model) {
+                                    if (!inputModel.mailingPincode) {
+                                        return $q.reject();
+                                    }
+                                    return Queries.searchPincodes(
+                                        inputModel.mailingPincode,
+                                        inputModel.mailingDistrict,
+                                        inputModel.mailingState
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.customer.mailingPincode = result.pincode;
+                                    model.customer.mailingLocality = result.division;
+                                    model.customer.mailingState = result.state;
+                                    model.customer.mailingDistrict = result.district;
+                                }
+                            },
+                            "customer.mailingLocality",
+                            "customer.mailingDistrict",
+                            "customer.mailingState"
+                        ]
+                    }
+                ]
+            },
+            {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
                 "items": [{

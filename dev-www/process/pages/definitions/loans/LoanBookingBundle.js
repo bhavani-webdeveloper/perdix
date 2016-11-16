@@ -12,14 +12,14 @@ irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [
         			{
-			            pageName: 'customer.IndividualEnrollment2',
+			            pageName: 'customer.IndividualEnrolment2',
 			            title: 'APPLICANT',
 			            type: 'applicant',
 			            minimum: 1,
 			            maximum: 1
 			        }, 
 			        {
-			            pageName: 'customer.IndividualEnrollment2',
+			            pageName: 'customer.IndividualEnrolment2',
 			            title: 'CO_APPLICANT',
 			            type: 'co-applicant',
 			            minimum: 1,
