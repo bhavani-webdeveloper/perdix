@@ -40,7 +40,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 			$log.debug("Trying redirect assuming token is avilable.");
 			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 		}
-	});
+	}, 300);
 
 	$.getJSON("app_manifest.json", function(json) {
 		$scope.$apply(function(){
