@@ -105,12 +105,12 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     var reqData = _.cloneDeep(model);
                     if (reqData.lead.id) {
                         LeadHelper.proceedData(reqData).then(function(resp) {
-                            // $state.go('Page.Landing', null);
+                            $state.go('Page.Landing', null);
                         });
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                //$state.go('Page.Landing', null);
+                                $state.go('Page.Landing', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;

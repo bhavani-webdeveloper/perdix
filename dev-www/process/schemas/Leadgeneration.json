@@ -38,7 +38,7 @@
             "title": "Lead Interactions",
             "items": {
                "type": "object",
-               "required": [],
+               "required": ["interactionDate"],
                "properties": {
                   "interactionDate": {
                      "type": "string",

@@ -234,126 +234,111 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     items: [{
-                            key: "lead.productCategory",
-                            type: "select",
-                            titleMap: {
-                                "Asset": "Asset",
-                                "Liability": "Liability",
-                                "others": "others"
-                            }
-                        }, {
-                            key: "lead.productSubCategory",
-                            type: "select",
-                            titleMap: {
-                                "Loan": "Loan",
-                                "investment": "investment"
-                            }
-                        }, {
-                            key: "lead.interestedInProduct",
+                        key: "lead.productCategory",
+                        type: "select",
+                        titleMap: {
+                            "Asset": "Asset",
+                            "Liability": "Liability",
+                            "others": "others"
+                        }
+                    }, {
+                        key: "lead.productSubCategory",
+                        type: "select",
+                        titleMap: {
+                            "Loan": "Loan",
+                            "investment": "investment"
+                        }
+                    }, {
+                        key: "lead.interestedInProduct",
+                        type: "radios",
+                        enumCode: "decisionmaker",
+                        onChange: "actions.changeStatus(modelValue, form, model)"
+                    }, {
+                        key: "lead.productRequiredBy",
+                        type: "select",
+                        condition: "model.lead.interestedInProduct==='YES'",
+                        titleMap: {
+                            "In this week": "In this week",
+                            "In this month": "In this month",
+                            "Next 2 -3 months": "Next 2 -3 months",
+                            "Next 4-6 months": "Next 4-6 months",
+
+                        },
+                        onChange: "actions.changeStatus(modelValue, form, model)"
+                    }, {
+                        key: "lead.screeningDate",
+                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
+                        type: "date",
+                        onChange: "actions.changeStatus(modelValue, form, model)"
+                    }, {
+                        key: "lead.followUpDate",
+                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
+                        type: "date",
+                        onChange: "actions.changeStatus(modelValue, form, model)"
+                    }, {
+                        key: "lead.loanPurpose1",
+                        condition: "model.lead.interestedInProduct==='YES'",
+                        type: "select",
+                        titleMap: {
+                            "AssetPurchase": "AssetPurchase",
+                            "WorkingCapital": "WorkingCapital",
+                            "BusinessDevelopment": "BusinessDevelopment",
+                            "LineOfCredit": "LineOfCredit",
+
+                        }
+                    }, {
+                        key: "lead.loanAmountRequested",
+                        type: "amount",
+                        condition: "model.lead.interestedInProduct==='YES'",
+                    }, {
+                        type: "fieldset",
+                        condition: "model.lead.interestedInProduct==='YES'",
+                        title: "PRODUCT_ELIGIBILITY",
+                        items: [{
+                            key: "lead.eligibleForProduct",
                             type: "radios",
                             enumCode: "decisionmaker",
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.productRequiredBy",
-                            type: "select",
-                            condition: "model.lead.interestedInProduct==='YES'",
-                            titleMap: {
-                                "In this week": "In this week",
-                                "In this month": "In this month",
-                                "Next 2 -3 months": "Next 2 -3 months",
-                                "Next 4-6 months": "Next 4-6 months",
-
-                            },
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.screeningDate",
-                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
-                            type: "date",
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.followUpDate",
-                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
-                            type: "date",
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.loanPurpose1",
-                            condition: "model.lead.interestedInProduct==='YES'",
+                            onChange: "actions.changeStatus(modelValue, form, model)",
+                        }]
+                    }, {
+                        type: "fieldset",
+                        title: "PRODUCT_REJECTION_REASON",
+                        condition: "model.lead.interestedInProduct==='NO'||model.lead.eligibleForProduct ==='NO'",
+                        items: [{
+                            key: "lead.productRejectReason",
                             type: "select",
                             titleMap: {
-                                "AssetPurchase": "AssetPurchase",
-                                "WorkingCapital": "WorkingCapital",
-                                "BusinessDevelopment": "BusinessDevelopment",
-                                "LineOfCredit": "LineOfCredit",
-
+                                "Reason1": "Reason1",
+                                "Reason2": "Reason2"
                             }
                         }, {
-                            key: "lead.loanAmountRequested",
-                            condition: "model.lead.interestedInProduct==='YES'",
-                        }, {
-                            type: "fieldset",
-                            title: "PRODUCT_REJECTION_REASON",
-                            condition: "model.lead.interestedInProduct==='NO'",
-                            items: [{
-                                key: "lead.productRejectReason",
-                                type: "select",
-                                titleMap: {
-                                    "Reason1": "Reason1",
-                                    "Reason2": "Reason2"
-                                }
-                            }, {
-                                key: "lead.additionalRemarks",
-                            }, ]
-                        },
-
-                        {
-                            type: "fieldset",
-                            condition: "model.lead.interestedInProduct==='YES'",
-                            title: "PRODUCT_ELIGIBILITY",
-                            items: [{
-                                key: "lead.eligibleForProduct",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                onChange: "actions.changeStatus(modelValue, form, model)",
-                            }, {
-                                key: "lead.productAcceptReason",
-                                condition: "model.lead.eligibleForProduct ==='NO'",
-                                type: "select",
-                                titleMap: {
-                                    "Reason1": "Reason1",
-                                    "Reason2": "Reason2"
-                                }
-                            }]
-                        },
-
-                        {
-                            type: "fieldset",
-                            title: "LEAD_STATUS",
-                            items: [{
-                                key: "lead.leadStatus",
-                                //type: "select",
-                                readonly: true,
-                                /*titleMap: {
-                                    "Screening": "Screening",
-                                    "FollowUp": "FollowUp",
-                                    "Incomplete": "Incomplete",
-                                    "Reject": "Reject"
-                                },*/
-                                onChange: "actions.changeStatus(modelValue, form, model)"
-                            }]
-                        }
-                    ]
+                            key: "lead.additionalRemarks",
+                        }, ]
+                    }, {
+                        type: "fieldset",
+                        title: "LEAD_STATUS",
+                        items: [{
+                            key: "lead.leadStatus",
+                            //type: "select",
+                            readonly: true,
+                            /*titleMap: {
+                                "Screening": "Screening",
+                                "FollowUp": "FollowUp",
+                                "Incomplete": "Incomplete",
+                                "Reject": "Reject"
+                            },*/
+                            onChange: "actions.changeStatus(modelValue, form, model)"
+                        }]
+                    }]
                 },
 
                 {
                     type: "box",
                     title: "LEAD_INTERACTIONS",
                     items: [{
-                        type:"section",
-                        html:"{{model.lead.leadInteractions}}"
-                    },{
                         key: "lead.leadInteractions",
                         type: "array",
-                         startEmpty: true,
+                        startEmpty: true,
                         title: "LEAD_INTERACTIONS",
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
@@ -386,7 +371,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     }]
                 },
 
-               
+
                 {
                     "type": "actionbox",
                     "items": [{
@@ -436,13 +421,22 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     };
                     var reqData = _.cloneDeep(model);
                     if (reqData.lead.id) {
-                        LeadHelper.proceedData(reqData).then(function(resp) {
-                            // $state.go('Page.Landing', null);
-                        });
+                        if (reqData.lead.leadStatus=="FollowUp") {
+                            LeadHelper.followData(reqData).then(function(resp) {
+                                 $state.go('Page.Landing', null);
+                            });
+                        } else {
+                            LeadHelper.proceedData(reqData).then(function(resp) {
+                                $state.go('Page.Landing', null);
+                            }, function(err) {
+                                Utils.removeNulls(res.lead, true);
+                                model.lead = res.lead;
+                            });
+                        }
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                //$state.go('Page.Landing', null);
+                                $state.go('Page.Landing', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;

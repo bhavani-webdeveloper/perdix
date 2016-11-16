@@ -12,16 +12,13 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
             PageHelper.showLoader();
             irfProgressMessage.pop('lead-save', 'Working...');
             reqData['leadAction'] = 'SAVE';
-            if(reqData.lead.screeningDate||reqData.lead.productAcceptReason)
-            {
+            if (reqData.lead.screeningDate || reqData.lead.productRejectReason) {
                 reqData['stage'] = 'Completed';
-            }
-            else
-            {
-              reqData['stage'] = 'Inprocess';  
+            } else {
+                reqData['stage'] = 'Inprocess';
             }
             /* TODO fix for KYC not saving **/
-            var action = reqData.lead.id? 'update' : 'save';
+            var action = reqData.lead.id ? 'update' : 'save';
             Lead[action](reqData, function(res, headers) {
                 irfProgressMessage.pop('lead-save', 'Data Saved', 2000);
                 $log.info(res);
@@ -46,15 +43,42 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
             } else {
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
-                irfProgressMessage.pop('lead-save', 'Working...');
+                irfProgressMessage.pop('lead-update', 'Working...');
                 res.leadAction = "PROCEED";
+                res.lead.leadInteractions=[{"id":'',"leadId":''}];
                 Lead.updateLead(res, function(res, headers) {
                     PageHelper.hideLoader();
-                    irfProgressMessage.pop('lead-save', 'Done. lead created with ID: ' + res.lead.id, 5000);
+                    irfProgressMessage.pop('lead-update', 'Done. lead updated with ID: ' + res.lead.id, 5000);
                     deferred.resolve(res);
                 }, function(res, headers) {
                     PageHelper.hideLoader();
-                    irfProgressMessage.pop('lead-save', 'Oops. Some error.', 2000);
+                    irfProgressMessage.pop('lead-update', 'Oops. Some error.', 2000);
+                    PageHelper.showErrors(res);
+                    deferred.reject(res);
+                });
+            }
+            return deferred.promise;
+        };
+
+        var followData = function(res) {
+            var deferred = $q.defer();
+            $log.info("Attempting Proceed");
+            $log.info(res);
+            if (res.lead.id === undefined || res.lead.id === null) {
+                $log.info("lead id null, cannot proceed");
+                deferred.reject(null);
+            } else {
+                PageHelper.clearErrors();
+                PageHelper.showLoader();
+                irfProgressMessage.pop('lead-update', 'Working...');
+                res.leadAction = "SAVE";
+                Lead.updateLead(res, function(res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('lead-update', 'Done. lead updated with ID: ' + res.lead.id, 5000);
+                    deferred.resolve(res);
+                }, function(res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('lead-update', 'Oops. Some error.', 2000);
                     PageHelper.showErrors(res);
                     deferred.reject(res);
                 });
@@ -65,6 +89,7 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
         return {
             saveData: saveData,
             proceedData: proceedData,
+            followData: followData,
         };
     }
 ]);
