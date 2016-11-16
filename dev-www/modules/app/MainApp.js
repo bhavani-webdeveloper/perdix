@@ -30,15 +30,17 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 
 	var connectPerdix7 = function() {
 		if ($scope.app_manifest.connect_perdix7) {
-			$timeout(function() {
-				$scope.connect_perdix7 = true;
-				if ($state.current.name === irf.REDIRECT_STATE) {
-					$log.debug("Legacy Perdix7 interoperability enabled, and trying redirect assuming token is avilable.");
-					$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
-				}
-			});
+			$scope.connect_perdix7 = true;
+			$log.info("Legacy Perdix7 interoperability enabled");
 		}
 	};
+
+	$timeout(function() {
+		if ($state.current.name === irf.REDIRECT_STATE) {
+			$log.debug("Trying redirect assuming token is avilable.");
+			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+		}
+	});
 
 	$.getJSON("app_manifest.json", function(json) {
 		$scope.$apply(function(){
