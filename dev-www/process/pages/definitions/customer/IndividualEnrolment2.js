@@ -6,6 +6,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
     return {
         "type": "schema-form",
+        "subType": "8-width",
         "title": "INDIVIDUAL_ENROLLMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
@@ -99,7 +100,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             {
                                 key:"customer.addressProofImageId",
                                 type:"file",
-                                required: false,
+                                required: true,
                                 fileType:"image/*"
                             },
                             {
@@ -203,10 +204,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         readonly: true
                     },
                     {
-                        "key": "customer.title",
-                        "title": "TITLE"
-                    },
-                    {
                         key: "customer.id",
                         condition: "model.customer.id",
                         title:"CUSTOMER_ID",
@@ -222,6 +219,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         key:"customer.photoImageId",
                         type:"file",
                         fileType:"image/*"
+                    },
+                    {
+                        "key": "customer.title",
+                        "title": "TITLE",
+                        "type": "select"
                     },
                     {
                         key: "customer.firstName",
@@ -629,6 +631,54 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     ]
                 }]
             },
+            {
+               type:"box",
+               title:"T_LIABILITIES",
+               items:[
+                   {
+                       key:"customer.liabilities",
+                       type:"array",
+                       startEmpty: true,
+                       title:"FINANCIAL_LIABILITIES",
+                       items:[
+                           {
+                               key:"customer.liabilities[].loanType",
+                               type:"select"
+                           },
+                           {
+                               key:"customer.liabilities[].loanSource",
+                               type:"select"
+                           },
+                           "customer.liabilities[].instituteName",
+                           {
+                               key: "customer.liabilities[].loanAmountInPaisa",
+                               type: "amount"
+                           },
+                           {
+                               key: "customer.liabilities[].installmentAmountInPaisa",
+                               type: "amount"
+                           },
+                           {
+                               key: "customer.liabilities[].startDate",
+                               type:"date"
+                           },
+                           {
+                               key:"customer.liabilities[].maturityDate",
+                               type:"date"
+                           },
+                           {
+                               key:"customer.liabilities[].frequencyOfInstallment",
+                               type:"select"
+                           },
+                           {
+                               key:"customer.liabilities[].liabilityLoanPurpose",
+                               type:"select"
+                           }
+            
+                       ]
+                   }
+               ]
+            },
             //{
             //    "type": "box",
             //    "title": "EXPENDITURES",
@@ -942,11 +992,13 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
-                                type: "select"
+                                type: "select",
+                                title: "IN_CURRENT_ADDRESS_SINCE"
                             },
                             {
                                 key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
-                                type:"select"
+                                type:"select",
+                                title: "IN_CURRENT_AREA_SINCE"
                             }
                         ]
                     },
@@ -1038,6 +1090,53 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             {
                                 key: "customer.customerBankAccounts[].accountType",
                                 type: "select"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].bankingSince",
+                                type: "date",
+                                title: "BANKING_SINCE"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].netBankingAvailable",
+                                type: "select",
+                                title: "NET_BANKING_AVAILABLE"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].bankStatement",
+                                type: "array",
+                                title: "STATEMENT_DETAILS",
+                                items: [
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                        type: "date",
+                                        title: "START_MONTH"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                        type: "amount",
+                                        title: "TOTAL_DEPOSITS"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                        type: "amount",
+                                        title: "TOTAL_WITHDRAWALS"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                        type: "amount",
+                                        title: "BALANCE_AS_ON_15TH"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                        type: "amount",
+                                        title: "NO_OF_CHEQUE_BOUNCED"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                        type: "amount",
+                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                                    },
+                                ]
                             },
                             {
                                 key: "customer.customerBankAccounts[].isDisbersementAccount",
