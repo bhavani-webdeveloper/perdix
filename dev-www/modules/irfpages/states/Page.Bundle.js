@@ -64,8 +64,22 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         'pageName': $stateParams.pageName
     }
 
+    var boxColumnHook = function(page){
+        if (page.type == 'schema-form' && page.subType == 'sub-navigation'){
+            var topElements = page.form;
+            var topElementsLength = topElements.length;
+            for (var i=0;i<topElementsLength; i++){
+                var form = topElements[i];
+                if (form['type'] == 'box' && !_.hasIn(form, 'colClass')) {
+                    form.colClass = 'col-sm-12';
+                }
+            }
+        }
+    }
+
     var initializePage = function(bundlePage) {
         var pageObj = {};
+
 
         pageObj.pageName = bundlePage.pageName;
         pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
@@ -78,6 +92,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         pageObj.error = false;
         try {
             pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
+            boxColumnHook(pageObj.page);
         } catch (e) {
             BundleLog.error(e);
             pageObj.error = true;

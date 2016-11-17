@@ -6,7 +6,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
     return {
         "type": "schema-form",
-        "subType": "8-width",
+        "subType": "sub-navigation",
         "title": "INDIVIDUAL_ENROLLMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {

@@ -28,20 +28,77 @@
       <section ng-hide="pageObj.error" class="content">
       
         <div ng-switch="pageObj.page.type" class="row page-row">
-          <irf-sf ng-switch-when="schema-form"
-            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
-            irf-schema="pageObj.page.schema"
-            irf-form="pageObj.page.form"
-            irf-actions="pageObj.page.actions"
-            irf-model="pageObj.model"
-            irf-helper="pageObj.formHelper"
-            irf-form-name="pageObj.formName"
-            irf-form-ctrl="pageObj.formCtrl"
-            class="page-form">
-            <div class="cantina-loader-wrapper">
-              <div classs="cantina-loader"></div>
-            </div>
-          </irf-sf>
+          <div ng-switch-when="schema-form">
+                <div ng-switch='pageObj.page.subType'>
+                    <div ng-switch-when='sub-navigation' >
+                        <div class="col-sm-4">
+                            <ul class="sidebar-nav">
+                                <li class="sidebar-brand">
+                                    <a href="#">
+                                        Start Bootstrap
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#">Shortcuts</a>
+                                </li>
+                                <li>
+                                    <a href="#">Overview</a>
+                                </li>
+                                <li>
+                                    <a href="#">Events</a>
+                                </li>
+                                <li>
+                                    <a href="#">About</a>
+                                </li>
+                                <li>
+                                    <a href="#">Services</a>
+                                </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <irf-sf
+                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
+                                    irf-schema="pageObj.page.schema"
+                                    irf-form="pageObj.page.form"
+                                    irf-actions="pageObj.page.actions"
+                                    irf-model="pageObj.model"
+                                    irf-helper="pageObj.formHelper"
+                                    irf-form-name="pageObj.formName"
+                                    irf-form-ctrl="pageObj.formCtrl"
+                                    class="page-form">
+                                    <div class="cantina-loader-wrapper">
+                                        <div classs="cantina-loader"></div>
+                                    </div>
+                                </irf-sf>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-default>
+                        <irf-sf
+                            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
+                            irf-schema="pageObj.page.schema"
+                            irf-form="pageObj.page.form"
+                            irf-actions="pageObj.page.actions"
+                            irf-model="pageObj.model"
+                            irf-helper="pageObj.formHelper"
+                            irf-form-name="pageObj.formName"
+                            irf-form-ctrl="pageObj.formCtrl"
+                            class="page-form">
+                            <div class="cantina-loader-wrapper">
+                                <div classs="cantina-loader"></div>
+                            </div>
+                        </irf-sf>                        
+                    </div>
+                </div>
+
+          </div>
           <irf-resource-search-wrapper ng-switch-when="search-list"
             definition="pageObj.page.definition"
             initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
