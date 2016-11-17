@@ -73,6 +73,11 @@ irf.pages.config([
 		url: "/PsychometricTest/:pageId",
 		templateUrl: "process/pages/templates/Psychometric.Test.html",
 		controller: "PsychometricTestCtrl"
+	},{
+		name: "Page.Reports",
+		url: "/Reports/:pageId",
+		templateUrl: "process/pages/templates/Reports.html",
+		controller: "ReportsCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){
