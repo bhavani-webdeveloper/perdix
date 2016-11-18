@@ -540,14 +540,14 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   width: 100%;
   position: relative;
 }
-a.latest_apk_url {
-  -webkit-animation: color_change .5s infinite alternate;
-  -moz-animation: color_change .5s infinite alternate;
-  -ms-animation: color_change .5s infinite alternate;
-  -o-animation: color_change .5s infinite alternate;
-  animation: color_change .5s infinite alternate;
+.breathe_white_transparent {
+  -webkit-animation: white_transparent .5s infinite alternate;
+  -moz-animation: white_transparent .5s infinite alternate;
+  -ms-animation: white_transparent .5s infinite alternate;
+  -o-animation: white_transparent .5s infinite alternate;
+  animation: white_transparent .5s infinite alternate;
 }
-@-webkit-keyframes color_change {
+@-webkit-keyframes white_transparent {
   from {
     color: white;
   }
@@ -557,7 +557,7 @@ a.latest_apk_url {
     filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.5));
   }
 }
-@-moz-keyframes color_change {
+@-moz-keyframes white_transparent {
   from {
     color: white;
   }
@@ -565,7 +565,7 @@ a.latest_apk_url {
     color: transparent;
   }
 }
-@-ms-keyframes color_change {
+@-ms-keyframes white_transparent {
   from {
     color: white;
   }
@@ -573,7 +573,7 @@ a.latest_apk_url {
     color: transparent;
   }
 }
-@-o-keyframes color_change {
+@-o-keyframes white_transparent {
   from {
     color: white;
   }
@@ -581,11 +581,75 @@ a.latest_apk_url {
     color: transparent;
   }
 }
-@keyframes color_change {
+@keyframes white_transparent {
   from {
     color: white;
   }
   to {
     color: transparent;
   }
+}
+.breathe_888_tomato {
+  -webkit-animation: _888_tomato .5s infinite alternate;
+  -moz-animation: _888_tomato .5s infinite alternate;
+  -ms-animation: _888_tomato .5s infinite alternate;
+  -o-animation: _888_tomato .5s infinite alternate;
+  animation: _888_tomato .5s infinite alternate;
+}
+@-webkit-keyframes _888_tomato {
+  from {
+    color: 888;
+  }
+  to {
+    color: tomato;
+    -webkit-filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.5));
+    filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.5));
+  }
+}
+@-moz-keyframes _888_tomato {
+  from {
+    color: 888;
+  }
+  to {
+    color: tomato;
+  }
+}
+@-ms-keyframes _888_tomato {
+  from {
+    color: 888;
+  }
+  to {
+    color: tomato;
+  }
+}
+@-o-keyframes _888_tomato {
+  from {
+    color: 888;
+  }
+  to {
+    color: tomato;
+  }
+}
+@keyframes _888_tomato {
+  from {
+    color: 888;
+  }
+  to {
+    color: tomato;
+  }
+}
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
 }
