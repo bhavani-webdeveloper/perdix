@@ -1,0 +1,2 @@
+UPDATE `loan_products` 
+SET `luc_cycle` = 'ONCE', `luc_days` = '1', `luc_for_disbursement` = 'FIRST_DISP' WHERE `loan_products`.`id` = 118;
