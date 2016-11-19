@@ -659,12 +659,22 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                type: "amount"
                            },
                            {
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                           },
+                           {
                                key: "customer.liabilities[].startDate",
                                type:"date"
                            },
                            {
                                key:"customer.liabilities[].maturityDate",
                                type:"date"
+                           },
+                           {
+                                key: "customer.liabilities[].noOfInstalmentPaid",
+                                type: "number",
+                                title: "NO_OF_INSTALLMENT_PAID"
                            },
                            {
                                key:"customer.liabilities[].frequencyOfInstallment",

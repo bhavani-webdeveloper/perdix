@@ -59,6 +59,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.pages = [];
     $scope.addTabMenu = [];
     $scope.pageName = $stateParams.pageName;
+    $scope.anchorLnks = [];
 
     var bundle = {
         'pageName': $stateParams.pageName
@@ -79,8 +80,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
     var initializePage = function(bundlePage) {
         var pageObj = {};
-
-
         pageObj.pageName = bundlePage.pageName;
         pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
         pageObj.formName = irf.form(bundlePage.pageName);

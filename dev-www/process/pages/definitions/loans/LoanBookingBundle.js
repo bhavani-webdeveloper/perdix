@@ -26,12 +26,27 @@ irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
 			            maximum: 3
 			        }, 
 			        {
-			            pageName: 'customer.EnterpriseEnrollment',
+			            pageName: 'customer.IndividualEnrolment2',
+			            title: 'GUARANTOR',
+			            type: 'guarantor',
+			            minimum: 0,
+			            maximum: 3
+			        }, 
+			        {
+			            pageName: 'customer.EnterpriseEnrolment2',
 			            title: 'BUSINESS',
 			            type: 'business',
 			            minimum: 1,
 			            maximum: 1
+			        },
+			        {
+			        	pageName: 'loans.individual.screening.LoanRequest',
+			            title: 'LOAN_REQUEST',
+			            type: 'loan-request',
+			            minimum: 1,
+			            maximum: 1
 			        }
+
         		],
         		"initialize": function(model, form, formCtrl, bundleManager){
 
