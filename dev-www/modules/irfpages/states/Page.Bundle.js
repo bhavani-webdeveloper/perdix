@@ -10,14 +10,17 @@
 irf.pages.factory('BundleManager', ['BundleLog', function(BundleLog){
 
     var currentInstance = null;
+    var pages = [];
 
     return {
-        register: function(bundlePage){
+        register: function(bundlePage, bundleModel, _pages){
             var newInstance = {
                 createdAt: Date.now(),
-                bundlePage: bundlePage
+                bundlePage: bundlePage,
+                bundleModel: bundleModel
             };
             currentInstance = newInstance;
+            pages = _pages;
             return currentInstance;
         },
         /**
@@ -28,9 +31,28 @@ irf.pages.factory('BundleManager', ['BundleLog', function(BundleLog){
         getInstance: function(){
             return currentInstance;
         },
-        pushEvent: function(eventName, obj){
+        pushEvent: function(eventName, pageObj, obj){
             BundleLog.info("Recieved event [" + eventName + "]");
-            BundleLog.info(obj);
+            BundleLog.info("Calling event handler");
+            if (_.hasIn(currentInstance.bundlePage, 'eventListeners') && _.hasIn(currentInstance.bundlePage.eventListeners, eventName)){
+                BundleLog.info("Inside here");
+                currentInstance.bundlePage.eventListeners[eventName](pageObj, currentInstance.bundleModel, obj);
+            }
+        },
+        /**
+         * Broadcast an event to all pages in the bundle.
+         * @param  {[type]} eventName [description]
+         * @param  {[type]} obj       [description]
+         * @return {[type]}           [description]
+         */
+        broadcastEvent: function(eventName, obj){
+            var pagesLength = pages.length;
+            for (var i=0; i<pagesLength; i++){
+                var page = pages[i].page;
+                if (_.hasIn(page, 'eventListeners.' + eventName)) {
+                    page.eventListeners[eventName](currentInstance.bundleModel, obj);
+                }
+            }
         }
     }
 }]);
@@ -38,16 +60,16 @@ irf.pages.factory('BundleManager', ['BundleLog', function(BundleLog){
 irf.pages.factory('BundleLog', ['$log', function($log){
     return {
         "info": function(msg){
-            $log.info("<<BUNDLE>> :: " + msg);    
+            $log.info("<<BUNDLE>> :: " + msg);
         },
         "debug": function(msg){
-            $log.debug("<<BUNDLE>> :: " + msg);    
+            $log.debug("<<BUNDLE>> :: " + msg);
         },
         "error": function(msg){
-            $log.error("<<BUNDLE>> :: " + msg);    
+            $log.error("<<BUNDLE>> :: " + msg);
         },
         "warn": function(msg){
-            $log.warn("<<BUNDLE>> :: " + msg);    
+            $log.warn("<<BUNDLE>> :: " + msg);
         }
     }
 }]);
@@ -60,6 +82,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.addTabMenu = [];
     $scope.pageName = $stateParams.pageName;
     $scope.anchorLnks = [];
+    $scope.bundleModel = {};
 
     var bundle = {
         'pageName': $stateParams.pageName
@@ -113,7 +136,8 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                                     var pageObj = _pageObj;
                                     pageObj.page.form = data;
                                     $timeout(function() {
-                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl);
+                                        // @TODO Code doesn't reach here for some reason. But initialize is called via directive. Need to discuss with stalin, why this is here?
+                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl, pageObj.bundlePage);
                                     });
                                 });
                             }
@@ -170,7 +194,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.removeTab = function(index) {
         var bundlePage = $scope.pages[index].bundlePage;
         --bundlePage.openPagesCount;
-        BundleLog.info($scope.pages.splice(index, 1));
         if ($scope.addTabMenu.indexOf(bundlePage) == -1) {
             $scope.addTabMenu.push(bundlePage);
         }
@@ -178,7 +201,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
     $scope.addTab = function(index) {
         var bundlePage = $scope.addTabMenu[index];
-        BundleLog.info(bundlePage);
         var openPage = initializePage(bundlePage);
         var insertIndex = -1;
         for (var i = 0; i < $scope.pages.length; i++) {
@@ -202,10 +224,10 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         $('a[href^="#"]').click(function(e){
             e.preventDefault();
         });
-        
+
         /* Loading the page */
         try {
-            $scope.page = $injector.get(irf.page($scope.pageName));
+            $scope.bundlePage = $injector.get(irf.page($scope.pageName));
         } catch (e) {
             BundleLog.error(e);
             $scope.error = true;
@@ -213,12 +235,15 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
         /* Done loading the page. */
         BundleLog.info("Bundle Page Loaded");
-        var bundleInstance = BundleManager.register($scope.page);
+        var bundleInstance = BundleManager.register($scope.bundlePage, $scope.bundleModel, $scope.pages);
         BundleLog.info("Ready to accept events");
 
+        BundleLog.info("Ready to call pre_pages_initialize");
+        $scope.bundlePage.pre_pages_initialize($scope.bundleModel);
+        BundleLog.info("Call done pre_pages_initialize");
 
-        bundle.pages = $scope.page.bundlePages;
 
+        bundle.pages = $scope.bundlePage.bundlePages;
         for (i in bundle.pages) {
             bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
             bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
@@ -235,7 +260,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 $scope.addTabMenu.push(bundlePage);
             }
         }
-        
+
+        BundleLog.info("Ready to call post_pages_initialize");
+        $scope.bundlePage.post_pages_initialize($scope.bundleModel);
+        BundleLog.info("Call done post_pages_initialize");
+
 
     });
 }]);
