@@ -1,10 +1,11 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningQueue"), 
+
+irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "SCREENING_QUEUE",
+			"title": "REJECTED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -57,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningQueue"),
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Screening',
+	                    'stage': 'Rejected',
 	                    'branchName': searchOptions.branchName,
 	                    'centreCode': searchOptions.centreCodeForSearch,
 	                    'customerName': searchOptions.customer_name,
@@ -131,15 +132,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningQueue"),
 					},
 					getActions: function() {
 						return [{
-							name: "SCREEN",
+							name: "REJECTED",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.screening', {
+								entityManager.setModel('loan.Rejected', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.Screening",
+									pageName: "loans.individual.booking.Rejected",
 									pageId: item.id
 								});
 							},
