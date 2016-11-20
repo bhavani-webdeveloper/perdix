@@ -16,7 +16,7 @@
             </a>
           </span>
           <small>{{ pageObj.page.title | translate }}</small>
-          <span ng-if="pageObj.page.offline">|&nbsp; 
+          <span ng-if="pageObj.page.offline">|&nbsp;
             <small>
               <a href ng-click="loadOfflinePage($event)" style="color:#999">
                 <i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}
@@ -26,7 +26,7 @@
         </h1>
       </section>
       <section ng-hide="pageObj.error" class="content">
-      
+
         <div ng-switch="pageObj.page.type" class="row page-row">
           <div ng-switch-when="schema-form">
                 <div ng-switch='pageObj.page.subType'>
@@ -64,7 +64,7 @@
                         <div class="col-sm-8">
                             <div class="row">
                                 <irf-sf
-                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
+                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.page)"
                                     irf-schema="pageObj.page.schema"
                                     irf-form="pageObj.page.form"
                                     irf-actions="pageObj.page.actions"
@@ -76,7 +76,7 @@
                                     <div class="cantina-loader-wrapper">
                                         <div classs="cantina-loader"></div>
                                     </div>
-                                </irf-sf>                        
+                                </irf-sf>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                             <div class="cantina-loader-wrapper">
                                 <div classs="cantina-loader"></div>
                             </div>
-                        </irf-sf>                        
+                        </irf-sf>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                 <img src="img/404.png" class="img-responsive">
               </div>
             </div>
-          </div>   
+          </div>
         </div>
       </section>
     </uib-tab>

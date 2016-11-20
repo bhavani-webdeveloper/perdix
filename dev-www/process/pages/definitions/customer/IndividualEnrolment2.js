@@ -9,7 +9,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         "subType": "sub-navigation",
         "title": "INDIVIDUAL_ENROLLMENT",
         "subTitle": "",
-        initialize: function (model, form, formCtrl) {
+        initialize: function (model, form, formCtrl, bundlePageObj) {
             model.customer = model.customer || {};
             //model.branchId = SessionStore.getBranchId() + '';
 
@@ -19,6 +19,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
+            BundleManager.pushEvent("on-customer-load", {name: "SHAHAL"})
+
+            if (bundlePageObj){
+                model._bundlePageObj = bundlePageObj;
+            }
+        },
+        eventListeners: {
+            "test-listener": function(bundleModel, obj){
+
+            }
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -684,7 +694,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                key:"customer.liabilities[].liabilityLoanPurpose",
                                type:"select"
                            }
-            
+
                        ]
                    }
                ]
@@ -1319,19 +1329,18 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
-                            // Utils.removeNulls(resp.customer,true);
-                            // model.customer = resp.customer;
-                            $state.go('Page.Landing', null);
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
-                                // Utils.removeNulls(resp.customer,true);
-                                // model.customer = resp.customer;
-                                $state.go('Page.Landing', null);
                             }, function(err) {
                                 Utils.removeNulls(res.customer,true);
                                 model.customer = res.customer;
+
+                                if (model._bundlePageObj){
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                }
+
                             });
                         });
                     }
