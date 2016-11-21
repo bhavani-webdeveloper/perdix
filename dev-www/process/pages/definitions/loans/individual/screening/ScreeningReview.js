@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('loans.LoanBookingBundle'),
+irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
