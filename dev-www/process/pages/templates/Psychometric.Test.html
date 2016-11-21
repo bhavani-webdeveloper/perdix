@@ -2,20 +2,30 @@
   <section class="content">
     <div class="row">
       <div class="col-md-12">
-        <div class="box box-theme no-border noselect" ng-switch="stage">
-          <div class="box-body" ng-switch-when="LANG_CHOICE">
-            <article class="card">Choose Language</article>
-            <select ng-model="chosenLanguage">
-              <option value="">Choose a language</option>
-              <option value="en">English</option>
-            </select>
-            <button class="btn btn-{{chosenLanguage?'theme':'default'}} pull-right" ng-disabled="!chosenLanguage" ng-click="moveStage('INSTRUCTIONS')">Next</button>
+        <div class="box box-theme no-border noselect">
+          <div class="box-body" ng-show="stage==STAGES.LANG_CHOICE">
+            <article class="card">Psychometric Test</article>
+            <br>
+            <div class="row">
+              <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+                <select ng-model="chosenLanguage" class="form-control" ng-options="item.value as item.name for item in LANGUAGES">
+                  <option value="">Choose a language</option>
+                </select>
+              </div>
+            </div>
+            <br>
+            <br>
+            <div class="text-center">
+              <a class="color-theme" ng-show="chosenLanguage" ng-click="moveStage(STAGES.INSTRUCTIONS)">
+                <i class="fa fa-chevron-circle-right" style="font-size:40px"></i>
+              </a>
+            </div>
           </div>
-          <div class="box-body" ng-switch-when="INSTRUCTIONS">
+          <div class="box-body" ng-show="stage==STAGES.INSTRUCTIONS">
             Instructions
-              <button class="btn btn-{{test?'theme':'default'}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?'Start Test':'Preparing Questionnaire..'}}</button>
+              <button class="btn btn-{{test?'theme':(preparationFailed?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?'Start Test':(preparationFailed?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
           </div>
-          <div class="box-body" ng-switch-when="TEST">
+          <div class="box-body" ng-show="stage==STAGES.TEST">
             <h3>
               {{ indexText() }}<small>/{{ test.questions.length }}</small>
               <span class="test-duration pull-right"></span>
@@ -30,7 +40,7 @@
                     <input type="radio" name="r1"
                       ng-model="test.questions[currentIndex].answerId"
                       ng-value="option.id"
-                    />
+                    >
                     <span class="control-indicator"></span>
                     <span class="radio-label" ng-bind-html="option.optionText"></span>
                   </label>
@@ -46,7 +56,7 @@
                     <input type="radio" name="r1"
                       ng-model="test.questions[currentIndex].answerId"
                       ng-value="option.id"
-                    />
+                    >
                     <span class="control-indicator"></span>
                     <span class="radio-label" ng-bind-html="option.optionText"></span>
                   </label>
@@ -55,14 +65,14 @@
               <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="submit()">Next</button>
             </article>
             <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && test.questions[currentIndex].linked">
-              <div class="question pictorial" ng-bind-html="test.questions[currentIndex].questionText"></div>
+              <div class="question linked" ng-bind-html="test.questions[currentIndex].questionText"></div>
               <ul class="options radios">
                 <li ng-repeat="option in test.questions[currentIndex].options" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
                   <label class="radio-item radio-theme">
                     <input type="radio" name="r1"
                       ng-model="test.questions[currentIndex].answerId"
                       ng-value="option.id"
-                    />
+                    >
                     <span class="control-indicator"></span>
                     <span class="radio-label" ng-bind-html="option.optionText"></span>
                   </label>
@@ -72,14 +82,14 @@
             </article>
             <article ng-show="testPaused" class="card">
               Take a break!
-              <br/>
+              <br>
               <span class="break-duration"></span>
             </article>
           </div>
-          <div class="box-body" ng-switch-when="END">
+          <div class="box-body" ng-show="stage==STAGES.END">
             <article class="card">
               You've successfully completed the test!!
-              <br/>
+              <br>
               <button class="btn btn-theme" ng-click="complete()">Close</button>
             </article>
           </div>
@@ -88,82 +98,6 @@
     </div>
   </section>
 <style type="text/css">
-.psychometric-page .box {
-  min-height: 500px
-}
-.psychometric-page h3 {
-  font-size: 60px;
-  font-weight: bold;
-  font-family: 'Source Sans Pro', sans-serif;
-  color: #ccc;
-  margin-top: 0;
-  margin-left: 8px;
-}
-.psychometric-page h3 small {
-  font-size: 25px;
-  font-weight: bold;
-  color: #ccc;
-  vertical-align: super;
-}
-.psychometric-page h3 a.play-pause {
-  color: #aaa;
-  float: right;
-  padding: 0 6px;
-  font-size: 30px;
-  font-weight: normal;
-}
-.psychometric-page h3 a.play-pause span {
-  font-size: 15px;
-  font-weight: lighter;
-}
-.psychometric-page .test-duration {
-  font-size: 30px;
-  font-weight: normal;
-  color: #888;
-}
-.psychometric-page .test-duration em {
-  font-size: 20px;
-  font-weight: normal;
-}
-.psychometric-page article {
-  padding: 15px;
-}
-.psychometric-page article.card {
-  padding-top: 100px;
-  text-align: center;
-  font-size: 50px;
-}
-.psychometric-page article * {
-  font-size: 18px;
-}
-.psychometric-page article .question.pictorial {
-  width: 50%;
-}
-.psychometric-page article .question.pictorial img {
-  width: 100%;
-}
-.psychometric-page article ul.options {
-  padding: 15px 0 0 10px;
-  list-style: none;
-}
-.psychometric-page article ul.options.pictorial li {
-  width: 50%;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  padding: 6px;
-  float: left;
-}
-.psychometric-page article ul.options li + li {
-  padding-top: 12px;
-}
-.psychometric-page article ul.options li.selected .radio-label {
-  font-weight: 600;
-}
-.psychometric-page article ul.options .control-indicator {
-  top: 6px;
-}
-.psychometric-page article ul.options .radio-label {
-  padding-right: 0;
-}
+  @import url("process/pages/templates/Psychometric.Test.css");
 </style>
 </div>

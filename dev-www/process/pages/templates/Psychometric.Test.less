@@ -1,0 +1,91 @@
+.psychometric-page {
+    .box {
+        min-height: 500px;
+        h3 {
+            font-size: 60px;
+            font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
+            color: #ccc;
+            margin-top: 0;
+            margin-left: 8px;
+            small {
+                font-size: 25px;
+                font-weight: bold;
+                color: #ccc;
+                vertical-align: super;
+            }
+            a.play-pause {
+                color: #aaa;
+                float: right;
+                padding: 0 6px;
+                font-size: 30px;
+                font-weight: normal;
+                span {
+                    font-size: 15px;
+                    font-weight: lighter;
+                }
+            }
+            .test-duration {
+                font-size: 30px;
+                font-weight: normal;
+                color: #888;
+                em {
+                    font-size: 20px;
+                    font-weight: normal;
+                }
+            }
+        }
+        article {
+            padding: 15px;
+            &.card {
+                padding-top: 100px;
+                text-align: center;
+                font-size: 50px;
+            }
+            * {
+                font-size: 18px;
+            }
+            .question.pictorial {
+                max-height: 360px;
+                img {
+                    max-height: 360px;
+                }
+            }
+            ul.options {
+                padding: 15px 0 0 10px;
+                list-style: none;
+                &.pictorial {
+                    li {
+                        width: 50%;
+                        height: 360px;
+                        padding: 6px;
+                        float: left;
+                        overflow: hidden;
+                        &.selected {
+                            border: 1px solid #ccc;
+                            border-radius: 2px;
+                        }
+                        .radio-label img {
+                            width: 100%;
+                            max-height: 360px;
+                        }
+                    }
+                }
+                li + li {
+                    padding-top: 12px;
+                }
+                li.selected {
+                    .radio-label {
+                        font-weight: 600;
+                    }
+                }
+                .control-indicator {
+                    top: 6px;
+                }
+                .radio-label {
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+}

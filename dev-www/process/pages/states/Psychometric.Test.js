@@ -9,12 +9,21 @@ irf.pages.controller("PsychometricTestCtrl",
 		return i < 10 ? '0'+i:i;
 	};
 
+	$scope.LANGUAGES = [
+		{
+			"value":"en",
+			"name":"English"
+		}
+	];
+
 	var STAGES = {
 		"LANG_CHOICE": "LANG_CHOICE",
 		"INSTRUCTIONS": "INSTRUCTIONS",
 		"TEST": "TEST",
 		"END": "END"
 	};
+
+	$scope.STAGES = STAGES;
 
 	$scope.stage = STAGES.LANG_CHOICE;
 	$scope.chosenLanguage = null;
@@ -91,28 +100,47 @@ irf.pages.controller("PsychometricTestCtrl",
 		}
 	};
 
+	var submitAnswers = function() {
+		var testToSend = _.clone($scope.test);
+		testToSend.questions = [];
+		for (var i = 0; i < $scope.test.questions.length; i++) {
+			testToSend.questions.push({
+				id: $scope.test.questions[i].id,
+				answerId: $scope.test.questions[i].answerId
+			});
+		};
+	};
+
 	$scope.moveStage = function(toStage) {
 		$scope.stage = toStage;
-		if ($scope.stage == STAGES.TEST) {
+		switch ($scope.stage) {
+		case STAGES.INSTRUCTIONS:
+			$scope.lastIndex = -1;
+			$log.info($scope.chosenLanguage);
+			Psychometric.getTest({
+				"participantId": $stateParams.pageId,
+				"createdBy": SessionStore.getLoginname(),
+				"langCode": $scope.chosenLanguage
+			}, function(test) {
+				$scope.test = test;
+				$scope.allowedIntervals = $scope.test.noOfInterval;
+				$scope.lastIndex = $scope.test.questions.length - 1;
+			}, function(err) {
+				$scope.preparationFailed = true;
+			});
+			break;
+		case STAGES.TEST:
 			startTestCountdown($scope.test.testDuration);
+			break;
+		case STAGES.END:
+			clearInterval(testCountdownId);
+			submitAnswers();
+			break;
 		}
 	}
 
 	$scope.complete = function() {
-		$scope.stage = STAGES.LANG_CHOICE;
+		$scope.stage = STAGES.LANG_CHOICE; // TODO remove
 	}
-
-	$scope.lastIndex = -1;
-	Psychometric.getTest({
-		"participantId": $stateParams.pageId,
-		"createdBy": SessionStore.getLoginname(),
-		"langCode": "en"
-	}, function(test) {
-		$scope.test = test;
-		$scope.allowedIntervals = $scope.test.noOfInterval;
-		$scope.lastIndex = $scope.test.questions.length - 1;
-	}, function(err) {
-
-	});
 
 }]);

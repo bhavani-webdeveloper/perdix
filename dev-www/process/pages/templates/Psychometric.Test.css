@@ -1,0 +1,85 @@
+.psychometric-page .box {
+  min-height: 500px;
+}
+.psychometric-page .box h3 {
+  font-size: 60px;
+  font-weight: bold;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #ccc;
+  margin-top: 0;
+  margin-left: 8px;
+}
+.psychometric-page .box h3 small {
+  font-size: 25px;
+  font-weight: bold;
+  color: #ccc;
+  vertical-align: super;
+}
+.psychometric-page .box h3 a.play-pause {
+  color: #aaa;
+  float: right;
+  padding: 0 6px;
+  font-size: 30px;
+  font-weight: normal;
+}
+.psychometric-page .box h3 a.play-pause span {
+  font-size: 15px;
+  font-weight: lighter;
+}
+.psychometric-page .box h3 .test-duration {
+  font-size: 30px;
+  font-weight: normal;
+  color: #888;
+}
+.psychometric-page .box h3 .test-duration em {
+  font-size: 20px;
+  font-weight: normal;
+}
+.psychometric-page .box article {
+  padding: 15px;
+}
+.psychometric-page .box article.card {
+  padding-top: 100px;
+  text-align: center;
+  font-size: 50px;
+}
+.psychometric-page .box article * {
+  font-size: 18px;
+}
+.psychometric-page .box article .question.pictorial {
+  max-height: 360px;
+}
+.psychometric-page .box article .question.pictorial img {
+  max-height: 360px;
+}
+.psychometric-page .box article ul.options {
+  padding: 15px 0 0 10px;
+  list-style: none;
+}
+.psychometric-page .box article ul.options.pictorial li {
+  width: 50%;
+  height: 360px;
+  padding: 6px;
+  float: left;
+  overflow: hidden;
+}
+.psychometric-page .box article ul.options.pictorial li.selected {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+.psychometric-page .box article ul.options.pictorial li .radio-label img {
+  width: 100%;
+  max-height: 360px;
+}
+.psychometric-page .box article ul.options li + li {
+  padding-top: 12px;
+}
+.psychometric-page .box article ul.options li.selected .radio-label {
+  font-weight: 600;
+}
+.psychometric-page .box article ul.options .control-indicator {
+  top: 6px;
+}
+.psychometric-page .box article ul.options .radio-label {
+  padding-right: 0;
+}
