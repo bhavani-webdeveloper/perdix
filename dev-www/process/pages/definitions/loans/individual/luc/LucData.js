@@ -109,8 +109,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "number"
                             }, {
                                 key: "loanMonitoringDetails.isAssetsOrdered",
-                                type: "radios",
-                                enumCode: "decisionmaker",
+                               /* type: "radios",
+                                enumCode: "decisionmaker",*/
                             }, {
                                 key: "loanMonitoringDetails.reasonForNotOrderingAssets",
                                 type: "string"
@@ -145,12 +145,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             },*/
                             {
                                 key: "loanMonitoringDetails.lucDone",
-                                type: "radios",
-                                enumCode: "decisionmaker",
+                                /*type: "radios",
+                                enumCode: "decisionmaker",*/
                             }, {
                                 key: "loanMonitoringDetails.lucRescheduled",
-                                type: "radios",
-                                enumCode: "decisionmaker",
+                               /* type: "radios",
+                                enumCode: "decisionmaker",*/
                             }, {
                                 key: "loanMonitoringDetails.lucRescheduleReason",
                                 type: "string"
@@ -159,8 +159,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "date"
                             }, {
                                 key: "loanMonitoringDetails.lucEscalated",
-                                type: "radios",
-                                enumCode: "decisionmaker",
+                                /*type: "radios",
+                                enumCode: "decisionmaker",*/
                             }, {
                                 key: "loanMonitoringDetails.lucEscalatedReason",
                                 type: "string"
