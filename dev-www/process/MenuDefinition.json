@@ -13,6 +13,15 @@
 			]
 		},
 		{
+			"title": "LUC",
+			"iconClass": "fa fa-check-square-o",
+			"items": [
+				"Page/Engine/loans.individual.luc.LucRiskQueue",
+				"Page/Engine/loans.individual.luc.LucScheduleQueue",
+				"Page/Engine/loans.individual.luc.LucData"
+			]
+		},
+		{
 			"title": "CUSTOMER",
 			"iconClass": "fa fa-user",
 			"items": [
