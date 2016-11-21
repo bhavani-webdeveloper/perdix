@@ -6,6 +6,10 @@ irf.models.factory('Psychometric', ['$resource', '$httpParamSerializer', functio
             method:'GET',
             url:endpoint + '/test'
         },
+        postTest:{
+            method:'POST',
+            url:endpoint + '/test'
+        },
         getAllConfig: {
             method: 'GET',
             url: endpoint + '/maintenance/config/all',

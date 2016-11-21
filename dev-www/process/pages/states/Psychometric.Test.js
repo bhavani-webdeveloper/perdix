@@ -109,6 +109,12 @@ irf.pages.controller("PsychometricTestCtrl",
 				answerId: $scope.test.questions[i].answerId
 			});
 		};
+		$log.info(testToSend);
+		Psychometric.postTest(testToSend, function(resp){
+			$log.info(resp);
+		}, function(errResp) {
+			$log.error(errResp);
+		});
 	};
 
 	$scope.moveStage = function(toStage) {
