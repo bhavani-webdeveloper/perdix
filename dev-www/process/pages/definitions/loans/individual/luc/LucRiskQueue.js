@@ -38,8 +38,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 								"screenFilter": true
 							}
 						},
-						"applicationName": {
-							"title": "APPLICATION_NAME",
+						"applicantName": {
+							"title": "APPLICANT_NAME",
 							"type": "string"
 						},
 						"businessName": {
@@ -70,7 +70,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 						//'branchName': searchOptions.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
-						'applicationName': searchOptions.applicationName,
+						'applicantName': searchOptions.applicantName,
 						'businessName': searchOptions.businessName,
 					}).$promise;
 

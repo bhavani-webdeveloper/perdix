@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningQueue"),
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {

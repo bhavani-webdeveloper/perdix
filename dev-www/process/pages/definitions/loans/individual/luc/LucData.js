@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
-    ["$log", "$state", "$stateParams", "LUC", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    ["$log", "$state", "$stateParams", "LUC","LucHelper","SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries",
 
-        function($log, $state, $stateParams, LUC, SessionStore, formHelper, $q, irfProgressMessage,
+        function($log, $state, $stateParams, LUC,LucHelper,SessionStore, formHelper, $q, irfProgressMessage,
             PageHelper, Utils, PagesDefinition, Queries) {
 
             var branch = SessionStore.getBranch();
@@ -13,30 +13,31 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 "subTitle": "LUC",
                 initialize: function(model, form, formCtrl) {
 
-                    model.luc = model.luc || {};
+                    model.loanMonitoringDetails = model.loanMonitoringDetails || {};
                     //model.branchId = SessionStore.getBranchId() + '';
                     //model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                     model = Utils.removeNulls(model, true);
                     //model.lead.branchName = SessionStore.getBranch();
-                    $log.info("lead generation page got initiated");
+                    $log.info("luc page got initiated");
 
-                    /* if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
-                         PageHelper.showLoader();
-                         PageHelper.showProgress("page-init", "Loading...");
-                         var leadId = $stateParams.pageId;
-                         if (!leadId) {
-                             PageHelper.hideLoader();
-                         }
-                         Lead.get({
-                                 id: leadId
-                             },
-                             function(res) {
-                                 _.assign(model.lead, res);
-                                 model = Utils.removeNulls(model, true);
-                                 PageHelper.hideLoader();
-                             }
-                         );
-                     }*/
+                    if (!(model && model.loanMonitoringDetails && model.loanMonitoringDetails.id && model.$$STORAGE_KEY$$)) {
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("page-init", "Loading...");
+                        var lucId = $stateParams.pageId;
+                        if (!lucId) {
+                            PageHelper.hideLoader();
+                        }
+                        LUC.get({
+                                id: lucId
+                            },
+                            function(res) {
+                                $log.info(res);
+                                _.assign(model.loanMonitoringDetails, res);
+                                model = Utils.removeNulls(model, true);
+                                PageHelper.hideLoader();
+                            }
+                        );
+                    }
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {
@@ -49,62 +50,69 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         "type": "box",
                         "title": "LUC",
                         "items": [{
-                            key: "luc.loanMonitoringDetails[].customerId",
+                            key: "loanMonitoringDetails.id",
+                            type: "number",
+                            condition: "model.loanMonitoringDetails.id",
+                        }, {
+                            key: "loanMonitoringDetails.customerId",
                             type: "number"
                         }, {
-                            key: "luc.loanMonitoringDetails[].customerName",
+                            key: "loanMonitoringDetails.customerName",
                             type: "string"
                         }, {
-                            key: "luc.loanMonitoringDetails[].address",
+                            key: "loanMonitoringDetails.address",
                             type: "string"
                         }, {
-                            key: "luc.loanMonitoringDetails[].companyName",
+                            key: "loanMonitoringDetails.proprietoryName",
                             type: "string"
                         }, {
-                            key: "luc.loanMonitoringDetails[].proprietoryName",
-                            type: "string"
-                        }, {
-                            key: "luc.loanMonitoringDetails[].loanId",
+                            key: "loanMonitoringDetails.loanId",
                             type: "number"
                         }]
                     }, {
                         "type": "box",
                         "title": "LOAN_UTILIZATION",
                         "items": [{
-                                key: "luc.loanMonitoringDetails[].loanSeries",
+                                key: "loanMonitoringDetails.loanSeries",
                                 type: "number"
                             }, {
-                                key: "luc.loanMonitoringDetails[].loanProductName",
+                                key: "loanMonitoringDetails.loanProductName",
                                 type: "string"
                             }, {
-                                key: "luc.loanMonitoringDetails[].loanPurposeCategory",
-                                type: "select"
+                                key: "loanMonitoringDetails.loanPurposeCategory",
+                                type: "select",
+                                enumCode:"loan_purpose_1"
                             }, {
-                                key: "luc.loanMonitoringDetails[].loanPurpose",
-                                type: "select"
+                                key: "loanMonitoringDetails.loanPurpose",
                             }, {
-                                key: "luc.loanMonitoringDetails[].loanAmount",
+                                key: "loanMonitoringDetails.loanAmount",
                                 type: "amount"
                             }, {
-                                key: "luc.loanMonitoringDetails[].disbursementDate",
+                                key: "loanMonitoringDetails.disbursementDate",
                                 type: "date"
                             }, {
-                                key: "luc.loanMonitoringDetails[].numberOfAssetsDelivered",
-                                type: "number"
+                                key: "loanMonitoringDetails.numberOfAssetsDelivered",
+                                type: "select",
+                                titleMap: {
+                                        "ALL": "All",
+                                        "SOME": "Some",
+                                        "NONE": "None",
+                                    },
                             }, {
-                                key: "luc.loanMonitoringDetails[].amountUtilizedForAssetsPurchase",
+                                key: "loanMonitoringDetails.amountUtilizedForAssetsPurchase",
                                 type: "amount"
                             }, {
-                                key: "luc.loanMonitoringDetails[].percentage",
+                                key: "loanMonitoringDetails.percentage",
+                                type: "number",
+                            }, {
+                                key: "loanMonitoringDetails.totalCreationAssetValue",
                                 type: "number"
                             }, {
-                                key: "luc.loanMonitoringDetails[].totalCreationAssetValue",
-                                type: "number"
+                                key: "loanMonitoringDetails.isAssetsOrdered",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                             }, {
-                                key: "luc.loanMonitoringDetails[].isAssetsOrdered",
-                                type: "radios"
-                            }, {
-                                key: "luc.loanMonitoringDetails[].reasonForNotOrderingAssets",
+                                key: "loanMonitoringDetails.reasonForNotOrderingAssets",
                                 type: "string"
                             },
                             /* {
@@ -136,55 +144,68 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "select"
                             },*/
                             {
-                                key: "luc.loanMonitoringDetails[].lucDone",
-                                type: "radios"
+                                key: "loanMonitoringDetails.lucDone",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                             }, {
-                                key: "luc.loanMonitoringDetails[].lucRescheduled",
-                                type: "radios"
+                                key: "loanMonitoringDetails.lucRescheduled",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                             }, {
-                                key: "luc.loanMonitoringDetails[].lucRescheduleReason",
+                                key: "loanMonitoringDetails.lucRescheduleReason",
                                 type: "string"
                             }, {
-                                key: "luc.loanMonitoringDetails[].lucRescheduledDate",
+                                key: "loanMonitoringDetails.lucRescheduledDate",
                                 type: "date"
                             }, {
-                                key: "luc.loanMonitoringDetails[].lucEscalated",
-                                type: "radios"
+                                key: "loanMonitoringDetails.lucEscalated",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                             }, {
-                                key: "luc.loanMonitoringDetails[].lucEscalatedReason",
+                                key: "loanMonitoringDetails.lucEscalatedReason",
                                 type: "string"
                             }, {
                                 key: "machineDetails",
                                 type: "array",
                                 startEmpty: true,
-                                title: "Machines",
+                                title: "MACHINE",
                                 items: [{
-                                    key: "luc.machineDetails[].make",
+                                    key: "loanMonitoringDetails.machineDetails[].make",
                                     type: "string",
                                 }, {
-                                    key: "luc.machineDetails[].type",
+                                    key: "loanMonitoringDetails.machineDetails[].type",
                                     type: "string",
                                 }, {
-                                    key: "luc.machineDetails[].year",
+                                    key: "loanMonitoringDetails.machineDetails[].year",
                                     type: "date",
                                 }, {
-                                    key: "luc.machineDetails[].model",
+                                    key: "loanMonitoringDetails.machineDetails[].model",
                                     type: "string",
                                 }, {
-                                    key: "luc.machineDetails[].serialNumber",
+                                    key: "loanMonitoringDetails.machineDetails[].serialNumber",
                                     type: "string",
                                 }, {
-                                    key: "luc.machineDetails[].assetType",
+                                    key: "loanMonitoringDetails.machineDetails[].assetType",
                                     type: "select",
+                                    titleMap: {
+                                        "NEW": "NEW",
+                                        "OLD": "OLD",
+                                    },
                                 }, {
-                                    key: "luc.machineDetails[].hypothecationLabelBeenApplied",
+                                    key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
                                     type: "radios",
+                                    enumCode: "decisionmaker",
                                 }, {
-                                    key: "luc.machineDetails[].companyNameInOriginalInvoice",
+                                    key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
                                     type: "radios",
+                                    enumCode: "decisionmaker",
                                 }, {
-                                    key: "luc.machineDetails[].hypothecatedTo",
+                                    key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
                                     type: "select",
+                                     titleMap: {
+                                        "NEW": "NEW",
+                                        "OLD": "OLD",
+                                    },
                                 }]
                             },
 
@@ -195,84 +216,88 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         "type": "box",
                         "title": "SOCIAL_IMPACT",
                         "items": [{
-                            "type": "fieldset",
-                            "title": "EMPLOYEE_INFORMATION",
-                            "items": [{
-                                type: "fieldset",
-                                title: "MEN",
-                                items: [{
-                                    key: "luc.socialImpactDetails[].totalNumberOfMen",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].averageSalaryOfMen",
-                                    type: "amount"
-                                }, {
-                                    key: "luc.socialImpactDetails[].menPartTimeEmployee",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].menFullTimeEmployee",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].avgSkillLevelOfMen",
-                                    type: "string"
-                                }, {
-                                    key: "luc.socialImpactDetails[].noOfFirstJobsMen",
-                                    type: "number"
-                                }]
+                            type: "fieldset",
+                            title: "MEN",
+                            items: [{
+                                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfMen",
+                                type: "number"
                             }, {
-                                type: "fieldset",
-                                title: "WOMEN",
-                                items: [{
-                                    key: "luc.socialImpactDetails[].totalNumberOfWomen",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].averageSalaryOfWomen",
-                                    type: "amount"
-                                }, {
-                                    key: "luc.socialImpactDetails[].womenPartTimeEmployee",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].womenFullTimeEmployee",
-                                    type: "number"
-                                }, {
-                                    key: "luc.socialImpactDetails[].avgSkillLevelOfWomen",
-                                    type: "string"
-                                }, {
-                                    key: "luc.socialImpactDetails[].noOfFirstJobsWomen",
-                                    type: "number"
-                                }]
+                                key: "loanMonitoringDetails.socialImpactDetails.averageSalaryOfMen",
+                                type: "amount"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee",
+                                type: "number"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
+                                type: "number"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.avgSkillLevelOfMen",
+                                type: "select",
+                                titleMap: {
+                                    "SKILLED": "SKILLED",
+                                    "UNSKILLED": "UNSKILLED",
+                                },
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.noOfFirstJobsMen",
+                                type: "number"
+                            }]
+                        }, {
+                            type: "fieldset",
+                            title: "WOMEN",
+                            items: [{
+                                key: "loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen",
+                                type: "number"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.averageSalaryOfWomen",
+                                type: "amount"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee",
+                                type: "number"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee",
+                                type: "number"
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.avgSkillLevelOfWomen",
+                                type: "select",
+                                titleMap: {
+                                    "SKILLED": "SKILLED",
+                                    "UNSKILLED": "UNSKILLED",
+                                },
+                            }, {
+                                key: "loanMonitoringDetails.socialImpactDetails.noOfFirstJobsWomen",
+                                type: "number"
                             }]
                         }, {
                             "type": "fieldset",
                             "title": "PRE_LOAN_DETAILS",
                             "items": [{
-                                key: "luc.socialImpactDetails[].preLoanMonthlyRevenue",
-                                type: "string"
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue",
+                                type: "number"
                             }, {
-                                key: "luc.socialImpactDetails[].preLoanMonthlyNetIncome",
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome",
                                 type: "amount"
                             }, {
-                                key: "luc.socialImpactDetails[].preLoanProprietorSalary",
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary",
                                 type: "amount"
                             }, {
-                                key: "luc.socialImpactDetails[].preLoanNumberOfCustomersOrBuyers",
-                                type: "select"
+                                key: "loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers",
+                                type: "number"
                             }]
                         }, {
                             "type": "fieldset",
                             "title": "POST_LOAN_DETAILS",
                             "items": [{
-                                key: "luc.socialImpactDetails[].postLoanMonthlyRevenue",
-                                type: "string"
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyRevenue",
+                                type: "number"
                             }, {
-                                key: "luc.socialImpactDetails[].postLoanMonthlyNetIncome",
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanMonthlyNetIncome",
                                 type: "amount"
                             }, {
-                                key: "luc.socialImpactDetails[].postLoanProprietorSalary",
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanProprietorSalary",
                                 type: "amount"
                             }, {
-                                key: "luc.socialImpactDetails[].postLoanNumberOfCustomersOrBuyers",
-                                type: "select"
+                                key: "loanMonitoringDetails.socialImpactDetails.postLoanNumberOfCustomersOrBuyers",
+                                type: "number"
                             }]
                         }]
                     },
@@ -296,7 +321,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                     submit: function(model, form, formName) {
                         $log.info("Inside submit()");
                         $log.warn(model);
-                        /*var sortFn = function(unordered) {
+                        var sortFn = function(unordered) {
                             var out = {};
                             Object.keys(unordered).sort().forEach(function(key) {
                                 out[key] = unordered[key];
@@ -304,29 +329,14 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             return out;
                         };
                         var reqData = _.cloneDeep(model);
-                        if (reqData.lead.id) {
-                            if (reqData.lead.leadStatus == "FollowUp") {
-                                LeadHelper.followData(reqData).then(function(resp) {
-                                    $state.go('Page.Landing', null);
-                                });
-                            } else {
-                                LeadHelper.proceedData(reqData).then(function(resp) {
-                                    $state.go('Page.Landing', null);
-                                }, function(err) {
-                                    Utils.removeNulls(res.lead, true);
-                                    model.lead = res.lead;
-                                });
-                            }
-                        } else {
-                            LeadHelper.saveData(reqData).then(function(res) {
-                                LeadHelper.proceedData(res).then(function(resp) {
-                                    $state.go('Page.Landing', null);
-                                }, function(err) {
-                                    Utils.removeNulls(res.lead, true);
-                                    model.lead = res.lead;
-                                });
+                        if (reqData.loanMonitoringDetails.id) {
+                            LucHelper.proceedData(reqData).then(function(resp) {
+                                //$state.go('Page.Landing', null);
                             });
-                        }*/
+                            
+                        } else {
+                            $log.info("Id is not in the model");
+                        }
                     }
                 }
             };

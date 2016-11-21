@@ -38,22 +38,26 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 								"screenFilter": true
 							}
 						},
-						"applicationName": {
-							"title": "APPLICATION_NAME",
+						"applicantName": {
+							"title": "APPLICANT_NAME",
 							"type": "string"
 						},
 						"businessName": {
 							"title": "BUSINESS_NAME",
-							"type": "number"
-						},
-						"accountNumber": {
-							"title": "LOAN_ACCOUNT_NUMBER",
-							"type": "number"
+							"type": "string"
 						},
 						"lucScheduledDate": {
 							"title": "LUC_SCHEDULED_DATE",
-							"type": "number"
+							"type": "string",
+							"x-schema-form": {
+								"type": "date"
+							}
 						},
+						"accountNumber": {
+							"title": "LOAN_ACCOUNT_NUMBER",
+							"type": "string"
+						},
+						
 
 					},
 					"required": ["LoanAccountNumber"]
@@ -70,7 +74,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 						//'branchName': searchOptions.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
-						'applicationName': searchOptions.applicationName,
+						'applicantName': searchOptions.applicationName,
 						'businessName': searchOptions.businessName,
 					}).$promise;
 
@@ -78,7 +82,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
-						return 20;
+						return 100;
 					},
 					"getTotalItemsCount": function(response, headers) {
 						return headers['x-total-count']
@@ -87,6 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 				listOptions: {
 					selectable: false,
 					expandable: true,
+					listStyle: "table",
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
@@ -96,7 +101,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					},
 					getListItem: function(item) {
 						return [
-							item.applicationName,
+							item.applicantName,
 							item.businessName,
 							item.accountNumber,
 							item.loanId,
@@ -113,11 +118,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					},
 					getColumns: function() {
 						return [{
-							title: 'Application Name',
-							data: 'applicationName'
+							title: 'Applicant Name',
+							data: 'customerName'
 						}, {
 							title: 'Business Name',
-							data: 'businessName'
+							data: 'bussinessName'
 						}, {
 							title: 'Account Number',
 							data: 'accountNumber'
@@ -128,7 +133,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 							title: 'Disbursement Date',
 							data: 'disbursementDate'
 						}, {
-							title: 'LUC Scheduled Date',
+							title: 'LUC Date',
 							data: 'lucDate'
 						}]
 					},
@@ -138,11 +143,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadGeneration', {
-									_request: item
-								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+									pageName: "loans.individual.luc.LucData",
 									pageId: item.id
 								});
 							},
