@@ -18,7 +18,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
-					"properties": {
+					"properties": 
+						{
+						"sno": {
+	                        "title": "S_NO",
+	                        "type": "string"
+	                    },
+	                    {
+						"hubname": {
+	                        "title": "HUBNAME_NAME",
+	                        "type": "string"
+	                    },
+	                    {
+						"spokename": {
+	                        "title": "SPOKE_NAME",
+	                        "type": "string"
+	                    },
+						{
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -39,14 +55,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": {
-	                        "title": "SCREENING_DATE",
-	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
-	                    }
-					},
+	                    
+					}
 					"required": []
 				},
 				getSearchFormHelper: function() {
@@ -86,7 +96,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							item.sno,
+							item.hubname,
+							item.spokename,
 							item.applicantName,
 							item.businessName,
 							item.customerId,
@@ -106,10 +118,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 						return [{
 							title: 'ID',
 							data: 'id'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
+						},{
+							title: 'HUB_NAME',
+							data: 'hubname'
+						},
+						{
+							title: 'SPOKE_NAME',
+							data: 'spokename'
+						},
+
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{

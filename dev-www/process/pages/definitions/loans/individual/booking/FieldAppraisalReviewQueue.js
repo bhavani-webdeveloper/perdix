@@ -39,14 +39,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": {
-	                        "title": "SCREENING_DATE",
-	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
-	                    }
-					},
+	                    
+					}
 					"required": []
 				},
 				getSearchFormHelper: function() {
@@ -86,7 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							
 							item.applicantName,
 							item.businessName,
 							item.customerId,
@@ -106,10 +100,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 						return [{
 							title: 'ID',
 							data: 'id'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
+						},  {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{

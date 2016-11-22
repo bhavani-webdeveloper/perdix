@@ -18,7 +18,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
-					"properties": {
+					"properties": 
+						{
+						"sno":
+						{
+	                        "title": "S_NO",
+	                        "type": "string"
+	                    },
+						{
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -39,13 +46,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": {
-	                        "title": "SCREENING_DATE",
-	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
-	                    }
+	                    
 					},
 					"required": []
 				},
@@ -86,7 +87,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							item.sno,
 							item.applicantName,
 							item.businessName,
 							item.customerId,
@@ -106,10 +107,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 						return [{
 							title: 'ID',
 							data: 'id'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
+						},
+						 {
+							title: 'S_NO',
+							data: 'sno'
+						},
+						 {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
@@ -121,10 +124,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 						}, {
 							title: 'AREA',
 							data: 'area'
-						}, {
+						},
+						 {
 							title: 'CITY_TOWN_VILLAGE',
 							data: 'cityTownVillage'
-						}, {
+						}, 
+						{
 							title: 'PINCODE',
 							data: 'pincode'
 						}]

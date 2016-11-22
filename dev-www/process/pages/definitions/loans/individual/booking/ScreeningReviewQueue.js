@@ -38,14 +38,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningReviewQue
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-	                    },
-	                    "screeningDate": {
-	                        "title": "SCREENING_DATE",
-	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
 	                    }
+
 					},
 					"required": []
 				},
@@ -86,7 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningReviewQue
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							
 							item.applicantName,
 							item.businessName,
 							item.customerId,

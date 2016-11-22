@@ -86,7 +86,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							
 							item.applicantName,
 							item.businessName,
 							item.customerId,
@@ -103,13 +103,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 						};
 					},
 					getColumns: function() {
-						return [{
+						return [
+						{
 							title: 'ID',
 							data: 'id'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
+						},
+						
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{

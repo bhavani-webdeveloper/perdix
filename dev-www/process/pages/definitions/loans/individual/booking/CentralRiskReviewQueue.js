@@ -19,7 +19,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"applicantName": {
+						"hubname":
+						{
+	                        "title": "HUB_NAME",
+	                        "type": "string"
+	                    },
+	                    "spokename":
+						{
+	                        "title": "SPOKE_NAME",
+	                        "type": "string"
+	                    },
+	                    "applicantName":
+						{
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
@@ -86,7 +97,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
+							item.hubname,
+							item.spokename,
 							item.applicantName,
 							item.businessName,
 							item.customerId,
@@ -106,10 +118,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 						return [{
 							title: 'ID',
 							data: 'id'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
+						},
+						{
+							title: 'HUB_NAME',
+							data: 'hubname'
+						},
+						{
+							title: 'SPOKE_NAME',
+							data: 'spokename'
+						},
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
