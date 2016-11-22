@@ -165,7 +165,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 key: "loanMonitoringDetails.lucEscalatedReason",
                                 type: "string"
                             }, {
-                                key: "machineDetails",
+                                key: "loanMonitoringDetails.machineDetails",
                                 type: "array",
                                 startEmpty: true,
                                 title: "MACHINE",
