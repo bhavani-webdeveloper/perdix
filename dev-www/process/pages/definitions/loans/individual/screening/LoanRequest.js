@@ -15,6 +15,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.branchId = SessionStore.getBranchId() + '';
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
+            model.loanAccount = {};
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -23,6 +24,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 item.customer.centreCode,
                 item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
             ]
+        },
+        eventListeners: {
+            "new-applicant": function(bundleModel, model, params){
+                $log.info("Inside new-applicant of LoanRequest");
+                model.loanAccount.applicant = params.customer.id;
+                /* Assign more customer information to show */
+            },
+            "new-co-applicant": function(bundleModel, model, params){
+                $log.info("Insdie new-co-applicant of LoanRequest");
+                model.loanAccount.coApplicant = params.customer.id;
+            },
+            "new-business": function(bundleModel, model, param){
+                $log.info("Inside new-business of LoanRequest");
+                model.loanAccount.customerId = params.customer.id;
+            }
         },
         form: [
             {
@@ -40,6 +56,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         enumCode: "loan_purpose_2",
                         parentEnumCode: "loan_purpose_1"
                     },
+                    {
+                        key: "loanAccount.assetAvailableForHypothecation",
+                        type: "select",
+                        enumCode: "decisionmaker",
+                        title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
+                    },
+                    {
+                        key: "loanAccount.estimatedValueOfAssets",
+                        type: "amount",
+                        condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
+                        title: "ESTIMATED_VALUE_OF_ASSETS"
+                    },
+                    {
+                        key: "loanAccount.loanAmountRequested",
+                        type: "amount",
+                        title: "LOAN_AMOUNT_REQUESTED"
+                    }
                 ]
             },
             {
@@ -70,33 +103,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-                var sortFn = function(unordered){
-                    var out = {};
-                    Object.keys(unordered).sort().forEach(function(key) {
-                        out[key] = unordered[key];
-                    });
-                    return out;
-                };
-                var reqData = _.cloneDeep(model);
-                EnrollmentHelper.fixData(reqData);
-                if (reqData.customer.id) {
-                    EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        // Utils.removeNulls(resp.customer,true);
-                        // model.customer = resp.customer;
-                        $state.go('Page.Landing', null);
-                    });
-                } else {
-                    EnrollmentHelper.saveData(reqData).then(function(res){
-                        EnrollmentHelper.proceedData(res).then(function(resp){
-                            // Utils.removeNulls(resp.customer,true);
-                            // model.customer = resp.customer;
-                            $state.go('Page.Landing', null);
-                        }, function(err) {
-                            Utils.removeNulls(res.customer,true);
-                            model.customer = res.customer;
-                        });
-                    });
-                }
             }
         }
     };

@@ -50,7 +50,7 @@ irf.pages.factory('BundleManager', ['BundleLog', function(BundleLog){
             for (var i=0; i<pagesLength; i++){
                 var page = pages[i].page;
                 if (_.hasIn(page, 'eventListeners.' + eventName)) {
-                    page.eventListeners[eventName](currentInstance.bundleModel, obj);
+                    page.eventListeners[eventName](currentInstance.bundleModel, pages[i].model, obj);
                 }
             }
         }
@@ -83,6 +83,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.pageName = $stateParams.pageName;
     $scope.anchorLnks = [];
     $scope.bundleModel = {};
+    var pageCounter = 0;
 
     var bundle = {
         'pageName': $stateParams.pageName
@@ -105,7 +106,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         var pageObj = {};
         pageObj.pageName = bundlePage.pageName;
         pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
-        pageObj.formName = irf.form(bundlePage.pageName);
+        pageObj.formName = irf.form(bundlePage.pageName) + (pageCounter++);
         pageObj.title = bundlePage.title;
         pageObj.id = bundlePage.id;
         pageObj.bundlePage = bundlePage;

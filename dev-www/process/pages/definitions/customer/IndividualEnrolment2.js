@@ -26,7 +26,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             }
         },
         eventListeners: {
-            "test-listener": function(bundleModel, obj){
+            "test-listener": function(bundleModel, model, obj){
 
             }
         },
@@ -1329,18 +1329,20 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     EnrollmentHelper.fixData(reqData);
                     if (reqData.customer.id) {
                         EnrollmentHelper.proceedData(reqData).then(function(resp){
+                            if (model._bundlePageObj){
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                            }
                         });
                     } else {
                         EnrollmentHelper.saveData(reqData).then(function(res){
                             EnrollmentHelper.proceedData(res).then(function(resp){
-                            }, function(err) {
-                                Utils.removeNulls(res.customer,true);
-                                model.customer = res.customer;
-
+                                model.customer = resp.customer;
                                 if (model._bundlePageObj){
                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 }
-
+                            }, function(err) {
+                                Utils.removeNulls(res.customer,true);
+                                model.customer = res.customer;
                             });
                         });
                     }

@@ -1092,6 +1092,17 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 ]
             },
             {
+                "type": "box",
+                "condition": "model.id",
+                "items": [
+                    {
+                        "type": "text",
+                        "title": "CUSTOMER_ID",
+                        "key": "customer.id"
+                    }
+                ]
+            },
+            {
                 "type": "actionbox",
                 "condition": "!model.customer.id",
                 "items": [/*{

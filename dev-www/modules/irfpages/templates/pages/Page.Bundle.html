@@ -64,7 +64,7 @@
                         <div class="col-sm-8">
                             <div class="row">
                                 <irf-sf
-                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.page)"
+                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.bundlePage)"
                                     irf-schema="pageObj.page.schema"
                                     irf-form="pageObj.page.form"
                                     irf-actions="pageObj.page.actions"
@@ -72,6 +72,7 @@
                                     irf-helper="pageObj.formHelper"
                                     irf-form-name="pageObj.formName"
                                     irf-form-ctrl="pageObj.formCtrl"
+                                    data-page-class="{{ pageObj.bundlePage.pageClass }}"
                                     class="page-form">
                                     <div class="cantina-loader-wrapper">
                                         <div classs="cantina-loader"></div>
@@ -82,7 +83,7 @@
                     </div>
                     <div ng-switch-default>
                         <irf-sf
-                            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl)"
+                            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.bundlePage)"
                             irf-schema="pageObj.page.schema"
                             irf-form="pageObj.page.form"
                             irf-actions="pageObj.page.actions"

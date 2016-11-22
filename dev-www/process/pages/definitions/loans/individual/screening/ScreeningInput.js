@@ -62,15 +62,31 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                         switch (pageObj.pageClass){
                             case 'applicant':
                                 $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
                                 break;
                             case 'co-applicant':
                                 $log.info("New co-applicant");
+                                if (!_.hasIn(bundleModel, 'coApplicants')) {
+                                    bundleModel.coApplicants = [];
+                                }
+                                bundleModel.coApplicants.push(params.customer);
                                 break;
                             case 'guarantor':
                                 $log.info("New guarantor");
+                                if (!_.hasIn(bundleModel, 'guarantors')){
+                                    bundleModel.guarantors = [];
+                                }
+                                bundleModel.guarantors.push(params.guarantor);
+                                break;
+                            case 'business':
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
                                 break;
                             default:
                                 $log.info("Unknown page class");
+                                break;
 
                         }
                     }
