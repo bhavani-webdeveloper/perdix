@@ -14,6 +14,11 @@ irf.models.factory('Psychometric', ['$resource', '$httpParamSerializer', functio
             method: 'GET',
             url: endpoint + '/maintenance/config/all',
             isArray: true
+        },
+        getLanguages: {
+            method: 'GET',
+            url: endpoint + '/maintenance/language/all',
+            isArray: true
         }
     });
 }]);

@@ -11,10 +11,13 @@ irf.pages.controller("PsychometricTestCtrl",
 
 	$scope.LANGUAGES = [
 		{
-			"value":"en",
-			"name":"English"
+			"langCode":"en",
+			"language":"English"
 		}
 	];
+	Psychometric.getLanguages({}, function(resp){
+		$scope.LANGUAGES = resp;
+	});
 
 	var STAGES = {
 		"LANG_CHOICE": "LANG_CHOICE",
