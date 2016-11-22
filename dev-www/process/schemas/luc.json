@@ -1,0 +1,363 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"loanMonitoringDetails": {
+			"type": "object",
+			"required": [
+				"loanSeries",
+				"loanProductCode",
+				"loanProductName",
+				"loanPurposeCategory",
+				"loanPurpose",
+				"currentStage",
+				"loanAmount",
+				"disbursementDate",
+				"numberOfAssetsDelivered",
+				"amountUtilizedForAssetsPurchase",
+				"percentage",
+				"totalCreationAssetValue",
+				"isAssetsOrdered",
+				"reasonForNotOrderingAssets",
+				"lucDone",
+				"lucRescheduled",
+				"lucRescheduledDate",
+				"lucRescheduleReason",
+				"lucEscalated",
+				"lucEscalatedReason",
+				"loanId",
+				"accountNumber",
+				"customerId",
+				"customerName",
+				"urn",
+				"socialImpactDetailsId",
+				"proprietoryName",
+				"proprietoryUrn",
+				"address",
+				"monitoringType"
+			],
+			"properties": {
+				"id": {
+					"title": "LUC ID",
+					"type": "number"
+				},
+				"loanSeries": {
+					"title": "LOAN_SERIES",
+					"type": "number"
+				},
+				"loanProductCode": {
+					"title": "LOAN_PRODUCT_CODE",
+					"type": "string"
+				},
+				"loanProductName": {
+					"title": "LOAN_PRODUCT_NAME",
+					"type": "string"
+				},
+				"loanPurposeCategory": {
+					"title": "LOAN_PURPOSE_CATEGORY",
+					"type": "string"
+				},
+				"loanPurpose": {
+					"title": "LOAN_PURPOSE",
+					"type": "string"
+				},
+				"currentStage": {
+					"title": "CURRENT_STAGE",
+					"type": "string"
+				},
+				"loanAmount": {
+					"title": "LOAN_AMOUNT",
+					"type": "number"
+				},
+				"disbursementDate": {
+					"title": "DISBURSEMENT_DATE",
+					"type": "string"
+				},
+				"numberOfAssetsDelivered": {
+					"title": "NUMBER_OF_ASSETS_DELIVERED",
+					"type": "string"
+				},
+				"amountUtilizedForAssetsPurchase": {
+					"title": "AMOUNT_UTILIZED_FOR_ASSETS_PURCHASE",
+					"type": "number"
+				},
+				"percentage": {
+					"title": "PERCENTAGE",
+					"type": "number"
+				},
+				"totalCreationAssetValue": {
+					"title": "TOTAL_CREATIONS_ASSET_VALUE",
+					"type": "number"
+				},
+				"isAssetsOrdered": {
+					"title": "IS_ASSETS_ORDERED",
+					"type": "number"
+				},
+				"reasonForNotOrderingAssets": {
+					"title": "REASONS_FOR_NOT_ORDERING_ASSETS",
+					"type": "string"
+				},
+				"lucDone": {
+					"title": "LUC_DONE",
+					"type": "number"
+				},
+				"lucRescheduled": {
+					"title": "LUC_RESCHEDULED",
+					"type": "number"
+				},
+				"lucRescheduleReason": {
+					"title": "LUC_RESCHEDULE_REASON",
+					"type": "string"
+				},
+				"lucRescheduledDate": {
+					"title": "LUC_RESCHEDULED_DATE",
+					"type": "string"
+				},
+				"lucEscalated": {
+					"title": "LUC_ESCALATED",
+					"type": "number"
+				},
+				"lucEscalatedReason": {
+					"title": "LUC_ESCALATED_REASON",
+					"type": "string"
+				},
+				"loanId": {
+					"title": "LOAN_ID",
+					"type": "number"
+				},
+				"accountNumber": {
+					"title": "ACCOUNT_NUMBER",
+					"type": "number"
+				},
+				"customerId": {
+					"title": "CUSTOMER_ID",
+					"type": "number"
+				},
+				"customerName": {
+					"title": "CUSTOMER_NAME",
+					"type": "string"
+				},
+				"urn": {
+					"title": "URN",
+					"type": "string"
+				},
+				"socialImpactDetailsId": {
+					"title": "SOCIAL_IMPACT_DETAILS_ID",
+					"type": "number"
+				},
+				"proprietoryName": {
+					"title": "PROPRIETORY_NAME",
+					"type": "string"
+				},
+				"proprietoryUrn": {
+					"title": "PROPRIETORY_URN",
+					"type": "string"
+				},
+				"address": {
+					"title": "ADDRESS",
+					"type": "string"
+				},
+				"udf1": {
+					"title": "UDF1",
+					"type": "string"
+				},
+				"udfDate1": {
+					"title": "UDF_DATE1",
+					"type": "string"
+				},
+				"assignedToUser": {
+					"title": "ASSIGNED_TO_USER",
+					"type": "string"
+				},
+				"lucDate": {
+					"title": "LUC_DATE",
+					"type": "string"
+				},
+				"bussinessName": {
+					"title": "BUSSINESS_NAME",
+					"type": "string"
+				},
+				"socialImpactDetails": {
+					"title": "SOCIAL_IMPACT_DETAILS",
+					"type": "object",
+					"required": [
+						"totalNumberOfMen",
+						"averageSalaryOfMen",
+						"menPartTimeEmployee",
+						"menFullTimeEmployee",
+						"avgSkillLevelOfMen",
+						"noOfFirstJobsMen",
+						"totalNumberOfWomen",
+						"averageSalaryOfWomen",
+						"womenPartTimeEmployee",
+						"womenFullTimeEmployee",
+						"avgSkillLevelOfWomen",
+						"noOfFirstJobsWomen",
+						"preLoanMonthlyRevenue",
+						"preLoanMonthlyNetIncome",
+						"preLoanProprietorSalary",
+						"preLoanNumberOfCustomersOrBuyers",
+						"postLoanMonthlyRevenue",
+						"postLoanMonthlyNetIncome",
+						"postLoanProprietorSalary",
+						"postLoanNumberOfCustomersOrBuyers"
+					],
+					"properties": {
+						"totalNumberOfMen": {
+							"title": "TOTAL_NUMBER_OF_MEN",
+							"type": "number"
+						},
+						"averageSalaryOfMen": {
+							"title": "AVERAGE_SALARY_OF_MEN",
+							"type": "number"
+						},
+						"menPartTimeEmployee": {
+							"title": "MEN_PART_TIME_EMPLOYEE",
+							"type": "number"
+						},
+						"menFullTimeEmployee": {
+							"title": "MEN_FULL_TIME_EMPLOYEE",
+							"type": "number"
+						},
+						"avgSkillLevelOfMen": {
+							"title": "AVG_SKILL_LEVEL_OF_MEN",
+							"type": "string"
+						},
+						"noOfFirstJobsMen": {
+							"title": "NO_OF_FIRST_JOBS_MEN",
+							"type": "number"
+						},
+						"totalNumberOfWomen": {
+							"title": "TOTAL_NUMBER_OF_WOMEN",
+							"type": "number"
+						},
+						"averageSalaryOfWomen": {
+							"title": "AVERAGE_SALARY_OF_WOMEN",
+							"type": "number"
+						},
+						"womenPartTimeEmployee": {
+							"title": "WOMEN_PART_TIME_EMPLOYEE",
+							"type": "number"
+						},
+						"womenFullTimeEmployee": {
+							"title": "WOMEN_FULL_TIME_EMPLOYEE",
+							"type": "number"
+						},
+						"avgSkillLevelOfWomen": {
+							"title": "AVG_SKILL_LEVEL_OF_WOMEN",
+							"type": "string"
+						},
+						"noOfFirstJobsWomen": {
+							"title": "NO_OF_FIRST_JOBS_WOMEN",
+							"type": "number"
+						},
+						"preLoanMonthlyRevenue": {
+							"title": "PRE_LOAN_MONTHLY_REVENUE",
+							"type": "number"
+						},
+						"preLoanMonthlyNetIncome": {
+							"title": "PRE_LOAN_MONTHLY_NET_INCOME",
+							"type": "number"
+						},
+						"preLoanProprietorSalary": {
+							"title": "PRE_LOAN_PROPRIETOR_SALARY",
+							"type": "number"
+						},
+						"preLoanNumberOfCustomersOrBuyers": {
+							"title": "PRE_LOAN_NUMBER_OF_CUSTOMERS_OR_BUYERS",
+							"type": "number"
+						},
+						"postLoanMonthlyRevenue": {
+							"title": "POST_LOAN_MONTHLY_REVENUE",
+							"type": "number"
+						},
+						"postLoanMonthlyNetIncome": {
+							"title": "POST_LOAN_MONTHLY_NET_INCOME",
+							"type": "number"
+						},
+						"postLoanProprietorSalary": {
+							"title": "POST_LOAN_PROPRIETOR_SALARY",
+							"type": "number"
+						},
+						"postLoanNumberOfCustomersOrBuyers": {
+							"title": "POST_LOAN_NUMBER_OF_CUSTOMER_OR_BUYERS",
+							"type": "number"
+						},
+						"udf1": {
+							"title": "UFD1",
+							"type": "string"
+						},
+						"udfDate1": {
+							"title": "UFDDATE1",
+							"type": "string"
+						}
+					}
+				},
+				"machineDetails": {
+					"title": "Machine Details",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"make",
+							"type",
+							"year",
+							"model",
+							"serialNumber",
+							"assetType",
+							"hypothecationLabelBeenApplied",
+							"companyNameInOriginalInvoice",
+							"hypothecatedTo"
+						],
+						"properties": {
+							"make": {
+								"title": "MAKE",
+								"type": "string"
+							},
+							"type": {
+								"title": "TYPE",
+								"type": "string"
+							},
+							"year": {
+								"title": "YEAR",
+								"type": "string"
+							},
+							"model": {
+								"title": "MODEL",
+								"type": "string"
+							},
+							"serialNumber": {
+								"title": "SERIAL_NUMBER",
+								"type": "string"
+							},
+							"assetType": {
+								"title": "ASSET_TYPE",
+								"type": "string"
+							},
+							"hypothecationLabelBeenApplied": {
+								"title": "IS_HYPOTHECATION_LABEL_APPLIED",
+								"type": "string"
+							},
+							"companyNameInOriginalInvoice": {
+								"title": "IS_COMPANY_NAME_IN_INVOICE",
+								"type": "string"
+							},
+							"hypothecatedTo": {
+								"title": "HYPOTHECATED_",
+								"type": "string"
+							},
+							"udf1": {
+								"title": "udf1",
+								"type": "string"
+							},
+							"udfDate1": {
+								"title": "udfDate1",
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
