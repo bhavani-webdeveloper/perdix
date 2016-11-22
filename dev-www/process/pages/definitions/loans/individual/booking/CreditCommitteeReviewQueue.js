@@ -118,7 +118,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 						return [{
 							title: 'ID',
 							data: 'id'
-						},{
+						},
+						{
 							title: 'HUB_NAME',
 							data: 'hubname'
 						},
