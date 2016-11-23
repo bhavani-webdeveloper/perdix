@@ -560,6 +560,81 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 ]
             },
             {
+               type:"box",
+               title:"BUYER_DETAILS",
+                items:[
+                {
+                      key:"customer.buyerDetails",
+                       type:"array",
+                       startEmpty: true,
+                       title:"BUYER_DETAILS",
+                       items:[
+                        {
+                            key: "customer.buyerDetails[].buyerName",
+                            title: "Buyer Name",
+                            type: "string"
+                        },
+                        {
+                            key:"customer.buyerDetails[].customerId",
+                            title:"CUSTOMER_ID",
+                            type:"number"
+                        },  
+                        {
+                            key: "customer.buyerDetails[].customerSince",
+                            title: "Customer Since",
+                            type: "string"
+                        },
+                        {
+                            key: "customer.buyerDetails[].id",
+                            title: "ID",
+                            type: "number"
+                        },
+                        {
+                            key: "customer.buyerDetails[].paymentDate",
+                            title: "Payment Date",
+                            type: "date"
+                        },
+                        {
+                            key: "customer.buyerDetails[].paymentFrequency",
+                            title: "Payment Frequency",
+                            type: "select"
+                        },
+                        {
+                            key: "customer.buyerDetails[].paymentTerms",
+                            title: "Payment Terms",
+                            type: "number"
+                        },
+                        {
+                            key: "customer.buyerDetails[].product",
+                            title:"Product",
+                            type: "string"
+                        },
+                        {
+                            key: "customer.buyerDetails[].receivablesOutstanding",
+                            title:"Receivables Out Standing",
+                            type: "number"
+                        },
+                        
+                        {
+                            key: "customer.buyerDetails[].sector",
+                            title: "Sector",
+                            type: "select"
+                        },
+                        {
+                            key: "customer.buyerDetails[].subSector",
+                            title: "Sub Sector",
+                            type: "select"
+                        },
+                        {
+                        key: "customer.buyerDetails[].version",
+                        title:"Version",
+                        type: "number"
+                    },
+                    ]
+                }
+                ]
+            },
+            {
                 "type": "actionbox",
                 "items": [/*{
                     "type": "save",
