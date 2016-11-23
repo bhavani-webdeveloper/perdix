@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan){
 
     var branch = SessionStore.getBranch();
 
@@ -31,10 +31,18 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 $log.info("Inside new-applicant of LoanRequest");
                 model.loanAccount.applicant = params.customer.id;
                 /* Assign more customer information to show */
+                model.loanAccount.loanCustomerRelations.push({
+                    'customerId': params.customer.id,
+                    'relation': "Applicant"
+                })
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
                 model.loanAccount.coApplicant = params.customer.id;
+                model.loanAccount.loanCustomerRelations.push({
+                    'customerId': params.customer.id,
+                    'relation': "Co-Applicant"
+                })
             },
             "new-business": function(bundleModel, model, param){
                 $log.info("Inside new-business of LoanRequest");
@@ -81,7 +89,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "items": [
                     {
                         "type": "button",
-                        "title": "SAVE"
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
                     },
                     {
                         "type": "submit",
@@ -106,7 +115,25 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                $log.warn(model);
+                /* TODO Call proceed servcie for the loan account */
+            },
+            save: function(model, formCtrl, form, $event){
+                $log.info("Inside save()");
+                /* TODO Call save service for the loan */
+                Utils.confirm("Are You Sure?")
+                    .then(
+                        function(){
+                            PageHelper.showLoader();
+                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                            reqData.loanProcessAction = "SAVE";
+                            IndividualLoan.create(reqData, function(resp, headers){
+                                model.loanAccount = reqData.loanAccount;
+                                PageHelper.hideLoader();
+                            }, function(httpResp){
+
+                            })
+                        }
+                    );
             }
         }
     };
