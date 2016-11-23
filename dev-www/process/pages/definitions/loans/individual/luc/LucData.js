@@ -301,9 +301,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             }]
                         }]
                     },
-
-
-
                     {
                         "type": "actionbox",
                         "items": [{
@@ -312,7 +309,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }]
                     },
                 ],
-
                 schema: function() {
                     return LUC.getSchema().$promise;
                 },
