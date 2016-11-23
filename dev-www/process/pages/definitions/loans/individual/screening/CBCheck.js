@@ -12,9 +12,22 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
-            //model.branchId = SessionStore.getBranchId() + '';
-            //model.customer.kgfsName = SessionStore.getBranch();
+            model.customer.coapplicants = model.customer.coapplicants || [];
         
+        },
+        eventListeners: {
+            "new-applicant": function(bundleModel, model, params){
+                $log.info("Inside new-applicant of CBCheck");
+                model.customer.applicantname = params.customer.firstName;
+                model.customer.applicantid = params.customer.id;
+                /* Assign more customer information to show */
+            },
+            "new-co-applicant": function(bundleModel, model, params){
+                $log.info("Insdie new-co-applicant of CBCheck");
+                model.customer.coapplicants.push({
+                                "coapplicantid":params.customer.id,
+                                "coapplicantname":params.customer.firstName});
+            }
         },
         
         form: [
@@ -22,53 +35,77 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "type": "box",
                 "items": [
                            {
-                           type:"fieldset",
+                                type:"fieldset",
                                 title:"CIBIL",
-                                items:[
-                                    {
-                                        key:"customer.applicantname",
-                                        title:"ApplicantName",
-                                        type:"string",
-                                    },
-                                    { 
-                                        type: 'button',  
-                                        title: 'Submit for CBCheck',  
-                                    },
-                                    {
-                                        key:"customer.coapplicantname",
-                                        title:"Co-ApplicantName",
-                                        type:"string",
-                                    },
-                                    { 
-                                        type: 'button',  
-                                        title: 'Submit for CBCheck',  
-                                    },
-                                ] 
+                                items:[]
                             },
                             {
-                             type:"fieldset",
+                                key:"customer.applicantname",
+                                title:"ApplicantName",
+                                readonly:true,
+                                type:"string",
+                            },
+                            { 
+                                type: 'button',  
+                                title: 'Submit for CBCheck',  
+                            },
+                            {
+                                key:"customer.coapplicants",
+                                type:"array",
+                                title: ".",
+                                view: "fixed",
+                                notitle:true,
+                                 "startEmpty": true,
+                                 "add":null,
+                                 "remove":null,
+                                items:[{
+                                    key:"customer.coapplicants[].coapplicantname",
+                                    title:"Co ApplicantName",
+                                    readonly:true,
+                                    type:"string"
+                                },
+                                { 
+                                    type: 'button',  
+                                    title: 'Submit for CBCheck',
+                                    condition:"model.customer.coapplicants.length"
+                                }]
+                            },
+                            {
+                                type:"fieldset",
                                 title:"HighMark",
-                                items:[
-                                    {
-                                        key:"customer.applicantname",
-                                        title:"ApplicantName",
-                                        type:"string",
+                                items:[]
+                            },
+                            {
+                                key:"customer.applicantname",
+                                title:"ApplicantName",
+                                readonly:true,
+                                type:"string",
 
-                                    },
-                                    { 
-                                        type: 'button',  
-                                        title: 'Submit for CBCheck',  
-                                    },
-                                    {
-                                        key:"customer.coapplicantname",
-                                        title:"Co-ApplicantName",
-                                        type:"string"
-                                    },
-                                    { 
-                                        type: 'button', 
-                                        title: 'Submit for CBCheck',  
-                                    },
-                                ] 
+                            },
+                            { 
+                                type: 'button',  
+                                title: 'Submit for CBCheck',  
+                            },
+                            {
+                                key:"customer.coapplicants",
+                                type:"array",
+                                title: ".",
+                                view: "fixed",
+                                notitle:true,
+                                 "startEmpty": true,
+                                 "add":null,
+                                 "remove":null,
+                                items:[{
+                                    key:"customer.coapplicants[].coapplicantname",
+                                    title:"Co ApplicantName",
+                                    readonly:true,
+                                    type:"string"
+                                },
+                                { 
+                                    type: 'button',  
+                                    title: 'Submit for CBCheck',
+                                    condition:"model.customer.coapplicants.length"
+                                }]
                             }
                             ]
                         }
