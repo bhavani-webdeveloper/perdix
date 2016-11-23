@@ -1,7 +1,7 @@
-irf.models.factory('Psychometric', ['$resource', '$httpParamSerializer', function($resource,$httpParamSerializer){
+irf.models.factory('Psychometric', ['$resource', '$httpParamSerializer', '$http', function($resource,$httpParamSerializer,$http){
     var endpoint = irf.PSYCHOMETRIC_BASE_URL + '/api/psychometric';
 
-    return $resource(endpoint, null, {
+    var res = $resource(endpoint, null, {
         getTest:{
             method:'GET',
             url:endpoint + '/test'
@@ -21,4 +21,15 @@ irf.models.factory('Psychometric', ['$resource', '$httpParamSerializer', functio
             isArray: true
         }
     });
+
+    res.getTestHttp = function(params) {
+        return {
+            "$promise": $http({
+                "method": "GET",
+                "url": endpoint + '/test',
+                "params": params
+            })
+        };
+    };
+    return res;
 }]);

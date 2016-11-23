@@ -7,6 +7,16 @@
             <article class="card">Psychometric Test</article>
             <br>
             <div class="row">
+              <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 text-center">
+                Participant: <b>{{ participantCustomer }}</b>
+                <br>
+                Application: <b>{{ applicationId }}</b>
+                <br>
+                Created by: <b>{{ createdByUser }}</b>
+              </div>
+            </div>
+            <br>
+            <div class="row">
               <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
                 <select ng-model="chosenLanguage" class="form-control" ng-options="item.langCode as item.language for item in LANGUAGES">
                   <option value="">Choose a language</option>
@@ -21,9 +31,19 @@
               </a>
             </div>
           </div>
-          <div class="box-body" ng-show="stage==STAGES.INSTRUCTIONS">
-            Instructions
-              <button class="btn btn-{{test?'theme':(preparationFailed?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?'Start Test':(preparationFailed?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
+          <div class="box-body instructions" ng-show="stage==STAGES.INSTRUCTIONS">
+            <h3>
+              Instructions
+              <button class="btn btn-{{test?'theme':(testStatus == 'Failed'?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?'Start Test':(testStatus == 'Failed'?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
+            </h3>
+            <div class="instruction-container">
+              <p class="instruction-1">{{ 'Current question by total questions' | translate }}</p>
+              <p class="instruction-2">{{ 'Press here for break' | translate }}</p>
+              <p class="instruction-3">{{ 'View countdown of test duration' | translate }}</p>
+              <p class="instruction-4">{{ 'Choose an option' | translate }}</p>
+              <p class="instruction-5">{{ 'Press next' | translate }}</p>
+              <img class="bg" src="" ng-src="{{instructionImage}}">
+            </div>
           </div>
           <div class="box-body" ng-show="stage==STAGES.TEST">
             <h3>
@@ -46,7 +66,7 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="submit()">Next</button>
+              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
             <article ng-hide="testPaused" ng-if="test.questions[currentIndex].pictorial && !test.questions[currentIndex].linked">
               <div class="question pictorial" ng-bind-html="test.questions[currentIndex].questionText"></div>
@@ -62,7 +82,7 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="submit()">Next</button>
+              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
             <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && test.questions[currentIndex].linked">
               <div class="question linked" ng-bind-html="test.questions[currentIndex].questionText"></div>
@@ -78,7 +98,7 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="submit()">Next</button>
+              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
             <article ng-show="testPaused" class="card">
               Take a break!
@@ -88,9 +108,11 @@
           </div>
           <div class="box-body" ng-show="stage==STAGES.END">
             <article class="card">
-              You've successfully completed the test!!
+              {{testStatus=='Close'?"Answers submitted successfully":testStatus}}
               <br>
-              <button class="btn btn-theme" ng-click="complete()">Close</button>
+              <button class="btn btn-theme" ng-show="testStatus=='Close'" ng-click="closeTest()">Close</button>
+              <br>
+              <button class="btn btn-theme" ng-show="testStatus=='Submission failed'" ng-click="submitAnswers()">Retry</button>
             </article>
           </div>
         </div>

@@ -1,6 +1,51 @@
 .psychometric-page .box {
   min-height: 500px;
 }
+.psychometric-page .box .box-body.instructions h3 button {
+  margin-top: 23px;
+}
+.psychometric-page .box .box-body.instructions .instruction-container {
+  position: relative;
+  width: 100%;
+  padding-top: 67%;
+}
+.psychometric-page .box .box-body.instructions .instruction-container img.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-1 {
+  position: absolute;
+  top: 7%;
+  left: 24%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-2 {
+  position: absolute;
+  top: 3%;
+  right: 33%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-3 {
+  position: absolute;
+  top: 17%;
+  right: 13%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-4 {
+  position: absolute;
+  top: 46%;
+  left: 64%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-5 {
+  position: absolute;
+  top: 73%;
+  right: 20%;
+  z-index: 10;
+}
 .psychometric-page .box h3 {
   font-size: 60px;
   font-weight: bold;
