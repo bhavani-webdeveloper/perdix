@@ -14,28 +14,66 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer = model.customer || {};
             //model.branchId = SessionStore.getBranchId() + '';
             //model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = "Enterprise";
-            model.loanAccount = {};
+        
         },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item.customer.firstName,
-                item.customer.centreCode,
-                item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-            ]
-        },
+        
         form: [
             {
-                "type": "actionbox",
-                "items": [/*{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },*/{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                }]
-            }
+                "type": "box",
+                "items": [
+                           {
+                           type:"fieldset",
+                                title:"CIBIL",
+                                items:[
+                                    {
+                                        key:"customer.applicantname",
+                                        title:"ApplicantName",
+                                        type:"string",
+                                    },
+                                    { 
+                                        type: 'button',  
+                                        title: 'Submit for CBCheck',  
+                                    },
+                                    {
+                                        key:"customer.coapplicantname",
+                                        title:"Co-ApplicantName",
+                                        type:"string",
+                                    },
+                                    { 
+                                        type: 'button',  
+                                        title: 'Submit for CBCheck',  
+                                    },
+                                ] 
+                            },
+                            {
+                             type:"fieldset",
+                                title:"HighMark",
+                                items:[
+                                    {
+                                        key:"customer.applicantname",
+                                        title:"ApplicantName",
+                                        type:"string",
+
+                                    },
+                                    { 
+                                        type: 'button',  
+                                        title: 'Submit for CBCheck',  
+                                    },
+                                    {
+                                        key:"customer.coapplicantname",
+                                        title:"Co-ApplicantName",
+                                        type:"string"
+                                    },
+                                    { 
+                                        type: 'button', 
+                                        title: 'Submit for CBCheck',  
+                                    },
+                                ] 
+                            }
+                            ]
+                        }
+                            
+            
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -56,5 +94,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 $log.warn(model);
             }
         }
+
     };
-}]);
+}
+
+]);
