@@ -342,12 +342,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                        key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
                        type: "select",
-                       enumCode: "years_in_present_area"
+                       enumCode: "years_in_present_area",
+                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
                     },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
                         type: "select",
-                        enumCode: "years_in_current_address"
+                        enumCode: "years_in_current_address",
+                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     }
                 ]
             },

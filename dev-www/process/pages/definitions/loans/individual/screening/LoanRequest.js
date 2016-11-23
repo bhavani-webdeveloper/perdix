@@ -16,6 +16,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = "Enterprise";
             model.loanAccount = {};
+            model.loanAccount.loanCustomerRelations = [];
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -77,13 +78,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             {
                 "type": "actionbox",
-                "items": [/*{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },*/{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                }]
+                "items": [
+                    {
+                        "type": "button",
+                        "title": "SAVE"
+                    },
+                    {
+                        "type": "submit",
+                        "title": "SUBMIT"
+                    }
+                ]
             }
         ],
         schema: function() {

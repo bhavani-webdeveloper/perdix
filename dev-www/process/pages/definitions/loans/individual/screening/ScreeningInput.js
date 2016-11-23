@@ -45,8 +45,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
 			            pageClass: 'loan-request',
 			            minimum: 1,
 			            maximum: 1
-			        }
-
+			        },
+                    {
+                        pageName: 'loans.individual.screening.CBCheck',
+                        title: 'CB_CHECK',
+                        pageClass: 'cb-check',
+                        minimum: 1,
+                        maximum: 1
+                    }
         		],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
@@ -70,6 +76,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                 if (!_.hasIn(bundleModel, 'coApplicants')) {
                                     bundleModel.coApplicants = [];
                                 }
+                                BundleManager.broadcastEvent("new-co-applicant", params);
                                 bundleModel.coApplicants.push(params.customer);
                                 break;
                             case 'guarantor':
