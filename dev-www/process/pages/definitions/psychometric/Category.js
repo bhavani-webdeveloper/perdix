@@ -49,7 +49,8 @@ irf.pageCollection.factory(irf.page("psychometric.Category"),
                             key:"category.active",
                             title:"Active",
                             type:"checkbox"
-                        }
+                        },
+                        
                     ]
                 },
                 {
