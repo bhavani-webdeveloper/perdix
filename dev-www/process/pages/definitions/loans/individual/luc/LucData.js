@@ -326,6 +326,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             return out;
                         };
                         var reqData = _.cloneDeep(model);
+                        reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
                         if (reqData.loanMonitoringDetails.id) {
                             LucHelper.proceedData(reqData).then(function(resp) {
                                 //$state.go('Page.Landing', null);

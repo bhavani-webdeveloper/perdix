@@ -69,6 +69,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
+						'currentStage':"LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
 						//'centreId': searchOptions.centreId,
 						//'branchName': searchOptions.branchName,

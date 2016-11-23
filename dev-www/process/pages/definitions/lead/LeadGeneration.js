@@ -145,6 +145,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         key: "lead.gender",
                                         type: "radios"
                                     }, {
+                                        key: "lead.dob",
+                                        type: "date",
+                                        "onChange": function(modelValue, form, model) {
+                                            if (model.lead.dob) {
+                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                            }
+                                        }
+                                    }, {
                                         key: "lead.age",
                                         type: "number",
                                         "onChange": function(modelValue, form, model) {
@@ -154,14 +162,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                                 } else {
                                                     model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                                 }
-                                            }
-                                        }
-                                    }, {
-                                        key: "lead.dob",
-                                        type: "date",
-                                        "onChange": function(modelValue, form, model) {
-                                            if (model.lead.dob) {
-                                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                             }
                                         }
                                     }, {
@@ -185,10 +185,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             key: "lead.addressLine1",
                                         }, {
                                             key: "lead.addressLine2",
-                                        },
-                                        "lead.district", {
+                                        }, {
                                             key: "lead.pincode",
                                             type: "lov",
+                                            fieldType: "number",
                                             autolov: true,
                                             inputMap: {
                                                 "pincode": "lead.pincode",
@@ -200,10 +200,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                                 }
                                             },
                                             outputMap: {
-
+                                                "division": "lead.area",
+                                                "region": "lead.cityTownVillage",
                                                 "pincode": "lead.pincode",
                                                 "district": "lead.district",
                                                 "state": "lead.state"
+
                                             },
                                             searchHelper: formHelper,
                                             search: function(inputModel, form, model) {
@@ -211,18 +213,21 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             },
                                             getListDisplayItem: function(item, index) {
                                                 return [
+                                                    item.division + ', ' + item.region,
                                                     item.pincode,
                                                     item.district + ', ' + item.state
                                                 ];
                                             }
                                         },
+                                        "lead.area",
+                                        "lead.cityTownVillage",
+                                        "lead.district",
                                         "lead.state", {
-                                            "key": "lead.latitude",
+                                            "key": "lead.location",
                                             "type": "geotag",
                                             "latitude": "latitude",
                                             "longitude": "longitude",
                                         },
-                                        "lead.area",
                                     ]
                                 },
                             ]
@@ -421,9 +426,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     };
                     var reqData = _.cloneDeep(model);
                     if (reqData.lead.id) {
-                        if (reqData.lead.leadStatus=="FollowUp") {
+                        if (reqData.lead.leadStatus == "FollowUp") {
                             LeadHelper.followData(reqData).then(function(resp) {
-                                 $state.go('Page.Landing', null);
+                                $state.go('Page.Landing', null);
                             });
                         } else {
                             LeadHelper.proceedData(reqData).then(function(resp) {
