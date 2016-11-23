@@ -67,7 +67,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             type: "string"
                         }, {
                             key: "loanMonitoringDetails.loanId",
-                            type: "number"
+                            type: "number",
+                            "readonly":true
                         }]
                     }, {
                         "type": "box",
