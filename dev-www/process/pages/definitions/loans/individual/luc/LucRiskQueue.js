@@ -78,7 +78,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
-						return 20;
+						return 100;
 					},
 					"getTotalItemsCount": function(response, headers) {
 						return headers['x-total-count']
@@ -87,6 +87,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 				listOptions: {
 					selectable: false,
 					expandable: true,
+					listStyle: "table",
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
@@ -96,7 +97,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 					},
 					getListItem: function(item) {
 						return [
-							item.applicationName,
+							item.applicantName,
 							item.businessName,
 							item.accountNumber,
 							item.loanId,
@@ -113,11 +114,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 					},
 					getColumns: function() {
 						return [{
-							title: 'Application Name',
-							data: 'applicationName'
+							title: 'Applicant Name',
+							data: 'customerName'
 						}, {
 							title: 'Business Name',
-							data: 'businessName'
+							data: 'bussinessName'
 						}, {
 							title: 'Account Number',
 							data: 'accountNumber'
@@ -128,7 +129,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 							title: 'Disbursement Date',
 							data: 'disbursementDate'
 						}, {
-							title: 'LUC Scheduled Date',
+							title: 'LUC Date',
 							data: 'lucDate'
 						}]
 					},
