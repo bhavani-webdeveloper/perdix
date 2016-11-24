@@ -1,9 +1,13 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
-        ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+        ,"LoanAccount", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
         	$log.info("Inside LoanBookingBundle");
+
+            var onLeadLoad = function(lead){
+                BundleManager.broadcastEvent('l')
+            }
 
 
         	return {
@@ -56,9 +60,27 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
         		],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
+
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
+                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("screening-input", 'Loading lead details');
+                        var _leadId = $stateParams.pageData['lead_id'];
+                        Lead.get({id: _leadId})
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress('screening-input', 'Done.', 5000);
+                                BundleManager.broadcastEvent('lead-loaded', res);
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
+                    
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){

@@ -28,6 +28,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         eventListeners: {
             "test-listener": function(bundleModel, model, obj){
 
+            },
+            "lead-loaded": function(bundleModel, model, obj){
+                model.customer.mobilePhone = obj.mobileNo;
+                model.customer.gender = obj.gender;
+                model.customer.firstName = obj.leadName;
             }
         },
         offline: false,

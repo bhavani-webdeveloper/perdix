@@ -48,6 +48,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
 
                 model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
+            },
+            "lead-loaded": function(bundleModel, model, obj){
+                model.customer.firstName = obj.businessName;
+                
             }
         },
         form: [

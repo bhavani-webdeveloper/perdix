@@ -155,7 +155,9 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 								$state.go("Page.Bundle", {
 									pageName: "loans.individual.screening.ScreeningInput",
-									pageId: item.id
+									pageData: {
+										lead_id: item.id
+									}
 								});
 							},
 							isApplicable: function(item, index) {
