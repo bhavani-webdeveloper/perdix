@@ -1,6 +1,8 @@
 irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
+		var centreList = SessionStore.getCentres();
+		var centreName = centreList[0].centreName;
 		return {
 			"type": "search-list",
 			"title": "INCOMPLETE_LEAD",
@@ -8,6 +10,8 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
 				$log.info("search-list sample got initialized");
+				var branchId = SessionStore.getBranchId();
+        		var branchName = SessionStore.getBranch();
 			},
 			definition: {
 				title: "SEARCH_LEAD",
@@ -19,7 +23,7 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch": {
+						/*"branch": {
 							"title": "HUB_NAME",
 							"type": "string",
 							"enumCode": "branch",
@@ -37,7 +41,7 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 								"parentEnumCode": "branch"
 							},
 							"parentEnumCode": "branch"
-						},
+						},*/
 						"leadName": {
 							"title": "LEAD_NAME",
 							"type": "string"
@@ -68,11 +72,11 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
                         branchName = branches[i].name;
                     }
 					var promise = Lead.search({
-						'branchName': branchName,
+						'branchName': branch,
 						'currentStage': "Incomplete",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
-						'centreName': searchOptions.centreId,
+						'centreName': centreName,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
