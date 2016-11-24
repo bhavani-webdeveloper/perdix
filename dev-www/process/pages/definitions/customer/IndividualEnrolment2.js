@@ -49,6 +49,63 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 "title":"KYC",
                 "items":[
                     {
+                        "key": "customer.id",
+                        "title": "LOAD_EXISTING_CUSTOMER",
+                        "type": "lov",
+                        "lovonly": true,
+                        "inputMap": {
+                            "firstName": {
+                                "key": "customer.firstName",
+                                "title": "CUSTOMER_NAME"
+                            },
+                            "kgfsName": {
+                                "key": "customer.kgfsName",
+                                "type": "select",
+                                "screenFilter": true
+                            },
+                            "centreId": {
+                                "key": "customer.centreId",
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "outputMap": {
+                            "urnNo": "customer.urnNo",
+                            "firstName":"customer.firstName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var promise = Enrollment.search({
+                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId':inputModel.centreId,
+                                'customerType':"individual",
+                                'stage': "Completed"
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context){
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            Enrollment.getCustomerById({id: valueObj.id})
+                                .$promise
+                                .then(function(res){
+                                    PageHelper.showProgress("customer-load", "Done..", 5000);
+                                    model.customer = res;
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                }, function(httpRes){
+                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                })
+                        }
+                    },
+                    {
                         "key": "customer.aadhaarNo",
                         "type":"qrcode",
                         "required": true,
@@ -1193,7 +1250,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "actionbox",
-                "condition": "model.customer.id",
+                "condition": "model.customer.id && model.customer.currentStage!='Completed'",
                 "items": [/*{
                     "type": "save",
                     "title": "SAVE"
