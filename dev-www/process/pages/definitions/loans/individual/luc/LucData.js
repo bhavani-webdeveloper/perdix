@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
-    ["$log", "$state", "$stateParams", "LUC","LucHelper","SessionStore", "formHelper", "$q", "irfProgressMessage",
+    ["$log", "$state", "$stateParams", "LUC", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries",
 
-        function($log, $state, $stateParams, LUC,LucHelper,SessionStore, formHelper, $q, irfProgressMessage,
+        function($log, $state, $stateParams, LUC, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
             PageHelper, Utils, PagesDefinition, Queries) {
 
             var branch = SessionStore.getBranch();
@@ -53,160 +53,360 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             key: "loanMonitoringDetails.id",
                             type: "number",
                             condition: "model.loanMonitoringDetails.id",
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.customerId",
-                            type: "number"
+                            type: "number",
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.customerName",
-                            type: "string"
+                            type: "string",
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.address",
-                            type: "string"
+                            type: "string",
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.proprietoryName",
-                            type: "string"
+                            type: "string",
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.loanId",
                             type: "number",
-                            "readonly":true
+                            "readonly": true
                         }]
                     }, {
                         "type": "box",
                         "title": "LOAN_UTILIZATION",
                         "items": [{
                                 key: "loanMonitoringDetails.loanSeries",
-                                type: "number"
+                                type: "number",
+                                "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanProductName",
-                                type: "string"
+                                type: "string",
+                                "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanPurposeCategory",
                                 type: "select",
-                                enumCode:"loan_purpose_1"
+                                enumCode: "loan_purpose_1"
                             }, {
                                 key: "loanMonitoringDetails.loanPurpose",
+                                "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanAmount",
-                                type: "amount"
+                                type: "amount",
+                                //"readonly": true
                             }, {
                                 key: "loanMonitoringDetails.disbursementDate",
-                                type: "date"
+                                type: "date",
+                                "readonly": true
                             }, {
-                                key: "loanMonitoringDetails.numberOfAssetsDelivered",
-                                type: "select",
-                                titleMap: {
+                                type: "fieldset",
+                                title: "",
+                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
+                                items: [{
+                                    key: "loanMonitoringDetails.numberOfAssetsDelivered",
+                                    type: "select",
+                                    titleMap: {
                                         "ALL": "All",
                                         "SOME": "Some",
                                         "NONE": "None",
                                     },
-                            }, {
-                                key: "loanMonitoringDetails.amountUtilizedForAssetsPurchase",
-                                type: "amount"
-                            }, {
-                                key: "loanMonitoringDetails.percentage",
-                                type: "number",
-                            }, {
-                                key: "loanMonitoringDetails.totalCreationAssetValue",
-                                type: "number"
-                            }, {
-                                key: "loanMonitoringDetails.isAssetsOrdered",
-                               /* type: "radios",
-                                enumCode: "decisionmaker",*/
-                            }, {
-                                key: "loanMonitoringDetails.reasonForNotOrderingAssets",
-                                type: "string"
-                            },
-                            /* {
-                                                            key: "howMuchOfLoanAmountUsed?",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "whatWasItUsedFor?",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "verifiedBy",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "%ofAmountUsed",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "intendedPurpose(Amt)%",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "nonIntendedPurpose(Amt)%",
-                                                            type: "select"
-                                                        }, {
-                                                            key: "IfTheAmountIsNotUsedForIntendedPurposeWhatWasItUsedFor?",
-                                                            type: "select"
-                                                        } , {
-                                key: "howMuchAmountHasBeenUsedForRepayingDepit",
-                                type: "number"
-                            }, {
-                                key: "whatWasTheMonthlyPaymentBeforeRefinance",
-                                type: "select"
-                            },*/
-                            {
-                                key: "loanMonitoringDetails.lucDone",
-                                /*type: "radios",
-                                enumCode: "decisionmaker",*/
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduled",
-                               /* type: "radios",
-                                enumCode: "decisionmaker",*/
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduleReason",
-                                type: "string"
-                            }, {
-                                key: "loanMonitoringDetails.lucRescheduledDate",
-                                type: "date"
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalated",
-                                /*type: "radios",
-                                enumCode: "decisionmaker",*/
-                            }, {
-                                key: "loanMonitoringDetails.lucEscalatedReason",
-                                type: "string"
-                            }, {
-                                key: "loanMonitoringDetails.machineDetails",
-                                type: "array",
-                                startEmpty: true,
-                                title: "MACHINE",
-                                items: [{
-                                    key: "loanMonitoringDetails.machineDetails[].make",
-                                    type: "string",
                                 }, {
-                                    key: "loanMonitoringDetails.machineDetails[].type",
-                                    type: "string",
+                                    key: "loanMonitoringDetails.amountUtilizedForAssetsPurchase",
+                                    type: "amount",
+                                    "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.amountUtilizedForAssetsPurchase) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                        model.loanMonitoringDetails.percentage = parseInt(a.toFixed());
+                                    }
                                 }, {
-                                    key: "loanMonitoringDetails.machineDetails[].year",
-                                    type: "date",
+                                    key: "loanMonitoringDetails.percentage",
+                                    type: "integer",
+                                    "readonly": true
+
                                 }, {
-                                    key: "loanMonitoringDetails.machineDetails[].model",
-                                    type: "string",
+                                    key: "loanMonitoringDetails.totalCreationAssetValue",
+                                    type: "number"
                                 }, {
-                                    key: "loanMonitoringDetails.machineDetails[].serialNumber",
-                                    type: "string",
-                                }, {
-                                    key: "loanMonitoringDetails.machineDetails[].assetType",
-                                    type: "select",
+                                    key: "loanMonitoringDetails.isAssetsOrdered",
+                                    type: "radios",
                                     titleMap: {
-                                        "NEW": "NEW",
-                                        "OLD": "OLD",
+                                        1: "Yes",
+                                        0: "No",
                                     },
+                                    // enumCode: "decisionmaker",
                                 }, {
-                                    key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
+                                    key: "loanMonitoringDetails.reasonForNotOrderingAssets",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.isAssetsOrdered==0",
+                                }, {
+                                    key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
-                                    enumCode: "decisionmaker",
-                                }, {
-                                    key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
-                                    type: "radios",
-                                    enumCode: "decisionmaker",
-                                }, {
-                                    key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
-                                    type: "select",
-                                     titleMap: {
-                                        "NEW": "NEW",
-                                        "OLD": "OLD",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
                                     },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduled",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduleReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduledDate",
+                                    type: "date",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalated",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalatedReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails",
+                                    type: "array",
+                                    startEmpty: true,
+                                    title: "MACHINE",
+                                    items: [{
+                                        key: "loanMonitoringDetails.machineDetails[].make",
+                                        type: "string",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].type",
+                                        type: "string",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].year",
+                                        type: "date",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].model",
+                                        type: "string",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].serialNumber",
+                                        type: "string",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].assetType",
+                                        type: "select",
+                                        titleMap: {
+                                            "NEW": "NEW",
+                                            "OLD": "OLD",
+                                        },
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
+                                        type: "radios",
+                                        titleMap: {
+                                            1: "Yes",
+                                            0: "No",
+                                        },
+                                        //enumCode: "decisionmaker",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
+                                        type: "radios",
+                                        titleMap: {
+                                            1: "Yes",
+                                            0: "No",
+                                        },
+                                        //enumCode: "decisionmaker",
+                                    }, {
+                                        key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
+                                        type: "select",
+                                        titleMap: {
+                                            "NEW": "NEW",
+                                            "OLD": "OLD",
+                                        },
+                                    }]
+                                }]
+                            }, {
+                                type: "fieldset",
+                                title: "",
+                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
+                                items: [{
+                                    key: "loanMonitoringDetails.loanAmountUsed",
+                                    type: "number",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                        model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
+                                    }
+
+                                }, {
+                                    key: "loanMonitoringDetails.loanAmountPurpose",
+
+                                }, {
+                                    key: "loanMonitoringDetails.verifiedBy",
+                                }, {
+                                    key: "loanMonitoringDetails.amountUsedPercentage",
+                                    "readonly": true,
+                                    type: "integer"
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true,
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "number",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage =parseInt(a.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                }, {
+                                    key: "loanMonitoringDetails.lucDone",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduled",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduleReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduledDate",
+                                    type: "date",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalated",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalatedReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
+                                }]
+                            }, {
+                                type: "fieldset",
+                                title: "",
+                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Machine Refinance'",
+                                items: [{
+                                    key: "loanMonitoringDetails.repayedDebitAmount",
+                                    type: "number",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.repayedDebitAmount) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
+                                        model.loanMonitoringDetails.amountUsedPercentage =parseInt(a.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.monthlyInterestForDebit",
+                                    type: "number"
+                                }, {
+                                    key: "loanMonitoringDetails.remainingAmountPurpose",
+                                }, {
+                                    key: "loanMonitoringDetails.remainingAmountUtilizedOn",
+                                    type: "date"
+                                }, {
+                                    key: "loanMonitoringDetails.amountUsedPercentage",
+                                    type: "integer",
+                                    "readonly": true
+                                },{
+                                    key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true,
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmount",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "number",
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage =parseInt(a.toFixed());
+                                    }
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    type: "integer",
+                                    "readonly": true
+                                }, {
+                                    key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
+                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                }, {
+                                    key: "loanMonitoringDetails.lucDone",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduled",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduleReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucRescheduledDate",
+                                    type: "date",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalated",
+                                    type: "radios",
+                                    titleMap: {
+                                        1: "Yes",
+                                        0: "No",
+                                    },
+                                    //enumCode: "decisionmaker",
+                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                }, {
+                                    key: "loanMonitoringDetails.lucEscalatedReason",
+                                    type: "string",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
                                 }]
                             },
 
@@ -301,8 +501,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "number"
                             }]
                         }]
-                    },
-                    {
+                    }, {
                         "type": "actionbox",
                         "items": [{
                             "type": "submit",
@@ -331,7 +530,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             LucHelper.proceedData(reqData).then(function(resp) {
                                 //$state.go('Page.Landing', null);
                             });
-                            
+
                         } else {
                             $log.info("Id is not in the model");
                         }

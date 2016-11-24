@@ -13,6 +13,14 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 PageHelper.showLoader();
                 irfProgressMessage.pop('luc-update', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
+                if (res.loanMonitoringDetails.lucDone == 1) {
+                    res.stage="Completed";
+                } else if(res.loanMonitoringDetails.lucRescheduled==1){
+                    res.stage="LUCReschedule";
+                }else if(res.loanMonitoringDetails.lucEscalated==1)
+                {
+                    res.stage="LUCEscalate";
+                }
                 LUC.update(res, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('luc-update', 'Done. luc updated with ID: ' + res.loanMonitoringDetails.id, 5000);

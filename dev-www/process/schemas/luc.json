@@ -176,6 +176,58 @@
 					"title": "BUSSINESS_NAME",
 					"type": "string"
 				},
+				"loanAmountUsed": {
+					"title": "LOAN_AMOUNT_USED",
+					"type": "number"
+				},
+				"loanAmountPurpose": {
+					"title": "LOAN_AMOUNT_PURPOSE",
+					"type": "string"	
+				},
+				"verifiedBy": {
+					"title": "VERIFIED_BY",
+					"type": "string"	
+				},
+				"amountUsedPercentage": {
+					"title": "PERCENTAGE",
+					"type": "number"
+				},
+				"intendedPurposeAmount": {
+					"title": "AMOUNT_USED_FOR_INTENDED_PURPOSE",
+					"type": "number"
+				},
+				"intendedPurposePercentage": {
+					"title": "PERCENTAGE",
+					"type": "number"	
+				},
+				"nonIntendedPurposeAmount": {
+					"title": "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
+					"type": "number"	
+				},
+				"nonIntendedPurposePercentage": {
+					"title": "PERCENTAGE",
+					"type": "number"
+				},
+				"nonIntendedPurposeAmountSpentOn": {
+					"title": "NON_INTENDED_AMOUNT_SPENT_ON",
+					"type": "string"	
+				},
+				"repayedDebitAmount": {
+					"title": "AMOUNT_USED_FOR_REPAYING_DEBIT",
+					"type": "number"	
+				},
+				"monthlyInterestForDebit": {
+					"title": "MONTHLY_INTEREST_FOR_REPAYING_DEBIT",
+					"type": "number"
+				},
+				"remainingAmountPurpose": {
+					"title": "REMAINING_AMOUNT_PURPOSE",
+					"type": "string"
+				},
+				"remainingAmountUtilizedOn": {
+					"title": "REMAININ_AMOUNT_UTILIZED_ON",
+					"type": "string"
+				},
 				"socialImpactDetails": {
 					"title": "SOCIAL_IMPACT_DETAILS",
 					"type": "object",

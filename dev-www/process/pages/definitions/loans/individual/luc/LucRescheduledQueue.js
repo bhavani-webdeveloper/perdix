@@ -1,9 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
+irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "LUC_RISK_QUEUE",
+			"title": "LUC_RESCHEDULED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				$log.info("luc Schedule Queue got initialized");
@@ -29,13 +29,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 							"title": "LOAN_ACCOUNT_NUMBER",
 							"type": "number"
 						},
-						"lucScheduledDate": {
-							"title": "LUC_SCHEDULED_DATE",
-							"type": "number"
-						},
-
 					},
-					"required": ["LoanAccountNumber"]
+					"required": []
 				},
 				getSearchFormHelper: function() {
 					return formHelper;
@@ -44,7 +39,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
-						'currentStage':"LUCEscalate",
+						'currentStage':"LUCReschedule",
 						//'centreId': searchOptions.centreId,
 						//'branchName': searchOptions.branchName,
 						'page': pageOpts.pageNo,
@@ -104,13 +99,19 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 						}, {
 							title: 'Loan Id',
 							data: 'loanId'
-						},{
+						}, {
+							title: 'Disbursement Date',
+							data: 'disbursementDate'
+						}, {
 							title: 'LUC Date',
 							data: 'lucDate'
+						}, {
+							title: 'Rescheduled Date',
+							data: 'lucRescheduledDate'
 						},{
-							title: 'Escalated Reason',
-							data: 'lucEscalatedReason'
-						}]
+							title: 'Rescheduled Reason',
+							data: 'lucRescheduleReason'
+						},]
 					},
 					getActions: function() {
 						return [{

@@ -12,10 +12,11 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
             PageHelper.showLoader();
             irfProgressMessage.pop('lead-save', 'Working...');
             reqData['leadAction'] = 'SAVE';
-            if (reqData.lead.screeningDate || reqData.lead.productRejectReason) {
-                reqData['stage'] = 'Completed';
-            } else {
-                reqData['stage'] = 'Inprocess';
+            if (reqData.lead.screeningDate) {
+                reqData['stage'] = 'ReadyForScreening';
+            }
+            else{
+               reqData['stage'] = 'Inprocess'; 
             }
             /* TODO fix for KYC not saving **/
             var action = reqData.lead.id ? 'update' : 'save';
@@ -45,7 +46,7 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
                 PageHelper.showLoader();
                 irfProgressMessage.pop('lead-update', 'Working...');
                 res.leadAction = "PROCEED";
-                res.lead.leadInteractions=[{"id":'',"leadId":''}];
+                //res.lead.leadInteractions=[{"id":'',"leadId":''}];
                 Lead.updateLead(res, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('lead-update', 'Done. lead updated with ID: ' + res.lead.id, 5000);
