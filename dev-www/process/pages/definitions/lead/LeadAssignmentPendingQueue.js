@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 				searchForm: [
 					"*"
 				],
+				autoSearch:true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'searchOptions',

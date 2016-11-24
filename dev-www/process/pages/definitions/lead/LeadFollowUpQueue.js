@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 				searchForm: [
 					"*"
 				],
+				autoSearch:true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',

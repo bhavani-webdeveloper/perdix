@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 				searchForm: [
 					"*"
 				],
+				autoSearch:true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
