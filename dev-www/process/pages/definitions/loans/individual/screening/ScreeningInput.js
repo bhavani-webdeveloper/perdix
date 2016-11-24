@@ -39,17 +39,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
 			            minimum: 1,
 			            maximum: 1
 			        },
-			        {
-			        	pageName: 'loans.individual.screening.LoanRequest',
-			            title: 'LOAN_REQUEST',
-			            pageClass: 'loan-request',
-			            minimum: 1,
-			            maximum: 1
-			        },
                     {
                         pageName: 'loans.individual.screening.CBCheck',
                         title: 'CB_CHECK',
                         pageClass: 'cb-check',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'loans.individual.screening.LoanRequest',
+                        title: 'LOAN_REQUEST',
+                        pageClass: 'loan-request',
                         minimum: 1,
                         maximum: 1
                     }

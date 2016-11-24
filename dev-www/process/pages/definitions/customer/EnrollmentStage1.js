@@ -121,7 +121,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         $log.info(reqData);
         PageHelper.clearErrors();
         PageHelper.showLoader();
-        irfProgressMessage.pop('enrollment-save', 'Working...');
         reqData['enrollmentAction'] = 'SAVE';
         /* TODO fix for KYC not saving **/
         if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
@@ -130,13 +129,11 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         }
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
-            irfProgressMessage.pop('enrollment-save', 'Data Saved', 2000);
             $log.info(res);
             PageHelper.hideLoader();
             deferred.resolve(res);
         }, function (res) {
             PageHelper.hideLoader();
-            irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
             PageHelper.showErrors(res);
             deferred.reject(res);
         });
@@ -162,15 +159,12 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         else {
             PageHelper.clearErrors();
             PageHelper.showLoader();
-            irfProgressMessage.pop('enrollment-save', 'Working...');
             res.enrollmentAction = "PROCEED";
             Enrollment.updateEnrollment(res, function (res, headers) {
                 PageHelper.hideLoader();
-                irfProgressMessage.pop('enrollment-save', 'Done. Customer created with ID: ' + res.customer.id, 5000);
                 deferred.resolve(res);
             }, function (res, headers) {
                 PageHelper.hideLoader();
-                irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
                 PageHelper.showErrors(res);
                 deferred.reject(res);
             });

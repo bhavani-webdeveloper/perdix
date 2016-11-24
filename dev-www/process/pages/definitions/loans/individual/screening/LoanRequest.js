@@ -17,6 +17,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             model.customer.customerType = "Enterprise";
             model.loanAccount = {};
             model.loanAccount.loanCustomerRelations = [];
+
+            /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
+            model.loanAccount.productCode = 'TLAPS';
+            model.loanAccount.tenure = 12;
+            model.loanAccount.isRestructure = false;
+            model.loanAccount.documentTracking = "PENDING";
+            /* END OF TEMP CODE */
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -78,23 +85,26 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "ESTIMATED_VALUE_OF_ASSETS"
                     },
                     {
-                        key: "loanAccount.loanAmountRequested",
+                        key: "loanAccount.loanAmount",
                         type: "amount",
                         title: "LOAN_AMOUNT_REQUESTED"
-                    }
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "!model.loanAccount.customerId",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                    },
                 ]
             },
             {
                 "type": "actionbox",
+                "condition": "model.loanAccount.customerId",
                 "items": [
                     {
                         "type": "button",
                         "title": "SAVE",
                         "onClick": "actions.save(model, formCtrl, form, $event)"
-                    },
-                    {
-                        "type": "submit",
-                        "title": "SUBMIT"
                     }
                 ]
             }
@@ -126,6 +136,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             PageHelper.showLoader();
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
+                            reqData.loanAccount.loanAmountRequested = reqData.loanAccount.loanAmount;
                             IndividualLoan.create(reqData, function(resp, headers){
                                 model.loanAccount = reqData.loanAccount;
                                 PageHelper.hideLoader();

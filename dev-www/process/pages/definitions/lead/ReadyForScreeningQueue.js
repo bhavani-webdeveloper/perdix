@@ -146,15 +146,15 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 					},
 					getActions: function() {
 						return [{
-							name: "Follow Up Lead",
+							name: "Do Screening",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								entityManager.setModel('lead.LeadGeneration', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.ScreeningInput",
 									pageId: item.id
 								});
 							},

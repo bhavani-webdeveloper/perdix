@@ -10,7 +10,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "type": "schema-form",
         "title": "ENTITY_ENROLLMENT",
         "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl) {
+        initialize: function (model, form, formCtrl, bundlePageObj) {
+            if (bundlePageObj){
+                model._bundlePageObj = bundlePageObj;
+            }
             model.customer = model.customer || {};
             //model.branchId = SessionStore.getBranchId() + '';
             //model.customer.kgfsName = SessionStore.getBranch();
@@ -636,13 +639,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "items": [/*{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE",
-                },*/{
-                    "type": "submit",
-                    "title": "SUBMIT"
-                }]
+                "condition": "!model.customer.id",
+                "items": [
+                    {
+                        "type": "button",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "condition": "model.customer.id",
+                "items": [
+                    {
+                        "type": "submit",
+                        "title": "COMPLETE_ENROLMENT"
+                    }
+                ]
             }
         ],
         schema: function() {
@@ -654,10 +668,34 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if (model.customer.firstName) {
                     deferred.resolve();
                 } else {
-                    irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
+                    PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
                     deferred.reject();
                 }
                 return deferred.promise;
+            },
+            save: function(model, formCtrl, formName){
+                $log.info("Inside save()");
+                formCtrl.scope.$broadcast('schemaFormValidate');
+
+                if (formCtrl && formCtrl.$invalid) {
+                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                    return false;
+                }
+
+                var reqData = _.cloneDeep(model);
+                EnrollmentHelper.fixData(reqData);
+                PageHelper.showProgress('enrolment','Saving..');
+                EnrollmentHelper.saveData(reqData).then(function(resp){
+                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                    Utils.removeNulls(resp.customer, true);
+                    model.customer = resp.customer;
+                    if (model._bundlePageObj){
+                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                    }
+                }, function(httpRes){
+                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    PageHelper.showErrors(httpRes);
+                });
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
@@ -671,31 +709,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                if (reqData.customer.id) {
-                    EnrollmentHelper.proceedData(reqData).then(function(resp){
-                        // Utils.removeNulls(resp.customer,true);
-                        // model.customer = resp.customer;
-                        model.customer = resp.customer;
-                        if (model._bundlePageObj){
-                            BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                        }
-                    });
-                } else {
-                    EnrollmentHelper.saveData(reqData).then(function(res){
-                        EnrollmentHelper.proceedData(res).then(function(resp){
-                            // Utils.removeNulls(resp.customer,true);
-                            // model.customer = resp.customer;
-                            model.customer = resp.customer;    
-                            if (model._bundlePageObj){
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                            }
-
-                        }, function(err) {
-                            Utils.removeNulls(res.customer,true);
-                            model.customer = res.customer;
-                        });
-                    });
-                }
+                PageHelper.showProgress('enrolment','Updaing...');
+                EnrollmentHelper.proceedData(reqData).then(function(resp){
+                    PageHelper.showProgress('enrolmet','Done.', 5000);
+                    Utils.removeNulls(resp.customer,true);
+                    model.customer = resp.customer;
+                    if (model._bundlePageObj){
+                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                    }
+                }, function(httpRes){
+                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    PageHelper.showErrors(httpRes);
+                });
             }
         }
     };
