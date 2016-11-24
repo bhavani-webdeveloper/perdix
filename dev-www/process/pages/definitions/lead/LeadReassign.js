@@ -68,15 +68,17 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     type: "box",
                     title: "ASSIGN_SPOKE",
                     items: [{
-                        "key": "lead.branchName",
-                        readonly: true
+                        "key": "lead.branchId",
+                        "title":"HUB_NAME",
+                        "type": "select",
+                        "enumCode": "branch_id",
+                        readonly:true
                     }, {
                         key: "lead.centreId",
                         "enumCode": "centre",
                         type: "select",
-                        "filter": {
-                            "parentCode": "model.lead.branchName"
-                        }
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.lead.branchId"
                     }, ]
                 },
 
