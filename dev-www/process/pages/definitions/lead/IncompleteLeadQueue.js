@@ -61,8 +61,14 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branches = formHelper.enum('branch_id').data;
+					var branchName;
+					for (var i=0; i<branches.length;i++){
+                        if(branches[i].code==searchOptions.branch_id)
+                        branchName = branches[i].name;
+                    }
 					var promise = Lead.search({
-						'branchName': searchOptions.branch,
+						'branchName': branchName,
 						'currentStage': "Incomplete",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,

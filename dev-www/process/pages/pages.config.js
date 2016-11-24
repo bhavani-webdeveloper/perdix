@@ -19,6 +19,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "PageLandingCtrl"
 	},{
+		name: "Page.LeadDashboard",
+		url: "/LeadDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LeadDashboardCtrl"
+	},{
 		name: "Page.BIDashboard", // BI Dashboard
 		url: "/BIDashboard",
 		templateUrl: "process/pages/templates/Page.BIDashboard.html",
