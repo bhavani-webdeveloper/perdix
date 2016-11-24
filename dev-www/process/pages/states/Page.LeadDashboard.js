@@ -10,6 +10,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             "Page/Engine/lead.LeadBulkUpload",
             "Page/Engine/lead.LeadGeneration",
             "Page/Engine/lead.leadAssignmentPendingQueue",
+            "Page/Engine/lead.ReadyForScreeningQueue",
             "Page/Engine/lead.LeadFollowUpQueue",
             "Page/Engine/lead.IncompleteLeadQueue"
         ]
@@ -72,6 +73,24 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }, function() {
                 cvqMenu.data = '-';
             });
+        }
+
+        var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
+        if (rfqMenu){
+            Lead.search({
+                'branchName': branchName,
+                'currentStage': "ReadyForScreening",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter){
+                rfqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                rfqMenu.data = '-';
+            })
         }
     });
 
