@@ -528,7 +528,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
                         if (reqData.loanMonitoringDetails.id) {
                             LucHelper.proceedData(reqData).then(function(resp) {
-                                //$state.go('Page.Landing', null);
+                                $state.go('Page.Landing', null);
                             });
 
                         } else {
