@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {
@@ -39,12 +39,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": {
-	                        "title": "SCREENING_DATE",
+	                    "pincode": {
+	                        "title": "PINCODE",
 	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
+	                       
 	                    }
 					},
 					"required": []
@@ -58,9 +56,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Application',
-	                    'branchName': searchOptions.branchName,
-	                    'centreCode': searchOptions.centreCodeForSearch,
-	                    'customerName': searchOptions.customer_name,
+	                    'enterprisePincode':searchOptions.pincode,
+	                    'applicantName':searchOptions.applicantName,
+	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
+	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

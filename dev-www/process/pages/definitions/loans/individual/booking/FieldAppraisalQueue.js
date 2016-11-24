@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalQueue"), 
+	irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalQueu
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {
@@ -39,8 +39,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalQueu
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    
-					}
+	                     "pincode": {
+	                        "title": "PINCODE",
+	                        "type": "string"
+	                    },
+					},
 					"required": []
 				},
 				getSearchFormHelper: function() {
@@ -52,9 +55,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalQueu
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisal',
-	                    'branchName': searchOptions.branchName,
-	                    'centreCode': searchOptions.centreCodeForSearch,
-	                    'customerName': searchOptions.customer_name,
+	                     'enterprisePincode':searchOptions.pincode,
+	                    'applicantName':searchOptions.applicantName,
+	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
+	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

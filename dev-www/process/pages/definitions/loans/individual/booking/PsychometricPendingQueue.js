@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PsychometricPendin
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {
@@ -58,9 +58,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PsychometricPendin
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'PsychometricPending',
-	                    'branchName': searchOptions.branchName,
-	                    'centreCode': searchOptions.centreCodeForSearch,
-	                    'customerName': searchOptions.customer_name,
+	                   
+						'screeningDate':searchOptions.screeningDate,
+	                    'applicantName':searchOptions.applicantName,
+	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
+	                    'customerName': searchOptions.businessName,
+	                    
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

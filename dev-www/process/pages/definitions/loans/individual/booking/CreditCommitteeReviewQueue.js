@@ -20,27 +20,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 					"title": 'SEARCH_OPTIONS',
 					"properties": 
 						{
-						"sno": {
+						"sno": 
+						{
 	                        "title": "S_NO",
 	                        "type": "string"
 	                    },
-	                    {
+	                    
 						"hubname": {
 	                        "title": "HUBNAME_NAME",
 	                        "type": "string"
 	                    },
-	                    {
-						"spokename": {
+	                    "spokename": {
 	                        "title": "SPOKE_NAME",
 	                        "type": "string"
 	                    },
-						{
+						
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {
@@ -56,7 +56,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 	                        "type": "string"
 	                    },
 	                    
-					}
+	                      "pincode": {
+	                        "title": "PINCODE",
+	                        "type": "string"
+	                    },
+					},
 					"required": []
 				},
 				getSearchFormHelper: function() {
@@ -68,9 +72,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'CreditCommitteeReview',
-	                    'branchName': searchOptions.branchName,
-	                    'centreCode': searchOptions.centreCodeForSearch,
-	                    'customerName': searchOptions.customer_name,
+	                     'enterprisePincode':searchOptions.pincode,
+	                    'applicantName':searchOptions.applicantName,
+	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
+	                    'branchName': searchOptions.hubname,
+	                    'centreCode': searchOptions.spokename,
+
+	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

@@ -20,18 +20,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 					"title": 'SEARCH_OPTIONS',
 					"properties": 
 						{
-						"sno":
-						{
-	                        "title": "S_NO",
-	                        "type": "string"
-	                    },
-						{
+						
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
 	                    "businessName": {
-	                        "title": "BUSINESS_NAME",New
+	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
 	                    },
 	                    "customerId": {
@@ -44,6 +39,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 	                    },
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
+	                        "type": "string"
+	                    }, "pincode": {
+	                        "title": "PINCODE",
 	                        "type": "string"
 	                    },
 	                    
@@ -59,9 +57,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchName': searchOptions.branchName,
-	                    'centreCode': searchOptions.centreCodeForSearch,
-	                    'customerName': searchOptions.customer_name,
+	                    'enterprisePincode':searchOptions.pincode,
+	                    'applicantName':searchOptions.applicantName,
+	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
+	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;
@@ -87,7 +87,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 					},
 					getListItem: function(item) {
 						return [
-							item.sno,
+							
 							item.applicantName,
 							item.businessName,
 							item.customerId,
