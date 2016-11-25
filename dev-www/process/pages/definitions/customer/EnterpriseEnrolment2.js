@@ -677,23 +677,23 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ]
                         },
                         {
-                          key:"customer.otherBusinessIncome",
+                          key:"customer.otherBusinessIncomes",
                             type:"array",
                             startEmpty: true,
                             title:"OTHER_BUSINESS_INCOME",
                             items:[
                                 {
-                                    key: "customer.otherBusinessIncome[].incomeSource",
+                                    key: "customer.otherBusinessIncomes[].incomeSource",
                                     title: "INCOME_SOURCE",
                                     type: "select"
                                 },
                                 {
-                                    key: "customer.otherBusinessIncome[].amount",
+                                    key: "customer.otherBusinessIncomes[].amount",
                                     title: "AMOUNT",
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.otherBusinessIncome[].date",
+                                    key: "customer.otherBusinessIncomes[].date",
                                     title: "DATE",
                                     type: "date"
                                 }, 
@@ -705,18 +705,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[]
                         },
                          {
-                            key:"customer.rawmaterialexpense",
+                            key:"customer.rawMaterialExpenses",
                             type:"array",
                             startEmpty: true,
                             title:"Raw material expense",
                             items:[
                                 {
-                                    key: "customer.rawmaterialexpense[].vendorName",
+                                    key: "customer.rawMaterialExpenses[].vendorName",
                                     title: "VENDOR_NAME",
                                     type: "string"
                                 },
                                 {
-                                    key: "customer.rawmaterialexpense[].rawMaterialType",
+                                    key: "customer.rawMaterialExpenses[].rawMaterialType",
                                     title: "TYPE",
                                     type: "radios",
                                         titleMap: {
@@ -725,12 +725,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         }
                                 },
                                 {
-                                    key: "customer.rawmaterialexpense[].amount",
+                                    key: "customer.rawMaterialExpenses[].amount",
                                     title: "AMOUNT",
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.rawmaterialexpense[].date",
+                                    key: "customer.rawMaterialExpenses[].date",
                                     title: "DATE",
                                     type: "date"
                                 },
