@@ -98,7 +98,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 .$promise
                                 .then(function(res){
                                     PageHelper.showProgress("customer-load", "Done..", 5000);
-                                    model.customer = res;
+                                    model.customer = Utils.removeNulls(res, true);
                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 }, function(httpRes){
                                     PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
@@ -1181,7 +1181,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             {
                                 key: "customer.customerBankAccounts[].netBankingAvailable",
                                 type: "select",
-                                title: "NET_BANKING_AVAILABLE"
+                                title: "NET_BANKING_AVAILABLE",
+                                enumCode: "decisionmaker"
                             },
                             {
                                 key: "customer.customerBankAccounts[].bankStatement",
@@ -1237,7 +1238,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "actionbox",
-                "condition": "!model.customer.id",
+                "condition": "!model.customer.id || model.customer.currentStage=='Completed'",
                 "items": [/*{
                     "type": "save",
                     "title": "SAVE"
@@ -1254,15 +1255,17 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 "items": [/*{
                     "type": "save",
                     "title": "SAVE"
-                },*/{
-                    "type": "submit",
-                    "title": "FINISH_ENROLMENT"
-                },{
-                    "type": "button",
-                    "title": "RELOAD",
-                    "icon": "fa fa-refresh",
-                    "onClick": "actions.reload(model, formCtrl, form, $event)"
-                }]
+                },*/
+                    {
+                        "type": "button",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    },
+                    {
+                        "type": "submit",
+                        "title": "FINISH_ENROLMENT"
+                    }
+                ]
             }
         ],
         schema: function() {

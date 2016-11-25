@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
 
     var branch = SessionStore.getBranch();
 
@@ -31,23 +31,41 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         eventListeners: {
             "new-applicant": function(bundleModel, model, params){
                 $log.info("Inside new-applicant of EnterpriseEnrollment");
-                
-                var newLinkedCustomer = {
-                    "linkedToCustomerId": params.customer.id,
-                    "linkedToCustomerName": params.customer.firstName
-                };
 
-                model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
+                var addToRelation = true;
+                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
+                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
+                        addToRelation = false;
+                        break;
+                    }
+                }
+                if (addToRelation){
+                    var newLinkedCustomer = {
+                        "linkedToCustomerId": params.customer.id,
+                        "linkedToCustomerName": params.customer.firstName
+                    };
+
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                }
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Inside new co-applicant of EnterpriseEnrollment");
 
-                var newLinkedCustomer = {
-                    "linkedToCustomerId": params.customer.id,
-                    "linkedToCustomerName": params.customer.firstName
-                };
+                var addToRelation = true;
+                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
+                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
+                        addToRelation = false;
+                        break;
+                    }
+                }
+                if (addToRelation){
+                    var newLinkedCustomer = {
+                        "linkedToCustomerId": params.customer.id,
+                        "linkedToCustomerName": params.customer.firstName
+                    };
 
-                model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                }
             },
             "lead-loaded": function(bundleModel, model, obj){
                 model.customer.firstName = obj.businessName;
@@ -59,6 +77,62 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
                 "items": [
+                    {
+                        "key": "customer.id",
+                        "title": "LOAD_EXISTING_CUSTOMER",
+                        "type": "lov",
+                        "lovonly": true,
+                        "inputMap": {
+                            "firstName": {
+                                "key": "customer.firstName",
+                                "title": "CUSTOMER_NAME"
+                            },
+                            "kgfsName": {
+                                "key": "customer.kgfsName",
+                                "type": "select",
+                                "screenFilter": true
+                            },
+                            "centreId": {
+                                "key": "customer.centreId",
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "outputMap": {
+                            "urnNo": "customer.urnNo",
+                            "firstName":"customer.firstName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var promise = Enrollment.search({
+                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId':inputModel.centreId,
+                                'customerType':"enterprise"
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context){
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            Enrollment.getCustomerById({id: valueObj.id})
+                                .$promise
+                                .then(function(res){
+                                    PageHelper.showProgress("customer-load", "Done..", 5000);
+                                    model.customer = Utils.removeNulls(res, true);
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                }, function(httpRes){
+                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                })
+                        }
+                    },
                     {
                         key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
@@ -434,7 +508,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.customerBankAccounts[].netBankingAvailable",
                                 type: "select",
-                                title: "NET_BANKING_AVAILABLE"
+                                title: "NET_BANKING_AVAILABLE",
+                                enumCode:"decisionmaker"
                             },
                             {
                                 key: "customer.customerBankAccounts[].bankStatement",

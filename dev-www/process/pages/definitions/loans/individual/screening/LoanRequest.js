@@ -36,13 +36,22 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         eventListeners: {
             "new-applicant": function(bundleModel, model, params){
                 $log.info("Inside new-applicant of LoanRequest");
-                model.loanAccount.applicant = params.customer.id;
+                // model.loanAccount.applicant = params.customer.id;
                 /* Assign more customer information to show */
-                model.loanAccount.loanCustomerRelations.push({
-                    'customerId': params.customer.id,
-                    'relation': "Applicant"
-                })
+                var addToRelation = true;
+                for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                    if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                        addToRelation = false;
+                        break;
+                    }
+                }
 
+                if (addToRelation){
+                    model.loanAccount.loanCustomerRelations.push({
+                        'customerId': params.customer.id,
+                        'relation': "Applicant"
+                    })    
+                }
                 /* TODO remove this later */
                 if (!_.hasIn(model.loanAccount, "customerId") || model.loanAccount.customerId == null){
                     model.loanAccount.customerId = params.customer.id;
@@ -50,11 +59,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
-                model.loanAccount.coApplicant = params.customer.id;
-                model.loanAccount.loanCustomerRelations.push({
-                    'customerId': params.customer.id,
-                    'relation': "Co-Applicant"
-                })
+                // model.loanAccount.coApplicant = params.customer.id;
+                var addToRelation = true;
+                for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                    if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                        addToRelation = false;
+                        break;
+                    }
+                }
+
+                if (addToRelation) {
+                    model.loanAccount.loanCustomerRelations.push({
+                        'customerId': params.customer.id,
+                        'relation': "Co-Applicant"
+                    })    
+                }
             },
             "new-business": function(bundleModel, model, param){
                 $log.info("Inside new-business of LoanRequest");

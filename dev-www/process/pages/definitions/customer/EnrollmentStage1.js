@@ -121,7 +121,11 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         $log.info(reqData);
         PageHelper.clearErrors();
         PageHelper.showLoader();
-        reqData['enrollmentAction'] = 'SAVE';
+        if (reqData.customer.currentStage == 'Completed'){ 
+            reqData['enrollmentAction'] = 'PROCEED';
+        } else {
+            reqData['enrollmentAction'] = 'SAVE';    
+        }
         /* TODO fix for KYC not saving **/
         if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
             reqData.customer.additionalKYCs = [];

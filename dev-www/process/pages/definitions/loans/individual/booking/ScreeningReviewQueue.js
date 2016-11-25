@@ -139,8 +139,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ScreeningReviewQue
 								entityManager.setModel('loan.ScreeningReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.ScreeningReview",
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.ScreeningReview",
 									pageId: item.id
 								});
 							},
