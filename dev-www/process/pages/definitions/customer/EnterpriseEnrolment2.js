@@ -670,7 +670,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 {
                                     key: "customer.throughSales[].date",
-                                    title: "Date",
+                                    title: "DATE",
                                     type: "date"
                                 }, 
                                 
@@ -694,7 +694,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 {
                                     key: "customer.otherBusinessIncome[].date",
-                                    title: "Date",
+                                    title: "DATE",
                                     type: "date"
                                 }, 
                              ]    
@@ -712,12 +712,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             items:[
                                 {
                                     key: "customer.rawmaterialexpense[].vendorName",
-                                    title: "Vendor Name",
+                                    title: "VENDOR_NAME",
                                     type: "string"
                                 },
                                 {
                                     key: "customer.rawmaterialexpense[].rawMaterialType",
-                                    title: "Type",
+                                    title: "TYPE",
                                     type: "radios",
                                         titleMap: {
                                             Cash:"Cash",
@@ -726,12 +726,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 {
                                     key: "customer.rawmaterialexpense[].amount",
-                                    title: "Amount",
+                                    title: "AMOUNT",
                                     type: "amount"
                                 },
                                 {
                                     key: "customer.rawmaterialexpense[].date",
-                                    title: "Date",
+                                    title: "DATE",
                                     type: "date"
                                 },
                                 
@@ -817,7 +817,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].subSector",
-                                title: "SUB SECTOR",
+                                title: "SUBSECTOR",
                                 type: "select"
                             },
                             {
