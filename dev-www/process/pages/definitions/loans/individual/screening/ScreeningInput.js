@@ -64,6 +64,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
+                    BundleManager.broadcastEvent('origination-stage', 'Screening');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("screening-input", 'Loading lead details');

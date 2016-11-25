@@ -4,6 +4,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager){
 
+    var pageParams = {
+        readonly: true
+    }
+
     return {
         "type": "schema-form",
         // "subType": "sub-navigation",
@@ -33,6 +37,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 model.customer.mobilePhone = obj.mobileNo;
                 model.customer.gender = obj.gender;
                 model.customer.firstName = obj.leadName;
+            },
+            "origination-stage": function(bundleModel, model, obj){
+                model.currentStage = obj
+                if (obj =='ScreeningReview') {
+                    pageParams.readonly = true;
+                }
             }
         },
         offline: false,
@@ -47,6 +57,215 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type":"box",
                 "title":"KYC",
+                "condition": "model.currentStage=='Screening'",
+                "items":[
+                    {
+                        "key": "customer.id",
+                        "title": "LOAD_EXISTING_CUSTOMER",
+                        "type": "lov",
+                        "lovonly": true,
+                        "inputMap": {
+                            "firstName": {
+                                "key": "customer.firstName",
+                                "title": "CUSTOMER_NAME"
+                            },
+                            "kgfsName": {
+                                "key": "customer.kgfsName",
+                                "type": "select",
+                                "screenFilter": true
+                            },
+                            "centreId": {
+                                "key": "customer.centreId",
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                        "outputMap": {
+                            "urnNo": "customer.urnNo",
+                            "firstName":"customer.firstName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var promise = Enrollment.search({
+                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId':inputModel.centreId,
+                                'customerType':"individual",
+                                'stage': "Completed"
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context){
+                            PageHelper.showProgress('customer-load', 'Loading customer...');
+                            Enrollment.getCustomerById({id: valueObj.id})
+                                .$promise
+                                .then(function(res){
+                                    PageHelper.showProgress("customer-load", "Done..", 5000);
+                                    model.customer = Utils.removeNulls(res, true);
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                }, function(httpRes){
+                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                })
+                        }
+                    },
+                    {
+                        "key": "customer.aadhaarNo",
+                        "type":"qrcode",
+                        "required": true,
+                        "onChange":"actions.setProofs(model)",
+                        "onCapture": function(result, model, form) {
+                            EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            this.actions.setProofs(model);
+                        }
+                    },
+                    {
+                        "key": "customer.panNo",
+                        "type": "text",
+                        "required": true
+                    },
+                    {
+                        type:"fieldset",
+                        title:"IDENTITY_PROOF",
+                        items:[
+                            {
+                                key:"customer.identityProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.identityProofImageId",
+                                type:"file",
+                                required: true,
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.identityProofReverseImageId",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.identityProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.identityProofNo = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.idProofIssueDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.idProofValidUptoDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.addressProofSameAsIdProof"
+                            }
+                        ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"ADDRESS_PROOF",
+                        condition:"!model.customer.addressProofSameAsIdProof",
+                        items:[
+                            {
+                                key:"customer.addressProof",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.addressProofImageId",
+                                type:"file",
+                                required: true,
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.addressProofReverseImageId",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.addressProofNo",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result);
+                                    model.customer.addressProofNo = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.addressProofIssueDate",
+                                type:"date"
+                            },
+                            {
+                                key:"customer.addressProofValidUptoDate",
+                                type:"date"
+                            },
+                        ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"SPOUSE_IDENTITY_PROOF",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        items:[
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf33",
+                                type:"select",
+                                onChange: function(modelValue) {
+                                    $log.info(modelValue);
+                                }
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf34",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf35",
+                                type:"file",
+                                fileType:"image/*"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf36",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                type:"barcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                }
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf36",
+                                condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                type:"qrcode",
+                                onCapture: function(result, model, form) {
+                                    $log.info(result); // spouse id proof
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    $log.info(aadhaarData);
+                                    model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                    model.customer.spouseFirstName = aadhaarData.name;
+                                    if (aadhaarData.yob) {
+                                        model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                        model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
+                            }
+                        ]
+                    }
+
+                ]
+            },
+            {
+                "type":"box",
+                "title":"KYC",
+                "condition": "model.currentStage == 'ScreeningReview'",
+                "readonly": true,
                 "items":[
                     {
                         "key": "customer.id",

@@ -53,6 +53,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
+                    BundleManager.broadcastEvent('origination-stage', 'ScreeningReview');
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){
