@@ -42,6 +42,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     'customerId': params.customer.id,
                     'relation': "Applicant"
                 })
+
+                /* TODO remove this later */
+                if (!_.hasIn(model.loanAccount, "customerId") || model.loanAccount.customerId == null){
+                    model.loanAccount.customerId = params.customer.id;
+                }
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
@@ -100,6 +105,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
+                "condition": "model.loanAccount.currentStage=='Application'",
                 "items": [
                     {
                       key:"loanAccount.newassetdetails",
@@ -166,7 +172,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                      }
                 ]
             },
-
             {
                 "type": "actionbox",
                 "condition": "model.loanAccount.customerId",
@@ -177,7 +182,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "onClick": "actions.save(model, formCtrl, form, $event)"
                     }
                 ]
-            }
+            },
+            {
+                "type": "actionbox",
+                "condition": "model.loanAccount.id",
+                "items": [
+                    {
+                        "type": "submit",
+                        "title": "PROCEED"
+                    }
+                ]
+            },
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -196,6 +211,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 /* TODO Call proceed servcie for the loan account */
+                Utils.confirm("Are You Sure?").then(function(){
+                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanProcessAction = "PROCEED";
+                    IndividualLoan.create(reqData,function(resp,headers){
+                        $state.go('Page.Landing', null);
+                    }, function(httpRes){
+                        PageHelper.showErrors(httpRes);
+                    })
+
+                })
             },
             save: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");

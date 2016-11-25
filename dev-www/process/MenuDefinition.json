@@ -4,6 +4,13 @@
 		"Page/Landing",
 		"Page/LeadDashboard",
 		{
+			"title": "Origination",
+			"iconClass": "fa fa-users",
+			"items": [
+				"Page/Bundle/loans.individual.screening.ScreeningInput"
+			]
+		},
+		{
 			"title": "LUC",
 			"iconClass": "fa fa-check-square-o",
 			"items": [

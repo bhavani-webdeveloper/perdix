@@ -569,6 +569,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTROMER_BUYER_DETAILS",
+               condition: "false",
                 items:[
                     {
                       key:"customer.buyerDetails",
