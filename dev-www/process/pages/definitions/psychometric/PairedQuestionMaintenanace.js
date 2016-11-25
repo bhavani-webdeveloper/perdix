@@ -1,22 +1,29 @@
-irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"), ["$log", "SessionStore", "PageHelper", "formHelper", "Utils",
+irf.pageCollection.factory(irf.page("psychometric.PairedQuestionMaintenanace"), ["$log", "SessionStore", "PageHelper", "formHelper", "Utils",
             function($log, SessionStore, PageHelper, formHelper, Utils) {
 
                 var branch = SessionStore.getBranch();
 
                 return {
                     "type": "schema-form",
-                    "title": "SINGLE_QUESTION_MAINTAENANCE",
+                    "title": "PAIRED_QUESTION_MAINTAENANCE",
                     initialize: function(model, form, formCtrl) {
                         model.psy = model.psy || {};
                         model = Utils.removeNulls(model, true);
                         $log.info("question maintenance page got initiated");
                     },
-                    form: [{
+                    form: [
+                    {
                             "type": "box",
-                            "title": "QUESTION_MAINTENANCE",
-                            "items": [{
-                                    key: "psy.questionId",
+                            "title": "QUESTION 1",
+                            
+                            "items": [
+                        
+
+                            {
+
+                                    key: "psy[0].questionId",
                                     type: "lov",
+                                    title:"QUESTION_ID",
                                     lovonly: true,
                                     fieldType: "number",
                                     /*outputMap: {
@@ -33,14 +40,18 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"), [
                                             item.name
                                         ];
                                     }*/
-                                }, {
-                                    key: "psy.categoryName",
+                                },
+
+                                {
+                                    key: "psy[0].categoryName",
                                     type: "lov",
+                                    title:"CATEGORY_NAME",
                                     lovonly: true,
                                     fieldType: "string",
                                 }, {
-                                    key: "psy.difficulty",
+                                    key: "psy[0].difficulty",
                                     type: "select",
+                                    title:"DIFFICULTY",
                                     titleMap: {
                                         "LOW": "Low",
                                         "MEDIUM": "Medium",
@@ -50,37 +61,131 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"), [
                                     key: "psy.type",
                                     type: "hidden",
                                 },*/ {
-                                    key: "psy.questionLang",
+                                    key: "psy[0].questionLang",
                                     type: "array",
+                                     title:"QUESTION_LANGUAGE",
                                     startEmpty: true,
                                     items: [{
-                                        key: "psy.questionLang[].langcode",
-                                        type:"select"
+                                        key: "psy[0].questionLang[].langCode",
+                                        type:"select",
+                                        title:"LANG_CODE"
                                     }, {
-                                        key: "psy.questionLang[].questionText",
-                                        type:"textarea"
+                                        key: "psy[0].questionLang[].questionText",
+                                        type:"textarea",
+                                        title:"QUESTION_TEXT"
                                     }]
                                 }, {
-                                    key: "psy.options",
+                                    key: "psy[0].options",
                                     type: "array",
+                                     title:"OPTIONS",
                                     startEmpty: true,
                                     items: [{
-                                            key: "psy.options[].score",
+                                            key: "psy[0].options[].score",
+                                            title:"SCORE"
                                         }, {
-                                            key: "psy.options[].optionlang",
+                                            key: "psy[0].options[].optionlang",
                                             type: "array",
+                                             title:"OPTIONS_LANGUAGE",
                                             startEmpty: true,
                                             items: [{
-                                                    key: "psy.options[].optionlang[].langcode",
+                                                    key: "psy[0].options[].optionlang[].langcode",
                                                     type:"select"  
                                                 },{
-                                                    key: "psy.options[].optionlang[].optiontext",
+                                                    key: "psy[0].options[].optionlang[].optiontext",
                                                     type:"textarea"
                                                 }]
                                             }]
                                     },
                                 ]
                             },
+                            {
+                            "type": "box",
+                            "title": "QUESTION 2",
+                              
+                            "items": [
+                        
+
+                            {
+
+                                    key: "psy[1].questionId",
+                                    type: "lov",
+                                    title:"QUESTION_ID",
+                                    lovonly: true,
+                                    fieldType: "number",
+                                    /*outputMap: {
+                                        "id": "roles.role_id",
+                                        "name": "roles.role_name"
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model) {
+                                        return RolesPages.allRoles().$promise;
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.id,
+                                            item.name
+                                        ];
+                                    }*/
+                                },
+
+                                {
+                                    key: "psy[1].categoryName",
+                                    type: "lov",
+                                    title:"CATEGORY_NAME",
+                                    lovonly: true,
+                                    fieldType: "string",
+                                }, {
+                                    key: "psy[1].difficulty",
+                                    type: "select",
+                                    title:"DIFFICULTY",
+                                    titleMap: {
+                                        "LOW": "Low",
+                                        "MEDIUM": "Medium",
+                                        "HIGH": "High"
+                                    }
+                                },/* {
+                                    key: "psy.type",
+                                    type: "hidden",
+                                },*/ {
+                                    key: "psy[1].questionLang",
+                                    type: "array",
+                                     title:"QUESTION_LANGUAGE",
+                                    startEmpty: true,
+                                    items: [{
+                                        key: "psy[1].questionLang[].langCode",
+                                        type:"select",
+                                        title:"LANG_CODE"
+                                    }, {
+                                        key: "psy[1].questionLang[].questionText",
+                                        type:"textarea",
+                                        title:"QUESTION_TEXT"
+                                    }]
+                                }, {
+                                    key: "psy[1].options",
+                                    type: "array",
+                                     title:"OPTIONS",
+                                    startEmpty: true,
+                                    items: [{
+                                            key: "psy[1].options[].score",
+                                            title:"SCORE"
+                                        }, {
+                                            key: "psy[1].options[].optionlang",
+                                            type: "array",
+                                             title:"OPTIONS_LANGUAGE",
+                                            startEmpty: true,
+                                            items: [{
+                                                    key: "psy[1].options[].optionlang[].langCode",
+                                                    type:"select"  
+                                                },{
+                                                    key: "psy[1].options[].optionlang[].optiontext",
+                                                    type:"textarea"
+                                                }]
+                                            }]
+                                    },
+                                ]
+                            },
+
+
 
 
 
