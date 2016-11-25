@@ -69,15 +69,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "key": "customer.firstName",
                                 "title": "CUSTOMER_NAME"
                             },
-                            "kgfsName": {
-                                "key": "customer.kgfsName",
+                            "customerBranchId": {
+                                "key": "customer.customerBranchId",
                                 "type": "select",
                                 "screenFilter": true
                             },
                             "centreId": {
                                 "key": "customer.centreId",
                                 "type": "select",
-                                "screenFilter": true
+                                "screenFilter": true,
+                                "parentEnumCode": "branch_id"
                             }
                         },
                         "outputMap": {
@@ -87,8 +88,14 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var branches = formHelper.enum('branch_id').data;
+                            var branchName;
+                            for (var i=0; i<branches.length;i++){
+                                if(branches[i].code==inputModel.customerBranchId)
+                                branchName = branches[i].name;
+                            }
                             var promise = Enrollment.search({
-                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
+                                'branchName': branchName ||SessionStore.getBranch(),
                                 'firstName': inputModel.firstName,
                                 'centreId':inputModel.centreId,
                                 'customerType':"individual",
@@ -484,8 +491,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         /*filter: {
                             "parentCode": "branch_id"
                         },*/
-                        parentEnumCode:"branch_id",
-                        screenFilter: true
+                        parentEnumCode:"branch_id"
                     },
                     {
                         key: "customer.oldCustomerId",
