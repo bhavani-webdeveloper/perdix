@@ -781,7 +781,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type: "select"
+                                type: "date"
                             },
                             
                             {
@@ -792,7 +792,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].paymentFrequency",
                                 title: "PAYMENT_FREQUENCY",
-                                type: "select"
+                                type: "select",
+                                enumCode: "payment_frequency"
                             },
                             {
                                 key: "customer.buyerDetails[].paymentTerms",
@@ -838,7 +839,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key:"customer.verification.referenceType",
                         title:"REFERENCE_TYPE",
                         type:"select",
-                        required:"true"
+                        required:"true",
+                        enumCode: "business_reference_type"
                     },
                      {
                         key:"customer.verification.businessName",
