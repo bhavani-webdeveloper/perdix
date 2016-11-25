@@ -644,18 +644,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[]
                         },
                          {
-                            key:"customer.throughSales",
+                            key:"customer.incomeThroughSales",
                             type:"array",
                             startEmpty: true,
                             title:"Through Sales",
                             items:[
                                 {
-                                    key: "customer.throughSales[].buyerName",
+                                    key: "customer.incomeThroughSales[].buyerName",
                                     title: "BUYER_NAME",
                                     type: "select"
                                 },
                                 {
-                                    key: "customer.throughSales[].incomeType",
+                                    key: "customer.incomeThroughSales[].incomeType",
                                     title: "INCOME_TYPE",
                                     type: "radios",
                                     titleMap: {
@@ -664,12 +664,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 },
                                 {
-                                    key: "customer.throughSales[].amount",
+                                    key: "customer.incomeThroughSales[].amount",
                                     title: "AMOUNT",
                                     type: "amount"   
                                 },
                                 {
-                                    key: "customer.throughSales[].date",
+                                    key: "customer.incomeThroughSales[].date",
                                     title: "DATE",
                                     type: "date"
                                 }, 
