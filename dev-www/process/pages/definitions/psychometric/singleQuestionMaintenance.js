@@ -86,7 +86,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"), [
 
                             {
                                 type: "actionbox",
-                                //condition: "!model.roles.role_id",
+                                condition: "!model.psy.questionId",
                                 items: [{
                                     type: "submit",
                                     title: "Create Question"
@@ -94,7 +94,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"), [
                             },
                             {
                                 type: "actionbox",
-                                //condition: "model.roles.role_id",
+                                condition: "model.psy.questionId",
                                 items: [{
                                     type: "submit",
                                     title: "Update Question"
