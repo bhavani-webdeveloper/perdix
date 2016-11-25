@@ -66,10 +66,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                     model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
                 }
-            },
-            "lead-loaded": function(bundleModel, model, obj){
-                model.customer.firstName = obj.businessName;
-                
             }
         },
         form: [
@@ -620,6 +616,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 ]
             },
+            
+            
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
@@ -638,13 +636,136 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.avgMonthlyNetIncome",
                         title: "AVERAGE_MONTHLY_NET_INCOME",
                         type: "amount"
+                    },
+                
+                        {
+                                type:"fieldset",
+                                title:"Income",
+                                items:[]
+                        },
+                         {
+                            key:"customer.throughSales",
+                            type:"array",
+                            startEmpty: true,
+                            title:"Through Sales",
+                            items:[
+                                {
+                                    key: "customer.throughSales[].buyerName",
+                                    title: "BUYER_NAME",
+                                    type: "select"
+                                },
+                                {
+                                    key: "customer.throughSales[].incomeType",
+                                    title: "INCOME_TYPE",
+                                    type: "radios",
+                                    titleMap: {
+                                    Cash:"Cash",
+                                    Invoice:"Invoice"
+                                    }
+                                },
+                                {
+                                    key: "customer.throughSales[].amount",
+                                    title: "AMOUNT",
+                                    type: "amount"   
+                                },
+                                {
+                                    key: "customer.throughSales[].date",
+                                    title: "Date",
+                                    type: "date"
+                                }, 
+                                
+                            ]
+                        },
+                        {
+                          key:"customer.otherBusinessIncome",
+                            type:"array",
+                            startEmpty: true,
+                            title:"OTHER_BUSINESS_INCOME",
+                            items:[
+                                {
+                                    key: "customer.otherBusinessIncome[].incomeSource",
+                                    title: "INCOME_SOURCE",
+                                    type: "select"
+                                },
+                                {
+                                    key: "customer.otherBusinessIncome[].amount",
+                                    title: "AMOUNT",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "customer.otherBusinessIncome[].date",
+                                    title: "Date",
+                                    type: "date"
+                                }, 
+                             ]    
+                        }, 
+                         {
+                                type:"fieldset",
+                                title:"EXPENSES",
+                                items:[]
+                        },
+                         {
+                            key:"customer.rawmaterialexpense",
+                            type:"array",
+                            startEmpty: true,
+                            title:"Raw material expense",
+                            items:[
+                                {
+                                    key: "customer.rawmaterialexpense[].vendorName",
+                                    title: "Vendor Name",
+                                    type: "string"
+                                },
+                                {
+                                    key: "customer.rawmaterialexpense[].rawMaterialType",
+                                    title: "Type",
+                                    type: "radios",
+                                        titleMap: {
+                                            Cash:"Cash",
+                                            Invoice:"Invoice"
+                                        }
+                                },
+                                {
+                                    key: "customer.rawmaterialexpense[].amount",
+                                    title: "Amount",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "customer.rawmaterialexpense[].date",
+                                    title: "Date",
+                                    type: "date"
+                                },
+                                
+                            ]
+                        },
+                        
+
+                ]
+            },
+            {
+               type:"box",
+               title:"EMPLOYEE_DETAILS",
+                items:[
+                    {
+                        key: "customer.enterprise.noOfFemaleEmployees",
+                        title: "No Of Male Employees",
+                        type: "number"
+                    },
+                    {
+                        key: "customer.enterprise.noOfMaleEmployees",
+                        title: "No Of Female Employees",
+                        type: "number"
+                    },
+                    {
+                        key: "customer.enterprise.averagemonthlysalary",
+                        title: "Average Monthly Salary",
+                        type: "amount"
                     }
+
                 ]
             },
             {
                type:"box",
                title:"CUSTROMER_BUYER_DETAILS",
-               condition: "false",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -654,24 +775,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        items:[
                             {
                                 key: "customer.buyerDetails[].buyerName",
-                                title: "Buyer Name",
+                                title: "BUYER_NAME",
                                 type: "string"
-                            },
-                            {
-                                key:"customer.buyerDetails[].customerId",
-                                title:"CUSTOMER_ID",
-                                type:"number"
-                            },  
+                            }, 
                             {
                                 key: "customer.buyerDetails[].customerSince",
-                                title: "Customer Since",
-                                type: "string"
+                                title: "CUSTOMER_SINCE",
+                                type: "select"
                             },
-                            {
-                                key: "customer.buyerDetails[].id",
-                                title: "ID",
-                                type: "number"
-                            },
+                            
                             {
                                 key: "customer.buyerDetails[].paymentDate",
                                 title: "Payment Date",
@@ -679,12 +791,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].paymentFrequency",
-                                title: "Payment Frequency",
+                                title: "PAYMENT_FREQUENCY",
                                 type: "select"
                             },
                             {
                                 key: "customer.buyerDetails[].paymentTerms",
-                                title: "Payment Terms",
+                                title: "PAYEMNT_TERMS",
                                 type: "number"
                             },
                             {
@@ -700,23 +812,69 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         
                             {
                                 key: "customer.buyerDetails[].sector",
-                                title: "Sector",
+                                title: "SECTOR",
                                 type: "select"
                             },
                             {
                                 key: "customer.buyerDetails[].subSector",
-                                title: "Sub Sector",
+                                title: "SUB SECTOR",
                                 type: "select"
                             },
                             {
-                                key: "customer.buyerDetails[].version",
-                                title:"Version",
+                                key: "customer.buyerDetails[].receivablesOutstanding/CustomerCredit",
+                                title:"Receivables Outstanding / Customer Credit",
                                 type: "number"
                             },
                         ]
                     }
                 ]
             },
+            {
+               type:"box",
+               key:"customer.verification",
+               title:"REFERENCES",
+                items:[
+                    {
+                        key:"customer.verification.referenceType",
+                        title:"REFERENCE_TYPE",
+                        type:"select",
+                        required:"true"
+                    },
+                     {
+                        key:"customer.verification.businessName",
+                        title:"BUSINESS_NAME",
+                        type:"string"
+                    },
+                    {
+                        key:"customer.verification.fullNameofPOC",
+                        title:"Full Name Of POC",
+                        type:"string"
+                    },
+                    {
+                        key:"customer.verification.mobileNo",
+                        title:"Mobile No",
+                        type:"number"
+                    },
+                    {
+                        key:"customer.verification.businessSector",
+                        title:"BUSINESS_SECTOR",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.verification.businessSubSector",
+                        title:"BUSINESS_SUBSECTOR",
+                        type:"select"
+                    },
+                    {
+                        key:"customer.verification.self-reportedIncome",
+                        title:"Self-Reported Income",
+                        type:"number"
+                    },
+
+                 ] 
+             },
+                     
+
             {
                 "type": "actionbox",
                 "condition": "!model.customer.id",
