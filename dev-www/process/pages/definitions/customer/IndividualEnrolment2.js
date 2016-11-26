@@ -13,7 +13,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         // "subType": "sub-navigation",
         "title": "INDIVIDUAL_ENROLLMENT",
         "subTitle": "",
-        initialize: function (model, form, formCtrl, bundlePageObj) {
+        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+            model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanRelation')){
                 console.log(model.loanRelation);
                 var custId = model.loanRelation.customerId;

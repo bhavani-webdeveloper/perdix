@@ -102,7 +102,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     }
 
-    var initializePage = function(bundlePage) {
+    var initializePage = function(bundlePage, bundleModel) {
         var pageObj = {};
         pageObj.pageName = bundlePage.pageName;
         pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
@@ -138,7 +138,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                                     pageObj.page.form = data;
                                     $timeout(function() {
                                         // @TODO Code doesn't reach here for some reason. But initialize is called via directive. Need to discuss with stalin, why this is here?
-                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl, pageObj.bundlePage);
+                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl, pageObj.bundlePage, bundleModel);
                                     });
                                 });
                             }
@@ -250,7 +250,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 bundlePage.openPagesCount = 0;
                 if (bundlePage.minimum > 0) {
                     for (var i = 0; i < bundlePage.minimum; i++) {
-                        var openPage = initializePage(bundlePage);
+                        var openPage = initializePage(bundlePage, $scope.bundleModel);
                         $scope.pages.push(openPage);
                     };
                     bundlePage.openPagesCount = bundlePage.minimum;

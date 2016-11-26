@@ -60,6 +60,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
         		],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
+                    bundleModel.currentStage = "Screening";
 
                 },
                 "post_pages_initialize": function(bundleModel){

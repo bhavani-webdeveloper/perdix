@@ -10,7 +10,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "type": "schema-form",
         "title": "ENTITY_ENROLLMENT",
         "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl, bundlePageObj) {
+        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+            model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanRelation')){
                 console.log(model.loanRelation);
                 var custId = model.loanRelation.customerId;

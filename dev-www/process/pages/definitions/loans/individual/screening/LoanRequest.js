@@ -10,8 +10,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "type": "schema-form",
         "title": "LOAN_REQUEST",
         "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl) {
-
+        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+            model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanAccount')){
 
             } else {

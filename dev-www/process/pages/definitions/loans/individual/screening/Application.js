@@ -43,6 +43,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     var deferred = $q.defer();
+                    bundleModel.currentStage = "Application";
 
                     var $this = this;
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
