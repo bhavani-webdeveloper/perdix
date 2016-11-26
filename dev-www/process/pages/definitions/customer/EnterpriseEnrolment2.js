@@ -808,12 +808,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
-                                type: "select"
+                                type: "select",
+                                enumCode: "businessSector"
                             },
                             {
                                 key: "customer.buyerDetails[].subSector",
                                 title: "SUBSECTOR",
-                                type: "select"
+                                type: "select",
+                                parentEnumCode: "businessSector",
+                                enumCode: "businessSubSector"
                             },
                             {
                                 key: "customer.buyerDetails[].receivablesOutstanding",

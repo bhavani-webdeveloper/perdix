@@ -39,6 +39,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 model.customer.customerType = 'Individual';
                 BundleManager.pushEvent("on-customer-load", {name: "11"})
 
+                model.customer.expenditures = [];
+                model.customer.expenditures.push({
+                    "expenditureSource": "Education",
+                    "frequency": "Monthly"
+                })
+
                 if (bundlePageObj){
                     model._bundlePageObj = bundlePageObj;
                 }    
@@ -803,6 +809,23 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 "title": "AMOUNT"
                             }
                         ]
+                    },
+                    {
+                        "key": "customer.expenditures",
+                        "type": "array",
+                        "title": "EXPENDITURES",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        // "add": null,
+                        // "remove": null,
+                        "items": [
+                            {
+                                "key": "customer.expenditures[].annualExpenses",
+                                "type": "amount",
+                                "title": "MONTHLY_EDUCATION_EXPENSE"
+                            }
+                        ]
                     }
                 ]
             },
@@ -1518,6 +1541,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                type: "box",
                 title: "PROXY_INDICATORS",
+                condition: "model.currentStage=='FieldAppraisal'",
                 items: [ 
                         {
                             key:"customer.proper&MatchingSignboard",
