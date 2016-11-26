@@ -141,47 +141,47 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                        items:[
                             {
                                 key: "loanAccount.newassetdetails[].machine",
-                                title:"Machine",
+                                title:"MACHINE",
                                 type: "string"
                             },
                             {
                                 key: "loanAccount.newassetdetails[].purchasePrice",
-                                title:"Purchase Price",
+                                title:"PURCHASE_RICE",
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].expectedIncome",
-                                title:"Expected Income",
+                                title:"EXPECTED_INCOME",
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].manfactureName",
-                                title:"Manfacture Name",
+                                title:"MANFACTURE_NAME",
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineType",
-                                title:"Machine Type",
+                                title:"MACHINE_TYPE",
                                 type: "select",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineModel",
-                                title:"Machine Model",
+                                title:"MACHINE_MODEL",
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].serialNo",
-                                title:"Serial No",
+                                title:"SERIAL_NO",
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].expectedPurchaseDate",
-                                title:"Expected Purchase Date",
+                                title:"EXPECTED_PURCHASE_DATE",
                                 type: "Date",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machinePermanentlyfixedtobuilding",
-                                title:"Machine Permanently Fixed to Building",
+                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
                                 titleMap: {
                                     YES:"YES",
@@ -190,7 +190,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             },
                             {
                                 key: "loanAccount.newassetdetails[].hypothecatedtoKinara",
-                                title:"Hypothecated to Kinara",
+                                title:"HYPOTHECATED_TO_KINARA",
                                 type: "select",
                             },
 

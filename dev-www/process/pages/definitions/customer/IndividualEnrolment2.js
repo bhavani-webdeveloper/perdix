@@ -1545,7 +1545,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 items: [ 
                         {
                             key:"customer.proper&MatchingSignboard",
-                            title:"Proper&Matching Signboard",
+                            title:"PROPER_MATCHING_SIGNBOARD",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
@@ -1559,7 +1559,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key:"customer.shop/ShedOrganized",
-                            title:"Shop/Shed Organized",
+                            title:"SHOP_SHED_ORGANIZED",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale_2"
@@ -1573,112 +1573,112 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key:"customer.customerAttitudetoKinara",
-                            title:"Customer Attitude to Kinara",
+                            title:"CUSTOMER_ATTITUDE_TO_KINARA",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.book-keepingQuality",
-                            title:"Book-keeping Quality",
+                            title:"BOOK-KEEPING_QUALITY",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.challengingchequebounce/feecharge/policies",
-                            title:"Challenging cheque bounce/fee charge/policies",
+                            title:"CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                          {
                             key:"customer.allMachinesoperational?",
-                            title:"All Machines operational?",
+                            title:"ALL_MACHINES_OPERATIONAL?",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.employeeSatisfaction",
-                            title:"Employee Satisfaction",
+                            title:"EMPLOYEE_SATISFACTION",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.political/PoliceConnections",
-                            title:"Political/Police Connections",
+                            title:"POLITICAL_POLICE_CONNECTIONS",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.multipleProducts(morethan3)",
-                            title:"Multiple Products(more than 3)",
+                            title:"MULTIPLE_PRODUCTS_MORE_THAN_3",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.multipleBuyers(morethan3)",
-                            title:"Multiple Buyers(more than 3)",
+                            title:"MULTIPLE_BUYERS_MORE_THAN_3",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.seasonalBusiness",
-                            title:"Seasonal Business",
+                            title:"SEASONAL_BUSINESS",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.incomeStability",
-                            title:"Income Stability",
+                            title:"INCOME STABILITY",
                             type:"radios",
                             required:"true",
                             enumCode: "income_stability"
                         },
                         {
                             key:"customer.utilizationofbusinesspremises ",
-                            title:"Utilization of Business Premises ",
+                            title:"UTILIZATION_OF_BUSINESS_PREMISES ",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale"
                         },
                         {
                             key:"customer.approachforthebusinesspremises",
-                            title:"Approach for the Business Premises",
+                            title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
                             type:"radios",
                             required:"true",
                             enumCode:"connectivity_status "
                         },
                         {
                             key:"customer.safetyMeasuresforEmployees ",
-                            title:"Safety Measures for Employees",
+                            title:"SAFETY_MEASURES_FOR_EMPLOYEES",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale"
                         },
                          {
                             key:"customer.childLabourers",
-                            title:"Child Labourers",
+                            title:"CHILD_LABOURERS",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.isthebusinessineffectingenvironment?",
-                            title:"Is The Business In Effecting Environment?",
+                            title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT?",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.stock/materialmanagement",
-                            title:"Stock/Material Management",
+                            title:"STOCK_MATERIAL_MANAGEMENT",
                             type:"radios",
                             required:"true",
                             enumCode: "status_scale"
@@ -1695,26 +1695,27 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         key:"customer.physicalAssets",
                         type:"array",
                         startEmpty: true,
-                        title:"PHYSICAL_ASSTES",
+                        title:"PHYSICAL_ASSETS",
                             items:[
                                 {
                                     key: "customer.physicalAssets[].assetType",
                                     title: "ASSET_TYPE",
-                                    type: "select"
+                                    type: "select",
+                                    enumCode: "asset_type"
                                 },
                                 {
                                     key: "customer.physicalAssets[].vehicleModel",
-                                    title: "Vehicle make & model",
+                                    title: "VEHICLE_MAKE_MODEL",
                                     type: "string"
                                 },
                                 {
                                     key: "customer.physicalAssets[].registeredOwner",
-                                    title: "Registered Owner",
+                                    title: "REGISTERED_OWNER",
                                     type: "string"
                                 },
                                 {
                                      key: "customer.physicalAssets[].ownedAssetValue",
-                                    title: "Value of the asset",
+                                    title: "VALUE_OF_THE_ASSET",
                                     type: "string"
                                 },
                             ]

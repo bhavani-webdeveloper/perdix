@@ -747,17 +747,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 items:[
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
-                        title: "No Of Male Employees",
+                        title: "NO_OF_MALE_EMPLOYEES",
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.noOfMaleEmployees",
-                        title: "No Of Female Employees",
+                        title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.averagemonthlysalary",
-                        title: "Average Monthly Salary",
+                        title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
 
@@ -786,7 +786,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             
                             {
                                 key: "customer.buyerDetails[].paymentDate",
-                                title: "Payment Date",
+                                title: "PAYMENT_DATE",
                                 type: "date"
                             },
                             {
@@ -802,7 +802,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].product",
-                                title:"Product",
+                                title:"PRODUCT",
                                 type: "string"
                             }, 
                             {
@@ -820,13 +820,99 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"Receivables Outstanding / Customer Credit",
+                                title:"RECEIBLES_OOUSTADING_CUSTOMER_CREDIT",
                                 type: "number"
                             },
                         ]
                     }
                 ]
             },
+            {
+               type:"box",
+               title:"MACHINARY",
+               condition: "model.currentStage == 'Application'",
+                items:[
+                    {
+                      key:"customer.machinery",
+                       type:"array",
+                       startEmpty: true,
+                       title:"MACHINARY SECTION",
+                       items:[
+                            {
+                                key:"customer.machinery[].machineDescription",
+                                title:"MACHINE_DESCRIPTION",
+                                type: "string"
+                            },
+                            {
+                                key: "customer.machinery[].manufacturerName",
+                                title:"MANUFACTURER_NAME",
+                                type: "string"
+                            },
+                            {
+                                key: "customer.machinery[].machineType",
+                                title:"MACHINE_TYPE",
+                                type: "select",
+                                enumCode: "collateral_type"
+                            },
+                            {
+                                key: "customer.machinery[].machineModel",
+                                title:"MACHINE_MODEL",
+                                type: "string"
+                            },
+                            {
+                                key: "customer.machinery[].serialNumber",
+                                title:"SERIAL_NUMBER",
+                                type: "string"
+                            },
+                            {
+                                key: "customer.machinery[].purchasePrice",
+                                title:"PURCHASE_PRICE",
+                                type: "number"
+                            },
+                            {
+                                key: "customer.machinery[].machinePurchasedYear",
+                                title:"MACHINE_PURCHASED_YEAR",
+                                type: "number"
+                            },
+                            {
+                                key: "customer.machinery[].presentValue",
+                                title:"PRESSENT_VALUE",
+                                type: "number"
+                            },
+                            {
+                                key: "customer.machinery[].isTheMachineNew",
+                                title:"IS_THE_MACHINE_NEW? ",
+                                type: "radios",
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "customer.machinery[].fundingSource",
+                                title:"FUNDING_SOURCE",
+                                type: "select",
+                            },
+                            {
+                                key: "customer.machinery[].isTheMachineHypothecated",
+                                title:"IS_THE_MACHINE_HYPOTHECATED",
+                                type: "radios",
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "customer.machinery[].machinePermanentlyFixedToBuilding",
+                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                type: "radios",
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "customer.machinery[].machineBillsDocId",
+                                title:"MACHINE_BILLS",
+                                "category":"customer",
+                                "subCategory":"customer",
+                                type: "file",
+                            },
+                         ]
+                     }
+                 ]
+            },                
             {
                type:"box",
                key:"customer.verification",
@@ -842,16 +928,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                      {
                         key:"customer.verification.businessName",
                         title:"BUSINESS_NAME",
-                        type:"string"`
+                        type:"string"
                     },
                     {
                         key:"customer.verification.fullNameofPOC",
-                        title:"Full Name Of POC",
+                        title:"FULL_NAME_OF_POC",
                         type:"string"
                     },
                     {
                         key:"customer.verification.mobileNo",
-                        title:"Mobile No",
+                        title:"MOBILE_NO",
                         type:"number"
                     },
                     {
@@ -866,7 +952,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key:"customer.verification.self-reportedIncome",
-                        title:"Self-Reported Income",
+                        title:"SELF_REPORTED_INCOME",
                         type:"number"
                     },
 
