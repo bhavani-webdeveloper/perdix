@@ -1462,6 +1462,153 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 ]
             },
             {
+               type: "box",
+                title: "PROXY_INDICATORS",
+                items: [ 
+                        {
+                            key:"customer.proper&MatchingSignboard",
+                            title:"Proper&Matching Signboard",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.bribeOffered",
+                            title:"BRIBE_OFFERED",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.shop/ShedOrganized",
+                            title:"Shop/Shed Organized",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "shopshed_organized"
+                        },
+                        {
+                            key:"customer.inIndustrialArea",
+                            title:"IN_INDUSTRIAL_AREA",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.customerAttitudetoKinara",
+                            title:"Customer Attitude to Kinara",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "shopshed_organized"
+                        },
+                        {
+                            key:"customer.book-keepingQuality",
+                            title:"Book-keeping Quality",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "shopshed_organized"
+                        },
+                        {
+                            key:"customer.challengingchequebounce/feecharge/policies",
+                            title:"Challenging cheque bounce/fee charge/policies",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                         {
+                            key:"customer.allMachinesoperational?",
+                            title:"All Machines operational?",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.employeeSatisfaction",
+                            title:"Employee Satisfaction",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "shopshed_organized"
+                        },
+                        {
+                            key:"customer.political/PoliceConnections",
+                            title:"Political/Police Connections",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.multipleProducts(morethan3)",
+                            title:"Multiple Products (more than 3)",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.multipleBuyers(morethan3)",
+                            title:"Multiple Buyers (more than 3)",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.seasonalBusiness",
+                            title:"Seasonal Business",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.incomeStability",
+                            title:"Income Stability",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "income_stability"
+                        },
+                        {
+                            key:"customer.utilizationofbusinesspremises ",
+                            title:"Utilization of Business Premises ",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "safetyMeasuresfor_employees"
+                        },
+                        {
+                            key:"customer.approachforthebusinesspremises",
+                            title:"Approach for the Business Premises",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"approachforthe_businesspremises "
+                        },
+                        {
+                            key:"customer.safetyMeasuresforEmployees ",
+                            title:"Safety Measures for Employees",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "safetyMeasuresfor_employees"
+                        },
+                         {
+                            key:"customer.childLabourers",
+                            title:"Child Labourers",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.isthebusinessineffectingenvironment?",
+                            title:"Is The Business In Effecting Environment?",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.stock/materialmanagement",
+                            title:"Stock/Material Management",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "safetyMeasuresfor_employees"
+                        },
+
+                    ]
+            },
+            {
                 "type": "actionbox",
                 "condition": "!model.customer.id || model.customer.currentStage=='Completed'",
                 "items": [/*{
