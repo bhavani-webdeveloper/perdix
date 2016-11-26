@@ -7,7 +7,8 @@
 			"title": "Origination",
 			"iconClass": "fa fa-users",
 			"items": [
-				"Page/Bundle/loans.individual.screening.ScreeningInput"
+				"Page/Bundle/loans.individual.screening.ScreeningInput",
+				"Page/Engine/psychometric.Queue"
 			]
 		},
 		{
