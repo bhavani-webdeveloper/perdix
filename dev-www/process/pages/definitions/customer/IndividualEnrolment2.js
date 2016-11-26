@@ -1482,8 +1482,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 ]
             },
             {
-               type: "box",
+                type: "box",
                 title: "PROXY_INDICATORS",
+                condition: "model.currentStage=='FieldAppraisal'",
                 items: [ 
                         {
                             key:"customer.proper&MatchingSignboard",
