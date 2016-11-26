@@ -1557,14 +1557,14 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         },
                         {
                             key:"customer.multipleProducts(morethan3)",
-                            title:"Multiple Products (more than 3)",
+                            title:"Multiple Products(more than 3)",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
                         },
                         {
                             key:"customer.multipleBuyers(morethan3)",
-                            title:"Multiple Buyers (more than 3)",
+                            title:"Multiple Buyers(more than 3)",
                             type:"radios",
                             required:"true",
                             enumCode:"decisionmaker",
