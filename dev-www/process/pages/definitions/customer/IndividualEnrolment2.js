@@ -1504,7 +1504,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title:"Shop/Shed Organized",
                             type:"radios",
                             required:"true",
-                            enumCode: "shopshed_organized"
+                            enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.inIndustrialArea",
@@ -1518,14 +1518,14 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title:"Customer Attitude to Kinara",
                             type:"radios",
                             required:"true",
-                            enumCode: "shopshed_organized"
+                            enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.book-keepingQuality",
                             title:"Book-keeping Quality",
                             type:"radios",
                             required:"true",
-                            enumCode: "shopshed_organized"
+                            enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.challengingchequebounce/feecharge/policies",
@@ -1546,7 +1546,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title:"Employee Satisfaction",
                             type:"radios",
                             required:"true",
-                            enumCode: "shopshed_organized"
+                            enumCode: "status_scale_2"
                         },
                         {
                             key:"customer.political/PoliceConnections",
@@ -1588,21 +1588,21 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title:"Utilization of Business Premises ",
                             type:"radios",
                             required:"true",
-                            enumCode: "safetyMeasuresfor_employees"
+                            enumCode: "status_scale"
                         },
                         {
                             key:"customer.approachforthebusinesspremises",
                             title:"Approach for the Business Premises",
                             type:"radios",
                             required:"true",
-                            enumCode:"approachforthe_businesspremises "
+                            enumCode:"connectivity_status "
                         },
                         {
                             key:"customer.safetyMeasuresforEmployees ",
                             title:"Safety Measures for Employees",
                             type:"radios",
                             required:"true",
-                            enumCode: "safetyMeasuresfor_employees"
+                            enumCode: "status_scale"
                         },
                          {
                             key:"customer.childLabourers",
@@ -1623,7 +1623,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title:"Stock/Material Management",
                             type:"radios",
                             required:"true",
-                            enumCode: "safetyMeasuresfor_employees"
+                            enumCode: "status_scale"
                         },
 
                     ]
