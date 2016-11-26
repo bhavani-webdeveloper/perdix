@@ -136,7 +136,7 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 							icon: "fa fa-eye-slash",
 							fn: function(item, index) {
 								$state.go("Page.PsychometricTest", {
-									pageId: item.id
+									pageId: item.id + ":" + item.applicantId
 								});
 							},
 							isApplicable: function(item, index) {
