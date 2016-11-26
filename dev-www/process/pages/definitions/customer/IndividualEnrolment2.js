@@ -1482,9 +1482,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 ]
             },
             {
-                type: "box",
+               type: "box",
                 title: "PROXY_INDICATORS",
-                condition: "model.currentStage=='FieldAppraisal'",
                 items: [ 
                         {
                             key:"customer.proper&MatchingSignboard",
@@ -1633,11 +1632,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                type:"box",
                title:"PHYSICAL_ASSTES",
                 items:[
-                        {
-                            key:"customer.physicalAssets",
-                            type:"array",
-                            startEmpty: true,
-                            title:"PHYSICAL_ASSTES",
+                    {
+                        key:"customer.physicalAssets",
+                        type:"array",
+                        startEmpty: true,
+                        title:"PHYSICAL_ASSTES",
                             items:[
                                 {
                                     key: "customer.physicalAssets[].assetType",
@@ -1660,7 +1659,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     type: "string"
                                 },
                             ]
-                        }
+                    }
                 ]
             }, 
                         
