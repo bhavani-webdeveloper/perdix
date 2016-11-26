@@ -8,7 +8,8 @@
 			"iconClass": "fa fa-users",
 			"items": [
 				"Page/Bundle/loans.individual.screening.ScreeningInput",
-				"Page/Engine/psychometric.Queue"
+				"Page/Engine/psychometric.Queue",
+				"Page/Engine/loans.individual.booking.ApplicationQueue"
 			]
 		},
 		{

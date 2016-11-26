@@ -138,8 +138,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 								entityManager.setModel('loan.Application', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.Application",
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.Application",
 									pageId: item.id
 								});
 							},
