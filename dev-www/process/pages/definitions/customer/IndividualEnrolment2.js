@@ -1630,6 +1630,41 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     ]
             },
             {
+               type:"box",
+               title:"PHYSICAL_ASSTES",
+                items:[
+                        {
+                            key:"customer.physicalAssets",
+                            type:"array",
+                            startEmpty: true,
+                            title:"PHYSICAL_ASSTES",
+                            items:[
+                                {
+                                    key: "customer.physicalAssets[].assetType",
+                                    title: "ASSET_TYPE",
+                                    type: "select"
+                                },
+                                {
+                                    key: "customer.physicalAssets[].vehicleModel",
+                                    title: "Vehicle make & model",
+                                    type: "string"
+                                },
+                                {
+                                    key: "customer.physicalAssets[].registeredOwner",
+                                    title: "Registered Owner",
+                                    type: "string"
+                                },
+                                {
+                                     key: "customer.physicalAssets[].ownedAssetValue",
+                                    title: "Value of the asset",
+                                    type: "string"
+                                },
+                            ]
+                        }
+                ]
+            }, 
+                        
+            {
                 "type": "actionbox",
                 "condition": "!model.customer.id || model.customer.currentStage=='Completed'",
                 "items": [/*{
