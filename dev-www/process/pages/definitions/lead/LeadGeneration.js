@@ -12,10 +12,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
 
                 model.lead = model.lead || {};
-                model.branchId = SessionStore.getBranchId() + '';
+                //model.branchId = SessionStore.getBranchId() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                 model = Utils.removeNulls(model, true);
-                model.lead.branchName = SessionStore.getBranch();
+                //model.lead.branchName = SessionStore.getBranchId() + '';
+                var branch = model.lead.branchName;
                 $log.info("lead generation page got initiated");
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
@@ -47,11 +48,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     "type": "box",
                     "title": "LEAD_PROFILE",
                     "items": [{
-                            key: "lead.branchName",
-                            readonly: true
+                            key: "lead.branchId",
+                            type: "select",
                         }, {
                             key: "lead.centreId",
-                            type: "select"
+                            type: "select",
+                            parentEnumCode: "branch_id",
+                            screenFilter: true
                         }, {
                             key: "lead.id",
                             condition: "model.lead.id",
@@ -129,10 +132,24 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             }
                                         }, {
                                             key: "lead.maritalStatus",
-                                            type: "select"
+                                            type: "select",
+                                            titleMap: {
+                                                "MARRIED": "MARRIED",
+                                                "UNMARRIED": "UNMARRIED",
+                                                "DIVORCED": "DIVORCED",
+                                                "SEPARATED": "SEPARATED",
+                                                "WIDOW(ER)": "WIDOW(ER)",
+                                            }
                                         }, {
                                             key: "lead.educationStatus",
                                             type: "select",
+                                            titleMap: {
+                                                "Below SSLC": "Below SSLC",
+                                                "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                                "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                                "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                                "More than post graduation": "MoreThanPostGraduation",
+                                            }
                                         }]
                                     }]
                                 },
@@ -166,11 +183,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         }
                                     }, {
                                         key: "lead.maritalStatus",
-                                        type: "select"
+                                        type: "select",
+                                        titleMap: {
+                                            "MARRIED": "MARRIED",
+                                            "UNMARRIED": "UNMARRIED",
+                                            "DIVORCED": "DIVORCED",
+                                            "SEPARATED": "SEPARATED",
+                                            "WIDOW(ER)": "WIDOW(ER)",
+                                        }
                                     }, {
                                         key: "lead.educationStatus",
                                         type: "select",
-                                    }, ]
+                                        titleMap: {
+                                            "Below SSLC": "Below SSLC",
+                                            "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
+                                            "Graduate/Equivalent to graduate": "Graduate/Equivalent",
+                                            "Post graduate&equivalent": "PostGraduate & Equivalent",
+                                            "More than post graduation": "MoreThanPostGraduation",
+                                        }
+                                    }]
                                 },
 
                                 {
@@ -239,7 +270,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     items: [{
+                        key: "lead.interestedInProduct",
+                        type: "radios",
+                        enumCode: "decisionmaker",
+                        onChange: "actions.changeStatus(modelValue, form, model)"
+                    }, {
                         key: "lead.productCategory",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         type: "select",
                         titleMap: {
                             "Asset": "Asset",
@@ -248,16 +285,27 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         }
                     }, {
                         key: "lead.productSubCategory",
+                        condition: "model.lead.interestedInProduct==='YES'",
                         type: "select",
                         titleMap: {
                             "Loan": "Loan",
                             "investment": "investment"
                         }
                     }, {
-                        key: "lead.interestedInProduct",
-                        type: "radios",
-                        enumCode: "decisionmaker",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
+                        key: "lead.loanAmountRequested",
+                        type: "amount",
+                        condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                    }, {
+                        key: "lead.loanPurpose1",
+                        condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                        type: "select",
+                        titleMap: {
+                            "AssetPurchase": "AssetPurchase",
+                            "WorkingCapital": "WorkingCapital",
+                            "BusinessDevelopment": "BusinessDevelopment",
+                            "LineOfCredit": "LineOfCredit",
+
+                        }
                     }, {
                         key: "lead.productRequiredBy",
                         type: "select",
@@ -281,21 +329,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         type: "date",
                         onChange: "actions.changeStatus(modelValue, form, model)"
                     }, {
-                        key: "lead.loanPurpose1",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                        type: "select",
-                        titleMap: {
-                            "AssetPurchase": "AssetPurchase",
-                            "WorkingCapital": "WorkingCapital",
-                            "BusinessDevelopment": "BusinessDevelopment",
-                            "LineOfCredit": "LineOfCredit",
-
-                        }
-                    }, {
-                        key: "lead.loanAmountRequested",
-                        type: "amount",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                    }, {
                         type: "fieldset",
                         condition: "model.lead.interestedInProduct==='YES'",
                         title: "PRODUCT_ELIGIBILITY",
@@ -312,9 +345,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         items: [{
                             key: "lead.productRejectReason",
                             type: "select",
+                            condition: "model.lead.interestedInProduct==='NO'",
                             titleMap: {
-                                "Reason1": "Reason1",
-                                "Reason2": "Reason2"
+                                "Has many running loans": "Has many running loans",
+                                "Available from banks": "Available from banks",
+                                "Not planned for now": "Not planned for now",
+                                "Available from banks": "Available from banks",
+                                "Interest rate is not satisfactory": "Interest rate is not satisfactory",
+                                "Too many documents": "Too many documents",
+                                "Interested only for cash collection": "Interested only for cash collection"
+                            }
+                        }, {
+                            key: "lead.productRejectReason",
+                            type: "select",
+                            condition: "model.lead.eligibleForProduct ==='NO'",
+                            titleMap: {
+                                "High Interest rate": "High Interest rate",
+                                "Negative": "Negative",
+                                "Not Kinara's target segment": "Not Kinara's target segment",
+                                "Not having proper documents": "Not having proper documents",
                             }
                         }, {
                             key: "lead.additionalRemarks",

@@ -225,8 +225,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
                                         type: "select",
                                         titleMap: {
-                                            "NEW": "NEW",
-                                            "OLD": "OLD",
+                                            "VHFPL": "VHFPL",
                                         },
                                     }]
                                 }]
@@ -237,7 +236,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 items: [{
                                     key: "loanMonitoringDetails.loanAmountUsed",
                                     type: "number",
-                                     "onChange": function(modelValue, form, model) {
+                                    "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
                                         model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
                                     }
@@ -247,6 +246,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                 }, {
                                     key: "loanMonitoringDetails.verifiedBy",
+                                    type:"select",
+                                     titleMap: {
+                                            "What was Loan Amount used for?": "What was Loan Amount used for?",
+                                        },
+                                    
                                 }, {
                                     key: "loanMonitoringDetails.amountUsedPercentage",
                                     "readonly": true,
@@ -254,9 +258,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                     "onChange": function(modelValue, form, model) {
+                                    "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.loanAmountUsed - model.loanMonitoringDetails.intendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
@@ -267,10 +274,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "number",
-                                     "onChange": function(modelValue, form, model) {
+                                   /* "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                        model.loanMonitoringDetails.nonIntendedPurposePercentage =parseInt(a.toFixed());
-                                    }
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                                    }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
@@ -325,9 +332,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 items: [{
                                     key: "loanMonitoringDetails.repayedDebitAmount",
                                     type: "number",
-                                     "onChange": function(modelValue, form, model) {
+                                    "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.repayedDebitAmount) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
-                                        model.loanMonitoringDetails.amountUsedPercentage =parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.monthlyInterestForDebit",
@@ -341,12 +348,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     key: "loanMonitoringDetails.amountUsedPercentage",
                                     type: "integer",
                                     "readonly": true
-                                },{
+                                }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                     "onChange": function(modelValue, form, model) {
+                                    "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
+                                        model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.repayedDebitAmount - model.loanMonitoringDetails.intendedPurposeAmount;
+                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
+
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
@@ -357,10 +368,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "number",
-                                     "onChange": function(modelValue, form, model) {
+                                    "readonly": true,
+                                    /*"onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.nonIntendedPurposePercentage =parseInt(a.toFixed());
-                                    }
+                                    }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",

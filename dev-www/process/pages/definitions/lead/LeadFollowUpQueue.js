@@ -23,8 +23,12 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 			"title": "LEAD_FOLLOW_UP",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch_id = branchId;
+				model.branch = branch;
+				model.centre =centreName[0];
+				$log.info(centreName[0]);
 				$log.info("search-list sample got initialized");
+				var branchId = SessionStore.getBranchId();
+				var branchName = SessionStore.getBranch();
 			},
 			definition: {
 				title: "SEARCH_LEAD",

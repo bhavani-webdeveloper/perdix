@@ -44,9 +44,9 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 					}, {
 						"key": "businessName"
 					}, {
-						"key": "leadStatus"
+						"key": "area"
 					}, {
-						"key": "followUpDate"
+						"key": "cityTownVillage"
 					}
 				],
 				autoSearch: true,

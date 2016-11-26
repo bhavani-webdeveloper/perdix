@@ -79,7 +79,12 @@
          "branchName": {
             "type": "string",
             "title": "HUB_NAME",
-            "enumCode": "branch_id"
+            "enumCode": "branch_id" 
+         },
+         "branchId": {
+            "type": "number",
+            "title": "HUB_NAME",
+            "enumCode": "branch_id" 
          },
          "centreName": {
             "type": "number",
@@ -170,8 +175,8 @@
          },
          "educationStatus": {
             "type": "string",
-            "title": "EDUCATION_STATUS",
-            "enumCode": "education"
+            "title": "EDUCATION_STATUS"
+            
          },
          "gender": {
             "type": "string",
@@ -208,8 +213,8 @@
          },
          "maritalStatus": {
             "type": "string",
-            "title": "MARITAL_STATUS",
-            "enumCode": "marital_status"
+            "title": "MARITAL_STATUS"
+           
          },
          "customerType": {
             "type": "string",

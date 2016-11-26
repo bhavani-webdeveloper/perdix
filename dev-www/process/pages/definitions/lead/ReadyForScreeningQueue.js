@@ -1,43 +1,79 @@
 irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getBranch();
+		var branches = formHelper.enum('branch_id').data;
+					var centres = formHelper.enum('centre').data;
+					var branchCode;
+					var centreName =[];
+					for (var i = 0; i < branches.length; i++) {
+						if (branches[i].name== branch)
+							branchCode = branches[i].code;
+						    $log.info(branchCode);
+					}
+					for (var i = 0; i < centres.length; i++) {
+						if ((centres[i].parentCode) == branchCode) {
+							centreName.push(centres[i].name);
+						}
+					}
 		return {
 			"type": "search-list",
 			"title": "READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
+				model.centre =centreName[0];
+				$log.info(centreName[0]);
 				$log.info("search-list sample got initialized");
+				var branchId = SessionStore.getBranchId();
+				var branchName = SessionStore.getBranch();
 			},
 			definition: {
 				title: "SEARCH_LEAD",
 				searchForm: [
-					"*"
+					// "*"
+					{
+						"key": "branch_id",
+						"type": "select"
+					}, {
+						"key": "centre",
+						"type": "select",
+						"parentEnumCode": "branch_id"
+					}, {
+						"key": "leadName"
+					}, {
+						"key": "businessName"
+					}, {
+						"key": "area"
+					}, {
+						"key": "cityTownVillage"
+					}
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch": {
+						"branch_id": {
 							"title": "HUB_NAME",
-							"type": "string",
-							"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
+							"type": ["null", "number"],
+							"enumCode": "branch_id" //,
+								// "x-schema-form": {
+								// 	"type": "select",
+								// 	"screenFilter": true
+								// }
 						},
 						"centre": {
 							"title": "SPOKE_NAME",
-							"type": "string",
-							"enumCode": "centre",
-							"x-schema-form": {
-								"type": "select",
-								"filter": {
-									"parentCode as branch": "model.branch"
-								},
-								"screenFilter": true
-							}
+							"type": ['null', 'number'],
+							"enumCode": "centre" //,
+								// "x-schema-form": {
+								// 	"type": "select",
+								// 	"filter": {
+								// 		"parentCode as branch": "model.branch"
+								// 	},
+								// 	"screenFilter": true
+								// }
 						},
 						"leadName": {
 							"title": "LEAD_NAME",
