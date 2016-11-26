@@ -14,19 +14,34 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
         "title": "INDIVIDUAL_ENROLLMENT",
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj) {
-            model.customer = model.customer || {};
-            //model.branchId = SessionStore.getBranchId() + '';
+            if (_.hasIn(model, 'loanRelation')){
+                console.log(model.loanRelation);
+                var custId = model.loanRelation.customerId;
+                Enrollment.getCustomerById({id:custId})
+                    .$promise
+                    .then(function(res){
+                        model.customer = res;
+                    }, function(httpRes){
+                        PageHelper.showErrors(httpRes);
+                    })
+                    .finally(function(){
+                        PageHelper.hideLoader();
+                    })
+            } else {
+                model.customer = model.customer || {};
+                //model.branchId = SessionStore.getBranchId() + '';
 
-            model.customer.date = model.customer.date || Utils.getCurrentDate();
-            model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+                model.customer.date = model.customer.date || Utils.getCurrentDate();
+                model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
 
-            model = Utils.removeNulls(model,true);
-            //model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = 'Individual';
-            BundleManager.pushEvent("on-customer-load", {name: "SHAHAL"})
+                model = Utils.removeNulls(model,true);
+                //model.customer.kgfsName = SessionStore.getBranch();
+                model.customer.customerType = 'Individual';
+                BundleManager.pushEvent("on-customer-load", {name: "11"})
 
-            if (bundlePageObj){
-                model._bundlePageObj = bundlePageObj;
+                if (bundlePageObj){
+                    model._bundlePageObj = bundlePageObj;
+                }    
             }
         },
         eventListeners: {
@@ -57,7 +72,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type":"box",
                 "title":"KYC",
-                "condition": "model.currentStage=='Screening'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items":[
                     {
                         "key": "customer.id",
@@ -98,8 +113,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 'branchName': branchName ||SessionStore.getBranch(),
                                 'firstName': inputModel.firstName,
                                 'centreId':inputModel.centreId,
-                                'customerType':"individual",
-                                'stage': "Completed"
+                                'customerType':"individual"
                             }).$promise;
                             return promise;
                         },
@@ -479,6 +493,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "PERSONAL_INFORMATION",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [
                     {
                         key: "customer.customerBranchId",
@@ -627,6 +642,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [
                     "customer.mobilePhone",
                     "customer.landLineNo",
@@ -769,6 +785,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
@@ -931,6 +948,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                type:"box",
                title:"T_LIABILITIES",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                items:[
                    {
                        key:"customer.liabilities",
@@ -1266,6 +1284,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "T_HOUSE_VERIFICATION",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [
                     //{
                     //    "key": "customer.firstName",
@@ -1335,6 +1354,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",

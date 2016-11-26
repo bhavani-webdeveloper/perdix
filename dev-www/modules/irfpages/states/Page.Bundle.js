@@ -110,7 +110,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         pageObj.title = bundlePage.title;
         pageObj.id = bundlePage.id;
         pageObj.bundlePage = bundlePage;
-        pageObj.model = {};
+        pageObj.model = bundlePage.model ||  {};
 
         pageObj.error = false;
         try {
@@ -240,32 +240,33 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         BundleLog.info("Ready to accept events");
 
         BundleLog.info("Ready to call pre_pages_initialize");
-        $scope.bundlePage.pre_pages_initialize($scope.bundleModel);
+        var q_pre_pages_init_promise = $q.resolve($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
+        q_pre_pages_init_promise.then(function(){
+            bundle.pages = $scope.bundlePage.bundlePages;
+            for (i in bundle.pages) {
+                bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
+                bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
+                var bundlePage = _.cloneDeep(bundle.pages[i]);
+                bundlePage.openPagesCount = 0;
+                if (bundlePage.minimum > 0) {
+                    for (var i = 0; i < bundlePage.minimum; i++) {
+                        var openPage = initializePage(bundlePage);
+                        $scope.pages.push(openPage);
+                    };
+                    bundlePage.openPagesCount = bundlePage.minimum;
+                }
+                if (bundlePage.maximum > bundlePage.minimum) {
+                    $scope.addTabMenu.push(bundlePage);
+                }
+            }
+
+            BundleLog.info("Ready to call post_pages_initialize");
+            $scope.bundlePage.post_pages_initialize($scope.bundleModel);
+            BundleLog.info("Call done post_pages_initialize");
+        }, function(){
+            /* Reject from pre_pages_initialize */
+        })
         BundleLog.info("Call done pre_pages_initialize");
-
-
-        bundle.pages = $scope.bundlePage.bundlePages;
-        for (i in bundle.pages) {
-            bundle.pages[i].minimum = bundle.pages[i].minimum || 0;
-            bundle.pages[i].maximum = bundle.pages[i].maximum || 1000;
-            var bundlePage = _.cloneDeep(bundle.pages[i]);
-            bundlePage.openPagesCount = 0;
-            if (bundlePage.minimum > 0) {
-                for (var i = 0; i < bundlePage.minimum; i++) {
-                    var openPage = initializePage(bundlePage);
-                    $scope.pages.push(openPage);
-                };
-                bundlePage.openPagesCount = bundlePage.minimum;
-            }
-            if (bundlePage.maximum > bundlePage.minimum) {
-                $scope.addTabMenu.push(bundlePage);
-            }
-        }
-
-        BundleLog.info("Ready to call post_pages_initialize");
-        $scope.bundlePage.post_pages_initialize($scope.bundleModel);
-        BundleLog.info("Call done post_pages_initialize");
-
 
     });
 }]);

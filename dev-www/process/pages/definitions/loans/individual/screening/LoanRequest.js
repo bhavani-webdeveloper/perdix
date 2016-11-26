@@ -11,19 +11,25 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "title": "LOAN_REQUEST",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
-            model.customer = model.customer || {};
-            //model.branchId = SessionStore.getBranchId() + '';
-            //model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = "Enterprise";
-            model.loanAccount = {};
-            model.loanAccount.loanCustomerRelations = [];
 
-            /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
-            model.loanAccount.productCode = 'TLAPS';
-            model.loanAccount.tenure = 12;
-            model.loanAccount.isRestructure = false;
-            model.loanAccount.documentTracking = "PENDING";
-            /* END OF TEMP CODE */
+            if (_.hasIn(model, 'loanAccount')){
+
+            } else {
+                model.customer = model.customer || {};
+                //model.branchId = SessionStore.getBranchId() + '';
+                //model.customer.kgfsName = SessionStore.getBranch();
+                model.customer.customerType = "Enterprise";
+
+                model.loanAccount = {};
+                model.loanAccount.loanCustomerRelations = [];
+
+                /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
+                model.loanAccount.productCode = 'TLAPS';
+                model.loanAccount.tenure = 12;
+                model.loanAccount.isRestructure = false;
+                model.loanAccount.documentTracking = "PENDING";    
+                /* END OF TEMP CODE */
+            }
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -94,7 +100,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.loanPurpose2",
                         type: "select",
                         enumCode: "loan_purpose_2",
-                        parentEnumCode: "loan_purpose_1"
+                        parentEnumCode: "loan_purpose_1",
+                        parentValueExpr: "model.loanAccount.loanPurpose2"
                     },
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
@@ -193,7 +200,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             {
                 "type": "actionbox",
-                "condition": "model.loanAccount.customerId",
+                "condition": "model.loanAccount.customerId &&  !model.loanAccount.id",
                 "items": [
                     {
                         "type": "button",

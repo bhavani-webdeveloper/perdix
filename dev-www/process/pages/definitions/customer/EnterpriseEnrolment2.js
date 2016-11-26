@@ -833,6 +833,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                key:"customer.verification",
+               condition: "model.loanAccount.currentStage=='Application'",
                title:"REFERENCES",
                 items:[
                     {
