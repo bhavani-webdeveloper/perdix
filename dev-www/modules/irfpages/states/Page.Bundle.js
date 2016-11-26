@@ -228,7 +228,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
         /* Loading the page */
         try {
-            $scope.bundlePage = $injector.get(irf.page($scope.pageName));
+            $scope.bundlePage = _.cloneDeep($injector.get(irf.page($scope.pageName)));
         } catch (e) {
             BundleLog.error(e);
             $scope.error = true;

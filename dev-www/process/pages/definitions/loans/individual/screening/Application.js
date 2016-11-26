@@ -67,6 +67,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                     var coApplicants = [];
                                     var guarantors = [];
                                     var urnNos = [];
+                                    var loanCustomerId = res.customerId;
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
@@ -79,6 +80,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                         }
                                         /* TODO HANDLE Guarantors */
                                     }
+
 
                                     Queries.getCustomerBasicDetails({urns: urnNos})
                                         .then(function(customers){
@@ -111,6 +113,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                             }
 
                                             $this.bundlePages.push({
+                                                pageName: 'customer.EnterpriseEnrolment2',
+                                                title: 'BUSINESS',
+                                                pageClass: 'business',
+                                                minimum: 1,
+                                                maximum: 1,
+                                                model: {
+                                                    loanRelation: {customerId: loanCustomerId}
+                                                }
+                                            })
+
+                                            $this.bundlePages.push({
                                                 pageName: 'loans.individual.screening.LoanRequest',
                                                 title: 'LOAN_REQUEST',
                                                 pageClass: 'loan-request',
@@ -138,7 +151,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
                     BundleManager.broadcastEvent('origination-stage', 'Application');
-                    
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){

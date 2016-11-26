@@ -240,11 +240,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?").then(function(){
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
-                    IndividualLoan.create(reqData,function(resp,headers){
-                        $state.go('Page.Landing', null);
-                    }, function(httpRes){
-                        PageHelper.showErrors(httpRes);
-                    })
+                    PageHelper.showLoader();
+                    IndividualLoan.create(reqData)
+                        .$promise
+                        .then(function(res){
+                            $state.go('Page.Landing', null);    
+                        }, function(httpRes){
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
 
                 })
             },
@@ -254,16 +260,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
-                            PageHelper.showLoader();
+                            
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
                             reqData.loanAccount.loanAmountRequested = reqData.loanAccount.loanAmount;
-                            IndividualLoan.create(reqData, function(resp, headers){
-                                model.loanAccount = reqData.loanAccount;
-                                PageHelper.hideLoader();
-                            }, function(httpResp){
+                            PageHelper.showLoader();
+                            IndividualLoan.create(reqData)
+                                .$promise
+                                .then(function(res){
+                                    model.loanAccount = reqData.loanAccount;    
+                                }, function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(httpRes){
+                                    PageHelper.hideLoader();
+                                })
+                            
 
-                            })
                         }
                     );
             }

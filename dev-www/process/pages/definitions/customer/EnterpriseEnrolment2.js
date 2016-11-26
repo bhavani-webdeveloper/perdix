@@ -11,14 +11,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "title": "ENTITY_ENROLLMENT",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj) {
-            if (bundlePageObj){
-                model._bundlePageObj = bundlePageObj;
+            if (_.hasIn(model, 'loanRelation')){
+                console.log(model.loanRelation);
+                var custId = model.loanRelation.customerId;
+                Enrollment.getCustomerById({id:custId})
+                    .$promise
+                    .then(function(res){
+                        model.customer = res;
+                    }, function(httpRes){
+                        PageHelper.showErrors(httpRes);
+                    })
+                    .finally(function(){
+                        PageHelper.hideLoader();
+                    })
+            } else {
+                if (bundlePageObj){
+                    model._bundlePageObj = bundlePageObj;
+                }
+                model.customer = model.customer || {};
+                //model.branchId = SessionStore.getBranchId() + '';
+                //model.customer.kgfsName = SessionStore.getBranch();
+                model.customer.customerType = "Enterprise";
+                model.customer.enterpriseCustomerRelations = [];
             }
-            model.customer = model.customer || {};
-            //model.branchId = SessionStore.getBranchId() + '';
-            //model.customer.kgfsName = SessionStore.getBranch();
-            model.customer.customerType = "Enterprise";
-            model.customer.enterpriseCustomerRelations = [];
+            
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -65,6 +81,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     };
 
                     model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                }
+            },
+            "origination-stage": function(bundleModel, model, obj){
+                model.currentStage = obj
+                if (obj =='ScreeningReview') {
+                    pageParams.readonly = true;
                 }
             }
         },
@@ -616,8 +638,70 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 ]
             },
-            
-            
+            {
+               type:"box",
+               title:"CUSTROMER_BUYER_DETAILS",
+                items:[
+                    {
+                      key:"customer.buyerDetails",
+                       type:"array",
+                       startEmpty: true,
+                       title:"BUYER_DETAILS",
+                       items:[
+                            {
+                                key: "customer.buyerDetails[].buyerName",
+                                title: "BUYER_NAME",
+                                type: "string"
+                            }, 
+                            {
+                                key: "customer.buyerDetails[].customerSince",
+                                title: "CUSTOMER_SINCE",
+                                type: "date"
+                            },
+                            
+                            {
+                                key: "customer.buyerDetails[].paymentDate",
+                                title: "Payment Date",
+                                type: "date"
+                            },
+                            {
+                                key: "customer.buyerDetails[].paymentFrequency",
+                                title: "PAYMENT_FREQUENCY",
+                                type: "select",
+                                enumCode: "payment_frequency"
+                            },
+                            {
+                                key: "customer.buyerDetails[].paymentTerms",
+                                title: "PAYEMNT_TERMS",
+                                type: "number"
+                            },
+                            {
+                                key: "customer.buyerDetails[].product",
+                                title:"Product",
+                                type: "string"
+                            }, 
+                            {
+                                key: "customer.buyerDetails[].sector",
+                                title: "SECTOR",
+                                type: "select",
+                                enumCode: "businessSector"
+                            },
+                            {
+                                key: "customer.buyerDetails[].subSector",
+                                title: "SUBSECTOR",
+                                type: "select",
+                                parentEnumCode: "businessSector",
+                                enumCode: "businessSubSector"
+                            },
+                            {
+                                key: "customer.buyerDetails[].receivablesOutstanding",
+                                title:"Receivables Outstanding / Customer Credit",
+                                type: "number"
+                            },
+                        ]
+                    }
+                ]
+            },
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
@@ -651,8 +735,39 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             items:[
                                 {
                                     key: "customer.incomeThroughSales[].buyerName",
-                                    title: "BUYER_NAME",
-                                    type: "select"
+                                    type: "lov",
+                                    autolov: true,
+                                    title:"BUYER_NAME",
+                                    bindMap: {
+                                    },
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model, context) {
+                                        var out = [];
+                                        for (var i=0; i<model.customer.buyerDetails.length; i++){
+                                            out.push({
+                                                name: model.customer.buyerDetails[i].buyerName,
+                                                value: model.customer.buyerDetails[i].buyerName
+                                            })
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function(valueObj, model, context){
+                                        if (_.isUndefined(model.customer.incomeThroughSales[context.arrayIndex])) {
+                                            model.customer.incomeThroughSales[context.arrayIndex] = {};
+                                        }
+
+                                        model.customer.incomeThroughSales[context.arrayIndex].buyerName = valueObj.value;
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
                                 },
                                 {
                                     key: "customer.incomeThroughSales[].incomeType",
@@ -912,54 +1027,62 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                          ]
                      }
                  ]
-            },                
+            },
             {
-               type:"box",
-               key:"customer.verification",
-               title:"REFERENCES",
-                items:[
+                "type": "box",
+                "title": "REFERENCES",
+                "condition": "model.currentStage=='Application'",
+                "items": [
                     {
-                        key:"customer.verification.referenceType",
-                        title:"REFERENCE_TYPE",
-                        type:"select",
-                        required:"true",
-                        enumCode: "business_reference_type"
-                    },
-                     {
-                        key:"customer.verification.businessName",
-                        title:"BUSINESS_NAME",
-                        type:"string"
-                    },
-                    {
-                        key:"customer.verification.fullNameofPOC",
-                        title:"FULL_NAME_OF_POC",
-                        type:"string"
-                    },
-                    {
-                        key:"customer.verification.mobileNo",
-                        title:"MOBILE_NO",
-                        type:"number"
-                    },
-                    {
-                        key:"customer.verification.businessSector",
-                        title:"BUSINESS_SECTOR",
-                        type:"select"
-                    },
-                    {
-                        key:"customer.verification.businessSubSector",
-                        title:"BUSINESS_SUBSECTOR",
-                        type:"select"
-                    },
-                    {
-                        key:"customer.verification.self-reportedIncome",
-                        title:"SELF_REPORTED_INCOME",
-                        type:"number"
-                    },
+                        key:"customer.verifications",
+                        title:"REFERENCES",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.verifications[].referenceType",
+                                title:"REFERENCE_TYPE",
+                                type:"select",
+                                required:"true",
+                                enumCode: "business_reference_type"
+                            },
+                             {
+                                key:"customer.verifications[].businessName",
+                                title:"BUSINESS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].fullNameofPOC",
+                                title:"FULL_NAME_OF_POC",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].mobileNo",
+                                title:"MOBILE_NO",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.verifications[].businessSector",
+                                title:"BUSINESS_SECTOR",
+                                type:"select",
+                                enumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].businessSubSector",
+                                title:"BUSINESS_SUBSECTOR",
+                                type:"select",
+                                enumCode: "businessSubSector",
+                                parentEnumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },
 
-                 ] 
-             },
-                     
-
+                         ] 
+                    },
+                ]
+            },
             {
                 "type": "actionbox",
                 "condition": "!model.customer.id",
