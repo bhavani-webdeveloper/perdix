@@ -108,6 +108,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             key: "lead.gender",
                                             type: "radios"
                                         }, {
+                                            key: "lead.dob",
+                                            type: "date",
+                                            "onChange": function(modelValue, form, model) {
+                                                if (model.lead.dob) {
+                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
+                                                }
+                                            }
+                                        }, {
                                             key: "lead.age",
                                             type: "number",
                                             "onChange": function(modelValue, form, model) {
@@ -117,14 +125,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                                     } else {
                                                         model.lead.dob = moment(new Date()).subtract(model.lead.age, 'years').format('YYYY-MM-DD');
                                                     }
-                                                }
-                                            }
-                                        }, {
-                                            key: "lead.dob",
-                                            type: "date",
-                                            "onChange": function(modelValue, form, model) {
-                                                if (model.lead.dob) {
-                                                    model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
                                                 }
                                             }
                                         }, {
@@ -428,11 +428,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     if (reqData.lead.id) {
                         if (reqData.lead.leadStatus == "FollowUp") {
                             LeadHelper.followData(reqData).then(function(resp) {
-                                $state.go('Page.Landing', null);
+                                $state.go('Page.LeadDashboard', null);
                             });
                         } else {
                             LeadHelper.proceedData(reqData).then(function(resp) {
-                                $state.go('Page.Landing', null);
+                                $state.go('Page.LeadDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;
@@ -441,7 +441,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.Landing', null);
+                                $state.go('Page.LeadDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;

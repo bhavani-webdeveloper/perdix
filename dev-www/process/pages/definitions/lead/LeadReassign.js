@@ -69,10 +69,10 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     title: "ASSIGN_SPOKE",
                     items: [{
                         "key": "lead.branchId",
-                        "title":"HUB_NAME",
+                        "title": "HUB_NAME",
                         "type": "select",
                         "enumCode": "branch_id",
-                        readonly:true
+                        readonly: true
                     }, {
                         key: "lead.centreId",
                         "enumCode": "centre",
@@ -90,8 +90,114 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     }, ]
                 }
             ],
-            schema: function() {
-                return Lead.getLeadSchema().$promise;
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "lead": {
+                        "type": "object",
+                        "required": [
+                            "centerId"
+                        ],
+                        "properties": {
+                            "currentDate": {
+                                "type": "string",
+                                "title": "CURRENT_DATE"
+                            },
+                            "branchName": {
+                                "type": "string",
+                                "title": "HUB_NAME",
+                                "enumCode": "branch_id"
+                            },
+                            "centreName": {
+                                "type": "number",
+                                "title": "SPOKE_NAME",
+                                "enumCode": "centre"
+                            },
+                            "centreId": {
+                                "type": ["null", "number"],
+                                "title": "SPOKE_NAME",
+                                "enumCode": "centre"
+                            },
+                            "id": {
+                                "type": "integer",
+                                "title": "LEAD_ID"
+                            },
+                            "leadId": {
+                                "type": "integer",
+                                "title": "LEAD_ID"
+                            },
+                            "leadName": {
+                                "type": "string",
+                                "title": "LEAD_NAME"
+                            },
+                            "mobileNo": {
+                                "type": "string",
+                                "maxLength": 10,
+                                "minLength": 10,
+                                "title": "MOBILE_NUMBER1"
+                            },
+                            "alternateMobileNo": {
+                                "type": "string",
+                                "title": "ALTERNATE_MOBILE_NUMBER",
+                                "maxLength": 10,
+                                "minLength": 10
+                            },
+                            "businessName": {
+                                "type": "string",
+                                "title": "BUSINESS_NAME"
+                            },
+                            "businessType": {
+                                "type": "string",
+                                "title": "BUSINESS_TYPE"
+                            },
+                            "addressLine1": {
+                                "type": "string",
+                                "title": "ADDRESS_LINE1"
+                            },
+                            "addressLine2": {
+                                "type": "string",
+                                "title": "ADDRESS_LINE2"
+                            },
+                            "pincode": {
+                                "title": "PIN_CODE",
+                                "type": "integer"
+                            },
+                            "state": {
+                                "type": "string",
+                                "title": "STATE"
+                            },
+                            "district": {
+                                "type": "string",
+                                "title": "DISTRICT"
+                            },
+                            "location": {
+                                "type": "string",
+                                "title": "LOCATION"
+                            },
+                            "latitude": {
+                                "type": "string",
+                                "title": "LOCATION"
+                            },
+                            "longitude": {
+                                "type": "string",
+                                "title": "LONGITUDE"
+                            },
+                            "area": {
+                                "type": "string",
+                                "title": "AREA"
+                            },
+                            "cityTownVillage": {
+                                "type": "string",
+                                "title": "CITY/_TOWN_VILLAGE"
+                            },
+                            "loanOfficer": {
+                                "type": "string",
+                                "title": "LOAN_OFFICER"
+                            }
+                        }
+                    }
+                }
             },
             actions: {
                 submit: function(model, form, formName) {
@@ -107,12 +213,12 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     var reqData = _.cloneDeep(model);
                     if (reqData.lead.id) {
                         LeadHelper.proceedData(reqData).then(function(resp) {
-                            $state.go('Page.Landing', null);
+                            $state.go('Page.LeadDashboard', null);
                         });
                     } else {
                         LeadHelper.saveData(reqData).then(function(res) {
                             LeadHelper.proceedData(res).then(function(resp) {
-                                $state.go('Page.Landing', null);
+                                $state.go('Page.LeadDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);
                                 model.lead = res.lead;
