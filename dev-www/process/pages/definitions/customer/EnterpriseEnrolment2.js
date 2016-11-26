@@ -804,13 +804,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.buyerDetails[].product",
                                 title:"Product",
                                 type: "string"
-                            },
-                            {
-                                key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"Receivables Out Standing",
-                                type: "number"
-                            },
-                        
+                            }, 
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
@@ -822,7 +816,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "select"
                             },
                             {
-                                key: "customer.buyerDetails[].receivablesOutstanding/CustomerCredit",
+                                key: "customer.buyerDetails[].receivablesOutstanding",
                                 title:"Receivables Outstanding / Customer Credit",
                                 type: "number"
                             },
@@ -833,7 +827,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                key:"customer.verification",
-               condition: "model.loanAccount.currentStage=='Application'",
                title:"REFERENCES",
                 items:[
                     {
@@ -846,7 +839,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                      {
                         key:"customer.verification.businessName",
                         title:"BUSINESS_NAME",
-                        type:"string"
+                        type:"string"`
                     },
                     {
                         key:"customer.verification.fullNameofPOC",
