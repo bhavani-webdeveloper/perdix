@@ -784,6 +784,30 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "box",
+                "title": "HOUSEHOLD_FINANCIALS",
+                "condition": "model.currentStage =='Application'",
+                "items": [
+                    {
+                        "key": "customer.otherBusinessIncomes",
+                        "type": "array",
+                        "title": "OTHER_INCOME_SOURCE",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        // "add": null,
+                        // "remove": null,
+                        "items": [
+                            {
+                                "key": "customer.otherBusinessIncomes[].incomeSource",
+                                "type": "amount",
+                                "title": "AMOUNT"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
                 "title": "T_FAMILY_DETAILS",
                 "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [{
@@ -824,110 +848,120 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             },
                             title: "T_RELATIONSHIP"
                         },
-                        {
-                            key:"customer.familyMembers[].customerId",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            type:"lov",
-                            "inputMap": {
-                                "firstName": {
-                                    "key": "customer.firstName",
-                                    "title": "CUSTOMER_NAME"
-                                },
-                                "branchName": {
-                                    "key": "customer.kgfsName",
-                                    "type": "select"
-                                },
-                                "centreCode": {
-                                    "key": "customer.centreCode",
-                                    "type": "select"
-                                }
-                            },
-                            "outputMap": {
-                                "id": "customer.familyMembers[arrayIndex].customerId",
-                                "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                        // {
+                        //     key:"customer.familyMembers[].customerId",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                        //     type:"lov",
+                        //     "inputMap": {
+                        //         "firstName": {
+                        //             "key": "customer.firstName",
+                        //             "title": "CUSTOMER_NAME"
+                        //         },
+                        //         "branchName": {
+                        //             "key": "customer.kgfsName",
+                        //             "type": "select"
+                        //         },
+                        //         "centreCode": {
+                        //             "key": "customer.centreCode",
+                        //             "type": "select"
+                        //         }
+                        //     },
+                        //     "outputMap": {
+                        //         "id": "customer.familyMembers[arrayIndex].customerId",
+                        //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
 
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form) {
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var promise = Enrollment.search({
-                                    'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                    'firstName': inputModel.first_name,
-                                }).$promise;
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    [data.firstName, data.fatherFirstName].join(' '),
-                                    data.id
-                                ];
-                            }
-                        },
+                        //     },
+                        //     "searchHelper": formHelper,
+                        //     "search": function(inputModel, form) {
+                        //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                        //         var promise = Enrollment.search({
+                        //             'branchName': SessionStore.getBranch() || inputModel.branchName,
+                        //             'firstName': inputModel.first_name,
+                        //         }).$promise;
+                        //         return promise;
+                        //     },
+                        //     getListDisplayItem: function(data, index) {
+                        //         return [
+                        //             [data.firstName, data.fatherFirstName].join(' '),
+                        //             data.id
+                        //         ];
+                        //     }
+                        // },
                         {
                             key:"customer.familyMembers[].familyMemberFirstName",
                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title:"FAMILY_MEMBER_FULL_NAME"
                         },
-                        {
-                            key: "customer.familyMembers[].gender",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            type: "radios",
-                            title: "T_GENDER"
-                        },
-                        {
-                            key:"customer.familyMembers[].age",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            title: "AGE",
-                            type:"number",
-                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                    } else {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            key: "customer.familyMembers[].dateOfBirth",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            type:"date",
-                            title: "T_DATEOFBIRTH",
-                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        },
-                        {
-                            key:"customer.familyMembers[].educationStatus",
-                            type:"select",
-                            title: "T_EDUCATION_STATUS"
-                        },
-                        {
-                            key:"customer.familyMembers[].maritalStatus",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            type:"select",
-                            title: "T_MARITAL_STATUS"
-                        },
-                        {
-                            key: "customer.familyMembers[].mobilePhone",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                        },
-                        {
-                            key:"customer.familyMembers[].healthStatus",
-                            type:"radios",
-                            titleMap:{
-                                "GOOD":"GOOD",
-                                "BAD":"BAD"
-                            },
+                        // {
+                        //     key: "customer.familyMembers[].gender",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                        //     type: "radios",
+                        //     title: "T_GENDER"
+                        // },
+                        // {
+                        //     key:"customer.familyMembers[].age",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                        //     title: "AGE",
+                        //     type:"number",
+                        //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                        //         if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                        //             if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                        //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                        //             } else {
+                        //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                        //             }
+                        //         }
+                        //     }
+                        // },
+                        // {
+                        //     key: "customer.familyMembers[].dateOfBirth",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                        //     type:"date",
+                        //     title: "T_DATEOFBIRTH",
+                        //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                        //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                        //             model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        //         }
+                        //     }
+                        // },
+                        // {
+                        //     key:"customer.familyMembers[].educationStatus",
+                        //     type:"select",
+                        //     title: "T_EDUCATION_STATUS"
+                        // },
+                        // {
+                        //     key:"customer.familyMembers[].maritalStatus",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                        //     type:"select",
+                        //     title: "T_MARITAL_STATUS"
+                        // },
+                        // {
+                        //     key: "customer.familyMembers[].mobilePhone",
+                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                        // },
+                        // {
+                        //     key:"customer.familyMembers[].healthStatus",
+                        //     type:"radios",
+                        //     titleMap:{
+                        //         "GOOD":"GOOD",
+                        //         "BAD":"BAD"
+                        //     },
 
+                        // },
+                        {
+                            key: "customer.familyMembers[].anualEducationFee",
+                            type: "amount",
+                            title: "ANNUAL_EDUCATION_FEE"
+                        },
+                        {
+                            key: "customer.familyMembers[].salary",
+                            type: "amount",
+                            title: "SALARY"
                         },
                         {
                             key:"customer.familyMembers[].incomes",
                             type:"array",
-                            startEmpty: true,
+                            startEmpty: false,
                             items:[
                                 {
                                     key: "customer.familyMembers[].incomes[].incomeSource",
@@ -1629,8 +1663,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     ]
             },
             {
-               type:"box",
-               title:"PHYSICAL_ASSTES",
+                type:"box",
+                title:"PHYSICAL_ASSETS",
+                "condition": "model.currentStage == 'Application'",
                 items:[
                     {
                         key:"customer.physicalAssets",
