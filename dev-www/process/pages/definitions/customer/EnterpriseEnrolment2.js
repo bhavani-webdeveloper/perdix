@@ -92,7 +92,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
-                "condition": "!model.currentStage=='ScreeningReview'",
+                "condition": "model.currentStage=='Screening'",
                 "items": [
                     {
                         "key": "customer.id",
@@ -591,7 +591,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition":"!model.currentStage=='ScreeningReview'",
+                "condition":"model.currentStage=='Screening'",
                 "items":[
                     "customer.mobilePhone",
                     "customer.landLineNo",
@@ -688,7 +688,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition":"!model.currentStage=='ScreeningReview'",
+                "condition":"model.currentStage=='Screening'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -914,7 +914,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"!model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='Screening'",
                 items:[
                     {
                        key:"customer.liabilities",
@@ -1031,7 +1031,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"!model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='Screening'",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -1162,7 +1162,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"!model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='Screening'",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -1440,7 +1440,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"EMPLOYEE_DETAILS",
-               "condition":"!model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='Screening'",
                 items:[
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
