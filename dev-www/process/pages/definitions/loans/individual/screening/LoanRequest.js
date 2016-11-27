@@ -26,8 +26,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.loanAccount.loanCustomerRelations = [];
 
                 /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
-                model.loanAccount.productCode = 'TLAPS';
-                model.loanAccount.tenure = 12;
+                //model.loanAccount.productCode = 'TLAPS';
+                //model.loanAccount.tenure = 12;
                 model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";    
@@ -116,12 +116,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                            return Queries.getAllLoanPurpose1();
                         },
                         getListDisplayItem: function(item, index) {
                             return [
                                 item.purpose1
                             ];
+                        },
+                        onSelect: function(result, model, context) {
+                            $log.info(result);
+                            model.loanAccount.loanPurpose2 = '';
                         }
                     },
                     {
@@ -136,7 +140,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                            return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
                         },
                         getListDisplayItem: function(item, index) {
                             return [
@@ -327,6 +331,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
                             if(model.currentStage=='ApplicationReview')
                                 $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
+                            if(model.currentStage=='Screening')
+                                $state.go("Page.Landing");
+                            if(model.currentStage=='Application')
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
                         }, function(httpRes){
                             PageHelper.showErrors(httpRes);
                         })

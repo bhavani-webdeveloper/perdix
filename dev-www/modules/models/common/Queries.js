@@ -439,5 +439,38 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
     	return deferred.promise;
     }
 
+    resource.getAllLoanPurpose1 = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("Allloanpurpose1.list", request).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
+    resource.getAllLoanPurpose2 = function(purpose1) {
+        var deferred = $q.defer();
+        resource.getResult("Allloanpurpose2.list", {"purpose1":purpose1}).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
 	return resource;
 }]);
