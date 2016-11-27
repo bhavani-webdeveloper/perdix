@@ -42,7 +42,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
                 model.customer.expenditures = [];
                 model.customer.expenditures.push({
-                    "expenditureSource": "Education",
+                    "expenditureSource": "expenditure",
                     "frequency": "Monthly"
                 })
 
@@ -83,7 +83,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 "items":[
                     {
                         "key": "customer.id",
-                        "title": "LOAD_EXISTING_CUSTOMER",
+                        "title": "CUSTOMER_SEARCH",
                         "type": "lov",
                         "lovonly": true,
                         "inputMap": {
@@ -900,7 +900,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "HOUSEHOLD_FINANCIALS",
-                "condition": "model.currentStage =='Application'",
+                "condition": "model.currentStage=='Application'",
                 "items": [
                     {
                         "key": "customer.otherBusinessIncomes",
@@ -1119,6 +1119,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
                         // },
                         {
+                             key:"customer.familyMembers[].educationStatus",
+                             type:"select",
+                             title: "T_EDUCATION_STATUS"
+                        },
+                        {
                             key: "customer.familyMembers[].anualEducationFee",
                             type: "amount",
                             title: "ANNUAL_EDUCATION_FEE"
@@ -1168,6 +1173,11 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             key:"customer.familyMembers[].familyMemberFirstName",
                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title:"FAMILY_MEMBER_FULL_NAME"
+                        },
+                        {
+                             key:"customer.familyMembers[].educationStatus",
+                             type:"select",
+                             title: "T_EDUCATION_STATUS"
                         },
                         {
                             key: "customer.familyMembers[].anualEducationFee",
