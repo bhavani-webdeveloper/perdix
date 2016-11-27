@@ -13,6 +13,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanAccount')){
+                $log.info('Printing Loan Account');
+                $log.info(model.loanAccount);
 
             } else {
                 model.customer = model.customer || {};
@@ -48,6 +50,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                     if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                         addToRelation = false;
+                        if (params.customer.urnNo)
+                            model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
                         break;
                     }
                 }
@@ -55,7 +59,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 if (addToRelation){
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
-                        'relation': "Applicant"
+                        'relation': "Applicant",
+                        'urn':params.customer.urnNo
                     })    
                 }
                 /* TODO remove this later */
@@ -70,6 +75,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                     if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                         addToRelation = false;
+                        if (params.customer.urnNo)
+                            model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
                         break;
                     }
                 }
@@ -77,7 +84,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 if (addToRelation) {
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
-                        'relation': "Co-Applicant"
+                        'relation': "Co-Applicant",
+                        'urn':params.customer.urnNo
                     })    
                 }
             },
@@ -93,6 +101,46 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "items": [
                     {
                         key: "loanAccount.loanPurpose1",
+                        type: "lov",
+                        autolov: true,
+                        title:"LOAN_PURPOSE_1",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose1": "loanAccount.loanPurpose1"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose1
+                            ];
+                        }
+                    },
+                    {
+                        key: "loanAccount.loanPurpose2",
+                        type: "lov",
+                        autolov: true,
+                        title:"LOAN_PURPOSE_2",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose2": "loanAccount.loanPurpose2"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose2
+                            ];
+                        }
+                    },
+                    /*{
+                        key: "loanAccount.loanPurpose1",
                         type: "select",
                         enumCode: "loan_purpose_1"
                     },
@@ -102,7 +150,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         enumCode: "loan_purpose_2",
                         parentEnumCode: "loan_purpose_1",
                         parentValueExpr: "model.loanAccount.loanPurpose2"
-                    },
+                    },*/
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
                         type: "select",
@@ -276,6 +324,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     PageHelper.hideLoader();
                                 })
                             
+                                PageHelper.hideLoader();
+                                PageHelper.showErrors(httpResp);
 
                         }
                     );
