@@ -28,6 +28,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
                 model.loanAccount.productCode = 'TLAPS';
                 model.loanAccount.tenure = 12;
+                model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";    
                 /* END OF TEMP CODE */
@@ -247,8 +248,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 ]
             },
             {
+                "type": "box",
+                "title": "SCREENING_REVIEW_REMARKS",
+                "condition":"model.currentStage=='ScreeningReview'",
+                "items": [
+                    {
+                        key: "loanAccount.screeningReviewRemarks"
+                    },
+                    {
+                        key: "loanAccount.ScreeningDeviations"
+                    },
+                ]
+            },
+            {
                 "type": "actionbox",
-                "condition": "model.loanAccount.customerId &&  !model.loanAccount.id",
+                "condition": "model.loanAccount.customerId &&  !model.loanAccount.id && !(model.currentStage=='ScreeningReview')",
                 "items": [
                     {
                         "type": "button",
@@ -289,16 +303,32 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
                     PageHelper.showLoader();
-                    IndividualLoan.create(reqData)
-                        .$promise
-                        .then(function(res){
-                            $state.go('Page.Landing', null);    
-                        }, function(httpRes){
-                            PageHelper.showErrors(httpRes);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
+                    if (model.currentStage=='ScreeningReview')
+                    {
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
+                    else
+                    {
+                        IndividualLoan.create(reqData)
+                            .$promise
+                            .then(function(res){
+                                $state.go('Page.Landing', null);    
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
 
                 })
             },

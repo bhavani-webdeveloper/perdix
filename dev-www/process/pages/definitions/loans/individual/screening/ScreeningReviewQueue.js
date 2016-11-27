@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
-				title: "SEARCH_LOAN",
+				title: "SEARCH",
 				searchForm: [
 					"*"
 				],
@@ -40,7 +40,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                        "type": "string"
 	                    },
 	                     "pincode": {
-	                        "title": "PINCODE",
+	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    }
 
@@ -119,13 +119,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 							title: 'CITY_TOWN_VILLAGE',
 							data: 'villageName'
 						}, {
-							title: 'PINCODE',
+							title: 'PIN_CODE',
 							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "SCREENINGREVIEW",
+							name: "REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

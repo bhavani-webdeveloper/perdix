@@ -57,6 +57,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                     var applicant;
                                     var coApplicants = [];
                                     var guarantors = [];
+                                    var business;
                                     var urnNos = [];
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
@@ -100,6 +101,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                                     }
                                                 });
                                             }
+
+                                            $this.bundlePages.push({
+                                                pageName: 'customer.EnterpriseEnrolment2',
+                                                title: 'BUSINESS',
+                                                pageClass: 'business',
+                                                minimum: 1,
+                                                maximum: 1,
+                                                model: {
+                                                    loanRelation: {customerId:res.customerId}
+                                                }
+                                            });
 
                                             $this.bundlePages.push({
                                                 pageName: 'loans.individual.screening.LoanRequest',

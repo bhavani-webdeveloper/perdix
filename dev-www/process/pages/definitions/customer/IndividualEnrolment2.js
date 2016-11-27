@@ -292,65 +292,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type":"box",
                 "title":"KYC",
-                "condition": "model.currentStage == 'ScreeningReview'",
+                "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'",
                 "readonly": true,
                 "items":[
                     {
-                        "key": "customer.id",
-                        "title": "LOAD_EXISTING_CUSTOMER",
-                        "type": "lov",
-                        "lovonly": true,
-                        "inputMap": {
-                            "firstName": {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
-                            },
-                            "kgfsName": {
-                                "key": "customer.kgfsName",
-                                "type": "select",
-                                "screenFilter": true
-                            },
-                            "centreId": {
-                                "key": "customer.centreId",
-                                "type": "select",
-                                "screenFilter": true
-                            }
-                        },
-                        "outputMap": {
-                            "urnNo": "customer.urnNo",
-                            "firstName":"customer.firstName"
-                        },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var promise = Enrollment.search({
-                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
-                                'firstName': inputModel.firstName,
-                                'centreId':inputModel.centreId,
-                                'customerType':"individual",
-                                'stage': "Completed"
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                [data.firstName, data.fatherFirstName].join(' | '),
-                                data.id,
-                                data.urnNo
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context){
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
-                            Enrollment.getCustomerById({id: valueObj.id})
-                                .$promise
-                                .then(function(res){
-                                    PageHelper.showProgress("customer-load", "Done..", 5000);
-                                    model.customer = Utils.removeNulls(res, true);
-                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                }, function(httpRes){
-                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                })
-                        }
+                        "key": "customer.firstName",
+                        "title":"CUSTOMER_NAME"
                     },
                     {
                         "key": "customer.aadhaarNo",
@@ -648,6 +595,111 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "box",
+                "title": "PERSONAL_INFORMATION",
+                "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+                "items": [
+                    {
+                        key: "customer.customerBranchId",
+                        title:"BRANCH_NAME",
+                        type: "select"
+                    },
+                    {
+                        key:"customer.centreId",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.oldCustomerId",
+                        title:"CUSTOMER_ID",
+                        titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.id",
+                        condition: "model.customer.id",
+                        title:"CUSTOMER_ID",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.urnNo",
+                        condition: "model.customer.urnNo",
+                        title:"URN_NO",
+                        readonly: true
+                    },
+                    {
+                        key:"customer.photoImageId",
+                        type:"file",
+                        fileType:"image/*"
+                    },
+                    {
+                        "key": "customer.title",
+                        "title": "TITLE",
+                        "type": "select"
+                    },
+                    {
+                        key: "customer.firstName",
+                        title:"FULL_NAME",
+                        type:"qrcode"
+                    },
+                    {
+                        key:"customer.enrolledAs",
+                        type:"radios"
+                    },
+                    {
+                        key:"customer.gender",
+                        type:"radios"
+                    },
+                    {
+                        key:"customer.dateOfBirth",
+                        type:"date"
+                    },
+                    {
+                        key:"customer.age",
+                        title: "AGE",
+                        type:"number"
+                    },
+                    {
+                        key:"customer.religion",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.language",
+                        title: "LANGUAGE"
+                    },
+                    {
+                        key: "customer.fatherFirstName",
+                        title: "FATHER_FULL_NAME"
+                    },
+                    {
+                        key: "customer.motherName",
+                        title: "MOTHER_NAME"
+                    },
+                    {
+                        key:"customer.maritalStatus",
+                        type:"select"
+                    },
+                    {
+                        key: "customer.spouseFirstName",
+                        title: "SPOUSE_FULL_NAME",
+                        condition:"model.customer.maritalStatus==='MARRIED'",
+                        type:"qrcode"
+                    },
+                    {
+                        key:"customer.spouseAge",
+                        title: "SPOUSE_AGE",
+                        type:"number",
+                        condition:"model.customer.maritalStatus==='MARRIED'"
+                    },
+                    {
+                        key:"customer.spouseDateOfBirth",
+                        type:"date",
+                        condition:"model.customer.maritalStatus==='MARRIED'"
+                    }
+                ]
+            },
+            {
+                "type": "box",
                 "title": "CONTACT_INFORMATION",
                 "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [
@@ -791,6 +843,62 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "box",
+                "title": "CONTACT_INFORMATION",
+                "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+                "items": [
+                    "customer.mobilePhone",
+                    "customer.landLineNo",
+                    {
+                        "type": "string",
+                        "key": "customer.whatsAppMobileNo",
+                        "title": "WHATSAPP_MOBILE_NO"
+                    },
+                    {
+                        "type": "string",
+                        "key": "customer.email",
+                        "title": "EMAIL"
+                    },
+                    {
+                        type: "fieldset",
+                        title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                        items: [
+                            "customer.doorNo",
+                            "customer.street",
+                            "customer.postOffice",
+                            "customer.landmark",
+                            {
+                                key: "customer.pincode",
+                                fieldType: "number",
+                            },
+                            "customer.locality",
+                            "customer.villageName",
+                            "customer.district",
+                            "customer.state",
+                            "customer.mailSameAsResidence"
+                        ]
+                    },
+                    {
+                        type: "fieldset",
+                        title: "CUSTOMER_PERMANENT_ADDRESS",
+                        condition:"!model.customer.mailSameAsResidence",
+                        items: [
+                            "customer.mailingDoorNo",
+                            "customer.mailingStreet",
+                            "customer.mailingPostoffice",
+                            {
+                                key: "customer.mailingPincode",
+                                fieldType: "number",
+                            },
+                            "customer.mailingLocality",
+                            "customer.mailingDistrict",
+                            "customer.mailingState"
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
                 "title": "HOUSEHOLD_FINANCIALS",
                 "condition": "model.currentStage =='Application'",
                 "items": [
@@ -820,6 +928,44 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         "view": "fixed",
                         // "add": null,
                         // "remove": null,
+                        "items": [
+                            {
+                                "key": "customer.expenditures[].annualExpenses",
+                                "type": "amount",
+                                "title": "MONTHLY_EDUCATION_EXPENSE"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "HOUSEHOLD_FINANCIALS",
+                "condition": "model.currentStage =='ApplicationReview'",
+                readonly:true,
+                "items": [
+                    {
+                        "key": "customer.otherBusinessIncomes",
+                        "type": "array",
+                        "title": "OTHER_INCOME_SOURCE",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        "items": [
+                            {
+                                "key": "customer.otherBusinessIncomes[].incomeSource",
+                                "type": "amount",
+                                "title": "AMOUNT"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "customer.expenditures",
+                        "type": "array",
+                        "title": "EXPENDITURES",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
                         "items": [
                             {
                                 "key": "customer.expenditures[].annualExpenses",
@@ -1004,6 +1150,57 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 }]
             },
             {
+                "type": "box",
+                "title": "T_FAMILY_DETAILS",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+                "items": [{
+                    key:"customer.familyMembers",
+                    type:"array",
+                    startEmpty: true,
+                    items: [
+                        {
+                            key:"customer.familyMembers[].relationShip",
+                            type:"select",
+                            title: "T_RELATIONSHIP"
+                        },
+                        {
+                            key:"customer.familyMembers[].familyMemberFirstName",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            title:"FAMILY_MEMBER_FULL_NAME"
+                        },
+                        {
+                            key: "customer.familyMembers[].anualEducationFee",
+                            type: "amount",
+                            title: "ANNUAL_EDUCATION_FEE"
+                        },
+                        {
+                            key: "customer.familyMembers[].salary",
+                            type: "amount",
+                            title: "SALARY"
+                        },
+                        {
+                            key:"customer.familyMembers[].incomes",
+                            type:"array",
+                            startEmpty: false,
+                            items:[
+                                {
+                                    key: "customer.familyMembers[].incomes[].incomeSource",
+                                    type:"select"
+                                },
+                                "customer.familyMembers[].incomes[].incomeEarned",
+                                {
+                                    key: "customer.familyMembers[].incomes[].frequency",
+                                    type: "select"
+                                }
+
+                            ]
+
+                        }
+                    ]
+                }]
+            },
+            {
                type:"box",
                title:"T_LIABILITIES",
                 "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
@@ -1062,310 +1259,71 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                    }
                ]
             },
-            //{
-            //    "type": "box",
-            //    "title": "EXPENDITURES",
-            //    "items": [{
-            //        key:"customer.expenditures",
-            //        type:"array",
-            //        startEmpty: true,
-            //        // remove: null,
-            //        // view: "fixed",
-            //        titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-            //        items:[{
-            //            type: 'section',
-            //            htmlClass: 'row',
-            //            items: [{
-            //                type: 'section',
-            //                htmlClass: 'col-xs-6',
-            //                items: [{
-            //                    key:"customer.expenditures[].frequency",
-            //                    type:"select",
-            //                    notitle: true
-            //                }]
-            //            },{
-            //                type: 'section',
-            //                htmlClass: 'col-xs-6',
-            //                items: [{
-            //                    key: "customer.expenditures[].annualExpenses",
-            //                    type:"amount",
-            //                    notitle: true
-            //                }]
-            //            }]
-            //        }]
-            //    }]
-            //},
-            //{
-            //    "type":"box",
-            //    "title":"BUSINESS_OCCUPATION_DETAILS",
-            //    "items":[
-            //        {
-            //            key:"customer.udf.userDefinedFieldValues.udf13",
-            //            type:"select"
-            //
-            //
-            //        },
-            //        {
-            //            type:"fieldset",
-            //            condition:"model.customer.udf.userDefinedFieldValues.udf13=='Business' || model.customer.udf.userDefinedFieldValues.udf13=='Employed'",
-            //            items:[
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf14",
-            //                    type:"select"
-            //
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf7"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf22"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf8"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf9"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf10"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf11"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf12"
-            //                },
-            //
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf23",
-            //                    type:"radios"
-            //                },
-            //
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf17"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf16",
-            //                    type:"select"
-            //                },
-            //
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf18",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf19",
-            //                    type:"radios"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf20",
-            //                    type:"select"
-            //
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf21",
-            //                    condition:"model.customer.udf.userDefinedFieldValues.udf20=='OTHERS'"
-            //                }
-            //            ]
-            //        },
-            //        {
-            //            type:"fieldset",
-            //            condition:"model.customer.udf.userDefinedFieldValues.udf13=='Agriculture'",
-            //            title:"AGRICULTURE_DETAILS",
-            //            items:[
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf24",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf25",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf15"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf26"
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf27",
-            //                    type:"select"
-            //
-            //                },
-            //                {
-            //                    key:"customer.udf.userDefinedFieldValues.udf28"
-            //                }
-            //            ]
-            //        }
-            //
-            //    ]
-            //},
-            //{
-            //    "type": "box",
-            //    "title": "T_ASSETS",
-            //    "items": [
-            //        {
-            //            key: "customer.physicalAssets",
-            //            type: "array",
-            //            startEmpty: true,
-            //            items: [
-            //                {
-            //                    key:"customer.physicalAssets[].ownedAssetDetails",
-            //                    type:"select"
-            //
-            //                },
-            //                "customer.physicalAssets[].numberOfOwnedAsset",
-            //                {
-            //                    key:"customer.physicalAssets[].ownedAssetValue",
-            //                }
-            //            ]
-            //        },
-            //        {
-            //            key: "customer.financialAssets",
-            //            title:"FINANCIAL_ASSETS",
-            //            type: "array",
-            //            startEmpty: true,
-            //            items: [
-            //                {
-            //                    key:"customer.financialAssets[].instrumentType",
-            //                    type:"select"
-            //                },
-            //                "customer.financialAssets[].nameOfInstitution",
-            //                {
-            //                    key:"customer.financialAssets[].instituteType",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key: "customer.financialAssets[].amountInPaisa",
-            //                    type: "amount"
-            //                },
-            //                {
-            //                    key:"customer.financialAssets[].frequencyOfDeposite",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.financialAssets[].startDate",
-            //                    type:"date"
-            //                },
-            //                {
-            //                    key:"customer.financialAssets[].maturityDate",
-            //                    type:"date"
-            //                }
-            //            ]
-            //        }]
-            //
-            //},
-            //{
-            //    type:"box",
-            //    title:"T_LIABILITIES",
-            //    items:[
-            //        {
-            //            key:"customer.liabilities",
-            //            type:"array",
-            //            startEmpty: true,
-            //            title:"FINANCIAL_LIABILITIES",
-            //            items:[
-            //                {
-            //                    key:"customer.liabilities[].loanType",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.liabilities[].loanSource",
-            //                    type:"select"
-            //                },
-            //                "customer.liabilities[].instituteName",
-            //                {
-            //                    key: "customer.liabilities[].loanAmountInPaisa",
-            //                    type: "amount"
-            //                },
-            //                {
-            //                    key: "customer.liabilities[].installmentAmountInPaisa",
-            //                    type: "amount"
-            //                },
-            //                {
-            //                    key: "customer.liabilities[].startDate",
-            //                    type:"date"
-            //                },
-            //                {
-            //                    key:"customer.liabilities[].maturityDate",
-            //                    type:"date"
-            //                },
-            //                {
-            //                    key:"customer.liabilities[].frequencyOfInstallment",
-            //                    type:"select"
-            //                },
-            //                {
-            //                    key:"customer.liabilities[].liabilityLoanPurpose",
-            //                    type:"select"
-            //                }
-            //
-            //            ]
-            //        }
-            //    ]
-            //},
-            //{
-            //    "type": "box",
-            //    "title": "BIOMETRIC",
-            //    "items": [
-            //        {
-            //            type: "button",
-            //            title: "CAPTURE_FINGERPRINT",
-            //            notitle: true,
-            //            fieldHtmlClass: "btn-block",
-            //            onClick: function(model, form, formName){
-            //                var promise = BiometricService.capture(model);
-            //                promise.then(function(data){
-            //                    model.customer.$fingerprint = data;
-            //                }, function(reason){
-            //                    console.log(reason);
-            //                })
-            //            }
-            //        },
-            //        {
-            //            "type": "section",
-            //            "html": '<div class="row"> <div class="col-xs-6">' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftThumb\')"></i> {{ model.getFingerLabel(\'LeftThumb\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftIndex\')"></i> {{ model.getFingerLabel(\'LeftIndex\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftMiddle\')"></i> {{ model.getFingerLabel(\'LeftMiddle\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftRing\')"></i> {{ model.getFingerLabel(\'LeftRing\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'LeftLittle\')"></i> {{ model.getFingerLabel(\'LeftLittle\') }}</span><br>' +
-            //            '</div> <div class="col-xs-6">' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightThumb\')"></i> {{ model.getFingerLabel(\'RightThumb\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightIndex\')"></i> {{ model.getFingerLabel(\'RightIndex\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightMiddle\')"></i> {{ model.getFingerLabel(\'RightMiddle\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightRing\')"></i> {{ model.getFingerLabel(\'RightRing\') }}</span><br>' +
-            //            '<span><i class="fa fa-fw" ng-class="model.isFPEnrolled(\'RightLittle\')"></i> {{ model.getFingerLabel(\'RightLittle\') }}</span><br>' +
-            //            '</div></div>'
-            //        }
-            //    ]
-            //},
+            {
+               type:"box",
+               title:"T_LIABILITIES",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+               items:[
+                   {
+                       key:"customer.liabilities",
+                       type:"array",
+                       startEmpty: true,
+                       title:"FINANCIAL_LIABILITIES",
+                       items:[
+                           {
+                               key:"customer.liabilities[].loanType",
+                               type:"select"
+                           },
+                           {
+                               key:"customer.liabilities[].loanSource",
+                               type:"select"
+                           },
+                           "customer.liabilities[].instituteName",
+                           {
+                               key: "customer.liabilities[].loanAmountInPaisa",
+                               type: "amount"
+                           },
+                           {
+                               key: "customer.liabilities[].installmentAmountInPaisa",
+                               type: "amount"
+                           },
+                           {
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                           },
+                           {
+                               key: "customer.liabilities[].startDate",
+                               type:"date"
+                           },
+                           {
+                               key:"customer.liabilities[].maturityDate",
+                               type:"date"
+                           },
+                           {
+                                key: "customer.liabilities[].noOfInstalmentPaid",
+                                type: "number",
+                                title: "NO_OF_INSTALLMENT_PAID"
+                           },
+                           {
+                               key:"customer.liabilities[].frequencyOfInstallment",
+                               type:"select"
+                           },
+                           {
+                               key:"customer.liabilities[].liabilityLoanPurpose",
+                               type:"select"
+                           }
+
+                       ]
+                   }
+               ]
+            },
             {
                 "type": "box",
                 "title": "T_HOUSE_VERIFICATION",
                 "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
                 "items": [
-                    //{
-                    //    "key": "customer.firstName",
-                    //    "title": "CUSTOMER_NAME",
-                    //    "readonly": true
-                    //},
-                    //{
-                    //    key:"customer.nameInLocalLanguage"
-                    //},
-                    //{
-                    //    key:"customer.addressInLocalLanguage",
-                    //    type:"textarea"
-                    //},
-
-
-                    //{
-                    //    key:"customer.caste",
-                    //    type:"select"
-                    //},
-                    //{
-                    //    key:"customer.language",
-                    //    type:"select"
-                    //},
                     {
                         type:"fieldset",
                         title:"HOUSE_DETAILS",
@@ -1397,6 +1355,51 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     //   key: "customer.nameOfRo",
                     //   readonly: true
                     //},
+                    {
+                       key:"customer.houseVerificationPhoto",
+                       type:"file",
+                       fileType:"image/*"
+                    },
+                    {
+                       key: "customer.date",
+                       type:"date"
+                    },
+                    "customer.place"
+                ]
+            },
+            {
+                "type": "box",
+                "title": "T_HOUSE_VERIFICATION",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+                "items": [
+                    {
+                        type:"fieldset",
+                        title:"HOUSE_DETAILS",
+                        items:[
+                            {
+                                key:"customer.ownership",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                type: "select",
+                                title: "IN_CURRENT_ADDRESS_SINCE"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                type:"select",
+                                title: "IN_CURRENT_AREA_SINCE"
+                            }
+                        ]
+                    },
+                    {
+                       "key": "customer.latitude",
+                       "title": "HOUSE_LOCATION",
+                       "type": "geotag",
+                       "latitude": "customer.latitude",
+                       "longitude": "customer.longitude"
+                    },
                     {
                        key:"customer.houseVerificationPhoto",
                        type:"file",
@@ -1457,6 +1460,102 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                         data.bankName
                                     ];
                                 }
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].customerBankName",
+                                readonly: true
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].customerBankBranchName",
+                                readonly: true
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].customerNameAsInBank"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].accountNumber"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].accountType",
+                                type: "select"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].bankingSince",
+                                type: "date",
+                                title: "BANKING_SINCE"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].netBankingAvailable",
+                                type: "select",
+                                title: "NET_BANKING_AVAILABLE",
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].bankStatement",
+                                type: "array",
+                                title: "STATEMENT_DETAILS",
+                                items: [
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                        type: "date",
+                                        title: "START_MONTH"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                        type: "amount",
+                                        title: "TOTAL_DEPOSITS"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                        type: "amount",
+                                        title: "TOTAL_WITHDRAWALS"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                        type: "amount",
+                                        title: "BALANCE_AS_ON_15TH"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                        type: "amount",
+                                        title: "NO_OF_CHEQUE_BOUNCED"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                        type: "amount",
+                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                                    },
+                                ]
+                            },
+                            {
+                                key: "customer.customerBankAccounts[].isDisbersementAccount",
+                                type: "radios",
+                                titleMap: [{
+                                    value: true,
+                                    name: "Yes"
+                                },{
+                                    value: false,
+                                    name: "No"
+                                }]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "box",
+                title: "CUSTOMER_BANK_ACCOUNTS",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                readonly:true,
+                items: [
+                    {
+                        key: "customer.customerBankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key: "customer.customerBankAccounts[].ifscCode",
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankName",
@@ -1688,9 +1787,195 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     ]
             },
             {
+               type: "box",
+                title: "PROXY_INDICATORS",
+                condition: "model.currentStage=='FieldAppraisalReview'",
+                readonly:true,
+                items: [ 
+                        {
+                            key:"customer.proper&MatchingSignboard",
+                            title:"PROPER_MATCHING_SIGNBOARD",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.bribeOffered",
+                            title:"BRIBE_OFFERED",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.shop/ShedOrganized",
+                            title:"SHOP_SHED_ORGANIZED",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale_2"
+                        },
+                        {
+                            key:"customer.inIndustrialArea",
+                            title:"IN_INDUSTRIAL_AREA",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.customerAttitudetoKinara",
+                            title:"CUSTOMER_ATTITUDE_TO_KINARA",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale_2"
+                        },
+                        {
+                            key:"customer.book-keepingQuality",
+                            title:"BOOK-KEEPING_QUALITY",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale_2"
+                        },
+                        {
+                            key:"customer.challengingchequebounce/feecharge/policies",
+                            title:"CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                         {
+                            key:"customer.allMachinesoperational?",
+                            title:"ALL_MACHINES_OPERATIONAL?",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.employeeSatisfaction",
+                            title:"EMPLOYEE_SATISFACTION",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale_2"
+                        },
+                        {
+                            key:"customer.political/PoliceConnections",
+                            title:"POLITICAL_POLICE_CONNECTIONS",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.multipleProducts(morethan3)",
+                            title:"MULTIPLE_PRODUCTS_MORE_THAN_3",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.multipleBuyers(morethan3)",
+                            title:"MULTIPLE_BUYERS_MORE_THAN_3",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.seasonalBusiness",
+                            title:"SEASONAL_BUSINESS",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.incomeStability",
+                            title:"INCOME STABILITY",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "income_stability"
+                        },
+                        {
+                            key:"customer.utilizationofbusinesspremises ",
+                            title:"UTILIZATION_OF_BUSINESS_PREMISES ",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale"
+                        },
+                        {
+                            key:"customer.approachforthebusinesspremises",
+                            title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"connectivity_status "
+                        },
+                        {
+                            key:"customer.safetyMeasuresforEmployees ",
+                            title:"SAFETY_MEASURES_FOR_EMPLOYEES",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale"
+                        },
+                         {
+                            key:"customer.childLabourers",
+                            title:"CHILD_LABOURERS",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.isthebusinessineffectingenvironment?",
+                            title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT?",
+                            type:"radios",
+                            required:"true",
+                            enumCode:"decisionmaker",
+                        },
+                        {
+                            key:"customer.stock/materialmanagement",
+                            title:"STOCK_MATERIAL_MANAGEMENT",
+                            type:"radios",
+                            required:"true",
+                            enumCode: "status_scale"
+                        },
+
+                    ]
+            },
+            {
                 type:"box",
                 title:"PHYSICAL_ASSETS",
                 "condition": "model.currentStage == 'Application'",
+                items:[
+                    {
+                        key:"customer.physicalAssets",
+                        type:"array",
+                        startEmpty: true,
+                        title:"PHYSICAL_ASSETS",
+                            items:[
+                                {
+                                    key: "customer.physicalAssets[].assetType",
+                                    title: "ASSET_TYPE",
+                                    type: "select",
+                                    enumCode: "asset_type"
+                                },
+                                {
+                                    key: "customer.physicalAssets[].vehicleModel",
+                                    title: "VEHICLE_MAKE_MODEL",
+                                    type: "string"
+                                },
+                                {
+                                    key: "customer.physicalAssets[].registeredOwner",
+                                    title: "REGISTERED_OWNER",
+                                    type: "string"
+                                },
+                                {
+                                     key: "customer.physicalAssets[].ownedAssetValue",
+                                    title: "VALUE_OF_THE_ASSET",
+                                    type: "string"
+                                },
+                            ]
+                    }
+                ]
+            },
+            {
+                type:"box",
+                title:"PHYSICAL_ASSETS",
+                "condition": "model.currentStage == 'ApplicationReview'",
+                readonly:true,
                 items:[
                     {
                         key:"customer.physicalAssets",
@@ -1726,7 +2011,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         
             {
                 "type": "actionbox",
-                "condition": "!model.customer.id || model.customer.currentStage=='Completed'",
+                "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview')",
                 "items": [/*{
                     "type": "save",
                     "title": "SAVE"
@@ -1739,7 +2024,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             {
                 "type": "actionbox",
-                "condition": "model.customer.id && model.customer.currentStage!='Completed'",
+                "condition": "(model.customer.id && model.customer.currentStage!='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview')",
                 "items": [/*{
                     "type": "save",
                     "title": "SAVE"
