@@ -90,9 +90,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     })    
                 }
             },
-            "new-business": function(bundleModel, model, param){
+            "new-business": function(bundleModel, model, params){
                 $log.info("Inside new-business of LoanRequest");
                 model.loanAccount.customerId = params.customer.id;
+                model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
+                model.loanAccount.loanCentre.centreId = params.customer.centreId;
+
             }
         },
         form: [
@@ -346,17 +350,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
-                                    model.loanAccount = reqData.loanAccount;    
+                                    model.loanAccount = res.loanAccount;    
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })
                                 .finally(function(httpRes){
                                     PageHelper.hideLoader();
                                 })
-                            
-                                PageHelper.hideLoader();
-                                PageHelper.showErrors(httpResp);
-
                         }
                     );
             }
