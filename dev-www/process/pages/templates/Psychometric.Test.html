@@ -52,7 +52,7 @@
               <a href="" class="play-pause" ng-show="allowedIntervals && testPaused" ng-click="pauseResumeTestCountdown(false, $event)"><span>Play</span> <i class="fa fa-play"></i></a>
               <a href="" class="play-pause" ng-show="allowedIntervals && !testPaused" ng-click="pauseResumeTestCountdown(true, $event)"><span>Pause</span> <i class="fa fa-pause"></i></a>
             </h3>
-            <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && !test.questions[currentIndex].linked">
+            <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && (!test.questions[currentIndex].linked || test.questions[currentIndex].linkOrder == 1)">
               <div class="question" ng-bind-html="test.questions[currentIndex].questionText"></div>
               <ul class="options radios">
                 <li ng-repeat="option in test.questions[currentIndex].options" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
@@ -68,7 +68,7 @@
               </ul>
               <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
-            <article ng-hide="testPaused" ng-if="test.questions[currentIndex].pictorial && !test.questions[currentIndex].linked">
+            <article ng-hide="testPaused" ng-if="test.questions[currentIndex].pictorial && (!test.questions[currentIndex].linked || test.questions[currentIndex].linkOrder == 1)">
               <div class="question pictorial" ng-bind-html="test.questions[currentIndex].questionText"></div>
               <ul class="options radios pictorial">
                 <li ng-repeat="option in test.questions[currentIndex].options" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
@@ -84,10 +84,10 @@
               </ul>
               <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
-            <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && test.questions[currentIndex].linked">
+            <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && test.questions[currentIndex].linked && test.questions[currentIndex].linkOrder == 2">
               <div class="question linked" ng-bind-html="test.questions[currentIndex].questionText"></div>
               <ul class="options radios">
-                <li ng-repeat="option in test.questions[currentIndex].options" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
+                <li ng-repeat="option in test.questions[currentIndex].options | filter:{linkedOption:test.questions[currentIndex-1].answerId}:true" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
                   <label class="radio-item radio-theme">
                     <input type="radio" name="r1"
                       ng-model="test.questions[currentIndex].answerId"
