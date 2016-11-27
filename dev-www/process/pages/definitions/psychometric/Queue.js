@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("psychometric.Queue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "PsychometricTestService",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, PsychometricTestService) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 				$log.info("psychometric.Queue got initialized");
 			},
 			definition: {
-				title: "SEARCH_LOAN",
+				title: "SEARCH",
 				searchForm: [
 					"*"
 				],
@@ -39,11 +39,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "pincode": {
-	                        "title": "PINCODE",
-	                        "type": "string",
-	                       
+	                     "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
 	                    }
+
 					},
 					"required": []
 				},
@@ -59,8 +59,9 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
+	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
+	                    
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;
@@ -86,13 +87,12 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					},
 					getListItem: function(item) {
 						return [
-							
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -103,30 +103,24 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 						};
 					},
 					getColumns: function() {
-						return [
-						{
-							title: 'ID',
-							data: 'id'
-						},
-						
-						{
+						return [{
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
+							data: 'customerName'
 						}, {
 							title: 'AREA',
 							data: 'area'
 						}, {
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
+							data: 'villageName'
 						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
@@ -135,11 +129,12 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 							desc: "",
 							icon: "fa fa-eye-slash",
 							fn: function(item, index) {
-								$state.go("Page.PsychometricTest", {
-									pageId: item.id + ":" + item.applicantId
+								PsychometricTestService.start(item.applicantName, item.loanId).then(function(){
+									$log.info("post PsychometricTestService call");
 								});
 							},
 							isApplicable: function(item, index) {
+
 								return true;
 							}
 						}];

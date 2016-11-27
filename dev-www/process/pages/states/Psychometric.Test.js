@@ -1,24 +1,33 @@
+irf.pages.factory("PsychometricTestService", ["$q", "$state", function($q, $state){
+	var deferred;
+	return {
+		start: function(participantId, applicationId) {
+			deferred = $q.defer();
+			$state.go("Page.PsychometricTest", {
+				participantId: participantId,
+				applicationId: applicationId
+			});
+			return deferred.promise;
+		},
+		deferred: deferred
+	};
+}]);
 irf.pages.controller("PsychometricTestCtrl",
-	["$log", "$scope", "SessionStore", "$stateParams", "Psychometric", "$element", "$timeout", "Queries",
-	function($log, $scope, SessionStore, $stateParams, Psychometric, $element, $timeout, Queries){
+	["$log", "$scope", "SessionStore", "$stateParams", "Psychometric", "$element", "$timeout", "Queries", "PsychometricTestService",
+	function($log, $scope, SessionStore, $stateParams, Psychometric, $element, $timeout, Queries, PsychometricTestService){
 	$log.info("PsychometricTest loaded");
 
-	var params = $stateParams.pageId.split(':');
-	if (params.length < 2) {
-		alert('Required parameters missing');
-		$scope.testStatus = 'Invalid';
-	}
-	$scope.participantId = params[0];
-	$scope.applicationId = params[1];
+	$scope.participantId = $stateParams.participantId;
+	$scope.applicationId = $stateParams.applicationId;
 	$scope.createdBy = SessionStore.getLoginname();
 
 	$scope.participantCustomer = $scope.participantId;
 	$scope.createdByUser = SessionStore.getUsername();
-
+/*
 	Queries.getCustomerBasicDetails({ids:[$scope.participantId]}).then(function(resp){
 		$scope.participantCustomer = resp.ids[$scope.participantId]['first_name'];
 	});
-
+*/
 	$scope.currentIndex = 0;
 	$scope.indexText = function() {
 		var i = $scope.currentIndex + 1;
@@ -125,7 +134,7 @@ irf.pages.controller("PsychometricTestCtrl",
 		$scope.lastIndex = -1;
 		$log.info("Chosen language: " + $scope.chosenLanguage);
 		Psychometric.getTest({
-			"participantId": $scope.participantId,
+			"participantId": 1, //$scope.participantId,
 			"applicationId": $scope.applicationId,
 			"createdBy": $scope.createdBy,
 			"langCode": $scope.chosenLanguage
@@ -176,7 +185,12 @@ irf.pages.controller("PsychometricTestCtrl",
 	}
 
 	$scope.closeTest = function() {
-		$scope.stage = STAGES.LANG_CHOICE; // TODO remove
+		if (PsychometricTestService.deferred) {
+			PsychometricTestService.deferred.resolve();
+			PsychometricTestService.deferred = null;
+		} else {
+			$log.info("Test called through invalid route");
+		}
 	}
 
 	$scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 

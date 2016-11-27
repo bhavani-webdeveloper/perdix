@@ -75,7 +75,7 @@ irf.pages.config([
 		controller: "PageManagementDashboardCtrl"
 	},{
 		name: "Page.PsychometricTest",
-		url: "/PsychometricTest/:pageId",
+		url: "/PsychometricTest/:participantId/:applicationId",
 		templateUrl: "process/pages/templates/Psychometric.Test.html",
 		controller: "PsychometricTestCtrl"
 	},{
