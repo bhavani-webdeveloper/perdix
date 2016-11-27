@@ -1251,10 +1251,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                        startEmpty: true,
                        title:"FINANCIAL_LIABILITIES",
                        items:[
-                           {
-                               key:"customer.liabilities[].loanType",
-                               type:"select"
-                           },
+                           // {
+                           //     key:"customer.liabilities[].loanType",
+                           //     type:"select"
+                           // },
                            {
                                key:"customer.liabilities[].loanSource",
                                type:"select"
