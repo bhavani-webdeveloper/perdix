@@ -62,9 +62,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             },
             "origination-stage": function(bundleModel, model, obj){
                 model.currentStage = obj
-                if (obj =='ScreeningReview') {
-                    pageParams.readonly = true;
-                }
             }
         },
         offline: false,

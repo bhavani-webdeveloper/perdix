@@ -199,7 +199,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             },
                             {
                                 key: "loanAccount.newassetdetails[].purchasePrice",
-                                title:"PURCHASE_RICE",
+                                title:"PURCHASE_PRICE",
                                 type: "number",
                             },
                             {
@@ -265,6 +265,19 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 ]
             },
             {
+                "type": "box",
+                "title": "APPLICATION_REVIEW_REMARKS",
+                "condition":"model.currentStage=='ApplicationReview'",
+                "items": [
+                    {
+                        key: "loanAccount.ApplicationReviewRemarks"
+                    },
+                    {
+                        key: "loanAccount.ApplicationDeviations"
+                    },
+                ]
+            },
+            {
                 "type": "actionbox",
                 "condition": "model.loanAccount.customerId &&  !model.loanAccount.id && !(model.currentStage=='ScreeningReview')",
                 "items": [
@@ -307,33 +320,19 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
                     PageHelper.showLoader();
-                    if (model.currentStage=='ScreeningReview')
-                    {
-                        IndividualLoan.update(reqData)
-                            .$promise
-                            .then(function(res){
+                    IndividualLoan.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            if(model.currentStage=='ScreeningReview')
                                 $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
-                            }, function(httpRes){
-                                PageHelper.showErrors(httpRes);
-                            })
-                            .finally(function(){
-                                PageHelper.hideLoader();
-                            })
-                    }
-                    else
-                    {
-                        IndividualLoan.create(reqData)
-                            .$promise
-                            .then(function(res){
-                                $state.go('Page.Landing', null);    
-                            }, function(httpRes){
-                                PageHelper.showErrors(httpRes);
-                            })
-                            .finally(function(){
-                                PageHelper.hideLoader();
-                            })
-                    }
-
+                            if(model.currentStage=='ApplicationReview')
+                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
+                        }, function(httpRes){
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
                 })
             },
             save: function(model, formCtrl, form, $event){

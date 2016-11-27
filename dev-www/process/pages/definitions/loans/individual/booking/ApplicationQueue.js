@@ -86,13 +86,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 					},
 					getListItem: function(item) {
 						return [
-							
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -103,30 +102,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 						};
 					},
 					getColumns: function() {
-						return [
-						{
-							title: 'ID',
-							data: 'id'
-						},
-						
-						{
+						return [{
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
+							data: 'customerName'
 						}, {
 							title: 'AREA',
 							data: 'area'
 						}, {
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
+							data: 'villageName'
 						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
@@ -135,12 +128,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.Application', {
+								entityManager.setModel('loans.individual.screening.Application', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
 									pageName: "loans.individual.screening.Application",
-									pageId: item.id
+									pageId: item.loanId
 								});
 							},
 							isApplicable: function(item, index) {

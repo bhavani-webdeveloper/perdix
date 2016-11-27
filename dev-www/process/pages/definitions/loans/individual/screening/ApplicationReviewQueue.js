@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationReviewQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -18,9 +18,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
-					"properties": 
-						{
-						
+					"properties": {
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -40,11 +38,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-	                    }, "pincode": {
-	                        "title": "PINCODE",
-	                        "type": "string"
 	                    },
-	                    
+	                     "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
+	                    }
+
 					},
 					"required": []
 				},
@@ -60,7 +59,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
+	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
@@ -87,13 +86,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 					},
 					getListItem: function(item) {
 						return [
-							
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -105,33 +103,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 					},
 					getColumns: function() {
 						return [{
-							title: 'ID',
-							data: 'id'
-						},
-						 {
-							title: 'S_NO',
-							data: 'sno'
-						},
-						 {
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
+							data: 'customerName'
 						}, {
 							title: 'AREA',
 							data: 'area'
-						},
-						 {
+						}, {
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
-						}, 
-						{
-							title: 'PINCODE',
-							data: 'pincode'
+							data: 'villageName'
+						}, {
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
@@ -140,12 +128,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationReviewQ
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.ApplicationReview', {
+								entityManager.setModel('loans.individual.screening.ApplicationReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.ApplicationReview",
-									pageId: item.id
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.ApplicationReview",
+									pageId: item.loanId
 								});
 							},
 							isApplicable: function(item, index) {

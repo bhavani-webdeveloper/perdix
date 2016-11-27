@@ -24,22 +24,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
 			            pageClass: 'guarantor',
 			            minimum: 0,
 			            maximum: 3
-			        }/*,
-			        {
-			            pageName: 'customer.EnterpriseEnrolment2',
-			            title: 'BUSINESS',
-			            pageClass: 'business',
-			            minimum: 1,
-			            maximum: 1
-			        },
-			        {
-			        	pageName: 'loans.individual.screening.LoanRequest',
-			            title: 'LOAN_REQUEST',
-			            pageClass: 'loan-request',
-			            minimum: 1,
-			            maximum: 1
-			        }*/
-
+			        }
         		],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");

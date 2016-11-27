@@ -92,7 +92,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
-                "condition": "model.currentStage=='Screening'",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
                 "items": [
                     {
                         "key": "customer.id",
@@ -391,7 +391,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
-                "condition": "model.currentStage=='ScreeningReview'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                 readonly:true,
                 "items": [
                     {
@@ -591,7 +591,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='Screening'",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 "items":[
                     "customer.mobilePhone",
                     "customer.landLineNo",
@@ -655,7 +655,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='ScreeningReview'",
+                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                 readonly:true,
                 "items":[
                     "customer.mobilePhone",
@@ -688,7 +688,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition":"model.currentStage=='Screening'",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -818,7 +818,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition":"model.currentStage=='ScreeningReview'",
+                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                 readonly:true,
                 items: [
                     {
@@ -914,7 +914,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='Screening'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items:[
                     {
                        key:"customer.liabilities",
@@ -972,7 +972,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                readonly:true,
                 items:[
                     {
@@ -1031,7 +1031,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='Screening'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -1096,7 +1096,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                readonly:true,
                 items:[
                     {
@@ -1162,7 +1162,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='Screening'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -1317,7 +1317,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                readonly:true,
                 items:[
                     {
@@ -1440,7 +1440,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='Screening'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items:[
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
@@ -1463,7 +1463,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
                readonly:true,
                 items:[
                     {
@@ -1486,14 +1486,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"MACHINARY",
+               title:"MACHINERY",
                condition: "model.currentStage == 'Application'",
                 items:[
                     {
                       key:"customer.machinery",
                        type:"array",
                        startEmpty: true,
-                       title:"MACHINARY SECTION",
+                       title:"MACHINERY_SECTION",
                        items:[
                             {
                                 key:"customer.machinery[].machineDescription",
@@ -1572,7 +1572,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"MACHINARY",
+               title:"MACHINERY",
                condition: "model.currentStage == 'ApplicationReview'",
                readonly:true,
                 items:[
@@ -1580,7 +1580,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                       key:"customer.machinery",
                        type:"array",
                        startEmpty: true,
-                       title:"MACHINARY SECTION",
+                       title:"MACHINERY_SECTION",
                        items:[
                             {
                                 key:"customer.machinery[].machineDescription",
