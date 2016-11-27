@@ -1031,7 +1031,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+               "condition":"model.currentStage=='Application'",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -1047,9 +1047,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type: "date"
+                                type: "select",
+                                enumCode: "customer_since"
                             },
-                            
                             {
                                 key: "customer.buyerDetails[].paymentDate",
                                 title: "Payment Date",
@@ -1179,139 +1179,137 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "AVERAGE_MONTHLY_NET_INCOME",
                         type: "amount"
                     },
-                
-                        {
-                                type:"fieldset",
-                                title:"Income",
-                                items:[]
-                        },
-                         {
-                            key:"customer.incomeThroughSales",
-                            type:"array",
-                            startEmpty: true,
-                            title:"Through Sales",
-                            items:[
-                                {
-                                    key: "customer.incomeThroughSales[].buyerName",
-                                    type: "lov",
-                                    autolov: true,
-                                    title:"BUYER_NAME",
-                                    bindMap: {
+                    {
+                        type:"section",
+                        title:"INCOME_EXPENSE_INFORMATION",
+                        condition: "model.currentStage == 'Application'",
+                        items: [
+                            {
+                                key:"customer.otherBusinessIncomes",
+                                type:"array",
+                                startEmpty: true,
+                                title:"OTHER_BUSINESS_INCOME",
+                                items:[
+                                    {
+                                        key: "customer.otherBusinessIncomes[].incomeSource",
+                                        title: "INCOME_SOURCE",
+                                        type: "select"
                                     },
-                                    searchHelper: formHelper,
-                                    search: function(inputModel, form, model, context) {
-                                        var out = [];
-                                        for (var i=0; i<model.customer.buyerDetails.length; i++){
-                                            out.push({
-                                                name: model.customer.buyerDetails[i].buyerName,
-                                                value: model.customer.buyerDetails[i].buyerName
-                                            })
-                                        }
-                                        return $q.resolve({
-                                            headers: {
-                                                "x-total-count": out.length
-                                            },
-                                            body: out
-                                        });
+                                    {
+                                        key: "customer.otherBusinessIncomes[].amount",
+                                        title: "AMOUNT",
+                                        type: "amount"
                                     },
-                                    onSelect: function(valueObj, model, context){
-                                        if (_.isUndefined(model.customer.incomeThroughSales[context.arrayIndex])) {
-                                            model.customer.incomeThroughSales[context.arrayIndex] = {};
-                                        }
+                                    {
+                                        key: "customer.otherBusinessIncomes[].date",
+                                        title: "DATE",
+                                        type: "date"
+                                    },
+                                ]
+                            },
+                            {
+                                key:"customer.incomeThroughSales",
+                                type:"array",
+                                startEmpty: true,
+                                title:"INCOMRE_THROUGH_SALES",
+                                items:[
+                                    {
+                                        key: "customer.incomeThroughSales[].buyerName",
+                                        type: "lov",
+                                        autolov: true,
+                                        title:"BUYER_NAME",
+                                        bindMap: {
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var out = [];
+                                            for (var i=0; i<model.customer.buyerDetails.length; i++){
+                                                out.push({
+                                                    name: model.customer.buyerDetails[i].buyerName,
+                                                    value: model.customer.buyerDetails[i].buyerName
+                                                })
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            if (_.isUndefined(model.customer.incomeThroughSales[context.arrayIndex])) {
+                                                model.customer.incomeThroughSales[context.arrayIndex] = {};
+                                            }
 
-                                        model.customer.incomeThroughSales[context.arrayIndex].buyerName = valueObj.value;
+                                            model.customer.incomeThroughSales[context.arrayIndex].buyerName = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
                                     },
-                                    getListDisplayItem: function(item, index) {
-                                        return [
-                                            item.name
-                                        ];
+                                    {
+                                        key: "customer.incomeThroughSales[].incomeType",
+                                        title: "INCOME_TYPE",
+                                        type: "radios",
+                                        titleMap: {
+                                        Cash:"Cash",
+                                        Invoice:"Invoice"
+                                        }
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].amount",
+                                        title: "AMOUNT",
+                                        type: "amount"   
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].date",
+                                        title: "DATE",
+                                        type: "date"
                                     }
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].incomeType",
-                                    title: "INCOME_TYPE",
-                                    type: "radios",
-                                    titleMap: {
-                                    Cash:"Cash",
-                                    Invoice:"Invoice"
-                                    }
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"   
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].date",
-                                    title: "DATE",
-                                    type: "date"
-                                }, 
-                                
-                            ]
-                        },
-                        {
-                          key:"customer.otherBusinessIncomes",
-                            type:"array",
-                            startEmpty: true,
-                            title:"OTHER_BUSINESS_INCOME",
-                            items:[
-                                {
-                                    key: "customer.otherBusinessIncomes[].incomeSource",
-                                    title: "INCOME_SOURCE",
-                                    type: "select"
-                                },
-                                {
-                                    key: "customer.otherBusinessIncomes[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.otherBusinessIncomes[].date",
-                                    title: "DATE",
-                                    type: "date"
-                                }, 
-                             ]    
-                        }, 
-                         {
+                                ]
+                            },
+                            {
                                 type:"fieldset",
                                 title:"EXPENSES",
                                 items:[]
-                        },
-                         {
-                            key:"customer.rawMaterialExpenses",
-                            type:"array",
-                            startEmpty: true,
-                            title:"Raw material expense",
-                            items:[
-                                {
-                                    key: "customer.rawMaterialExpenses[].vendorName",
-                                    title: "VENDOR_NAME",
-                                    type: "string"
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].rawMaterialType",
-                                    title: "TYPE",
-                                    type: "radios",
+                            },
+                            {
+                                key:"customer.rawMaterialExpenses",
+                                type:"array",
+                                startEmpty: true,
+                                title:"RAW_MATERIAL_EXPENSE",
+                                items:[
+                                    {
+                                        key: "customer.rawMaterialExpenses[].vendorName",
+                                        title: "VENDOR_NAME",
+                                        type: "string"
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].rawMaterialType",
+                                        title: "TYPE",
+                                        type: "radios",
                                         titleMap: {
                                             Cash:"Cash",
                                             Invoice:"Invoice"
                                         }
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].date",
-                                    title: "DATE",
-                                    type: "date"
-                                },
-                                
-                            ]
-                        },
-                        
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].amount",
+                                        title: "AMOUNT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].date",
+                                        title: "DATE",
+                                        type: "date"
+                                    }
 
+                                ]
+                            }
+                        ]
+                    }
                 ]
             },
             {

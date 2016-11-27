@@ -44,7 +44,13 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 model.customer.expenditures.push({
                     "expenditureSource": "expenditure",
                     "frequency": "Monthly"
-                })
+                });
+
+                model.customer.familyMembers = [
+                    {
+                        'relationShip': 'self'
+                    }
+                ]
 
                 if (bundlePageObj){
                     model._bundlePageObj = bundlePageObj;
@@ -486,7 +492,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     {
                         "key": "customer.title",
                         "title": "TITLE",
-                        "type": "select"
+                        "type": "select",
+                        "enumCode": "title"
                     },
                     {
                         key: "customer.firstName",
@@ -531,7 +538,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     },
                     {
                         key: "customer.language",
-                        title: "LANGUAGE"
+                        title: "LANGUAGE",
+                        type: "select",
+                        enumCode: "language"
                     },
                     {
                         key: "customer.fatherFirstName",
@@ -976,7 +985,31 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening'",
+                "items": [
+                    {
+                        "key": "customer.familyMembers",
+                        "type": "array",
+                        "items": [
+                            {
+                                "key": "customer.familyMembers[].relationShip",
+                                "type": "select",
+                                "readonly": true
+                            },
+                            {
+                                "key": "customer.familyMembers[].educationStatus",
+                                "title": "EDUCATION_LEVEL",
+                                "type": "select"
+                            }
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "type": "box",
+                "title": "T_FAMILY_SELF_DETAILS",
+                "condition": "model.currentStage == 'Application'",
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
