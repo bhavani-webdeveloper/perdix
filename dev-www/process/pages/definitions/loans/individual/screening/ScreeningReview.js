@@ -57,12 +57,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                         /* TODO HANDLE Guarantors */
                                     }
 
-                                    Queries.getCustomerBasicDetails({urns: urnNos})
+                                    /*Queries.getCustomerBasicDetails({urns: urnNos})
                                         .then(function(customers){
                                             for (var i=0;i<coApplicants.length; i++){
                                                 coApplicants[i].customerId = customers.urns[coApplicants[i].urn].id;
-                                            }
-                                            applicant.customerId = customers.urns[applicant.urn].id;
+                                            }*/
+                                            //applicant.customerId = customers.urns[applicant.urn].id;
                                             $this.bundlePages.push({
                                                 pageName: 'customer.IndividualEnrolment2',
                                                 title: 'APPLICANT',
@@ -109,9 +109,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                                 }
                                             });
                                             deferred.resolve();
-                                        }, function(httpRes){
+                                        /*}, function(httpRes){
                                             PageHelper.showErrors(httpRes);
-                                        })
+                                        })*/
                                 }, function(httpRes){
                                     deferred.reject();
                                     PageHelper.showErrors(httpRes);
