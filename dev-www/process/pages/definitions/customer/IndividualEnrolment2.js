@@ -1536,37 +1536,37 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.customerBankAccounts[].bankStatement",
+                                key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
                                 items: [
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
                                         type: "date",
                                         title: "START_MONTH"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                         type: "amount",
                                         title: "TOTAL_DEPOSITS"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                         type: "amount",
                                         title: "TOTAL_WITHDRAWALS"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
                                         title: "BALANCE_AS_ON_15TH"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                         type: "amount",
                                         title: "NO_OF_CHEQUE_BOUNCED"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
