@@ -13,6 +13,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 				searchForm: [
 					"*"
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -62,7 +63,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					},
 					"required": ["LoanAccountNumber"]
 				},
-				autoSearch: true,
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
