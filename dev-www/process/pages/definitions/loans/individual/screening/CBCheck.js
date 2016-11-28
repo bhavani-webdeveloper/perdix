@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CBCheck"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,CreditBureau){
 
     var branch = SessionStore.getBranch();
 
@@ -10,7 +10,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "type": "schema-form",
         "title": "CB_CHECK",
         "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+        initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.loanSaved = false;
@@ -123,7 +123,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     type: 'button',  
                                     title: 'Submit for CBCheck',
                                     "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
-                                    "onClick": "actions.save(model.customer.applicantid,'CIBIL',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
+                                    "onClick": "actions.save(model.customer.applicantid,'AOR',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
                                 }]
                             }
                             ]
@@ -138,6 +138,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             save: function(customerId, CBType, loanAmount, loanPurpose){
                 $log.info("Inside submit()");
                 $log.warn(model);
+                CreditBureau.creditBureauCheck({
+                    customerId: customerId,
+                    highMarkType: CBType,
+                    purpose: loanPurpose,
+                    loanAmount: loanAmount
+                }, function(response){
+                    PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
+                }, function(errorResponse){
+                    PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+                });
             }
         }
 
