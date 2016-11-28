@@ -62,6 +62,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					},
 					"required": ["LoanAccountNumber"]
 				},
+				autoSearch: true,
 				getSearchFormHelper: function() {
 					return formHelper;
 				},

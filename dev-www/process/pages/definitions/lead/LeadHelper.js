@@ -10,13 +10,13 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
             $log.info(reqData);
             PageHelper.clearErrors();
             PageHelper.showLoader();
+
             irfProgressMessage.pop('lead-save', 'Working...');
             reqData['leadAction'] = 'SAVE';
             if (reqData.lead.screeningDate) {
                 reqData['stage'] = 'ReadyForScreening';
-            }
-            else{
-               reqData['stage'] = 'Inprocess'; 
+            } else {
+                reqData['stage'] = 'Inprocess';
             }
             /* TODO fix for KYC not saving **/
             var action = reqData.lead.id ? 'update' : 'save';

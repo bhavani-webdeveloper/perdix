@@ -1,6 +1,8 @@
 irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
+
+		
 		return {
 			"type": "search-list",
 			"title": "LEAD_ASSIGNMENT_PENDING",
@@ -51,14 +53,14 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					var branches = formHelper.enum('branch_id').data;
+					/*var branches = formHelper.enum('branch_id').data;
 					var branchName;
 					for (var i=0; i<branches.length;i++){
                         if(branches[i].code==searchOptions.branch_id)
                         branchName = branches[i].name;
-                    }
+                    }*/
 					var promise = Lead.search({
-						'branchName': branchName,
+						'branchName': searchOptions.branch,
 						'currentStage': "Assignment Pending",
 						'leadName': searchOptions.leadName,
 						'area': searchOptions.area,

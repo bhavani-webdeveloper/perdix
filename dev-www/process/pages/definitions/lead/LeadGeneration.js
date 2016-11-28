@@ -15,8 +15,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 //model.branchId = SessionStore.getBranchId() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                 model = Utils.removeNulls(model, true);
-                //model.lead.branchName = SessionStore.getBranchId() + '';
-                var branch = model.lead.branchName;
+                model.lead.branchId = SessionStore.getBranchId() + '';
                 $log.info("lead generation page got initiated");
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
@@ -474,6 +473,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         return out;
                     };
                     var reqData = _.cloneDeep(model);
+                    var centres = formHelper.enum('centre').data;
+                    for (var i = 0; i < centres.length; i++) {
+                        if ((centres[i].code) == reqData.lead.centreId) {
+                            reqData.lead.centreName = centres[i].name;
+                        }
+                    }
                     if (reqData.lead.id) {
                         if (reqData.lead.leadStatus == "FollowUp") {
                             LeadHelper.followData(reqData).then(function(resp) {

@@ -1,7 +1,14 @@
 irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
-		var branches = formHelper.enum('branch_id').data;
+		var centres = SessionStore.getCentres();
+		var centreName=[];
+
+		for (var i = 0; i < centres.length; i++) {
+			centreName.push(centres[i].centreName);
+		}
+
+		/*var branches = formHelper.enum('branch_id').data;
 					var centres = formHelper.enum('centre').data;
 					var branchCode;
 					var centreName =[];
@@ -15,15 +22,13 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 							centreName.push(centres[i].name);
 						}
 					}
-
+*/
 		return {
 			"type": "search-list",
 			"title": "INCOMPLETE_LEAD",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
-				model.centre =centreName[0];
-				$log.info(centreName[0]);
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
@@ -31,50 +36,13 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 			definition: {
 				title: "SEARCH_LEAD",
 				searchForm: [
-					// "*"
-					{
-						"key": "branch_id",
-						"type": "select"
-					}, {
-						"key": "centre",
-						"type": "select",
-						"parentEnumCode": "branch_id"
-					}, {
-						"key": "leadName"
-					}, {
-						"key": "businessName"
-					}, {
-						"key": "area"
-					}, {
-						"key": "cityTownVillage"
-					}
+					 "*"
 				],
 				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch_id": {
-							"title": "HUB_NAME",
-							"type": ["null", "number"],
-							"enumCode": "branch_id" //,
-								// "x-schema-form": {
-								// 	"type": "select",
-								// 	"screenFilter": true
-								// }
-						},
-						"centre": {
-							"title": "SPOKE_NAME",
-							"type": ['null', 'number'],
-							"enumCode": "centre" //,
-								// "x-schema-form": {
-								// 	"type": "select",
-								// 	"filter": {
-								// 		"parentCode as branch": "model.branch"
-								// 	},
-								// 	"screenFilter": true
-								// }
-						},
 						"leadName": {
 							"title": "LEAD_NAME",
 							"type": "string"
@@ -98,14 +66,14 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					
+
 
 					var promise = Lead.search({
 						'branchName': branch,
 						'currentStage': "Incomplete",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
-						//'centreName': centreName,
+						'centreName': centreName[0],
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,

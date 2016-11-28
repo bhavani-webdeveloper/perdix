@@ -32,6 +32,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 					},
 					"required": []
 				},
+				autoSearch: true,
 				getSearchFormHelper: function() {
 					return formHelper;
 				},

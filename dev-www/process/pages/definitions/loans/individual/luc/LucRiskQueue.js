@@ -37,6 +37,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 					},
 					"required": ["LoanAccountNumber"]
 				},
+				autoSearch: true,
 				getSearchFormHelper: function() {
 					return formHelper;
 				},

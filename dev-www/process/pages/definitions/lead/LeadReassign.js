@@ -211,6 +211,13 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         return out;
                     };
                     var reqData = _.cloneDeep(model);
+                    var centres = formHelper.enum('centre').data;
+
+                    for (var i = 0; i < centres.length; i++) {
+                        if ((centres[i].code) == reqData.lead.centreId) {
+                            reqData.lead.centreName = centres[i].name;
+                        }
+                    }
                     if (reqData.lead.id) {
                         LeadHelper.proceedData(reqData).then(function(resp) {
                             $state.go('Page.LeadDashboard', null);

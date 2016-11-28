@@ -74,7 +74,7 @@
 					"type": "number"
 				},
 				"isAssetsOrdered": {
-					"title": "IS_ASSETS_ORDERED",
+					"title": "ARE_ASSETS_ORDERED",
 					"type": "number"
 				},
 				"reasonForNotOrderingAssets": {
@@ -102,7 +102,7 @@
 					"type": "number"
 				},
 				"lucEscalatedReason": {
-					"title": "LUC_ESCALATED_REASON",
+					"title": "LUC_ESCALALATION_REASON",
 					"type": "string"
 				},
 				"loanId": {
@@ -166,7 +166,7 @@
 					"type": "number"
 				},
 				"loanAmountPurpose": {
-					"title": "LOAN_AMOUNT_PURPOSE",
+					"title": "LOAN_AMOUNT_USED_FOR",
 					"type": "string"	
 				},
 				"verifiedBy": {
@@ -194,7 +194,7 @@
 					"type": "number"
 				},
 				"nonIntendedPurposeAmountSpentOn": {
-					"title": "NON_INTENDED_AMOUNT_SPENT_ON",
+					"title": "UNINTENDED_AMOUNT_USED_FOR",
 					"type": "string"	
 				},
 				"repayedDebitAmount": {
@@ -206,11 +206,11 @@
 					"type": "number"
 				},
 				"remainingAmountPurpose": {
-					"title": "REMAINING_AMOUNT_PURPOSE",
+					"title": "REMAINING_AMOUNT_TO_BE_USED_FOR",
 					"type": "string"
 				},
 				"remainingAmountUtilizedOn": {
-					"title": "REMAININ_AMOUNT_UTILIZED_ON",
+					"title": "BY_WHEN_REMAINING_AMOUNT_WILL_BE_USED",
 					"type": "string"
 				},
 				"socialImpactDetails": {
@@ -238,7 +238,7 @@
 					],
 					"properties": {
 						"totalNumberOfMen": {
-							"title": "TOTAL_NUMBER_OF_MEN",
+							"title": "TOTAL_NUMBER_OF_MEN_ADDED",
 							"type": "number"
 						},
 						"averageSalaryOfMen": {
@@ -246,15 +246,15 @@
 							"type": "number"
 						},
 						"menPartTimeEmployee": {
-							"title": "MEN_PART_TIME_EMPLOYEE",
+							"title": "PART_TIME_MALE_EMPLOYEE_ADDED",
 							"type": "number"
 						},
 						"menFullTimeEmployee": {
-							"title": "MEN_FULL_TIME_EMPLOYEE",
+							"title": "FULL_TIME_MALE_EMPLOYEE_ADDED",
 							"type": "number"
 						},
 						"avgSkillLevelOfMen": {
-							"title": "AVG_SKILL_LEVEL_OF_MEN",
+							"title": "AVG_SKILL_OF_MALE_EMPLOYEES",
 							"type": "string"
 						},
 						"noOfFirstJobsMen": {
@@ -262,7 +262,7 @@
 							"type": "number"
 						},
 						"totalNumberOfWomen": {
-							"title": "TOTAL_NUMBER_OF_WOMEN",
+							"title": "FEMALE_EMPLOYEES_ADDED",
 							"type": "number"
 						},
 						"averageSalaryOfWomen": {
@@ -270,15 +270,15 @@
 							"type": "number"
 						},
 						"womenPartTimeEmployee": {
-							"title": "WOMEN_PART_TIME_EMPLOYEE",
+							"title": "PART_TIME_FEMALE_EMPLOYEE_ADDED",
 							"type": "number"
 						},
 						"womenFullTimeEmployee": {
-							"title": "WOMEN_FULL_TIME_EMPLOYEE",
+							"title": "FULL_TIME_FEMALE_EMPLOYEE_ADDED",
 							"type": "number"
 						},
 						"avgSkillLevelOfWomen": {
-							"title": "AVG_SKILL_LEVEL_OF_WOMEN",
+							"title": "AVG_SKILL_OF_FEMALE_EMPLOYEES",
 							"type": "string"
 						},
 						"noOfFirstJobsWomen": {
@@ -373,11 +373,11 @@
 								"type": "string"
 							},
 							"companyNameInOriginalInvoice": {
-								"title": "IS_COMPANY_NAME_IN_INVOICE",
+								"title": "DOES_ORIGINAL_INVOICE_HAS_COMPANY_NAME",
 								"type": "string"
 							},
 							"hypothecatedTo": {
-								"title": "HYPOTHECATED_",
+								"title": "HYPOTHECATED_TO",
 								"type": "string"
 							},
 							"udf1": {

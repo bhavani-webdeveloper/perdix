@@ -122,6 +122,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.percentage",
+                                    title:"%OF_AMOUNT_UTILISED",
                                     type: "integer",
                                     "readonly": true
 
@@ -235,7 +236,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
                                 items: [{
                                     key: "loanMonitoringDetails.loanAmountUsed",
-                                    type: "number",
+                                    type:"amount",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
                                         model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
@@ -243,20 +244,25 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                 }, {
                                     key: "loanMonitoringDetails.loanAmountPurpose",
+                                    type:"select",
+                                     titleMap: {
+                                            "Raw material": "Raw material",
+                                        },
 
                                 }, {
                                     key: "loanMonitoringDetails.verifiedBy",
                                     type:"select",
                                      titleMap: {
-                                            "What was Loan Amount used for?": "What was Loan Amount used for?",
-                                        },
-                                    
+                                            "Bill ": "Bill ",
+                                        }
                                 }, {
                                     key: "loanMonitoringDetails.amountUsedPercentage",
                                     "readonly": true,
+                                    title:"%OF_AMOUNT_UTILISED",
                                     type: "integer"
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    type:"amount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
@@ -267,19 +273,22 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    title:"%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                    type: "number",
+                                    type:"amount",
+
                                    /* "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
                                     }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    title:"%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
@@ -331,14 +340,14 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Machine Refinance'",
                                 items: [{
                                     key: "loanMonitoringDetails.repayedDebitAmount",
-                                    type: "number",
+                                    type: "amount",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.repayedDebitAmount) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
                                         model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.monthlyInterestForDebit",
-                                    type: "number"
+                                    type: "amount"
                                 }, {
                                     key: "loanMonitoringDetails.remainingAmountPurpose",
                                 }, {
@@ -346,28 +355,30 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "date"
                                 }, {
                                     key: "loanMonitoringDetails.amountUsedPercentage",
+                                    title:"%OF_AMOUNT_UTILISED",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
+                                    type:"amount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                    "onChange": function(modelValue, form, model) {
-                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                     "onChange": function(modelValue, form, model) {
+                                        var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
                                         model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.repayedDebitAmount - model.loanMonitoringDetails.intendedPurposeAmount;
-                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                        var b = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                                         model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(b.toFixed());
-
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
+                                    title:"%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                    type: "number",
+                                    type: "amount",
                                     "readonly": true,
                                     /*"onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
@@ -375,6 +386,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
+                                    title:"%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
@@ -439,7 +451,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "amount"
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee",
-                                type: "number"
+                                type: "number",
+                                "onChange": function(modelValue, form, model) {
+                                    model.loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen -
+                                    model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
+                                }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
                                 type: "number"
@@ -465,7 +481,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "amount"
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee",
-                                type: "number"
+                                type: "number",
+                                 "onChange": function(modelValue, form, model) {
+                                    model.loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen -
+                                    model.loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee;
+                                }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee",
                                 type: "number"
