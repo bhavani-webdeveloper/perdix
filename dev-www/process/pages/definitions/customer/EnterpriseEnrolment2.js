@@ -479,6 +479,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.partnershipDissolvedDate",
                         title: "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
+                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
                         type: "date"
                     },
                     {
@@ -1451,7 +1452,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.averagemonthlysalary",
+                        key: "customer.enterprise.avgMonthlySalary",
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
@@ -1475,7 +1476,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.averagemonthlysalary",
+                        key: "customer.enterprise.avgMonthlySalary",
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }

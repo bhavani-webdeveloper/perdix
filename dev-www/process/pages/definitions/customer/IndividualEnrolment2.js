@@ -988,6 +988,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
                 "condition": "model.currentStage=='Screening'",
+                "add": null,
+                "remove": null,
+                "view": "fixed",
                 "items": [
                     {
                         "key": "customer.familyMembers",
