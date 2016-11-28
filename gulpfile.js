@@ -50,7 +50,7 @@ gulp.task('assets', function(){
     return gulp.src([
         'dev-www/img/**/*',
         'dev-www/modules/**/*.' + '+(json|html)',
-        'dev-www/process/**/*.' + '+(json|html)',
+        'dev-www/process/**/*.' + '+(json|html|css)',
         'dev-www/css/fonts/**/*',
         'dev-www/js/vendor/renderjson.js',
         'dev-www/js/themeswitch.js',
