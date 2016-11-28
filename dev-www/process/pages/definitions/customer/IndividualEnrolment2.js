@@ -460,6 +460,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     {
                         key:"customer.centreId",
                         type:"select",
+                        title:"CENTRE_NAME",
                         /*filter: {
                             "parentCode": "branch_id"
                         },*/
@@ -538,7 +539,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     },
                     {
                         key: "customer.language",
-                        title: "LANGUAGE",
+                        title: "PREFERRED_LANGUAGE",
                         type: "select",
                         enumCode: "language"
                     },
@@ -612,6 +613,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     },
                     {
                         key:"customer.centreId",
+                        title:"CENTRE_NAME",
                         type:"select"
                     },
                     {
@@ -671,7 +673,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     },
                     {
                         key: "customer.language",
-                        title: "LANGUAGE"
+                        title: "PREFERRED_LANGUAGE"
                     },
                     {
                         key: "customer.fatherFirstName",
