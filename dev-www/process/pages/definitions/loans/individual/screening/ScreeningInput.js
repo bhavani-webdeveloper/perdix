@@ -88,6 +88,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
         			"on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
         			},
+                    "new-loan": function(pageObj, bundleModel, params){
+                        $log.info("Inside new-loan of CBCheck");
+                        BundleManager.broadcastEvent("new-loan", params);
+                    },
                     "new-enrolment": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
                             case 'applicant':
