@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("psychometric.Queue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "PsychometricTestService",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, PsychometricTestService) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "PsychometricTestService", "PageHelper",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, PsychometricTestService, PageHelper) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -129,8 +129,26 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 							desc: "",
 							icon: "fa fa-eye-slash",
 							fn: function(item, index) {
-								PsychometricTestService.start(item.applicantName, item.loanId).then(function(){
-									$log.info("post PsychometricTestService call");
+								PsychometricTestService.start(item.applicantName, item.loanId).then(function(resp){
+									PageHelper.showLoader();
+									IndividualLoan.get({
+										id: resp.applicationId
+									}, function(reqData) {
+										IndividualLoan.update({
+											loanProcessAction: 'PROCEED',
+											loanAccount: reqData
+										}).$promise.then(function(loanResp){
+											
+										}).finally(function(){
+											$state.go('Page.Engine', {
+												pageName: 'psychometric.Queue',
+												pageId: null
+											});
+											PageHelper.hideLoader();
+										});
+									});
+								}, function(errResp) {
+									$log.error('Psychometric Test failed');
 								});
 							},
 							isApplicable: function(item, index) {

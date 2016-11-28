@@ -19,13 +19,11 @@ irf.models.factory('Psychometric',
         },
         getLanguages: searchResource({
             method: 'GET',
-            url: endpoint + '/maintenance/language/all',
-            isArray: true
+            url: endpoint + '/maintenance/language/all'
         }),
         getCategoryAll: searchResource({
             method: 'GET',
-            url: endpoint + '/maintenance/category/all',
-            isArray: true
+            url: endpoint + '/maintenance/category/all'
         }),
         findCategories:searchResource({
             method: 'GET',

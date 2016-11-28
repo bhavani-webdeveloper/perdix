@@ -110,9 +110,9 @@
             <article class="card">
               {{testStatus=='Close'?"Answers submitted successfully":testStatus}}
               <br>
-              <button class="btn btn-theme" ng-show="testStatus=='Close'" ng-click="closeTest()">Close</button>
-              <br>
               <button class="btn btn-theme" ng-show="testStatus=='Submission failed'" ng-click="submitAnswers()">Retry</button>
+              <br>
+              <button class="btn btn-theme" ng-hide="testStatus=='Submitting'" ng-click="closeTest()">Close</button>
             </article>
           </div>
         </div>

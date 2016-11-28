@@ -1,15 +1,17 @@
-irf.pages.factory("PsychometricTestService", ["$q", "$state", function($q, $state){
-	var deferred;
+var irf = irf || {};
+irf.pages.factory("PsychometricTestService", ["$q", "$state", "$rootScope", function($q, $state, $rootScope){
 	return {
 		start: function(participantId, applicationId) {
-			deferred = $q.defer();
+			irf.PsychometricTestServiceDeferred = $q.defer();
 			$state.go("Page.PsychometricTest", {
 				participantId: participantId,
 				applicationId: applicationId
 			});
-			return deferred.promise;
+			return irf.PsychometricTestServiceDeferred.promise;
 		},
-		deferred: deferred
+		deferred: function () {
+			return irf.PsychometricTestServiceDeferred;
+		}
 	};
 }]);
 irf.pages.controller("PsychometricTestCtrl",
@@ -40,8 +42,8 @@ irf.pages.controller("PsychometricTestCtrl",
 			"language":"English"
 		}
 	];
-	Psychometric.getLanguages({}, function(resp){
-		$scope.LANGUAGES = resp;
+	Psychometric.getLanguages(null, function(resp){
+		$scope.LANGUAGES = resp.body;
 	});
 
 	var STAGES = {
@@ -58,6 +60,7 @@ irf.pages.controller("PsychometricTestCtrl",
 	$scope.testPaused = false;
 	var testCountdownId = null, breakCountdownId = null, testResumed = true;
 	var startCountdown = function() {
+		$scope.testStatus = 'Answering';
 		var testDuration = $scope.test.testDuration;
 		var totalTime = testDuration * 1000, startTime = new Date().getTime();
 
@@ -142,7 +145,7 @@ irf.pages.controller("PsychometricTestCtrl",
 			$scope.test = test;
 			$scope.allowedIntervals = $scope.test.noOfInterval;
 			$scope.lastIndex = $scope.test.questions.length - 1;
-			$scope.testStatus = 'Answering';
+			$scope.testStatus = 'Prepared';
 		}, function(err) {
 			$scope.testStatus = 'Failed';
 		});
@@ -185,9 +188,20 @@ irf.pages.controller("PsychometricTestCtrl",
 	}
 
 	$scope.closeTest = function() {
-		if (PsychometricTestService.deferred) {
-			PsychometricTestService.deferred.resolve();
-			PsychometricTestService.deferred = null;
+		if (PsychometricTestService.deferred()) {
+			if ($scope.testStatus == 'Close') {
+				PsychometricTestService.deferred().resolve({
+					participantId: $scope.participantId,
+					applicationId: $scope.applicationId
+				});
+				PsychometricTestService.deferred = null;
+			} else {
+				$log.info("Returning with Test Status: " + $scope.testStatus);
+				PsychometricTestService.deferred().reject({
+					participantId: $scope.participantId,
+					applicationId: $scope.applicationId
+				});
+			}
 		} else {
 			$log.info("Test called through invalid route");
 		}
