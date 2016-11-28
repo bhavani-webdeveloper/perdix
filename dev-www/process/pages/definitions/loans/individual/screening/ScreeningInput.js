@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
 			            pageName: 'customer.IndividualEnrolment2',
 			            title: 'CO_APPLICANT',
 			            pageClass: 'co-applicant',
-			            minimum: 1,
+			            minimum: 0,
 			            maximum: 3
 			        },
 			        {
