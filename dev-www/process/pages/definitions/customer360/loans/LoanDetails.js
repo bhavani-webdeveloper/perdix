@@ -406,6 +406,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }, {
                             "key": "loanAccount.frequency",
                             "type": "select"
+                        },{
+                            "key":"loanAccount.expectedInterestRate",
+                            title:"Expected Interest Rate",
+                            "type":"number"
                         }]
                     }, {
                         "type": "fieldset",
