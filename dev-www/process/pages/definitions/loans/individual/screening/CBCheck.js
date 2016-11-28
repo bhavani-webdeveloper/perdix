@@ -10,9 +10,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "type": "schema-form",
         "title": "CB_CHECK",
         "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl) {
+        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
+            model.customer.loanSaved = false;
         
         },
         eventListeners: {
@@ -20,6 +21,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 $log.info("Inside new-applicant of CBCheck");
                 model.customer.applicantname = params.customer.firstName;
                 model.customer.applicantid = params.customer.id;
+                model.customer.loanAmount = '';
+                model.customer.loanPurpose1 = '';
                 /* Assign more customer information to show */
             },
             "new-co-applicant": function(bundleModel, model, params){
@@ -27,6 +30,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.customer.coapplicants.push({
                                 "coapplicantid":params.customer.id,
                                 "coapplicantname":params.customer.firstName});
+            },
+            "new-loan": function(bundleModel, model, params){
+                $log.info("Inside new-loan of CBCheck");
+                model.customer.loanSaved = true;
+                model.customer.loanAmount = params.loanAccount.loanAmount;
+                model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
+                for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
+                    model.customer.coapplicants[i].loanAmount = params.loanAccount.loanAmount;
+                    model.customer.coapplicants[i].loanPurpose1 = params.loanAccount.loanPurpose1;
+                }
             }
         },
         
@@ -47,7 +60,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             },
                             { 
                                 type: 'button',  
-                                title: 'Submit for CBCheck',  
+                                title: 'Submit for CBCheck',
+                                "condition":"model.customer.loanSaved",
+                                "onClick": "actions.save(model.customer.applicantid,'CIBIL',model.customer.loanAmount, model.customer.loanPurpose1)"
                             },
                             {
                                 key:"customer.coapplicants",
@@ -67,7 +82,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 { 
                                     type: 'button',  
                                     title: 'Submit for CBCheck',
-                                    condition:"model.customer.coapplicants.length"
+                                    "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
+                                    "onClick": "actions.save(model.customer.applicantid,'CIBIL',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
                                 }]
                             },
                             {
@@ -83,8 +99,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                             },
                             { 
-                                type: 'button',  
-                                title: 'Submit for CBCheck',  
+                                type: 'button',
+                                "condition":"model.customer.loanSaved",
+                                title: 'Submit for CBCheck',
+                                "onClick": "actions.save(model.customer.applicantid,'AOR',model.customer.loanAmount, model.customer.loanPurpose1)"
                             },
                             {
                                 key:"customer.coapplicants",
@@ -104,7 +122,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 { 
                                     type: 'button',  
                                     title: 'Submit for CBCheck',
-                                    condition:"model.customer.coapplicants.length"
+                                    "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
+                                    "onClick": "actions.save(model.customer.applicantid,'CIBIL',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
                                 }]
                             }
                             ]
@@ -116,17 +135,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             return SchemaResource.getLoanAccountSchema().$promise;
         },
         actions: {
-            preSave: function(model, form, formName) {
-                var deferred = $q.defer();
-                if (model.customer.firstName) {
-                    deferred.resolve();
-                } else {
-                    irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
-                    deferred.reject();
-                }
-                return deferred.promise;
-            },
-            submit: function(model, form, formName){
+            save: function(customerId, CBType, loanAmount, loanPurpose){
                 $log.info("Inside submit()");
                 $log.warn(model);
             }
