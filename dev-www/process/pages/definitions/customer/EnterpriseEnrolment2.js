@@ -1053,7 +1053,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].paymentDate",
-                                title: "Payment Date",
+                                title: "PAYMET_DATE",
                                 type: "date"
                             },
                             {
@@ -1069,7 +1069,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].product",
-                                title:"Product",
+                                title:"PRODUCT",
                                 type: "string"
                             }, 
                             {
@@ -1087,7 +1087,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"Receivables Outstanding / Customer Credit",
+                                title:"RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
                                 type: "number"
                             },
                         ]
@@ -1119,7 +1119,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             
                             {
                                 key: "customer.buyerDetails[].paymentDate",
-                                title: "Payment Date",
+                                title: "PAYMENT_DATE",
                                 type: "date"
                             },
                             {
@@ -1135,7 +1135,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].product",
-                                title:"Product",
+                                title:"PRODUCT",
                                 type: "string"
                             }, 
                             {
@@ -1153,7 +1153,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"Receivables Outstanding / Customer Credit",
+                                title:"RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
                                 type: "number"
                             },
                         ]
