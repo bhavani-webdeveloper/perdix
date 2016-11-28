@@ -1403,7 +1403,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             key:"customer.rawMaterialExpenses",
                             type:"array",
                             startEmpty: true,
-                            title:"Raw material expense",
+                            title:"RAW_MATERIAL_EXPENSES",
                             items:[
                                 {
                                     key: "customer.rawMaterialExpenses[].vendorName",
