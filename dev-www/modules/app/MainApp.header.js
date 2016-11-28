@@ -51,6 +51,10 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 		irfProgressMessage.pop("logs", "Console Logs Cleared", 2500);
 	};
 
+	$scope.gotoPageEngine = function(stateParams) {
+		$state.go('Page.Engine', stateParams);
+	};
+
 	$scope.logout = function() {
 		var promise = authService.logout();
 		promise.then(

@@ -123,7 +123,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left" ng-show="!$parent.latest_apk_force_upgrade">
-                                <a ui-sref="Page.Engine({pageName: 'UserProfile', pageId: ss.session.login})" href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a ng-click="gotoPageEngine({pageName: 'UserProfile', pageId: ss.session.login})" href="#" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a ng-click="logout()" class="btn btn-default btn-flat">Sign out</a>
