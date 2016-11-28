@@ -82,7 +82,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type":"box",
                 "title":"KYC",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
                 "items":[
                     {
                         "key": "customer.id",
@@ -450,7 +450,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "PERSONAL_INFORMATION",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         key: "customer.customerBranchId",
@@ -709,7 +709,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     "customer.mobilePhone",
                     "customer.landLineNo",
@@ -908,7 +908,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "HOUSEHOLD_FINANCIALS",
-                "condition": "model.currentStage=='Application'",
+                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         "key": "customer.otherBusinessIncomes",
@@ -987,7 +987,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "T_FAMILY_DETAILS",
-                "condition": "model.currentStage=='Screening'",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='FieldAppraisal'",
                 "add": null,
                 "remove": null,
                 "view": "fixed",
@@ -1248,7 +1248,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                type:"box",
                title:"T_LIABILITIES",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                items:[
                    {
                        key:"customer.liabilities",
@@ -1307,7 +1307,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                type:"box",
                title:"T_LIABILITIES",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview'",
+                "condition": "model.currentStage == 'ApplicationReview'",
                 readonly:true,
                items:[
                    {
@@ -1367,7 +1367,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 "type": "box",
                 "title": "T_HOUSE_VERIFICATION",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         type:"fieldset",
@@ -1460,7 +1460,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -1983,7 +1983,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             {
                 type:"box",
                 title:"PHYSICAL_ASSETS",
-                "condition": "model.currentStage == 'Application'",
+                "condition": "model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                         key:"customer.physicalAssets",

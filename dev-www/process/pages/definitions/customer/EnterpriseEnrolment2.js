@@ -92,7 +92,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
-                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         "key": "customer.id",
@@ -592,7 +592,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items":[
                     "customer.mobilePhone",
                     "customer.landLineNo",
@@ -689,7 +689,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -915,7 +915,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                        key:"customer.liabilities",
@@ -1163,7 +1163,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -1486,7 +1486,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"MACHINERY",
-               condition: "model.currentStage == 'Application'",
+               condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                       key:"customer.machinery",
@@ -1659,7 +1659,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "REFERENCES",
-                "condition": "model.currentStage=='Application'",
+                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         key:"customer.verifications",

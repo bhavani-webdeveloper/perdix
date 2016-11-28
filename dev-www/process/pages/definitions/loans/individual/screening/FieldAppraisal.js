@@ -82,9 +82,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         /* TODO HANDLE Guarantors */
                                     }
 
-                                    debugger;
-
-
                                     /*Queries.getCustomerBasicDetails({urns: urnNos})
                                         .then(function(customers){
                                             for (var i=0;i<coApplicants.length; i++){
