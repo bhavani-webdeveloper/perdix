@@ -1532,6 +1532,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             enumCode: "decisionmaker"
                                         },
                                         {
+                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            type: "amount",
+                                            title: "SANCTION_AMOUNT"
+                                        },
+                                        {
                                             key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",
                                             title: "STATEMENT_DETAILS",

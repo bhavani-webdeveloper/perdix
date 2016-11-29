@@ -263,10 +263,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.companyRegistered",
                         type: "radios",
-                        titleMap: {
-                            "YES": "Yes",
-                            "NO": "No"
-                        },
+                        enumCode: "decisionmaker",
                         title: "IS_REGISTERED"
                     },
                     {
@@ -785,6 +782,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "NET_BANKING_AVAILABLE",
                                 enumCode:"decisionmaker"
                             },
+                            {
+                                key: "customer.customerBankAccounts[].sanctionedAmount",
+                                type: "amount",
+                                title: "SANCTIONED_AMOUNT"
+                            },
+
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
@@ -1630,7 +1633,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.machinery[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW? ",
+                                title:"IS_THE_MACHINE_NEW?",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
@@ -1860,6 +1863,40 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                 ]
             },
+            {
+                "type": "box",
+                "title": "SUPPLIERS_DEATILS",
+                "items": [
+                    {
+                        key:"customer.supplierDetails",
+                        title:"SUPPLIERS_DEATILS",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.supplierDetails[].supplier'sName",
+                                title:"SUPPLIERS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.supplierDetails[].type",
+                                title:"TYPE",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.supplierDetails[].paymentTermsdays",
+                                title:"PAYEMNT_TERMS_DAYS",
+                                type:" number"
+                            },
+                            {
+                                key:"customer.supplierDetails[].amount",
+                                title:"AMOUNT",
+                                type:"amount"
+                            },
+                         ] 
+                     }     
+                ] 
+             },
+            
             {
                 "type": "actionbox",
                 "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",

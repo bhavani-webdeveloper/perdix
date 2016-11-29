@@ -189,7 +189,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },*/
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
-                        type: "select",
+                        type: "radios",
                         enumCode: "decisionmaker",
                         title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
                     },
@@ -222,7 +222,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        type: "number",
+                        type: "date",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -232,17 +232,27 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.expectedInterestRate",
-                        type: "amount",
+                        type: "number",
                         title: "EXPECTED_INTEREST_RATE"
                     },
                     {
-                        key: "loanAccount.estimatedDateOfCompletion",
+                        key: "loanAccount.expectedInterestRate",
                         type: "amount",
+                        title: "ESTIMATED_KINARA_EMI"
+                    },
+                    {
+                        key: "loanAccount.estimatedDateOfCompletion",
+                        type: "date",
                         title: "ESTIMATED_DATE_OF_COMPLETION"
                     },
                     {
+                       key: "loanAccount.estimatedDateOfCompletion",
+                       type:"select",
+                       title:"PRODUCT_TYPE" 
+                    },
+                    {
                         key: "loanAccount.customerSignDateExpected",
-                        type: "amount",
+                        type: "date",
                         title: "CUSTOMER_SIGN_DATE_EXPECTED"
                     },
                     {
@@ -308,10 +318,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 key: "loanAccount.newassetdetails[].machinePermanentlyfixedtobuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
-                                titleMap: {
-                                    YES:"YES",
-                                    NO:"NO"
-                                }
+                                enumCode: "decisionmaker"
                             },
                             {
                                 key: "loanAccount.newassetdetails[].hypothecatedtoKinara",
