@@ -37,4 +37,5 @@
     <plugin name="cordova-plugin-dialogs" spec="~1.2.1" />
     <plugin name="cordova-plugin-datepicker" spec="~0.9.3" />
     <plugin name="irf-bluetooth-plugin" spec="~1.1.0" />
+    <plugin name="com.lampa.startapp" spec="https://github.com/stalingino/com.lampa.startapp.git" />
 </widget>
