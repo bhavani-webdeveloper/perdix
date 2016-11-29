@@ -1926,7 +1926,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.incomeStability",
-                                    title:"INCOME STABILITY",
+                                    title:"INCOME_STABILITY",
                                     type:"radios",
                                     required:"true",
                                     enumCode: "income_stability"
