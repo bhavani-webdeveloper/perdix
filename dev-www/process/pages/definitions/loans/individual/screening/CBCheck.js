@@ -148,7 +148,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     if(response.status == 'Error' || response.status != 'SUCCESS'){
                         var retryCount=0;
                         while (retryCount<3 && retryStatus != 'SUCCESS'){
-                            CreditBureau.reinitiateCBCheck({inqUnqRefNo:},
+                            CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},
                                 function(httpres){
                                     retryStatus = response.status;
                                     if(retryStatus == 'SUCCESS')

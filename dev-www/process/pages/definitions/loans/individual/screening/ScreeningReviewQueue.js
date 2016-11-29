@@ -61,7 +61,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
-	                    
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

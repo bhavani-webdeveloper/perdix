@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -19,15 +19,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"hubname":
+						"branch": 
 						{
 	                        "title": "HUB_NAME",
-	                        "type": "string"
+	                        "type": "integer",
+	                        "enumCode": "branch_id",
+	                        "x-schema-form": {
+	                            "type": "select"
+							}
 	                    },
-	                    "spokename":
+						"centre": 
 						{
-	                        "title": "SPOKE_NAME",
-	                        "type": "string"
+	                        "title": "CENTRE",
+	                        "type": ["null", "number"],
+	                        "enumCode": "centre",
+	                        "screenFilter": true,
+	                        "x-schema-form": {
+	                            "type": "select",
+	                        	"parentEnumCode":"branch_id"
+							}
 	                    },
 	                    "applicantName":
 						{
@@ -51,7 +61,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 	                        "type": "string"
 	                    },
 	                    "pincode": {
-	                        "title": "PINCODE",
+	                        "title": "PIN_CODE",
 	                        "type": "string",
 	                        
 	                    },
@@ -62,8 +72,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+					var branches = formHelper.enum('branch_id').data;
+					var branchName;
+					for (var i=0; i<branches.length;i++){
+	                    if(branches[i].code==searchOptions.branch)
+	                        branchName = branches[i].name;
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'CentralRiskReview',
@@ -71,8 +84,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.hubname,
-	                    'centreCode': searchOptions.spokename,
+	                    'branchName': branchName,
+	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
@@ -99,7 +112,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 					},
 					getListItem: function(item) {
 						return [
-							item.hubname,
+							item.branch,
 							item.spokename,
 							item.applicantName,
 							item.businessName,
@@ -123,7 +136,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 						},
 						{
 							title: 'HUB_NAME',
-							data: 'hubname'
+							data: 'branch'
 						},
 						{
 							title: 'SPOKE_NAME',
@@ -155,11 +168,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CentralRiskReviewQ
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.CentralRiskReview', {
+								entityManager.setModel('loans.individual.screening.CentralRiskReview', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.CentralRiskReview",
+									pageName: "loans.individual.screening.CentralRiskReview",
 									pageId: item.id
 								});
 							},
