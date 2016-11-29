@@ -80,7 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'CentralRiskReview',
-	                     'enterprisePincode':searchOptions.pincode,
+						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
@@ -112,14 +112,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					},
 					getListItem: function(item) {
 						return [
-							item.branch,
-							item.spokename,
+							item.branchName,
+							item.centreName,
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -136,30 +136,35 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 						},
 						{
 							title: 'HUB_NAME',
-							data: 'branch'
+							data: 'branchName'
 						},
 						{
 							title: 'SPOKE_NAME',
-							data: 'spokename'
+							data: 'centreName'
 						},
+						{
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, 
 						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
+						},
+						{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
-						}, {
+							data: 'customerName'
+						}, 
+						{
 							title: 'AREA',
 							data: 'area'
-						}, {
+						}, 
+						{
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
-						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							data: 'villageName'
+						}, 
+						{
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
@@ -171,9 +176,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 								entityManager.setModel('loans.individual.screening.CentralRiskReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
+								$state.go("Page.Bundle", {
 									pageName: "loans.individual.screening.CentralRiskReview",
-									pageId: item.id
+									pageId: item.loanId
 								});
 							},
 							isApplicable: function(item, index) {
