@@ -1841,7 +1841,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview')",
+                "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview')",
                 "items": [
                     {
                         "type": "button",
@@ -1852,7 +1852,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "condition": "model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview')",
+                "condition": "model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview')",
                 "items": [
                     {
                         "type": "submit",
