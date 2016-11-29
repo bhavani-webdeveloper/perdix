@@ -18,6 +18,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 model.lead.branchId = SessionStore.getBranchId() + '';
                 $log.info("lead generation page got initiated");
 
+                /*for (i in model.lead.leadInteractions)
+                {
+                    i.interactionDate=Utils.getCurrentDate();
+                    $log.info("printing i");
+                    $log.info(model.lead.leadInteractions);
+                }*/
+
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
@@ -30,6 +37,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            if(model.lead.currentStage == 'Inprocess')
+                            {
+                                model.lead.leadInteractions1=model.lead.leadInteractions;
+                                model.lead.leadInteractions=[{}];
+                            }
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -98,7 +110,16 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     }, {
                                         key: "lead.ownership",
                                         type: "select",
-                                        "enumCode": "ownership"
+                                        enumCode: "ownership",
+
+                                        /*titleMap: {
+                                            "Owned": "Owned",
+                                            "Own house without registration": "Own house without registration",
+                                            "Family Property": "Family Property",
+                                            "Leased": "Leased",
+                                            "Rental": "Rental",
+                                        }*/
+
                                     }, {
                                         key: "lead.companyRegistered",
                                         type: "radios",
@@ -132,23 +153,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                         }, {
                                             key: "lead.maritalStatus",
                                             type: "select",
-                                            titleMap: {
+                                            enumCode: "marital_status",
+                                            /*titleMap: {
                                                 "MARRIED": "MARRIED",
                                                 "UNMARRIED": "UNMARRIED",
                                                 "DIVORCED": "DIVORCED",
                                                 "SEPARATED": "SEPARATED",
                                                 "WIDOW(ER)": "WIDOW(ER)",
-                                            }
+                                            }*/
                                         }, {
                                             key: "lead.educationStatus",
                                             type: "select",
-                                            titleMap: {
+                                            enumCode: "education",
+                                           /* titleMap: {
                                                 "Below SSLC": "Below SSLC",
                                                 "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
                                                 "Graduate/Equivalent to graduate": "Graduate/Equivalent",
                                                 "Post graduate&equivalent": "PostGraduate & Equivalent",
                                                 "More than post graduation": "MoreThanPostGraduation",
-                                            }
+                                            }*/
                                         }]
                                     }]
                                 },
@@ -183,23 +206,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     }, {
                                         key: "lead.maritalStatus",
                                         type: "select",
-                                        titleMap: {
+                                        enumCode: "marital_status",
+                                        /*titleMap: {
                                             "MARRIED": "MARRIED",
                                             "UNMARRIED": "UNMARRIED",
                                             "DIVORCED": "DIVORCED",
                                             "SEPARATED": "SEPARATED",
                                             "WIDOW(ER)": "WIDOW(ER)",
-                                        }
+                                        }*/
                                     }, {
                                         key: "lead.educationStatus",
                                         type: "select",
-                                        titleMap: {
+                                        enumCode: "education",
+                                       /* titleMap: {
                                             "Below SSLC": "Below SSLC",
                                             "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
                                             "Graduate/Equivalent to graduate": "Graduate/Equivalent",
                                             "Post graduate&equivalent": "PostGraduate & Equivalent",
                                             "More than post graduation": "MoreThanPostGraduation",
-                                        }
+                                        }*/
                                     }]
                                 },
 
@@ -272,15 +297,17 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         key: "lead.interestedInProduct",
                         type: "radios",
                         enumCode: "decisionmaker",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
+                        onChange: "actions.changeStatus(modelValue, form, model)",
                     }, {
                         key: "lead.productCategory",
                         condition: "model.lead.interestedInProduct==='YES'",
                         type: "select",
+                      
+                        /*"Liability": "Liability",
+                            "others": "others"
+                            "investment": "investment"*/
                         titleMap: {
                             "Asset": "Asset",
-                            "Liability": "Liability",
-                            "others": "others"
                         }
                     }, {
                         key: "lead.productSubCategory",
@@ -288,7 +315,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         type: "select",
                         titleMap: {
                             "Loan": "Loan",
-                            "investment": "investment"
                         }
                     }, {
                         key: "lead.loanAmountRequested",
@@ -387,11 +413,62 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
                 {
                     type: "box",
+                    title: "PREVIOUS_INTERACTIONS",
+                    condition: "model.lead.id && model.lead.currentStage == 'Inprocess'",
+                    items: [{
+                        key: "lead.leadInteractions1",
+                        type: "array",
+                        add: null,
+                        remove: null,
+                        title: "LEAD_INTERACTIONS",
+                        items: [{
+                            key: "lead.leadInteractions1[].interactionDate",
+                            type: "date",
+                            readonly: true,
+                        }, {
+                            key: "lead.leadInteractions1[].loanOfficerId",
+                            readonly: true,
+                        }, {
+                            key: "lead.leadInteractions1[].typeOfInteraction",
+                            type: "select",
+                            readonly: true,
+                            titleMap: {
+                                "Call": "Call",
+                                "Visit": "Visit",
+                            },
+                        }, {
+                            key: "lead.leadInteractions1[].customerResponse",
+                            readonly: true,
+                        }, {
+                            key: "lead.leadInteractions1[].additionalRemarks",
+                            readonly: true,
+                        }, {
+                            "key": "lead.leadInteractions1[].location",
+                            readonly: true,
+                            "type": "geotag",
+                            "latitude": "latitude",
+                            "longitude": "longitude",
+                            "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction == 'Visit'",
+                        }, {
+                            "key": "lead.leadInteractions1[].picture",
+                            readonly: true,
+                            "type": "file",
+                            "fileType": "image/*",
+                            "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction === 'Visit'",
+                        }, ]
+                    }]
+                },
+
+
+                {
+                    type: "box",
                     title: "LEAD_INTERACTIONS",
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
-                        startEmpty: true,
+                        add:null,
+                        remove:null,
+                        //startEmpty: true,
                         title: "LEAD_INTERACTIONS",
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",

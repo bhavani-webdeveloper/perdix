@@ -72,6 +72,48 @@
                }
             }
          },
+
+          "leadInteractions1": {
+            "type": "array",
+            "title": "Lead Interactions",
+            "items": {
+               "type": "object",
+               "required": [],
+               "properties": {
+                  "interactionDate": {
+                     "type": "string",
+                     "title": "INTER_ACTION_DATE"
+                  },
+                  "loanOfficerId": {
+                     "type": "string",
+                     "title": "LOAN_OFFICER_NAME"
+                  },
+                  "typeOfInteraction": {
+                     "type": "string",
+                     "title": "TYPE_OF_INTERACTION"
+                  },
+                  "customerResponse": {
+                     "type": "string",
+                     "title": "CUSTOMER_RESPONSE"
+                  },
+                  "additionalRemarks": {
+                     "type": "string",
+                     "title": "ADDITIONAL_REMARKS"
+                  },
+                  "location": {
+                     "type": "string",
+                     "title": "LOCATION"
+                  },
+                  "picture": {
+                     "type": "string",
+                     "title": "PHOTO",
+                     "category": "Loan",
+                     "subCategory": "COLLATERALPHOTO"
+                  }
+               }
+            }
+         },
+
          "currentDate": {
             "type": "string",
             "title": "CURRENT_DATE"
@@ -176,7 +218,6 @@
          "educationStatus": {
             "type": "string",
             "title": "EDUCATION_STATUS"
-            
          },
          "gender": {
             "type": "string",
