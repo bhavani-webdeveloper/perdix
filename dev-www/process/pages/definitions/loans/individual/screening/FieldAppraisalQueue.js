@@ -128,11 +128,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalQu
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.FieldAppraisalReview', {
+								entityManager.setModel('loans.individual.screening.FieldAppraisal', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.FieldAppraisalReview",
+									pageName: "loans.individual.screening.FieldAppraisal",
 									pageId: item.loanId
 								});
 							},
