@@ -541,7 +541,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                         "items": [{
                             type: "button",
-                            icon: "fa fa-step-backward",
+                            icon: "fa fa-step-forward",
                             title: "Escalate",
                             onClick: function(model) {
                                 $log.info("Inside submit()");
