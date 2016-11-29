@@ -1388,7 +1388,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                readonly:true,
                 items:[
                     {
@@ -1534,7 +1534,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                readonly:true,
                 items:[
                     {
@@ -1644,7 +1644,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"MACHINERY",
-               condition: "model.currentStage == 'ApplicationReview'",
+               condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                readonly:true,
                 items:[
                     {
@@ -1786,7 +1786,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "REFERENCES",
-                "condition": "model.currentStage=='ApplicationReview'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 readonly:true,
                 "items": [
                     {
