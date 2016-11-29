@@ -122,7 +122,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.percentage",
-                                    title:"%OF_AMOUNT_UTILISED",
+                                    title: "%OF_AMOUNT_UTILISED",
                                     type: "integer",
                                     "readonly": true
 
@@ -132,11 +132,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.isAssetsOrdered",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    // enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.reasonForNotOrderingAssets",
                                     type: "string",
@@ -144,41 +140,38 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==Yes",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled==Yes",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    enumCode: "decisionmaker1",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
-                                    type: "string",
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
+                                    type: "select",
+                                    titleMap: {
+                                        "Value of the machine is less than the given quotation": "Value of the machine is less than the given quotation",
+                                        "Mis match in the Machine type & accessories": "Mis match in the Machine type & accessories",
+                                        "Mis match in no of Machineries": "Mis match in no of Machineries",
+                                        "Non operational Machinery": "Non operational Machinery",
+                                        "Non delivery of Machine": "Non delivery of Machine",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
+
+
                                 }, {
                                     key: "loanMonitoringDetails.machineDetails",
                                     type: "array",
@@ -209,19 +202,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }, {
                                         key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
                                         type: "radios",
-                                        titleMap: {
-                                            1: "Yes",
-                                            0: "No",
-                                        },
-                                        //enumCode: "decisionmaker",
+                                        enumCode: "decisionmaker1",
                                     }, {
                                         key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
                                         type: "radios",
-                                        titleMap: {
-                                            1: "Yes",
-                                            0: "No",
-                                        },
-                                        //enumCode: "decisionmaker",
+                                        enumCode: "decisionmaker1",
                                     }, {
                                         key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
                                         type: "select",
@@ -236,7 +221,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
                                 items: [{
                                     key: "loanMonitoringDetails.loanAmountUsed",
-                                    type:"amount",
+                                    type: "amount",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.loanAmountUsed) / parseFloat(model.loanMonitoringDetails.loanAmount)) * 100);
                                         model.loanMonitoringDetails.amountUsedPercentage = parseInt(a.toFixed());
@@ -244,25 +229,25 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                 }, {
                                     key: "loanMonitoringDetails.loanAmountPurpose",
-                                    type:"select",
-                                     titleMap: {
-                                            "Raw material": "Raw material",
-                                        },
+                                    type: "select",
+                                    titleMap: {
+                                        "Raw material": "Raw material",
+                                    },
 
                                 }, {
                                     key: "loanMonitoringDetails.verifiedBy",
-                                    type:"select",
-                                     titleMap: {
-                                            "Bill ": "Bill ",
-                                        }
+                                    type: "select",
+                                    titleMap: {
+                                        "Bill ": "Bill ",
+                                    }
                                 }, {
                                     key: "loanMonitoringDetails.amountUsedPercentage",
                                     "readonly": true,
-                                    title:"%OF_AMOUNT_UTILISED",
+                                    title: "%OF_AMOUNT_UTILISED",
                                     type: "integer"
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
-                                    type:"amount",
+                                    type: "amount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
@@ -273,22 +258,22 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
-                                    title:"%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                    type:"amount",
+                                    type: "amount",
 
-                                   /* "onChange": function(modelValue, form, model) {
-                                        var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
-                                        model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
-                                    }*/
+                                    /* "onChange": function(modelValue, form, model) {
+                                         var a = ((parseFloat(model.loanMonitoringDetails.nonIntendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
+                                         model.loanMonitoringDetails.nonIntendedPurposePercentage = parseInt(a.toFixed());
+                                     }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
-                                    title:"%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
@@ -298,41 +283,34 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    enumCode: "decisionmaker1",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
-                                    type: "string",
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
+                                    type: "select",
+                                    titleMap: {
+                                            "Mis utilized": "Mis utilized",
+                                            "Not utilized": "Not utilized",
+                                            "Partially utilized": "Partially utilized",
+                                        },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
                                 }]
                             }, {
                                 type: "fieldset",
@@ -355,14 +333,14 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "date"
                                 }, {
                                     key: "loanMonitoringDetails.amountUsedPercentage",
-                                    title:"%OF_AMOUNT_UTILISED",
+                                    title: "%OF_AMOUNT_UTILISED",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
-                                    type:"amount",
+                                    type: "amount",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
-                                     "onChange": function(modelValue, form, model) {
+                                    "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
                                         model.loanMonitoringDetails.nonIntendedPurposeAmount = model.loanMonitoringDetails.repayedDebitAmount - model.loanMonitoringDetails.intendedPurposeAmount;
@@ -371,7 +349,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
-                                    title:"%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
@@ -386,7 +364,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }*/
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
-                                    title:"%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
+                                    title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
                                     condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
@@ -396,41 +374,34 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
+                                    enumCode: "decisionmaker1",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled==1",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
-                                    titleMap: {
-                                        1: "Yes",
-                                        0: "No",
-                                    },
-                                    //enumCode: "decisionmaker",
-                                    condition: "model.loanMonitoringDetails.lucDone=='0'",
+                                    enumCode: "decisionmaker1",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
-                                    type: "string",
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='1'",
+                                     type: "select",
+                                    titleMap: {
+                                            "Mis utilized": "Mis utilized",
+                                            "Not utilized": "Not utilized",
+                                            "Partially utilized": "Partially utilized",
+                                        },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' ",
                                 }]
                             },
 
@@ -454,7 +425,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "number",
                                 "onChange": function(modelValue, form, model) {
                                     model.loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen -
-                                    model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
+                                        model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
                                 }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
@@ -482,9 +453,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee",
                                 type: "number",
-                                 "onChange": function(modelValue, form, model) {
+                                "onChange": function(modelValue, form, model) {
                                     model.loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfWomen -
-                                    model.loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee;
+                                        model.loanMonitoringDetails.socialImpactDetails.womenPartTimeEmployee;
                                 }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.womenFullTimeEmployee",
@@ -535,9 +506,103 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }]
                     }, {
                         "type": "actionbox",
+                        condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && model.loanMonitoringDetails.lucEscalated=='No' ",
+                        "items": [{
+                            type: "button",
+                            icon: "fa fa-step-backward",
+                            title: "ReSchedule",
+                            onClick: function(model) {
+                                $log.info("Inside submit()");
+                                $log.warn(model);
+                                var sortFn = function(unordered) {
+                                    var out = {};
+                                    Object.keys(unordered).sort().forEach(function(key) {
+                                        out[key] = unordered[key];
+                                    });
+                                    return out;
+                                };
+                                var reqData = _.cloneDeep(model);
+
+                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                                if (reqData.loanMonitoringDetails.id) {
+                                    LucHelper.reschedule(reqData).then(function(resp) {
+                                        $state.go('Page.Landing', null);
+                                    });
+
+                                } else {
+                                    $log.info("Id is not in the model");
+                                }
+
+                            }
+                        }]
+                    },
+                    {
+                        "type": "actionbox",
+                        condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                        "items": [{
+                            type: "button",
+                            icon: "fa fa-step-backward",
+                            title: "Escalate",
+                            onClick: function(model) {
+                                $log.info("Inside submit()");
+                                $log.warn(model);
+                                var sortFn = function(unordered) {
+                                    var out = {};
+                                    Object.keys(unordered).sort().forEach(function(key) {
+                                        out[key] = unordered[key];
+                                    });
+                                    return out;
+                                };
+                                var reqData = _.cloneDeep(model);
+
+                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                                if (reqData.loanMonitoringDetails.id) {
+                                    LucHelper.escalate(reqData).then(function(resp) {
+                                        $state.go('Page.Landing', null);
+                                    });
+                                } else {
+                                    $log.info("Id is not in the model");
+                                }
+                            }
+                        }]
+                    },{
+                        "type": "actionbox",
+                        condition: "model.loanMonitoringDetails.lucDone== 'Yes'",
                         "items": [{
                             "type": "submit",
-                            "title": "Submit"
+                            "title": "Close"
+                        }]
+                    },
+                    {
+                        "type": "actionbox",
+                        condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'||model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
+                        "items": [ {
+                            type: "button",
+                            icon: "fa fa-step-backward",
+                            title: "Sent Back",
+                            onClick: function(model) {
+                                $log.info("Inside submit()");
+                                $log.warn(model);
+                                var sortFn = function(unordered) {
+                                    var out = {};
+                                    Object.keys(unordered).sort().forEach(function(key) {
+                                        out[key] = unordered[key];
+                                    });
+                                    return out;
+                                };
+                                var reqData = _.cloneDeep(model);
+
+                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                                if (reqData.loanMonitoringDetails.id) {
+                                    LucHelper.goBack(reqData).then(function(resp) {
+                                        $state.go('Page.Landing', null);
+                                    });
+
+                                } else {
+                                    $log.info("Id is not in the model");
+                                }
+
+                            }
                         }]
                     },
                 ],
@@ -557,6 +622,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             return out;
                         };
                         var reqData = _.cloneDeep(model);
+
                         reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
                         if (reqData.loanMonitoringDetails.id) {
                             LucHelper.proceedData(reqData).then(function(resp) {
