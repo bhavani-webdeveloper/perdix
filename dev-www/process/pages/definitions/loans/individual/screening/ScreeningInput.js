@@ -113,6 +113,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                     bundleModel.guarantors = [];
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
+                                BundleManager.broadcastEvent('new-guarantor', params);
                                 break;
                             case 'business':
                                 $log.info("New Business Enrolment");

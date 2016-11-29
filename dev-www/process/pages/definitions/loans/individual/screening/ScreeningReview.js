@@ -53,9 +53,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);
                                             urnNos.push(cust.urn);
+                                        } else if (cust.relation == 'GUARANTOR'){
+                                            guarantors.push(cust);
                                         }
                                         /* TODO HANDLE Guarantors */
                                     }
+
+
 
                                     /*Queries.getCustomerBasicDetails({urns: urnNos})
                                         .then(function(customers){
@@ -95,6 +99,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                                     maximum: 1,
                                                     model: {
                                                         loanRelation: coApplicants[i]
+                                                    }
+                                                });
+                                            }
+
+                                            for (var i=0;i<guarantors.length; i++){
+                                                $this.bundlePages.push({
+                                                    pageName: 'customer.IndividualEnrolment2',
+                                                    title: 'GUARANTOR',
+                                                    pageClass: 'guarantor',
+                                                    minimum: 1,
+                                                    maximum: 1,
+                                                    model: {
+                                                        loanRelation: guarantors[i]
                                                     }
                                                 });
                                             }

@@ -84,6 +84,25 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
                 }
             },
+            "new-guarantor": function(bundleModel, model, params){
+                $log.info("Inside new guarantor of EnterpriseEnrollment");
+
+                var addToRelation = true;
+                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
+                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
+                        addToRelation = false;
+                        break;
+                    }
+                }
+                if (addToRelation){
+                    var newLinkedCustomer = {
+                        "linkedToCustomerId": params.customer.id,
+                        "linkedToCustomerName": params.customer.firstName
+                    };
+
+                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
+                }
+            },
             "origination-stage": function(bundleModel, model, obj){
                 model.currentStage = obj
             }
@@ -304,6 +323,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
+                        add: null,
+                        remove: null,
                         title: "RELATIONSHIP_TO_BUSINESS",
                         items: [
                             {

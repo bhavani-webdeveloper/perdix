@@ -96,7 +96,34 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                 model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                 model.loanAccount.loanCentre.centreId = params.customer.centreId;
+            },
+            "new-guarantor": function(bundleModel, model, params){
+                $log.info("Insdie guarantor of LoanRequest");
+                // model.loanAccount.coApplicant = params.customer.id;
+                var addToRelation = true;
+                for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                    if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                        addToRelation = false;
+                        if (params.customer.urnNo)
+                            model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                        break;
+                    }
+                }
 
+                if (addToRelation) {
+                    model.loanAccount.loanCustomerRelations.push({
+                        'customerId': params.customer.id,
+                        'relation': "GUARANTOR",
+                        'urn':params.customer.urnNo
+                    })    
+                };
+
+                if (!_.hasIn(model.loanAccount, 'guarantors')) {
+                    model.loanAccount.guarantors = [];
+                }
+                model.loanAccount.guarantors.push({
+                    'guaCustomerId': params.customer.id
+                });
             }
         },
         form: [
@@ -361,13 +388,18 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 /* TODO Call proceed servcie for the loan account */
+                
                 Utils.confirm("Are You Sure?").then(function(){
+
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
                     PageHelper.showLoader();
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("update-loan", "Working...");
                     IndividualLoan.update(reqData)
                         .$promise
                         .then(function(res){
+                            PageHelper.showProgress("update-loan", "Done.", 3000);
                             if(model.currentStage=='ScreeningReview')
                                 $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
                             if(model.currentStage=='ApplicationReview')
@@ -377,6 +409,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             if(model.currentStage=='Application')
                                 $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
                         }, function(httpRes){
+                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);
                         })
                         .finally(function(){
