@@ -2052,7 +2052,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 
                         {
                             "type": "actionbox",
-                            "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview')",
+                            "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
                             "items": [/*{
                              "type": "save",
                              "title": "SAVE"
@@ -2065,7 +2065,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "actionbox",
-                            "condition": "(model.customer.id && model.customer.currentStage!='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview')",
+                            "condition": "(model.customer.id && model.customer.currentStage!='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
                             "items": [/*{
                              "type": "save",
                              "title": "SAVE"

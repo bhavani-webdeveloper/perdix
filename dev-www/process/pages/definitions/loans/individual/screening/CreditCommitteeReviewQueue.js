@@ -1,10 +1,10 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeReviewQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "CREDIT_COMMITTEE_REVIEW_QUEUE",
+			"title": "CREDIT_COMMITTEE_REVIEW",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -18,24 +18,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
-					"properties": 
+					"properties": {
+						"branch": 
 						{
-						"sno": 
+	                        "title": "HUB_NAME",
+	                        "type": "integer",
+	                        "enumCode": "branch_id",
+	                        "x-schema-form": {
+	                            "type": "select"
+							}
+	                    },
+						"centre": 
 						{
-	                        "title": "S_NO",
-	                        "type": "string"
+	                        "title": "CENTRE",
+	                        "type": ["null", "number"],
+	                        "enumCode": "centre",
+	                        "screenFilter": true,
+	                        "x-schema-form": {
+	                            "type": "select",
+	                        	"parentEnumCode":"branch_id"
+							}
 	                    },
-	                    
-						"hubname": {
-	                        "title": "HUBNAME_NAME",
-	                        "type": "string"
-	                    },
-	                    "spokename": {
-	                        "title": "SPOKE_NAME",
-	                        "type": "string"
-	                    },
-						
-						"applicantName": {
+	                    "applicantName":
+						{
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
@@ -55,10 +60,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    
-	                      "pincode": {
-	                        "title": "PINCODE",
-	                        "type": "string"
+	                    "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string",
+	                        
 	                    },
 					},
 					"required": []
@@ -67,18 +72,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+					var branches = formHelper.enum('branch_id').data;
+					var branchName;
+					for (var i=0; i<branches.length;i++){
+	                    if(branches[i].code==searchOptions.branch)
+	                        branchName = branches[i].name;
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'CreditCommitteeReview',
-	                     'enterprisePincode':searchOptions.pincode,
+						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.hubname,
-	                    'centreCode': searchOptions.spokename,
-
+	                    'branchName': branchName,
+	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
@@ -105,15 +112,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 					},
 					getListItem: function(item) {
 						return [
-							item.sno,
-							item.hubname,
-							item.spokename,
+							item.branchName,
+							item.centreName,
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -130,45 +136,49 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.CreditCommitteeRev
 						},
 						{
 							title: 'HUB_NAME',
-							data: 'hubname'
+							data: 'branchName'
 						},
 						{
 							title: 'SPOKE_NAME',
-							data: 'spokename'
+							data: 'centreName'
 						},
-
+						{
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, 
 						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
+						},
+						{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
-						}, {
+							data: 'customerName'
+						}, 
+						{
 							title: 'AREA',
 							data: 'area'
-						}, {
+						}, 
+						{
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
-						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							data: 'villageName'
+						}, 
+						{
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "CREDIT_COMMITTEE_REVIEW",
+							name: "CENTRAL_RISK_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.CreditCommitteeReview', {
+								entityManager.setModel('loans.individual.screening.CreditCommitteeReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.CreditCommitteeReview",
-									pageId: item.id
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.CreditCommitteeReview",
+									pageId: item.loanId
 								});
 							},
 							isApplicable: function(item, index) {
