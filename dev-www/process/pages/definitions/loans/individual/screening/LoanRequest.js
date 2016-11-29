@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan","BundleManager",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,BundleManager){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan){
 
     var branch = SessionStore.getBranch();
 
@@ -32,9 +32,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";    
                 /* END OF TEMP CODE */
-                if (bundlePageObj){
-                    model._bundlePageObj = bundlePageObj;
-                }
             }
         },
         offline: false,
@@ -176,9 +173,50 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "ESTIMATED_VALUE_OF_ASSETS"
                     },
                     {
-                        key: "loanAccount.loanAmount",
+                        key: "loanAccount.loanAmountRequested",
                         type: "amount",
                         title: "LOAN_AMOUNT_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.frequencyRequested",
+                        type: "select",
+                        title: "FREQUENCY_REQUESTED",
+                        enumCode: "frequency"
+                    },
+                    {
+                        key: "loanAccount.tenureRequested",
+                        type: "number",
+                        title: "TENURE_REQUESETED"
+                    },
+                    {
+                        key: "loanAccount.emiRequested",
+                        type: "amount",
+                        title: "EMI_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.emiPaymentDateRequested",
+                        type: "number",
+                        title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.loanAmountRequested",
+                        type: "amount",
+                        title: "LOAN_AMOUNT_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.expectedInterestRate",
+                        type: "amount",
+                        title: "EXPECTED_INTEREST_RATE"
+                    },
+                    {
+                        key: "loanAccount.estimatedDateOfCompletion",
+                        type: "amount",
+                        title: "ESTIMATED_DATE_OF_COMPLETION"
+                    },
+                    {
+                        key: "loanAccount.customerSignDateExpected",
+                        type: "amount",
+                        title: "CUSTOMER_SIGN_DATE_EXPECTED"
                     },
                     {
                         "type": "section",
@@ -191,7 +229,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
-                "condition": "model.loanAccount.currentStage=='Application'",
+                "condition": "model.loanAccount.loanPurpose2=='New Asset' && model.loanAccount.currentStage=='Application'",
                 "items": [
                     {
                       key:"loanAccount.newassetdetails",
@@ -360,10 +398,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
-                                    model.loanAccount = res.loanAccount;
-                                    if (model._bundlePageObj){
-                                        BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount})
-                                    }
+                                    model.loanAccount = res.loanAccount;    
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })

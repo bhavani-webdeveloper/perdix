@@ -104,6 +104,8 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 
     var initializePage = function(bundlePage, bundleModel) {
         var pageObj = {};
+        pageObj.singlePageDefinition = _.cloneDeep(bundlePage);
+        delete pageObj.singlePageDefinition.model; /* Deleting the model thats coming. is not required. uncomment if u need init model also */
         pageObj.pageName = bundlePage.pageName;
         pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
         pageObj.formName = irf.form(bundlePage.pageName) + (pageCounter++);
@@ -111,6 +113,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         pageObj.id = bundlePage.id;
         pageObj.bundlePage = bundlePage;
         pageObj.model = bundlePage.model ||  {};
+
 
         pageObj.error = false;
         try {

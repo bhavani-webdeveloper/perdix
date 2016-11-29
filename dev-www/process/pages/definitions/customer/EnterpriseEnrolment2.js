@@ -1183,7 +1183,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         type:"section",
                         title:"INCOME_EXPENSE_INFORMATION",
-                        condition: "model.currentStage == 'Application'",
+                        condition: "model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
                         items: [
                             {
                                 key:"customer.otherBusinessIncomes",
@@ -1279,13 +1279,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.expenditures",
                                 type:"array",
-                                startEmpty: true,
                                 title:"BUSINESS_EXPENSE",
                                 items:[
                                     {
                                         key: "customer.expenditures[].annualExpenses",
                                         title: "AMOUNT",
-                                        type: "string"
+                                        type: "amount"
                                     },
                                     {
                                         key: "customer.expenditures[].string",
@@ -1298,26 +1297,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "string"
                                     }
                                 ]
-                            },
-                            {
-                                key: "customer.enterprise.cashAtBank",
-                                title: "CASH_AT_BANK",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.enterprise.rawMaterial",
-                                title: "RAW_MATERIAL",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.enterprise.workInProgress",
-                                title: "WIP",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.enterprise.finishedGoods",
-                                title: "FINISHED_GOODS",
-                                type: "amount"
                             },
                             {
                                 key:"customer.rawMaterialExpenses",
@@ -1351,6 +1330,31 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
 
                                 ]
+                            },
+                            {
+                                type:"fieldset",
+                                title:"ASSETS",
+                                items:[]
+                            },
+                            {
+                                key: "customer.enterprise.cashAtBank",
+                                title: "CASH_AT_BANK",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.rawMaterial",
+                                title: "RAW_MATERIAL",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.workInProgress",
+                                title: "WIP",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.finishedGoods",
+                                title: "FINISHED_GOODS",
+                                type: "amount"
                             },
                             {
                                 key: 'customer.enterpriseAssets',

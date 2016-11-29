@@ -51,10 +51,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     'relationShip': 'self'
                                 }
                             ]
-
-                            if (bundlePageObj){
-                                model._bundlePageObj = bundlePageObj;
-                            }
+                        }
+                        // debugger;
+                        if (bundlePageObj){
+                            model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
                     },
                     eventListeners: {
@@ -1682,7 +1682,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type: "box",
                             title: "PROXY_INDICATORS",
-                            condition: "model.currentStage=='FieldAppraisal'",
+                            condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal'",
                             items: [
                                 {
                                     key:"customer.properAndMatchingSignboard",
