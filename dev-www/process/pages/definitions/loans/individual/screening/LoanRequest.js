@@ -426,7 +426,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
-                            reqData.loanAccount.loanAmountRequested = reqData.loanAccount.loanAmount;
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
