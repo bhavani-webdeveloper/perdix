@@ -1277,6 +1277,49 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[]
                             },
                             {
+                                key:"customer.expenditures",
+                                type:"array",
+                                startEmpty: true,
+                                title:"BUSINESS_EXPENSE",
+                                items:[
+                                    {
+                                        key: "customer.expenditures[].annualExpenses",
+                                        title: "AMOUNT",
+                                        type: "string"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].string",
+                                        title: "VENDOR_NAME",
+                                        type: "string"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].frequency",
+                                        title: "VENDOR_NAME",
+                                        type: "string"
+                                    }
+                                ]
+                            },
+                            {
+                                key: "customer.enterprise.cashAtBank",
+                                title: "CASH_AT_BANK",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.rawMaterial",
+                                title: "RAW_MATERIAL",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.workInProgress",
+                                title: "WIP",
+                                type: "amount"
+                            },
+                            {
+                                key: "customer.enterprise.finishedGoods",
+                                title: "FINISHED_GOODS",
+                                type: "amount"
+                            },
+                            {
                                 key:"customer.rawMaterialExpenses",
                                 type:"array",
                                 startEmpty: true,
@@ -1307,6 +1350,31 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "date"
                                     }
 
+                                ]
+                            },
+                            {
+                                key: 'customer.enterpriseAssets',
+                                type: 'array',
+                                startEmpty: true,
+                                title: "ENTERPRISE_ASSETS",
+                                items: [
+                                    {
+                                        key: "customer.enterpriseAssets[].assetType",
+                                        title: "ASSET_TYPE",
+                                        type: "select",
+                                        enumCode: "enterprise_asset_types"
+                                    },
+                                    {
+                                        key: "customer.enterpriseAssets[].vehicleMakeModel",
+                                        title: "VEHICLE_MAKE_MODEL",
+                                        type: "string",
+                                        condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
+                                    },
+                                    {
+                                        key: "customer.enterpriseAssets[].valueOfAsset",
+                                        title: "VALUE_OF_THE_ASSET",
+                                        type: "amount"
+                                    },
                                 ]
                             }
                         ]
