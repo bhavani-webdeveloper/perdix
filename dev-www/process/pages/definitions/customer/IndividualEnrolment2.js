@@ -1721,7 +1721,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.bookKeepingQuality",
-                                    title:"BOOK-KEEPING_QUALITY",
+                                    title:"BOOK_KEEPING_QUALITY",
                                     type:"radios",
                                     required:"true",
                                     enumCode: "status_scale_2"
@@ -1870,7 +1870,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.bookKeepingQuality",
-                                    title:"BOOK-KEEPING_QUALITY",
+                                    title:"BOOK_KEEPING_QUALITY",
                                     type:"radios",
                                     required:"true",
                                     enumCode: "status_scale_2"
