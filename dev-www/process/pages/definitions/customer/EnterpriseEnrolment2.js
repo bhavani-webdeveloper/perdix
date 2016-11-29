@@ -1907,7 +1907,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 };
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
-                PageHelper.showProgress('enrolment','Updaing...');
+                PageHelper.showProgress('enrolment','Updating...', 2000);
                 EnrollmentHelper.proceedData(reqData).then(function(resp){
                     PageHelper.showProgress('enrolmet','Done.', 5000);
                     Utils.removeNulls(resp.customer,true);

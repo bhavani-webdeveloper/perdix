@@ -137,15 +137,36 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         actions: {
             save: function(customerId, CBType, loanAmount, loanPurpose){
                 $log.info("Inside submit()");
-                $log.warn(model);
+                PageHelper.showLoader();
                 CreditBureau.creditBureauCheck({
                     customerId: customerId,
                     highMarkType: CBType,
                     purpose: loanPurpose,
                     loanAmount: loanAmount
                 }, function(response){
-                    PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
+                    var retryStatus = response.status; 
+                    if(response.status == 'Error' || response.status != 'SUCCESS'){
+                        var retryCount=0;
+                        while (retryCount<3 && retryStatus != 'SUCCESS'){
+                            CreditBureau.reinitiateCBCheck({inqUnqRefNo:},
+                                function(httpres){
+                                    retryStatus = response.status;
+                                    if(retryStatus == 'SUCCESS')
+                                        break;
+                                }, function (err){
+                                    PageHelper.hideLoader();
+                                    PageHelper.showProgress("cb-check", "Failed while placing retry Request", 5000);
+                                    break;
+                                });
+                            retryCount++;
+                        }
+                    }
+                    if(retryStatus == 'SUCCESS'){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
+                    }
                 }, function(errorResponse){
+                    PageHelper.hideLoader();
                     PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
                 });
             }
