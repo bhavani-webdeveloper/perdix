@@ -6,6 +6,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
     var branch = SessionStore.getBranch();
 
+    var navigateToQueue = function(model){
+        if(model.currentStage=='ScreeningReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
+        if(model.currentStage=='ApplicationReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
+        if(model.currentStage=='Screening')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
+        if(model.currentStage=='Application')
+            $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
+        if (model.currentStage == 'FieldAppraisal')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalQueue', pageId:null});
+        if (model.currentStage == 'FieldAppraisalReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
+    }
+
     return {
         "type": "schema-form",
         "title": "LOAN_REQUEST",
@@ -412,18 +427,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         .$promise
                         .then(function(res){
                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                            if(model.currentStage=='ScreeningReview')
-                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
-                            if(model.currentStage=='ApplicationReview')
-                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
-                            if(model.currentStage=='Screening')
-                                $state.go("Page.Landing");
-                            if(model.currentStage=='Application')
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
-                            if (model.currentStage == 'FieldAppraisal')
-                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalQueue', pageId:null});
-                            if (model.currentStage == 'FieldAppraisalReview')
-                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
+                            return navigateToQueue(model);
                         }, function(httpRes){
                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);
@@ -504,10 +508,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
-                                    PageHelper.showProgress('sent-back', 'Sent back successful');
-                                    model.loanAccount = res.loanAccount;    
+                                    PageHelper.showProgress('sent-back', 'Sent back successful', 3000);
+                                    return navigateToQueue();
                                 }, function(httpRes){
-                                    PageHelper.showProgress('sent-back', 'Oops. Some error occured.');
+                                    PageHelper.showProgress('sent-back', 'Oops. Some error occured.', 3000);
                                     PageHelper.showErrors(httpRes);
                                 })
                                 .finally(function(httpRes){
