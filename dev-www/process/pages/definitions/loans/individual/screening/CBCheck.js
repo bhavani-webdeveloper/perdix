@@ -151,13 +151,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},
                                 function(httpres){
                                     retryStatus = response.status;
-                                    if(retryStatus == 'SUCCESS')
-                                        break;
                                 }, function (err){
                                     PageHelper.hideLoader();
                                     PageHelper.showProgress("cb-check", "Failed while placing retry Request", 5000);
-                                    break;
+                                    retryStatus = 'err';
                                 });
+                            if(retryStatus == 'SUCCESS' || retryStatus == 'err')
+                                break;
                             retryCount++;
                         }
                     }
