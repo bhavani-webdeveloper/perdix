@@ -223,8 +223,8 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				promise.then(function(data){
 					$scope.page.schema = data;
 
-					if (angular.isFunction($scope.page.form)) {
-						var promise = $scope.page.form();
+					if (angular.isFunction($scope.page.formFn)) {
+						var promise = $scope.page.formFn();
 						promise.then(function(data){
 							$scope.page.form = data;
 							$timeout(function() {
@@ -233,6 +233,16 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 						});
 					}
 				});
+			} else {
+				if (angular.isFunction($scope.page.formFn)) {
+					var promise = $scope.page.formFn();
+					promise.then(function(data){
+						$scope.page.form = data;
+						$timeout(function() {
+							$scope.page.initialize($scope.model, $scope.page.form, $scope.formCtrl);
+						});
+					});
+				}
 			}
 			$scope.formHelper = formHelper;
 
