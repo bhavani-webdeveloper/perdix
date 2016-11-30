@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
-                            if(model.lead.currentStage == 'Inprocess')
+                           if(model.lead.currentStage == 'Inprocess')
                             {
                                 model.lead.leadInteractions1=model.lead.leadInteractions;
                                 model.lead.leadInteractions=[{}];
@@ -466,9 +466,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
-                        add:null,
-                        remove:null,
-                        //startEmpty: true,
+                       /* add:null,
+                        remove:null,*/
+                        startEmpty: true,
                         title: "LEAD_INTERACTIONS",
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
@@ -557,7 +557,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         }
                     }
                     if (reqData.lead.id) {
-                        if (reqData.lead.leadStatus == "FollowUp") {
+
+                        if (reqData.lead.leadStatus == "FollowUp" && model.lead.currentStage == "Inprocess") {
                             LeadHelper.followData(reqData).then(function(resp) {
                                 $state.go('Page.LeadDashboard', null);
                             });
