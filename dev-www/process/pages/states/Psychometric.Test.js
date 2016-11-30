@@ -15,8 +15,8 @@ irf.pages.factory("PsychometricTestService", ["$q", "$state", "$rootScope", func
 	};
 }]);
 irf.pages.controller("PsychometricTestCtrl",
-	["$log", "$scope", "SessionStore", "$stateParams", "Psychometric", "$element", "$timeout", "Queries", "PsychometricTestService",
-	function($log, $scope, SessionStore, $stateParams, Psychometric, $element, $timeout, Queries, PsychometricTestService){
+	["$log", "$scope", "SessionStore", "$stateParams", "Psychometric", "$element", "$timeout", "Queries", "PsychometricTestService", "PageHelper",
+	function($log, $scope, SessionStore, $stateParams, Psychometric, $element, $timeout, Queries, PsychometricTestService, PageHelper){
 	$log.info("PsychometricTest loaded");
 
 	$scope.participantId = $stateParams.participantId;
@@ -52,7 +52,7 @@ irf.pages.controller("PsychometricTestCtrl",
 		"TEST": "TEST",
 		"END": "END"
 	};
-
+	
 	$scope.STAGES = STAGES;
 
 	$scope.stage = STAGES.LANG_CHOICE;
@@ -134,6 +134,8 @@ irf.pages.controller("PsychometricTestCtrl",
 	};
 
 	var prepareQuestionnaire = function() {
+		$scope.error = null;
+		$scope.testStatus = 'Preparing';
 		$scope.lastIndex = -1;
 		$log.info("Chosen language: " + $scope.chosenLanguage);
 		Psychometric.getTest({
@@ -148,10 +150,12 @@ irf.pages.controller("PsychometricTestCtrl",
 			$scope.testStatus = 'Prepared';
 		}, function(err) {
 			$scope.testStatus = 'Failed';
+			$scope.error = err;
 		});
 	};
 
 	var submitAnswers = function() {
+		$scope.error = null;
 		$scope.testStatus = 'Submitting';
 		clearInterval(testCountdownId);
 		var testToSend = _.clone($scope.test);
@@ -169,6 +173,7 @@ irf.pages.controller("PsychometricTestCtrl",
 		}, function(errResp) {
 			$log.error(errResp);
 			$scope.testStatus = 'Submission failed';
+			$scope.error = errResp;
 		});
 	};
 
