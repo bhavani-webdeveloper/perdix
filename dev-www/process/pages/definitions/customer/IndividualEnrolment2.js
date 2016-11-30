@@ -1,57 +1,172 @@
-irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
-        ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager",
-            function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-                     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager){
+irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"), ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager",
+    function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager) {
 
-                var pageParams = {
-                    readonly: true
+        var pageParams = {
+            readonly: true
+        }
+
+        return {
+            "type": "schema-form",
+            // "subType": "sub-navigation",
+            "title": "INDIVIDUAL_ENROLLMENT",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                model.currentStage = bundleModel.currentStage;
+                model.customer.identityProof = "Pan Card";
+                model.customer.addressProof = "Aadhar Card";
+                if (_.hasIn(model, 'loanRelation')) {
+                    console.log(model.loanRelation);
+                    var custId = model.loanRelation.customerId;
+                    Enrollment.getCustomerById({
+                            id: custId
+                        })
+                        .$promise
+                        .then(function(res) {
+                            model.customer = res;
+                        }, function(httpRes) {
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
+                } else {
+                    model.customer = model.customer || {};
+                    //model.branchId = SessionStore.getBranchId() + '';
+
+                    model.customer.date = model.customer.date || Utils.getCurrentDate();
+                    model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
+
+                    model = Utils.removeNulls(model, true);
+                    //model.customer.kgfsName = SessionStore.getBranch();
+                    model.customer.customerType = 'Individual';
+                    BundleManager.pushEvent("on-customer-load", {
+                        name: "11"
+                    })
+
+                    model.customer.expenditures = [];
+                    model.customer.expenditures.push({
+                        "expenditureSource": "expenditure",
+                        "frequency": "Monthly"
+                    });
+
+                    model.customer.familyMembers = [{
+                        'relationShip': 'self'
+                    }]
                 }
+                debugger;
+                if (bundlePageObj) {
+                    model._bundlePageObj = _.cloneDeep(bundlePageObj);
+                }
+            },
+            eventListeners: {
+                "test-listener": function(bundleModel, model, obj) {
 
-                return {
-                    "type": "schema-form",
-                    // "subType": "sub-navigation",
-                    "title": "INDIVIDUAL_ENROLLMENT",
-                    "subTitle": "",
-                    initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                        model.currentStage = bundleModel.currentStage;
-                        model.customer.identityProof = "Pan Card";
-                        model.customer.addressProof= "Aadhar Card";
-                        if (_.hasIn(model, 'loanRelation')){
-                            console.log(model.loanRelation);
-                            var custId = model.loanRelation.customerId;
-                            Enrollment.getCustomerById({id:custId})
-                                    .$promise
-                                    .then(function(res){
-                                        model.customer = res;
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                        } else {
-                            model.customer = model.customer || {};
-                            //model.branchId = SessionStore.getBranchId() + '';
+                },
+                "lead-loaded": function(bundleModel, model, obj) {
 
-                            model.customer.date = model.customer.date || Utils.getCurrentDate();
-                            model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-
-                            model = Utils.removeNulls(model,true);
-                            //model.customer.kgfsName = SessionStore.getBranch();
-                            model.customer.customerType = 'Individual';
-                            BundleManager.pushEvent("on-customer-load", {name: "11"})
-
-                            model.customer.expenditures = [];
-                            model.customer.expenditures.push({
-                                "expenditureSource": "expenditure",
-                                "frequency": "Monthly"
-                            });
-
-                            model.customer.familyMembers = [
-                                {
-                                    'relationShip': 'self'
+                    model.customer.mobilePhone = obj.mobileNo;
+                    model.customer.gender = obj.gender;
+                    model.customer.firstName = obj.leadName;
+                    model.customer.dateOfBirth=obj.dob;
+                    model.customer.age=obj.age;
+                    model.customer.maritalStatus=obj.maritalStatus;
+                    model.customer.customerBranchId=obj.branchId;
+                    model.customer.centreId=obj.centreId;
+                    model.customer.landmark=obj.addressLine2;
+                    model.customer.street=obj.addressLine1;
+                    model.customer.pincode=obj.pincode;
+                    model.customer.district=obj.district;
+                    model.customer.state=obj.state;
+                    model.customer.locality=obj.area;
+                    model.customer.villageName=obj.cityTownVillage;
+                    model.customer.landLineNo=obj.alternateMobileNo; 
+                },
+                "origination-stage": function(bundleModel, model, obj) {
+                    model.currentStage = obj
+                }
+            },
+            offline: false,
+            getOfflineDisplayItem: function(item, index) {
+                return [
+                    item.customer.urnNo,
+                    Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
+                    item.customer.villageName
+                ]
+            },
+            form: [{
+                    "type": "box",
+                    "title": "KYC",
+                    "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
+                    "items": [{
+                            "key": "customer.id",
+                            "title": "CUSTOMER_SEARCH",
+                            "type": "lov",
+                            "lovonly": true,
+                            "inputMap": {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME"
+                                },
+                                "customerBranchId": {
+                                    "key": "customer.customerBranchId",
+                                    "type": "select",
+                                    "screenFilter": true
+                                },
+                                "centreId": {
+                                    "key": "customer.centreId",
+                                    "type": "select",
+                                    "screenFilter": true,
+                                    "parentEnumCode": "branch_id"
                                 }
+<<<<<<< .mine
+                            },
+                            "outputMap": {
+                                "urnNo": "customer.urnNo",
+                                "firstName": "customer.firstName"
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var branches = formHelper.enum('branch_id').data;
+                                var branchName;
+                                for (var i = 0; i < branches.length; i++) {
+                                    if (branches[i].code == inputModel.customerBranchId)
+                                        branchName = branches[i].name;
+                                }
+                                var promise = Enrollment.search({
+                                    'branchName': branchName || SessionStore.getBranch(),
+                                    'firstName': inputModel.firstName,
+                                    'centreId': inputModel.centreId,
+                                    'customerType': "individual"
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' | '),
+                                    data.id,
+                                    data.urnNo
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                PageHelper.showProgress('customer-load', 'Loading customer...');
+                                Enrollment.getCustomerById({
+                                        id: valueObj.id
+                                    })
+                                    .$promise
+                                    .then(function(res) {
+                                        PageHelper.showProgress("customer-load", "Done..", 5000);
+                                        model.customer = Utils.removeNulls(res, true);
+                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {
+                                            customer: model.customer
+                                        })
+                                    }, function(httpRes) {
+                                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                    })
+                            }
+=======
                             ]
                         }
                         if (bundlePageObj){
@@ -61,1575 +176,651 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     eventListeners: {
                         "test-listener": function(bundleModel, model, obj){
 
+>>>>>>> .r1621
                         },
-                        "lead-loaded": function(bundleModel, model, obj){
-                            model.customer.mobilePhone = obj.mobileNo;
-                            model.customer.gender = obj.gender;
-                            model.customer.firstName = obj.leadName;
-                        },
-                        "origination-stage": function(bundleModel, model, obj){
-                            model.currentStage = obj
-                        }
-                    },
-                    offline: false,
-                    getOfflineDisplayItem: function(item, index){
-                        return [
-                            item.customer.urnNo,
-                            Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                            item.customer.villageName
-                        ]
-                    },
-                    form: [
-                        {
-                            "type":"box",
-                            "title":"KYC",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
-                            "items":[
-                                {
-                                    "key": "customer.id",
-                                    "title": "CUSTOMER_SEARCH",
-                                    "type": "lov",
-                                    "lovonly": true,
-                                    "inputMap": {
-                                        "firstName": {
-                                            "key": "customer.firstName",
-                                            "title": "CUSTOMER_NAME"
-                                        },
-                                        "customerBranchId": {
-                                            "key": "customer.customerBranchId",
-                                            "type": "select",
-                                            "screenFilter": true
-                                        },
-                                        "centreId": {
-                                            "key": "customer.centreId",
-                                            "type": "select",
-                                            "screenFilter": true,
-                                            "parentEnumCode": "branch_id"
-                                        }
-                                    },
-                                    "outputMap": {
-                                        "urnNo": "customer.urnNo",
-                                        "firstName":"customer.firstName"
-                                    },
-                                    "searchHelper": formHelper,
-                                    "search": function(inputModel, form) {
-                                        $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                        var branches = formHelper.enum('branch_id').data;
-                                        var branchName;
-                                        for (var i=0; i<branches.length;i++){
-                                            if(branches[i].code==inputModel.customerBranchId)
-                                                branchName = branches[i].name;
-                                        }
-                                        var promise = Enrollment.search({
-                                            'branchName': branchName ||SessionStore.getBranch(),
-                                            'firstName': inputModel.firstName,
-                                            'centreId':inputModel.centreId,
-                                            'customerType':"individual"
-                                        }).$promise;
-                                        return promise;
-                                    },
-                                    getListDisplayItem: function(data, index) {
-                                        return [
-                                            [data.firstName, data.fatherFirstName].join(' | '),
-                                            data.id,
-                                            data.urnNo
-                                        ];
-                                    },
-                                    onSelect: function(valueObj, model, context){
-                                        PageHelper.showProgress('customer-load', 'Loading customer...');
-                                        Enrollment.getCustomerById({id: valueObj.id})
-                                                .$promise
-                                                .then(function(res){
-                                                    PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                    model.customer = Utils.removeNulls(res, true);
-                                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                                }, function(httpRes){
-                                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                                })
-                                    }
-                                },
-                                /*{
-                                    "key": "customer.aadhaarNo",
-                                    "type":"qrcode",
-                                    "required": true,
-                                    "onChange":"actions.setProofs(model)",
-                                    "onCapture": function(result, model, form) {
-                                        EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
-                                        this.actions.setProofs(model);
-                                    }
-                                },
-                                {
-                                    "key": "customer.panNo",
-                                    "type": "text",
-                                    "required": true
-                                },*/
-                                {
-                                    type:"fieldset",
-                                    title:"IDENTITY_PROOF",
-                                    items:[
-                                        {
-                                            key:"customer.identityProof",
-                                            readonly:true,
-                                            //type:"select"
-                                        },
-                                        {
-                                            key:"customer.identityProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        /*{
-                                            key:"customer.idProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.idProofValidUptoDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofSameAsIdProof"
-                                        }*/
-                                    ]
-                                },
-
-
-                                /*{
-                                    type:"fieldset",
-                                    title:"IDENTITY_PROOF",
-                                    items:[
-                                        {
-                                            key:"customer.identityProof",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.identityProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.idProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.idProofValidUptoDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofSameAsIdProof"
-                                        }
-                                    ]
-                                },*/
-                                {
-                                    type:"fieldset",
-                                    title:"ADDRESS_PROOF",
-                                    //condition:"!model.customer.addressProofSameAsIdProof",
-                                    items:[
-                                        {
-                                            key:"customer.addressProof",
-                                            readonly:true,
-                                            //type:"select"
-                                        },
-                                        {
-                                            key:"customer.addressProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.addressProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.addressProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.addressProofNo = result.text;
-                                            }
-                                        },
-                                        /*{
-                                            key:"customer.addressProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofValidUptoDate",
-                                            type:"date"
-                                        },*/
-                                    ]
-                                },
-
-                                 {
-                                    "key": "customer.additionalKYCs",
-                                    "type": "array",
-                                    "title": "ADDITIONAL_KYC",
-                                    startEmpty: true,
-                                    //"add": null,
-                                    //"remove": null,
-                                    //"view": "fixed",
-                                    "items": [
-                                        {
-                                            
-                                            key:"customer.additionalKYCs[].kyc1ProofType",
-                                            type:"select",
-                                            "enumCode": "identity_proof"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ImagePath",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                                             type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ProofNumber",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1IssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                                            type:"date"
-                                        }
-                                        
-                                    ]
-                                },
-                            /*    {
-                                    type:"fieldset",
-                                    title:"SPOUSE_IDENTITY_PROOF",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    items:[
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf33",
-                                            type:"select",
-                                            onChange: function(modelValue) {
-                                                $log.info(modelValue);
-                                            }
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf34",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf35",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf36",
-                                            condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result); // spouse id proof
-                                                model.customer.udf.userDefinedFieldValues.udf36 = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf36",
-                                            condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
-                                            type:"qrcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result); // spouse id proof
-                                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                                $log.info(aadhaarData);
-                                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                                                model.customer.spouseFirstName = aadhaarData.name;
-                                                if (aadhaarData.yob) {
-                                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }*/
-
-                            ]
+                        /*{
+                            "key": "customer.aadhaarNo",
+                            "type":"qrcode",
+                            "required": true,
+                            "onChange":"actions.setProofs(model)",
+                            "onCapture": function(result, model, form) {
+                                EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                this.actions.setProofs(model);
+                            }
                         },
                         {
-                            "type":"box",
-                            "title":"KYC",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            "readonly": true,
-                            "items":[
-                                {
-                                    "key": "customer.firstName",
-                                    "title":"CUSTOMER_NAME"
-                                },
-                                 {
-                                    type:"fieldset",
-                                    title:"IDENTITY_PROOF",
-                                    items:[
-                                        {
-                                            key:"customer.identityProof",
-                                            readonly:true,
-                                            //type:"select"
-                                        },
-                                        {
-                                            key:"customer.identityProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        /*{
-                                            key:"customer.idProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.idProofValidUptoDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofSameAsIdProof"
-                                        }*/
-                                    ]
-                                },
-                                {
-                                    type:"fieldset",
-                                    title:"ADDRESS_PROOF",
-                                    //condition:"!model.customer.addressProofSameAsIdProof",
-                                    items:[
-                                        {
-                                            key:"customer.addressProof",
-                                            readonly:true,
-                                            //type:"select"
-                                        },
-                                        {
-                                            key:"customer.addressProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.addressProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.addressProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.addressProofNo = result.text;
-                                            }
-                                        },
-                                        /*{
-                                            key:"customer.addressProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofValidUptoDate",
-                                            type:"date"
-                                        },*/
-                                    ]
-                                },
-
-                                 {
-                                    "key": "customer.additionalKYCs",
-                                    "type": "array",
-                                    "title": "ADDITIONAL_KYC",
-                                    startEmpty: true,
-                                    //"add": null,
-                                    //"remove": null,
-                                    //"view": "fixed",
-                                    "items": [
-                                        {
-                                            
-                                            key:"customer.additionalKYCs[].kyc1ProofType",
-                                            type:"select",
-                                            "enumCode": "identity_proof"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ImagePath",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                                             type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ProofNumber",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1IssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ValidUptoDate",
-                                            type:"date"
-                                        }
-                                        
-                                    ]
-                                },
-                               /* {
-                                    type:"fieldset",
-                                    title:"SPOUSE_IDENTITY_PROOF",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    items:[
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf33",
-                                            type:"select",
-                                            onChange: function(modelValue) {
-                                                $log.info(modelValue);
-                                            }
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf34",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf35",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf36",
-                                            condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result); // spouse id proof
-                                                model.customer.udf.userDefinedFieldValues.udf36 = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf36",
-                                            condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
-                                            type:"qrcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result); // spouse id proof
-                                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                                $log.info(aadhaarData);
-                                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                                                model.customer.spouseFirstName = aadhaarData.name;
-                                                if (aadhaarData.yob) {
-                                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }*/
-
-                            ]
-                        },
+                            "key": "customer.panNo",
+                            "type": "text",
+                            "required": true
+                        },*/
                         {
-                            "type": "box",
-                            "title": "PERSONAL_INFORMATION",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [
-                                {
-                                    key: "customer.customerBranchId",
-                                    title:"BRANCH_NAME",
-                                    type: "select"
-                                },
-                                {
-                                    key:"customer.centreId",
-                                    type:"select",
-                                    title:"CENTRE_NAME",
-                                    /*filter: {
-                                     "parentCode": "branch_id"
-                                     },*/
-                                    parentEnumCode:"branch_id",
-                                    parentValueExpr:"model.customer.customerBranchId"
-                                },
-                                {
-                                    key: "customer.oldCustomerId",
-                                    title:"CUSTOMER_ID",
-                                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
-                                    condition: "model.customer.oldCustomerId",
-                                    readonly: true
-                                },
-                                {
-                                    key: "customer.id",
-                                    condition: "model.customer.id",
-                                    title:"CUSTOMER_ID",
-                                    readonly: true
-                                },
-                                {
-                                    key: "customer.urnNo",
-                                    condition: "model.customer.urnNo",
-                                    title:"URN_NO",
-                                    readonly: true
-                                },
-                                {
-                                    key:"customer.photoImageId",
-                                    type:"file",
-                                    fileType:"image/*"
-                                },
-                                {
-                                    "key": "customer.title",
-                                    "title": "TITLE",
-                                    "type": "select",
-                                    "enumCode": "title"
-                                },
-                                {
-                                    key: "customer.firstName",
-                                    title:"FULL_NAME",
-                                    type:"qrcode",
-                                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
-                                },
-                                {
-                                    key:"customer.enrolledAs",
-                                    type:"radios"
-                                },
-                                {
-                                    key:"customer.gender",
-                                    type:"radios"
-                                },
-                                {
-                                    key:"customer.dateOfBirth",
-                                    type:"date",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.dateOfBirth) {
-                                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                    }
-                                },
-                                {
-                                    key:"customer.age",
-                                    title: "AGE",
-                                    type:"number",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.age > 0) {
-                                            if (model.customer.dateOfBirth) {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                                            }
-                                        }
-                                    }
-                                },
-                                {
-                                    key:"customer.religion",
-                                    type:"select"
-                                },
-                                {
-                                    key: "customer.language",
-                                    title: "PREFERRED_LANGUAGE",
-                                    type: "select",
-                                    enumCode: "language"
-                                },
-                                {
-                                    key: "customer.fatherFirstName",
-                                    title: "FATHER_FULL_NAME"
-                                },
-                                {
-                                    key: "customer.motherName",
-                                    title: "MOTHER_NAME"
-                                },
-                                {
-                                    key:"customer.maritalStatus",
-                                    type:"select"
-                                },
-                                {
-                                    key: "customer.spouseFirstName",
-                                    title: "SPOUSE_FULL_NAME",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    type:"qrcode",
+                            type: "fieldset",
+                            title: "IDENTITY_PROOF",
+                            items: [{
+                                    key: "customer.identityProof",
+                                    readonly: true,
+                                    //type:"select"
+                                }, {
+                                    key: "customer.identityProofImageId",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.identityProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
                                     onCapture: function(result, model, form) {
-                                        $log.info(result); // spouse id proof
-                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                        $log.info(aadhaarData);
-                                        model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
-                                        model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
-                                        model.customer.spouseFirstName = aadhaarData.name;
-                                        if (aadhaarData.yob) {
-                                            model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
-                                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
                                     }
                                 },
-                                {
-                                    key:"customer.spouseDateOfBirth",
-                                    type:"date",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.spouseDateOfBirth) {
-                                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                    }
-                                },
-                                {
-                                    key:"customer.spouseAge",
-                                    title: "SPOUSE_AGE",
-                                    type:"number",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.spouseAge > 0) {
-                                            if (model.customer.spouseDateOfBirth) {
-                                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "PERSONAL_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            "items": [
-                                {
-                                    key: "customer.customerBranchId",
-                                    title:"BRANCH_NAME",
-                                    type: "select"
-                                },
-                                {
-                                    key:"customer.centreId",
-                                    title:"CENTRE_NAME",
-                                    type:"select"
-                                },
-                                {
-                                    key: "customer.oldCustomerId",
-                                    title:"CUSTOMER_ID",
-                                    titleExpr:"('CUSTOMER_ID'|translate)+' (Artoo)'",
-                                    condition: "model.customer.oldCustomerId",
-                                    readonly: true
-                                },
-                                {
-                                    key: "customer.id",
-                                    condition: "model.customer.id",
-                                    title:"CUSTOMER_ID",
-                                    readonly: true
-                                },
-                                {
-                                    key: "customer.urnNo",
-                                    condition: "model.customer.urnNo",
-                                    title:"URN_NO",
-                                    readonly: true
-                                },
-                                {
-                                    key:"customer.photoImageId",
-                                    type:"file",
-                                    fileType:"image/*"
-                                },
-                                {
-                                    "key": "customer.title",
-                                    "title": "TITLE",
-                                    "type": "select"
-                                },
-                                {
-                                    key: "customer.firstName",
-                                    title:"FULL_NAME",
-                                    type:"qrcode"
-                                },
-                                {
-                                    key:"customer.enrolledAs",
-                                    type:"radios"
-                                },
-                                {
-                                    key:"customer.gender",
-                                    type:"radios"
-                                },
-                                {
-                                    key:"customer.dateOfBirth",
+                                /*{
+                                    key:"customer.idProofIssueDate",
                                     type:"date"
                                 },
                                 {
-                                    key:"customer.age",
-                                    title: "AGE",
-                                    type:"number"
+                                    key:"customer.idProofValidUptoDate",
+                                    type:"date"
                                 },
                                 {
-                                    key:"customer.religion",
-                                    type:"select"
-                                },
-                                {
-                                    key: "customer.language",
-                                    title: "PREFERRED_LANGUAGE"
-                                },
-                                {
-                                    key: "customer.fatherFirstName",
-                                    title: "FATHER_FULL_NAME"
-                                },
-                                {
-                                    key: "customer.motherName",
-                                    title: "MOTHER_NAME"
-                                },
-                                {
-                                    key:"customer.maritalStatus",
-                                    type:"select"
-                                },
-                                {
-                                    key: "customer.spouseFirstName",
-                                    title: "SPOUSE_FULL_NAME",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    type:"qrcode"
-                                },
-                                {
-                                    key:"customer.spouseAge",
-                                    title: "SPOUSE_AGE",
-                                    type:"number",
-                                    condition:"model.customer.maritalStatus==='MARRIED'"
-                                },
-                                {
-                                    key:"customer.spouseDateOfBirth",
-                                    type:"date",
-                                    condition:"model.customer.maritalStatus==='MARRIED'"
-                                }
+                                    key:"customer.addressProofSameAsIdProof"
+                                }*/
                             ]
                         },
-                        {
-                            "type": "box",
-                            "title": "CONTACT_INFORMATION",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [
-                                "customer.mobilePhone",
-                                "customer.landLineNo",
-                                {
-                                    "type": "string",
-                                    "key": "customer.whatsAppMobileNo",
-                                    "title": "WHATSAPP_MOBILE_NO"
-                                },
-                                {
-                                    "type": "string",
-                                    "key": "customer.email",
-                                    "title": "EMAIL"
-                                },
-                                {
-                                    type: "fieldset",
-                                    title: "CUSTOMER_RESIDENTIAL_ADDRESS",
-                                    items: [
-                                        "customer.doorNo",
-                                        "customer.street",
-                                        "customer.postOffice",
-                                        "customer.landmark",
-                                        {
-                                            key: "customer.pincode",
-                                            type: "lov",
-                                            fieldType: "number",
-                                            autolov: true,
-                                            inputMap: {
-                                                "pincode": "customer.pincode",
-                                                "district": {
-                                                    key: "customer.district"
-                                                },
-                                                "state": {
-                                                    key: "customer.state"
-                                                }
-                                            },
-                                            outputMap: {
-                                                "division": "customer.locality",
-                                                "region": "customer.villageName",
-                                                "pincode": "customer.pincode",
-                                                "district": "customer.district",
-                                                "state": "customer.state"
-                                            },
-                                            searchHelper: formHelper,
-                                            initialize: function(inputModel) {
-                                                $log.warn('in pincode initialize');
-                                                $log.info(inputModel);
-                                            },
-                                            search: function(inputModel, form, model) {
-                                                if (!inputModel.pincode) {
-                                                    return $q.reject();
-                                                }
-                                                return Queries.searchPincodes(
-                                                        inputModel.pincode,
-                                                        inputModel.district,
-                                                        inputModel.state
-                                                );
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.division + ', ' + item.region,
-                                                    item.pincode,
-                                                    item.district + ', ' + item.state
-                                                ];
-                                            },
-                                            onSelect: function(result, model, context) {
-                                                $log.info(result);
-                                            }
-                                        },
-                                        "customer.locality",
-                                        "customer.villageName",
-                                        "customer.district",
-                                        "customer.state",
-                                        "customer.mailSameAsResidence"
-                                    ]
-                                },
-                                {
-                                    type: "fieldset",
-                                    title: "CUSTOMER_PERMANENT_ADDRESS",
-                                    condition:"!model.customer.mailSameAsResidence",
-                                    items: [
-                                        "customer.mailingDoorNo",
-                                        "customer.mailingStreet",
-                                        "customer.mailingPostoffice",
-                                        {
-                                            key: "customer.mailingPincode",
-                                            type: "lov",
-                                            fieldType: "number",
-                                            autolov: true,
-                                            inputMap: {
-                                                "mailingPincode": "customer.mailingPincode",
-                                                "mailingDistrict": {
-                                                    key: "customer.mailingDistrict"
-                                                },
-                                                "mailingState": {
-                                                    key: "customer.mailingState"
-                                                }
-                                            },
-                                            outputMap: {
-                                                "mailingDivision": "customer.mailingLocality",
-                                                "mailingPincode": "customer.mailingPincode",
-                                                "mailingDistrict": "customer.mailingDistrict",
-                                                "mailingState": "customer.mailingState"
-                                            },
-                                            searchHelper: formHelper,
-                                            initialize: function(inputModel) {
-                                                $log.warn('in pincode initialize');
-                                                $log.info(inputModel);
-                                            },
-                                            search: function(inputModel, form, model) {
-                                                if (!inputModel.mailingPincode) {
-                                                    return $q.reject();
-                                                }
-                                                return Queries.searchPincodes(
-                                                        inputModel.mailingPincode,
-                                                        inputModel.mailingDistrict,
-                                                        inputModel.mailingState
-                                                );
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.division + ', ' + item.region,
-                                                    item.pincode,
-                                                    item.district + ', ' + item.state
-                                                ];
-                                            },
-                                            onSelect: function(result, model, context) {
-                                                model.customer.mailingPincode = result.pincode;
-                                                model.customer.mailingLocality = result.division;
-                                                model.customer.mailingState = result.state;
-                                                model.customer.mailingDistrict = result.district;
-                                            }
-                                        },
-                                        "customer.mailingLocality",
-                                        "customer.mailingDistrict",
-                                        "customer.mailingState"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "CONTACT_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            "items": [
-                                "customer.mobilePhone",
-                                "customer.landLineNo",
-                                {
-                                    "type": "string",
-                                    "key": "customer.whatsAppMobileNo",
-                                    "title": "WHATSAPP_MOBILE_NO"
-                                },
-                                {
-                                    "type": "string",
-                                    "key": "customer.email",
-                                    "title": "EMAIL"
-                                },
-                                {
-                                    type: "fieldset",
-                                    title: "CUSTOMER_RESIDENTIAL_ADDRESS",
-                                    items: [
-                                        "customer.doorNo",
-                                        "customer.street",
-                                        "customer.postOffice",
-                                        "customer.landmark",
-                                        {
-                                            key: "customer.pincode",
-                                            fieldType: "number",
-                                        },
-                                        "customer.locality",
-                                        "customer.villageName",
-                                        "customer.district",
-                                        "customer.state",
-                                        "customer.mailSameAsResidence"
-                                    ]
-                                },
-                                {
-                                    type: "fieldset",
-                                    title: "CUSTOMER_PERMANENT_ADDRESS",
-                                    condition:"!model.customer.mailSameAsResidence",
-                                    items: [
-                                        "customer.mailingDoorNo",
-                                        "customer.mailingStreet",
-                                        "customer.mailingPostoffice",
-                                        {
-                                            key: "customer.mailingPincode",
-                                            fieldType: "number",
-                                        },
-                                        "customer.mailingLocality",
-                                        "customer.mailingDistrict",
-                                        "customer.mailingState"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "HOUSEHOLD_FINANCIALS",
-                            "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [
-                                {
-                                    "key": "customer.otherBusinessIncomes",
-                                    "type": "array",
-                                    "title": "OTHER_INCOME_SOURCE",
-                                    "view": "fixed",
-                                    // "add": null,
-                                    // "remove": null,
-                                    "items": [
-                                        {
-                                            "key": "customer.otherBusinessIncomes[].incomeSource",
-                                            "type": "amount",
-                                            "title": "AMOUNT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "key": "customer.expenditures",
-                                    "type": "array",
-                                    "title": "EXPENDITURES",
-                                    "view": "fixed",
-                                    // "add": null,
-                                    // "remove": null,
-                                    "items": [
-                                        {
-                                            "key": "customer.expenditures[].annualExpenses",
-                                            "type": "amount",
-                                            "title": "MONTHLY_EDUCATION_EXPENSE"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "HOUSEHOLD_FINANCIALS",
-                            "condition": "model.currentStage =='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            "items": [
-                                {
-                                    "key": "customer.otherBusinessIncomes",
-                                    "type": "array",
-                                    "title": "OTHER_INCOME_SOURCE",
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed",
-                                    "items": [
-                                        {
-                                            "key": "customer.otherBusinessIncomes[].incomeSource",
-                                            "type": "amount",
-                                            "title": "AMOUNT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "key": "customer.expenditures",
-                                    "type": "array",
-                                    "title": "EXPENDITURES",
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed",
-                                    "items": [
-                                        {
-                                            "key": "customer.expenditures[].annualExpenses",
-                                            "type": "amount",
-                                            "title": "MONTHLY_EDUCATION_EXPENSE"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "T_FAMILY_DETAILS",
-                            "condition": "model.currentStage=='Screening'",
-                            "add": null,
-                            "remove": null,
-                            "view": "fixed",
-                            "items": [
-                                {
-                                    "key": "customer.familyMembers",
-                                    "type": "array",
-                                    "items": [
-                                        {
-                                            "key": "customer.familyMembers[].relationShip",
-                                            "type": "select",
-                                            "readonly": true
-                                        },
-                                        {
-                                            "key": "customer.familyMembers[].educationStatus",
-                                            "title": "EDUCATION_LEVEL",
-                                            "type": "select"
-                                        }
-                                    ]
-                                }
 
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "T_FAMILY_SELF_DETAILS",
-                            "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [{
-                                key:"customer.familyMembers",
-                                type:"array",
-                                startEmpty: true,
-                                items: [
-                                    {
-                                        key:"customer.familyMembers[].relationShip",
-                                        type:"select",
-                                        onChange: function(modelValue, form, model, formCtrl, event) {
-                                            if (modelValue && modelValue.toLowerCase() === 'self') {
-                                                if (model.customer.id)
-                                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                                if (model.customer.firstName)
-                                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                                if (model.customer.gender)
-                                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                                if (model.customer.dateOfBirth)
-                                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                                if (model.customer.maritalStatus)
-                                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                                if (model.customer.mobilePhone)
-                                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
-                                                if (model.customer.spouseFirstName)
-                                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                                if (model.customer.gender)
-                                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
-                                                            (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
-                                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
-                                                if (model.customer.spouseDateOfBirth)
-                                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                                if (model.customer.maritalStatus)
-                                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                            }
-                                        },
-                                        title: "T_RELATIONSHIP"
-                                    },
-                                    // {
-                                    //     key:"customer.familyMembers[].customerId",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                    //     type:"lov",
-                                    //     "inputMap": {
-                                    //         "firstName": {
-                                    //             "key": "customer.firstName",
-                                    //             "title": "CUSTOMER_NAME"
-                                    //         },
-                                    //         "branchName": {
-                                    //             "key": "customer.kgfsName",
-                                    //             "type": "select"
-                                    //         },
-                                    //         "centreCode": {
-                                    //             "key": "customer.centreCode",
-                                    //             "type": "select"
-                                    //         }
-                                    //     },
-                                    //     "outputMap": {
-                                    //         "id": "customer.familyMembers[arrayIndex].customerId",
-                                    //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
 
-                                    //     },
-                                    //     "searchHelper": formHelper,
-                                    //     "search": function(inputModel, form) {
-                                    //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    //         var promise = Enrollment.search({
-                                    //             'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                    //             'firstName': inputModel.first_name,
-                                    //         }).$promise;
-                                    //         return promise;
-                                    //     },
-                                    //     getListDisplayItem: function(data, index) {
-                                    //         return [
-                                    //             [data.firstName, data.fatherFirstName].join(' '),
-                                    //             data.id
-                                    //         ];
-                                    //     }
-                                    // },
-                                    {
-                                        key:"customer.familyMembers[].familyMemberFirstName",
-                                        condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                        title:"FAMILY_MEMBER_FULL_NAME"
-                                    },
-                                    // {
-                                    //     key: "customer.familyMembers[].gender",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                    //     type: "radios",
-                                    //     title: "T_GENDER"
-                                    // },
-                                    // {
-                                    //     key:"customer.familyMembers[].age",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                    //     title: "AGE",
-                                    //     type:"number",
-                                    //     "onChange": function(modelValue, form, model, formCtrl, event) {
-                                    //         if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                    //             if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                    //             } else {
-                                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // },
-                                    // {
-                                    //     key: "customer.familyMembers[].dateOfBirth",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                    //     type:"date",
-                                    //     title: "T_DATEOFBIRTH",
-                                    //     "onChange": function(modelValue, form, model, formCtrl, event) {
-                                    //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    //             model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                    //         }
-                                    //     }
-                                    // },
-                                    // {
-                                    //     key:"customer.familyMembers[].educationStatus",
-                                    //     type:"select",
-                                    //     title: "T_EDUCATION_STATUS"
-                                    // },
-                                    // {
-                                    //     key:"customer.familyMembers[].maritalStatus",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                    //     type:"select",
-                                    //     title: "T_MARITAL_STATUS"
-                                    // },
-                                    // {
-                                    //     key: "customer.familyMembers[].mobilePhone",
-                                    //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                    // },
-                                    // {
-                                    //     key:"customer.familyMembers[].healthStatus",
-                                    //     type:"radios",
-                                    //     titleMap:{
-                                    //         "GOOD":"GOOD",
-                                    //         "BAD":"BAD"
-                                    //     },
-
-                                    // },
-                                    {
-                                        key:"customer.familyMembers[].educationStatus",
-                                        type:"select",
-                                        title: "T_EDUCATION_STATUS"
-                                    },
-                                    {
-                                        key: "customer.familyMembers[].anualEducationFee",
-                                        type: "amount",
-                                        title: "ANNUAL_EDUCATION_FEE"
-                                    },
-                                    {
-                                        key: "customer.familyMembers[].salary",
-                                        type: "amount",
-                                        title: "SALARY"
-                                    },
-                                    {
-                                        key:"customer.familyMembers[].incomes",
-                                        type:"array",
-                                        startEmpty: true,
-                                        items:[
-                                            {
-                                                key: "customer.familyMembers[].incomes[].incomeSource",
-                                                type:"select"
-                                            },
-                                            "customer.familyMembers[].incomes[].incomeEarned",
-                                            {
-                                                key: "customer.familyMembers[].incomes[].frequency",
-                                                type: "select"
-                                            }
-
-                                        ]
-
-                                    }
-                                ]
-                            }]
-                        },
-                        {
-                            "type": "box",
-                            "title": "T_FAMILY_DETAILS",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            "items": [{
-                                key:"customer.familyMembers",
-                                type:"array",
-                                startEmpty: true,
-                                items: [
-                                    {
-                                        key:"customer.familyMembers[].relationShip",
-                                        type:"select",
-                                        title: "T_RELATIONSHIP"
-                                    },
-                                    {
-                                        key:"customer.familyMembers[].familyMemberFirstName",
-                                        condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                        title:"FAMILY_MEMBER_FULL_NAME"
-                                    },
-                                    {
-                                        key:"customer.familyMembers[].educationStatus",
-                                        type:"select",
-                                        title: "T_EDUCATION_STATUS"
-                                    },
-                                    {
-                                        key: "customer.familyMembers[].anualEducationFee",
-                                        type: "amount",
-                                        title: "ANNUAL_EDUCATION_FEE"
-                                    },
-                                    {
-                                        key: "customer.familyMembers[].salary",
-                                        type: "amount",
-                                        title: "SALARY"
-                                    },
-                                    {
-                                        key:"customer.familyMembers[].incomes",
-                                        type:"array",
-                                        startEmpty: false,
-                                        items:[
-                                            {
-                                                key: "customer.familyMembers[].incomes[].incomeSource",
-                                                type:"select"
-                                            },
-                                            "customer.familyMembers[].incomes[].incomeEarned",
-                                            {
-                                                key: "customer.familyMembers[].incomes[].frequency",
-                                                type: "select"
-                                            }
-
-                                        ]
-
-                                    }
-                                ]
-                            }]
-                        },
-                        {
-                            type:"box",
-                            title:"T_LIABILITIES",
-                            "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                        /*{
+                            type:"fieldset",
+                            title:"IDENTITY_PROOF",
                             items:[
                                 {
-                                    key:"customer.liabilities",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"FINANCIAL_LIABILITIES",
-                                    items:[
-                                        // {
-                                        //     key:"customer.liabilities[].loanType",
-                                        //     type:"select"
-                                        // },
-                                        {
-                                            key:"customer.liabilities[].loanSource",
-                                            type:"select"
-                                        },
-                                        "customer.liabilities[].instituteName",
-                                        {
-                                            key: "customer.liabilities[].loanAmountInPaisa",
-                                            type: "amount"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].installmentAmountInPaisa",
-                                            type: "amount"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].outstandingAmountInPaisa",
-                                            type: "amount",
-                                            title: "OUTSTANDING_AMOUNT"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].startDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].maturityDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].noOfInstalmentPaid",
-                                            type: "number",
-                                            title: "NO_OF_INSTALLMENT_PAID"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].frequencyOfInstallment",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select",
-                                            enumCode: "loan_purpose_1"
-                                        }
-
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            type:"box",
-                            title:"T_LIABILITIES",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            items:[
-                                {
-                                    key:"customer.liabilities",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"FINANCIAL_LIABILITIES",
-                                    items:[
-                                        {
-                                            key:"customer.liabilities[].loanType",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].loanSource",
-                                            type:"select"
-                                        },
-                                        "customer.liabilities[].instituteName",
-                                        {
-                                            key: "customer.liabilities[].loanAmountInPaisa",
-                                            type: "amount"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].installmentAmountInPaisa",
-                                            type: "amount"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].outstandingAmountInPaisa",
-                                            type: "amount",
-                                            title: "OUTSTANDING_AMOUNT"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].startDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].maturityDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key: "customer.liabilities[].noOfInstalmentPaid",
-                                            type: "number",
-                                            title: "NO_OF_INSTALLMENT_PAID"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].frequencyOfInstallment",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select"
-                                        }
-
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "box",
-                            "title": "T_HOUSE_VERIFICATION",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [
-                                {
-                                    type:"fieldset",
-                                    title:"HOUSE_DETAILS",
-                                    items:[
-                                        {
-                                            key:"customer.ownership",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
-                                            type: "select",
-                                            title: "IN_CURRENT_ADDRESS_SINCE"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
-                                            type:"select",
-                                            title: "IN_CURRENT_AREA_SINCE"
-                                        }
-                                    ]
+                                    key:"customer.identityProof",
+                                    type:"select"
                                 },
                                 {
-                                    "key": "customer.latitude",
-                                    "title": "HOUSE_LOCATION",
-                                    "type": "geotag",
-                                    "latitude": "customer.latitude",
-                                    "longitude": "customer.longitude"
+                                    key:"customer.identityProofImageId",
+                                    type:"file",
+                                    required: true,
+                                    fileType:"image/*"
                                 },
-                                //{
-                                //   key: "customer.nameOfRo",
-                                //   readonly: true
-                                //},
                                 {
-                                    key:"customer.houseVerificationPhoto",
+                                    key:"customer.identityProofReverseImageId",
                                     type:"file",
                                     fileType:"image/*"
                                 },
                                 {
-                                    key: "customer.date",
+                                    key:"customer.identityProofNo",
+                                    type:"barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                },
+                                {
+                                    key:"customer.idProofIssueDate",
                                     type:"date"
                                 },
-                                "customer.place"
+                                {
+                                    key:"customer.idProofValidUptoDate",
+                                    type:"date"
+                                },
+                                {
+                                    key:"customer.addressProofSameAsIdProof"
+                                }
+                            ]
+                        },*/
+                        {
+                            type: "fieldset",
+                            title: "ADDRESS_PROOF",
+                            //condition:"!model.customer.addressProofSameAsIdProof",
+                            items: [{
+                                    key: "customer.addressProof",
+                                    readonly: true,
+                                    //type:"select"
+                                }, {
+                                    key: "customer.addressProofImageId",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.addressProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
+                                    }
+                                },
+                                /*{
+                                    key:"customer.addressProofIssueDate",
+                                    type:"date"
+                                },
+                                {
+                                    key:"customer.addressProofValidUptoDate",
+                                    type:"date"
+                                },*/
                             ]
                         },
+
                         {
-                            "type": "box",
-                            "title": "T_HOUSE_VERIFICATION",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            "items": [
-                                {
-                                    type:"fieldset",
-                                    title:"HOUSE_DETAILS",
-                                    items:[
-                                        {
-                                            key:"customer.ownership",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
-                                            type: "select",
-                                            title: "IN_CURRENT_ADDRESS_SINCE"
-                                        },
-                                        {
-                                            key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
-                                            type:"select",
-                                            title: "IN_CURRENT_AREA_SINCE"
+                            "key": "customer.additionalKYCs",
+                            "type": "array",
+                            "title": "ADDITIONAL_KYC",
+                            startEmpty: true,
+                            //"add": null,
+                            //"remove": null,
+                            //"view": "fixed",
+                            "items": [{
+
+                                    key: "customer.additionalKYCs[].kyc1ProofType",
+                                    type: "select",
+                                    "enumCode": "identity_proof"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ImagePath",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ReverseImagePath",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1IssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ValidUptoDate",
+                                    type: "date"
+                                }
+
+                            ]
+                        },
+                        /*    {
+                                type:"fieldset",
+                                title:"SPOUSE_IDENTITY_PROOF",
+                                condition:"model.customer.maritalStatus==='MARRIED'",
+                                items:[
+                                    {
+                                        key:"customer.udf.userDefinedFieldValues.udf33",
+                                        type:"select",
+                                        onChange: function(modelValue) {
+                                            $log.info(modelValue);
                                         }
-                                    ]
+                                    },
+                                    {
+                                        key:"customer.udf.userDefinedFieldValues.udf34",
+                                        type:"file",
+                                        fileType:"image/*"
+                                    },
+                                    {
+                                        key:"customer.udf.userDefinedFieldValues.udf35",
+                                        type:"file",
+                                        fileType:"image/*"
+                                    },
+                                    {
+                                        key:"customer.udf.userDefinedFieldValues.udf36",
+                                        condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                        type:"barcode",
+                                        onCapture: function(result, model, form) {
+                                            $log.info(result); // spouse id proof
+                                            model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                        }
+                                    },
+                                    {
+                                        key:"customer.udf.userDefinedFieldValues.udf36",
+                                        condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                        type:"qrcode",
+                                        onCapture: function(result, model, form) {
+                                            $log.info(result); // spouse id proof
+                                            var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                            $log.info(aadhaarData);
+                                            model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                            model.customer.spouseFirstName = aadhaarData.name;
+                                            if (aadhaarData.yob) {
+                                                model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                            }
+                                        }
+                                    }
+                                ]
+                            }*/
+
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "KYC",
+                    "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    "readonly": true,
+                    "items": [{
+                            "key": "customer.firstName",
+                            "title": "CUSTOMER_NAME"
+                        }, {
+                            type: "fieldset",
+                            title: "IDENTITY_PROOF",
+                            items: [{
+                                    key: "customer.identityProof",
+                                    readonly: true,
+                                    //type:"select"
+                                }, {
+                                    key: "customer.identityProofImageId",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.identityProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.identityProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
                                 },
-                                {
-                                    "key": "customer.latitude",
-                                    "title": "HOUSE_LOCATION",
-                                    "type": "geotag",
-                                    "latitude": "customer.latitude",
-                                    "longitude": "customer.longitude"
-                                },
-                                {
-                                    key:"customer.houseVerificationPhoto",
-                                    type:"file",
-                                    fileType:"image/*"
-                                },
-                                {
-                                    key: "customer.date",
+                                /*{
+                                    key:"customer.idProofIssueDate",
                                     type:"date"
                                 },
-                                "customer.place"
+                                {
+                                    key:"customer.idProofValidUptoDate",
+                                    type:"date"
+                                },
+                                {
+                                    key:"customer.addressProofSameAsIdProof"
+                                }*/
+                            ]
+                        }, {
+                            type: "fieldset",
+                            title: "ADDRESS_PROOF",
+                            //condition:"!model.customer.addressProofSameAsIdProof",
+                            items: [{
+                                    key: "customer.addressProof",
+                                    readonly: true,
+                                    //type:"select"
+                                }, {
+                                    key: "customer.addressProofImageId",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.addressProofReverseImageId",
+                                    type: "file",
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.addressProofNo",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.addressProofNo = result.text;
+                                    }
+                                },
+                                /*{
+                                    key:"customer.addressProofIssueDate",
+                                    type:"date"
+                                },
+                                {
+                                    key:"customer.addressProofValidUptoDate",
+                                    type:"date"
+                                },*/
                             ]
                         },
+
                         {
-                            type: "box",
-                            title: "CUSTOMER_BANK_ACCOUNTS",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
+                            "key": "customer.additionalKYCs",
+                            "type": "array",
+                            "title": "ADDITIONAL_KYC",
+                            startEmpty: true,
+                            //"add": null,
+                            //"remove": null,
+                            //"view": "fixed",
+                            "items": [{
+
+                                    key: "customer.additionalKYCs[].kyc1ProofType",
+                                    type: "select",
+                                    "enumCode": "identity_proof"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ImagePath",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ReverseImagePath",
+                                    type: "file",
+                                    required: true,
+                                    fileType: "image/*"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ProofNumber",
+                                    type: "barcode",
+                                    onCapture: function(result, model, form) {
+                                        $log.info(result);
+                                        model.customer.identityProofNo = result.text;
+                                    }
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1IssueDate",
+                                    type: "date"
+                                }, {
+                                    key: "customer.additionalKYCs[].kyc1ValidUptoDate",
+                                    type: "date"
+                                }
+
+                            ]
+                        },
+                        /* {
+                             type:"fieldset",
+                             title:"SPOUSE_IDENTITY_PROOF",
+                             condition:"model.customer.maritalStatus==='MARRIED'",
+                             items:[
+                                 {
+                                     key:"customer.udf.userDefinedFieldValues.udf33",
+                                     type:"select",
+                                     onChange: function(modelValue) {
+                                         $log.info(modelValue);
+                                     }
+                                 },
+                                 {
+                                     key:"customer.udf.userDefinedFieldValues.udf34",
+                                     type:"file",
+                                     fileType:"image/*"
+                                 },
+                                 {
+                                     key:"customer.udf.userDefinedFieldValues.udf35",
+                                     type:"file",
+                                     fileType:"image/*"
+                                 },
+                                 {
+                                     key:"customer.udf.userDefinedFieldValues.udf36",
+                                     condition: "model.customer.udf.userDefinedFieldValues.udf33 !== 'Aadhar card'",
+                                     type:"barcode",
+                                     onCapture: function(result, model, form) {
+                                         $log.info(result); // spouse id proof
+                                         model.customer.udf.userDefinedFieldValues.udf36 = result.text;
+                                     }
+                                 },
+                                 {
+                                     key:"customer.udf.userDefinedFieldValues.udf36",
+                                     condition: "model.customer.udf.userDefinedFieldValues.udf33 === 'Aadhar card'",
+                                     type:"qrcode",
+                                     onCapture: function(result, model, form) {
+                                         $log.info(result); // spouse id proof
+                                         var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                         $log.info(aadhaarData);
+                                         model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                         model.customer.spouseFirstName = aadhaarData.name;
+                                         if (aadhaarData.yob) {
+                                             model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                         }
+                                     }
+                                 }
+                             ]
+                         }*/
+
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "PERSONAL_INFORMATION",
+                    "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                    "items": [{
+                        key: "customer.customerBranchId",
+                        title: "BRANCH_NAME",
+                        type: "select"
+                    }, {
+                        key: "customer.centreId",
+                        type: "select",
+                        title: "CENTRE_NAME",
+                        /*filter: {
+                         "parentCode": "branch_id"
+                         },*/
+                        parentEnumCode: "branch_id",
+                        parentValueExpr: "model.customer.customerBranchId"
+                    }, {
+                        key: "customer.oldCustomerId",
+                        title: "CUSTOMER_ID",
+                        titleExpr: "('CUSTOMER_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
+                        readonly: true
+                    }, {
+                        key: "customer.id",
+                        condition: "model.customer.id",
+                        title: "CUSTOMER_ID",
+                        readonly: true
+                    }, {
+                        key: "customer.urnNo",
+                        condition: "model.customer.urnNo",
+                        title: "URN_NO",
+                        readonly: true
+                    }, {
+                        key: "customer.photoImageId",
+                        type: "file",
+                        fileType: "image/*"
+                    }, {
+                        "key": "customer.title",
+                        "title": "TITLE",
+                        "type": "select",
+                        "enumCode": "title"
+                    }, {
+                        key: "customer.firstName",
+                        title: "FULL_NAME",
+                        type: "qrcode",
+                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                    }, {
+                        key: "customer.enrolledAs",
+                        type: "radios"
+                    }, {
+                        key: "customer.gender",
+                        type: "radios"
+                    }, {
+                        key: "customer.dateOfBirth",
+                        type: "date",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }, {
+                        key: "customer.age",
+                        title: "AGE",
+                        type: "number",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    }, {
+                        key: "customer.religion",
+                        type: "select"
+                    }, {
+                        key: "customer.language",
+                        title: "PREFERRED_LANGUAGE",
+                        type: "select",
+                        enumCode: "language"
+                    }, {
+                        key: "customer.fatherFirstName",
+                        title: "FATHER_FULL_NAME"
+                    }, {
+                        key: "customer.motherName",
+                        title: "MOTHER_NAME"
+                    }, {
+                        key: "customer.maritalStatus",
+                        type: "select"
+                    }, {
+                        key: "customer.spouseFirstName",
+                        title: "SPOUSE_FULL_NAME",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        type: "qrcode",
+                        onCapture: function(result, model, form) {
+                            $log.info(result); // spouse id proof
+                            var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                            $log.info(aadhaarData);
+                            model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                            model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                            model.customer.spouseFirstName = aadhaarData.name;
+                            if (aadhaarData.yob) {
+                                model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }, {
+                        key: "customer.spouseDateOfBirth",
+                        type: "date",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.spouseDateOfBirth) {
+                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }, {
+                        key: "customer.spouseAge",
+                        title: "SPOUSE_AGE",
+                        type: "number",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.spouseAge > 0) {
+                                if (model.customer.spouseDateOfBirth) {
+                                    model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "PERSONAL_INFORMATION",
+                    "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    "items": [{
+                        key: "customer.customerBranchId",
+                        title: "BRANCH_NAME",
+                        type: "select"
+                    }, {
+                        key: "customer.centreId",
+                        title: "CENTRE_NAME",
+                        type: "select"
+                    }, {
+                        key: "customer.oldCustomerId",
+                        title: "CUSTOMER_ID",
+                        titleExpr: "('CUSTOMER_ID'|translate)+' (Artoo)'",
+                        condition: "model.customer.oldCustomerId",
+                        readonly: true
+                    }, {
+                        key: "customer.id",
+                        condition: "model.customer.id",
+                        title: "CUSTOMER_ID",
+                        readonly: true
+                    }, {
+                        key: "customer.urnNo",
+                        condition: "model.customer.urnNo",
+                        title: "URN_NO",
+                        readonly: true
+                    }, {
+                        key: "customer.photoImageId",
+                        type: "file",
+                        fileType: "image/*"
+                    }, {
+                        "key": "customer.title",
+                        "title": "TITLE",
+                        "type": "select"
+                    }, {
+                        key: "customer.firstName",
+                        title: "FULL_NAME",
+                        type: "qrcode"
+                    }, {
+                        key: "customer.enrolledAs",
+                        type: "radios"
+                    }, {
+                        key: "customer.gender",
+                        type: "radios"
+                    }, {
+                        key: "customer.dateOfBirth",
+                        type: "date"
+                    }, {
+                        key: "customer.age",
+                        title: "AGE",
+                        type: "number"
+                    }, {
+                        key: "customer.religion",
+                        type: "select"
+                    }, {
+                        key: "customer.language",
+                        title: "PREFERRED_LANGUAGE"
+                    }, {
+                        key: "customer.fatherFirstName",
+                        title: "FATHER_FULL_NAME"
+                    }, {
+                        key: "customer.motherName",
+                        title: "MOTHER_NAME"
+                    }, {
+                        key: "customer.maritalStatus",
+                        type: "select"
+                    }, {
+                        key: "customer.spouseFirstName",
+                        title: "SPOUSE_FULL_NAME",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        type: "qrcode"
+                    }, {
+                        key: "customer.spouseAge",
+                        title: "SPOUSE_AGE",
+                        type: "number",
+                        condition: "model.customer.maritalStatus==='MARRIED'"
+                    }, {
+                        key: "customer.spouseDateOfBirth",
+                        type: "date",
+                        condition: "model.customer.maritalStatus==='MARRIED'"
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "CONTACT_INFORMATION",
+                    "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                    "items": [
+                        "customer.mobilePhone",
+                        "customer.landLineNo", {
+                            "type": "string",
+                            "key": "customer.whatsAppMobileNo",
+                            "title": "WHATSAPP_MOBILE_NO"
+                        }, {
+                            "type": "string",
+                            "key": "customer.email",
+                            "title": "EMAIL"
+                        }, {
+                            type: "fieldset",
+                            title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                             items: [
-                                {
-                                    key: "customer.customerBankAccounts",
-                                    type: "array",
-                                    title: "BANK_ACCOUNTS",
-                                    startEmpty: true,
-                                    items: [
-                                        {
-                                            key: "customer.customerBankAccounts[].ifscCode",
-                                            type: "lov",
-                                            lovonly: true,
-                                            inputMap: {
-                                                "ifscCode": {
-                                                    "key": "customer.customerBankAccounts[].ifscCode"
-                                                },
-                                                "bankName": {
-                                                    "key": "customer.customerBankAccounts[].customerBankName"
-                                                },
-                                                "branchName": {
-                                                    "key": "customer.customerBankAccounts[].customerBankBranchName"
-                                                }
-                                            },
-                                            outputMap: {
-                                                "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
-                                                "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
-                                                "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
-                                            },
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form) {
-                                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                var promise = CustomerBankBranch.search({
-                                                    'bankName': inputModel.bankName,
-                                                    'ifscCode': inputModel.ifscCode,
-                                                    'branchName': inputModel.branchName
-                                                }).$promise;
-                                                return promise;
-                                            },
-                                            getListDisplayItem: function(data, index) {
-                                                return [
-                                                    data.ifscCode,
-                                                    data.branchName,
-                                                    data.bankName
-                                                ];
-                                            }
+                                "customer.doorNo",
+                                "customer.street",
+                                "customer.postOffice",
+                                "customer.landmark", {
+                                    key: "customer.pincode",
+                                    type: "lov",
+                                    fieldType: "number",
+                                    autolov: true,
+                                    inputMap: {
+                                        "pincode": "customer.pincode",
+                                        "district": {
+                                            key: "customer.district"
                                         },
+<<<<<<< .mine
+                                        "state": {
+                                            key: "customer.state"
+=======
                                         {
                                             key: "customer.customerBankAccounts[].customerBankName",
                                             readonly: true
@@ -1712,26 +903,69 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 value: false,
                                                 name: "No"
                                             }]
+>>>>>>> .r1621
                                         }
-                                    ]
-                                }
+                                    },
+                                    outputMap: {
+                                        "division": "customer.locality",
+                                        "region": "customer.villageName",
+                                        "pincode": "customer.pincode",
+                                        "district": "customer.district",
+                                        "state": "customer.state"
+                                    },
+                                    searchHelper: formHelper,
+                                    initialize: function(inputModel) {
+                                        $log.warn('in pincode initialize');
+                                        $log.info(inputModel);
+                                    },
+                                    search: function(inputModel, form, model) {
+                                        if (!inputModel.pincode) {
+                                            return $q.reject();
+                                        }
+                                        return Queries.searchPincodes(
+                                            inputModel.pincode,
+                                            inputModel.district,
+                                            inputModel.state
+                                        );
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    },
+                                    onSelect: function(result, model, context) {
+                                        $log.info(result);
+                                    }
+                                },
+                                "customer.locality",
+                                "customer.villageName",
+                                "customer.district",
+                                "customer.state",
+                                "customer.mailSameAsResidence"
                             ]
-                        },
-                        {
-                            type: "box",
-                            title: "CUSTOMER_BANK_ACCOUNTS",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
+                        }, {
+                            type: "fieldset",
+                            title: "CUSTOMER_PERMANENT_ADDRESS",
+                            condition: "!model.customer.mailSameAsResidence",
                             items: [
-                                {
-                                    key: "customer.customerBankAccounts",
-                                    type: "array",
-                                    title: "BANK_ACCOUNTS",
-                                    startEmpty: true,
-                                    items: [
-                                        {
-                                            key: "customer.customerBankAccounts[].ifscCode",
+                                "customer.mailingDoorNo",
+                                "customer.mailingStreet",
+                                "customer.mailingPostoffice", {
+                                    key: "customer.mailingPincode",
+                                    type: "lov",
+                                    fieldType: "number",
+                                    autolov: true,
+                                    inputMap: {
+                                        "mailingPincode": "customer.mailingPincode",
+                                        "mailingDistrict": {
+                                            key: "customer.mailingDistrict"
                                         },
+<<<<<<< .mine
+                                        "mailingState": {
+                                            key: "customer.mailingState"
+=======
                                         {
                                             key: "customer.customerBankAccounts[].customerBankName",
                                             readonly: true
@@ -1814,659 +1048,1396 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 value: false,
                                                 name: "No"
                                             }]
+>>>>>>> .r1621
                                         }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            type: "box",
-                            title: "PROXY_INDICATORS",
-                            condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal'",
-                            items: [
-                                {
-                                    key:"customer.properAndMatchingSignboard",
-                                    title:"PROPER_MATCHING_SIGNBOARD",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
+                                    },
+                                    outputMap: {
+                                        "mailingDivision": "customer.mailingLocality",
+                                        "mailingPincode": "customer.mailingPincode",
+                                        "mailingDistrict": "customer.mailingDistrict",
+                                        "mailingState": "customer.mailingState"
+                                    },
+                                    searchHelper: formHelper,
+                                    initialize: function(inputModel) {
+                                        $log.warn('in pincode initialize');
+                                        $log.info(inputModel);
+                                    },
+                                    search: function(inputModel, form, model) {
+                                        if (!inputModel.mailingPincode) {
+                                            return $q.reject();
+                                        }
+                                        return Queries.searchPincodes(
+                                            inputModel.mailingPincode,
+                                            inputModel.mailingDistrict,
+                                            inputModel.mailingState
+                                        );
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.division + ', ' + item.region,
+                                            item.pincode,
+                                            item.district + ', ' + item.state
+                                        ];
+                                    },
+                                    onSelect: function(result, model, context) {
+                                        model.customer.mailingPincode = result.pincode;
+                                        model.customer.mailingLocality = result.division;
+                                        model.customer.mailingState = result.state;
+                                        model.customer.mailingDistrict = result.district;
+                                    }
                                 },
-                                {
-                                    key:"customer.bribeOffered",
-                                    title:"BRIBE_OFFERED",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.shopOrganized",
-                                    title:"SHOP_SHED_ORGANIZED",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.isIndustrialArea",
-                                    title:"IN_INDUSTRIAL_AREA",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.customerAttitudeToKinara",
-                                    title:"CUSTOMER_ATTITUDE_TO_KINARA",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.bookKeepingQuality",
-                                    title:"BOOK_KEEPING_QUALITY",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.challengingChequeBounce",
-                                    title:"CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.allMachinesAreOperational",
-                                    title:"ALL_MACHINES_OPERATIONAL?",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.employeeSatisfaction",
-                                    title:"EMPLOYEE_SATISFACTION",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.politicalOrPoliceConnections",
-                                    title:"POLITICAL_POLICE_CONNECTIONS",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.multipleProducts",
-                                    title:"MULTIPLE_PRODUCTS_MORE_THAN_3",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.multipleBuyers",
-                                    title:"MULTIPLE_BUYERS_MORE_THAN_3",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.seasonalBusiness",
-                                    title:"SEASONAL_BUSINESS",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.incomeStability",
-                                    title:"INCOME STABILITY",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "income_stability"
-                                },
-                                {
-                                    key:"customer.utilisationOfBusinessPremises",
-                                    title:"UTILIZATION_OF_BUSINESS_PREMISES ",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-                                {
-                                    key:"customer.approachForTheBusinessPremises",
-                                    title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"connectivity_status "
-                                },
-                                {
-                                    key:"customer.safetyMeasuresForEmployees",
-                                    title:"SAFETY_MEASURES_FOR_EMPLOYEES",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-                                {
-                                    key:"customer.childLabours",
-                                    title:"CHILD_LABOURERS",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.isBusinessEffectingTheEnvironment",
-                                    title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.stockMaterialManagement",
-                                    title:"STOCK_MATERIAL_MANAGEMENT",
-                                    type:"radios",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-
-                            ]
-                        },
-                        {
-                            type: "box",
-                            title: "PROXY_INDICATORS",
-                            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            items: [
-                                {
-                                    key:"customer.properAndMatchingSignboard",
-                                    title:"PROPER_MATCHING_SIGNBOARD",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.bribeOffered",
-                                    title:"BRIBE_OFFERED",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.shopOrganized",
-                                    title:"SHOP_SHED_ORGANIZED",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.isIndustrialArea",
-                                    title:"IN_INDUSTRIAL_AREA",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.customerAttitudeToKinara",
-                                    title:"CUSTOMER_ATTITUDE_TO_KINARA",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.bookKeepingQuality",
-                                    title:"BOOK_KEEPING_QUALITY",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.challengingChequeBounce",
-                                    title:"CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.allMachinesAreOperational",
-                                    title:"ALL_MACHINES_OPERATIONAL?",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.employeeSatisfaction",
-                                    title:"EMPLOYEE_SATISFACTION",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale_2"
-                                },
-                                {
-                                    key:"customer.politicalOrPoliceConnections",
-                                    title:"POLITICAL_POLICE_CONNECTIONS",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.multipleProducts",
-                                    title:"MULTIPLE_PRODUCTS_MORE_THAN_3",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.multipleBuyers",
-                                    title:"MULTIPLE_BUYERS_MORE_THAN_3",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.seasonalBusiness",
-                                    title:"SEASONAL_BUSINESS",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.incomeStability",
-                                    title:"INCOME_STABILITY",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "income_stability"
-                                },
-                                {
-                                    key:"customer.utilisationOfBusinessPremises",
-                                    title:"UTILIZATION_OF_BUSINESS_PREMISES ",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-                                {
-                                    key:"customer.approachForTheBusinessPremises",
-                                    title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"connectivity_status "
-                                },
-                                {
-                                    key:"customer.safetyMeasuresForEmployees",
-                                    title:"SAFETY_MEASURES_FOR_EMPLOYEES",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-                                {
-                                    key:"customer.childLabours",
-                                    title:"CHILD_LABOURERS",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.isBusinessEffectingTheEnvironment",
-                                    title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT?",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode:"decisionmaker",
-                                },
-                                {
-                                    key:"customer.stockMaterialManagement",
-                                    title:"STOCK_MATERIAL_MANAGEMENT",
-                                    type:"string",
-                                    required:"true",
-                                    enumCode: "status_scale"
-                                },
-
-                            ]
-                        },
-                        {
-                            type:"box",
-                            title:"PHYSICAL_ASSETS",
-                            "condition": "model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
-                            items:[
-                                {
-                                    key:"customer.physicalAssets",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"PHYSICAL_ASSETS",
-                                    items:[
-                                        {
-                                            key: "customer.physicalAssets[].assetType",
-                                            title: "ASSET_TYPE",
-                                            type: "select",
-                                            enumCode: "asset_type"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].vehicleModel",
-                                            title: "VEHICLE_MAKE_MODEL",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].registeredOwner",
-                                            title: "REGISTERED_OWNER",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].ownedAssetValue",
-                                            title: "VALUE_OF_THE_ASSET",
-                                            type: "amount"
-                                        },
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            type:"box",
-                            title:"PHYSICAL_ASSETS",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
-                            readonly:true,
-                            items:[
-                                {
-                                    key:"customer.physicalAssets",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"PHYSICAL_ASSETS",
-                                    items:[
-                                        {
-                                            key: "customer.physicalAssets[].assetType",
-                                            title: "ASSET_TYPE",
-                                            type: "select",
-                                            enumCode: "asset_type"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].vehicleModel",
-                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
-                                            title: "VEHICLE_MAKE_MODEL",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].registeredOwner",
-                                            title: "REGISTERED_OWNER",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].ownedAssetValue",
-                                            title: "VALUE_OF_THE_ASSET",
-                                            type: "string"
-                                        },
-                                    ]
-                                }
-                            ]
-                        },
-
-                        {
-                            "type": "actionbox",
-                            "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
-                            "items": [/*{
-                             "type": "save",
-                             "title": "SAVE"
-                             },*/
-                                {
-                                    "type": "button",
-                                    "title": "SAVE",
-                                    "onClick": "actions.save(model, formCtrl, form, $event)"
-                                }]
-                        },
-                        {
-                            "type": "actionbox",
-                            "condition": "(model.customer.id && model.customer.currentStage!='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
-                            "items": [/*{
-                             "type": "save",
-                             "title": "SAVE"
-                             },*/
-                                {
-                                    "type": "button",
-                                    "title": "SAVE",
-                                    "onClick": "actions.save(model, formCtrl, form, $event)"
-                                },
-                                {
-                                    "type": "submit",
-                                    "title": "FINISH_ENROLMENT"
-                                }
+                                "customer.mailingLocality",
+                                "customer.mailingDistrict",
+                                "customer.mailingState"
                             ]
                         }
-                    ],
-                    schema: function() {
-                        return Enrollment.getSchema().$promise;
-                    },
-                    actions: {
-                        setProofs:function(model){
-                            model.customer.addressProofNo=model.customer.aadhaarNo;
-                            model.customer.identityProofNo=model.customer.aadhaarNo;
-                            model.customer.identityProof='Aadhar card';
-                            model.customer.addressProof='Aadhar card';
-                            model.customer.addressProofSameAsIdProof = true;
-                            if (model.customer.yearOfBirth) {
-                                model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "CONTACT_INFORMATION",
+                    "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    "items": [
+                        "customer.mobilePhone",
+                        "customer.landLineNo", {
+                            "type": "string",
+                            "key": "customer.whatsAppMobileNo",
+                            "title": "WHATSAPP_MOBILE_NO"
+                        }, {
+                            "type": "string",
+                            "key": "customer.email",
+                            "title": "EMAIL"
+                        }, {
+                            type: "fieldset",
+                            title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                            items: [
+                                "customer.doorNo",
+                                "customer.street",
+                                "customer.postOffice",
+                                "customer.landmark", {
+                                    key: "customer.pincode",
+                                    fieldType: "number",
+                                },
+                                "customer.locality",
+                                "customer.villageName",
+                                "customer.district",
+                                "customer.state",
+                                "customer.mailSameAsResidence"
+                            ]
+                        }, {
+                            type: "fieldset",
+                            title: "CUSTOMER_PERMANENT_ADDRESS",
+                            condition: "!model.customer.mailSameAsResidence",
+                            items: [
+                                "customer.mailingDoorNo",
+                                "customer.mailingStreet",
+                                "customer.mailingPostoffice", {
+                                    key: "customer.mailingPincode",
+                                    fieldType: "number",
+                                },
+                                "customer.mailingLocality",
+                                "customer.mailingDistrict",
+                                "customer.mailingState"
+                            ]
+                        }
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "HOUSEHOLD_FINANCIALS",
+                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                    "items": [{
+                        "key": "customer.otherBusinessIncomes",
+                        "type": "array",
+                        "title": "OTHER_INCOME_SOURCE",
+                        "view": "fixed",
+                        // "add": null,
+                        // "remove": null,
+                        "items": [{
+                            "key": "customer.otherBusinessIncomes[].incomeSource",
+                            "type": "amount",
+                            "title": "AMOUNT"
+                        }]
+                    }, {
+                        "key": "customer.expenditures",
+                        "type": "array",
+                        "title": "EXPENDITURES",
+                        "view": "fixed",
+                        // "add": null,
+                        // "remove": null,
+                        "items": [{
+                            "key": "customer.expenditures[].annualExpenses",
+                            "type": "amount",
+                            "title": "MONTHLY_EDUCATION_EXPENSE"
+                        }]
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "HOUSEHOLD_FINANCIALS",
+                    "condition": "model.currentStage =='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    "items": [{
+                        "key": "customer.otherBusinessIncomes",
+                        "type": "array",
+                        "title": "OTHER_INCOME_SOURCE",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        "items": [{
+                            "key": "customer.otherBusinessIncomes[].incomeSource",
+                            "type": "amount",
+                            "title": "AMOUNT"
+                        }]
+                    }, {
+                        "key": "customer.expenditures",
+                        "type": "array",
+                        "title": "EXPENDITURES",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        "items": [{
+                            "key": "customer.expenditures[].annualExpenses",
+                            "type": "amount",
+                            "title": "MONTHLY_EDUCATION_EXPENSE"
+                        }]
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "T_FAMILY_DETAILS",
+                    "condition": "model.currentStage=='Screening'",
+                    "add": null,
+                    "remove": null,
+                    "view": "fixed",
+                    "items": [{
+                            "key": "customer.familyMembers",
+                            "type": "array",
+                            "items": [{
+                                "key": "customer.familyMembers[].relationShip",
+                                "type": "select",
+                                "readonly": true
+                            }, {
+                                "key": "customer.familyMembers[].educationStatus",
+                                "title": "EDUCATION_LEVEL",
+                                "type": "select"
+                            }]
+                        }
+
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "T_FAMILY_SELF_DETAILS",
+                    "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                    "items": [{
+                        key: "customer.familyMembers",
+                        type: "array",
+                        startEmpty: true,
+                        items: [{
+                                key: "customer.familyMembers[].relationShip",
+                                type: "select",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    if (modelValue && modelValue.toLowerCase() === 'self') {
+                                        if (model.customer.id)
+                                            model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                        if (model.customer.firstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                        if (model.customer.dateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                        if (model.customer.mobilePhone)
+                                            model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                    } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                        if (model.customer.spouseFirstName)
+                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                        if (model.customer.gender)
+                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                            (model.customer.gender == 'FEMALE' ? 'FEMALE' : model.customer.gender);
+                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                        if (model.customer.spouseDateOfBirth)
+                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                        if (model.customer.maritalStatus)
+                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                    }
+                                },
+                                title: "T_RELATIONSHIP"
+                            },
+                            // {
+                            //     key:"customer.familyMembers[].customerId",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            //     type:"lov",
+                            //     "inputMap": {
+                            //         "firstName": {
+                            //             "key": "customer.firstName",
+                            //             "title": "CUSTOMER_NAME"
+                            //         },
+                            //         "branchName": {
+                            //             "key": "customer.kgfsName",
+                            //             "type": "select"
+                            //         },
+                            //         "centreCode": {
+                            //             "key": "customer.centreCode",
+                            //             "type": "select"
+                            //         }
+                            //     },
+                            //     "outputMap": {
+                            //         "id": "customer.familyMembers[arrayIndex].customerId",
+                            //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+
+                            //     },
+                            //     "searchHelper": formHelper,
+                            //     "search": function(inputModel, form) {
+                            //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            //         var promise = Enrollment.search({
+                            //             'branchName': SessionStore.getBranch() || inputModel.branchName,
+                            //             'firstName': inputModel.first_name,
+                            //         }).$promise;
+                            //         return promise;
+                            //     },
+                            //     getListDisplayItem: function(data, index) {
+                            //         return [
+                            //             [data.firstName, data.fatherFirstName].join(' '),
+                            //             data.id
+                            //         ];
+                            //     }
+                            // },
+                            {
+                                key: "customer.familyMembers[].familyMemberFirstName",
+                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                title: "FAMILY_MEMBER_FULL_NAME"
+                            },
+                            // {
+                            //     key: "customer.familyMembers[].gender",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            //     type: "radios",
+                            //     title: "T_GENDER"
+                            // },
+                            // {
+                            //     key:"customer.familyMembers[].age",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            //     title: "AGE",
+                            //     type:"number",
+                            //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                            //         if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                            //             if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                            //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                            //             } else {
+                            //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                            //             }
+                            //         }
+                            //     }
+                            // },
+                            // {
+                            //     key: "customer.familyMembers[].dateOfBirth",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            //     type:"date",
+                            //     title: "T_DATEOFBIRTH",
+                            //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                            //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                            //             model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            //         }
+                            //     }
+                            // },
+                            // {
+                            //     key:"customer.familyMembers[].educationStatus",
+                            //     type:"select",
+                            //     title: "T_EDUCATION_STATUS"
+                            // },
+                            // {
+                            //     key:"customer.familyMembers[].maritalStatus",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            //     type:"select",
+                            //     title: "T_MARITAL_STATUS"
+                            // },
+                            // {
+                            //     key: "customer.familyMembers[].mobilePhone",
+                            //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                            // },
+                            // {
+                            //     key:"customer.familyMembers[].healthStatus",
+                            //     type:"radios",
+                            //     titleMap:{
+                            //         "GOOD":"GOOD",
+                            //         "BAD":"BAD"
+                            //     },
+
+                            // },
+                            {
+                                key: "customer.familyMembers[].educationStatus",
+                                type: "select",
+                                title: "T_EDUCATION_STATUS"
+                            }, {
+                                key: "customer.familyMembers[].anualEducationFee",
+                                type: "amount",
+                                title: "ANNUAL_EDUCATION_FEE"
+                            }, {
+                                key: "customer.familyMembers[].salary",
+                                type: "amount",
+                                title: "SALARY"
+                            }, {
+                                key: "customer.familyMembers[].incomes",
+                                type: "array",
+                                startEmpty: true,
+                                items: [{
+                                        key: "customer.familyMembers[].incomes[].incomeSource",
+                                        type: "select"
+                                    },
+                                    "customer.familyMembers[].incomes[].incomeEarned", {
+                                        key: "customer.familyMembers[].incomes[].frequency",
+                                        type: "select"
+                                    }
+
+                                ]
+
                             }
+                        ]
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "T_FAMILY_DETAILS",
+                    "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    "items": [{
+                        key: "customer.familyMembers",
+                        type: "array",
+                        startEmpty: true,
+                        items: [{
+                            key: "customer.familyMembers[].relationShip",
+                            type: "select",
+                            title: "T_RELATIONSHIP"
+                        }, {
+                            key: "customer.familyMembers[].familyMemberFirstName",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            title: "FAMILY_MEMBER_FULL_NAME"
+                        }, {
+                            key: "customer.familyMembers[].educationStatus",
+                            type: "select",
+                            title: "T_EDUCATION_STATUS"
+                        }, {
+                            key: "customer.familyMembers[].anualEducationFee",
+                            type: "amount",
+                            title: "ANNUAL_EDUCATION_FEE"
+                        }, {
+                            key: "customer.familyMembers[].salary",
+                            type: "amount",
+                            title: "SALARY"
+                        }, {
+                            key: "customer.familyMembers[].incomes",
+                            type: "array",
+                            startEmpty: false,
+                            items: [{
+                                    key: "customer.familyMembers[].incomes[].incomeSource",
+                                    type: "select"
+                                },
+                                "customer.familyMembers[].incomes[].incomeEarned", {
+                                    key: "customer.familyMembers[].incomes[].frequency",
+                                    type: "select"
+                                }
+
+                            ]
+
+                        }]
+                    }]
+                }, {
+                    type: "box",
+                    title: "T_LIABILITIES",
+                    "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                    items: [{
+                        key: "customer.liabilities",
+                        type: "array",
+                        startEmpty: true,
+                        title: "FINANCIAL_LIABILITIES",
+                        items: [
+                            // {
+                            //     key:"customer.liabilities[].loanType",
+                            //     type:"select"
+                            // },
+                            {
+                                key: "customer.liabilities[].loanSource",
+                                type: "select"
+                            },
+                            "customer.liabilities[].instituteName", {
+                                key: "customer.liabilities[].loanAmountInPaisa",
+                                type: "amount"
+                            }, {
+                                key: "customer.liabilities[].installmentAmountInPaisa",
+                                type: "amount"
+                            }, {
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                            }, {
+                                key: "customer.liabilities[].startDate",
+                                type: "date"
+                            }, {
+                                key: "customer.liabilities[].maturityDate",
+                                type: "date"
+                            }, {
+                                key: "customer.liabilities[].noOfInstalmentPaid",
+                                type: "number",
+                                title: "NO_OF_INSTALLMENT_PAID"
+                            }, {
+                                key: "customer.liabilities[].frequencyOfInstallment",
+                                type: "select"
+                            }, {
+                                key: "customer.liabilities[].liabilityLoanPurpose",
+                                type: "select",
+                                enumCode: "loan_purpose_1"
+                            }
+
+                        ]
+                    }]
+                }, {
+                    type: "box",
+                    title: "T_LIABILITIES",
+                    "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    items: [{
+                        key: "customer.liabilities",
+                        type: "array",
+                        startEmpty: true,
+                        title: "FINANCIAL_LIABILITIES",
+                        items: [{
+                                key: "customer.liabilities[].loanType",
+                                type: "select"
+                            }, {
+                                key: "customer.liabilities[].loanSource",
+                                type: "select"
+                            },
+                            "customer.liabilities[].instituteName", {
+                                key: "customer.liabilities[].loanAmountInPaisa",
+                                type: "amount"
+                            }, {
+                                key: "customer.liabilities[].installmentAmountInPaisa",
+                                type: "amount"
+                            }, {
+                                key: "customer.liabilities[].outstandingAmountInPaisa",
+                                type: "amount",
+                                title: "OUTSTANDING_AMOUNT"
+                            }, {
+                                key: "customer.liabilities[].startDate",
+                                type: "date"
+                            }, {
+                                key: "customer.liabilities[].maturityDate",
+                                type: "date"
+                            }, {
+                                key: "customer.liabilities[].noOfInstalmentPaid",
+                                type: "number",
+                                title: "NO_OF_INSTALLMENT_PAID"
+                            }, {
+                                key: "customer.liabilities[].frequencyOfInstallment",
+                                type: "select"
+                            }, {
+                                key: "customer.liabilities[].liabilityLoanPurpose",
+                                type: "select"
+                            }
+
+                        ]
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "T_HOUSE_VERIFICATION",
+                    "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                    "items": [{
+                            type: "fieldset",
+                            title: "HOUSE_DETAILS",
+                            items: [{
+                                key: "customer.ownership",
+                                type: "select"
+                            }, {
+                                key: "customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                type: "select",
+                                title: "IN_CURRENT_ADDRESS_SINCE"
+                            }, {
+                                key: "customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                type: "select",
+                                title: "IN_CURRENT_AREA_SINCE"
+                            }]
+                        }, {
+                            "key": "customer.latitude",
+                            "title": "HOUSE_LOCATION",
+                            "type": "geotag",
+                            "latitude": "customer.latitude",
+                            "longitude": "customer.longitude"
                         },
-                        preSave: function(model, form, formName) {
-                            var deferred = $q.defer();
-                            if (model.customer.firstName) {
-                                deferred.resolve();
-                            } else {
-                                PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
-                                deferred.reject();
-                            }
-                            return deferred.promise;
+                        //{
+                        //   key: "customer.nameOfRo",
+                        //   readonly: true
+                        //},
+                        {
+                            key: "customer.houseVerificationPhoto",
+                            type: "file",
+                            fileType: "image/*"
+                        }, {
+                            key: "customer.date",
+                            type: "date"
                         },
-                        reload: function(model, formCtrl, form, $event) {
-                            $state.go("Page.Engine", {
-                                pageName: 'customer.IndividualEnrollment',
-                                pageId: model.customer.id
-                            },{
-                                reload: true,
-                                inherit: false,
-                                notify: true
-                            });
+                        "customer.place"
+                    ]
+                }, {
+                    "type": "box",
+                    "title": "T_HOUSE_VERIFICATION",
+                    "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    "items": [{
+                            type: "fieldset",
+                            title: "HOUSE_DETAILS",
+                            items: [{
+                                key: "customer.ownership",
+                                type: "select"
+                            }, {
+                                key: "customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                type: "select",
+                                title: "IN_CURRENT_ADDRESS_SINCE"
+                            }, {
+                                key: "customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                type: "select",
+                                title: "IN_CURRENT_AREA_SINCE"
+                            }]
+                        }, {
+                            "key": "customer.latitude",
+                            "title": "HOUSE_LOCATION",
+                            "type": "geotag",
+                            "latitude": "customer.latitude",
+                            "longitude": "customer.longitude"
+                        }, {
+                            key: "customer.houseVerificationPhoto",
+                            type: "file",
+                            fileType: "image/*"
+                        }, {
+                            key: "customer.date",
+                            type: "date"
                         },
-                        save: function(model, formCtrl, form, $event){
-
-                            formCtrl.scope.$broadcast('schemaFormValidate');
-
-                            if (formCtrl && formCtrl.$invalid) {
-                                PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-                                return false;
+                        "customer.place"
+                    ]
+                }, {
+                    type: "box",
+                    title: "CUSTOMER_BANK_ACCOUNTS",
+                    "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
+                    items: [{
+                        key: "customer.customerBankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        items: [{
+                            key: "customer.customerBankAccounts[].ifscCode",
+                            type: "lov",
+                            lovonly: true,
+                            inputMap: {
+                                "ifscCode": {
+                                    "key": "customer.customerBankAccounts[].ifscCode"
+                                },
+                                "bankName": {
+                                    "key": "customer.customerBankAccounts[].customerBankName"
+                                },
+                                "branchName": {
+                                    "key": "customer.customerBankAccounts[].customerBankBranchName"
+                                }
+                            },
+                            outputMap: {
+                                "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
+                                "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
+                                "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form) {
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var promise = CustomerBankBranch.search({
+                                    'bankName': inputModel.bankName,
+                                    'ifscCode': inputModel.ifscCode,
+                                    'branchName': inputModel.branchName
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    data.ifscCode,
+                                    data.branchName,
+                                    data.bankName
+                                ];
                             }
-
-                            if (!EnrollmentHelper.validateData(model)) {
-                                $log.warn("Invalid Data, returning false");
-                                return false;
-                            }
-                            var reqData = _.cloneDeep(model);
-                            EnrollmentHelper.fixData(reqData);
-                            var out = reqData.customer.$fingerprint;
-                            var fpPromisesArr = [];
-                            for (var key in out) {
-                                if (out.hasOwnProperty(key) && out[key].data!=null) {
-                                    (function(obj){
-                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
-                                        promise.then(function(data){
-                                            reqData.customer[obj.table_field] = data.fileId;
-                                            delete reqData.customer.$fingerprint[obj.fingerId];
-                                        });
-                                        fpPromisesArr.push(promise);
-                                    })(out[key]);
-                                } else {
-                                    if (out[key].data == null){
-                                        delete out[key];
-                                    }
-                                }
-                            }
-
-                            // $q.all start
-                            $q.all(fpPromisesArr).then(function(){
-                                try{
-                                    var liabilities = reqData['customer']['liabilities'];
-                                    if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                        for (var i=0; i<liabilities.length;i++){
-                                            var l = liabilities[i];
-                                            l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                            l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                        }
-                                    }
-
-                                    var financialAssets = reqData['customer']['financialAssets'];
-                                    if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                        for (var i=0; i<financialAssets.length;i++){
-                                            var f = financialAssets[i];
-                                            f.amountInPaisa = f.amountInPaisa * 100;
-                                        }
-                                    }
-                                } catch(e){
-                                    $log.info("Error trying to change amount info.");
-                                }
-
-                                reqData.customer.verified = true;
-                                if (reqData.customer.hasOwnProperty('verifications')){
-                                    var verifications = reqData.customer['verifications'];
-                                    for (var i=0; i<verifications.length; i++){
-                                        if (verifications[i].houseNoIsVerified){
-                                            verifications[i].houseNoIsVerified=1;
-                                        }
-                                        else{
-                                            verifications[i].houseNoIsVerified=0;
-                                        }
-                                    }
-                                }
-                                try{
-                                    for(var i=0;i<reqData.customer.familyMembers.length;i++){
-                                        var incomes = reqData.customer.familyMembers[i].incomes;
-
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
-                                        }
-                                    }
-                                }catch(err){
-                                    console.error(err);
-                                }
-
-                                EnrollmentHelper.fixData(reqData);
-                                EnrollmentHelper.saveData(reqData)
-                                        .then(
-                                                function(res){
-                                                    PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                                                    Utils.removeNulls(res.customer, true);
-                                                    model.customer = res.customer;
-                                                    if (model._bundlePageObj){
-                                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                                    }
-                                                },
-                                                function(httpRes){
-                                                    PageHelper.showProgress('enrolment', 'Oops. Some error', 5000);
-                                                    PageHelper.showErrors(httpRes);
-                                                }
-                                        );
-                            });
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankName",
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankBranchName",
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerNameAsInBank"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountNumber"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountType",
+                            type: "select"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankingSince",
+                            type: "date",
+                            title: "BANKING_SINCE"
+                        }, {
+                            key: "customer.customerBankAccounts[].netBankingAvailable",
+                            type: "select",
+                            title: "NET_BANKING_AVAILABLE",
+                            enumCode: "decisionmaker"
+                        }, {
+                            key: "customer.customerBankAccounts[].sanctionAmount",
+                            type: "amount",
+                            title: "SANCTION_AMOUNT"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankStatements",
+                            type: "array",
+                            title: "STATEMENT_DETAILS",
+                            items: [{
+                                key: "customer.customerBankAccounts[].bankStatements[].startMonth",
+                                type: "date",
+                                title: "START_MONTH"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
+                                type: "amount",
+                                title: "TOTAL_DEPOSITS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
+                                type: "amount",
+                                title: "TOTAL_WITHDRAWALS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
+                                type: "amount",
+                                title: "BALANCE_AS_ON_15TH"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
+                                type: "amount",
+                                title: "NO_OF_CHEQUE_BOUNCED"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
+                                type: "amount",
+                                title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                            }, ]
+                        }, {
+                            key: "customer.customerBankAccounts[].isDisbersementAccount",
+                            type: "radios",
+                            titleMap: [{
+                                value: true,
+                                name: "Yes"
+                            }, {
+                                value: false,
+                                name: "No"
+                            }]
+                        }]
+                    }]
+                }, {
+                    type: "box",
+                    title: "CUSTOMER_BANK_ACCOUNTS",
+                    "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    items: [{
+                        key: "customer.customerBankAccounts",
+                        type: "array",
+                        title: "BANK_ACCOUNTS",
+                        startEmpty: true,
+                        items: [{
+                            key: "customer.customerBankAccounts[].ifscCode",
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankName",
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerBankBranchName",
+                            readonly: true
+                        }, {
+                            key: "customer.customerBankAccounts[].customerNameAsInBank"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountNumber"
+                        }, {
+                            key: "customer.customerBankAccounts[].accountType",
+                            type: "select"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankingSince",
+                            type: "date",
+                            title: "BANKING_SINCE"
+                        }, {
+                            key: "customer.customerBankAccounts[].netBankingAvailable",
+                            type: "select",
+                            title: "NET_BANKING_AVAILABLE",
+                            enumCode: "decisionmaker"
+                        }, {
+                            key: "customer.customerBankAccounts[].bankStatement",
+                            type: "array",
+                            title: "STATEMENT_DETAILS",
+                            items: [{
+                                key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                type: "date",
+                                title: "START_MONTH"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                type: "amount",
+                                title: "TOTAL_DEPOSITS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                type: "amount",
+                                title: "TOTAL_WITHDRAWALS"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                type: "amount",
+                                title: "BALANCE_AS_ON_15TH"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                type: "amount",
+                                title: "NO_OF_CHEQUE_BOUNCED"
+                            }, {
+                                key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                type: "amount",
+                                title: "NO_OF_EMI_CHEQUE_BOUNCED"
+                            }, ]
+                        }, {
+                            key: "customer.customerBankAccounts[].isDisbersementAccount",
+                            type: "radios",
+                            titleMap: [{
+                                value: true,
+                                name: "Yes"
+                            }, {
+                                value: false,
+                                name: "No"
+                            }]
+                        }]
+                    }]
+                }, {
+                    type: "box",
+                    title: "PROXY_INDICATORS",
+                    condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal'",
+                    items: [{
+                            key: "customer.properAndMatchingSignboard",
+                            title: "PROPER_MATCHING_SIGNBOARD",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.bribeOffered",
+                            title: "BRIBE_OFFERED",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.shopOrganized",
+                            title: "SHOP_SHED_ORGANIZED",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.isIndustrialArea",
+                            title: "IN_INDUSTRIAL_AREA",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.customerAttitudeToKinara",
+                            title: "CUSTOMER_ATTITUDE_TO_KINARA",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.bookKeepingQuality",
+                            title: "BOOK_KEEPING_QUALITY",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.challengingChequeBounce",
+                            title: "CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.allMachinesAreOperational",
+                            title: "ALL_MACHINES_OPERATIONAL?",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.employeeSatisfaction",
+                            title: "EMPLOYEE_SATISFACTION",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.politicalOrPoliceConnections",
+                            title: "POLITICAL_POLICE_CONNECTIONS",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.multipleProducts",
+                            title: "MULTIPLE_PRODUCTS_MORE_THAN_3",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.multipleBuyers",
+                            title: "MULTIPLE_BUYERS_MORE_THAN_3",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.seasonalBusiness",
+                            title: "SEASONAL_BUSINESS",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.incomeStability",
+                            title: "INCOME STABILITY",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "income_stability"
+                        }, {
+                            key: "customer.utilisationOfBusinessPremises",
+                            title: "UTILIZATION_OF_BUSINESS_PREMISES ",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale"
+                        }, {
+                            key: "customer.approachForTheBusinessPremises",
+                            title: "APPROACH_FOR_THE_BUSINESS_PREMISES",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "connectivity_status "
+                        }, {
+                            key: "customer.safetyMeasuresForEmployees",
+                            title: "SAFETY_MEASURES_FOR_EMPLOYEES",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale"
+                        }, {
+                            key: "customer.childLabours",
+                            title: "CHILD_LABOURERS",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.isBusinessEffectingTheEnvironment",
+                            title: "IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.stockMaterialManagement",
+                            title: "STOCK_MATERIAL_MANAGEMENT",
+                            type: "radios",
+                            required: "true",
+                            enumCode: "status_scale"
                         },
-                        submit: function(model, form, formName){
-                            var actions = this.actions;
-                            $log.info("Inside submit()");
-                            $log.warn(model);
-                            if (!EnrollmentHelper.validateData(model)) {
-                                $log.warn("Invalid Data, returning false");
-                                return false;
-                            }
-                            var reqData = _.cloneDeep(model);
-                            EnrollmentHelper.fixData(reqData);
 
-                            var out = reqData.customer.$fingerprint;
-                            var fpPromisesArr = [];
-                            for (var key in out) {
-                                if (out.hasOwnProperty(key) && out[key].data!=null) {
-                                    (function(obj){
-                                        var promise = Files.uploadBase64({file: obj.data, type: 'CustomerEnrollment', subType: 'FINGERPRINT', extn:'iso'}, {}).$promise;
-                                        promise.then(function(data){
-                                            reqData.customer[obj.table_field] = data.fileId;
-                                            delete reqData.customer.$fingerprint[obj.fingerId];
-                                        });
-                                        fpPromisesArr.push(promise);
-                                    })(out[key]);
-                                } else {
-                                    if (out[key].data == null){
-                                        delete out[key];
-                                    }
-                                }
-                            }
+                    ]
+                }, {
+                    type: "box",
+                    title: "PROXY_INDICATORS",
+                    condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    items: [{
+                            key: "customer.properAndMatchingSignboard",
+                            title: "PROPER_MATCHING_SIGNBOARD",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.bribeOffered",
+                            title: "BRIBE_OFFERED",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.shopOrganized",
+                            title: "SHOP_SHED_ORGANIZED",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.isIndustrialArea",
+                            title: "IN_INDUSTRIAL_AREA",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.customerAttitudeToKinara",
+                            title: "CUSTOMER_ATTITUDE_TO_KINARA",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.bookKeepingQuality",
+                            title: "BOOK_KEEPING_QUALITY",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.challengingChequeBounce",
+                            title: "CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.allMachinesAreOperational",
+                            title: "ALL_MACHINES_OPERATIONAL?",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.employeeSatisfaction",
+                            title: "EMPLOYEE_SATISFACTION",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale_2"
+                        }, {
+                            key: "customer.politicalOrPoliceConnections",
+                            title: "POLITICAL_POLICE_CONNECTIONS",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.multipleProducts",
+                            title: "MULTIPLE_PRODUCTS_MORE_THAN_3",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.multipleBuyers",
+                            title: "MULTIPLE_BUYERS_MORE_THAN_3",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.seasonalBusiness",
+                            title: "SEASONAL_BUSINESS",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.incomeStability",
+                            title: "INCOME_STABILITY",
+                            type: "string",
+                            required: "true",
+                            enumCode: "income_stability"
+                        }, {
+                            key: "customer.utilisationOfBusinessPremises",
+                            title: "UTILIZATION_OF_BUSINESS_PREMISES ",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale"
+                        }, {
+                            key: "customer.approachForTheBusinessPremises",
+                            title: "APPROACH_FOR_THE_BUSINESS_PREMISES",
+                            type: "string",
+                            required: "true",
+                            enumCode: "connectivity_status "
+                        }, {
+                            key: "customer.safetyMeasuresForEmployees",
+                            title: "SAFETY_MEASURES_FOR_EMPLOYEES",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale"
+                        }, {
+                            key: "customer.childLabours",
+                            title: "CHILD_LABOURERS",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.isBusinessEffectingTheEnvironment",
+                            title: "IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT?",
+                            type: "string",
+                            required: "true",
+                            enumCode: "decisionmaker",
+                        }, {
+                            key: "customer.stockMaterialManagement",
+                            title: "STOCK_MATERIAL_MANAGEMENT",
+                            type: "string",
+                            required: "true",
+                            enumCode: "status_scale"
+                        },
 
-                            // $q.all start
-                            $q.all(fpPromisesArr).then(function(){
-                                try{
-                                    var liabilities = reqData['customer']['liabilities'];
-                                    if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                        for (var i=0; i<liabilities.length;i++){
-                                            var l = liabilities[i];
-                                            l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                            l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                        }
-                                    }
+                    ]
+                }, {
+                    type: "box",
+                    title: "PHYSICAL_ASSETS",
+                    "condition": "model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
+                    items: [{
+                        key: "customer.physicalAssets",
+                        type: "array",
+                        startEmpty: true,
+                        title: "PHYSICAL_ASSETS",
+                        items: [{
+                            key: "customer.physicalAssets[].assetType",
+                            title: "ASSET_TYPE",
+                            type: "select",
+                            enumCode: "asset_type"
+                        }, {
+                            key: "customer.physicalAssets[].vehicleModel",
+                            title: "VEHICLE_MAKE_MODEL",
+                            type: "string"
+                        }, {
+                            key: "customer.physicalAssets[].registeredOwner",
+                            title: "REGISTERED_OWNER",
+                            type: "string"
+                        }, {
+                            key: "customer.physicalAssets[].ownedAssetValue",
+                            title: "VALUE_OF_THE_ASSET",
+                            type: "amount"
+                        }, ]
+                    }]
+                }, {
+                    type: "box",
+                    title: "PHYSICAL_ASSETS",
+                    "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    readonly: true,
+                    items: [{
+                        key: "customer.physicalAssets",
+                        type: "array",
+                        startEmpty: true,
+                        title: "PHYSICAL_ASSETS",
+                        items: [{
+                            key: "customer.physicalAssets[].assetType",
+                            title: "ASSET_TYPE",
+                            type: "select",
+                            enumCode: "asset_type"
+                        }, {
+                            key: "customer.physicalAssets[].vehicleModel",
+                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
+                            title: "VEHICLE_MAKE_MODEL",
+                            type: "string"
+                        }, {
+                            key: "customer.physicalAssets[].registeredOwner",
+                            title: "REGISTERED_OWNER",
+                            type: "string"
+                        }, {
+                            key: "customer.physicalAssets[].ownedAssetValue",
+                            title: "VALUE_OF_THE_ASSET",
+                            type: "string"
+                        }, ]
+                    }]
+                },
 
-                                    var financialAssets = reqData['customer']['financialAssets'];
-                                    if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                        for (var i=0; i<financialAssets.length;i++){
-                                            var f = financialAssets[i];
-                                            f.amountInPaisa = f.amountInPaisa * 100;
-                                        }
-                                    }
-                                } catch(e){
-                                    $log.info("Error trying to change amount info.");
-                                }
+                {
+                    "type": "actionbox",
+                    "condition": "(!model.customer.id || model.customer.currentStage=='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
+                    "items": [
+                        /*{
+                                                     "type": "save",
+                                                     "title": "SAVE"
+                                                     },*/
+                        {
+                            "type": "button",
+                            "title": "SAVE",
+                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                        }
+                    ]
+                }, {
+                    "type": "actionbox",
+                    "condition": "(model.customer.id && model.customer.currentStage!='Completed') && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
+                    "items": [
+                        /*{
+                                                     "type": "save",
+                                                     "title": "SAVE"
+                                                     },*/
+                        {
+                            "type": "button",
+                            "title": "SAVE",
+                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                        }, {
+                            "type": "submit",
+                            "title": "FINISH_ENROLMENT"
+                        }
+                    ]
+                }
+            ],
+            schema: function() {
+                return Enrollment.getSchema().$promise;
+            },
+            actions: {
+                setProofs: function(model) {
+                    model.customer.addressProofNo = model.customer.aadhaarNo;
+                    model.customer.identityProofNo = model.customer.aadhaarNo;
+                    model.customer.identityProof = 'Aadhar card';
+                    model.customer.addressProof = 'Aadhar card';
+                    model.customer.addressProofSameAsIdProof = true;
+                    if (model.customer.yearOfBirth) {
+                        model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
+                    }
+                },
+                preSave: function(model, form, formName) {
+                    var deferred = $q.defer();
+                    if (model.customer.firstName) {
+                        deferred.resolve();
+                    } else {
+                        PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
+                        deferred.reject();
+                    }
+                    return deferred.promise;
+                },
+                reload: function(model, formCtrl, form, $event) {
+                    $state.go("Page.Engine", {
+                        pageName: 'customer.IndividualEnrollment',
+                        pageId: model.customer.id
+                    }, {
+                        reload: true,
+                        inherit: false,
+                        notify: true
+                    });
+                },
+                save: function(model, formCtrl, form, $event) {
 
-                                reqData['enrollmentAction'] = 'PROCEED';
+                    formCtrl.scope.$broadcast('schemaFormValidate');
 
-                                reqData.customer.verified = true;
-                                if (reqData.customer.hasOwnProperty('verifications')){
-                                    var verifications = reqData.customer['verifications'];
-                                    for (var i=0; i<verifications.length; i++){
-                                        if (verifications[i].houseNoIsVerified){
-                                            verifications[i].houseNoIsVerified=1;
-                                        }
-                                        else{
-                                            verifications[i].houseNoIsVerified=0;
-                                        }
-                                    }
-                                }
-                                try{
-                                    for(var i=0;i<reqData.customer.familyMembers.length;i++){
-                                        var incomes = reqData.customer.familyMembers[i].incomes;
+                    if (formCtrl && formCtrl.$invalid) {
+                        PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                        return false;
+                    }
 
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
-                                        }
-                                    }
-                                }catch(err){
-                                    console.error(err);
-                                }
-
-                                EnrollmentHelper.fixData(reqData);
-                                PageHelper.showProgress('enrolment', 'Updating Customer');
-                                EnrollmentHelper.proceedData(reqData).then(function(resp){
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    Utils.removeNulls(resp.customer,true);
-                                    model.customer = resp.customer;
-                                }, function(err) {
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                    if (!EnrollmentHelper.validateData(model)) {
+                        $log.warn("Invalid Data, returning false");
+                        return false;
+                    }
+                    var reqData = _.cloneDeep(model);
+                    EnrollmentHelper.fixData(reqData);
+                    var out = reqData.customer.$fingerprint;
+                    var fpPromisesArr = [];
+                    for (var key in out) {
+                        if (out.hasOwnProperty(key) && out[key].data != null) {
+                            (function(obj) {
+                                var promise = Files.uploadBase64({
+                                    file: obj.data,
+                                    type: 'CustomerEnrollment',
+                                    subType: 'FINGERPRINT',
+                                    extn: 'iso'
+                                }, {}).$promise;
+                                promise.then(function(data) {
+                                    reqData.customer[obj.table_field] = data.fileId;
+                                    delete reqData.customer.$fingerprint[obj.fingerId];
                                 });
-                            });
-                            // $q.all end
+                                fpPromisesArr.push(promise);
+                            })(out[key]);
+                        } else {
+                            if (out[key].data == null) {
+                                delete out[key];
+                            }
                         }
                     }
-                };
-            }]);
+
+                    // $q.all start
+                    $q.all(fpPromisesArr).then(function() {
+                        try {
+                            var liabilities = reqData['customer']['liabilities'];
+                            if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
+                                for (var i = 0; i < liabilities.length; i++) {
+                                    var l = liabilities[i];
+                                    l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                }
+                            }
+
+                            var financialAssets = reqData['customer']['financialAssets'];
+                            if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
+                                for (var i = 0; i < financialAssets.length; i++) {
+                                    var f = financialAssets[i];
+                                    f.amountInPaisa = f.amountInPaisa * 100;
+                                }
+                            }
+                        } catch (e) {
+                            $log.info("Error trying to change amount info.");
+                        }
+
+                        reqData.customer.verified = true;
+                        if (reqData.customer.hasOwnProperty('verifications')) {
+                            var verifications = reqData.customer['verifications'];
+                            for (var i = 0; i < verifications.length; i++) {
+                                if (verifications[i].houseNoIsVerified) {
+                                    verifications[i].houseNoIsVerified = 1;
+                                } else {
+                                    verifications[i].houseNoIsVerified = 0;
+                                }
+                            }
+                        }
+                        try {
+                            for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                                var incomes = reqData.customer.familyMembers[i].incomes;
+
+                                for (var j = 0; j < incomes.length; j++) {
+                                    switch (incomes[i].frequency) {
+                                        case 'M':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'Monthly':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'D':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'Daily':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'W':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'Weekly':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'F':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fornightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fortnightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.error(err);
+                        }
+
+                        EnrollmentHelper.fixData(reqData);
+                        EnrollmentHelper.saveData(reqData)
+                            .then(
+                                function(res) {
+                                    PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                    Utils.removeNulls(res.customer, true);
+                                    model.customer = res.customer;
+                                    if (model._bundlePageObj) {
+                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {
+                                            customer: model.customer
+                                        })
+                                    }
+                                },
+                                function(httpRes) {
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error', 5000);
+                                    PageHelper.showErrors(httpRes);
+                                }
+                            );
+                    });
+                },
+                submit: function(model, form, formName) {
+                    var actions = this.actions;
+                    $log.info("Inside submit()");
+                    $log.warn(model);
+                    if (!EnrollmentHelper.validateData(model)) {
+                        $log.warn("Invalid Data, returning false");
+                        return false;
+                    }
+                    var reqData = _.cloneDeep(model);
+                    EnrollmentHelper.fixData(reqData);
+
+                    var out = reqData.customer.$fingerprint;
+                    var fpPromisesArr = [];
+                    for (var key in out) {
+                        if (out.hasOwnProperty(key) && out[key].data != null) {
+                            (function(obj) {
+                                var promise = Files.uploadBase64({
+                                    file: obj.data,
+                                    type: 'CustomerEnrollment',
+                                    subType: 'FINGERPRINT',
+                                    extn: 'iso'
+                                }, {}).$promise;
+                                promise.then(function(data) {
+                                    reqData.customer[obj.table_field] = data.fileId;
+                                    delete reqData.customer.$fingerprint[obj.fingerId];
+                                });
+                                fpPromisesArr.push(promise);
+                            })(out[key]);
+                        } else {
+                            if (out[key].data == null) {
+                                delete out[key];
+                            }
+                        }
+                    }
+
+                    // $q.all start
+                    $q.all(fpPromisesArr).then(function() {
+                        try {
+                            var liabilities = reqData['customer']['liabilities'];
+                            if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
+                                for (var i = 0; i < liabilities.length; i++) {
+                                    var l = liabilities[i];
+                                    l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                }
+                            }
+
+                            var financialAssets = reqData['customer']['financialAssets'];
+                            if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
+                                for (var i = 0; i < financialAssets.length; i++) {
+                                    var f = financialAssets[i];
+                                    f.amountInPaisa = f.amountInPaisa * 100;
+                                }
+                            }
+                        } catch (e) {
+                            $log.info("Error trying to change amount info.");
+                        }
+
+                        reqData['enrollmentAction'] = 'PROCEED';
+
+                        reqData.customer.verified = true;
+                        if (reqData.customer.hasOwnProperty('verifications')) {
+                            var verifications = reqData.customer['verifications'];
+                            for (var i = 0; i < verifications.length; i++) {
+                                if (verifications[i].houseNoIsVerified) {
+                                    verifications[i].houseNoIsVerified = 1;
+                                } else {
+                                    verifications[i].houseNoIsVerified = 0;
+                                }
+                            }
+                        }
+                        try {
+                            for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                                var incomes = reqData.customer.familyMembers[i].incomes;
+
+                                for (var j = 0; j < incomes.length; j++) {
+                                    switch (incomes[i].frequency) {
+                                        case 'M':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'Monthly':
+                                            incomes[i].monthsPerYear = 12;
+                                            break;
+                                        case 'D':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'Daily':
+                                            incomes[i].monthsPerYear = 365;
+                                            break;
+                                        case 'W':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'Weekly':
+                                            incomes[i].monthsPerYear = 52;
+                                            break;
+                                        case 'F':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fornightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                        case 'Fortnightly':
+                                            incomes[i].monthsPerYear = 26;
+                                            break;
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.error(err);
+                        }
+
+                        EnrollmentHelper.fixData(reqData);
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        EnrollmentHelper.proceedData(reqData).then(function(resp) {
+                            PageHelper.showProgress('enrolment', 'Done.', 5000);
+                            Utils.removeNulls(resp.customer, true);
+                            model.customer = resp.customer;
+                        }, function(err) {
+                            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                        });
+                    });
+                    // $q.all end
+                }
+            }
+        };
+    }
+]);
