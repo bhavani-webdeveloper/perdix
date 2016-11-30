@@ -1436,45 +1436,45 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[]
                             },
                             {
-                                key: "customer.enterprise.cashAtBank",
+                                key: "customer.enterprice.cashAtBank",
                                 title: "CASH_AT_BANK",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprise.rawMaterial",
+                                key: "customer.enterprice.rawMaterial",
                                 title: "RAW_MATERIAL",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprise.workInProgress",
+                                key: "customer.enterprice.workInProgress",
                                 title: "WIP",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprise.finishedGoods",
+                                key: "customer.enterprice.finishedGoods",
                                 title: "FINISHED_GOODS",
                                 type: "amount"
                             },
                             {
-                                key: 'customer.enterpriseAssets',
+                                key: 'customer.enterpriceAssets',
                                 type: 'array',
                                 startEmpty: true,
                                 title: "ENTERPRICE_ASSETS",
                                 items: [
                                     {
-                                        key: "customer.enterpriseAssets[].assetType",
+                                        key: "customer.enterpriceAssets[].assetType",
                                         title: "ASSET_TYPE",
                                         type: "select",
                                         enumCode: "enterprice_asset_types"
                                     },
                                     {
-                                        key: "customer.enterpriseAssets[].vehicleMakeModel",
+                                        key: "customer.enterpriceAssets[].vehicleMakeModel",
                                         title: "VEHICLE_MAKE_MODEL",
                                         type: "string",
-                                        condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
+                                        condition:"model.customer.enterpriceAssets[arrayIndex].assetType=='Vehicle'"
                                     },
                                     {
-                                        key: "customer.enterpriseAssets[].valueOfAsset",
+                                        key: "customer.enterpriceAssets[].valueOfAsset",
                                         title: "VALUE_OF_THE_ASSET",
                                         type: "amount"
                                     },
@@ -1637,17 +1637,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                readonly:true,
                 items:[
                     {
-                        key: "customer.enterprise.noOfFemaleEmployees",
+                        key: "customer.enterprice.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.noOfMaleEmployees",
+                        key: "customer.enterprice.noOfMaleEmployees",
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
-                        key: "customer.enterprise.avgMonthlySalary",
+                        key: "customer.enterprice.avgMonthlySalary",
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
