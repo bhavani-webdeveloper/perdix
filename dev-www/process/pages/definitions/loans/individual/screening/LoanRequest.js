@@ -374,9 +374,14 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         "type": "submit",
                         "title": "PROCEED"
+                    },
+                    {
+                        "type": "button",
+                        "title": "SENT_BACK",
+                        "onClick": "actions.sentBack(model, formCtrl, form, $event)"
                     }
                 ]
-            },
+            }
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -450,6 +455,66 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 })
                         }
                     );
+            },
+            sentBack: function(model, formCtrl, form, $event){
+                $log.info("Inside sentBack()");
+                Utils.confirm("Are you sure?")
+                    .then(
+                        function(){
+                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)}
+                            reqData.loanProcessAction = 'PROCEED';
+                            PageHelper.showLoader();
+                            var targetStage = null;
+                            switch(model.loanAccount.currentStage){
+                                case "ScreeningReview":
+                                    targetStage = "Screening";
+                                    break;
+                                case "Application":
+                                    targetStage = "ScreeningReview";
+                                    break;
+                                case "Psychometric":
+                                    targetStage = "Application";
+                                    break;
+                                case "ApplicationReview":
+                                    targetStage = "Psychometric";
+                                    break;
+                                case "FieldAppraisal":
+                                    targetStage = "ApplicationReview";
+                                    break;
+                                case "FieldAppraisalReview":
+                                    targetStage = "FieldAppraisal";
+                                    break;
+                                case "CentralRiskReview":
+                                    targetStage = "FieldAppraisalReview";
+                                    break;
+                                case "CreditCommitteeReview":
+                                    targetStage = "CentralRiskReview";
+                                    break;
+                                default:
+                                    targetStage = null;                                
+                            }
+
+                            if (targetStage == null){
+                                PageHelper.showProgress("sent-back", "Unable to sent back from current stage.", 5000);
+                                return;
+                            }
+                            reqData.stage = targetStage;
+                            PageHelper.showLoader();
+                            PageHelper.showProgress('sent-back', 'Working...');
+                            IndividualLoan.create(reqData)
+                                .$promise
+                                .then(function(res){
+                                    PageHelper.showProgress('sent-back', 'Sent back successful');
+                                    model.loanAccount = res.loanAccount;    
+                                }, function(httpRes){
+                                    PageHelper.showProgress('sent-back', 'Oops. Some error occured.');
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(httpRes){
+                                    PageHelper.hideLoader();
+                                })
+                        }
+                    )
             }
         }
     };
