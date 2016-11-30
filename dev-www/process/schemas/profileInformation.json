@@ -9,17 +9,17 @@
             "type": "object",
             "properties": {
                 "aadhaarNo": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "title": "AADHAAR_NO",
                     "minLength": 12,
                     "maxLength": 12
                 },
                 "nameInLocalLanguage":{
-                    "type":"string",
+                    "type":["string","null"],
                     "title":"NAME_IN_LOCAL_LANGUAGE"
                 },
                 "addressInLocalLanguage":{
-                    "type":"string",
+                    "type":["string","null"],
                     "title":"ADDRESS_IN_LOCAL_LANGUAGE"
                 },
                 "additionalKYCs": {
@@ -29,58 +29,58 @@
                         "type":"object",
                         "properties": {
                             "kyc1ImagePath": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
                             },
                             "kyc1ReverseImagePath": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
                             },
                             "kyc1IssueDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_ISSUE_DATE",
                                 "format": "date"
                             },
                             "kyc1ProofNumber": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_PROOF_NUMBER"
                             },
                             "kyc1ProofType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_PROOF_TYPE",
                                 "enumCode": "kyc"
                             },
                             "kyc1ValidUptoDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC1_VALID_UPTO_DATE",
                                 "format": "date"
                             },
                             "kyc2ImagePath": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC2_PROOF_DOCUMENT",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC2"
                             },
                             "kyc2IssueDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC2_ISSUE_DATE",
                                 "format": "date"
                             },
                             "kyc2ProofNumber": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC2_PROOF_NUMBER"
                             },
                             "kyc2ProofType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC2_PROOF_TYPE",
                                 "enumCode": "kyc"
                             },
                             "kyc2ValidUptoDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "KYC2_VALID_UPTO_DATE",
                                 "format": "date"
                             }
@@ -88,92 +88,92 @@
                     }
                 },
                 "addressProof": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF",
                     "enumCode": "address_proof"
                 },
                 "addressProofImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF_IMAGE_ID",
                     "category": "CustomerEnrollment",
                     "subCategory": "ADDRESSPROOF"
                 },
                 "addressProofReverseImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
                     "category": "CustomerEnrollment",
                     "subCategory": "ADDRESSPROOF"
                 },
                 "addressProofIssueDate": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF_ISSUE_DATE",
                     "format": "date"
                 },
                 "addressProofNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF_NO"
                 },
                 "addressProofValidUptoDate": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ADDRESS_PROOF_VALID_UPTO_DATE",
                     "format": "date"
                 },
                 "addressProofSameAsIdProof":{
-                    "type":"boolean",
+                    "type":["boolean","null"],
                     "default":false,
                     "title":"ADDRESS_PROOF_SAME_AS_ID"
                 },
                 "ageProof": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "AGE_PROOF",
                     "enumCode": "identity_proof"
                 },
                 "ageProofImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "AGE_PROOF_DOCUMENT",
                     "category": "CustomerEnrollment",
                     "subCategory": "AGEPROOF"
                 },
                 "caste": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "CASTE",
                     "enumCode": "caste"
                 },
                 "dateOfBirth": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DATE_OF_BIRTH",
                     "format": "date"
                 },
                 "customerType": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "CUSTOMER_TYPE"
                 },
                 "district": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DISTRICT",
                     "enumCode":"district"
                 },
                 "doorNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DOOR_NO"
                 },
                 "enrollmentCheckerApprovedDate": {
-                    "type": "string"
+                    "type": ["string","null"]
                 },
                 "enrollmentCheckerApprover": {
-                    "type": "integer"
+                    "type": ["integer","null"]
                 },
                 "enrollmentCheckerRemarks": {
-                    "type": "string"
+                    "type": ["string","null"]
                 },
                 "enrollmentCheckerStatus": {
-                    "type": "string"
+                    "type": ["string","null"]
                 },
                 "enrollmentId": {
-                    "type": "string"
+                    "type": ["string","null"]
                 },
                 "enrolledAs": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ENROLLED_AS",
                     "enumCode": "enrolledAs",
                     "default":"CUSTOMER"
@@ -182,65 +182,65 @@
                     "type": "object",
                     "properties": {
                         "businessAddress1": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessAddress2": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessConstitution": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessDescription": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessLandline1": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessName": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessType": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "companyWebsite": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "corporateName": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "customerNumber": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "landmark": {
-                            "type": "string",
+                            "type": ["string","null"],
                             "title": "LANDMARK"
                         },
                         "district": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         },
                         "pincode": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         },
                         "registeredAt": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registeredOffice": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registrationDate": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registrationNumber": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "state": {
-                            "type": "string"
+                            "type":["string","null"]
                         },
                         "version": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         }
                     },
                     "required": [
@@ -271,19 +271,19 @@
                         "type": "object",
                         "properties": {
                             "customerId": {
-                                "type": "integer"
+                                "type": ["integer","null"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type": ["integer","null"]
                             },
                             "linkedToCustomerId": {
-                                "type": "integer"
+                                "type": ["integer","null"]
                             },
                             "relationshipType": {
-                                "type": "string"
+                                "type": ["string","null"]
                             },
                             "version": {
-                                "type": "integer"
+                                "type": ["integer","null"]
                             },
                             "businessInvolvement": {
                                 "type": "string"
@@ -314,61 +314,61 @@
                     "type": "object",
                     "properties": {
                         "businessAddress1": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessAddress2": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessConstitution": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessDescription": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessLandline1": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessName": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "businessType": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "companyWebsite": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "corporateName": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "customerNumber": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "district": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "id": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         },
                         "pincode": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         },
                         "registeredAt": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registeredOffice": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registrationDate": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "registrationNumber": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "state": {
-                            "type": "string"
+                            "type": ["string","null"]
                         },
                         "version": {
-                            "type": "integer"
+                            "type": ["integer","null"]
                         }
                     },
                     "required": [
@@ -400,18 +400,18 @@
                         "type": "object",
                         "properties": {
                             "annualExpenses": {
-                                "type": "integer",
+                                "type": ["integer","null"],
                                 "title": "ANNUAL_EXPENSES"
                             },
 
                             "expenditureSource": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "EXPENDITURE_SOURCE",
                                 "enumCode": "expenditure",
                                 "default": "Other"
                             },
                             "frequency": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FREQUENCY",
                                 "enumCode": "frequency"
                             }
@@ -432,47 +432,47 @@
                         "type": "object",
                         "properties": {
                             "customerId": {
-                                "type": "number",
+                                "type": ["number","null"],
                                 "title": "FAMILY_MEMBER_ID"
                             },
                             "dateOfBirth": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "DATE_OF_BIRTH",
                                 "format": "date"
                             },
 
                             "deathCertificateUploaded": {
-                                "type": "boolean",
+                                "type": ["boolean","null"],
                                 "title": "DEATH_CERTIFICATE_UPLOADED"
                             },
                             "deseasedetailscaptured": {
-                                "type": "boolean",
+                                "type": ["boolean","null"],
                                 "title": "DECEASED_DETAILS_CAPTURED"
 
                             },
                             "educationStatus": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "EDUCATION_STATUS",
                                 "enumCode": "education"
                             },
                             "enrolledUrnNo": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "ENROLLED_URN_NUMBER"
                             },
                             "familyMemberFirstName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FAMILY_MEMBER_FIRSTNAME"
                             },
                             "familyMemberLastName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FAMILY_MEMBER_LASTNAME"
                             },
                             "familyMemberMiddleName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FAMILY_MEMBER_MIDDLENAME"
                             },
                             "gender": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "GENDER",
                                 "enumCode": "gender"
                             },
@@ -485,7 +485,7 @@
                                     "properties": {
 
                                         "frequency": {
-                                            "type": "string",
+                                            "type": ["string","null"],
                                             "title": "FREQUENCY",
                                             "enumCode": "frequency",
                                             "captureStages":[
@@ -494,7 +494,7 @@
                                         },
 
                                         "incomeEarned": {
-                                            "type": "integer",
+                                            "type": ["integer","null"],
                                             "title": "INCOME_EARNED",
                                             "minimum": 1,
                                             "maximum": 100000000,
@@ -502,11 +502,11 @@
                                                 "Stage02"
                                             ],
                                             "x-schema-form": {
-                                                "type": "amount"
+                                                "type": ["number","null"]
                                             }
                                         },
                                         "incomeSource": {
-                                            "type": "string",
+                                            "type": ["string","null"],
                                             "title": "OCCUPATION",
                                             "enumCode": "occupation",
                                             "captureStages":[
@@ -514,7 +514,7 @@
                                             ]
                                         },
                                         "monthsPerYear": {
-                                            "type": "integer",
+                                            "type": ["integer","null"],
                                             "title": "PER_YEAR",
                                             "minimum": 1,
                                             "maximum": 366,
@@ -532,28 +532,28 @@
                                 }
                             },
                             "mobilePhone": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "MOBILE_PHONE",
                                 "minLength": 10,
                                 "maxLength": 10
                             },
                             "relationShip": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "RELATIONSHIP",
                                 "enumCode": "relation"
 
                             },
                             "contributionToExpenditure":{
-                                "type":"number",
+                                "type": ["number","null"],
                                 "title":"CONTRIBUTION_TO_EXPENDITURE",
                                 "minimum":0
                             },
                             "healthStatus":{
                                 "title":"HEALTH_STATUS",
-                                "type":"string"
+                                "type":["string","null"]
                             },
                             "maritalStatus":{
-                                "type":"string",
+                                "type":["string","null"],
                                 "title":"MARITAL_STATUS",
                                 "enumCode":"marital_status"
                             }
@@ -569,15 +569,15 @@
                     }
                 },
                 "fatherFirstName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FATHER_FIRSTNAME"
                 },
                 "fatherLastName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FATHER_LASTNAME"
                 },
                 "fatherMiddleName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FATHER_MIDDLENAME"
                 },
                 "financialAssets": {
@@ -587,39 +587,39 @@
                         "type": "object",
                         "properties": {
                             "amountInPaisa": {
-                                "type": "integer",
+                                "type": ["integer","null"],
                                 "title": "AMOUNT_IN_PAISA",
                                 "minimum": 0,
                                 "maximum": 100000000
                             },
                             "frequencyOfDeposite": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FREQUENCY_OF_DEPOSIT",
                                 "enumCode": "frequency"
                             },
                             "instituteType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "INSTITUTE_TYPE",
                                 "enumCode": "finanical_asset"
                             },
                             "instrumentType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "INSTRUMENT_TYPE",
                                 "enumCode": "financialAssetInstrumentType"
                             },
                             "maturityDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "MATURITY_DATE",
                                 "format": "date"
                             },
                             "nameOfInstitution": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "NAME_OF_INSTITUTION",
                                 "minLength": 1,
                                 "maxLength": 100
                             },
                             "startDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
                             }
@@ -634,46 +634,46 @@
                     }
                 },
                 "firstName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FIRSTNAME",
                     "minLength": 1,
                     "maxLength": 100
                 },
                 "gender": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "GENDER",
                     "enumCode": "gender"
                 },
 
                 "idProofIssueDate": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ID_PROOF_ISSUE_DATE",
                     "format": "date"
                 },
                 "idProofValidUptoDate": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "ID_PROOF_VALID_UPTO_DATE",
                     "format": "date"
                 },
                 "identityProof": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IDENTITY_PROOF",
                     "enumCode": "identity_proof"
                 },
                 "identityProofImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IDENTITY_PROOF_DOCUMENT",
                     "category": "CustomerEnrollment",
                     "subCategory": "IDENTITYPROOF"
                 },
                 "identityProofReverseImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
                     "category": "CustomerEnrollment",
                     "subCategory": "IDENTITYPROOF"
                 },
                 "identityProofNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IDENTITY_PROOFNO"
                 },
                 "centreCode": {
@@ -687,41 +687,41 @@
                     "enumCode": "centre"
                 },
                 "customerBranchId": {
-                    "type": "integer",
+                    "type": ["integer","null"],
                     "title": "BRANCH_NAME",
                     "enumCode": "branch_id"
                 },
                 "inviteId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "INVITE_ID"
                 },
                 "kgfsBankName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "KGFS_BANK_NAME"
                 },
                 "kgfsName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "BRANCH_NAME",
                     "enumCode": "branch"
                 },
                 "landLineNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LANDLINE_NO",
                     "minLength": 5,
                     "maxLength": 15
                 },
                 "language": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LANGUAGE",
                     "enumCode": "language"
                 },
                 "lastName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LASTNAME"
                 },
 
                 "latitude": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LATITUDE"
                 },
 
@@ -733,44 +733,44 @@
                         "properties": {
 
                             "frequencyOfInstallment": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "FREQUENCY_OF_INSTALLMENT",
                                 "enumCode": "frequency"
                             },
                             "installmentAmountInPaisa": {
-                                "type": "integer",
+                                "type": ["integer","null"],
                                 "title": "INSTALLMENT_AMOUNT_IN_PAISA"
                             },
                             "instituteName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "INSTITUTE_NAME"
                             },
                             "liabilityLoanPurpose": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "LOAN_PURPOSE",
                                 "enumCode": "liability_loan_purpose"
                             },
                             "loanAmountInPaisa": {
-                                "type": "integer",
+                                "type": ["integer","null"],
                                 "title": "LOAN_AMOUNT_IN_PAISA"
                             },
                             "loanSource": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "LOAN_SOURCE",
                                 "enumCode": "loan_source"
                             },
                             "loanType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "LOAN_TYPE",
                                 "enumCode": "liability_loan_type"
                             },
                             "maturityDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "MATURITY_DATE",
                                 "format": "date"
                             },
                             "startDate": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
                             }
@@ -786,84 +786,84 @@
                     }
                 },
                 "locality": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LOCALITY"
                 },
                 "landmark": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LANDMARK"
                 },
                 "longitude": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LONGITUDE"
                 },
                 "nameOfRo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "NAME_OF_RO"
                 },
                 "oldCustomerId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "OLD_CUSTOMER_ID"
                 },
                 "ownership": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "OWNERSHIP",
                     "enumCode": "ownership"
                 },
                 "houseVerificationPhoto": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "HOUSE_VERIFICATION_PHOTO",
                     "category": "CustomerEnrollment",
                     "subCategory": "HOUSEVERIFICATTIONPHOTO"
                 },
                 "date": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DATE",
                     "format": "date"
                 },
                 "mailSameAsResidence": {
-                    "type": "boolean",
+                    "type": ["boolean","null"],
                     "title": "MAIL_SAME_AS_RESIDENCE"
                 },
                 "mailingDistrict": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DISTRICT",
                     "enumCode":"district"
                 },
                 "mailingDoorNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "DOOR_NO"
                 },
                 "mailingLocality": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "LOCALITY"
                 },
                 "mailingPincode": {
-                    "type": "number",
+                    "type": ["number","null"],
                     "title": "PIN_CODE",
                     "minLength": 6,
                     "maxLength": 6
                 },
                 "mailingPostoffice": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "POST_OFFICE"
                 },
                 "mailingState": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
                 },
                 "mailingStreet": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "STREET"
                 },
                 "maritalStatus": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "MARITAL_STATUS",
                     "enumCode": "marital_status"
                 },
                 "middleName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "MIDDLENAME"
                 },
                 "miscellaneous": {
@@ -871,23 +871,23 @@
                     "title": "MISCELLANEOUS",
                     "properties": {
                         "alcoholConsumption": {
-                            "type": "string",
+                            "type": ["string","null"],
                             "title": "ALCOHOL_CONSUMPTION"
                         },
                         "heightInInch": {
-                            "type": "integer",
+                            "type": ["integer","null"],
                             "title": "HEIGHT_IN_INCH"
                         },
                         "narcoticsConsumption": {
-                            "type": "string",
+                            "type": ["string","null"],
                             "title": "NARCOTICS_CONSUMPTION"
                         },
                         "tobaccoConsumption": {
-                            "type": "string",
+                            "type": ["string","null"],
                             "title": "TOBACCO_CONSUMPTION"
                         },
                         "weightInKg": {
-                            "type": "integer",
+                            "type": ["integer","null"],
                             "title": "WEIGHT_IN_KG"
                         }
                     },
@@ -900,85 +900,85 @@
                     ]
                 },
                 "mobilePhone": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "MOBILE_PHONE",
                     "minLength": 10,
                     "maxLength": 10
                 },
                 "panCardImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "PAN_CARD_IMAGE",
                     "category": "CustomerEnrollment",
                     "subCategory": "PAN"
                 },
                 "panNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "PAN_NO",
                     "minLength": 10,
                     "maxLength": 10
                 },
                 "photoImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "CUSTOMER_PHOTO",
                     "category": "CustomerEnrollment",
                     "subCategory": "PHOTO"
                 },
                 "leftHandThumpImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "leftHandIndexImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "leftHandMiddleImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "leftHandRingImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "leftHandSmallImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "rightHandThumpImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "rightHandIndexImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "rightHandMiddleImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "rightHandRingImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
                 },
                 "rightHandSmallImageId": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "FINGERPRINT",
                     "category": "CustomerEnrollment",
                     "subCategory": "FINGERPRINT"
@@ -990,25 +990,25 @@
                         "type": "object",
                         "properties": {
                             "address": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "Address"
                             },
                             "nameOfOwnedAsset": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "NAME_OF_OWNED_ASSET"
                             },
                             "numberOfOwnedAsset": {
-                                "type": "integer",
+                                "type": ["integer","nul"],
                                 "title": "NUMBER_OF_OWNED_ASSET",
                                 "default":1
                             },
                             "ownedAssetDetails": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "OWNED_ASSET_DETAILS",
                                 "enumCode": "asset"
                             },
                             "ownedAssetValue": {
-                                "type": "number",
+                                "type": ["number","null"],
                                 "title": "OWNED_ASSET_VALUE"
                             }
                         },
@@ -1019,52 +1019,52 @@
                     }
                 },
                 "pincode": {
-                    "type": "number",
+                    "type": ["number","null"],
                     "title": "PIN_CODE",
                     "minimum":100000,
                     "maximum":999999
                 },
                 "place": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "PLACE"
                 },
                 "postOffice": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "POST_OFFICE"
                 },
                 "religion": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "RELIGION",
                     "enumCode": "religion"
                 },
                 "spouseDateOfBirth": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "SPOUSE_DATE_OF_BIRTH",
                     "format": "date"
                 },
                 "spouseFirstName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "SPOUSE_FIRSTNAME"
                 },
                 "spouseLastName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "SPOUSE_LASTNAME"
                 },
                 "spouseMiddleName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "SPOUSE_MIDDLENAME"
                 },
                 "state": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
                 },
                 "stdCode": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "STD_CODE"
                 },
                 "street": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "STREET"
                 },
                 "udf": {
@@ -1072,7 +1072,7 @@
                     "title": "UDF",
                     "properties": {
                         "id": {
-                            "type": "integer",
+                            "type": ["integer","null"],
                             "title": "Id "
                         },
                         "userDefinedDateFieldValues": {
@@ -1081,13 +1081,13 @@
                             "properties": {
                                 "udfDate1": {
                                     "title": "SPOUSE_ID_PROOF_ISSUE_DATE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "format": "date"
 
                                 },
                                 "udfDate2": {
                                     "title": "SPOUSE_ID_PROOF_VALID_UPTO_DATE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "format": "date"
                                 }
                             }
@@ -1098,27 +1098,27 @@
                             "properties": {
                                 "udf1":{
                                     "title": "SPOUSE_LOAN_CONSENT",
-                                    "type":"boolean"
+                                    "type":["boolean","null"]
                                 },
                                 "udf2":{
                                     "title":"IF_HOUSE_RENTED_NAME_OF_LANDLORD",
-                                    "type":"string",
+                                    "type":["string","null"],
                                     "minLength":1,
                                     "maxLength":100
                                 },
                                 "udf3":{
                                     "title": "HOUSE_OWNERSHIP",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode":"house_ownership"
                                 },
                                 "udf4":{
                                     "title":"HOUSE_DURATION_OF_STAY",
-                                    "type":"integer",
+                                    "type":["integer","null"],
                                     "minimum": 0
                                 },
                                 "udf5": {
                                     "title": "HOUSE_CONDITION",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"condition"
@@ -1129,175 +1129,175 @@
                                 },
                                 "udf7": {
                                     "title": "BUSINESS_OR_EMPLOYER_NAME",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf8": {
                                     "title": "BUSINESS_VILLAGE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "maxLength": 100
                                 },
                                 "udf9": {
                                     "title": "BUSINESS_LANDMARK",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf10": {
                                     "title": "BUSINESS_PINCODE",
-                                    "type": "number",
+                                    "type": ["number","null"],
                                     "minimum": 100000,
                                     "maximum": 999999
                                 },
                                 "udf11": {
                                     "title": "BUSINESS_PHONE",
-                                    "type": "number",
+                                    "type": ["number","null"],
                                     "minimum": 1000000000,
                                     "maximum": 9999999999
                                 },
                                 "udf12": {
                                     "title": "IF_SHOP_RENTED_NAME_OF_LANDLORD",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf13": {
                                     "title": "CUST_OCCUPATION_TYPE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode":"broad_occupation_type"
                                 },
                                 "udf14": {
                                     "title": "RELATIONSHIP_WITH_BUSINESS_OWNER",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode":"relation_with_business_owner"
                                 },
                                 "udf15": {
                                     "title": "CROP_NAME",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf16": {
                                     "title": "WORK_PLACE_TYPE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"work_place_type"
                                 },
                                 "udf17": {
                                     "title": "WORK_PERIOD",
-                                    "type": "integer",
+                                    "type": ["integer","null"],
                                     "minimum": 1
                                 },
                                 "udf18": {
                                     "title": "WORK_PLACE_BUILD_TYPE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode":"work_place_build_type",
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf19": {
                                     "title": "WORK_PLACE_CONDITION",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"condition"
                                 },
                                 "udf20": {
                                     "title": "WORK_PLACE",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"work_place"
                                 },
                                 "udf21": {
                                     "title": "WORK_PLACE_OTHERS",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf22": {
                                     "title": "BUSINESS_REG_NO",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100
                                 },
                                 "udf23": {
                                     "title": "BUSINESS_DESCRIPTION",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"condition"
                                 },
                                 "udf24": {
                                     "title": "RELATION_WITH_FARMER",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"relation_with_business_owner"
                                 },
                                 "udf25": {
                                     "title": "LAND_OWNERSHIP",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"land_ownership"
                                 },
                                 "udf26": {
                                     "title": "IRRIGATED",
-                                    "type": "boolean"
+                                    "type": ["boolean","null"]
                                 },
                                 "udf27": {
                                     "title": "HARVEST_MONTH",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "minLength": 1,
                                     "maxLength": 100,
                                     "enumCode":"months"
                                 },
                                 "udf28": {
                                     "title": "LAND_AREA",
-                                    "type": "number"
+                                    "type": ["number","null"]
                                 },
                                 "udf29": {
                                     "title": "YEARS_IN_CURR_ADDRESS",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_current_address"
                                 },
                                 "udf30": {
                                     "title": "YEARS_IN_CURR_AREA",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_current_area"
                                 },
                                 "udf31": {
                                     "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_present_area"
                                 },
                                 "udf32": {
                                     "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_current_address"
                                 },
                                 "udf33": {
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "title": "SPOUSE_IDENTITY_PROOF",
                                     "enumCode": "identity_proof"
                                 },
                                 "udf34": {
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "title": "SPOUSE_IDENTITY_PROOF_IMAGE",
                                     "category": "CustomerEnrollment",
                                     "subCategory": "IDENTITYPROOF"
                                 },
                                 "udf35": {
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "title": "SPOUSE_IDENTITY_PROOF_IMAGE_BACK",
                                     "category": "CustomerEnrollment",
                                     "subCategory": "IDENTITYPROOF"
                                 },
                                 "udf36": {
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "title": "SPOUSE_IDENTITY_PROOF_NO"
                                 }
                             }
@@ -1308,18 +1308,18 @@
                             "properties": {
                                 "udf31": {
                                     "title": "YEARS_OF_BUSINESS_PRESENT_AREA",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_present_area"
                                 },
                                 "udf32": {
                                     "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS",
-                                    "type": "string",
+                                    "type": ["string","null"],
                                     "enumCode": "years_in_current_address"
                                 }
                             }
                         },
                         "version": {
-                            "type": "integer",
+                            "type": ["integer","null"],
                             "title": "Version"
                         }
                     },
@@ -1331,7 +1331,7 @@
                     ]
                 },
                 "urnNo": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "URN_NO"
                 },
                 "verifications": {
@@ -1342,27 +1342,27 @@
                         "properties": {
 
                             "houseNo": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "HOUSE_NO"
                             },
                             "houseNoIsVerified": {
-                                "type": "boolean",
+                                "type": ["boolean","null"],
                                 "title": "HOUSE_NO_IS_VERIFIED"
                             },
                             "referenceFirstName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "REFERENCE_FULL_NAME"
                             },
                             "referenceLastName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "REFERENCE_LASTNAME"
                             },
                             "referenceMiddleName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "REFERENCE_MIDDLENAME"
                             },
                             "relationship": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "RELATIONSHIP",
                                 "enumCode": "relationship"
                             }
@@ -1372,15 +1372,15 @@
                     }
                 },
                 "inCurrentAddressSince": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IN_CURRENT_ADDRESS_SINCE"
                 },
                 "inCurrentAreaSince": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "IN_CURRENT_AREA_SINCE"
                 },
                 "villageName": {
-                    "type": "string",
+                    "type": ["string","null"],
                     "title": "VILLAGE_NAME",
                     "enumCode":"village"
                 },
@@ -1391,36 +1391,36 @@
                         "type": "object",
                         "properties": {
                             "ifscCode": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "IFSC_CODE"
                             },
                             "customerBankName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "BANK_NAME"
                             },
                             "customerBankBranchName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "BRANCH_NAME"
                             },
                             "customerName": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "CUSTOMER_NAME"
                             },
                             "customerNameAsInBank": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "CUSTOMER_NAME_IN_BANK"
                             },
                             "accountNumber": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "ACCOUNT_NUMBER"
                             },
                             "accountType": {
-                                "type": "string",
+                                "type": ["string","null"],
                                 "title": "ACCOUNT_TYPE",
                                 "enumCode": "account_type"
                             },
                             "isDisbersementAccount": {
-                                "type": "boolean",
+                                "type": ["boolean","null"],
                                 "title": "DISBURSEMENT_ACCOUNT"
                             }
                         }
@@ -1458,7 +1458,7 @@
             ]
         },
         "enrollmentAction": {
-            "type": "string",
+            "type": ["string","null"],
             "title": "Enrollment Action"
         }
     },
