@@ -52,7 +52,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             ]
                         }
-                        // debugger;
+                        debugger;
                         if (bundlePageObj){
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
@@ -240,7 +240,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                     ]
                                 },
-                                {
+                            /*    {
                                     type:"fieldset",
                                     title:"SPOUSE_IDENTITY_PROOF",
                                     condition:"model.customer.maritalStatus==='MARRIED'",
@@ -288,7 +288,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             }
                                         }
                                     ]
-                                }
+                                }*/
 
                             ]
                         },
@@ -464,7 +464,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     /*filter: {
                                      "parentCode": "branch_id"
                                      },*/
-                                    parentEnumCode:"branch_id"
+                                    parentEnumCode:"branch_id",
+                                    parentValueExpr:"model.customer.customerBranchId"
                                 },
                                 {
                                     key: "customer.oldCustomerId",
