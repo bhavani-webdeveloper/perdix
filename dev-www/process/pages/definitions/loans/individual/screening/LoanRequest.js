@@ -217,7 +217,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
-                        title: "LOAN_AMOUNT_REQUESTED"
+                        title: "LOAN_AMOUNTREQUESTED"
                     },
                     {
                         key: "loanAccount.frequencyRequested",
@@ -241,11 +241,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
-                        key: "loanAccount.loanAmountRequested",
-                        type: "amount",
-                        title: "LOAN_AMOUNT_REQUESTED"
-                    },
-                    {
                         key: "loanAccount.expectedInterestRate",
                         type: "number",
                         title: "EXPECTED_INTEREST_RATE"
@@ -261,9 +256,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "ESTIMATED_DATE_OF_COMPLETION"
                     },
                     {
-                       key: "loanAccount.estimatedDateOfCompletion",
-                       type:"select",
-                       title:"PRODUCT_TYPE" 
+                       key: "loanAccount.loanPurpose1",
+                       title:"PRODUCT_TYPE",
+                       readonly:true
                     },
                     {
                         key: "loanAccount.customerSignDateExpected",

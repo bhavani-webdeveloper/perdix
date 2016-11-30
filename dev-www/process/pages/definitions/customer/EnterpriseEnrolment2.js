@@ -268,6 +268,43 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "IS_REGISTERED"
                     },
                     {
+                        key: "customer.enterpriseRegistrations",
+                        type: "array",
+                        title: "REGISTRATION_DETAILS",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        items: [
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationType",
+                                title: "REGISTRATION_TYPE",
+                                type: "select",
+                                enumCode: "business_registration_type"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               title: "REGISTRATION_NUMBER"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                type: "date",
+                                title: "REGISTRATION_DATE"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].expiryDate",
+                                type: "date",
+                                title: "VALID_UPTO"
+                            },
+                            {
+                                key:"customer.enterpriseRegistrations[].documentId",
+                                type:"file",
+                                required: true,
+                                fileType:"image/*",
+                                title:"REGISTRATION_DOCUMENT",
+                                category:"CustomerEnrollment",
+                                subCategory:"REGISTRATIONDOCUMENT"
+                            }
+                        ]
+                    }/*,
+                    {
                         key: "customer.enterprise.registrationType",
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_TYPE",
@@ -284,7 +321,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         type: "date",
                         title: "REGISTRATION_DATE"
-                    },
+                    }*/,
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -382,31 +419,32 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                                 readonly: true,
                                 title: "CUSTOMER_NAME"
-                            }
-                        ]
-                    },
-                    {
-                        key: "customer.enterpriseRegistrations",
-                        type: "array",
-                        title: "ADDITIONAL_REGISTRATION",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        startEmpty: true,
-                        items: [
+                            },
                             {
-                                key: "customer.enterpriseRegistrations[].registrationType",
-                                title: "REGISTRATION_TYPE",
+                                key: "customer.enterpriseCustomerRelations[].businessInvolvement",
+                                title: "BUSINESS_INVOLVEMENT",
                                 type: "select",
-                                enumCode: "business_registration_type"
+                                enumCode: "business_involvement"
                             },
                             {
-                                key: "customer.enterpriseRegistrations[].registrationNumber",
-                               title: "REGISTRATION_NUMBER"
+                                key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
+                                title: "PARTNER_OF_ANY_OTHER_COMPANY",
+                                type: "select",
+                                enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosed",
+                                title: "OTHER_BUSINESS_CLOSED",
+                                type: "select",
+                                enumCode: "decisionmaker",
+                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
                                 type: "date",
-                                title: "REGISTRATION_DATE"
-                            },
+                                title: "OTHER_BUSINESS_CLOSE_DATE",
+                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                            }
                         ]
                     }
                 ]
@@ -516,6 +554,43 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "IS_REGISTERED"
                     },
                     {
+                        key: "customer.enterpriseRegistrations",
+                        type: "array",
+                        title: "REGISTRATION_DETAILS",
+                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
+                        items: [
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationType",
+                                title: "REGISTRATION_TYPE",
+                                type: "select",
+                                enumCode: "business_registration_type"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               title: "REGISTRATION_NUMBER"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                type: "date",
+                                title: "REGISTRATION_DATE"
+                            },
+                            {
+                                key: "customer.enterpriseRegistrations[].expiryDate",
+                                type: "date",
+                                title: "VALID_UPTO"
+                            },
+                            {
+                                key:"customer.enterpriseRegistrations[].documentId",
+                                type:"file",
+                                required: true,
+                                fileType:"image/*",
+                                title:"REGISTRATION_DOCUMENT",
+                                category:"CustomerEnrollment",
+                                subCategory:"REGISTRATIONDOCUMENT"
+                            }
+                        ]
+                    }/*,
+                    {
                         key: "customer.enterprise.registrationType",
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         title: "REGISTRATION_TYPE",
@@ -532,7 +607,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         type: "date",
                         title: "REGISTRATION_DATE"
-                    },
+                    }*/,
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -584,31 +659,32 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                                 readonly: true,
                                 title: "CUSTOMER_NAME"
-                            }
-                        ]
-                    },
-                    {
-                        key: "customer.enterpriseRegistrations",
-                        type: "array",
-                        title: "ADDITIONAL_REGISTRATION",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        startEmpty: true,
-                        items: [
+                            },
                             {
-                                key: "customer.enterpriseRegistrations[].registrationType",
-                                title: "REGISTRATION_TYPE",
+                                key: "customer.enterpriseCustomerRelations[].businessInvolvement",
+                                title: "BUSINESS_INVOLVEMENT",
                                 type: "select",
-                                enumCode: "business_registration_type"
+                                enumCode: "business_involvement"
                             },
                             {
-                                key: "customer.enterpriseRegistrations[].registrationNumber",
-                               title: "REGISTRATION_NUMBER"
+                                key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
+                                title: "PARTNER_OF_ANY_OTHER_COMPANY",
+                                type: "select",
+                                enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.enterpriseRegistrations[].registeredDate",
+                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosed",
+                                title: "OTHER_BUSINESS_CLOSED",
+                                type: "select",
+                                enumCode: "decisionmaker",
+                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany=='YES'"
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
                                 type: "date",
-                                title: "REGISTRATION_DATE"
-                            },
+                                title: "OTHER_BUSINESS_CLOSE_DATE",
+                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                            }
                         ]
                     }
                 ]
@@ -1987,6 +2063,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     return false;
                 }
 
+                if (model.customer.enterprise.companyRegistered != "YES"){
+                    try
+                    {
+                        delete model.customer.enterpriseRegistrations;
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
+
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
                 PageHelper.showProgress('enrolment','Saving..');
@@ -2012,6 +2098,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     });
                     return out;
                 };
+                if (model.customer.enterprise.companyRegistered != "YES"){
+                    try
+                    {
+                        delete model.customer.enterpriseRegistrations;
+                    }
+                    catch(err){
+                        console.error(err);
+                    }
+                }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
                 PageHelper.showProgress('enrolment','Updating...', 2000);

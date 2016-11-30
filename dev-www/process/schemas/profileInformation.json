@@ -284,6 +284,18 @@
                             },
                             "version": {
                                 "type": "integer"
+                            },
+                            "businessInvolvement": {
+                                "type": "string"
+                            },
+                            "partnerOfAnyOtherCompany": {
+                                "type": "string"
+                            },
+                            "otherBusinessClosed": {
+                                "type": "string"
+                            },
+                            "otherBusinessClosureDate": {
+                                "type": "string"
                             }
                         },
                         "required": [

@@ -54,7 +54,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             ]
                         }
-                        debugger;
                         if (bundlePageObj){
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
@@ -1663,7 +1662,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.customerBankAccounts[].sanctionAmount",
                                             type: "amount",
-                                            title: "SANCTION_AMOUNT"
+                                            title: "SANCTION_AMOUNT",
+                                            condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements",
@@ -1760,6 +1760,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             type: "select",
                                             title: "NET_BANKING_AVAILABLE",
                                             enumCode: "decisionmaker"
+                                        },
+                                        {
+                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            type: "amount",
+                                            title: "SANCTION_AMOUNT",
+                                            condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].bankStatement",
