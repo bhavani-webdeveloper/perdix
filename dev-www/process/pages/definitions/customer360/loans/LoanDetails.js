@@ -177,7 +177,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                 "items": [
                     {
                         "key": "cbsLoan.firstDisbursementDate",
-                        "title": "FIRST_DISBURSEMENT_DATE",
+                        "title": "FIRST_DISBURSEMENT_DAT",
                         "type": "string"
                     },
                     {

@@ -1293,7 +1293,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select"
+                                            type:"select",
+                                            enumCode: "loan_purpose_1"
                                         }
 
                                     ]
@@ -2011,7 +2012,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.physicalAssets[].ownedAssetValue",
                                             title: "VALUE_OF_THE_ASSET",
-                                            type: "string"
+                                            type: "amount"
                                         },
                                     ]
                                 }
@@ -2037,6 +2038,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key: "customer.physicalAssets[].vehicleModel",
+                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
                                             title: "VEHICLE_MAKE_MODEL",
                                             type: "string"
                                         },

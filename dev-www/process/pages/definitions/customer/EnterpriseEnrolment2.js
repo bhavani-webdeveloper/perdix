@@ -321,8 +321,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
-                        add: null,
-                        remove: null,
+                        startEmpty: true,
                         title: "RELATIONSHIP_TO_BUSINESS",
                         items: [
                             {
@@ -1057,9 +1056,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 ]
             },
             {
-               type:"box",
-               title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='Application'",
+                type:"box",
+                title:"CUSTOMER_BUYER_DETAILS",
+                "condition":"model.currentStage=='Application'",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -1120,6 +1119,40 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         ]
                     }
                 ]
+            },
+            {
+                "type": "box",
+                "title": "SUPPLIERS_DEATILS",
+                "items": [
+                    {
+                        key:"customer.supplierDetails",
+                        title:"SUPPLIERS_DEATILS",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.supplierDetails[].supplierName",
+                                title:"SUPPLIERS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.supplierDetails[].supplierType",
+                                title:"TYPE",
+                                type:"select",
+                                enumCode: "supplier_type"
+                            },
+                            {
+                                key:"customer.supplierDetails[].paymentTerms",
+                                title:"PAYEMNT_TERMS_IN_DAYS",
+                                type:" number"
+                            },
+                            {
+                                key:"customer.supplierDetails[].amount",
+                                title:"AMOUNT",
+                                type:"amount"
+                            },
+                         ] 
+                     }     
+                ] 
             },
             {
                type:"box",
@@ -1314,13 +1347,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "amount"
                                     },
                                     {
-                                        key: "customer.expenditures[].string",
-                                        title: "VENDOR_NAME",
-                                        type: "string"
+                                        key: "customer.expenditures[].expenditureSource",
+                                        title: "EXPENDITURE_SOURCE",
+                                        type: "select",
+                                        enumCode: "business_expense"
                                     },
                                     {
                                         key: "customer.expenditures[].frequency",
-                                        title: "VENDOR_NAME",
+                                        title: "FREQUENCY",
                                         type: "string"
                                     }
                                 ]
@@ -1866,40 +1900,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                 ]
             },
-            {
-                "type": "box",
-                "title": "SUPPLIERS_DEATILS",
-                "items": [
-                    {
-                        key:"customer.supplierDetails",
-                        title:"SUPPLIERS_DEATILS",
-                        type: "array", 
-                        items:[
-                            {
-                                key:"customer.supplierDetails[].supplier'sName",
-                                title:"SUPPLIERS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.supplierDetails[].type",
-                                title:"TYPE",
-                                type:"select"
-                            },
-                            {
-                                key:"customer.supplierDetails[].paymentTermsdays",
-                                title:"PAYEMNT_TERMS_DAYS",
-                                type:" number"
-                            },
-                            {
-                                key:"customer.supplierDetails[].amount",
-                                title:"AMOUNT",
-                                type:"amount"
-                            },
-                         ] 
-                     }     
-                ] 
-             },
-            
             {
                 "type": "actionbox",
                 "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",

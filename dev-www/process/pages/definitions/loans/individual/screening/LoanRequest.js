@@ -266,7 +266,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
-                "condition": "model.loanAccount.loanPurpose2=='New Asset' && model.loanAccount.currentStage=='Application'",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
                 "items": [
                     {
                       key:"loanAccount.newassetdetails",
@@ -415,6 +415,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 $state.go("Page.Landing");
                             if(model.currentStage=='Application')
                                 $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
+                            if (model.currentStage == 'FieldAppraisal')
+                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalQueue', pageId:null});
+                            if (model.currentStage == 'FieldAppraisalReview')
+                                $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
                         }, function(httpRes){
                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);
