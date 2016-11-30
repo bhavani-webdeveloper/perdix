@@ -29,6 +29,7 @@
             "mobileNo",
             "pincode",
             "businessType",
+            "leadInteractions",
             "businessActivity"
          ],
          "properties": {
