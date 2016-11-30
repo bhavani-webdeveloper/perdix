@@ -410,7 +410,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "ENTITY_INFORMATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 readonly:true,
                 "items": [
                     {
@@ -676,7 +676,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 readonly:true,
                 "items":[
                     "customer.mobilePhone",
@@ -845,7 +845,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type: "box",
                 title: "CUSTOMER_BANK_ACCOUNTS",
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 readonly:true,
                 items: [
                     {
@@ -999,7 +999,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                readonly:true,
                 items:[
                     {
@@ -1058,7 +1058,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 type:"box",
                 title:"CUSTOMER_BUYER_DETAILS",
-                "condition":"model.currentStage=='Application'",
+                "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                       key:"customer.buyerDetails",
@@ -1123,6 +1123,43 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "SUPPLIERS_DEATILS",
+                "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                "items": [
+                    {
+                        key:"customer.supplierDetails",
+                        title:"SUPPLIERS_DEATILS",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.supplierDetails[].supplierName",
+                                title:"SUPPLIERS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.supplierDetails[].supplierType",
+                                title:"TYPE",
+                                type:"select",
+                                enumCode: "supplier_type"
+                            },
+                            {
+                                key:"customer.supplierDetails[].paymentTerms",
+                                title:"PAYEMNT_TERMS_IN_DAYS",
+                                type:" number"
+                            },
+                            {
+                                key:"customer.supplierDetails[].amount",
+                                title:"AMOUNT",
+                                type:"amount"
+                            },
+                         ] 
+                     }     
+                ] 
+            },
+            {
+                "type": "box",
+                "title": "SUPPLIERS_DEATILS",
+                "readonly": true,
+                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 "items": [
                     {
                         key:"customer.supplierDetails",
@@ -1157,7 +1194,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                readonly:true,
                 items:[
                     {
