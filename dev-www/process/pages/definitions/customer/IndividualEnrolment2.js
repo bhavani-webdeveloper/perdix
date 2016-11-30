@@ -574,6 +574,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     }
                                 },
                                 {
+                                    key:"customer.spouseDateOfBirth",
+                                    type:"date",
+                                    condition:"model.customer.maritalStatus==='MARRIED'",
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.customer.spouseDateOfBirth) {
+                                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                        }
+                                    }
+                                },
+                                {
                                     key:"customer.spouseAge",
                                     title: "SPOUSE_AGE",
                                     type:"number",
@@ -585,16 +595,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             } else {
                                                 model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
                                             }
-                                        }
-                                    }
-                                },
-                                {
-                                    key:"customer.spouseDateOfBirth",
-                                    type:"date",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.spouseDateOfBirth) {
-                                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                         }
                                     }
                                 }
