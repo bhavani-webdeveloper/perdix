@@ -1459,13 +1459,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: 'customer.enterpriseAssets',
                                 type: 'array',
                                 startEmpty: true,
-                                title: "ENTERPRISE_ASSETS",
+                                title: "ENTERPRICE_ASSETS",
                                 items: [
                                     {
                                         key: "customer.enterpriseAssets[].assetType",
                                         title: "ASSET_TYPE",
                                         type: "select",
-                                        enumCode: "enterprise_asset_types"
+                                        enumCode: "enterprice_asset_types"
                                     },
                                     {
                                         key: "customer.enterpriseAssets[].vehicleMakeModel",
