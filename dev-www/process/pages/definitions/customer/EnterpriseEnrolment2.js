@@ -1392,7 +1392,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.expenditures[].frequency",
                                         title: "FREQUENCY",
-                                        type: "string"
+                                        type: "select",
+                                        enumCode: "frequency"
                                     }
                                 ]
                             },

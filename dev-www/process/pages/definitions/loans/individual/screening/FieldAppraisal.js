@@ -70,7 +70,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                     var urnNos = [];
                                     var loanCustomerId = res.customerId;
 
-                                    for (var i=0; i<res.loanAccount.loanCustomerRelations.length; i++){
+                                    for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
                                         if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
                                             applicant = cust;
