@@ -189,6 +189,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.centreId",
                         type:"select",
+                        title:"CENTRE_NAME",
                         /*filter: {
                             "parentCode": "model.branch_id"
                         },*/
@@ -345,7 +346,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     },
                                     "centreId": {
                                         "key": "customer.centreId",
-                                        "type": "select"
+                                        "type": "select",
+                                        title:"CENTRE_NAME"
                                     }
                                 },
                                 outputMap: {
@@ -435,7 +437,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key:"customer.centreId",
-                        type:"select"
+                        type:"select",
+                        title:"CENTRE_NAME"
                     },
                     {
                         key: "customer.oldCustomerId",
