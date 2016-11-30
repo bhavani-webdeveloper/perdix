@@ -30,7 +30,13 @@
                         "properties": {
                             "kyc1ImagePath": {
                                 "type": "string",
-                                "title": "KYC1_PROOF_DOCUMENT",
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            },
+                            "kyc1ReverseImagePath": {
+                                "type": "string",
+                                "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "KYC1"
                             },

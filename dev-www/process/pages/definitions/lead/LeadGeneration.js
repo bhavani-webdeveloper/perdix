@@ -306,13 +306,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 } else {
                                     model.lead.leadStatus = "Incomplete";
                                 }
-
                                 if(model.lead.interestedInProduct==='YES')
                                 {
                                     model.lead.productCategory="Asset";
                                     model.lead.productSubCategory="Loan";
                                 }
-
                             }
                             //onChange: "actions.changeStatus(modelValue, form, model)",
                     }, {
