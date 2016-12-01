@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan","BundleManager",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,BundleManager){
 
     var branch = SessionStore.getBranch();
 
@@ -62,6 +62,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";    
                 /* END OF TEMP CODE */
+            }
+            if (bundlePageObj){
+                model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
         },
         offline: false,
@@ -633,6 +636,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             save: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
                 /* TODO Call save service for the loan */
+                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
@@ -643,7 +647,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
-                                    model.loanAccount = res.loanAccount;    
+                                    model.loanAccount = res.loanAccount;
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })

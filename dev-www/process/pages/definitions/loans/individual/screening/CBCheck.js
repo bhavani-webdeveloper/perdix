@@ -34,10 +34,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             "new-loan": function(bundleModel, model, params){
                 $log.info("Inside new-loan of CBCheck");
                 model.customer.loanSaved = true;
-                model.customer.loanAmount = params.loanAccount.loanAmount;
+                model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                 model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
                 for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
-                    model.customer.coapplicants[i].loanAmount = params.loanAccount.loanAmount;
+                    model.customer.coapplicants[i].loanAmount = params.loanAccount.loanAmountRequested;
                     model.customer.coapplicants[i].loanPurpose1 = params.loanAccount.loanPurpose1;
                 }
             }
@@ -138,7 +138,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             save: function(customerId, CBType, loanAmount, loanPurpose){
                 $log.info("Inside submit()");
                 PageHelper.showLoader();
-                CreditBureau.creditBureauCheck({
+                CreditBureau.postcreditBureauCheck({
                     customerId: customerId,
                     highMarkType: CBType,
                     purpose: loanPurpose,

@@ -17,6 +17,10 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
         reinitiateCBCheck: {
             method: 'GET',
             url: endpoint + '/reinitiate/:inqUnqRefNo'
+        },
+        postcreditBureauCheck: {
+            method: 'POST',
+            url: endpoint + '/check'
         }
     });
 
