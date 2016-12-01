@@ -76,7 +76,7 @@
 
           "leadInteractions1": {
             "type": "array",
-            "title": "Lead Interactions",
+            "title": "Interactions History",
             "items": {
                "type": "object",
                "required": [],
