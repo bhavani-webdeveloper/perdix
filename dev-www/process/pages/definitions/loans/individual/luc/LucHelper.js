@@ -4,7 +4,6 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
         var proceedData = function(res) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
-            $log.info(res);
             if (res.loanMonitoringDetails.id === undefined || res.loanMonitoringDetails.id === null) {
                 $log.info("luc id null, cannot proceed");
                 deferred.reject(null);
@@ -33,7 +32,6 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
         var goBack = function(res) {
             var deferred = $q.defer();
             $log.info("Sending Back");
-            $log.info(res);
             if (res.loanMonitoringDetails.id === undefined || res.loanMonitoringDetails.id === null) {
                 $log.info("luc id null, cannot proceed");
                 deferred.reject(null);
@@ -65,7 +63,6 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
         var escalate = function(res) {
             var deferred = $q.defer();
             $log.info("Sending Back");
-            $log.info(res);
             if (res.loanMonitoringDetails.id === undefined || res.loanMonitoringDetails.id === null) {
                 $log.info("luc id null, cannot proceed");
                 deferred.reject(null);
@@ -98,7 +95,6 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
          var reschedule = function(res) {
             var deferred = $q.defer();
             $log.info("reschedule working");
-            $log.info(res);
             if (res.loanMonitoringDetails.id === undefined || res.loanMonitoringDetails.id === null) {
                 $log.info("luc id null, cannot proceed");
                 deferred.reject(null);
