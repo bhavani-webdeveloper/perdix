@@ -1095,8 +1095,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                type:"select"
                            },
                            {
-                               key:"customer.liabilities[].loanSource",
-                               type:"select"
+                               key:"customer.liabilities[].loanSource"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            "customer.liabilities[].instituteName",
                            {
@@ -1168,8 +1168,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                type:"select"
                            },
                            {
-                               key:"customer.liabilities[].loanSource",
-                               type:"select"
+                               key:"customer.liabilities[].loanSource"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            "customer.liabilities[].instituteName",
                            {

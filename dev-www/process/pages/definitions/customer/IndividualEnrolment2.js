@@ -1410,8 +1410,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         //     type:"select"
                                         // },
                                         {
-                                            key:"customer.liabilities[].loanSource",
-                                            type:"select"
+                                            key:"customer.liabilities[].loanSource"/*,
+                                            type:"select"*/ //Made as free text till list of values are given by Kinara
                                         },
                                         "customer.liabilities[].instituteName",
                                         {
@@ -1471,8 +1471,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             type:"select"
                                         },
                                         {
-                                            key:"customer.liabilities[].loanSource",
-                                            type:"select"
+                                            key:"customer.liabilities[].loanSource"/*,
+                                            type:"select"*/ //Made as free text till list of values are given by Kinara
                                         },
                                         "customer.liabilities[].instituteName",
                                         {
