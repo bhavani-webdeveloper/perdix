@@ -246,7 +246,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "EXPECTED_INTEREST_RATE"
                     },
                     {
-                        key: "loanAccount.expectedInterestRate",
+                        key: "loanAccount.estimatedEmi",
                         type: "amount",
                         title: "ESTIMATED_KINARA_EMI"
                     },
