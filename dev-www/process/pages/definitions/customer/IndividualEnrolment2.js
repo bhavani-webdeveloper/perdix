@@ -1480,10 +1480,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     startEmpty: true,
                                     title:"FINANCIAL_LIABILITIES",
                                     items:[
-                                        {
-                                            key:"customer.liabilities[].loanType",
-                                            type:"select"
-                                        },
+                                        // {
+                                        //     key:"customer.liabilities[].loanType",
+                                        //     type:"select"
+                                        // },
                                         {
                                             key:"customer.liabilities[].loanSource"/*,
                                             type:"select"*/ //Made as free text till list of values are given by Kinara

@@ -1091,8 +1091,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType",
-                               type:"select"
+                               key:"customer.liabilities[].loanType"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            {
                                key:"customer.liabilities[].loanSource"/*,
@@ -1164,8 +1164,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType",
-                               type:"select"
+                               key:"customer.liabilities[].loanType"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            {
                                key:"customer.liabilities[].loanSource"/*,

@@ -104,6 +104,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
         close: {
             method: 'PUT',
             url: endpoint + "/close"
+        },       
+         loanRemarksSummary:{
+            method:'GET',
+            url:endpoint+'/loanActionSummary/:id',
+            isArray:true
         }
     });
 }]);

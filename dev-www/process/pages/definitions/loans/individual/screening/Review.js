@@ -43,22 +43,18 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
-            } else {
-                model.customer = model.customer || {};
-                //model.branchId = SessionStore.getBranchId() + '';
-                //model.customer.kgfsName = SessionStore.getBranch();
-                model.customer.customerType = "Enterprise";
+                PageHelper.showLoader();
+                IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                .$promise
+                .then(function (resp){
 
-                model.loanAccount = {};
-                model.loanAccount.loanCustomerRelations = [];
 
-                /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
-                //model.loanAccount.productCode = 'TLAPS';
-                //model.loanAccount.tenure = 12;
-                model.loanAccount.frequency = 'M';
-                model.loanAccount.isRestructure = false;
-                model.loanAccount.documentTracking = "PENDING";    
-                /* END OF TEMP CODE */
+                },function (errResp){
+
+                })
+                .finally(function(){
+                    PageHelper.hideLoader();
+                })
             }
         },
         offline: false,
@@ -75,8 +71,65 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         form: [
             {
                 "type": "box",
-                "title": "HISTORY_REVIEWS",
                 "items": [
+                    {
+                        type:"fieldset",
+                        title:"SCREENING_SCORE_REVIEW",
+                        items:[]
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "row",
+                        "items": [
+                        {
+                            "type": "section",
+                            "htmlClass": "col-sm-3",
+                            "items": [{
+                                "title": "STATUS",
+                                "readonly": true
+                            }]
+                        },
+                        {
+                            "type": "section",
+                            "htmlClass": "col-sm-6",
+                            "items": [{
+                                "title": "REMARKS",
+                                "readonly": true
+                            }]
+                        }]
+                    },
+                    {
+                        "type":"array",
+                        title: "REMARKS",
+                        "view": "fixed",
+                        "key": "loanSummary",
+                        "add": null,
+                        "remove": null,
+                        "items": [
+                        {
+                            "type": "section",
+                            "htmlClass": "row",
+                            "items": [
+                            {
+                                "type": "section",
+                                "htmlClass": "col-sm-3",
+                                "items": [{
+                                    "key": "loanSummary[].status",
+                                    "notitle": true,
+                                    "readonly": true
+                                }]
+                            },
+                            {
+                                "type": "section",
+                                "htmlClass": "col-sm-6",
+                                "items": [{
+                                    "key": "loanSummary[].remarks",
+                                    "notitle": true,
+                                    "readonly": true
+                                }]
+                            }]
+                        }]
+                    }
                 ]
             }
         ],
@@ -84,117 +137,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             return SchemaResource.getLoanAccountSchema().$promise;
         },
         actions: {
-            preSave: function(model, form, formName) {
-                var deferred = $q.defer();
-                if (model.customer.firstName) {
-                    deferred.resolve();
-                } else {
-                    irfProgressMessage.pop('enrollment-save', 'Customer Name is required', 3000);
-                    deferred.reject();
-                }
-                return deferred.promise;
-            },
-            submit: function(model, form, formName){
-                $log.info("Inside submit()");
-                /* TODO Call proceed servcie for the loan account */
-                
-                Utils.confirm("Are You Sure?").then(function(){
-
-                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanProcessAction = "PROCEED";
-                    PageHelper.showLoader();
-                    PageHelper.showProgress("update-loan", "Working...");
-                    IndividualLoan.update(reqData)
-                        .$promise
-                        .then(function(res){
-                            PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return navigateToQueue(model);
-                        }, function(httpRes){
-                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                            PageHelper.showErrors(httpRes);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
-                })
-            },
-            sendBack: function(model, formCtrl, form, $event){
-                $log.info("Inside sendBack()");
-                if (!validateForm(formCtrl)){
-                    return;
-                }
-                Utils.confirm("Are You Sure?").then(function(){
-                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanProcessAction = "PROCEED";
-                    reqData.stage = model.review.targetStage;
-                    reqData.remarks = model.review.remarks;
-                    PageHelper.showLoader();
-                    PageHelper.showProgress("update-loan", "Working...");
-                    IndividualLoan.update(reqData)
-                        .$promise
-                        .then(function(res){
-                            PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return navigateToQueue(model);
-                        }, function(httpRes){
-                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                            PageHelper.showErrors(httpRes);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
-                })
-
-            },
-            reject: function(model, formCtrl, form, $event){
-                $log.info("Inside reject()");
-                if (!validateForm(formCtrl)){
-                    return;
-                }
-                Utils.confirm("Are You Sure?").then(function(){
-
-                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanProcessAction = "PROCEED";
-                    reqData.stage = "Rejected";
-                    reqData.remarks = model.review.remarks;
-                    PageHelper.showLoader();
-                    PageHelper.showProgress("update-loan", "Working...");
-                    IndividualLoan.update(reqData)
-                        .$promise
-                        .then(function(res){
-                            PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return navigateToQueue(model);
-                        }, function(httpRes){
-                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                            PageHelper.showErrors(httpRes);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
-                })
-            },
-            save: function(model, formCtrl, form, $event){
-                $log.info("Inside save()");
-                /* TODO Call save service for the loan */
-                Utils.confirm("Are You Sure?")
-                    .then(
-                        function(){
-                            
-                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                            reqData.loanProcessAction = "SAVE";
-                            PageHelper.showLoader();
-                            IndividualLoan.create(reqData)
-                                .$promise
-                                .then(function(res){
-                                    model.loanAccount = res.loanAccount;    
-                                }, function(httpRes){
-                                    PageHelper.showErrors(httpRes);
-                                })
-                                .finally(function(httpRes){
-                                    PageHelper.hideLoader();
-                                })
-                        }
-                    );
-            }
+            
         }
     };
 }]);
