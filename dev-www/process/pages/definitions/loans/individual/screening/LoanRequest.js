@@ -384,11 +384,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         "type": "submit",
                         "title": "PROCEED"
-                    },
-                    {
-                        "type": "button",
-                        "title": "SENT_BACK",
-                        "onClick": "actions.sentBack(model, formCtrl, form, $event)"
                     }
                 ]
             }

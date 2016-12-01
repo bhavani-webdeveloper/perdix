@@ -6,19 +6,32 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
     var branch = SessionStore.getBranch();
 
+    var validateForm = function(formCtrl){
+        formCtrl.scope.$broadcast('schemaFormValidate');
+        if (formCtrl && formCtrl.$invalid) {
+            PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+            return false;
+        }
+        return true;
+    }
+
     var navigateToQueue = function(model){
-        if(model.currentStage=='ScreeningReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
-        if(model.currentStage=='ApplicationReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
         if(model.currentStage=='Screening')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
+        if(model.currentStage=='ScreeningReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
         if(model.currentStage=='Application')
             $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
+        if(model.currentStage=='ApplicationReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
         if (model.currentStage == 'FieldAppraisal')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalQueue', pageId:null});
         if (model.currentStage == 'FieldAppraisalReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
+        if (model.currentStage == 'CreditCommitteeReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.CreditCommitteeReviewQueue', pageId:null});
+        if (model.currentStage == 'CentralRiskReview')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.CentralRiskReviewQueue', pageId:null});
     }
 
     return {
@@ -30,7 +43,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
-
             } else {
                 model.customer = model.customer || {};
                 //model.branchId = SessionStore.getBranchId() + '';
@@ -71,24 +83,69 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "type": "box",
                 "title": "POST_REVIEW",
                 "items": [
+                    {
+                        key: "review.action",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK"
+                        }
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='REJECT'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='SEND_BACK'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.targetStage",
+                                required: true,
+                                type: "select",
+                                title: "SEND_BACK_TO_STAGE",
+                                titleMap: {
+                                    "Screening" : "Screening",
+                                    "ScreeningReview" : "ScreeningReview",
+                                    "Application" : "Application",
+                                    "ApplicationReview" : "ApplicationReview",
+                                    "FieldAppraisal" : "FieldAppraisal",
+                                    "FieldAppraisalReview" : "FieldAppraisalReview",
+                                    "CentralRiskReview" : "CentralRiskReview"
+                                }
+                            },
+                            {
+                                key: "review.sendBackButton",
+                                type: "button",
+                                title: "SEND_BACK",
+                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    }
                     
                 ]
-            },
-            // {
-            //     "type": "actionbox",
-            //     "condition": "model.loanAccount.id",
-            //     "items": [
-            //         {
-            //             "type": "submit",
-            //             "title": "PROCEED"
-            //         },
-            //         {
-            //             "type": "button",
-            //             "title": "SENT_BACK",
-            //             "onClick": "actions.sentBack(model, formCtrl, form, $event)"
-            //         }
-            //     ]
-            // }
+            }
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -113,6 +170,59 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
                     PageHelper.showLoader();
+                    PageHelper.showProgress("update-loan", "Working...");
+                    IndividualLoan.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-loan", "Done.", 3000);
+                            return navigateToQueue(model);
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                })
+            },
+            sendBack: function(model, formCtrl, form, $event){
+                $log.info("Inside sendBack()");
+                if (!validateForm(formCtrl)){
+                    return;
+                }
+                Utils.confirm("Are You Sure?").then(function(){
+                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanProcessAction = "PROCEED";
+                    reqData.stage = model.review.targetStage;
+                    reqData.remarks = model.review.remarks;
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("update-loan", "Working...");
+                    IndividualLoan.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-loan", "Done.", 3000);
+                            return navigateToQueue(model);
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                })
+
+            },
+            reject: function(model, formCtrl, form, $event){
+                $log.info("Inside reject()");
+                if (!validateForm(formCtrl)){
+                    return;
+                }
+                Utils.confirm("Are You Sure?").then(function(){
+
+                    var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanProcessAction = "PROCEED";
+                    reqData.stage = "Rejected";
+                    reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
                     PageHelper.showProgress("update-loan", "Working...");
                     IndividualLoan.update(reqData)
@@ -151,66 +261,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 })
                         }
                     );
-            },
-            sentBack: function(model, formCtrl, form, $event){
-                $log.info("Inside sentBack()");
-                Utils.confirm("Are you sure?")
-                    .then(
-                        function(){
-                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)}
-                            reqData.loanProcessAction = 'PROCEED';
-                            PageHelper.showLoader();
-                            var targetStage = null;
-                            switch(model.loanAccount.currentStage){
-                                case "ScreeningReview":
-                                    targetStage = "Screening";
-                                    break;
-                                case "Application":
-                                    targetStage = "ScreeningReview";
-                                    break;
-                                case "Psychometric":
-                                    targetStage = "Application";
-                                    break;
-                                case "ApplicationReview":
-                                    targetStage = "Psychometric";
-                                    break;
-                                case "FieldAppraisal":
-                                    targetStage = "ApplicationReview";
-                                    break;
-                                case "FieldAppraisalReview":
-                                    targetStage = "FieldAppraisal";
-                                    break;
-                                case "CentralRiskReview":
-                                    targetStage = "FieldAppraisalReview";
-                                    break;
-                                case "CreditCommitteeReview":
-                                    targetStage = "CentralRiskReview";
-                                    break;
-                                default:
-                                    targetStage = null;                                
-                            }
-
-                            if (targetStage == null){
-                                PageHelper.showProgress("sent-back", "Unable to sent back from current stage.", 5000);
-                                return;
-                            }
-                            reqData.stage = targetStage;
-                            PageHelper.showLoader();
-                            PageHelper.showProgress('sent-back', 'Working...');
-                            IndividualLoan.create(reqData)
-                                .$promise
-                                .then(function(res){
-                                    PageHelper.showProgress('sent-back', 'Sent back successful', 3000);
-                                    return navigateToQueue();
-                                }, function(httpRes){
-                                    PageHelper.showProgress('sent-back', 'Oops. Some error occured.', 3000);
-                                    PageHelper.showErrors(httpRes);
-                                })
-                                .finally(function(httpRes){
-                                    PageHelper.hideLoader();
-                                })
-                        }
-                    )
             }
         }
     };
