@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.SanctionInput'),
         		],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "CreditCommitteeReview";
+                    bundleModel.currentStage = "Sanction";
                     var deferred = $q.defer();
 
                     var $this = this;

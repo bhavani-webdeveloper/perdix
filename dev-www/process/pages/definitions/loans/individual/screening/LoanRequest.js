@@ -254,7 +254,14 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
-                    },
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "ADDITIONAL_LOAN_INFORMATION",
+                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'",
+                "items": [
                     {
                         key: "loanAccount.expectedInterestRate",
                         type: "number",
@@ -314,7 +321,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
-                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Sanction' )",
                 "items": [
                     {
                       key:"loanAccount.newassetdetails",
@@ -492,10 +499,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         "key": "loanAccount.tenure",
                         "title":"DURATION_IN_MONTHS"
-                    },
-                    {
-                        "key": "loanAccount.frequency",
-                        "type":"select"
                     },
                     {
                         "type": "fieldset",

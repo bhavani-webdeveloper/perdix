@@ -399,7 +399,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type":"box",
                             "title":"KYC",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             "readonly": true,
                             "items":[
                                 {
@@ -745,7 +745,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "PERSONAL_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview'  || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
                                 {
@@ -1002,7 +1002,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "CONTACT_INFORMATION",
-                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
                                 "customer.mobilePhone",
@@ -1098,7 +1098,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "HOUSEHOLD_FINANCIALS",
-                            "condition": "model.currentStage =='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage =='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
                                 {
@@ -1341,7 +1341,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "T_FAMILY_DETAILS",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [{
                                 key:"customer.familyMembers",
@@ -1457,7 +1457,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type:"box",
                             title:"T_LIABILITIES",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items:[
                                 {
@@ -1565,7 +1565,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
                                 {
@@ -1746,7 +1746,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type: "box",
                             title: "CUSTOMER_BANK_ACCOUNTS",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items: [
                                 {
@@ -1996,7 +1996,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type: "box",
                             title: "PROXY_INDICATORS",
-                            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items: [
                                 {
@@ -2181,7 +2181,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type:"box",
                             title:"PHYSICAL_ASSETS",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items:[
                                 {
