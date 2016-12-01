@@ -34,6 +34,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.leadInteractions = [{
                                     "interactionDate": Utils.getCurrentDate(),
