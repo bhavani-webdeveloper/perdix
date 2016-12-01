@@ -318,13 +318,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ImagePath",
                                             type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
                                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
                                              type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
@@ -420,7 +418,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.identityProofImageId",
                                             type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
@@ -462,7 +459,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.addressProofImageId",
                                             type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
@@ -507,13 +503,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ImagePath",
                                             type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
                                             key:"customer.additionalKYCs[].kyc1ReverseImagePath",
                                              type:"file",
-                                            required: true,
                                             fileType:"image/*"
                                         },
                                         {
