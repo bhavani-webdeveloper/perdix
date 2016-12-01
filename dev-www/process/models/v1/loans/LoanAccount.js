@@ -147,7 +147,7 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
 
                 }
 
-                return data;
+                return data; 
 
             }
 
