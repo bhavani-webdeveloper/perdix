@@ -4,8 +4,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
         	$log.info("Inside LoanBookingBundle");
-
-
         	return {
         		"type": "page-bundle",
         		"title": "CENTRAL_RISK_REVIEW",
@@ -114,6 +112,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                                 pageName: 'loans.individual.screening.LoanRequest',
                                                 title: 'LOAN_REQUEST',
                                                 pageClass: 'loan-request',
+                                                minimum: 1,
+                                                maximum: 1,
+                                                model: {
+                                                    loanAccount: res
+                                                }
+                                            });
+
+                                            $this.bundlePages.push({
+                                                pageName: 'loans.individual.screening.Review',
+                                                title: 'REVIEW',
+                                                pageClass: 'loan-review',
                                                 minimum: 1,
                                                 maximum: 1,
                                                 model: {

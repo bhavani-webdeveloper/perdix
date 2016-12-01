@@ -137,6 +137,18 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                                     loanAccount: res
                                                 }
                                             });
+
+                                            $this.bundlePages.push({
+                                                pageName: 'loans.individual.screening.Review',
+                                                title: 'REVIEW',
+                                                pageClass: 'loan-review',
+                                                minimum: 1,
+                                                maximum: 1,
+                                                model: {
+                                                    loanAccount: res
+                                                }
+                                            });
+                                            
                                             deferred.resolve();
                                         /*}, function(httpRes){
                                             PageHelper.showErrors(httpRes);
