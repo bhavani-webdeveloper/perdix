@@ -384,10 +384,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "condition":"model.currentStage=='ScreeningReview'",
                 "items": [
                     {
-                        key: "loanAccount.screeningReviewRemarks"
+                        key: "loanAccount.screeningReviewRemarks",
+                        title:"REMARKS"
                     },
                     {
-                        key: "loanAccount.ScreeningDeviations"
+                        key: "loanAccount.ScreeningDeviations",
+                        title:"DEVIATIONS"
                     },
                 ]
             },
@@ -397,10 +399,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "condition":"model.currentStage=='ApplicationReview'",
                 "items": [
                     {
-                        key: "loanAccount.ApplicationReviewRemarks"
+                        key: "loanAccount.ApplicationReviewRemarks",
+                        title:"REMARKS"
                     },
                     {
-                        key: "loanAccount.ApplicationDeviations"
+                        key: "loanAccount.ApplicationDeviations",
+                        title:"DEVIATIONS"
                     },
                 ]
             },
@@ -418,7 +422,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "LOAN_SANCTION",
-                // "condition": "model.currentStage == 'Sanction'",
+                "condition": "model.currentStage == 'Sanction'",
                 "items": [
                     {
                         "key": "loanAccount.interestRate",
