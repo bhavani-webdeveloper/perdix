@@ -140,7 +140,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 PageHelper.showLoader();
                 CreditBureau.postcreditBureauCheck({
                     customerId: customerId,
-                    highMarkType: CBType,
+                    type: CBType,
                     purpose: loanPurpose,
                     loanAmount: loanAmount
                 }, function(response){

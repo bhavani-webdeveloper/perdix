@@ -1448,6 +1448,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key:"customer.liabilities[].liabilityLoanPurpose",
                                             type:"select",
                                             enumCode: "loan_purpose_1"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].interestOnly",
+                                           type:"radios",
+                                           title:"INTEREST_ONLY",
+                                           enumCode:"decisionmaker"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].interestExpense",
+                                           title:"INTEREST_EXPENSE"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].principalExpense",
+                                           title:"PRINCIPAL_EXPENSE"
                                         }
 
                                     ]
@@ -1508,6 +1522,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.liabilities[].liabilityLoanPurpose",
                                             type:"select"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].interestOnly",
+                                           type:"radios",
+                                           title:"INTEREST_ONLY",
+                                           enumCode:"decisionmaker"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].interestExpense",
+                                           title:"INTEREST_EXPENSE"
+                                        },
+                                        {
+                                           key:"customer.liabilities[].principalExpense",
+                                           title:"PRINCIPAL_EXPENSE"
                                         }
 
                                     ]
