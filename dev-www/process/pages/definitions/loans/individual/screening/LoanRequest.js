@@ -21,6 +21,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
     }
 
+    var populateDisbursementSchedule=function (value,form,model){
+        PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+        model.loanAccount.disbursementSchedules=[];
+        for(var i=0;i<value;i++){
+            model.loanAccount.disbursementSchedules.push({
+                trancheNumber:""+(i+1),
+                disbursementAmount:0
+            });
+        }
+        if (value ==1){
+            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmountRequested;
+        }
+
+    }
+
     return {
         "type": "schema-form",
         "title": "LOAN_REQUEST",

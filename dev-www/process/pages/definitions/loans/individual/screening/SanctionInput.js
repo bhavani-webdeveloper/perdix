@@ -54,8 +54,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.SanctionInput'),
                                         }
                                         /* TODO HANDLE Guarantors */
                                     }
-                                    
-                                    customersForInsurance.push({urnNo: applicant.urnNo, name: applicant.firstName});
 
                                     /*Queries.getCustomerBasicDetails({urns: urnNos})
                                         .then(function(customers){
@@ -117,8 +115,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.SanctionInput'),
                                                 minimum: 1,
                                                 maximum: 1,
                                                 model: {
-                                                    loanAccount: res,
-                                                    customersForInsurance: customersForInsurance
+                                                    loanAccount: res
                                                 }
                                             });
 
