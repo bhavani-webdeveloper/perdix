@@ -65,6 +65,31 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);    
                 }
             },
+            "lead-loaded": function(bundleModel, model, obj){
+                            model.customer.mobilePhone = obj.mobileNo;
+                            model.customer.gender = obj.gender;
+                            model.customer.firstName = obj.businessName;
+                            model.customer.maritalStatus=obj.maritalStatus;
+                            model.customer.customerBranchId=obj.branchId;
+                            model.customer.centreId=obj.centreId;
+                            model.customer.landmark=obj.addressLine2;
+                            model.customer.street=obj.addressLine1;
+                            model.customer.pincode=obj.pincode;
+                            model.customer.district=obj.district;
+                            model.customer.state=obj.state;
+                            model.customer.locality=obj.area;
+                            model.customer.villageName=obj.cityTownVillage;
+                            model.customer.landLineNo=obj.alternateMobileNo;
+                            model.customer.dateOfBirth=obj.dob;
+                            model.customer.age=obj.age;
+                            model.customer.mobilePhone = obj.mobileNo;
+                            model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
+                            model.customer.latitude =obj.location;
+                            model.customer.enterprise.ownership =obj.ownership;
+                            model.customer.enterprise.companyRegistered =obj.companyRegistered;
+                            model.customer.enterprise.businessType =obj.businessType;
+                            model.customer.enterprise.businessLine=obj.businessActivity;
+                        },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Inside new co-applicant of EnterpriseEnrollment");
 
