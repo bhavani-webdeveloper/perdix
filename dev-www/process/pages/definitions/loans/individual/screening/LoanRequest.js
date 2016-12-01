@@ -274,6 +274,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "CUSTOMER_SIGN_DATE_EXPECTED"
                     },
                     {
+                        key: "loanAccount.proposedHires",
+                        type: "number",
+                        title: "PROPOSED_HIRES"
+                    },
+                    {
+                        key: "loanAccount.percentageIncreasedIncome",
+                        type: "number",
+                        title: "PERCENTAGE_INCREASED_INCOME"
+                    },
+                    {
+                        key: "loanAccount.percentageInterestSaved",
+                        type: "number",
+                        title: "PERCENTAGE_INTEREST_SAVED"
+                    },
+                    {
                         "type": "section",
                         "htmlClass": "alert alert-warning",
                         "condition": "!model.loanAccount.customerId",
