@@ -1,19 +1,19 @@
 irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
-["$log", "SessionStore", "PageHelper", "formHelper", "Utils", "Psychometric", "$q",
-    function($log, SessionStore, PageHelper, formHelper, Utils, Psychometric, $q) {
+["$log", "SessionStore", "PageHelper", "formHelper", "Utils", "Psychometric", "$q", "elementsUtils",
+	function($log, SessionStore, PageHelper, formHelper, Utils, Psychometric, $q, elementsUtils) {
 
-        var branch = SessionStore.getBranch();
-        var languagesTitleMap;
+		var branch = SessionStore.getBranch();
+		var languagesTitleMap;
 
-        return {
-            "type": "schema-form",
-            "title": "SINGLE_QUESTION_MAINTAENANCE",
-            initialize: function(model, form, formCtrl) {
-                model.psy = model.psy || {};
-                model = Utils.removeNulls(model, true);
-                $log.info("question maintenance page got initiated");
-            },
-            form: [],
+		return {
+			"type": "schema-form",
+			"title": "SINGLE_QUESTION_MAINTAENANCE",
+			initialize: function(model, form, formCtrl) {
+				model.psy = model.psy || {};
+				model = Utils.removeNulls(model, true);
+				$log.info("question maintenance page got initiated");
+			},
+			form: [],
 			formFn: function() {
 				var deferred = $q.defer();
 				Psychometric.getLanguages().$promise.then(function(languages) {
@@ -29,28 +29,48 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						"type": "box",
 						"title": "QUESTION_MAINTENANCE",
 						"items": [{
-							key: "psy.questionId",
+							key: "psy.id",
 							type: "lov",
 							lovonly: true,
 							fieldType: "number",
-							/*outputMap: {
-							    "id": "roles.role_id",
-							    "name": "roles.role_name"
+							inputMap: {
+								"difficulty": {
+									key: "psy.difficulty",
+									type: "radios"
+								},
+								"type": {
+									key: "psy.type",
+									type: "radios"
+								},
+								"pictorial": {
+									key: "psy.pictorial",
+									type: "checkbox"
+								},
+								"active": {
+									key: "psy.active",
+									type: "checkbox"
+								}
+							},
+							outputMap: {
+								"id": "roles.role_id",
+								"name": "roles.role_name"
 							},
 							searchHelper: formHelper,
 							search: function(inputModel, form, model) {
-							    return RolesPages.allRoles().$promise;
+								if (!inputModel.active) delete inputModel.active;
+								return Psychometric.findSingleQuestion(inputModel).$promise;
 							},
 							getListDisplayItem: function(item, index) {
-							    return [
-							        item.id,
-							        item.name
-							    ];
-							}*/
+								return [
+									item.category.categoryName,
+									item.questionLang[0].questionText
+								];
+							}
 						}, {
 							key: "psy.category.categoryName",
 							type: "lov",
 							lovonly: true,
+							required: true,
 							outputMap: {
 								"id": "psy.category.id",
 								"categoryName": "psy.category.categoryName",
@@ -62,7 +82,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							},
 							getListDisplayItem: function(item, index) {
 								return [
-									item.categoryName,
+									item.id + ": " + item.categoryName,
 									"Cutoff Score: " + item.cutoffScore
 								];
 							}
@@ -74,9 +94,16 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 								"MEDIUM": "Medium",
 								"HIGH": "High"
 							}
-						}, "psy.pictorial", {
+						}, {
+							key: "psy.pictorial",
+							onChange: function(modelValue, form, model) {
+								model.psy.questionLang = [];
+								model.psy.options = [];
+							}
+						}, {
 							key: "psy.questionLang",
 							type: "array",
+							startEmpty: true,
 							items: [{
 								type: "section",
 								htmlClass: "row",
@@ -84,8 +111,8 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 									type: "section",
 									htmlClass: "col-sm-4",
 									items: [{
-										key: "psy.questionLang[].langcode",
-									    type: "select",
+										key: "psy.questionLang[].langCode",
+										type: "select",
 										notitle: true,
 										titleMap: languagesTitleMap
 									}]
@@ -94,26 +121,71 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 									htmlClass: "col-sm-8",
 									items: [{
 										key: "psy.questionLang[].questionText",
+										condition: "!model.psy.pictorial",
 										type: "textarea",
 										notitle: true
-							        }]
+									}, {
+										key: "psy.questionLang[].questionText",
+										condition: "model.psy.pictorial",
+										type: "file",
+										fileType: "image/*",
+										imageCompressionRatio: 100,
+										notitle: true,
+										customHandle: function(file, progress, modelValue, form, model) {
+											var deferred = $q.defer();
+											elementsUtils.fileToBase64(file).then(function(base64File) {
+												deferred.resolve("<img src=\"" + base64File[0] + "\">");
+											});
+											return deferred.promise;
+										}
+									}]
 								}]
 							}]
 						}, {
 							key: "psy.options",
 							type: "array",
+							startEmpty: true,
 							items: [{
-							    key: "psy.options[].score",
+								key: "psy.options[].score",
 							}, {
-							    key: "psy.options[].optionlang",
+								key: "psy.options[].optionlang",
 								type: "array",
+								startEmpty: true,
 								items: [{
-								    key: "psy.options[].optionlang[].langcode",
-								    type: "select",
-								    titleMap: languagesTitleMap
-								}, {
-									key: "psy.options[].optionlang[].optiontext",
-									type: "textarea"
+									type: "section",
+									htmlClass: "row",
+									items: [{
+										type: "section",
+										htmlClass: "col-sm-4",
+										items: [{
+											key: "psy.options[].optionlang[].langCode",
+											type: "select",
+											titleMap: languagesTitleMap,
+											notitle: true
+										}]
+									}, {
+										type: "section",
+										htmlClass: "col-sm-8",
+										items: [{
+											key: "psy.options[].optionlang[].optionText",
+											condition: "!model.psy.pictorial",
+											type: "textarea",
+											notitle: true
+										}, {
+											key: "psy.options[].optionlang[].optionText",
+											condition: "model.psy.pictorial",
+											type: "file",
+											fileType: "image/*",
+											notitle: true,
+											customHandle: function(file, progress, modelValue, form, model) {
+												var deferred = $q.defer();
+												elementsUtils.fileToBase64(file).then(function(base64File) {
+													deferred.resolve("<img src=\"" + base64File[0] + "\">");
+												});
+												return deferred.promise;
+											}
+										}]
+									}]
 								}]
 							}]
 						}]
@@ -121,128 +193,143 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						type: "actionbox",
 						condition: "!model.psy.questionId",
 						items: [{
-						    type: "submit",
-						    title: "Create Question"
+							type: "submit",
+							title: "Create Question"
 						}]
 					}, {
 						type: "actionbox",
 						condition: "model.psy.questionId",
 						items: [{
-						    type: "submit",
-						    title: "Update Question"
+							type: "submit",
+							title: "Update Question"
 						}, {
-						    type: "button",
+							type: "button",
 							icon: "fa fa-refresh",
 							style: "btn-default",
 							title: "Reset",
-				            onClick: function(model) {
-				                model.psy = {};
-				            }
-				        }]
+							onClick: function(model) {
+								model.psy = {};
+							}
+						}]
 					}]);
 				}, deferred.reject);
 				return deferred.promise;
 			},
-            schema: {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": {
-                    "psy": {
-                        "type": "object",
-                        "title": "psy",
-                        "properties": {
-                            "questionId": {
-                                "type": "number",
-                                "title": "QUESTION_ID"
-                            },
-                            "category": {
-                                "type": "object",
-                                "required": [],
-                                "properties": {
-                                    "categoryName": {
-                                        "type": "string",
-                                        "title": "CATEGORY"
-                                    }
-                                }
-                            },
-                            "difficulty": {
-                                "type": "string",
-                                "title": "DIFFICULTY"
-                            },
-                            "pictorial": {
-                                "type": "boolean",
-                                "title": "PICTORIAL"
-                            },
-                            "questionLang": {
-                                "type": "array",
-                                "title": "QUESTION_LANGUAGE",
-                                "items": {
-                                    "type": "object",
-                                    "required": [],
-                                    "properties": {
-                                        "langcode": {
-                                            "type": "string",
-                                            "title": "LANG_CODE"
-                                        },
-                                        "questionText": {
-                                            "type": "string",
-                                            "title": "QUESTION_TEXT"
-                                        }
-                                    }
-                                }
-                            },
-                            "options": {
-                                "type": "array",
-                                "title": "OPTIONS",
-                                "items": {
-                                    "type": "object",
-                                    "required": [],
-                                    "properties": {
-                                        "score": {
-                                            "type": "number",
-                                            "title": "SCORE"
-                                        },
-                                        "optionlang": {
-                                            "type": "array",
-                                            "title": "OPTIONS_LANGUAGE",
-                                            "items": {
-                                                "type": "object",
-                                                "required": [],
-                                                "properties": {
-                                                    "langcode": {
-                                                        "type": "string",
-                                                        "title": "LANG_CODE"
-                                                    },
-                                                    "optiontext": {
-                                                        "type": "number",
-                                                        "title": "OPTION_TEXT"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            actions: {
-                /*submit: function(model, form, formName) {
-                    Utils.confirm('Are you sure?').then(function() {
-                        PageHelper.clearErrors();
-                        PageHelper.showLoader();
-                        RolesPages.updateRole(model.roles).$promise.then(function(resp) {
-                            model.roles = resp;
-                            PageHelper.showProgress("roles-pages", "Role created/updated", 3000);
-                        }, function(err) {
-                            PageHelper.showErrors(err);
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        });
-                    });
-                }*/
-            }
-        };
-    }
+			schema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"psy": {
+						"required": ["category", "difficulty", "questionLang", "options"],
+						"type": "object",
+						"title": "psy",
+						"properties": {
+							"id": {
+								"type": "number",
+								"title": "Question ID"
+							},
+							"category": {
+								"type": "object",
+								"required": ["id"],
+								"properties": {
+									"id": {
+										"type": "number"
+									},
+									"categoryName": {
+										"type": "string",
+										"title": "Category"
+									}
+								}
+							},
+							"difficulty": {
+								"type": "string",
+								"title": "Difficulty",
+								"enum": ["LOW", "MEDIUM", "HIGH"]
+							},
+							"type": {
+								"type": "string",
+								"title": "Type",
+								"enum": ["SINGLE", "PAIRED", "LINKED"]
+							},
+							"pictorial": {
+								"type": "boolean",
+								"title": "Pictorial"
+							},
+							"active": {
+								"type": "boolean",
+								"title": "Active"
+							},
+							"questionLang": {
+								"type": "array",
+								"title": "Question Text",
+								"items": {
+									"type": "object",
+									"required": ["langCode", "questionText"],
+									"properties": {
+										"langCode": {
+											"type": [null, "string"],
+											"title": "Language Code"
+										},
+										"questionText": {
+											"type": "string",
+											"title": "Question Text"
+										}
+									}
+								}
+							},
+							"options": {
+								"type": "array",
+								"title": "Options",
+								"items": {
+									"type": "object",
+									"required": ["score", "optionlang"],
+									"properties": {
+										"score": {
+											"type": "number",
+											"title": "Score"
+										},
+										"optionlang": {
+											"type": "array",
+											"title": "Option Text",
+											"items": {
+												"type": "object",
+												"required": ["langCode", "optionText"],
+												"properties": {
+													"langCode": {
+														"type": [null, "string"],
+														"title": "Language Code"
+													},
+													"optionText": {
+														"type": "string",
+														"title": "Option Text"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			actions: {
+				submit: function(model, formCtrl, formName) {
+					$log.info(model);
+					Utils.confirm('Are you sure?').then(function() {
+						PageHelper.clearErrors();
+						PageHelper.showLoader();
+						Psychometric.postSingleQuestion(model.psy).$promise.then(function(resp) {
+							model.psy = resp;
+							PageHelper.showProgress("psychometric", "Question created/updated", 3000);
+						}, function(err) {
+							PageHelper.showErrors(err);
+						}).finally(function() {
+							PageHelper.hideLoader();
+						});
+					});
+				}
+			}
+		};
+	}
 ]);

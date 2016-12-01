@@ -10,7 +10,7 @@ themeswitch.changeTheme = function(color, saveOffline) {
 	return false;
 };
 themeswitch.getThemeColor = function(){
-	return localStorage.getItem("irfThemeColor") || 'gray';
+	return /*localStorage.getItem("irfThemeColor") ||*/ 'gray'; // TODO commented for kinara, also check header.html
 };
 themeswitch.saveThemeColor = function(color){
 	return localStorage.setItem("irfThemeColor", color);

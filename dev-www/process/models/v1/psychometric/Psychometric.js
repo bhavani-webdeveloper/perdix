@@ -31,8 +31,12 @@ irf.models.factory('Psychometric',
         }),
         postSingleQuestion: {
             method: 'POST',
-            url: endpoint + '/question/single',
+            url: endpoint + '/question/single'
         },
+        findSingleQuestion: searchResource({
+            method: 'GET',
+            url: endpoint + '/question/single/find'
+        })
     });
 
     res.getTestHttp = function(params) {
