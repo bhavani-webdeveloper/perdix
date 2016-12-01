@@ -66,6 +66,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.mobilePhone = obj.mobileNo;
                             model.customer.gender = obj.gender;
                             model.customer.firstName = obj.leadName;
+                            model.customer.maritalStatus=obj.maritalStatus;
+                            model.customer.customerBranchId=obj.branchId;
+                            model.customer.centreId=obj.centreId;
+                            model.customer.landmark=obj.addressLine2;
+                            model.customer.street=obj.addressLine1;
+                            model.customer.pincode=obj.pincode;
+                            model.customer.district=obj.district;
+                            model.customer.state=obj.state;
+                            model.customer.locality=obj.area;
+                            model.customer.villageName=obj.cityTownVillage;
+                            model.customer.landLineNo=obj.alternateMobileNo;
+                            model.customer.dateOfBirth=obj.dob;
+                            model.customer.age=obj.age;
+                            model.customer.landLineNo = obj.alternateMobileNo;
                         },
                         "origination-stage": function(bundleModel, model, obj){
                             model.currentStage = obj
