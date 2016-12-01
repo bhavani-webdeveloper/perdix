@@ -15,6 +15,20 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         return true;
     }
 
+    var populateDisbursementSchedule=function (value,form,model){
+        PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+        model.loanAccount.disbursementSchedules=[];
+        for(var i=0;i<value;i++){
+            model.loanAccount.disbursementSchedules.push({
+                trancheNumber:""+(i+1),
+                disbursementAmount:0
+            });
+        }
+        if (value ==1){
+            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmountRequested;
+        }
+    }
+
     var navigateToQueue = function(model){
         if(model.currentStage=='Screening')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
@@ -36,7 +50,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
     return {
         "type": "schema-form",
-        "title": "REVIEW",
+        "title": "SANCTION",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
@@ -73,122 +87,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             
         },
         form: [
-            {
-                "type": "box",
-                "title": "LOAN_DETAILS",
-                "items": [
-                    {
-                        "key": "loanAccount.interestRate",
-                        "type": "number",
-                        "title": "INTEREST_RATE"
-                    },
-                    {
-                        "key": "loanAccount.securityEmi",
-                        "type": "amount",
-                        "title": "SECURITY_EMI"
-                    },
-                    {
-                        "key": "loanAccount.loanAmount",
-                        "type": "amount",
-                        "title": "LOAN_AMOUNT"
-                    },
-                    {
-                        "key": "loanAccount.processingFeePercentage",
-                        "type": "number",
-                        "title": "PROCESSING_FEES_IN_PERCENTAGE"
-                    },
-                    {
-                        "key": "loanAccount.commercialCibilCharge",
-                        "type": "amount",
-                        "title": "COMMERCIAL_CIBIL_CHARGE"
-                    },
-                    {
-                        "key":"loanAccount.portfolioInsuranceUrn",
-                        "title":"URN_NO"
-                    },
-                    {
-                        "key": "loanAccount.interestRate",
-                        "type": "number",
-                        "title": "INTEREST_RATE"
-                    },
-                    {
-                        "type": "fieldset",
-                        "title": "DISBURSEMENT_DETAILS",
-                        "items": [
-                            {
-                                key:"loanAccount.sanctionDate",
-                                type:"date",
-                                title:"SANCTION_DATE"
-                            },
-                            {
-                                key:"loanAccount.numberOfDisbursements",
-                                title:"NUM_OF_DISBURSEMENTS",
-                                onChange:function(value,form,model){
-                                    populateDisbursementSchedule(value,form,model);
-                                }
-                            },
-                            {
-                                key:"loanAccount.disbursementSchedules",
-                                title:"DISBURSEMENT_SCHEDULES",
-                                add:null,
-                                remove:null,
-                                items:[
-                                    {
-                                        key:"loanAccount.disbursementSchedules[].trancheNumber",
-                                        title:"TRANCHE_NUMBER",
-                                        readonly:true
-                                    },
-                                    {
-                                        key:"loanAccount.disbursementSchedules[].disbursementAmount",
-                                        title:"DISBURSEMENT_AMOUNT",
-                                        type:"amount"
-                                    },
-                                    {
-                                        key: "loanAccount.disbursementSchedules[].tranchCondition",
-                                        type: "lov",
-                                        autolov: true,
-                                        title:"TRANCHE_CONDITION",
-                                        bindMap: {
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model, context) {
-                                            
-                                            var trancheConditions = formHelper.enum('tranche_conditions').data;
-                                            var out = [];
-                                            for (var i=0;i<trancheConditions.length; i++){
-                                                var t = trancheConditions[i];
-                                                var min = _.hasIn(t, "field1")?parseInt(t.field1) - 1: 0;
-                                                var max = _.hasIn(t, "field2")?parseInt(t.field2) - 1: 100;
-
-                                                if (context.arrayIndex>=min && context.arrayIndex <=max){
-                                                    out.push({
-                                                        name: trancheConditions[i].name,
-                                                        value: trancheConditions[i].value
-                                                    })    
-                                                }
-                                            }
-                                            return $q.resolve({
-                                                headers: {
-                                                    "x-total-count": out.length
-                                                },
-                                                body: out
-                                            });
-                                        },
-                                        onSelect: function(valueObj, model, context){
-                                            model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.name
-                                            ];
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
+            
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;

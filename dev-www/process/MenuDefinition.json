@@ -15,7 +15,8 @@
 				"Page/Engine/loans.individual.screening.FieldAppraisalQueue",
 				"Page/Engine/loans.individual.screening.FieldAppraisalReviewQueue",
 				"Page/Engine/loans.individual.screening.CentralRiskReviewQueue",
-				"Page/Engine/loans.individual.screening.CreditCommitteeReviewQueue"
+				"Page/Engine/loans.individual.screening.CreditCommitteeReviewQueue",
+				"Page/Engine/loans.individual.screening.LoanSanctionQueue"
 			]
 		},
 		{
