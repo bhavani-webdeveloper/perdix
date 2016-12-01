@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, $stateParams,  Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -12,7 +12,11 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
 
                 model.lead = model.lead || {};
-                //model.branchId = SessionStore.getBranchId() + '';
+                model.lead.leadInteractions = [{
+                    "interactionDate": Utils.getCurrentDate(),
+                    "loanOfficerId": SessionStore.getUsername() + ''
+                }];
+                //model.branchId = SessionStore.getUsername() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                 model = Utils.removeNulls(model, true);
                 model.lead.branchId = SessionStore.getBranchId() + '';
@@ -39,7 +43,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             _.assign(model.lead, res);
                             if (model.lead.currentStage == 'Inprocess') {
                                 model.lead.leadInteractions1 = model.lead.leadInteractions;
-                                model.lead.leadInteractions = [{}];
+                                model.lead.leadInteractions = [{
+                                    "interactionDate": Utils.getCurrentDate(),
+                                    "loanOfficerId": SessionStore.getUsername() + ''
+                                }];
                             }
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
@@ -306,33 +313,32 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                 } else {
                                     model.lead.leadStatus = "Incomplete";
                                 }
-                                if(model.lead.interestedInProduct==='YES')
-                                {
-                                    model.lead.productCategory="Asset";
-                                    model.lead.productSubCategory="Loan";
+                                if (model.lead.interestedInProduct === 'YES') {
+                                    model.lead.productCategory = "Asset";
+                                    model.lead.productSubCategory = "Loan";
                                 }
                             }
                             //onChange: "actions.changeStatus(modelValue, form, model)",
                     }, {
                         key: "lead.productCategory",
                         condition: "model.lead.interestedInProduct==='YES'",
-                        readonly:true,
-                       /* type: "select",
+                        readonly: true,
+                        /* type: "select",
 
-                        "Liability": "Liability",
-                            "others": "others"
-                            "investment": "investment"
-                        titleMap: {
-                            "Asset": "Asset",
-                        }*/
+                         "Liability": "Liability",
+                             "others": "others"
+                             "investment": "investment"
+                         titleMap: {
+                             "Asset": "Asset",
+                         }*/
                     }, {
                         key: "lead.productSubCategory",
                         condition: "model.lead.interestedInProduct==='YES'",
-                        readonly:true,
-                       /* type: "select",
-                        titleMap: {
-                            "Loan": "Loan",
-                        }*/
+                        readonly: true,
+                        /* type: "select",
+                         titleMap: {
+                             "Loan": "Loan",
+                         }*/
                     }, {
                         key: "lead.loanAmountRequested",
                         type: "amount",
@@ -490,8 +496,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
                             type: "date",
+                            readonly: true,
                         }, {
                             key: "lead.leadInteractions[].loanOfficerId",
+                            readonly: true,
                         }, {
                             key: "lead.leadInteractions[].typeOfInteraction",
                             type: "select",
