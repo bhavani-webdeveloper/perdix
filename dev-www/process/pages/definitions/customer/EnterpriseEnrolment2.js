@@ -1813,7 +1813,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.machinery[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW?",
+                                title:"IS_THE_MACHINE_NEW",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },

@@ -286,16 +286,16 @@
                                 "type": ["integer","null"]
                             },
                             "businessInvolvement": {
-                                "type": "string"
+                                "type": ["string","null"]
                             },
                             "partnerOfAnyOtherCompany": {
-                                "type": "string"
+                                "type": ["string","null"]
                             },
                             "otherBusinessClosed": {
-                                "type": "string"
+                                "type": ["string","null"]
                             },
                             "otherBusinessClosureDate": {
-                                "type": "string"
+                                "type": ["string","null"]
                             }
                         },
                         "required": [
@@ -308,7 +308,7 @@
                     }
                 },
                 "enterpriseId": {
-                    "type": "integer"
+                    "type": ["integer","null"]
                 },
                 "enterprises": {
                     "type": "object",
