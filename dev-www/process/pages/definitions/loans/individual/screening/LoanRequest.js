@@ -256,9 +256,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "ESTIMATED_DATE_OF_COMPLETION"
                     },
                     {
-                       key: "loanAccount.loanPurpose1",
+                       key: "loanAccount.productCategory",
                        title:"PRODUCT_TYPE",
-                       readonly:true
+                       readonly:true,
+                       condition:"model.currentStage!='Application'"
+                    },
+                    {
+                       key: "loanAccount.productCategory",
+                       title:"PRODUCT_TYPE",
+                       type:"select",
+                       enumCode:"loan_purpose_1",
+                       condition:"model.currentStage=='Application'"
                     },
                     {
                         key: "loanAccount.customerSignDateExpected",
