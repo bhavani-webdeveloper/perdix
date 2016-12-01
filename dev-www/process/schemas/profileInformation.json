@@ -157,6 +157,10 @@
                     "type": ["string","null"],
                     "title": "DOOR_NO"
                 },
+                "careOf": {
+                    "type": ["string","null"],
+                    "title": "CARE_OF"
+                },
                 "enrollmentCheckerApprovedDate": {
                     "type": ["string","null"]
                 },
@@ -622,6 +626,82 @@
                                 "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
+                            }
+                        },
+                        "required": [
+                            "amountInPaisa",
+                            "instituteType",
+                            "instrumentType",
+                            "nameOfInstitution",
+                            "frequencyOfDeposite"
+                        ]
+                    }
+                },
+                "financialSummaries": {
+                    "type": "array",
+                    "title": "FINANCIAL_SUMMARY",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "sales": {
+                                "type": ["integer","null"],
+                                "title": "SALES",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "purchases": {
+                                "type": ["integer","null"],
+                                "title": "PURCHASES",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "operatingExpenses": {
+                                "type": ["number","null"],
+                                "title": "OPERATNG_EXPENSES",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "householdExpenses": {
+                                "type": ["number","null"],
+                                "title": "HOUSEHOLD_EXPENSES",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "fixedObligations": {
+                                "type": ["number","null"],
+                                "title": "FIXED_OBLIGATIONS",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "netBusinessIncome": {
+                                "type": ["number","null"],
+                                "title": "NET_BUSINESS_INCOME",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "otherIncome": {
+                                "type": ["number","null"],
+                                "title": "OTHER_INCOME",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "disposableIncome": {
+                                "type": ["number","null"],
+                                "title": "DISPOSABLE_INCOME",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "instalmentAmount": {
+                                "type": ["number","null"],
+                                "title": "INSTALLMENT_AMOUNT",
+                                "minimum": 1,
+                                "maximum": 100000000
+                            },
+                            "availableSurplus": {
+                                "type": ["integer","null"],
+                                "title": "AVAILABLE_SURPLUS",
+                                "minimum": 1,
+                                "maximum": 100000000
                             }
                         },
                         "required": [
@@ -1413,6 +1493,16 @@
                             "accountNumber": {
                                 "type": ["string","null"],
                                 "title": "ACCOUNT_NUMBER"
+                            },
+                            "confirmedAccountNumber": {
+                                "type": ["string","null"],
+                                "title": "CONFIRMED_ACCOUNT_NUMBER"
+                            },
+                            "limit": {
+                                "type": ["integer","null"],
+                                "title": "LIMIT",
+                                "minimum": 0,
+                                "maximum": 100000000
                             },
                             "accountType": {
                                 "type": ["string","null"],

@@ -626,6 +626,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     fileType:"image/*"
                                 },
                                 {
+                                    "key": "customer.existingLoan",
+                                    "title": "EXISTING_LOAN",
+                                    "type": "radios",
+                                    enumCode:"decisionmaker",
+                                    condition:"model._bundlePageObj.pageClass=='applicant'"
+                                },
+                                {
                                     "key": "customer.title",
                                     "title": "TITLE",
                                     "type": "select",
@@ -776,6 +783,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     fileType:"image/*"
                                 },
                                 {
+                                    "key": "customer.existingLoan",
+                                    "title": "EXISTING_LOAN",
+                                    "type": "radios",
+                                    enumCode:"decisionmaker",
+                                    condition:"model._bundlePageObj.pageClass=='applicant'"
+                                },
+                                {
                                     "key": "customer.title",
                                     "title": "TITLE",
                                     "type": "select"
@@ -862,6 +876,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     type: "fieldset",
                                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                                     items: [
+                                        "customer.careOf",
                                         "customer.doorNo",
                                         "customer.street",
                                         "customer.postOffice",
@@ -1006,6 +1021,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     type: "fieldset",
                                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                                     items: [
+                                        "customer.careOf",
                                         "customer.doorNo",
                                         "customer.street",
                                         "customer.postOffice",
