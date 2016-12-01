@@ -1460,7 +1460,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.otherBusinessIncomes[].incomeSource",
                                         title: "INCOME_SOURCE",
-                                        type: "select"
+                                        type: "select",
+                                        enumCode:"occupation"
                                     },
                                     {
                                         key: "customer.otherBusinessIncomes[].amount",
@@ -1758,7 +1759,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key: "customer.otherBusinessIncomes[].incomeSource",
                                     title: "INCOME_SOURCE",
-                                    type: "select"
+                                    type: "select",
+                                    enumCode:"occupation"
                                 },
                                 {
                                     key: "customer.otherBusinessIncomes[].amount",
