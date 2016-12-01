@@ -15,8 +15,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     "subTitle": "",
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                         model.currentStage = bundleModel.currentStage;
-                        model.customer.identityProof = "Pan Card";
-                        model.customer.addressProof= "Aadhar Card";
+                       
                         if (_.hasIn(model, 'loanRelation')){
                             console.log(model.loanRelation);
                             var custId = model.loanRelation.customerId;
@@ -33,12 +32,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         } else {
                             model.customer = model.customer || {};
                             //model.branchId = SessionStore.getBranchId() + '';
-
                             model.customer.date = model.customer.date || Utils.getCurrentDate();
                             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-
                             model = Utils.removeNulls(model,true);
                             //model.customer.kgfsName = SessionStore.getBranch();
+                            model.customer.identityProof = "Pan Card";
+                            model.customer.addressProof= "Aadhar Card";
                             model.customer.customerType = 'Individual';
                             BundleManager.pushEvent("on-customer-load", {name: "11"})
 
@@ -57,6 +56,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         if (bundlePageObj){
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
+
                     },
                     eventListeners: {
                         "test-listener": function(bundleModel, model, obj){
