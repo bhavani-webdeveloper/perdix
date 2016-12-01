@@ -48,6 +48,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 .$promise
                 .then(function (resp){
 
+                    model.loanSummary = resp;
+
 
                 },function (errResp){
 
@@ -78,27 +80,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         items:[]
                     },
                     {
-                        "type": "section",
-                        "htmlClass": "row",
-                        "items": [
-                        {
-                            "type": "section",
-                            "htmlClass": "col-sm-3",
-                            "items": [{
-                                "title": "STATUS",
-                                "readonly": true
-                            }]
-                        },
-                        {
-                            "type": "section",
-                            "htmlClass": "col-sm-6",
-                            "items": [{
-                                "title": "REMARKS",
-                                "readonly": true
-                            }]
-                        }]
-                    },
-                    {
                         "type":"array",
                         title: "REMARKS",
                         "view": "fixed",
@@ -115,7 +96,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 "htmlClass": "col-sm-3",
                                 "items": [{
                                     "key": "loanSummary[].status",
-                                    "notitle": true,
+                                    "title": "STATUS",
                                     "readonly": true
                                 }]
                             },
@@ -124,7 +105,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 "htmlClass": "col-sm-6",
                                 "items": [{
                                     "key": "loanSummary[].remarks",
-                                    "notitle": true,
+                                    "title": "REMARKS",
                                     "readonly": true
                                 }]
                             }]
