@@ -443,7 +443,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         type: "array",
                         add: null,
                         remove: null,
-                        title: "LEAD_INTERACTIONS",
+                        title: "Interaction History",
                         items: [{
                             key: "lead.leadInteractions1[].interactionDate",
                             type: "date",
