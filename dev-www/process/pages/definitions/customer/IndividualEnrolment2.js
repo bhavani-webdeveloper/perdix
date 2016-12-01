@@ -1071,8 +1071,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "items": [
                                         {
                                             "key": "customer.otherBusinessIncomes[].incomeSource",
-                                            "type": "amount",
-                                            "title": "AMOUNT"
+                                            //"type": "amount",
+                                            enumCode:"expenditure",
+                                            //"title": "AMOUNT",
+                                            "title": "INCOME_SOURCE"
                                         }
                                     ]
                                 },
