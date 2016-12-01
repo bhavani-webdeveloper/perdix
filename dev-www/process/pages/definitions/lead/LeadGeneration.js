@@ -22,13 +22,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 model.lead.branchId = SessionStore.getBranchId() + '';
                 $log.info("lead generation page got initiated");
 
-                /*for (i in model.lead.leadInteractions)
-                {
-                    i.interactionDate=Utils.getCurrentDate();
-                    $log.info("printing i");
-                    $log.info(model.lead.leadInteractions);
-                }*/
-
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
@@ -41,6 +34,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
+                            if (model.lead.currentStage == 'Incomplete') {
+                                model.lead.leadInteractions = [{
+                                    "interactionDate": Utils.getCurrentDate(),
+                                    "loanOfficerId": SessionStore.getUsername() + ''
+                                }];
+                            }
+
+
                             if (model.lead.currentStage == 'Inprocess') {
                                 model.lead.leadInteractions1 = model.lead.leadInteractions;
                                 model.lead.leadInteractions = [{
@@ -66,11 +67,13 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     "title": "LEAD_PROFILE",
                     "items": [{
                             key: "lead.branchId",
+                            readonly:true,
                             type: "select",
                         }, {
                             key: "lead.centreId",
                             type: "select",
                             parentEnumCode: "branch_id",
+                            parentValueExpr:"model.lead.branchId",
                             screenFilter: true
                         }, {
                             key: "lead.id",
