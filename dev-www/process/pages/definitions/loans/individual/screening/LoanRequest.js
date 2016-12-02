@@ -630,7 +630,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         titleMap: {
                             "REJECT": "REJECT",
                             "SEND_BACK": "SEND_BACK",
-                            "PROCEED": "PROCEED"
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
                         }
                     },
                     {
@@ -649,6 +650,25 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: "REJECT",
                                 required: true,
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='HOLD'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.holdButton(model, formCtrl, form, $event)"
                             }
                         ]
                     },
@@ -763,6 +783,31 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 .then(function(res){
                                     model.loanAccount = res.loanAccount;
                                     BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                }, function(httpRes){
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function(httpRes){
+                                    PageHelper.hideLoader();
+                                })
+                        }
+                    );
+            },
+            holdButton: function(model, formCtrl, form, $event){
+                $log.info("Inside save()");
+                /* TODO Call save service for the loan */
+                Utils.confirm("Are You Sure?")
+                    .then(
+                        function(){
+                            
+                            var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                            reqData.loanAccount.status = 'HOLD';
+                            reqData.loanProcessAction = "SAVE";
+                            PageHelper.showLoader();
+                            IndividualLoan.create(reqData)
+                                .$promise
+                                .then(function(res){
+                                    BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                    return navigateToQueue(model);
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })

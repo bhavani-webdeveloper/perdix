@@ -14,53 +14,156 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
         		"type": "page-bundle",
         		"title": "LOAN_BOOKING_BUNDLE",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
-        		"bundlePages": [
-        			{
-			            pageName: 'customer.IndividualEnrolment2',
-			            title: 'APPLICANT',
-			            pageClass: 'applicant',
-			            minimum: 1,
-			            maximum: 1
-			        },
-			        {
-			            pageName: 'customer.IndividualEnrolment2',
-			            title: 'CO_APPLICANT',
-			            pageClass: 'co-applicant',
-			            minimum: 0,
-			            maximum: 3
-			        },
-			        {
-			            pageName: 'customer.IndividualEnrolment2',
-			            title: 'GUARANTOR',
-			            pageClass: 'guarantor',
-			            minimum: 0,
-			            maximum: 3
-			        },
-			        {
-			            pageName: 'customer.EnterpriseEnrolment2',
-			            title: 'BUSINESS',
-			            pageClass: 'business',
-			            minimum: 1,
-			            maximum: 1
-			        },
-                    {
-                        pageName: 'loans.individual.screening.CBCheck',
-                        title: 'CB_CHECK',
-                        pageClass: 'cb-check',
-                        minimum: 1,
-                        maximum: 1
-                    },
-                    {
-                        pageName: 'loans.individual.screening.LoanRequest',
-                        title: 'LOAN_REQUEST',
-                        pageClass: 'loan-request',
-                        minimum: 1,
-                        maximum: 1
-                    }
-        		],
+        		"bundlePages": [],
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     bundleModel.currentStage = "Screening";
+                    var deferred = $q.defer();
+
+                    var $this = this;
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
+                        PageHelper.showLoader();
+                        bundleModel.loanId = $stateParams.pageId;
+                        IndividualLoan.get({id: bundleModel.loanId})
+                            .$promise
+                            .then(
+                                function(res){
+                                    var applicant;
+                                    var coApplicants = [];
+                                    var guarantors = [];
+                                    var business;
+                                    var urnNos = [];
+
+                                    for (var i=0; i<res.loanCustomerRelations.length; i++){
+                                        var cust = res.loanCustomerRelations[i];
+                                        if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
+                                            applicant = cust;
+                                            urnNos.push(cust.urn);
+                                        } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
+                                            coApplicants.push(cust);
+                                            urnNos.push(cust.urn);
+                                        } else if (cust.relation == 'GUARANTOR'){
+                                            guarantors.push(cust);
+                                        }
+                                    }
+
+                                    $this.bundlePages.push({
+                                        pageName: 'customer.IndividualEnrolment2',
+                                        title: 'APPLICANT',
+                                        pageClass: 'applicant',
+                                        minimum: 1,
+                                        maximum: 1,
+                                        model: {
+                                            loanRelation: applicant
+                                        }
+                                    });
+
+                                    for (var i=0;i<coApplicants.length; i++){
+                                        $this.bundlePages.push({
+                                            pageName: 'customer.IndividualEnrolment2',
+                                            title: 'CO_APPLICANT',
+                                            pageClass: 'co-applicant',
+                                            minimum: 1,
+                                            maximum: 1,
+                                            model: {
+                                                loanRelation: coApplicants[i]
+                                            }
+                                        });
+                                    }
+
+                                    for (var i=0;i<guarantors.length; i++){
+                                        $this.bundlePages.push({
+                                            pageName: 'customer.IndividualEnrolment2',
+                                            title: 'GUARANTOR',
+                                            pageClass: 'guarantor',
+                                            minimum: 1,
+                                            maximum: 1,
+                                            model: {
+                                                loanRelation: guarantors[i]
+                                            }
+                                        });
+                                    }
+
+                                    $this.bundlePages.push({
+                                        pageName: 'customer.EnterpriseEnrolment2',
+                                        title: 'BUSINESS',
+                                        pageClass: 'business',
+                                        minimum: 1,
+                                        maximum: 1,
+                                        model: {
+                                            loanRelation: {customerId:res.customerId}
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageName: 'loans.individual.screening.LoanRequest',
+                                        title: 'LOAN_REQUEST',
+                                        pageClass: 'loan-request',
+                                        minimum: 1,
+                                        maximum: 1,
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+                                    
+                                    deferred.resolve();
+                                }, function(httpRes){
+                                    deferred.reject();
+                                    PageHelper.showErrors(httpRes);
+                                }
+                            )
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    } else {
+                        $this.bundlePages = [
+                            {
+                                pageName: 'customer.IndividualEnrolment2',
+                                title: 'APPLICANT',
+                                pageClass: 'applicant',
+                                minimum: 1,
+                                maximum: 1
+                            },
+                            {
+                                pageName: 'customer.IndividualEnrolment2',
+                                title: 'CO_APPLICANT',
+                                pageClass: 'co-applicant',
+                                minimum: 0,
+                                maximum: 3
+                            },
+                            {
+                                pageName: 'customer.IndividualEnrolment2',
+                                title: 'GUARANTOR',
+                                pageClass: 'guarantor',
+                                minimum: 0,
+                                maximum: 3
+                            },
+                            {
+                                pageName: 'customer.EnterpriseEnrolment2',
+                                title: 'BUSINESS',
+                                pageClass: 'business',
+                                minimum: 1,
+                                maximum: 1
+                            },
+                            {
+                                pageName: 'loans.individual.screening.CBCheck',
+                                title: 'CB_CHECK',
+                                pageClass: 'cb-check',
+                                minimum: 1,
+                                maximum: 1
+                            },
+                            {
+                                pageName: 'loans.individual.screening.LoanRequest',
+                                title: 'LOAN_REQUEST',
+                                pageClass: 'loan-request',
+                                minimum: 1,
+                                maximum: 1
+                            }
+                        ];
+
+                        deferred.resolve();
+                    }
+                    return deferred.promise;
 
                 },
                 "post_pages_initialize": function(bundleModel){
