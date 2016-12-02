@@ -129,11 +129,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.Screening', {
+								entityManager.setModel('loans.individual.screening.ScreeningInput', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.Screening",
+									pageName: "loans.individual.screening.ScreeningInput",
 									pageId: item.loanId
 								});
 							},
