@@ -68,6 +68,6 @@
 				"Page/Engine/management.RolesPages"
 			]
 		},
-		"Page/Engine/bi.BIReports"
+		"Page/ReportsDashboard"
 	]
 }
