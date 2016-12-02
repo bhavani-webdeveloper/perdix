@@ -2194,6 +2194,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.physicalAssets[].vehicleModel",
                                             title: "VEHICLE_MAKE_MODEL",
+                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
                                             type: "string"
                                         },
                                         {
