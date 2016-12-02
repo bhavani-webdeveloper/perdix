@@ -118,7 +118,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "key": "customer.centreId",
                                             "type": "select",
                                             "screenFilter": true,
-                                            "parentEnumCode": "branch_id"
+                                            "parentEnumCode": "branch_id",
                                         }
                                     },
                                     "outputMap": {
@@ -601,7 +601,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                      "parentCode": "branch_id"
                                      },*/
                                     parentEnumCode:"branch_id",
-                                    parentValueExpr:"model.customer.customerBranchId"
                                 },
                                 {
                                     key: "customer.oldCustomerId",
