@@ -83,6 +83,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LoanOriginationDashboardCtrl"
 	},{
+		name: "Page.LUCDashboard",
+		url: "/LUCDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "LUCDashboardCtrl"
+	},{
 		name: "Page.PsychometricTest",
 		url: "/PsychometricTest/:participantId/:applicationId",
 		templateUrl: "process/pages/templates/Psychometric.Test.html",
