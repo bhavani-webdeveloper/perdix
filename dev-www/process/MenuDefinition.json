@@ -4,17 +4,7 @@
 		"Page/Landing",
 		"Page/LeadDashboard",
 		"Page/LoanOriginationDashboard",
-		{
-			"title": "LUC",
-			"iconClass": "fa fa-check-square-o",
-			"items": [
-				"Page/Engine/loans.individual.luc.LucRiskQueue",
-				"Page/Engine/loans.individual.luc.LucLegalRecoveryQueue",
-				"Page/Engine/loans.individual.luc.LucScheduleQueue",
-				"Page/Engine/loans.individual.luc.LucRescheduledQueue",
-				"Page/Engine/loans.individual.luc.LucData"
-			]
-		},
+		"Page/LUCDashboard",
 		{
 			"title": "CUSTOMER",
 			"iconClass": "fa fa-user",
