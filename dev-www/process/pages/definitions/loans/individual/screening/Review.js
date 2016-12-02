@@ -75,41 +75,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "type": "box",
                 "items": [
                     {
-                        type:"fieldset",
-                        title:"SCREENING_SCORE_REVIEW",
-                        items:[]
-                    },
-                    {
-                        "type":"array",
-                        title: "REMARKS",
-                        "view": "fixed",
-                        "key": "loanSummary",
-                        "add": null,
-                        "remove": null,
-                        "items": [
-                        {
-                            "type": "section",
-                            "htmlClass": "row",
-                            "items": [
-                            {
-                                "type": "section",
-                                "htmlClass": "col-sm-3",
-                                "items": [{
-                                    "key": "loanSummary[].status",
-                                    "title": "STATUS",
-                                    "readonly": true
-                                }]
-                            },
-                            {
-                                "type": "section",
-                                "htmlClass": "col-sm-6",
-                                "items": [{
-                                    "key": "loanSummary[].remarks",
-                                    "title": "REMARKS",
-                                    "readonly": true
-                                }]
+                        type:"tableview",
+                        key:"loanSummary",
+                        title:"REMARKS_HISTORY",
+                        selectable: false,
+                        getActions:function (){
+                            return [];
+
+                        },
+                        getColumns: function(){
+                            return [{
+                                title: 'STATUS',
+                                data: 'status'
+                            }, {
+                                title: 'REMARKS',
+                                data: 'remarks'
                             }]
-                        }]
+                        }
                     }
                 ]
             }

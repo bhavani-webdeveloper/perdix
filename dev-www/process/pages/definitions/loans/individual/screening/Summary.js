@@ -46,108 +46,29 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 "colClass": "col-sm-12",
                 "items": [
                             {
-                                type:"fieldset",
-                                title:"SCREENING_SCORE_REVIEW",
-                                items:[]
-                            },
-                            {
-                                key:"customer.firstName",
-                                title:"CUSTOMER_NAME",
-                                readonly:true,
-                                type:"string",
-                            },
-                            {
-                                key:"customer.urnNo",
-                                title:"URN_NO",
-                                readonly:true,
-                                type:"string",
-                            },
-                            {
-                                "type":"array",
-                                title: "RELATIONSHIP_TO_BUSINESS",
-                                "view": "fixed",
-                                "key": "ScoreDetails[0].Parameters",
-                                "add": null,
-                                "remove": null,
-                                "items": [
-                                {
-                                    "type": "section",
-                                    "htmlClass": "row",
-                                    "items": [
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title": "PARAMETER",
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title": "VALUE",
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title": "SCORE",
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "title": "RESULT",
-                                            "readonly": true
-                                        }]
-                                    }]
+                                type:"tableview",
+                                key:"ScoreDetails[0].Parameters",
+                                title:"SCORING_DETAILS",
+                                selectable: false,
+                                getActions:function (){
+                                    return [];
+
                                 },
-                                {
-                                    "type": "section",
-                                    "htmlClass": "row",
-                                    "items": [
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "key": "ScoreDetails[0].Parameters[].ParameterName",
-                                            "notitle": true,
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "key": "ScoreDetails[0].Parameters[].UserInput",
-                                            "notitle": true,
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "key": "ScoreDetails[0].Parameters[].ParamterScore",
-                                            "notitle": true,
-                                            "readonly": true
-                                        }]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3",
-                                        "items": [{
-                                            "key": "ScoreDetails[0].Parameters[].ParameterPassStatus",
-                                            "notitle": true,
-                                            "readonly": true
-                                        }]
+                                getColumns: function(){
+                                    return [{
+                                        title: 'PARAMETER',
+                                        data: 'ParameterName'
+                                    }, {
+                                        title: 'VALUE',
+                                        data: 'UserInput'
+                                    }, {
+                                        title: 'SCORE',
+                                        data: 'ParamterScore'
+                                    },{
+                                        title: 'RESULT',
+                                        data: 'ParameterPassStatus'
                                     }]
-                                }]
+                                }
                             },
                             {
                                 type:"fieldset",
