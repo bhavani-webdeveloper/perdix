@@ -156,6 +156,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 .then(function(res){
                                                     PageHelper.showProgress("customer-load", "Done..", 5000);
                                                     model.customer = Utils.removeNulls(res, true);
+                                                    model.customer.identityProof = "Pan Card";
+                                                    model.customer.addressProof= "Aadhar Card";
                                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                                 }, function(httpRes){
                                                     PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
@@ -1147,8 +1149,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "items": [
                                         {
                                             "key": "customer.familyMembers[].relationShip",
-                                            "type": "select",
-                                            "readonly": true
+                                            "type": "select"
                                         },
                                         {
                                             "key": "customer.familyMembers[].educationStatus",
