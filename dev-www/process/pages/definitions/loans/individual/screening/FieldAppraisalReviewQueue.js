@@ -15,6 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 				searchForm: [
 					"*"
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',

@@ -15,6 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 				searchForm: [
 					"*"
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
