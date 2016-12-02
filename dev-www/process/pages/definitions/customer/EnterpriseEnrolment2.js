@@ -364,8 +364,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_LINE",
                         type: "select",
                         enumCode: "businessLine",
-                        parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessType"
+                        parentEnumCode: "businessType"
 
                     },
                     {
@@ -373,16 +372,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
-                        parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessLine"
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector",
-                        parentEnumCode: "businessSector",
-                        parentValueExpr:"model.customer.enterprise.businessSector"
+                        parentEnumCode: "businessSector"
                     },
                     {
                         key: "customer.enterprise.itrAvailable",
