@@ -105,6 +105,22 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                             loanAccount: res
                                         }
                                     });
+
+                                    $this.bundlePages.push({
+                                        pageName: 'customer.IndividualEnrolment2',
+                                        title: 'CO_APPLICANT',
+                                        pageClass: 'co-applicant',
+                                        minimum: 0,
+                                        maximum: 3
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageName: 'customer.IndividualEnrolment2',
+                                        title: 'GUARANTOR',
+                                        pageClass: 'guarantor',
+                                        minimum: 0,
+                                        maximum: 3
+                                    });
                                     
                                     deferred.resolve();
                                 }, function(httpRes){
