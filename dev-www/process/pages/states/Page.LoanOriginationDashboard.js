@@ -7,6 +7,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             "iconClass": "fa fa-users",
             "items": [
                 "Page/Bundle/loans.individual.screening.ScreeningInput",
+                "Page/Engine/loans.individual.screening.ScreeningQueue",
                 "Page/Engine/loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/psychometric.Queue",
                 "Page/Engine/loans.individual.booking.ApplicationQueue",
@@ -23,6 +24,24 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             $scope.dashboardDefinition = resp;
             var branchId = SessionStore.getBranchId();
             var branchName = SessionStore.getBranch();
+
+            var sqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningQueue"];
+            if (sqMenu) {
+                IndividualLoan.search({
+                    'stage': 'Screening',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    sqMenu.data = response.headers['x-total-count'];
+                }, function() {
+                    sqMenu.data = '-';
+                });
+            }
 
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
