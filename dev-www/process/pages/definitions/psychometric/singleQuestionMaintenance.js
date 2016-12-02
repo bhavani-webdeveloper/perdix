@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							getListDisplayItem: function(item, index) {
 								return [
 									item.category.categoryName,
-									item.questionLang[0].questionText
+									item.questionLangs[0].questionText
 								];
 							}
 						}, {
@@ -97,11 +97,11 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}, {
 							key: "psy.pictorial",
 							onChange: function(modelValue, form, model) {
-								model.psy.questionLang = [];
+								model.psy.questionLangs = [];
 								model.psy.options = [];
 							}
 						}, {
-							key: "psy.questionLang",
+							key: "psy.questionLangs",
 							type: "array",
 							startEmpty: true,
 							items: [{
@@ -111,7 +111,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 									type: "section",
 									htmlClass: "col-sm-4",
 									items: [{
-										key: "psy.questionLang[].langCode",
+										key: "psy.questionLangs[].langCode",
 										type: "select",
 										notitle: true,
 										titleMap: languagesTitleMap
@@ -120,12 +120,12 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 									type: "section",
 									htmlClass: "col-sm-8",
 									items: [{
-										key: "psy.questionLang[].questionText",
+										key: "psy.questionLangs[].questionText",
 										condition: "!model.psy.pictorial",
 										type: "textarea",
 										notitle: true
 									}, {
-										key: "psy.questionLang[].questionText",
+										key: "psy.questionLangs[].questionText",
 										condition: "model.psy.pictorial",
 										type: "file",
 										fileType: "image/*",
@@ -148,7 +148,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							items: [{
 								key: "psy.options[].score",
 							}, {
-								key: "psy.options[].optionlang",
+								key: "psy.options[].optionLangs",
 								type: "array",
 								startEmpty: true,
 								items: [{
@@ -158,7 +158,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 										type: "section",
 										htmlClass: "col-sm-4",
 										items: [{
-											key: "psy.options[].optionlang[].langCode",
+											key: "psy.options[].optionLangs[].langCode",
 											type: "select",
 											titleMap: languagesTitleMap,
 											notitle: true
@@ -167,12 +167,12 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 										type: "section",
 										htmlClass: "col-sm-8",
 										items: [{
-											key: "psy.options[].optionlang[].optionText",
+											key: "psy.options[].optionLangs[].optionText",
 											condition: "!model.psy.pictorial",
 											type: "textarea",
 											notitle: true
 										}, {
-											key: "psy.options[].optionlang[].optionText",
+											key: "psy.options[].optionLangs[].optionText",
 											condition: "model.psy.pictorial",
 											type: "file",
 											fileType: "image/*",
@@ -220,7 +220,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 				"type": "object",
 				"properties": {
 					"psy": {
-						"required": ["category", "difficulty", "questionLang", "options"],
+						"required": ["category", "difficulty", "questionLangs", "options"],
 						"type": "object",
 						"title": "psy",
 						"properties": {
@@ -259,7 +259,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 								"type": "boolean",
 								"title": "Active"
 							},
-							"questionLang": {
+							"questionLangs": {
 								"type": "array",
 								"title": "Question Text",
 								"items": {
@@ -282,13 +282,13 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 								"title": "Options",
 								"items": {
 									"type": "object",
-									"required": ["score", "optionlang"],
+									"required": ["score", "optionLangs"],
 									"properties": {
 										"score": {
 											"type": "number",
 											"title": "Score"
 										},
-										"optionlang": {
+										"optionLangs": {
 											"type": "array",
 											"title": "Option Text",
 											"items": {
