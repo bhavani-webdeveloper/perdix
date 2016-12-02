@@ -1,12 +1,27 @@
+<style>
+        svg {
+            display: block;
+            width: 100%;
+			margin: 5px;
+        }
+        .bi-chart {
+            height: 300px;
+			width: 100%;
+        }
+    </style>
 <div>
-  <section ng-hide="error" class="content-header">
-    <h1>
+  <!-- <section ng-hide="error" class="content-header">
+	<h1>
       <span><a href style="color:#333">Page Title</a></span>
       <small>Small Title</small>
     </h1>
   </section>
 
-  <section class="content">
+  <section class="content">-->
+    <div class="row">
+      <!-- <irf-dashboard-box definition="dashboardDefinition"></irf-dashboard-box> -->
+    </div>
+	<!--
     <div class="row">
       <div class="col-sm-6">
 
@@ -26,6 +41,78 @@
         </div>
 
       </div>
-    </div>
-  </section>
+    </div> -->
+	<div class="row">
+  
+	<!--<div ng-repeat="ReportValue in dataset" >	-->
+	
+	<uib-tabset active="active" class="bundle-tabset">
+    	<uib-tab class="tab-theme uib-tab nav-item" select="onTabLoad(TabNames.menu_id, $index)" ng-repeat="TabNames in TabDefinition.ReportData" heading="{{ TabNames.menu_name }}">
+		
+		<section ng-hide="error" class="content-header"></section>
+		<div ng-repeat="SingleReport in ResultDataSet[$index]" class="content">
+			<div class="{{ SingleReport.ClassName }}">
+				<div class="box box-theme">
+					
+					<div class="box-header with-border">
+	                  <h3 class="box-title">{{ SingleReport.TableTitle }}</h3>
+					  <div class="box-tools pull-right">
+	                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+	                  </div>
+	                </div><!-- /.box-header -->
+					
+					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'SimpleTable'">
+						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+						<tr>
+							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						</tr>
+						<tr ng-repeat="row in RepeatTables">
+							<td ng-repeat="col in row">{{ col }}</td>
+						</tr>
+						</table>
+					</div>
+					
+					
+					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'TwoDimensional'">
+						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+						<tr>
+							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						</tr>
+						<tr ng-repeat="row in RepeatTables">
+							<td ng-repeat="col in row">{{ col }}</td>
+						</tr>
+						</table>
+					</div>
+					
+					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'Merge'">
+						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+						<tr>
+							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						</tr>
+						<tr ng-repeat="row in RepeatTables">
+							<td ng-repeat="col in row">{{ col }}</td>
+						</tr>
+						</table>
+					</div>
+					
+										
+					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'CHART'">
+						
+						<div id="{{SingleReport.ChartIDName}}" class="bi-chart"><svg></svg></div>					
+    					
+					</div>
+					
+					<!--<div class="overlay" ng-hide="myVar">
+						<i class="fa fa-refresh fa-spin"></i>
+					</div>-->
+				</div>
+	 		</div>		
+		</div>
+		
+		</uib-tab>
+	</uib-tabset>
+	<!--</div>-->
+	</div>
+  <!--</section>-->
 </div>
