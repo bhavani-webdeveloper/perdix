@@ -726,7 +726,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             save: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
                 /* TODO Call save service for the loan */
-                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
@@ -738,6 +737,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 .$promise
                                 .then(function(res){
                                     model.loanAccount = res.loanAccount;
+                                    BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })
