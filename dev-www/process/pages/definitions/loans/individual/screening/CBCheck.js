@@ -102,7 +102,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: 'button',
                                 "condition":"model.customer.loanSaved",
                                 title: 'Submit for CBCheck',
-                                "onClick": "actions.save(model.customer.applicantid,'AOR',model.customer.loanAmount, model.customer.loanPurpose1)"
+                                "onClick": "actions.save(model.customer.applicantid,'BASE',model.customer.loanAmount, model.customer.loanPurpose1)"
                             },
                             {
                                 key:"customer.coapplicants",
@@ -123,7 +123,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     type: 'button',  
                                     title: 'Submit for CBCheck',
                                     "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
-                                    "onClick": "actions.save(model.customer.applicantid,'AOR',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
+                                    "onClick": "actions.save(model.customer.applicantid,'BASE',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
                                 }]
                             }
                             ]
