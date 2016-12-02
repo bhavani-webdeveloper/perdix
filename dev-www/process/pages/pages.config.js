@@ -93,6 +93,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Psychometric.Test.html",
 		controller: "PsychometricTestCtrl"
 	},{
+		name: "Page.ReportsDashboard",
+		url: "/ReportsDashboard",
+		templateUrl: "process/pages/templates/ReportsDashboard.html",
+		controller: "ReportsDashboardCtrl"
+	},{
 		name: "Page.Reports",
 		url: "/Reports/:pageId",
 		templateUrl: "process/pages/templates/Reports.html",
