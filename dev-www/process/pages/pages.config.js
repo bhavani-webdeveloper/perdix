@@ -10,6 +10,10 @@ irf.HOME_PAGE = {
 	}
 };
 
+irf.goHome = function($state) {
+	$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+};
+
 irf.pages.config([
 	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC",
 	function($stateProvider, elemConfig, Model_ELEM_FC) {

@@ -1,8 +1,8 @@
 <div class="psychometric-page">
 	<div ng-show="error" class="alert alert-danger alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%);">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-		<h4><i class="icon fa fa-ban">&nbsp;</i>{{ error.errorCode || error.error }}</h4>
-		{{ error.errorMsg || error.message }}
+		<h4><i class="icon fa fa-ban">&nbsp;</i>{{ error.errorCode?error.errorCode:error.error }}</h4>
+		{{ error.errorMsg?error.errorMsg:error.message }}
 	</div>
   <section class="content">
     <div class="row">

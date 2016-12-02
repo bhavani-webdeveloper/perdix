@@ -15,8 +15,10 @@ irf.pages.factory("PsychometricTestService", ["$q", "$state", "$rootScope", func
 	};
 }]);
 irf.pages.controller("PsychometricTestCtrl",
-	["$log", "$scope", "SessionStore", "$stateParams", "Psychometric", "$element", "$timeout", "Queries", "PsychometricTestService", "PageHelper",
-	function($log, $scope, SessionStore, $stateParams, Psychometric, $element, $timeout, Queries, PsychometricTestService, PageHelper){
+["$log", "$scope", "SessionStore", "$state", "$stateParams", "Psychometric", "$element", "$timeout", "Queries",
+"PsychometricTestService", "PageHelper",
+function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $element, $timeout, Queries,
+	PsychometricTestService, PageHelper){
 	$log.info("PsychometricTest loaded");
 
 	$scope.participantId = $stateParams.participantId;
@@ -30,6 +32,13 @@ irf.pages.controller("PsychometricTestCtrl",
 		$scope.participantCustomer = resp.ids[$scope.participantId]['first_name'];
 	});
 */
+
+	if (!PsychometricTestService.deferred()) {
+		$log.error("Psychometric Test Service Requested through invalid route");
+		irf.goHome($state);
+		return;
+	}
+
 	$scope.currentIndex = 0;
 	$scope.indexText = function() {
 		var i = $scope.currentIndex + 1;
