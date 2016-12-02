@@ -28,6 +28,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 IndividualLoan.get({
                     id: resp.applicationId
                 }, function(reqData) {
+                    reqData.psychometricCompleted = 'Completed';
                     IndividualLoan.update({
                         loanProcessAction: 'PROCEED',
                         loanAccount: reqData

@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
+irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 ["$log", "SessionStore", "PageHelper", "formHelper", "Utils", "Psychometric", "$q", "elementsUtils",
 	function($log, SessionStore, PageHelper, formHelper, Utils, Psychometric, $q, elementsUtils) {
 
@@ -29,7 +29,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 					$log.info(languages);
 					deferred.resolve([{
 						"type": "box",
-						"title": "Question 1",
+						"title": "Question",
 						"items": [{
 							key: "psy1.id",
 							type: "lov",
@@ -56,16 +56,27 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							searchHelper: formHelper,
 							search: function(inputModel, form, model) {
 								if (!inputModel.active) delete inputModel.active;
-								return Psychometric.findSingleQuestion(inputModel).$promise;
+								return Psychometric.findQuestions(inputModel).$promise;
 							},
 							getListDisplayItem: function(item, index) {
 								return [
 									item.category.categoryName,
-									item.questionLangs1.questionText
+									item.questionLangs[0].questionText
 								];
 							},
 							onSelect: function(result, model, context) {
-								model.psy1 = result;
+								if (result.type === 'SINGLE') {
+									model.psy1 = resp;
+								} else if (result.type === 'PAIRED') {
+									Psychometric.getPairedQuestions({id:result.id}, function(resp) {
+										model.psy1 = resp[0];
+										model.psy2 = resp[1];
+									});
+								} else if (result.type === 'LINKED') {
+									Psychometric.getLinkedQuestion({id:result.id}, function(resp) {
+										model.psy1 = resp;
+									});
+								}
 							}
 						}, {
 							key: "psy1.category.categoryName",
@@ -93,6 +104,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							}
 						}, {
 							key: "psy1.type",
+							condition: "!model.psy1.id",
 							type: "radios",
 							onChange: function(modelValue, form, model) {
 								model.psy1.pictorial = false;
@@ -101,6 +113,11 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 								model.psy2.type = model.psy1.type;
 								model.psy2.difficulty = model.psy1.difficulty;
 							}
+						}, {
+							key: "psy1.type",
+							condition: "model.psy1.id",
+							type: "radios",
+							readonly: true
 						}, {
 							key: "psy1.difficulty",
 							type: "radios",
@@ -122,7 +139,6 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}, {
 							key: "psy1.questionLangs",
 							type: "array",
-							startEmpty: true,
 							items: [{
 								type: "section",
 								htmlClass: "row",
@@ -163,7 +179,6 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}, {
 							key: "psy1.options",
 							type: "array",
-							startEmpty: true,
 							items: [{
 								key: "psy1.options[].optionScore",
 							}, {
@@ -206,12 +221,60 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 										}]
 									}]
 								}]
+							}, {
+								key: "psy1.options[].linkedOptions",
+								condition: "model.psy1.type === 'LINKED'",
+								type: "array",
+								startEmpty: true,
+								items: [{
+									key: "psy1.options[].linkedOptions[].optionScore",
+								}, {
+									key: "psy1.options[].linkedOptions[].optionLangs",
+									type: "array",
+									startEmpty: true,
+									items: [{
+										type: "section",
+										htmlClass: "row",
+										items: [{
+											type: "section",
+											htmlClass: "col-sm-4",
+											items: [{
+												key: "psy1.options[].linkedOptions[].optionLangs[].langCode",
+												type: "select",
+												titleMap: languagesTitleMap,
+												notitle: true
+											}]
+										}, {
+											type: "section",
+											htmlClass: "col-sm-8",
+											items: [{
+												key: "psy1.options[].linkedOptions[].optionLangs[].optionText",
+												condition: "!model.psy1.pictorial",
+												type: "textarea",
+												notitle: true
+											}, {
+												key: "psy1.options[].linkedOptions[].optionLangs[].optionText",
+												condition: "model.psy1.pictorial",
+												type: "file",
+												fileType: "image/*",
+												notitle: true,
+												customHandle: function(file, progress, modelValue, form, model) {
+													var deferred = $q.defer();
+													elementsUtils.fileToBase64(file).then(function(base64File) {
+														deferred.resolve("<img src=\"" + base64File1 + "\">");
+													});
+													return deferred.promise;
+												}
+											}]
+										}]
+									}]
+								}]
 							}]
 						}]
 					}, {
 						"type": "box",
-						"title": "Question 2",
-						"condition": "model.psy1.type === 'PAIRED' || model.psy1.type === 'LINKED'",
+						"title": "Paired Question",
+						"condition": "model.psy1.type === 'PAIRED'",
 						"items": [{
 							key: "psy2.id",
 							type: "number",
@@ -230,7 +293,6 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}, {
 							key: "psy2.questionLangs",
 							type: "array",
-							startEmpty: true,
 							items: [{
 								type: "section",
 								htmlClass: "row",
@@ -256,7 +318,6 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}, {
 							key: "psy2.options",
 							type: "array",
-							startEmpty: true,
 							items: [{
 								key: "psy2.options[].optionScore",
 							}, {
@@ -310,7 +371,10 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 							}
 						}]
 					}]);
-				}, deferred.reject);
+				}, function(errResp) {
+					PageHelper.showProgress("psychometric", "Service Unreachable. Contact Administrator", 3000);
+					deferred.reject(errResp);
+				});
 				return deferred.promise;
 			},
 			schema: {
@@ -318,7 +382,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 				"type": "object",
 				"properties": {
 					"psy1": {
-						"required": ["category", "difficulty", "questionLangs", "options"],
+						"required": ["category", "type", "difficulty", "questionLangs", "options"],
 						"type": "object",
 						"title": "psy",
 						"properties": {
@@ -403,6 +467,41 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 													}
 												}
 											}
+										},
+										"linkedOptions": {
+											"type": "array",
+											"title": "Linked Options",
+											"items": {
+												"type": "object",
+												"properties": {
+													"linkedOptionId": {
+														"type": "number",
+														"title": "Linked Option ID"
+													},
+													"optionScore": {
+														"type": "number",
+														"title": "Score"
+													},
+													"optionLangs": {
+														"type": "array",
+														"title": "Option Text",
+														"items": {
+															"type": "object",
+															"required": ["langCode", "optionText"],
+															"properties": {
+																"langCode": {
+																	"type": [null, "string"],
+																	"title": "Language Code"
+																},
+																"optionText": {
+																	"type": "string",
+																	"title": "Option Text"
+																}
+															}
+														}
+													},
+												}
+											}
 										}
 									}
 								}
@@ -410,7 +509,7 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 						}
 					},
 					"psy2": {
-						"required": ["category", "difficulty", "questionLangs", "options"],
+						"required": ["category", "type", "difficulty", "questionLangs", "options"],
 						"type": "object",
 						"title": "psy",
 						"properties": {
@@ -522,7 +621,18 @@ irf.pageCollection.factory(irf.page("psychometric.singleQuestionMaintenance"),
 								PageHelper.hideLoader();
 							});
 						} else if (model.psy1.type==='PAIRED') {
-
+							Psychometric.postPairedQuestions([model.psy1, model.psy2]).$promise.then(function(resp) {
+								model.psy1 = resp[0];
+								model.psy2 = resp[1];
+								PageHelper.showProgress("psychometric", "Question created/updated", 3000);
+							}, function(err) {
+								$log.info(err);
+								err.error = err.errorCode || err.error;
+								err.message = err.errorMsg || err.message;
+								PageHelper.setError({message: err.error + ": " + err.message});
+							}).finally(function() {
+								PageHelper.hideLoader();
+							});
 						}
 					});
 				}

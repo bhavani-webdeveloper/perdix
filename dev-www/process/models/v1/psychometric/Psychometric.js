@@ -33,10 +33,32 @@ irf.models.factory('Psychometric',
             method: 'POST',
             url: endpoint + '/question/single'
         },
-        findSingleQuestion: searchResource({
+        findQuestions: searchResource({
             method: 'GET',
-            url: endpoint + '/question/single/find'
-        })
+            url: endpoint + '/question/find'
+        }),
+        getSingleQuestion: {
+            method: 'GET',
+            url: endpoint + '/question/single/:id'
+        },
+        getPairedQuestions: {
+            method: 'GET',
+            url: endpoint + '/question/paired/:id',
+            isArray: true
+        },
+        postPairedQuestions: {
+            method: 'POST',
+            url: endpoint + '/question/paired',
+            isArray: true
+        },
+        getLinkedQuestion: {
+            method: 'GET',
+            url: endpoint + '/question/linked/:id'
+        },
+        postLinkedQuestion: {
+            method: 'POST',
+            url: endpoint + '/question/linked'
+        }
     });
 
     res.getTestHttp = function(params) {
