@@ -12,15 +12,18 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
 
                 model.lead = model.lead || {};
+                model.lead.branchName = SessionStore.getBranch();
+                model.lead.branchId = SessionStore.getBranch();
+                
                 model.lead.leadInteractions = [{
                     "interactionDate": Utils.getCurrentDate(),
                     "loanOfficerId": SessionStore.getUsername() + ''
                 }];
-                //model.branchId = SessionStore.getUsername() + '';
                 model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                 model = Utils.removeNulls(model, true);
-                model.lead.branchId = SessionStore.getBranchId() + '';
+               
                 $log.info("lead generation page got initiated");
+                
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -68,7 +71,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     "title": "LEAD_PROFILE",
                     "items": [{
                             key: "lead.branchId",
-                            readonly:true,
                             type: "select",
                         }, {
                             key: "lead.centreId",
