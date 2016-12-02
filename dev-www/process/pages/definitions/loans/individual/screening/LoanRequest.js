@@ -270,6 +270,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "!model.loanAccount.customerId",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
                     }
                 ]
             },
@@ -325,13 +331,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.percentageInterestSaved",
                         type: "number",
                         title: "PERCENTAGE_INTEREST_SAVED"
-                    },
-                    {
-                        "type": "section",
-                        "htmlClass": "alert alert-warning",
-                        "condition": "!model.loanAccount.customerId",
-                        "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
-                    },
+                    }
                 ]
             },
             {
@@ -597,6 +597,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "POST_REVIEW",
+                "condition": "model.loanAccount.id",
                 "items": [
                     {
                         key: "review.action",
