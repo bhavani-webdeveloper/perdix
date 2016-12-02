@@ -630,6 +630,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "key": "customer.existingLoan",
                                     "title": "EXISTING_LOAN",
                                     "type": "radios",
+                                    required:true,
                                     enumCode:"decisionmaker",
                                     condition:"model._bundlePageObj.pageClass=='applicant'"
                                 },
@@ -877,7 +878,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     type: "fieldset",
                                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                                     items: [
-                                        "customer.careOf",
+                                    {
+                                      key:"customer.careOf",
+                                      required:true  
+                                    },
                                         "customer.doorNo",
                                         "customer.street",
                                         "customer.postOffice",
