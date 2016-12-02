@@ -273,7 +273,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
-                        title: "LOAN_AMOUNTREQUESTED"
+                        title: "LOAN_AMOUNT_REQUESTED"
                     },
                     {
                         key: "loanAccount.frequencyRequested",

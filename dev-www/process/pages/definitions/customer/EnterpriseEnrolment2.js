@@ -362,8 +362,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
-                        type: "select",
-                        enumCode: "businessLine",
+                        type: "radios",
+                        enumCode: "business_line",
                         parentEnumCode: "businessType"
 
                     },
@@ -1257,7 +1257,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].paymentTerms",
                                 title: "PAYEMNT_TERMS",
-                                type: "number"
+                                type: "select",
+                                enumCode: "payment_terms"
                             },
                             {
                                 key: "customer.buyerDetails[].product",
@@ -2002,7 +2003,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.machinery[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW?",
+                                title:"IS_THE_MACHINE_NEW",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
