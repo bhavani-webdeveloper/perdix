@@ -877,6 +877,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNo",
+                                    "title": "WHATSAPP_MOBILE_NO",
+                                     "type":"radios",
+                                     "titleMap": {
+                                         1: "Mobile Phone",
+                                         2: "Phone 2",
+                                         3: "Other"
+                                     },
+                                },
+                                {
+                                    "type": "string",
+                                    "condition":"model.customer.whatsAppMobileNo1 == 3 ",
+                                    "key": "customer.whatsAppMobileNo1",
                                     "title": "WHATSAPP_MOBILE_NO"
                                 },
                                 {
@@ -1025,6 +1037,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNo",
+                                    "title": "WHATSAPP_MOBILE_NO",
+                                     "type":"radios",
+                                     "titleMap": {
+                                         1: "Mobile Phone",
+                                         2: "Phone 2",
+                                         3: "Other"
+                                     },
+                                },
+                                {
+                                    "type": "string",
+                                    "condition":"model.customer.whatsAppMobileNo1 == 3 ",
+                                    "key": "customer.whatsAppMobileNo1",
                                     "title": "WHATSAPP_MOBILE_NO"
                                 },
                                 {
