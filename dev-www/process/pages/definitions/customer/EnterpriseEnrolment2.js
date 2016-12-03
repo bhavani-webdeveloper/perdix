@@ -44,6 +44,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 //model.branchId = SessionStore.getBranchId() + '';
                 //model.customer.kgfsName = SessionStore.getBranch();
                 model.customer.customerType = "Enterprise";
+                var branch1 = formHelper.enum('branch_id').data;
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].name) == SessionStore.getBranch()) {
+                        model.customer.customerBranchId = branch1[i].value;
+                    }
+                }
                 model.customer.enterpriseCustomerRelations = [];
             }
             
@@ -229,7 +235,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         /*filter: {
                             "parentCode": "model.branch_id"
                         },*/
-                        parentEnumCode:"branch_id"
+                        parentValueExpr:"model.customer.customerBranchId",
+                        parentEnumCode:"branch_id",
                     },
                     {
                         key: "customer.oldCustomerId",
@@ -527,6 +534,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.id",
                         condition: "model.customer.id",
                         title:"ENTITY_ID",
+                        parentEnumCode:"branch_id",
+                        parentValueExpr:"model.customer.customerBranchId",
                         readonly: true
                     },
                     {
