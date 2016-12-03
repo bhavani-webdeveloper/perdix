@@ -87,16 +87,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
             } else {
                 model.customer = model.customer || {};
-                //model.branchId = SessionStore.getBranchId() + '';
-                //model.customer.kgfsName = SessionStore.getBranch();
                 model.customer.customerType = "Enterprise";
-
                 model.loanAccount = {};
                 model.loanAccount.loanCustomerRelations = [];
-
-                /* TODO REMOVE THIS CODE.. TEMP CODE ONLY */
-                //model.loanAccount.productCode = 'TLAPS';
-                //model.loanAccount.tenure = 12;
                 model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";    
@@ -117,8 +110,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         eventListeners: {
             "new-applicant": function(bundleModel, model, params){
                 $log.info("Inside new-applicant of LoanRequest");
-                // model.loanAccount.applicant = params.customer.id;
-                /* Assign more customer information to show */
                 var addToRelation = true;
                 for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                     if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
@@ -695,7 +686,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     "ApplicationReview" : "ApplicationReview",
                                     "FieldAppraisal" : "FieldAppraisal",
                                     "FieldAppraisalReview" : "FieldAppraisalReview",
-                                    "CentralRiskReview" : "CentralRiskReview"
+                                    "CentralRiskReview" : "CentralRiskReview",
+                                    "CreditCommitteeReview" : "CreditCommitteeReview"
                                 }
                             },
                             {
