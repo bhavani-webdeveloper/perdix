@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("management.ForceLogout"),
-["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+["$log", "$q","Logout","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper",
-function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
+function($log, $q, Logout,Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper){
 
     var branch = SessionStore.getBranch();
@@ -12,7 +12,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
-            model.ScoreDetails = [];
+            model.customer = model.customer|| {};
             model.customer = {};
             if (_.hasIn(model, 'cbModel')){
 
@@ -52,12 +52,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                 title:"",
                                 items:[
                                     {
-                                        "key":"ScoreDetails[0].UserID",
+                                        "key":"customer.userId",
                                         "title":"User ID",
                                       //  readonly:true
                                     },
                                     {
-                                        "key":"ScoreDetails[0].UserName",
+                                        "key":"customer.userName",
                                         "title":"User Name",
                                         //readonly:true
                                     }
@@ -66,29 +66,54 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         ]
             },
            {
-                    type: "actionbox",
-                    key:"ScoreDetails[0].submit",
-                    items: [
-                        {
-                            type: "submit",
-                            title: "Submit"
-                        }
-                    ]
-            },                 
+                    "type": "actionbox",
+                    "items": [{
+                        "type": "submit",
+                        "title": "Submit"
+                    }]
+                },             
             
         ],
-
-        schema: function() {
-            return SchemaResource.getLoanAccountSchema().$promise;
-        },
+        schema: 
+                {
+                  "$schema": "http://json-schema.org/draft-04/schema#",
+                  "type": "object",
+                  "properties": {
+                    "customer": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                        "userId": {
+                      "type": "string"
+                  },
+                  "userName": {
+                      "type": "string"
+                  }, 
+                    }
+                    
+              }
+          }
+             
+          },
         actions: {
-            save: function(customerId, CBType, loanAmount, loanPurpose){
+            submit: function(model, form, formName){
                 $log.info("Inside submit()");
-                $log.warn(model);
+                Logout.forceLogOut({
+                            userId: model.customer.userId
+                        }).$promise.then(
+                                function(response) {
+                                    PageHelper.hideLoader();
+                                    PageHelper.showProgress("forcelogout", "Done.", 2000);
+                                },
+                                function(errorResponse) {
+                                    PageHelper.hideLoader();
+                                    PageHelper.showErrors(errorResponse);
+                                }
+                            ); 
             }
         }
 
-    };
+    }
 }
 
 ]);

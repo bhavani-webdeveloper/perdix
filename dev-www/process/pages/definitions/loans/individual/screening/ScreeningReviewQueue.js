@@ -48,7 +48,17 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                     "pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"
-	                    }
+	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
+
 
 					},
 					"required": []
@@ -67,7 +77,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,	                    
+	                    'villageName':searchOptions.villageName,
+	                    'status':searchOptions.status,                   
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,

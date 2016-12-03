@@ -45,13 +45,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedQueue"),
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": {
+	                    "screeningDate": 
+	                    {
 	                        "title": "SCREENING_DATE",
 	                        "type": "string",
 	                        "x-schema-form": {
 	                            "type": "date"
 	                        }
-	                    }
+	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
+
 					},
 					"required": []
 				},
@@ -69,6 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedQueue"),
 	                    'screeningDate':searchOptions.screeningDate,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
+	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

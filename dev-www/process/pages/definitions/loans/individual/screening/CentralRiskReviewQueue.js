@@ -65,6 +65,16 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                        "title": "PIN_CODE",
 	                        "type": "string",   
 	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
+
 					},
 					"required": []
 				},
@@ -83,6 +93,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
+	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
 	                    'branchName': branchName,
 	                    'centreCode': searchOptions.centre,

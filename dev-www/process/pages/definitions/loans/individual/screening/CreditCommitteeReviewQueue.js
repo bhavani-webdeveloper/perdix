@@ -66,6 +66,16 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 	                        "type": "string",
 	                        
 	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
+
 					},
 					"required": []
 				},
@@ -86,6 +96,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
 	                    'branchName': branchName,
+	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

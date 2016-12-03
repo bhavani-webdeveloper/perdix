@@ -49,7 +49,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                    "status": {
+	                    "status": 
+	                    {
                             "type":"string",
                             "title":"STATUS",
                             "enumCode": "origination_status",

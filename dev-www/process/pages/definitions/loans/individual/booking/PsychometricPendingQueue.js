@@ -50,7 +50,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PsychometricPendin
 	                        "x-schema-form": {
 	                            "type": "date"
 	                        }
-	                    }
+	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
+
 					},
 					"required": []
 				},
@@ -69,6 +79,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PsychometricPendin
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
+	                    'status':searchOptions.status,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
