@@ -2,6 +2,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
 		return {
 			"type": "search-list",
 			"title": "APPLICATION_QUEUE",
@@ -57,6 +62,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.ApplicationQueue")
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Application',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

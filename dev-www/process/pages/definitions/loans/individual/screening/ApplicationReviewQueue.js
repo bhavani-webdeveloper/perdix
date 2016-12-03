@@ -2,7 +2,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
-		return {
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
+		return { 
 			"type": "search-list",
 			"title": "APPLICATION_REVIEW_QUEUE",
 			"subTitle": "",
@@ -57,6 +62,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

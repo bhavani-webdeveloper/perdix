@@ -2,6 +2,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
 		return {
 			"type": "search-list",
 			"title": "SCREENING_REVIEW_QUEUE",
@@ -56,6 +61,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
+						'centreCode':centreId[0],
+	                    'branchName':branch,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

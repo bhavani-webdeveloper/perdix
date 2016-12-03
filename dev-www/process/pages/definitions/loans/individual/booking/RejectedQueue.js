@@ -3,6 +3,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
 		return {
 			"type": "search-list",
 			"title": "REJECTED_QUEUE",
@@ -59,12 +64,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.RejectedQueue"),
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Rejected',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch,
 	                    'screeningDate':searchOptions.screeningDate,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
-
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;

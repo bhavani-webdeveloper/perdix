@@ -2,6 +2,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
 		return {
 			"type": "search-list",
 			"title": "FIELD_APPRAISAL_REVIEW_QUEUE",
@@ -57,6 +62,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisalReview',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

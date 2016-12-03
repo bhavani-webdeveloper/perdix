@@ -63,8 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                    },
 	                    "pincode": {
 	                        "title": "PIN_CODE",
-	                        "type": "string",
-	                        
+	                        "type": "string",   
 	                    },
 					},
 					"required": []
