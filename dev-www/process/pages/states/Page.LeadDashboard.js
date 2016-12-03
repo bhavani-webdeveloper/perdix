@@ -8,18 +8,23 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         "iconClass": "fa fa-book",
         "items": [
             "Page/Engine/lead.LeadBulkUpload",
-            "Page/Engine/lead.LeadGeneration",
             "Page/Engine/lead.leadAssignmentPendingQueue",
-            "Page/Engine/lead.ReadyForScreeningQueue",
+            "Page/Engine/lead.IncompleteLeadQueue",
+            "Page/Engine/lead.LeadGeneration",
             "Page/Engine/lead.LeadFollowUpQueue",
-            "Page/Engine/lead.IncompleteLeadQueue"
+            "Page/Engine/lead.ReadyForScreeningQueue",   
         ]
     };
 
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
-        $scope.dashboardDefinition = resp;
+        $scope.dashboardDefinition = resp; 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
+        var centres = SessionStore.getCentres();
+        var centreName=[];
+        for (var i = 0; i < centres.length; i++) {
+            centreName.push(centres[i].centreName);
+        }
 
         var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.leadAssignmentPendingQueue"];
         if (lapqMenu) {
@@ -44,6 +49,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             Lead.search({
                 'branchName': branchName,
                 'currentStage': "Inprocess",
+                'centreName': centreName[0],
                 'leadName': '',
                 'area': '',
                 'cityTownVillage': '',
@@ -61,6 +67,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         if (ilqMenu) {
             Lead.search({
                 'branchName': branchName,
+                'centreName': centreName[0],
                 'currentStage': "Incomplete",
                 'leadName': '',
                 'area': '',
@@ -79,6 +86,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         if (rfqMenu){
             Lead.search({
                 'branchName': branchName,
+                'centreName': centreName[0],
                 'currentStage': "ReadyForScreening",
                 'leadName': '',
                 'area': '',
