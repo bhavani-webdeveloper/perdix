@@ -674,22 +674,103 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: "textarea",
                                 required: true
                             },
-                            {
-                                key: "review.targetStage",
-                                required: true,
-                                type: "select",
-                                title: "SEND_BACK_TO_STAGE",
-                                titleMap: {
-                                    "Screening" : "Screening",
-                                    "ScreeningReview" : "ScreeningReview",
-                                    "Application" : "Application",
-                                    "ApplicationReview" : "ApplicationReview",
-                                    "FieldAppraisal" : "FieldAppraisal",
-                                    "FieldAppraisalReview" : "FieldAppraisalReview",
-                                    "CentralRiskReview" : "CentralRiskReview",
-                                    "CreditCommitteeReview" : "CreditCommitteeReview"
-                                }
-                            },
+                   {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'ScreeningReview'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+
+                    },
+                }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'Application'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                    }
+                },{
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'Psychometric'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                    }
+                },  {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'ApplicationReview'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                    }
+                }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'FieldAppraisal'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                    }
+                }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'FieldAppraisalReview'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                        "FieldAppraisal": "FieldAppraisal",
+                    }
+                }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'CentralRiskReview'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                        "FieldAppraisal": "FieldAppraisal",
+                        "FieldAppraisalReview": "FieldAppraisalReview",
+                    },
+                } ,{
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type:"select",
+                    condition: "model.currentStage == 'CreditCommitteeReview'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                        "FieldAppraisal": "FieldAppraisal",
+                        "FieldAppraisalReview": "FieldAppraisalReview",
+                        "CentralRiskReview": "CentralRiskReview"
+                    },
+                },
                             {
                                 key: "review.sendBackButton",
                                 type: "button",
