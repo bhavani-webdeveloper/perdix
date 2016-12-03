@@ -11,6 +11,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
+                model.lead.customerType="Enterprise";
 
                 model.lead.leadInteractions = [{
                     "interactionDate": Utils.getCurrentDate(),

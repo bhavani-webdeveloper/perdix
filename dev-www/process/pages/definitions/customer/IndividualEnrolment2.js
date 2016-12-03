@@ -661,6 +661,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.dateOfBirth",
+                                    required:true,
                                     type:"date",
                                     "onChange": function(modelValue, form, model) {
                                         if (model.customer.dateOfBirth) {
@@ -671,6 +672,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.age",
                                     title: "AGE",
+                                    required:true,
                                     type:"number",
                                     "onChange": function(modelValue, form, model) {
                                         if (model.customer.age > 0) {
@@ -702,6 +704,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.maritalStatus",
+                                    required:true,
                                     type:"select"
                                 },
                                 {
@@ -1163,6 +1166,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             "key": "customer.familyMembers[].educationStatus",
+                                            readonly:true,
                                             "title": "EDUCATION_LEVEL",
                                             "type": "select"
                                         }
@@ -1316,6 +1320,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     {
                                         key:"customer.familyMembers[].educationStatus",
                                         type:"select",
+                                        required:true,
                                         title: "T_EDUCATION_STATUS"
                                     },
                                     {
@@ -1564,6 +1569,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     items:[
                                         {
                                             key:"customer.ownership",
+                                            required:true,
                                             type:"select"
                                         },
                                         {
@@ -1574,6 +1580,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
                                             type:"select",
+                                            required:true,
                                             title: "IN_CURRENT_AREA_SINCE"
                                         }
                                     ]
@@ -1743,6 +1750,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                                     type: "amount",
+                                                    required:true,
                                                     title: "TOTAL_DEPOSITS"
                                                 },
                                                 {
@@ -1758,11 +1766,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                                     type: "amount",
+                                                    required:true,
                                                     title: "NO_OF_CHEQUE_BOUNCED"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                                     type: "amount",
+                                                    required:true,
                                                     title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                                 },
                                             ]

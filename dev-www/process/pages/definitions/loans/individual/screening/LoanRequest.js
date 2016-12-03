@@ -256,18 +256,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
                         type: "radios",
+                        required:true,
                         enumCode: "decisionmaker",
                         title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
                     },
                     {
                         key: "loanAccount.estimatedValueOfAssets",
                         type: "amount",
+                        required:true,
                         condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
                         title: "ESTIMATED_VALUE_OF_ASSETS"
                     },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
+                        required:true,
                         title: "LOAN_AMOUNT_REQUESTED"
                     },
                     {
@@ -278,11 +281,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.tenureRequested",
+                        required:true,
                         type: "number",
                         title: "TENURE_REQUESETED"
                     },
                     {
                         key: "loanAccount.emiRequested",
+                        required:true,
                         type: "amount",
                         title: "EMI_REQUESTED"
                     },
@@ -328,6 +333,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                        key: "loanAccount.productCategory",
                        title:"PRODUCT_TYPE",
+                       required:true,
                        type:"select",
                        enumCode:"loan_purpose_1",
                        condition:"model.currentStage=='Application'"
@@ -368,52 +374,62 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.newassetdetails[].machine",
                                 title:"MACHINE",
+                                required:true,
                                 type: "string"
                             },
                             {
                                 key: "loanAccount.newassetdetails[].purchasePrice",
                                 title:"PURCHASE_PRICE",
+                                required:true,
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].expectedIncome",
                                 title:"EXPECTED_INCOME",
+                                required:true,
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].manfactureName",
                                 title:"MANFACTURE_NAME",
+                                required:true,
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineType",
                                 title:"MACHINE_TYPE",
+                                required:true,
                                 type: "select",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineModel",
                                 title:"MACHINE_MODEL",
+                                required:true,
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].serialNo",
                                 title:"SERIAL_NO",
+                                required:true,
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
+                                required:true,
                                 type: "Date",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machinePermanentlyfixedtobuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
+                                required:true,
                                 enumCode: "decisionmaker"
                             },
                             {
                                 key: "loanAccount.newassetdetails[].hypothecatedtoKinara",
                                 title:"HYPOTHECATED_TO_KINARA",
+                                required:true,
                                 type: "select",
                             },
 
@@ -480,6 +496,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         "key": "loanAccount.loanAmount",
                         "type": "amount",
+                        required:true,
                         "title": "LOAN_AMOUNT"
                     },
                     {

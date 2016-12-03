@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
 
-    var branch = SessionStore.getBranch();
+    var branch = SessionStore.getBranch(); 
 
     var validateRequest = function(req){
         for (var i=0; i<req.customer.customerBankAccounts.length; i++){
@@ -253,6 +253,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.referredBy",
                         title:"REFERRED_BY",
+                        required:true,
                         type: "select",
                         enumCode: "referredBy"
                     },
@@ -280,6 +281,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.ownership",
                         title: "OWNERSHIP",
                         type: "select",
+                        required:true,
                         enumCode: "ownership"
                     },
                     {
@@ -291,6 +293,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.businessHistory",
                         title: "BUSINESS_HISTORY",
+                        required:true,
                         type: "select",
                         enumCode: "business_history"
                     },
@@ -491,6 +494,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.enterpriseCustomerRelations[].businessInvolvement",
                                 title: "BUSINESS_INVOLVEMENT",
+                                required:true,
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
@@ -575,6 +579,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                        key: "customer.enterprise.companyOperatingSince",
                        title:"OPERATING_SINCE",
+                       required:true,
                        type: "date"
                     },
                     {
@@ -830,12 +835,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                        key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
                        type: "select",
+                       required:true,
                        enumCode: "years_in_present_area",
                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
                     },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
                         type: "select",
+                        required:true,
                         enumCode: "years_in_current_address",
                         title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     }
@@ -1001,11 +1008,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                         type: "amount",
+                                        required:true,
                                         title: "NO_OF_CHEQUE_BOUNCED"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
+                                        required:true,
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                 ]
@@ -1095,6 +1104,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
                                         type: "amount",
+                                        required:true,
                                         title: "TOTAL_DEPOSITS"
                                     },
                                     {
@@ -2108,6 +2118,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.electricityAvailable",
                         title:"ELECTRICITY_AVAIALBLE",
+                        required:true,
                         enumCode: "decisionmaker"
                     },
                     {
@@ -2224,6 +2235,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.spaceAvailable",
                         title:"SPACE_AVAILABLE",
+                        required:true,
                         enumCode: "decisionmaker"
                     }
                  ]
