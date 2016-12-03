@@ -10,20 +10,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
-
                 model.lead = model.lead || {};
-                model.lead.branchName = SessionStore.getBranch();
-                model.lead.branchId = SessionStore.getBranch();
-                
+
                 model.lead.leadInteractions = [{
                     "interactionDate": Utils.getCurrentDate(),
                     "loanOfficerId": SessionStore.getUsername() + ''
                 }];
-                model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
+
+                 var branch1 = formHelper.enum('branch_id').data;
+                 $log.info(branch1);
+                 //$log.info(SessionStore.getBranch());
+
+                    for (var i = 0; i < branch1.length; i++) {
+                        if ((branch1[i].name) == SessionStore.getBranch()) {
+                            model.lead.branchId = branch1[i].value;
+                            $log.info(model.lead.branchId);
+                        }
+                    }
+
                 model = Utils.removeNulls(model, true);
-               
-                $log.info("lead generation page got initiated");
-                
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -37,15 +42,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         },
                         function(res) {
                             _.assign(model.lead, res);
-                            
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.leadInteractions = [{
                                     "interactionDate": Utils.getCurrentDate(),
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
-
-
                             if (model.lead.currentStage == 'Inprocess') {
                                 model.lead.leadInteractions1 = model.lead.leadInteractions;
                                 model.lead.leadInteractions = [{
@@ -72,6 +74,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     "items": [{
                             key: "lead.branchId",
                             type: "select",
+                            readonly:true
                         }, {
                             key: "lead.centreId",
                             type: "select",
