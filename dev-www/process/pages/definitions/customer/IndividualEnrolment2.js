@@ -597,6 +597,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key: "customer.customerBranchId",
                                     title:"BRANCH_NAME",
+                                    readonly:true,
                                     type: "select"
                                 },
                                 {
@@ -765,6 +766,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.centreId",
                                     title:"CENTRE_NAME",
+                                    parentEnumCode:"branch_id",
+                                    parentValueExpr:"model.customer.customerBranchId",
                                     type:"select"
                                 },
                                 {
