@@ -18,9 +18,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 }];
 
                  var branch1 = formHelper.enum('branch_id').data;
-                 $log.info(branch1);
-                 //$log.info(SessionStore.getBranch());
-
                     for (var i = 0; i < branch1.length; i++) {
                         if ((branch1[i].name) == SessionStore.getBranch()) {
                             model.lead.branchId = branch1[i].value;
