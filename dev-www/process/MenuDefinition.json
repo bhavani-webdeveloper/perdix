@@ -68,6 +68,14 @@
 				"Page/Engine/management.RolesPages"
 			]
 		},
+		{
+			"title": "PSYCHOMETRIC",
+			"iconClass": "fa fa-puzzle-piece",
+			"items":[
+				"Page/Engine/psychometric.Config",
+				"Page/Engine/psychometric.QuestionMaintenance"
+			]
+		},
 		"Page/ReportsDashboard"
 	]
 }

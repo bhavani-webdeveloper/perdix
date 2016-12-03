@@ -17,6 +17,11 @@ irf.models.factory('Psychometric',
             url: endpoint + '/maintenance/config/all',
             isArray: true
         },
+        updateAllConfig: {
+            method: 'PUT',
+            url: endpoint + '/maintenance/config/all',
+            isArray: true
+        },
         getLanguages: searchResource({
             method: 'GET',
             url: endpoint + '/maintenance/language/all'

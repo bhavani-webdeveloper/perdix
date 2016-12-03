@@ -350,14 +350,14 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 						}]
 					}, {
 						type: "actionbox",
-						condition: "!model.psy.questionId",
+						condition: "!model.psy1.id",
 						items: [{
 							type: "submit",
 							title: "Create Question"
 						}]
 					}, {
 						type: "actionbox",
-						condition: "model.psy.questionId",
+						condition: "model.psy1.id",
 						items: [{
 							type: "submit",
 							title: "Update Question"
@@ -367,7 +367,8 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							style: "btn-default",
 							title: "Reset",
 							onClick: function(model) {
-								model.psy = {};
+								model.psy1 = {};
+								model.psy2 = {};
 							}
 						}]
 					}]);
