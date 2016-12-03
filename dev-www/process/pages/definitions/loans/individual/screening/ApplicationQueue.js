@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalReviewQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -9,7 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 		}
 		return {
 			"type": "search-list",
-			"title": "FIELD_APPRAISAL_REVIEW_QUEUE",
+			"title": "APPLICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -20,6 +20,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 				searchForm: [
 					"*"
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
@@ -46,9 +47,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 	                    },
 	                    "pincode": {
 	                        "title": "PINCODE",
-	                        "type": "string"
-	                    },
-	                    
+	                        "type": "string",
+	                       
+	                    }
 					},
 					"required": []
 				},
@@ -60,7 +61,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'FieldAppraisalReview',
+	                    'stage': 'Application',
 	                    'centreCode':centreId[0],
 	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
@@ -93,13 +94,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 					},
 					getListItem: function(item) {
 						return [
-							
+							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -111,40 +111,37 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.FieldAppraisalRevi
 					},
 					getColumns: function() {
 						return [{
-							title: 'ID',
-							data: 'id'
-						},  {
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
+							data: 'customerName'
 						}, {
 							title: 'AREA',
 							data: 'area'
 						}, {
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
+							data: 'villageName'
 						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "FIELD_APPRAISAL_REVIEW",
+							name: "APPLICATION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loan.FieldAppraisalReview', {
+								entityManager.setModel('loans.individual.screening.Application', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.FieldAppraisalReview",
-									pageId: item.id
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.Application",
+									pageId: item.loanId
 								});
 							},
 							isApplicable: function(item, index) {

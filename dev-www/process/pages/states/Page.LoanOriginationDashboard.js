@@ -10,7 +10,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 "Page/Engine/loans.individual.screening.ScreeningQueue",
                 "Page/Engine/loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/psychometric.Queue",
-                "Page/Engine/loans.individual.booking.ApplicationQueue",
+                "Page/Engine/loans.individual.screening.ApplicationQueue",
                 "Page/Engine/loans.individual.screening.ApplicationReviewQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalReviewQueue",
@@ -80,7 +80,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             }
 
 
-            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.ApplicationQueue"];
+            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ApplicationQueue"];
             if (aqMenu) {
                 IndividualLoan.search({
                     'stage': 'Application',
