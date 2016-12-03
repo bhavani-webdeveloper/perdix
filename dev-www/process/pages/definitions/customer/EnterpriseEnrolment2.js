@@ -315,6 +315,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.partnershipDissolvedDate",
                         title: "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
+                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
                         type: "date"
                     },
                     {

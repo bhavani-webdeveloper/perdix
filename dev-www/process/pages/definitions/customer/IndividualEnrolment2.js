@@ -291,11 +291,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key:"customer.addressProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.addressProofNo = result.text;
-                                            }
+                                            onCapture: EnrollmentHelper.customerAadhaarOnCapture,
+                                            type:"qrcode"
+                                            
                                         },
                                         /*{
                                             key:"customer.addressProofIssueDate",
@@ -651,8 +649,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key: "customer.firstName",
                                     title:"FULL_NAME",
-                                    type:"qrcode",
-                                    onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                                    type:"string"
                                 },
                                 {
                                     key:"customer.enrolledAs",

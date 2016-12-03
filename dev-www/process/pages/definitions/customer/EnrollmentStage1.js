@@ -213,7 +213,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         // "lm":"" landmark
         var aadhaarData = parseAadhaar(result.text);
         $log.info(aadhaarData);
-        model.customer.aadhaarNo = aadhaarData.uid;
+        // model.customer.aadhaarNo = aadhaarData.uid;
         model.customer.firstName = aadhaarData.name;
         model.customer.gender = aadhaarData.gender;
         model.customer.doorNo = aadhaarData.house;
