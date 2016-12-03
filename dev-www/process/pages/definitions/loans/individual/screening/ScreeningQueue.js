@@ -45,19 +45,18 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                     "pincode": {
+	                    "pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                    "status":
-	                    {
-                            "type":"select",
-                            "title":"Status",
-                            "titleMap":
-                                    {
-                               		 "HOLD’ ":"HOLD",
-                                    }
-                            },
+	                    "status": {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
 
 					},
 					"required": []
