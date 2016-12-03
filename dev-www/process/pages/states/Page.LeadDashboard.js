@@ -40,7 +40,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }).$promise.then(function(response,headerGetter){
                 lapqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                lapqMenu.data = '-';
             });
         }
 
@@ -50,6 +50,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 'branchName': branchName,
                 'currentStage': "Inprocess",
                 'centreName': centreName[0],
+                'leadStatus': "FollowUp",
                 'leadName': '',
                 'area': '',
                 'cityTownVillage': '',
@@ -59,7 +60,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }).$promise.then(function(response,headerGetter){
                 lfuqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                lfuqMenu.data = '-';
             });
         }
 
@@ -78,7 +79,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }).$promise.then(function(response,headerGetter){
                 ilqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                ilqMenu.data = '-';
             });
         }
 
