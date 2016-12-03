@@ -31,6 +31,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     })
                         } else {
                             model.customer = model.customer || {};
+                            var branch1 = formHelper.enum('branch_id').data;
+                            for (var i = 0; i < branch1.length; i++) {
+                                if ((branch1[i].name) == SessionStore.getBranch()) {
+                                 model.customer.customerBranchId = branch1[i].value;
+                                }
+                            }
                             //model.branchId = SessionStore.getBranchId() + '';
                             model.customer.date = model.customer.date || Utils.getCurrentDate();
                             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
@@ -601,6 +607,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                      "parentCode": "branch_id"
                                      },*/
                                     parentEnumCode:"branch_id",
+                                    parentValueExpr:"model.customer.customerBranchId",
                                 },
                                 {
                                     key: "customer.oldCustomerId",
