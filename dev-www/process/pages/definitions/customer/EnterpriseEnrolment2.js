@@ -214,6 +214,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.customerBranchId",
                         title:"BRANCH_NAME",
+                        readonly:true,
                         type: "select"
                     },
                     {
