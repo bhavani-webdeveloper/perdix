@@ -58,6 +58,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.CreditCommitteeReviewQueue', pageId:null});
         if (model.currentStage == 'CentralRiskReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.CentralRiskReviewQueue', pageId:null});
+        if (model.currentStage == 'Sanction')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.LoanSanctionQueue', pageId:null});
     }
 
     var populateDisbursementSchedule=function (value,form,model){
@@ -125,7 +127,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         'customerId': params.customer.id,
                         'relation': "Applicant",
                         'urn':params.customer.urnNo
-                    })    
+                    });
+                    model.loanAccount.applicant = params.customer.urnNo;
                 }
                 /* TODO remove this later */
                 if (!_.hasIn(model.loanAccount, "customerId") || model.loanAccount.customerId == null){
@@ -417,7 +420,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                          ]
                      }
                 ]
-            },
+            }/*,
             {
                 "type": "box",
                 "title": "SCREENING_REVIEW_REMARKS",
@@ -447,7 +450,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title:"DEVIATIONS"
                     },
                 ]
-            },
+            }*/,
             {
                 "type": "actionbox",
                 "condition": "model.loanAccount.customerId &&  !model.loanAccount.id && !(model.currentStage=='ScreeningReview')",
@@ -524,11 +527,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     //         model.loanAccount.portfolioInsuranceUrn = valueObj.urnNo;
                     //     }
                     // },
-                    {
-                        "key": "loanAccount.interestRate",
-                        "type": "number",
-                        "title": "INTEREST_RATE"
-                    },
                     {
                         "key": "loanAccount.tenure",
                         "title":"DURATION_IN_MONTHS"
@@ -823,6 +821,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
+                    reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
                     if (model.currentStage == 'Sanction') {
                         reqData.stage = 'LoanInitiation';
@@ -851,6 +850,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
+                            reqData.remarks = model.review.remarks;
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
@@ -876,6 +876,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
                             reqData.loanProcessAction = "SAVE";
+                            reqData.remarks = model.review.remarks;
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
@@ -899,6 +900,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?").then(function(){
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
+                    reqData.remarks = model.review.remarks;
                     reqData.stage = model.review.targetStage;
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
@@ -930,6 +932,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanProcessAction = "PROCEED";
+                    reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
                     if (model.currentStage == 'Sanction') {
                         reqData.stage = 'LoanInitiation';
