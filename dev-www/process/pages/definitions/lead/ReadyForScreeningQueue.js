@@ -58,8 +58,15 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 						"cityTownVillage": {
 							"title": "CITY/_TOWN_VILLAGE",
 							"type": "string"
+						},
+						"screeningDate": {
+							"title": "SCREENING_DATE",
+							"type": "string",
+							"x-schema-form": {
+								"type": "date",
+								"screenFilter": true
+							}
 						}
-
 					},
 					"required": []
 				},
@@ -132,9 +139,6 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 						}, {
 							title: 'Lead Status',
 							data: 'leadStatus'
-						}, {
-							title: 'Follow Up Date',
-							data: 'followUpDate'
 						}, {
 							title: 'Address Line1',
 							data: 'addressLine1'
