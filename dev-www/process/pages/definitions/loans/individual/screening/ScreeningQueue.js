@@ -48,7 +48,16 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 	                     "pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"
-	                    }
+	                    },
+	                    "status":
+	                    {
+                            "type":"select",
+                            "title":"Status",
+                            "titleMap":
+                                    {
+                               		 "HOLD’ ":"HOLD",
+                                    }
+                            },
 
 					},
 					"required": []
@@ -67,10 +76,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
+	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
+
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -99,7 +110,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 							item.customerName,
 							item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode,	
+							
 						]
 					},
 					getTableConfig: function() {
