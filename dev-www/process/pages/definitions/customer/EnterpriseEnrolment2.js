@@ -6,6 +6,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
     var branch = SessionStore.getBranch();
 
+    var validateRequest = function(req){
+        for (var i=0; i<req.customer.customerBankAccounts.length; i++){
+            var bankAccount = req.customer.customerBankAccounts[i];
+            if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
+                PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                return false;
+            }
+        }
+        return true;
+    }
+
     return {
         "type": "schema-form",
         "title": "ENTITY_ENROLLMENT",
@@ -270,6 +281,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "constitution"
                     },
                     {
+                        key: "customer.enterprise.businessHistory",
+                        title: "BUSINESS_HISTORY",
+                        type: "select",
+                        enumCode: "business_history"
+                    },
+                    {
                         key: "customer.enterprise.noOfPartners",
                         title: "NO_OF_PARTNERS",
                         type: "select",
@@ -386,6 +403,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "ITR_AVAILABLE",
                         type: "select",
                         enumCode: "decisionmaker"
+                    },
+                    {
+                        key: "customer.enterprice.electricityAvailable",
+                        title: "ELECTRICITY_AVAIALBLE",
+                        type: "radios",
+                        enumCode: "decisionmaker",
+                        required: true
+                    },
+                    {
+                        key: "customer.enterprice.spaceAvailable",
+                        title: "SPACE_AVAILABLE",
+                        type: "radios",
+                        enumCode: "decisionmaker",
+                        required: true
                     },
                     {
                         key: "customer.enterpriseCustomerRelations",
@@ -553,6 +584,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "CONSTITUTION",
                         type: "select",
                         enumCode: "constitution"
+                    },
+                    {
+                        key: "customer.enterprise.businessHistory",
+                        title: "BUSINESS_HISTORY",
+                        type: "select",
+                        enumCode: "business_history"
                     },
                     {
                         key: "customer.enterprise.noOfPartners",
@@ -774,6 +811,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.district",
                     "customer.state",
                     {
+                       key: "customer.distanceFromBranch",
+                       type: "select",
+                       enumCode: "distance_from_branch",
+                       title: "DISTANCE_FROM_BRANCH"
+                    },
+                    {
                        key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
                        type: "select",
                        enumCode: "years_in_present_area",
@@ -887,7 +930,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].customerNameAsInBank"
                             },
                             {
-                                key: "customer.customerBankAccounts[].accountNumber"
+                                key: "customer.customerBankAccounts[].accountNumber",
+                                type: "password"
                             },
                             {
                                 key: "customer.customerBankAccounts[].confirmedAccountNumber"
@@ -1314,7 +1358,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
                                 title:"PAYEMNT_TERMS_IN_DAYS",
-                                type:" number"
+                                type:" select",
+                                enumCode: "payment_terms"
                             },
                             {
                                 key:"customer.supplierDetails[].amount",
@@ -1398,7 +1443,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].paymentTerms",
                                 title: "PAYEMNT_TERMS",
-                                type: "number"
+                                type: "select",
+                                enumCode: "payment_terms"
                             },
                             {
                                 key: "customer.buyerDetails[].product",
@@ -2024,16 +2070,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.machinery[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.machinery[].isTheMachineHypothecated=='YES'"
+                                type: "string",
+                                condition:"model.customer.machinery[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
                                 key: "customer.machinery[].hypothecatedToUs",
-                                title:"HYPOTHECATED_TO_US",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.machinery[].hypothecatedTo=='NO'"
+                                title:"CAN_BE_HYPOTHECATED_TO_US",
+                                type: "string",
+                                condition:"model.customer.machinery[arrayIndex].isTheMachineHypothecated=='NO'"
                             },
                             {
                                 key: "customer.machinery[].machinePermanentlyFixedToBuilding",
@@ -2341,6 +2385,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
+
+                if (!(validateRequest(reqData))){
+                    return;
+                }
+
                 PageHelper.showProgress('enrolment','Saving..');
                 EnrollmentHelper.saveData(reqData).then(function(resp){
                     PageHelper.showProgress('enrolment', 'Done.', 5000);
@@ -2375,6 +2424,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
+
+                if (!(validateRequest(reqData))){
+                    return;
+                }
+
                 PageHelper.showProgress('enrolment','Updating...', 2000);
                 EnrollmentHelper.proceedData(reqData).then(function(resp){
                     PageHelper.showProgress('enrolmet','Done.', 5000);
