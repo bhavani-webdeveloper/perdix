@@ -1196,7 +1196,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                            },
                            {
                                key:"customer.liabilities[].liabilityLoanPurpose",
-                               type:"select"
+                               type:"select",
+                               enumCode: "loan_purpose_1"
                            },
                            {
                                key:"customer.liabilities[].interestOnly",
@@ -1502,6 +1503,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.monthlyTurnover",
                         title: "MONTHLY_TURNOVER",
+                        required:true,
                         type: "amount"
                     },
                     {
@@ -1980,15 +1982,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
+                        required:true,
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.noOfMaleEmployees",
+                        required:true,
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.avgMonthlySalary",
+                        required:true,
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
