@@ -2,8 +2,9 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
+		$log.info(centres);
 		var centreName=[];
-
+		
 		for (var i = 0; i < centres.length; i++) {
 			centreName.push(centres[i].centreName);
 		}
