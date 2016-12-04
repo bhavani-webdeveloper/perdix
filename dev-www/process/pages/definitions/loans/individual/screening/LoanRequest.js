@@ -867,7 +867,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
-                            reqData.remarks = model.review.remarks;
+                            // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = Utils.getCurrentDate();
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
