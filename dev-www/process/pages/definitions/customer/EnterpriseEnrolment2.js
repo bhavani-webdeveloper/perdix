@@ -417,14 +417,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "decisionmaker"
                     },
                     {
-                        key: "customer.enterprice.electricityAvailable",
+                        key: "customer.enterprise.electricityAvailable",
                         title: "ELECTRICITY_AVAIALBLE",
                         type: "radios",
                         enumCode: "decisionmaker",
                         required: true
                     },
                     {
-                        key: "customer.enterprice.spaceAvailable",
+                        key: "customer.enterprise.spaceAvailable",
                         title: "SPACE_AVAILABLE",
                         type: "radios",
                         enumCode: "decisionmaker",

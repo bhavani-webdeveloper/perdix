@@ -1190,7 +1190,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             "key": "customer.familyMembers[].educationStatus",
-                                            readonly:true,
                                             "title": "EDUCATION_LEVEL",
                                             "type": "select"
                                         }
