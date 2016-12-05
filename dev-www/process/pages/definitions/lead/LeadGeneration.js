@@ -497,8 +497,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
-                        /* add:null,
-                         remove:null,*/
+                         add:null,
+                         remove:null,
                         startEmpty: true,
                         title: "LEAD_INTERACTIONS",
                         items: [{

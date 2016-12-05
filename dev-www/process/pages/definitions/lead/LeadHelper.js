@@ -13,7 +13,7 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
 
             irfProgressMessage.pop('lead-save', 'Working...');
             reqData['leadAction'] = 'SAVE';
-            if (reqData.lead.screeningDate) {
+            if (reqData.lead.leadStatus == "Screening") {
                 reqData['stage'] = 'ReadyForScreening';
             } else {
                 reqData['stage'] = 'Inprocess';
@@ -46,6 +46,12 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
                 PageHelper.showLoader();
                 irfProgressMessage.pop('lead-update', 'Working...');
                 res.leadAction = "PROCEED";
+                if (res.lead.leadStatus == "Screening") {
+                res.stage = 'ReadyForScreening';
+                }else if(res.lead.leadStatus == "Reject")
+                {
+                  res.stage = 'Inprocess';  
+                }
                 //res.lead.leadInteractions=[{"id":'',"leadId":''}];
                 Lead.updateLead(res, function(res, headers) {
                     PageHelper.hideLoader();

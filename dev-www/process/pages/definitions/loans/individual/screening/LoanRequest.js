@@ -135,6 +135,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     model.loanAccount.customerId = params.customer.id;
                 }
             },
+            "lead-loaded": function(bundleModel, model, obj) {
+                 $log.info(obj);
+                model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
+            },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
                 // model.loanAccount.coApplicant = params.customer.id;
@@ -271,7 +275,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
                         required:true,
-                        title: "LOAN_AMOUNT_REQUESTED"
+                        title: "REQUESTED_LOAN_AMOUNT"
                     },
                     {
                         key: "loanAccount.frequencyRequested",

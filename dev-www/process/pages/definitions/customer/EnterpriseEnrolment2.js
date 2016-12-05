@@ -100,9 +100,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             model.customer.dateOfBirth=obj.dob;
                             model.customer.age=obj.age;
                             model.customer.mobilePhone = obj.mobileNo;
-                            model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
                             model.customer.latitude =obj.location;
                             model.customer.enterprise.ownership =obj.ownership;
+                            model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
                             model.customer.enterprise.companyRegistered =obj.companyRegistered;
                             model.customer.enterprise.businessType =obj.businessType;
                             model.customer.enterprise.businessLine=obj.businessActivity;

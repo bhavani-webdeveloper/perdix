@@ -137,6 +137,16 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     }
                 },
                 {
+                    key:"customer.spouseDateOfBirth",
+                    type:"date",
+                    condition:"model.customer.maritalStatus==='MARRIED'",
+                    "onChange": function(modelValue, form, model) {
+                        if (model.customer.spouseDateOfBirth) {
+                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                        }
+                    }
+                },
+                {
                     key:"customer.spouseAge",
                     title: "SPOUSE_AGE",
                     type:"number",
@@ -151,16 +161,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         }
                     }
                 },
-                {
-                    key:"customer.spouseDateOfBirth",
-                    type:"date",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
-                    "onChange": function(modelValue, form, model) {
-                        if (model.customer.spouseDateOfBirth) {
-                            model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-                    }
-                }
+                
             ]
         },
         {
@@ -596,6 +597,17 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             title: "T_GENDER"
                         },
                         {
+                            key: "customer.familyMembers[].dateOfBirth",
+                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                            type:"date",
+                            title: "T_DATEOFBIRTH",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        },
+                        {
                             key:"customer.familyMembers[].age",
                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                             title: "AGE",
@@ -607,17 +619,6 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                     } else {
                                         model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
                                     }
-                                }
-                            }
-                        },
-                        {
-                            key: "customer.familyMembers[].dateOfBirth",
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                            type:"date",
-                            title: "T_DATEOFBIRTH",
-                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                 }
                             }
                         },
