@@ -394,17 +394,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: "number",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].manfactureName",
-                                title:"MANFACTURE_NAME",
-                                required:true,
-                                type: "string",
-                            },
-                            {
                                 key: "loanAccount.newassetdetails[].machineType",
                                 title:"MACHINE_TYPE",
                                 required:true,
                                 type: "select",
                                 enumCode: "collateral_type"
+                            },
+                            {
+                                key: "loanAccount.newassetdetails[].manfactureName",
+                                title:"MANFACTURE_NAME",
+                                required:true,
+                                type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineModel",
@@ -415,13 +415,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.newassetdetails[].serialNo",
                                 title:"SERIAL_NO",
-                                required:true,
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.newassetdetails[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
-                                required:true,
                                 type: "Date",
                             },
                             {
@@ -435,6 +433,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 key: "loanAccount.newassetdetails[].hypothecatedtoKinara",
                                 title:"HYPOTHECATED_TO_KINARA",
                                 required:true,
+                                enumCode: "decisionmaker",
                                 type: "select",
                             },
 
