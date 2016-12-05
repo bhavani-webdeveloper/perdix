@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("psychometric.Queue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "PsychometricTestService", "PageHelper",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, PsychometricTestService, PageHelper) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "Psychometric", "PsychometricTestService", "PageHelper",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, Psychometric, PsychometricTestService, PageHelper) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -23,11 +23,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
-	                    },
+	                    },/*
 	                    "businessName": {
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
-	                    },
+	                    },*/
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -55,16 +55,16 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
-					return IndividualLoan.search({
-	                    'enterprisePincode':searchOptions.pincode,
-	                    'applicantName':searchOptions.applicantName,
+					return Psychometric.searchLoanForPsychometric({
+	                    'pincode':searchOptions.pincode,
+	                    'first_name':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,	                    
-	                    'customerName': searchOptions.businessName,
+	                    'village_name':searchOptions.villageName,
+	                    //'customerName': searchOptions.businessName,
 	                    
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                }).$promise;
+	                });
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -104,23 +104,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					},
 					getColumns: function() {
 						return [{
+							title: 'ACCOUNT_NUMBER',
+							data: 'account_number'
+						}, {
 							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
-							title: 'APPLICANT_NAME',
-							data: 'applicantName'
-						},{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						}, {
-							title: 'AREA',
-							data: 'area'
-						}, {
-							title: 'CITY_TOWN_VILLAGE',
-							data: 'villageName'
-						}, {
-							title: 'PIN_CODE',
-							data: 'enterprisePincode'
+							data: 'screening_date'
 						}]
 					},
 					getActions: function() {
@@ -129,11 +117,12 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 							desc: "",
 							icon: "fa fa-eye-slash",
 							fn: function(item, index) {
-								PsychometricTestService.start(item.applicantName, item.loanId).then(function(resp){
+								PsychometricTestService.start(item.applicant, item.id).then(function(resp){
 									PageHelper.showLoader();
 									IndividualLoan.get({
 										id: resp.applicationId
 									}, function(reqData) {
+										reqData.psychometricCompleted = 'Completed';
 										IndividualLoan.update({
 											loanProcessAction: 'PROCEED',
 											loanAccount: reqData

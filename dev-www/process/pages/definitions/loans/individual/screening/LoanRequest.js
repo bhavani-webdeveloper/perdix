@@ -22,32 +22,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
         if(model.currentStage=='ScreeningReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
-        if(model.currentStage=='Application') {
-            PsychometricTestService.start(model.loanAccount.applicant, model.loanAccount.id).then(function(resp){
-                PageHelper.showLoader();
-                IndividualLoan.get({
-                    id: resp.applicationId
-                }, function(reqData) {
-                    reqData.psychometricCompleted = 'Completed';
-                    IndividualLoan.update({
-                        loanProcessAction: 'PROCEED',
-                        loanAccount: reqData
-                    }).$promise.then(function(loanResp){
-                        $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
-                    }, function(loanErrResp) {
-                        $log.error('IndividualLoan update failed');
-                        $state.go('Page.Engine', {pageName: 'psychometric.Queue', pageId: null});
-                        $log.error(loanErrResp);
-                    }).finally(function(){
-                        PageHelper.hideLoader();
-                    });
-                });
-            }, function(errResp) {
-                $log.error('Psychometric Test failed');
-                $log.error(errResp);
-                $state.go('Page.Engine', {pageName: 'psychometric.Queue', pageId: null});
-            });
-        }
+        if(model.currentStage=='Application')
+            $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
         if(model.currentStage=='ApplicationReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
         if (model.currentStage == 'FieldAppraisal')

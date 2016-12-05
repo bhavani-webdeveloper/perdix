@@ -1,6 +1,6 @@
 irf.models.factory('Psychometric', 
-    ['$resource', '$httpParamSerializer', '$http', 'searchResource',
-    function($resource, $httpParamSerializer, $http,searchResource) {
+    ['$resource', '$httpParamSerializer', '$http', 'searchResource', "Queries", "$q",
+    function($resource, $httpParamSerializer, $http,searchResource, Queries, $q) {
     var endpoint = irf.PSYCHOMETRIC_BASE_URL + '/api/psychometric';
 
     var res = $resource(endpoint, null, {
@@ -66,14 +66,33 @@ irf.models.factory('Psychometric',
         }
     });
 
-    res.getTestHttp = function(params) {
-        return {
-            "$promise": $http({
-                "method": "GET",
-                "url": endpoint + '/test',
-                "params": params
-            })
+    res.searchLoanForPsychometric = function(params) {
+        var deferred = $q.defer();
+        var parameters = {
+            pincode: params.pincode || '',
+            first_name: params.first_name || '',
+            area: params.area || '',
+            village_name: params.village_name || ''
         };
+        Queries.getResult("searchLoanForPsychometric", parameters, params.per_page, params.page).then(function(resp){
+            if (resp && resp.results && resp.results.length) {
+                deferred.resolve({
+                    headers: {
+                        "x-total-count": resp.totalCount
+                    },
+                    body: resp.results
+                });
+            } else {
+                deferred.resolve({
+                    headers: {
+                        "x-total-count": 0
+                    },
+                    body: []
+                });
+            }
+        }, deferred.reject);
+        return deferred.promise;
     };
+
     return res;
 }]);
