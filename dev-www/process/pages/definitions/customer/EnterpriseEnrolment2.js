@@ -1676,45 +1676,45 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[]
                             },
                             {
-                                key: "customer.enterprice.cashAtBank",
+                                key: "customer.enterprise.cashAtBank",
                                 title: "CASH_AT_BANK",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprice.rawMaterial",
+                                key: "customer.enterprise.rawMaterial",
                                 title: "RAW_MATERIAL",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprice.workInProgress",
+                                key: "customer.enterprise.workInProgress",
                                 title: "WIP",
                                 type: "amount"
                             },
                             {
-                                key: "customer.enterprice.finishedGoods",
+                                key: "customer.enterprise.finishedGoods",
                                 title: "FINISHED_GOODS",
                                 type: "amount"
                             },
                             {
-                                key: 'customer.enterpriceAssets',
+                                key: 'customer.enterpriseAssets',
                                 type: 'array',
                                 startEmpty: true,
                                 title: "ENTERPRICE_ASSETS",
                                 items: [
                                     {
-                                        key: "customer.enterpriceAssets[].assetType",
+                                        key: "customer.enterpriseAssets[].assetType",
                                         title: "ASSET_TYPE",
                                         type: "select",
                                         enumCode: "enterprice_asset_types"
                                     },
                                     {
-                                        key: "customer.enterpriceAssets[].vehicleMakeModel",
+                                        key: "customer.enterpriseAssets[].vehicleMakeModel",
                                         title: "VEHICLE_MAKE_MODEL",
                                         type: "string",
-                                        condition:"model.customer.enterpriceAssets[arrayIndex].assetType=='Vehicle'"
+                                        condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
                                     },
                                     {
-                                        key: "customer.enterpriceAssets[].valueOfAsset",
+                                        key: "customer.enterpriseAssets[].valueOfAsset",
                                         title: "VALUE_OF_THE_ASSET",
                                         type: "amount"
                                     },
@@ -1885,45 +1885,45 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     items:[]
                                 },
                                 {
-                                    key: "customer.enterprice.cashAtBank",
+                                    key: "customer.enterprise.cashAtBank",
                                     title: "CASH_AT_BANK",
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.enterprice.rawMaterial",
+                                    key: "customer.enterprise.rawMaterial",
                                     title: "RAW_MATERIAL",
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.enterprice.workInProgress",
+                                    key: "customer.enterprise.workInProgress",
                                     title: "WIP",
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.enterprice.finishedGoods",
+                                    key: "customer.enterprise.finishedGoods",
                                     title: "FINISHED_GOODS",
                                     type: "amount"
                                 },
                                 {
-                                    key: 'customer.enterpriceAssets',
+                                    key: 'customer.enterpriseAssets',
                                     type: 'array',
                                     startEmpty: true,
                                     title: "ENTERPRICE_ASSETS",
                                     items: [
                                         {
-                                            key: "customer.enterpriceAssets[].assetType",
+                                            key: "customer.enterpriseAssets[].assetType",
                                             title: "ASSET_TYPE",
                                             type: "select",
-                                            enumCode: "enterprice_asset_types"
+                                            enumCode: "enterprise_asset_types"
                                         },
                                         {
-                                            key: "customer.enterpriceAssets[].vehicleMakeModel",
+                                            key: "customer.enterpriseAssets[].vehicleMakeModel",
                                             title: "VEHICLE_MAKE_MODEL",
                                             type: "string",
-                                            condition:"model.customer.enterpriceAssets[arrayIndex].assetType=='Vehicle'"
+                                            condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
                                         },
                                         {
-                                            key: "customer.enterpriceAssets[].valueOfAsset",
+                                            key: "customer.enterpriseAssets[].valueOfAsset",
                                             title: "VALUE_OF_THE_ASSET",
                                             type: "amount"
                                         },
@@ -2007,17 +2007,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                readonly:true,
                 items:[
                     {
-                        key: "customer.enterprice.noOfFemaleEmployees",
+                        key: "customer.enterprise.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
                         type: "number"
                     },
                     {
-                        key: "customer.enterprice.noOfMaleEmployees",
+                        key: "customer.enterprise.noOfMaleEmployees",
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
-                        key: "customer.enterprice.avgMonthlySalary",
+                        key: "customer.enterprise.avgMonthlySalary",
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
