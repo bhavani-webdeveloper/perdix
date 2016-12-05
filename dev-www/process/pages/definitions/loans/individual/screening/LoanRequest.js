@@ -400,6 +400,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title:"MACHINE_TYPE",
                                 required:true,
                                 type: "select",
+                                enumCode: "collateral_type"
                             },
                             {
                                 key: "loanAccount.newassetdetails[].machineModel",

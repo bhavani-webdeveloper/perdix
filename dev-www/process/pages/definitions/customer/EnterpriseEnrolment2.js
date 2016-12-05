@@ -391,8 +391,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
-                        type: "radios",
-                        enumCode: "business_line",
+                        type: "select",
+                        enumCode: "business_type",
                         parentEnumCode: "businessType"
 
                     },
