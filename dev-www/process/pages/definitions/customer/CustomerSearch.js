@@ -88,7 +88,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}
 			},
 			listOptions: {
-				selectable: true,
+				selectable: false,
 				expandable: true,
 				listStyle: "table",
 				itemCallback: function(item, index) {

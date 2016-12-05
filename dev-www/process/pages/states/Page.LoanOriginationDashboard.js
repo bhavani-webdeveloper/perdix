@@ -9,7 +9,6 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 "Page/Bundle/loans.individual.screening.ScreeningInput",
                 "Page/Engine/loans.individual.screening.ScreeningQueue",
                 "Page/Engine/loans.individual.screening.ScreeningReviewQueue",
-                "Page/Engine/psychometric.Queue",
                 "Page/Engine/loans.individual.screening.ApplicationQueue",
                 "Page/Engine/loans.individual.screening.ApplicationReviewQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalQueue",
@@ -60,7 +59,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     srqMenu.data = '-';
                 });
             }
-
+/*
             var pqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/psychometric.Queue"];
             if (pqMenu) {
                 IndividualLoan.search({
@@ -78,8 +77,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     pqMenu.data = '-';
                 });
             }
-
-
+*/
             var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ApplicationQueue"];
             if (aqMenu) {
                 IndividualLoan.search({

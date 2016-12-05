@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "PSYCHOMETRIC_PENDING_QUEUE",
+			"title": "Psychometric Test",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -56,7 +56,6 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Psychometric',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

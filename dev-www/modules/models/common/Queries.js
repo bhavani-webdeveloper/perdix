@@ -1,6 +1,6 @@
 irf.models.factory('Queries',[
-"$resource", "$httpParamSerializer", "BASE_URL", "$q", "$log",
-function($resource,$httpParamSerializer,BASE_URL, $q, $log){
+"$resource", "SysQueries", "$httpParamSerializer", "BASE_URL", "$q", "$log",
+function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
 	var endpoint = BASE_URL + '/api';
 
 	var resource =  $resource(endpoint, null, {

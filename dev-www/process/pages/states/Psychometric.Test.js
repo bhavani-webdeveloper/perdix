@@ -33,9 +33,9 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 	});
 */
 
-	if (!PsychometricTestService.deferred()) {
+	if (!(PsychometricTestService && _.isFunction(PsychometricTestService.deferred) && PsychometricTestService.deferred())) {
 		$log.error("Psychometric Test Service Requested through invalid route");
-		irf.goHome($state);
+		$state.go("Page.Engine", {"pageName": "psychometric.Queue", "pageId": null});
 		return;
 	}
 
