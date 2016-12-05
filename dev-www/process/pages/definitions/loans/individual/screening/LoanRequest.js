@@ -494,7 +494,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         "key": "loanAccount.securityEmi",
-                        "type": "amount",
+                        'enumCode': "decisionmaker",
+                        'type': "select",
                         "title": "SECURITY_EMI"
                     },
                     {

@@ -887,9 +887,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     "type": "string",
-                                    "condition":"model.customer.whatsAppMobileNo1 == 3 ",
+                                    "condition":"model.customer.whatsAppMobileNo == 3 ",
                                     "key": "customer.whatsAppMobileNo1",
-                                    "title": "WHATSAPP_MOBILE_NO"
+                                    "title": "WHATSAPP_NO"
                                 },
                                 {
                                     "type": "string",
@@ -1047,9 +1047,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     "type": "string",
-                                    "condition":"model.customer.whatsAppMobileNo1 == 3 ",
+                                    "condition":"model.customer.whatsAppMobileNo == 3 ",
                                     "key": "customer.whatsAppMobileNo1",
-                                    "title": "WHATSAPP_MOBILE_NO"
+                                    "title": "WHATSAPP_NO"
                                 },
                                 {
                                     "type": "string",
