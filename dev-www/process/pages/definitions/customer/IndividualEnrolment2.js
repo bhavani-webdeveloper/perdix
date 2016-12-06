@@ -18,18 +18,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                        
                         if (_.hasIn(model, 'loanRelation')){
                             console.log(model.loanRelation);
+                            if(model.loanRelation){
                             var custId = model.loanRelation.customerId;
-                            Enrollment.getCustomerById({id:custId})
-                                    .$promise
-                                    .then(function(res){
-                                        model.customer = res;
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(){
-                                        PageHelper.hideLoader();
-                                    })
-                        } else {
+                                Enrollment.getCustomerById({id:custId})
+                                        .$promise
+                                        .then(function(res){
+                                            model.customer = res;
+                                        }, function(httpRes){
+                                            PageHelper.showErrors(httpRes);
+                                        })
+                                        .finally(function(){
+                                            PageHelper.hideLoader();
+                                        })
+                            }
+                        } 
+                        // else {
                             model.customer = model.customer || {};
                             var branch1 = formHelper.enum('branch_id').data;
                             for (var i = 0; i < branch1.length; i++) {
@@ -42,23 +45,27 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
                             model = Utils.removeNulls(model,true);
                             //model.customer.kgfsName = SessionStore.getBranch();
-                            model.customer.identityProof = "Pan Card";
-                            model.customer.addressProof= "Aadhar Card";
+                            model.customer.identityProof = model.customer.identityProof || "Pan Card";
+                            model.customer.addressProof= model.customer.addressProof || "Aadhar Card";
                             model.customer.customerType = 'Individual';
                             BundleManager.pushEvent("on-customer-load", {name: "11"})
 
-                            model.customer.expenditures = [];
-                            model.customer.expenditures.push({
-                                "expenditureSource": "expenditure",
-                                "frequency": "Monthly"
-                            });
+                            if(!model.customer.expenditures){
+                                model.customer.expenditures = [];
+                                model.customer.expenditures.push({
+                                    "expenditureSource": "expenditure",
+                                    "frequency": "Monthly"
+                                });
+                            }
 
-                            model.customer.familyMembers = [
-                                {
-                                    'relationShip': 'self'
-                                }
-                            ]
-                        }
+                            if(!model.customer.familyMembers){
+                                model.customer.familyMembers = [
+                                    {
+                                        'relationShip': 'self'
+                                    }
+                                ]
+                            }
+                        // }
                         if (bundlePageObj){
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
