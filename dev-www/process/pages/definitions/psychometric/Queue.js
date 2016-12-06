@@ -106,9 +106,6 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 						return [{
 							title: 'ACCOUNT_NUMBER',
 							data: 'account_number'
-						}, {
-							title: 'SCREENING_DATE',
-							data: 'screening_date'
 						}]
 					},
 					getActions: function() {
@@ -128,6 +125,8 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 											loanAccount: reqData
 										}).$promise.then(function(loanResp){
 											
+										}, function(errResp){
+											PageHelper.setErrors(errResp);
 										}).finally(function(){
 											$state.go('Page.Engine', {
 												pageName: 'psychometric.Queue',

@@ -44,16 +44,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             {
                 "type": "box",
                 "colClass": "col-sm-12",
+                "title": "SCORING_DETAILS",
                 "items": [
                             {
                                 type:"tableview",
                                 key:"ScoreDetails[0].Parameters",
-                                title:"SCORING_DETAILS",
+                                // title:"SCORING_DETAILS",
                                 selectable: false,
-                                getActions:function (){
-                                    return [];
-
-                                },
+                                paginate: false,
+                                searching: false,
                                 getColumns: function(){
                                     return [{
                                         title: 'PARAMETER',

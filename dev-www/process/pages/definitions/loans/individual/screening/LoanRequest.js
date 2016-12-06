@@ -926,6 +926,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 if (!validateForm(formCtrl)){
                     return;
                 }
+
+                if (reqData.stage === 'ApplicationReview' && reqData.psychometricCompleted != 'Completed') {
+                    PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
+                    return;
+                }
                 
                 Utils.confirm("Are You Sure?").then(function(){
 

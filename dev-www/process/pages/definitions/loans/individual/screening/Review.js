@@ -73,17 +73,15 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         form: [
             {
                 "type": "box",
+                "title": "REMARKS_HISTORY",
                 "items": [
                     {
                         type:"tableview",
                         key:"loanSummary",
-                        title:"REMARKS_HISTORY",
                         selectable: false,
-                        getActions:function (){
-                            return [];
-
-                        },
-                        getColumns: function(){
+                        paginate: false,
+                        searching: false,
+                        getColumns: function() {
                             return [{
                                 title: 'STATUS',
                                 data: 'status'

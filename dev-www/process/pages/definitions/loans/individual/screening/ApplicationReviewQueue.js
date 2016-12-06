@@ -116,6 +116,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 						return {
 							"serverPaginate": true,
 							"paginate": true,
+							"searching": true,
 							"pageLength": 10
 						};
 					},
