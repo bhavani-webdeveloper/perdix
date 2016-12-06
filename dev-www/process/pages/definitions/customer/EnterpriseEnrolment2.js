@@ -7,11 +7,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     var branch = SessionStore.getBranch(); 
 
     var validateRequest = function(req){
-        for (var i=0; i<req.customer.customerBankAccounts.length; i++){
-            var bankAccount = req.customer.customerBankAccounts[i];
-            if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
-                PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
-                return false;
+        if (req.customer && req.customer.customerBankAccounts) {
+            for (var i=0; i<req.customer.customerBankAccounts.length; i++){
+                var bankAccount = req.customer.customerBankAccounts[i];
+                if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
+                    PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
+                    return false;
+                }
             }
         }
         return true;

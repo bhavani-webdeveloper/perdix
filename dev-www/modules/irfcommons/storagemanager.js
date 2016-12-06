@@ -252,7 +252,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			return null;
 		},
 		save: function(model, formCtrl, formName, actions) {
-			var pageName = formName.substring(6).replace(/\$/g, '.');
+			var pageName = formName.substring(6).replace(/\_/g, '.').replace(/\.\./g, '__');
 			var promise = true;
 			if (angular.isFunction(actions.preSave)) {
 				promise = actions.preSave(model, formCtrl, formName);
