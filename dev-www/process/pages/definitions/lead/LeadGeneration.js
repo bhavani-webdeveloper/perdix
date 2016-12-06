@@ -12,6 +12,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
                 model.lead.customerType="Enterprise";
+                model.lead.leadStatus="Incomplete";
 
                 model.lead.leadInteractions = [{
                     "interactionDate": Utils.getCurrentDate(),
@@ -29,6 +30,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 model = Utils.removeNulls(model, true);
 
                 if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
+
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
                     var leadId = $stateParams.pageId;
@@ -41,6 +43,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         function(res) {
                             _.assign(model.lead, res);
                             if (model.lead.currentStage == 'Incomplete') {
+                                model.lead.customerType="Enterprise";
+                                model.lead.leadStatus="Incomplete";
                                 model.lead.leadInteractions = [{
                                     "interactionDate": Utils.getCurrentDate(),
                                     "loanOfficerId": SessionStore.getUsername() + ''
