@@ -1,8 +1,9 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
+ ["$log", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
+    "PageHelper", "Utils","entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
+    function($log, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
+        PageHelper, Utils, entityManager,BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -63,7 +64,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     );
                 }
             },
-            offline: false,
+            offline: true,
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item.lead.leadName
@@ -542,6 +543,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                 {
                     "type": "actionbox",
                     "items": [{
+                        "type": "save",
+                        "title": "Offline Save"
+                    },{
                         "type": "submit",
                         "title": "Submit"
                     }]
