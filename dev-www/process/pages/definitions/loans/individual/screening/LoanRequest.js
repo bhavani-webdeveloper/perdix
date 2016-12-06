@@ -70,7 +70,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 model.loanAccount.loanCustomerRelations = [];
                 model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
-                model.loanAccount.documentTracking = "PENDING";    
+                model.loanAccount.documentTracking = "PENDING";
                 /* END OF TEMP CODE */
             }
             if (bundlePageObj){
@@ -133,7 +133,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         'customerId': params.customer.id,
                         'relation': "Co-Applicant",
                         'urn':params.customer.urnNo
-                    })    
+                    })
                 }
             },
             "new-business": function(bundleModel, model, params){
@@ -161,7 +161,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         'customerId': params.customer.id,
                         'relation': "GUARANTOR",
                         'urn':params.customer.urnNo
-                    })    
+                    })
                 };
 
                 if (!_.hasIn(model.loanAccount, 'guarantors')) {
@@ -346,77 +346,155 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Sanction' )",
                 "items": [
                     {
-                      key:"loanAccount.newassetdetails",
+                      key:"loanAccount.collateral",
                        type:"array",
                        startEmpty: true,
                        title:"ASSET_DETAILS",
                        items:[
                             {
-                                key: "loanAccount.newassetdetails[].machine",
+                                key: "loanAccount.collateral[].collateralDescription",
                                 title:"MACHINE",
                                 required:true,
                                 type: "string"
                             },
                             {
-                                key: "loanAccount.newassetdetails[].purchasePrice",
+                                key: "loanAccount.collateral[].collateralValue",
                                 title:"PURCHASE_PRICE",
                                 required:true,
                                 type: "number",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].expectedIncome",
+                                key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",
                                 required:true,
                                 type: "number",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].machineType",
+                                key: "loanAccount.collateral[].collateralType",
                                 title:"MACHINE_TYPE",
                                 required:true,
                                 type: "select",
                                 enumCode: "collateral_type"
                             },
                             {
-                                key: "loanAccount.newassetdetails[].manfactureName",
+                                key: "loanAccount.collateral[].manufacturer",
                                 title:"MANFACTURE_NAME",
                                 required:true,
                                 type: "string",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].machineModel",
+                                key: "loanAccount.collateral[].modelNo",
                                 title:"MACHINE_MODEL",
                                 required:true,
                                 type: "string",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].serialNo",
+                                key: "loanAccount.collateral[].serialNo",
                                 title:"SERIAL_NO",
                                 type: "string",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].expectedPurchaseDate",
+                                key: "loanAccount.collateral[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
                                 type: "Date",
                             },
                             {
-                                key: "loanAccount.newassetdetails[].machinePermanentlyfixedtobuilding",
+                                key: "loanAccount.collateral[].machineAttachedToBuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
                                 required:true,
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "loanAccount.newassetdetails[].hypothecatedtoKinara",
+                                key: "loanAccount.collateral[].hypothecatedToBank",
                                 title:"HYPOTHECATED_TO_KINARA",
                                 required:true,
                                 enumCode: "decisionmaker",
-                                type: "select",
-                            },
+                                type: "radios",
+                            }
 
                          ]
                      }
                 ]
-            }/*,
+            },
+            {
+                "type": "box",
+                "title": "NEW_ASSET_DETAILS",
+                "readonly": true,
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='SanctionReview' )",
+                "items": [
+                    {
+                      key:"loanAccount.collateral",
+                       type:"array",
+                       startEmpty: true,
+                       title:"ASSET_DETAILS",
+                       items:[
+                            {
+                                key: "loanAccount.collateral[].collateralDescription",
+                                title:"MACHINE",
+                                required:true,
+                                type: "string"
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateralValue",
+                                title:"PURCHASE_PRICE",
+                                required:true,
+                                type: "number",
+                            },
+                            {
+                                key: "loanAccount.collateral[].expectedIncome",
+                                title:"EXPECTED_INCOME",
+                                required:true,
+                                type: "number",
+                            },
+                            {
+                                key: "loanAccount.collateral[].collateralType",
+                                title:"MACHINE_TYPE",
+                                required:true,
+                                type: "select",
+                                enumCode: "collateral_type"
+                            },
+                            {
+                                key: "loanAccount.collateral[].manufacturer",
+                                title:"MANFACTURE_NAME",
+                                required:true,
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].modelNo",
+                                title:"MACHINE_MODEL",
+                                required:true,
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].serialNo",
+                                title:"SERIAL_NO",
+                                type: "string",
+                            },
+                            {
+                                key: "loanAccount.collateral[].expectedPurchaseDate",
+                                title:"EXPECTED_PURCHASE_DATE",
+                                type: "Date",
+                            },
+                            {
+                                key: "loanAccount.collateral[].machineAttachedToBuilding",
+                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                type: "radios",
+                                required:true,
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key: "loanAccount.collateral[].hypothecatedToBank",
+                                title:"HYPOTHECATED_TO_KINARA",
+                                required:true,
+                                enumCode: "decisionmaker",
+                                type: "radios",
+                            }
+                         ]
+                     }
+                ]
+            }
+            /*,
             {
                 "type": "box",
                 "title": "SCREENING_REVIEW_REMARKS",
@@ -570,7 +648,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         },
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            
+
                                             var trancheConditions = formHelper.enum('tranche_conditions').data;
                                             var out = [];
                                             for (var i=0;i<trancheConditions.length; i++){
@@ -582,7 +660,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                                     out.push({
                                                         name: trancheConditions[i].name,
                                                         value: trancheConditions[i].value
-                                                    })    
+                                                    })
                                                 }
                                             }
                                             return $q.resolve({
@@ -793,7 +871,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             }
                         ]
                     }
-                    
+
                 ]
             }
         ],
@@ -814,7 +892,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 /* TODO Call proceed servcie for the loan account */
-                
+
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -845,7 +923,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
-                            
+
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
                             // reqData.remarks = model.review.remarks;
@@ -871,7 +949,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
-                            
+
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
                             reqData.loanProcessAction = "SAVE";
@@ -922,7 +1000,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             proceed: function(model, formCtrl, form, $event){
                 $log.info("Inside submit()");
                 /* TODO Call proceed servcie for the loan account */
-                
+
                 if (!validateForm(formCtrl)){
                     return;
                 }
@@ -931,7 +1009,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
                     return;
                 }
-                
+
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -1018,7 +1096,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     targetStage = "CentralRiskReview";
                                     break;
                                 default:
-                                    targetStage = null;                                
+                                    targetStage = null;
                             }
 
                             if (targetStage == null){
