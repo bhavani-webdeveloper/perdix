@@ -692,10 +692,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "items": [
                     {
                         key: "review.action",
+                        condition: "model.currentStage !== 'Screening'",
                         type: "radios",
                         titleMap: {
                             "REJECT": "REJECT",
                             "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        condition: "model.currentStage == 'Screening'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
                             "PROCEED": "PROCEED",
                             "HOLD": "HOLD"
                         }
