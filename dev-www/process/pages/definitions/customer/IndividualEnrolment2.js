@@ -676,6 +676,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.enrolledAs",
                                     type:"radios"
+
                                 },
                                 {
                                     key:"customer.gender",
@@ -1715,7 +1716,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             type: "box",
-                            title: "CUSTOMER_BANK_ACCOUNTS",
+                            title: "BANK_ACCOUNTS",
                             "condition": "model.currentStage=='Screening' || model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
                             items: [
                                 {
