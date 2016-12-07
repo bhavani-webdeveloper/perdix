@@ -1143,17 +1143,29 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "key": "customer.expenditures",
                                     "type": "array",
                                     "title": "EXPENDITURES",
-                                    "view": "fixed",
+                                    //"view": "fixed",
                                     // "add": null,
                                     // "remove": null,
                                     "items": [
+                                        
+                                        {
+                                            "key": "customer.expenditures[].expenditureSource",
+                                            "type": "select",
+                                            "title": "EXPENSE_TYPE"
+                                        },
                                         {
                                             "key": "customer.expenditures[].annualExpenses",
                                             "type": "amount",
-                                            "title": "MONTHLY_EDUCATION_EXPENSE"
+                                            "title": "AMOUNT"
+                                        },
+                                        {
+                                            "key": "customer.expenditures[].frequency",
+                                            "type": "string",
+                                            "title": "FREQUENCY"
                                         }
-                                    ]
+                                     ]
                                 }
+                              
                             ]
                         },
                         {
@@ -1192,6 +1204,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }
                                     ]
                                 }
+
                             ]
                         },
                         {
