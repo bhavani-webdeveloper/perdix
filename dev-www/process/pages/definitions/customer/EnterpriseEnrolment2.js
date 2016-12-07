@@ -408,7 +408,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "businessLine",
                         parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessType",
 
                     },
                     {
