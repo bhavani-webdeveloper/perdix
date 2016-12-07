@@ -949,7 +949,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 "region": "customer.villageName",
                                                 "pincode": "customer.pincode",
                                                 "district": "customer.district",
-                                                "state": "customer.state"
+                                                "state": "customer.state",
+                                                "country":"customer.country"
                                             },
                                             searchHelper: formHelper,
                                             initialize: function(inputModel) {
@@ -970,7 +971,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 return [
                                                     item.division + ', ' + item.region,
                                                     item.pincode,
-                                                    item.district + ', ' + item.state
+                                                    item.district + ', ' + item.state,
+                                                    item.country
                                                 ];
                                             },
                                             onSelect: function(result, model, context) {
@@ -981,6 +983,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         "customer.villageName",
                                         "customer.district",
                                         "customer.state",
+                                        "customer.country",
                                         "customer.mailSameAsResidence"
                                     ]
                                 },
