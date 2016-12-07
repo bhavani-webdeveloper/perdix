@@ -913,7 +913,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 type: "box",
-                title: "CUSTOMER_BANK_ACCOUNTS",
+                title: "BANK_ACCOUNTS",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items: [
                     {
