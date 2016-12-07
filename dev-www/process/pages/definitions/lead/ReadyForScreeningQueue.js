@@ -139,6 +139,9 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 						}, {
 							title: 'Lead Status',
 							data: 'leadStatus'
+						},{
+							title: 'Screening Date',
+							data: 'screeningDate'
 						}, {
 							title: 'Address Line1',
 							data: 'addressLine1'
