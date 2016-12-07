@@ -315,6 +315,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     items: [{
                         key: "lead.interestedInProduct",
                         type: "radios",
+                        required:true,
                         enumCode: "decisionmaker",
                         "onChange": function(modelValue, form, model) {
                                 if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
@@ -506,6 +507,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                          add:null,
                          remove:null,
                         startEmpty: true,
+                        view:"fixed",
                         title: "LEAD_INTERACTIONS",
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
