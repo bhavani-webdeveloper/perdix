@@ -67,8 +67,10 @@ irf.pageCollection.factory(irf.page("psychometric.Config"),
                         Psychometric.updateAllConfig(model.config).$promise.then(function(resp){
                             model.config= resp;
                             PageHelper.showProgress("config","Configurations updated", 3000);
-                        }, function(err){
-                            PageHelper.showErrors(err);
+                        }, function(errResp) {
+                            $log.info(errResp);
+                            var err = errResp.data;
+                            PageHelper.setError({message: (err.errorCode || err.error) + ": " + (err.errorMsg || err.message)});
                         }).finally(function(){
                             PageHelper.hideLoader();
                         });

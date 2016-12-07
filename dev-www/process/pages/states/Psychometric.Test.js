@@ -179,6 +179,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 		Psychometric.postTest(testToSend, function(resp){
 			$log.info(resp);
 			$scope.testStatus = 'Close';
+			$scope.closeTest();
 		}, function(errResp) {
 			$log.error(errResp);
 			$scope.testStatus = 'Submission failed';

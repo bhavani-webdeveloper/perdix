@@ -34,10 +34,7 @@ irf.models.factory('Psychometric',
             method: 'GET',
             url: endpoint + '/maintenance/category/find'
         }),
-        postSingleQuestion: {
-            method: 'POST',
-            url: endpoint + '/question/single'
-        },
+
         findQuestions: searchResource({
             method: 'GET',
             url: endpoint + '/question/find'
@@ -45,6 +42,10 @@ irf.models.factory('Psychometric',
         getSingleQuestion: {
             method: 'GET',
             url: endpoint + '/question/single/:id'
+        },
+        postSingleQuestion: {
+            method: 'POST',
+            url: endpoint + '/question/single'
         },
         getPairedQuestions: {
             method: 'GET',

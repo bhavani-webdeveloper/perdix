@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							onSelect: function(result, model, context) {
 								if (result.type === 'SINGLE') {
-									model.psy1 = resp;
+									model.psy1 = result;
 								} else if (result.type === 'PAIRED') {
 									Psychometric.getPairedQuestions({id:result.id}, function(resp) {
 										model.psy1 = resp[0];
@@ -424,7 +424,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"questionLangs": {
 								"type": "array",
-								"title": "Question Text",
+								"title": "Text",
 								"items": {
 									"type": "object",
 									"required": ["langCode", "questionText"],
@@ -442,7 +442,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"options": {
 								"type": "array",
-								"title": "Options",
+								"title": "Option",
 								"items": {
 									"type": "object",
 									"required": ["optionScore", "optionLangs"],
@@ -453,7 +453,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 										},
 										"optionLangs": {
 											"type": "array",
-											"title": "Option Text",
+											"title": "Text",
 											"items": {
 												"type": "object",
 												"required": ["langCode", "optionText"],
@@ -471,7 +471,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 										},
 										"linkedOptions": {
 											"type": "array",
-											"title": "Linked Options",
+											"title": "Linked Option",
 											"items": {
 												"type": "object",
 												"properties": {
@@ -485,7 +485,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 													},
 													"optionLangs": {
 														"type": "array",
-														"title": "Option Text",
+														"title": "Text",
 														"items": {
 															"type": "object",
 															"required": ["langCode", "optionText"],
@@ -551,7 +551,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"questionLangs": {
 								"type": "array",
-								"title": "Question Text",
+								"title": "Text",
 								"items": {
 									"type": "object",
 									"required": ["langCode", "questionText"],
@@ -580,7 +580,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 										},
 										"optionLangs": {
 											"type": "array",
-											"title": "Option Text",
+											"title": "Text",
 											"items": {
 												"type": "object",
 												"required": ["langCode", "optionText"],
@@ -612,9 +612,23 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 						if (model.psy1.type==='SINGLE') {
 							Psychometric.postSingleQuestion(model.psy1).$promise.then(function(resp) {
 								model.psy1 = resp;
-								PageHelper.showProgress("psychometric", "Question created/updated", 3000);
-							}, function(err) {
-								$log.info(err);
+								PageHelper.showProgress("psychometric", "Single Question created/updated", 3000);
+							}, function(errResp) {
+								$log.info(errResp);
+								var err = errResp.data;
+								err.error = err.errorCode || err.error;
+								err.message = err.errorMsg || err.message;
+								PageHelper.setError({message: err.error + ": " + err.message});
+							}).finally(function() {
+								PageHelper.hideLoader();
+							});
+						} else if (model.psy1.type==='LINKED') {
+							Psychometric.postLinkedQuestion(model.psy1).$promise.then(function(resp) {
+								model.psy1 = resp;
+								PageHelper.showProgress("psychometric", "Linked Questions created/updated", 3000);
+							}, function(errResp) {
+								$log.info(errResp);
+								var err = errResp.data;
 								err.error = err.errorCode || err.error;
 								err.message = err.errorMsg || err.message;
 								PageHelper.setError({message: err.error + ": " + err.message});
@@ -625,12 +639,11 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							Psychometric.postPairedQuestions([model.psy1, model.psy2]).$promise.then(function(resp) {
 								model.psy1 = resp[0];
 								model.psy2 = resp[1];
-								PageHelper.showProgress("psychometric", "Question created/updated", 3000);
-							}, function(err) {
-								$log.info(err);
-								err.error = err.errorCode || err.error;
-								err.message = err.errorMsg || err.message;
-								PageHelper.setError({message: err.error + ": " + err.message});
+								PageHelper.showProgress("psychometric", "Paired Questions created/updated", 3000);
+							}, function(errResp) {
+								$log.info(errResp);
+								var err = errResp.data;
+                            	PageHelper.setError({message: (err.errorCode || err.error) + ": " + (err.errorMsg || err.message)});
 							}).finally(function() {
 								PageHelper.hideLoader();
 							});
