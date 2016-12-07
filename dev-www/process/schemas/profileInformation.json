@@ -1517,6 +1517,48 @@
                             "isDisbersementAccount": {
                                 "type": ["boolean","null"],
                                 "title": "DISBURSEMENT_ACCOUNT"
+                            },
+                            "bankStatements": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "balanceAsOn15th": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "customerBankAccountId": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "customerId": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "id": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "noOfChequeBounced": {
+                                    "type": ["integer", "null"],
+                                    "maximum": 99,
+                                    "minimum":0
+                                  },
+                                  "noOfEmiChequeBounced": {
+                                    "type": ["integer", "null"],
+                                    "maximum": 99,
+                                    "minimum":0
+                                  },
+                                  "startMonth": {
+                                    "type": ["string", "null"]
+                                  },
+                                  "totalDeposits": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "totalWithdrawals": {
+                                    "type": ["integer", "null"]
+                                  },
+                                  "version": {
+                                    "type": ["integer", "null"]
+                                  }
+                                }
+                              }
                             }
                         }
                     }
