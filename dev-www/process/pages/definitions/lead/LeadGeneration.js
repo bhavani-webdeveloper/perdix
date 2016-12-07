@@ -99,6 +99,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
+                                    title:"APPLICANT_NAME"
                                 }, {
                                     key: "lead.customerType",
                                     type: "select",
@@ -314,6 +315,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     title: "PRODUCT_DETAILS",
                     items: [{
                         key: "lead.interestedInProduct",
+                        title:"INTERESTED_IN_LOAN_PRODUCT",
                         type: "radios",
                         required:true,
                         enumCode: "decisionmaker",
