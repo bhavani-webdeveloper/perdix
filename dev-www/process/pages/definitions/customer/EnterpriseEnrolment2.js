@@ -1037,7 +1037,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true,
+                                        required:true,                                       
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                 ]
