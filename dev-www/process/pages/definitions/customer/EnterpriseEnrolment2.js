@@ -267,6 +267,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.referredName",
+                        condition: "model.customer.enterprise.referredBy == 'Channel Partner' || model.customer.enterprise.referredBy == 'Peer Referral' || model.customer.enterprise.referredBy =='Known supply chain'",
                         title:"REFERRED_NAME"
                     },/*
                     {
