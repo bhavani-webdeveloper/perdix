@@ -1184,8 +1184,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            {
-                               key:"customer.liabilities[].loanSource"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
+                               key:"customer.liabilities[].loanSource",
+                               type:"select",
+                               titleMap: {
+                                                "Bank": "Bank",
+                                                "NBFC/MFI": "NBFC/MFI",
+                                                "Society": "Society",
+                                                "Private Financials": "Private Financials"
+                                            }
+
+
                            },
                            "customer.liabilities[].instituteName",
                            {
