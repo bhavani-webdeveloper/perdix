@@ -43,6 +43,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     model._bundlePageObj = bundlePageObj;
                 }
                 model.customer = model.customer || {};
+                 if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                     model.customer.enterprise = {};
+                 }
                 //model.branchId = SessionStore.getBranchId() + '';
                 //model.customer.kgfsName = SessionStore.getBranch();
                 model.customer.customerType = "Enterprise";
@@ -103,11 +106,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             model.customer.age=obj.age;
                             model.customer.mobilePhone = obj.mobileNo;
                             model.customer.latitude =obj.location;
+                            if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                                model.customer.enterprise = {};
+                            }
                             model.customer.enterprise.ownership =obj.ownership;
                             model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
                             model.customer.enterprise.companyRegistered =obj.companyRegistered;
                             model.customer.enterprise.businessType =obj.businessType;
-                            model.customer.enterprise.businessLine=obj.businessActivity;
+                            model.customer.enterprise.businessActivity=obj.businessActivity;
                         },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Inside new co-applicant of EnterpriseEnrollment");
@@ -365,7 +371,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 subCategory:"REGISTRATIONDOCUMENT"
                             }
                         ]
-                    }/*,
+                    },/*,
                     {
                         key: "customer.enterprise.registrationType",
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
@@ -383,7 +389,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         condition: "model.customer.enterprise.companyRegistered === 'YES'",
                         type: "date",
                         title: "REGISTRATION_DATE"
-                    }*/,
+                    }*/
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -391,11 +397,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessType"
                     },
                     {
+                        key: "customer.enterprise.businessActivity",
+                        title: "BUSINESS_ACTIVITY",
+                        type: "select",
+                        enumCode: "business_activity"
+                    },
+                    {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        enumCode: "business_type",
-                        parentEnumCode: "businessType"
+                        enumCode: "businessLine",
+                        parentEnumCode: "businessType",
+                        parentValueExpr:"model.customer.enterprise.businessType",
 
                     },
                     {
@@ -403,14 +416,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
-                        parentEnumCode: "businessType"
+                        parentEnumCode: "businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessLine",
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector",
-                        parentEnumCode: "businessSector"
+                        parentEnumCode: "businessSector",
+                        //parentValueExpr:"model.customer.enterprise.businessSector",
                     },
                     {
                         key: "customer.enterprise.itrAvailable",
@@ -702,6 +717,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_TYPE",
                         type: "select",
                         enumCode: "businessType"
+                    },
+                    {
+                        key: "customer.enterprise.businessActivity",
+                        title: "BUSINESS_ACTIVITY",
+                        type: "select",
+                        enumCode: "business_activity"
                     },
                     {
                         key: "customer.enterprise.businessLine",
