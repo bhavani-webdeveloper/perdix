@@ -1171,7 +1171,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+               "condition":" model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                        key:"customer.liabilities",
