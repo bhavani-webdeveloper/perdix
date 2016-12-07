@@ -119,10 +119,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                         enumCode: "businessType"
                                     }, {
                                         key: "lead.businessActivity",
-                                        title:"BUSINESS_LINE",
+                                        //title:"BUSINESS_LINE",
                                         type: "select",
-                                        enumCode: "businessLine",
-                                        parentEnumCode: "businessType"
+                                        enumCode: "business_activity",
+                                        //parentEnumCode: "businessType"
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type: "date"
