@@ -23,7 +23,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         if(model.currentStage=='ScreeningReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
         if(model.currentStage=='Application')
-            $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationQueue', pageId:null});
         if(model.currentStage=='ApplicationReview')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
         if (model.currentStage == 'FieldAppraisal')
