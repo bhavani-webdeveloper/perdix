@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     "title": "INDIVIDUAL_ENROLLMENT",
                     "subTitle": "",
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+       
                         model.currentStage = bundleModel.currentStage;
                        
                         if (_.hasIn(model, 'loanRelation')){
@@ -33,6 +34,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             }
                         } 
                         // else {
+
                             model.customer = model.customer || {};
                             var branch1 = formHelper.enum('branch_id').data;
                             for (var i = 0; i < branch1.length; i++) {
@@ -57,6 +59,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "frequency": "Monthly"
                                 });
                             }
+
 
                             if(!model.customer.familyMembers){
                                 model.customer.familyMembers = [
@@ -93,6 +96,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.dateOfBirth=obj.dob;
                             model.customer.age=obj.age;
                             model.customer.landLineNo = obj.alternateMobileNo;
+
+
+                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                $log.info("hi");
+                                $log.info(model.customer.familyMembers[i].relationShip);
+                                model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                /*if (model.customer.familyMembers[i].relationShip == "self") {
+                                    model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                    break;
+                                }*/
+                            }      
                         },
                         "origination-stage": function(bundleModel, model, obj){
                             model.currentStage = obj
@@ -1184,13 +1198,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "type": "box",
                             "title": "T_FAMILY_DETAILS",
                             "condition": "model.currentStage=='Screening'",
-                            "add": null,
-                            "remove": null,
-                            "view": "fixed",
                             "items": [
                                 {
                                     "key": "customer.familyMembers",
                                     "type": "array",
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": true,
+                                    "view":"fixed",
                                     "items": [
                                         {
                                             "key": "customer.familyMembers[].relationShip",
