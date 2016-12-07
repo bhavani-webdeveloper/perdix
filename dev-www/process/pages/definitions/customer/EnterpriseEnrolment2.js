@@ -2109,6 +2109,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.machinery[].fundingSource",
                                 title:"FUNDING_SOURCE",
                                 type: "select",
+                                titleMap: {
+                                        "Funding Source1": "Funding Source1",
+                                    }
                             },
                             {
                                 key: "customer.machinery[].isTheMachineHypothecated",
