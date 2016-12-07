@@ -360,13 +360,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                         key: "lead.loanPurpose1",
                         condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                         type: "select",
-                        titleMap: {
+                        enumCode: "loan_purpose_1"
+                        /*titleMap: {
                             "AssetPurchase": "AssetPurchase",
                             "WorkingCapital": "WorkingCapital",
                             "BusinessDevelopment": "BusinessDevelopment",
                             "LineOfCredit": "LineOfCredit",
 
-                        }
+                        }*/
                     }, {
                         key: "lead.productRequiredBy",
                         type: "select",
