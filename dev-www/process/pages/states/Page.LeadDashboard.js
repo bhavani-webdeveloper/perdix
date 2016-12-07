@@ -7,10 +7,10 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         "title": "Leads Dashboard",
         "iconClass": "fa fa-book",
         "items": [
+            "Page/Engine/lead.LeadGeneration",
             "Page/Engine/lead.LeadBulkUpload",
             "Page/Engine/lead.leadAssignmentPendingQueue",
             "Page/Engine/lead.IncompleteLeadQueue",
-            "Page/Engine/lead.LeadGeneration",
             "Page/Engine/lead.LeadFollowUpQueue",
             "Page/Engine/lead.ReadyForScreeningQueue",   
         ]
