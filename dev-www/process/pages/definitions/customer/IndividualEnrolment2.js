@@ -95,6 +95,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.landLineNo=obj.alternateMobileNo;
                             model.customer.dateOfBirth=obj.dob;
                             model.customer.age=obj.age;
+                            model.customer.gender=obj.gender;
                             model.customer.landLineNo = obj.alternateMobileNo;
 
 
