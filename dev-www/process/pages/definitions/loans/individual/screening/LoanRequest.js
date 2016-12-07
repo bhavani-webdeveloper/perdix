@@ -113,6 +113,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             "lead-loaded": function(bundleModel, model, obj) {
                 model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
+                model.loanAccount.loanPurpose1 = obj.loanPurpose1;
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
