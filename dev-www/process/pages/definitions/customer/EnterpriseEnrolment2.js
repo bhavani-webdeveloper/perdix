@@ -349,7 +349,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 enumCode: "business_registration_type"
                             },
                             {
-                                key: "customer.enterpriseRegistrations[].registrationNumber",
+                               key: "customer.enterpriseRegistrations[].registrationNumber",
                                title: "REGISTRATION_NUMBER"
                             },
                             {
