@@ -893,10 +893,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                      },
                                 },
                                 {
-                                    "type": "string",
+                                    "type": "number",
                                     "condition":"model.customer.whatsAppMobileNo == 3 ",
                                     "key": "customer.whatsAppMobileNo1",
-                                    "title": "WHATSAPP_NO"
+                                    "title": "WHATSAPP_NO",
                                 },
                                 {
                                     "type": "string",
@@ -909,7 +909,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     items: [
                                     {
                                       key:"customer.careOf",
-                                      required:true  
+                                      required:true,
+                                      title:"C/O",  
                                     },
                                         "customer.doorNo",
                                         "customer.street",
