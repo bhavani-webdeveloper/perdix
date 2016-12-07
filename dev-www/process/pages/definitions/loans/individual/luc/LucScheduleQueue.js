@@ -33,9 +33,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 							"enumCode": "centre",
 							"x-schema-form": {
 								"type": "select",
-								"filter": {
-									"parentCode": "branch"
-								},
+								"parentEnumCode": "branch",
 								"screenFilter": true
 							}
 						},
