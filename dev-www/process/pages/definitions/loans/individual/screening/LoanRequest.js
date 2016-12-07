@@ -112,7 +112,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
             },
             "lead-loaded": function(bundleModel, model, obj) {
-                 $log.info(obj);
                 model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
             },
             "new-co-applicant": function(bundleModel, model, params){
