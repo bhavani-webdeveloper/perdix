@@ -124,6 +124,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                         type: "select",
                                         enumCode: "business_activity",
                                         //parentEnumCode: "businessType"
+                                    },{
+                                        key: "lead.companyRegistered",
+                                        type: "radios",
+                                        enumCode: "decisionmaker"
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type: "date"
@@ -140,11 +144,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                             "Rental": "Rental",
                                         }*/
 
-                                    }, {
-                                        key: "lead.companyRegistered",
-                                        type: "radios",
-                                        enumCode: "decisionmaker"
-                                    }, {
+                                    },  
+                                    {
                                         type: "fieldset",
                                         title: "INDIVIDUAL_DETAILS",
                                         items: [{
