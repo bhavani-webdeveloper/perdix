@@ -1517,8 +1517,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         //     type:"select"
                                         // },
                                         {
-                                            key:"customer.liabilities[].loanSource"/*,
-                                            type:"select"*/ //Made as free text till list of values are given by Kinara
+                                            key:"customer.liabilities[].loanSource",
+                                            type:"select",
+                                            enumCode:"loan_source"
                                         },
                                         "customer.liabilities[].instituteName",
                                         {
