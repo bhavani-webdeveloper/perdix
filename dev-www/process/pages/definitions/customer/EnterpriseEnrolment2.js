@@ -711,6 +711,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "date",
                         title: "REGISTRATION_DATE"
                     }*/,
+
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -718,12 +719,27 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessType"
                     },
                     {
+                        key: "customer.enterprise.businessActivity",
+                        title: "BUSINESS_ACTIVITY",
+                        type: "select",
+                        enumCode: "business_activity"
+                    },
+                    {
+                        key: "customer.enterprise.businessLine",
+                        title: "BUSINESS_LINE",
+                        type: "select",
+                        enumCode: "businessLine",
+                        //parentEnumCode: "businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessType",
+
+                    },
+                    /*{
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
                         enumCode: "businessActivity",
                         // parentEnumCode: "businessType"
-                    },
+                    },*/
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
