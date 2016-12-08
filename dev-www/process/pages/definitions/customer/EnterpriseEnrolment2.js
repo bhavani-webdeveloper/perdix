@@ -1172,20 +1172,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
+                               key:"customer.liabilities[].loanType",
+                               type:"select",
+                               enumCode:"liability_loan_type",
                            },
                            {
                                key:"customer.liabilities[].loanSource",
                                type:"select",
-                               titleMap: {
-                                                "Bank": "Bank",
-                                                "NBFC/MFI": "NBFC/MFI",
-                                                "Society": "Society",
-                                                "Private Financials": "Private Financials"
-                                            }
-
-
+                               enumCode: "loan_purpose_1",
                            },
                            "customer.liabilities[].instituteName",
                            {
