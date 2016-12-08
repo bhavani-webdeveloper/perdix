@@ -65,6 +65,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 								];
 							},
 							onSelect: function(result, model, context) {
+								PageHelper.clearErrors();
 								if (result.type === 'SINGLE') {
 									model.psy1 = result;
 								} else if (result.type === 'PAIRED') {

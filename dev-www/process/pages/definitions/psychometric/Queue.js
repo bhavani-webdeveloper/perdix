@@ -121,7 +121,7 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 									}, function(reqData) {
 										reqData.psychometricCompleted = 'Completed';
 										IndividualLoan.update({
-											loanProcessAction: 'PROCEED',
+											loanProcessAction: 'SAVE',
 											loanAccount: reqData
 										}).$promise.then(function(loanResp){
 											
