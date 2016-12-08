@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                 {
                     "type":"box",
                     "title":"Details",
-                    colClass: "col-sm-12",
+                   // colClass: "col-sm-12",
                     "items":[
                         {
                             key: "address.streetAddress",
