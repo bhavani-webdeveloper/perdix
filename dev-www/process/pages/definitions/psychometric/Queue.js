@@ -2,6 +2,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "Psychometric", "PsychometricTestService", "PageHelper",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, Psychometric, PsychometricTestService, PageHelper) {
 		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+		for (var i = 0; i < centres.length; i++) {
+			centreId.push(centres[i].centreId);
+		}
 		return {
 			"type": "search-list",
 			"title": "Psychometric Test",
@@ -23,11 +28,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
-	                    },/*
+	                    },
 	                    "businessName": {
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
-	                    },*/
+	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -40,11 +45,20 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                     "pincode": {
-	                        "title": "PIN_CODE",
-	                        "type": "string"
-	                    }
-
+	                    "pincode": {
+	                        "title": "PINCODE",
+	                        "type": "string",
+	                       
+	                    },
+	                     "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
 					},
 					"required": []
 				},
@@ -55,16 +69,20 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
-					return Psychometric.searchLoanForPsychometric({
-	                    'pincode':searchOptions.pincode,
-	                    'first_name':searchOptions.applicantName,
+					return IndividualLoan.search({
+	                    'stage': 'Application',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch,
+	                    'enterprisePincode':searchOptions.pincode,
+	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'village_name':searchOptions.villageName,
-	                    //'customerName': searchOptions.businessName,
-	                    
+	                    'status':searchOptions.status,
+	                    'villageName':searchOptions.villageName,
+	                    'customerName': searchOptions.businessName,
+	                    'psychometric_completed': 'N',
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                });
+	                }).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -104,8 +122,23 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					},
 					getColumns: function() {
 						return [{
-							title: 'ACCOUNT_NUMBER',
-							data: 'account_number'
+							title: 'SCREENING_DATE',
+							data: 'screeningDate'
+						}, {
+							title: 'APPLICANT_NAME',
+							data: 'applicantName'
+						},{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
+						}, {
+							title: 'AREA',
+							data: 'area'
+						}, {
+							title: 'CITY_TOWN_VILLAGE',
+							data: 'villageName'
+						}, {
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
 					getActions: function() {
