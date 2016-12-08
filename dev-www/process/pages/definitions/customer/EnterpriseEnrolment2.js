@@ -267,7 +267,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.referredName",
-                        condition: "model.customer.enterprise.referredBy == 'Channel Partner' || model.customer.enterprise.referredBy == 'Peer Referral' || model.customer.enterprise.referredBy =='Known supply chain'",
                         title:"REFERRED_NAME"
                     },/*
                     {
@@ -349,7 +348,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 enumCode: "business_registration_type"
                             },
                             {
-                               key: "customer.enterpriseRegistrations[].registrationNumber",
+                                key: "customer.enterpriseRegistrations[].registrationNumber",
                                title: "REGISTRATION_NUMBER"
                             },
                             {
@@ -398,11 +397,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessType"
                     },
                     {
+                        key: "customer.enterprise.businessActivity",
+                        title: "BUSINESS_ACTIVITY",
+                        type: "select",
+                        enumCode: "business_activity"
+                    },
+                    {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        enumCode: "businessActivity",
-                        parentEnumCode: "businessType"
+                        enumCode: "businessLine",
+                        parentEnumCode: "businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessType",
+
                     },
                     {
                         key: "customer.enterprise.businessSector",
@@ -905,7 +912,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 type: "box",
-                title: "BANK_ACCOUNTS",
+                title: "CUSTOMER_BANK_ACCOUNTS",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items: [
                     {
@@ -1163,7 +1170,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":" model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                        key:"customer.liabilities",
@@ -1172,14 +1179,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType",
-                               type:"select",
-                               enumCode:"liability_loan_type",
+                               key:"customer.liabilities[].loanType"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            {
-                               key:"customer.liabilities[].loanSource",
-                               type:"select",
-                               enumCode: "loan_purpose_1",
+                               key:"customer.liabilities[].loanSource"/*,
+                                type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
                            "customer.liabilities[].instituteName",
                            {
