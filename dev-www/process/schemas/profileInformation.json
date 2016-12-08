@@ -306,11 +306,6 @@
                             }
                         },
                         "required": [
-                            "customerId",
-                            "id",
-                            "linkedToCustomerId",
-                            "relationshipType",
-                            "version"
                         ]
                     }
                 },
