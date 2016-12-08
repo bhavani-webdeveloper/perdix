@@ -400,7 +400,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.businessActivity",
                         title: "BUSINESS_ACTIVITY",
                         type: "select",
-                        enumCode: "business_activity"
+                        enumCode: "business_activity",
+                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessLine",
@@ -1190,12 +1191,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
+                               key:"customer.liabilities[].loanType"
+                               type:"select",
+                               enumCode:"liability_loan_type" 
                            },
                            {
-                               key:"customer.liabilities[].loanSource"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
+                               key:"customer.liabilities[].loanSource"
+                                type:"select",
+                                enumCode:"loan_source"
                            },
                            "customer.liabilities[].instituteName",
                            {
