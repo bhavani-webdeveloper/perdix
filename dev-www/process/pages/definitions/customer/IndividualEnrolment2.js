@@ -827,7 +827,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     "key": "customer.title",
                                     "title": "TITLE",
-                                    "type": "select"
+                                    "type": "string"
                                 },
                                 {
                                     key: "customer.firstName",
@@ -846,18 +846,19 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     key:"customer.dateOfBirth",
                                     type:"date"
                                 },
-                                {
-                                    key:"customer.age",
-                                    title: "AGE",
-                                    type:"number"
-                                },
+                                // {
+                                //     key:"customer.age",
+                                //     title: "AGE",
+                                //     type:"number"
+                                // },
                                 {
                                     key:"customer.religion",
                                     type:"select"
                                 },
                                 {
                                     key: "customer.language",
-                                    title: "PREFERRED_LANGUAGE"
+                                    title: "PREFERRED_LANGUAGE",
+                                    type: "string"
                                 },
                                 {
                                     key: "customer.fatherFirstName",
@@ -877,12 +878,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     condition:"model.customer.maritalStatus==='MARRIED'",
                                     type:"qrcode"
                                 },
-                                {
-                                    key:"customer.spouseAge",
-                                    title: "SPOUSE_AGE",
-                                    type:"number",
-                                    condition:"model.customer.maritalStatus==='MARRIED'"
-                                },
+                                // {
+                                //     key:"customer.spouseAge",
+                                //     title: "SPOUSE_AGE",
+                                //     type:"number",
+                                //     condition:"model.customer.maritalStatus==='MARRIED'"
+                                // },
                                 {
                                     key:"customer.spouseDateOfBirth",
                                     type:"date",

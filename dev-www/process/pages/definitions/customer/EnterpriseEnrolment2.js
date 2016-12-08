@@ -639,13 +639,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.anyPartnerOfPresentBusiness",
                         title: "HAS_ANYONE_ELSE_PARTNER",
-                        type: "select",
-                        enumCode: "decisionmaker"
+                        type: "string"
                     },
                     {
                         key: "customer.enterprise.partnershipDissolvedDate",
                         title: "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
-                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
+                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='Yes' || model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
                         type: "date"
                     },
                     {
@@ -719,37 +718,33 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         enumCode: "businessType"
                     },
                     {
-                        key: "customer.enterprise.businessActivity",
-                        title: "BUSINESS_ACTIVITY",
-                        type: "select",
-                        enumCode: "business_activity"
-                    },
-                    {
                         key: "customer.enterprise.businessLine",
                         title: "BUSINESS_LINE",
                         type: "select",
-                        enumCode: "businessLine",
-                        parentEnumCode: "businessType"
+                        enumCode: "businessActivity",
+                        // parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
-                        parentEnumCode: "businessType"
+                        // parentEnumCode: "businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessLine",
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
                         type: "select",
                         enumCode: "businessSubSector",
-                        parentEnumCode: "businessSector"
+                        // parentEnumCode: "businessSector",
+                        //parentValueExpr:"model.customer.enterprise.businessSector",
                     },
                     {
                         key: "customer.enterprise.itrAvailable",
                         title: "ITR_AVAILABLE",
-                        type: "select",
-                        enumCode: "decisionmaker"
+                        type: "string",
+                        // enumCode: "decisionmaker"
                     },
                     {
                         key: "customer.enterpriseCustomerRelations",
@@ -762,9 +757,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "select",
                                 enumCode: "relationship_type"
                             },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerId"
-                            },
+                            // {
+                            //     key: "customer.enterpriseCustomerRelations[].linkedToCustomerId"
+                            // },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                                 readonly: true,
@@ -898,14 +893,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                        key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
-                       type: "select",
-                       enumCode: "years_in_present_area",
+                       type: "string",
+                       // enumCode: "years_in_present_area",
                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
                     },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
-                        type: "select",
-                        enumCode: "years_in_current_address",
+                        type: "string",
+                        // enumCode: "years_in_current_address",
                         title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     }
                 ]
@@ -1115,38 +1110,38 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "amount"
                             },
                             {
-                                key: "customer.customerBankAccounts[].bankStatement",
+                                key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
                                 items: [
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
                                         type: "date",
                                         title: "START_MONTH"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                         type: "amount",
                                         required:true,
                                         title: "TOTAL_DEPOSITS"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                         type: "amount",
                                         title: "TOTAL_WITHDRAWALS"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
                                         title: "BALANCE_AS_ON_15TH"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                         type: "amount",
                                         title: "NO_OF_CHEQUE_BOUNCED"
                                     },
                                     {
-                                        key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
@@ -1243,7 +1238,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_LIABILITIES",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+               "condition":"model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
                     {
@@ -1419,7 +1414,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "type": "box",
                 "title": "SUPPLIERS_DEATILS",
                 "readonly": true,
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "condition":" model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                 "items": [
                     {
                         key:"customer.supplierDetails",
@@ -1454,7 +1449,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"CUSTOMER_BUYER_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+               "condition":" model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
                     {
@@ -1785,10 +1780,29 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 ]
             },
+        {
+            type: "box",
+            title: "T_BUSINESS_FINANCIALS",
+            "condition": "model.currentStage=='Screening'",
+            items: [{
+                key: "customer.enterprise.monthlyTurnover",
+                title: "MONTHLY_TURNOVER",
+                required: true,
+                type: "amount"
+            }, {
+                key: "customer.enterprise.monthlyBusinessExpenses",
+                title: "MONTHLY_BUSINESS_EXPENSES",
+                type: "amount"
+            }, {
+                key: "customer.enterprise.avgMonthlyNetIncome",
+                title: "AVERAGE_MONTHLY_NET_INCOME",
+                type: "amount"
+            }]
+        },
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+               "condition":"model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
                     {

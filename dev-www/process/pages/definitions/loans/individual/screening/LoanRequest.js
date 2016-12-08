@@ -274,6 +274,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
+                        
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
