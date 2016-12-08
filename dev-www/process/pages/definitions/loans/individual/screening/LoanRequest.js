@@ -114,6 +114,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             "lead-loaded": function(bundleModel, model, obj) {
                 model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                 model.loanAccount.loanPurpose1 = obj.loanPurpose1;
+                model.loanAccount.screeningDate = obj.screeningDate;
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of LoanRequest");
@@ -939,7 +940,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanProcessAction = "SAVE";
                             // reqData.remarks = model.review.remarks;
-                            reqData.loanAccount.screeningDate = Utils.getCurrentDate();
+                            reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
