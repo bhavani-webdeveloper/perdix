@@ -858,7 +858,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key: "customer.language",
                                     title: "PREFERRED_LANGUAGE",
-                                    type: "string"
+                                    type: "select",
+                                    enumCode: "language"
                                 },
                                 {
                                     key: "customer.fatherFirstName",
