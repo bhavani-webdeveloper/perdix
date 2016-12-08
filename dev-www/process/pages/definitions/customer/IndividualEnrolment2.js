@@ -1239,6 +1239,34 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "box",
+                            "title": "T_FAMILY_DETAILS",
+                            "condition": "model.currentStage=='ScreeningReview'",
+                            readonly:true,
+                            "items": [
+                                {
+                                    "key": "customer.familyMembers",
+                                    "type": "array",
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": true,
+                                    "view":"fixed",
+                                    "items": [
+                                        {
+                                            "key": "customer.familyMembers[].relationShip",
+                                            "type": "select"
+                                        },
+                                        {
+                                            "key": "customer.familyMembers[].educationStatus",
+                                            "title": "EDUCATION_LEVEL",
+                                            "type": "select"
+                                        }
+                                    ]
+                                }
+
+                            ]
+                        },
+                        {
+                            "type": "box",
                             "title": "T_FAMILY_SELF_DETAILS",
                             "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [{
@@ -1419,7 +1447,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "T_FAMILY_DETAILS",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            "condition": " model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [{
                                 key:"customer.familyMembers",
@@ -1894,9 +1922,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].netBankingAvailable",
-                                            type: "select",
+                                            type: "string",
                                             title: "NET_BANKING_AVAILABLE",
-                                            enumCode: "decisionmaker"
+                                            //enumCode: "decisionmaker"
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].sanctionAmount",
@@ -1905,37 +1933,37 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].bankStatement",
+                                            key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",
                                             title: "STATEMENT_DETAILS",
                                             items: [
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].startMonth",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].startMonth",
                                                     type: "date",
                                                     title: "START_MONTH"
                                                 },
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].totalDeposits",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                                     type: "amount",
                                                     title: "TOTAL_DEPOSITS"
                                                 },
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].totalWithdrawals",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                                     type: "amount",
                                                     title: "TOTAL_WITHDRAWALS"
                                                 },
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].balanceAsOn15th",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                                     type: "amount",
                                                     title: "BALANCE_AS_ON_15TH"
                                                 },
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].noOfChequeBounced",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                                     type: "amount",
                                                     title: "NO_OF_CHEQUE_BOUNCED"
                                                 },
                                                 {
-                                                    key: "customer.customerBankAccounts[].bankStatement[].noOfEmiChequeBounced",
+                                                    key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                                     type: "amount",
                                                     title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                                 },
