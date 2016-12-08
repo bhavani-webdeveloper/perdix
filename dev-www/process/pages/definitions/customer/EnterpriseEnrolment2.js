@@ -2174,8 +2174,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.machinery[].machineBillsDocId",
                                 title:"MACHINE_BILLS",
-                                "category":"customer",
-                                "subCategory":"customer",
+                                "category":"Loan",
+                                "subCategory":"DOC1",
                                 type: "file",
                             },
                          ]
@@ -2286,8 +2286,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.machinery[].machineBillsDocId",
                                 title:"MACHINE_BILLS",
-                                "category":"customer",
-                                "subCategory":"customer",
+                                "category":"Loan",
+                                "subCategory":"DOC1",
                                 type: "file",
                             },
                          ]
