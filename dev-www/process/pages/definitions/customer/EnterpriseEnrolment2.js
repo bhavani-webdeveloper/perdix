@@ -267,6 +267,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.referredName",
+                        condition: "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
                         title:"REFERRED_NAME"
                     },/*
                     {
@@ -1191,12 +1192,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        title:"FINANCIAL_LIABILITIES",
                        items:[
                            {
-                               key:"customer.liabilities[].loanType"
+                               key:"customer.liabilities[].loanType",
                                type:"select",
                                enumCode:"liability_loan_type" 
                            },
                            {
-                               key:"customer.liabilities[].loanSource"
+                               key:"customer.liabilities[].loanSource",
                                 type:"select",
                                 enumCode:"loan_source"
                            },
