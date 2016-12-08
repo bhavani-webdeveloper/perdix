@@ -1095,9 +1095,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].netBankingAvailable",
-                                type: "select",
+                                type: "string",
                                 title: "NET_BANKING_AVAILABLE",
-                                enumCode:"decisionmaker"
+                                //enumCode:"decisionmaker"
                             },
                             {
                                 key: "customer.customerBankAccounts[].sanctionedAmount",
