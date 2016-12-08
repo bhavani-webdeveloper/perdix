@@ -233,8 +233,10 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", "Queries", function($log, $
         dateToLocalTZ: function(mysqlDate){
         	var localUtcOffset = moment().utcOffset();
         	return moment.utc(mysqlDate).utcOffset(localUtcOffset);
+        },
+        randomString: function(length){
+        	return Math.random().toString(36).substring(2, length+2);
         }
-
 	};
 }]);
 

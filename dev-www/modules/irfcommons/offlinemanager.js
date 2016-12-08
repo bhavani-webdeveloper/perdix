@@ -17,7 +17,19 @@
  *
  * */
 
-irf.commons.factory('OfflineManager', ["$log", function($log){
+irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", function($log, irfStorageService, Utils){
+
+    function randomStringForCollection(collection){
+        var key = Utils.randomString(10);
+        while(true) {
+            if (_.hasIn(collection, key)){
+                key = Utils.randomString(10);
+                continue;
+            }
+            break;
+        }
+        return key;
+    }
 
     return {
         /**
@@ -27,7 +39,12 @@ irf.commons.factory('OfflineManager', ["$log", function($log){
          * @param {object} item  The item to be saved in offline storage.
          */
         storeItem: function(collectionId, item){
-
+            var collection = irfStorageService.retrieveJSON(collectionId);
+            if (collection == null){
+                collection = {};
+            }
+            collection[key] = item;
+            irfStorageService.storeJSON(collectionId, collection);
         },
         /**
          * Retrieve a list of items stored in offline.
@@ -35,15 +52,19 @@ irf.commons.factory('OfflineManager', ["$log", function($log){
          * @param {string} collectionId Usually the pageId.
          */
         retrieveItems: function(collectionId){
-
+            return irfStorageService.retrieveJSON(collectionId);
         },
         /**
          * Remove an item from the offline storage.
          *
          * @param {string} id  Id of the item.
          */
-        removeItem: function(id){
-
+        removeItem: function(collectionId, id){
+            var collection = irfStorageService.retrieveJSON(collectionId);
+            if (collection == null){
+                collection = {};
+            }
+            delete collection[id];
         }
     }
 }])
