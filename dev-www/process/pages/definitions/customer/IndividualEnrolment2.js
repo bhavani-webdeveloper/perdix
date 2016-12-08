@@ -695,7 +695,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.age",
                                     title: "AGE",
-                                    required:true,
+                                    //required:true,
                                     type:"number",
                                     "onChange": function(modelValue, form, model) {
                                         if (model.customer.age > 0) {
