@@ -1573,7 +1573,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "amount"
                                     },
                                     {
-                                        key: "customer.otherBusinessIncomes[].date",
+                                        key: "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
                                         title: "DATE",
                                         type: "date"
                                     },
@@ -1636,7 +1636,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "amount"   
                                     },
                                     {
-                                        key: "customer.incomeThroughSales[].date",
+                                        key: "customer.incomeThroughSales[].incomeSalesDate",
                                         title: "DATE",
                                         type: "date"
                                     }
@@ -1697,7 +1697,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "amount"
                                     },
                                     {
-                                        key: "customer.rawMaterialExpenses[].date",
+                                        key: "customer.rawMaterialExpenses[].rawMaterialDate",
                                         title: "DATE",
                                         type: "date"
                                     }
@@ -1866,7 +1866,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     type: "amount"   
                                 },
                                 {
-                                    key: "customer.incomeThroughSales[].date",
+                                    key: "customer.incomeThroughSales[].incomeSalesDate",
                                     title: "DATE",
                                     type: "date"
                                 }, 
@@ -1891,7 +1891,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.otherBusinessIncomes[].date",
+                                    key: "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
                                     title: "DATE",
                                     type: "date"
                                 }, 
@@ -1928,7 +1928,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.rawMaterialExpenses[].date",
+                                    key: "customer.rawMaterialExpenses[].rawMaterialDate",
                                     title: "DATE",
                                     type: "date"
                                 },
@@ -2312,7 +2312,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "array", 
                         items:[
                             {
-                                key:"customer.verifications[].referenceType",
+                                key:"customer.verifications[].relationship",
                                 title:"REFERENCE_TYPE",
                                 type:"select",
                                 required:"true",
@@ -2324,7 +2324,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"string"
                             },
                             {
-                                key:"customer.verifications[].fullNameofPOC",
+                                key:"customer.verifications[].referenceFirstName",
                                 title:"FULL_NAME_OF_POC",
                                 type:"string"
                             },
@@ -2368,7 +2368,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "array", 
                         items:[
                             {
-                                key:"customer.verifications[].referenceType",
+                                key:"customer.verifications[].relationship",
                                 title:"REFERENCE_TYPE",
                                 type:"select",
                                 required:"true",
@@ -2380,7 +2380,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"string"
                             },
                             {
-                                key:"customer.verifications[].fullNameofPOC",
+                                key:"customer.verifications[].referenceFirstName",
                                 title:"FULL_NAME_OF_POC",
                                 type:"string"
                             },
