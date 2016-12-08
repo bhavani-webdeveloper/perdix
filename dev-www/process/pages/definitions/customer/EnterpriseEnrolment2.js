@@ -1455,7 +1455,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
                                 title:"PAYEMNT_TERMS_IN_DAYS",
-                                type:" number"
+                                type: "select",
+                                enumCode: "payment_terms"
+                                //type:" number"
                             },
                             {
                                 key:"customer.supplierDetails[].amount",
