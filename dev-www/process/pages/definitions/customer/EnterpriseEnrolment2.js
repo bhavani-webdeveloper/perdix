@@ -438,14 +438,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.electricityAvailable",
                         title: "ELECTRICITY_AVAIALBLE",
-                        type: "radios",
+                        type: "select",
                         enumCode: "decisionmaker",
                         required: true
                     },
                     {
                         key: "customer.enterprise.spaceAvailable",
                         title: "SPACE_AVAILABLE",
-                        type: "radios",
+                        type: "select",
                         enumCode: "decisionmaker",
                         required: true
                     },
@@ -763,6 +763,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "ITR_AVAILABLE",
                         type: "string",
                         // enumCode: "decisionmaker"
+                    },
+                    {
+                        key: "customer.enterprise.electricityAvailable",
+                        title: "ELECTRICITY_AVAIALBLE",
+                        type: "select",
+                        enumCode: "decisionmaker",
+                        required: true
+                    },
+                    {
+                        key: "customer.enterprise.spaceAvailable",
+                        title: "SPACE_AVAILABLE",
+                        type: "select",
+                        enumCode: "decisionmaker",
+                        required: true
                     },
                     {
                         key: "customer.enterpriseCustomerRelations",
@@ -1571,11 +1585,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.otherBusinessIncomes[].incomeSource",
                                         title: "INCOME_SOURCE",
                                         type: "select",
+                                        required: true,
                                         enumCode:"occupation"
                                     },
                                     {
                                         key: "customer.otherBusinessIncomes[].amount",
                                         title: "AMOUNT",
+                                        required: true,
                                         type: "amount"
                                     },
                                     {
@@ -1595,12 +1611,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.incomeThroughSales[].buyerName",
                                         type: "lov",
                                         autolov: true,
+                                        required: true,
                                         title:"BUYER_NAME",
                                         bindMap: {
                                         },
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
                                             var out = [];
+                                            if (!model.customer.buyerDetails){
+                                                return out;
+                                            }
                                             for (var i=0; i<model.customer.buyerDetails.length; i++){
                                                 out.push({
                                                     name: model.customer.buyerDetails[i].buyerName,
@@ -1631,6 +1651,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.incomeThroughSales[].incomeType",
                                         title: "INCOME_TYPE",
                                         type: "radios",
+                                        required: true,
                                         titleMap: {
                                         Cash:"Cash",
                                         Invoice:"Invoice"
@@ -2089,110 +2110,99 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
-                      key:"customer.machinery",
+                      key:"customer.fixedAssetsMachinaries",
                        type:"array",
                        startEmpty: true,
                        title:"MACHINERY_SECTION",
                        items:[
                             {
-                                key:"customer.machinery[].machineDescription",
+                                key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
+                                required: true,
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].manufacturerName",
+                                key: "customer.fixedAssetsMachinaries[].manufacturerName",
                                 title:"MANUFACTURER_NAME",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].machineType",
+                                key: "customer.fixedAssetsMachinaries[].machineType",
                                 title:"MACHINE_TYPE",
+                                required: true,
                                 type: "select",
-                                enumCode: "collateral_type"
+                                enumCode: "machine_type"
                             },
                             {
-                                key: "customer.machinery[].machineModel",
+                                key: "customer.fixedAssetsMachinaries[].machineModel",
                                 title:"MACHINE_MODEL",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].serialNumber",
+                                key: "customer.fixedAssetsMachinaries[].serialNumber",
                                 title:"SERIAL_NUMBER",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].purchasePrice",
+                                key: "customer.fixedAssetsMachinaries[].purchasePrice",
                                 title:"PURCHASE_PRICE",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].machinePurchasedYear",
+                                key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].presentValue",
+                                key: "customer.fixedAssetsMachinaries[].presentValue",
                                 title:"PRESSENT_VALUE",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].isTheMachineNew",
+                                key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
                                 title:"IS_THE_MACHINE_NEW",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].fundingSource",
+                                key: "customer.fixedAssetsMachinaries[].fundingSource",
                                 title:"FUNDING_SOURCE",
                                 type: "select",
-                                titleMap: {
-                                        "Funding Source1": "Funding Source1",
-                                    }
+                                enumCode: "funding_source"
                             },
                             {
-                                key: "customer.machinery[].isTheMachineHypothecated",
+                                key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].hypothecatedTo",
+                                key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
                                 type: "string",
-                                condition:"model.customer.machinery[arrayIndex].isTheMachineHypothecated=='YES'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
-                                key: "customer.machinery[].hypothecatedToUs",
+                                key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
                                 title:"CAN_BE_HYPOTHECATED_TO_US",
                                 type: "string",
-                                condition:"model.customer.machinery[arrayIndex].isTheMachineHypothecated=='NO'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                             },
                             {
-                                key: "customer.machinery[].machinePermanentlyFixedToBuilding",
+                                key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].machineBillsDocId",
+                                key: "customer.fixedAssetsMachinaries[].machineBillsDocId",
                                 title:"MACHINE_BILLS",
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
                             },
                          ]
-                     },
-                    {
-                        key: "customer.enterprise.electricityAvailable",
-                        title:"ELECTRICITY_AVAIALBLE",
-                        required:true,
-                        enumCode: "decisionmaker"
-                    },
-                    {
-                        key: "customer.enterprise.spaceAvailable",
-                        title:"SPACE_AVAILABLE",
-                        enumCode: "decisionmaker"
-                    }
+                     }
                  ]
             },
             {
@@ -2202,109 +2212,97 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                readonly:true,
                 items:[
                     {
-                      key:"customer.machinery",
+                      key:"customer.fixedAssetsMachinaries",
                        type:"array",
                        startEmpty: true,
                        title:"MACHINERY_SECTION",
                        items:[
                             {
-                                key:"customer.machinery[].machineDescription",
+                                key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].manufacturerName",
+                                key: "customer.fixedAssetsMachinaries[].manufacturerName",
                                 title:"MANUFACTURER_NAME",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].machineType",
+                                key: "customer.fixedAssetsMachinaries[].machineType",
                                 title:"MACHINE_TYPE",
-                                type: "select",
-                                enumCode: "collateral_type"
+                                type: "string"
                             },
                             {
-                                key: "customer.machinery[].machineModel",
+                                key: "customer.fixedAssetsMachinaries[].machineModel",
                                 title:"MACHINE_MODEL",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].serialNumber",
+                                key: "customer.fixedAssetsMachinaries[].serialNumber",
                                 title:"SERIAL_NUMBER",
                                 type: "string"
                             },
                             {
-                                key: "customer.machinery[].purchasePrice",
+                                key: "customer.fixedAssetsMachinaries[].purchasePrice",
                                 title:"PURCHASE_PRICE",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].machinePurchasedYear",
+                                key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].presentValue",
+                                key: "customer.fixedAssetsMachinaries[].presentValue",
                                 title:"PRESSENT_VALUE",
                                 type: "number"
                             },
                             {
-                                key: "customer.machinery[].isTheMachineNew",
+                                key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
                                 title:"IS_THE_MACHINE_NEW? ",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].fundingSource",
+                                key: "customer.fixedAssetsMachinaries[].fundingSource",
                                 title:"FUNDING_SOURCE",
-                                type: "select",
+                                type: "string",
                             },
                             {
-                                key: "customer.machinery[].isTheMachineHypothecated",
+                                key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].hypothecatedTo",
+                                key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
                                 type: "radios",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.machinery[].isTheMachineHypothecated=='YES'"
+                                condition:"model.customer.fixedAssetsMachinaries[].isTheMachineHypothecated=='YES'"
                             },
                             {
-                                key: "customer.machinery[].hypothecatedToUs",
+                                key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
                                 title:"HYPOTHECATED_TO_US",
                                 type: "radios",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.machinery[].hypothecatedTo=='NO'"
+                                condition:"model.customer.fixedAssetsMachinaries[].hypothecatedTo=='NO'"
                             },
                             {
-                                key: "customer.machinery[].machinePermanentlyFixedToBuilding",
+                                key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                                 type: "radios",
                                 enumCode: "decisionmaker"
                             },
                             {
-                                key: "customer.machinery[].machineBillsDocId",
+                                key: "customer.fixedAssetsMachinaries[].machineBillsDocId",
                                 title:"MACHINE_BILLS",
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
                             },
                          ]
-                     },
-                    {
-                        key: "customer.enterprise.electricityAvailable",
-                        title:"ELECTRICITY_AVAIALBLE",
-                        enumCode: "decisionmaker"
-                    },
-                    {
-                        key: "customer.enterprise.spaceAvailable",
-                        title:"SPACE_AVAILABLE",
-                        required:true,
-                        enumCode: "decisionmaker"
-                    }
+                     }
                  ]
             },
             {
