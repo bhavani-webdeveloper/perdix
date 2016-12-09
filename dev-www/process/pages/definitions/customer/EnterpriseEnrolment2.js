@@ -737,14 +737,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_ACTIVITY",
                         type: "select",
                         enumCode: "businessActivity",
-                        parentEnumCode: "businessType"
                     },
                     {
                         key: "customer.enterprise.businessSector",
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
-                        parentEnumCode: "businessType",
                         //parentValueExpr:"model.customer.enterprise.businessLine",
                     },
                     {
