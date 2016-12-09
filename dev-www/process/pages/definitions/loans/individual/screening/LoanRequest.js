@@ -1018,7 +1018,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     return;
                 }
 
-                if (model.loanAccount.stage === 'ApplicationReview' && model.loanAccount.psychometricCompleted != 'Completed') {
+                if (model.loanAccount.stage === 'Application' && model.loanAccount.psychometricCompleted != 'Completed') {
                     PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
                     return;
                 }
