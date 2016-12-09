@@ -1838,7 +1838,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
                                             title: "SANCTION_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
@@ -1943,7 +1943,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             //enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
                                             title: "SANCTION_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
