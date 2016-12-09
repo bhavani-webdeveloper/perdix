@@ -901,20 +901,34 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 "customer.landLineNo",
                                 {
                                     "type": "string",
-                                    "key": "customer.whatsAppMobileNo",
-                                    "title": "WHATSAPP_MOBILE_NO",
+                                    "key": "customer.whatsAppMobileNoOption",
+                                    "condition": "model.currentStage=='Screening'",
+                                    notitle: true,
                                      "type":"radios",
                                      "titleMap": {
                                          1: "Mobile Phone",
                                          2: "Phone 2",
                                          3: "Other"
                                      },
+                                     onChange: function(modelValue, form, model, formCtrl, event) {
+                                        debugger;
+                                        switch (modelValue){
+                                            case 1:
+                                                model.customer.whatsAppMobileNo = model.customer.mobilePhone;
+                                                break;
+                                            case 2:
+                                                model.customer.whatsAppMobileNo = model.customer.landLineNo;
+                                                break;
+                                            case 3:
+                                                model.customer.whatsAppMobileNo = "";
+                                                break;
+                                        }
+                                     },
                                 },
                                 {
                                     "type": "number",
-                                    "condition":"model.customer.whatsAppMobileNo == 3 ",
-                                    "key": "customer.whatsAppMobileNo1",
-                                    "title": "WHATSAPP_NO",
+                                    "key": "customer.whatsAppMobileNo",
+                                    "title": "WHATSAPP_MOBILE_NO",
                                 },
                                 {
                                     "type": "string",
