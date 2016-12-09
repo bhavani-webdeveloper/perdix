@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CBCheck"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau","Enrollment",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,CreditBureau){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,CreditBureau,Enrollment){
 
     var branch = SessionStore.getBranch();
 
@@ -11,9 +11,52 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "title": "CB_CHECK",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl) {
+
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.loanSaved = false;
+
+            if (_.hasIn(model, 'loanAccount')){
+                if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length >0){
+
+                    for (var i = model.loanAccount.loanCustomerRelations.length - 1; i >= 0; i--) {
+                        if(model.loanAccount.loanCustomerRelations[i].relation == 'Applicant'){
+                            Enrollment.getCustomerById({id:model.loanAccount.loanCustomerRelations[i].customerId})
+                            .$promise
+                            .then(function(res){
+                                model.customer.applicantname = res.firstName;
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                            model.customer.applicantid = model.loanAccount.loanCustomerRelations[i].customerId;
+                            model.customer.loanAmount = model.loanAccount.loanAmountRequested;
+                            model.customer.loanPurpose1 = '';
+                            model.customer.loanSaved = true;
+                        }
+                        else if(model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant'){
+                            Enrollment.getCustomerById({id:model.loanAccount.loanCustomerRelations[i].customerId})
+                            .$promise
+                            .then(function(res){
+                                model.customer.coapplicants.push({
+                                "coapplicantid":model.loanAccount.loanCustomerRelations[i].customerId,
+                                "coapplicantname":res.firstName,
+                                "loanAmount":model.loanAccount.loanAmountRequested,
+                                "loanPurpose1":''});
+                                model.customer.loanSaved = true;
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                        }
+                    }
+
+                }
+            }
         
         },
         eventListeners: {
@@ -138,6 +181,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             save: function(customerId, CBType, loanAmount, loanPurpose){
                 $log.info("Inside submit()");
                 PageHelper.showLoader();
+                loanPurpose = 'Business Loan - General';
                 CreditBureau.postcreditBureauCheck({
                     customerId: customerId,
                     type: CBType,
@@ -145,7 +189,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     loanAmount: loanAmount
                 }, function(response){
                     var retryStatus = response.status; 
-                    if(response.status == 'Error' || response.status != 'SUCCESS'){
+                    if((response.status == 'Error' || response.status != 'SUCCESS') && response.status != 'PROCESSED'){
                         var retryCount=0;
                         while (retryCount<3 && retryStatus != 'SUCCESS'){
                             CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},

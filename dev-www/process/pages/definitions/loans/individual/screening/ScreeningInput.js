@@ -96,6 +96,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                     });
 
                                     $this.bundlePages.push({
+                                        pageName: 'loans.individual.screening.CBCheck',
+                                        title: 'CB_CHECK',
+                                        pageClass: 'cb-check',
+                                        minimum: 1,
+                                        maximum: 1,
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
                                         pageName: 'loans.individual.screening.LoanRequest',
                                         title: 'LOAN_REQUEST',
                                         pageClass: 'loan-request',

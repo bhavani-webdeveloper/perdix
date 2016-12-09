@@ -21,6 +21,10 @@ irf.models.factory('CreditBureau',function($resource,$httpParamSerializer,BASE_U
         postcreditBureauCheck: {
             method: 'POST',
             url: endpoint + '/check'
+        },
+        getCBDetails: {
+            method: 'GET',
+            url: endpoint + '/find'
         }
     });
 
