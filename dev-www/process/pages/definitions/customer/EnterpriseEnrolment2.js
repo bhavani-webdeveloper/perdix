@@ -32,6 +32,27 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
+
+                        if(model.customer.enterpriseCustomerRelations)
+                        {
+                        var linkedIds = [];
+                        for(i=0;i<model.customer.enterpriseCustomerRelations.length;i++) {
+                            linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
+                        };
+                        Queries.getCustomerBasicDetails({
+                            "ids": linkedIds
+                        }).then(function(result) {
+                            if (result && result.ids) {
+                                for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
+                                    var cust = result.ids[model.customer.enterpriseCustomerRelations[i].linkedToCustomerId];
+                                    if (cust) {
+                                        model.customer.enterpriseCustomerRelations[i].linkedToCustomerName = cust.first_name;
+                                    }
+                                }
+                            }
+                        });
+                        }
+
                     }, function(httpRes){
                         PageHelper.showErrors(httpRes);
                     })
@@ -56,8 +77,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 }
                 model.customer.enterpriseCustomerRelations = [];
-            }
-            
+            }   
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -402,7 +422,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         title: "BUSINESS_ACTIVITY",
                         type: "select",
                         enumCode: "businessActivity",
-                        parentEnumCode: "businessType"
+                        parentEnumCode: "businessType",
+                        //parentValueExpr:"model.customer.enterprise.businessType",
                     },
                     {
                         key: "customer.enterprise.businessSector",
