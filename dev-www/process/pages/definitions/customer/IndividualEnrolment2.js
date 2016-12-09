@@ -1248,7 +1248,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }
                                     ]
                                 }
-
                             ]
                         },
                         {
@@ -1837,7 +1836,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionedAmount",
+                                            key: "customer.customerBankAccounts[].sanctionAmount",
                                             type: "amount",
                                             title: "SANCTION_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
@@ -1942,7 +1941,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             //enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionedAmount",
+                                            key: "customer.customerBankAccounts[].sanctionAmount",
                                             type: "amount",
                                             title: "SANCTION_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
