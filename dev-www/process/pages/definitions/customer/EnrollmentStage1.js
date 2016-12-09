@@ -127,10 +127,10 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             reqData['enrollmentAction'] = 'SAVE';    
         }
         /* TODO fix for KYC not saving **/
-        if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
+       /* if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
             reqData.customer.additionalKYCs = [];
             reqData.customer.additionalKYCs.push({});
-        }
+        }*/
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
             $log.info(res);
