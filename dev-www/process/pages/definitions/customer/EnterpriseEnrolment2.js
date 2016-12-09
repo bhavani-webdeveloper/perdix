@@ -2191,6 +2191,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
+                                fileType:"image/*"
                             },
                          ]
                      }
@@ -2291,6 +2292,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
+                                fileType:"image/*"
                             },
                          ]
                      }

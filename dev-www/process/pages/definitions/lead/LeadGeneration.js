@@ -317,7 +317,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     items: [{
                         key: "lead.interestedInProduct",
                         title:"INTERESTED_IN_LOAN_PRODUCT",
-                        type: "radios",
+                        type: "select",
                         required:true,
                         enumCode: "decisionmaker",
                         "onChange": function(modelValue, form, model) {
