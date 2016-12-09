@@ -1423,7 +1423,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
                                 title:"PAYEMNT_TERMS_IN_DAYS",
-                                type:" select",
+                                type: "select",
                                 enumCode: "payment_terms"
                             },
                             {
