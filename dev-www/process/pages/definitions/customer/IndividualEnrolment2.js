@@ -903,7 +903,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNoOption",
                                     "condition": "model.currentStage=='Screening'",
-                                    notitle: true,
+                                    "title": "CHOOSE_WHATSAPP_NO",
                                      "type":"radios",
                                      "titleMap": {
                                          1: "Mobile Phone",
@@ -911,22 +911,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                          3: "Other"
                                      },
                                      onChange: function(modelValue, form, model, formCtrl, event) {
-                                        debugger;
                                         switch (modelValue){
-                                            case 1:
+                                            case "1":
                                                 model.customer.whatsAppMobileNo = model.customer.mobilePhone;
                                                 break;
-                                            case 2:
+                                            case "2":
                                                 model.customer.whatsAppMobileNo = model.customer.landLineNo;
                                                 break;
-                                            case 3:
+                                            case "3":
                                                 model.customer.whatsAppMobileNo = "";
                                                 break;
                                         }
                                      },
                                 },
                                 {
-                                    "type": "number",
+                                    "type": "string",
                                     "key": "customer.whatsAppMobileNo",
                                     "title": "WHATSAPP_MOBILE_NO",
                                 },
