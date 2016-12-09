@@ -692,21 +692,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }
                                     }
                                 },
-                                {
-                                    key:"customer.age",
-                                    title: "AGE",
-                                    //required:true,
-                                    type:"number",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.age > 0) {
-                                            if (model.customer.dateOfBirth) {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                                            }
-                                        }
-                                    }
-                                },
+                                // {
+                                //     key:"customer.age",
+                                //     title: "AGE",
+                                //     //required:true,
+                                //     type:"number",
+                                //     "onChange": function(modelValue, form, model) {
+                                //         if (model.customer.age > 0) {
+                                //             if (model.customer.dateOfBirth) {
+                                //                 model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                //             } else {
+                                //                 model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                //             }
+                                //         }
+                                //     }
+                                // },
                                 {
                                     key:"customer.religion",
                                     type:"select"
@@ -758,21 +758,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }
                                     }
                                 },
-                                {
-                                    key:"customer.spouseAge",
-                                    title: "SPOUSE_AGE",
-                                    type:"number",
-                                    condition:"model.customer.maritalStatus==='MARRIED'",
-                                    "onChange": function(modelValue, form, model) {
-                                        if (model.customer.spouseAge > 0) {
-                                            if (model.customer.spouseDateOfBirth) {
-                                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
-                                            }
-                                        }
-                                    }
-                                }
+                                // {
+                                //     key:"customer.spouseAge",
+                                //     title: "SPOUSE_AGE",
+                                //     type:"number",
+                                //     condition:"model.customer.maritalStatus==='MARRIED'",
+                                //     "onChange": function(modelValue, form, model) {
+                                //         if (model.customer.spouseAge > 0) {
+                                //             if (model.customer.spouseDateOfBirth) {
+                                //                 model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                //             } else {
+                                //                 model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
+                                //             }
+                                //         }
+                                //     }
+                                // }
                             ]
                         },
                         {
@@ -1504,7 +1504,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type:"box",
                             title:"T_LIABILITIES",
-                            "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                            "condition": "model.currentStage == 'Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             items:[
                                 {
                                     key:"customer.liabilities",
@@ -1579,7 +1579,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type:"box",
                             title:"T_LIABILITIES",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items:[
                                 {
