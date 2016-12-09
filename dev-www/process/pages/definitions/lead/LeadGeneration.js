@@ -330,24 +330,24 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                 } else {
                                     model.lead.leadStatus = "Incomplete";
                                 }
-                                if (model.lead.interestedInProduct === 'YES') {
+                               /* if (model.lead.interestedInProduct === 'YES') {
                                     model.lead.productCategory = "Asset";
                                     model.lead.productSubCategory = "Loan";
-                                }
+                                }*/
                             }
                             //onChange: "actions.changeStatus(modelValue, form, model)",
-                    }, {
+                    }, /*{
                         key: "lead.productCategory",
                         condition: "model.lead.interestedInProduct==='YES'",
                         readonly: true,
-                        /* type: "select",
+                         type: "select",
 
                          "Liability": "Liability",
                              "others": "others"
                              "investment": "investment"
                          titleMap: {
                              "Asset": "Asset",
-                         }*/
+                         }
                     }, {
                         key: "lead.productSubCategory",
                         condition: "model.lead.interestedInProduct==='YES'",
@@ -355,8 +355,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                         /* type: "select",
                          titleMap: {
                              "Loan": "Loan",
-                         }*/
-                    }, {
+                         }
+                    },*/ {
                         key: "lead.loanAmountRequested",
                         type: "amount",
                         condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
@@ -588,6 +588,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
+                     model.lead.productCategory = "Asset";
+                     model.lead.productSubCategory = "Loan";
                     $log.warn(model);
                     var sortFn = function(unordered) {
                         var out = {};

@@ -780,9 +780,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "select",
                                 enumCode: "relationship_type"
                             },
-                            // {
-                            //     key: "customer.enterpriseCustomerRelations[].linkedToCustomerId"
-                            // },
+                            {
+                               key: "customer.enterpriseCustomerRelations[].linkedToCustomerId"
+                            },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                                 readonly: true,
