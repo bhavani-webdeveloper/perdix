@@ -159,7 +159,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 			$scope.testStatus = 'Prepared';
 		}, function(err) {
 			$scope.testStatus = 'Failed';
-			$scope.error = err;
+			$scope.error = err.data;
 		});
 	};
 
@@ -183,7 +183,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 		}, function(errResp) {
 			$log.error(errResp);
 			$scope.testStatus = 'Submission failed';
-			$scope.error = errResp;
+			$scope.error = errResp.data;
 		});
 	};
 
