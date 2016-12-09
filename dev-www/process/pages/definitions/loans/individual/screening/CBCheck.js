@@ -211,7 +211,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     }
                 }, function(errorResponse){
                     PageHelper.hideLoader();
-                    PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+                    if(errorResponse && errorResponse.data && errorResponse.data.error)
+                        PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
+                    else
+                        PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
                 });
             }
         }
