@@ -327,7 +327,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.proposedHires",
-                        type: "number",
+                        type: "string",
                         title: "PROPOSED_HIRES"
                     },
                     {
