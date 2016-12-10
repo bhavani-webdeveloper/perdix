@@ -915,10 +915,8 @@
                     "title": "LOCALITY"
                 },
                 "mailingPincode": {
-                    "type": ["number","null"],
-                    "title": "PIN_CODE",
-                    "minLength": 6,
-                    "maxLength": 6
+                    "type": ["string","null"],
+                    "title": "PIN_CODE"
                 },
                 "mailingPostoffice": {
                     "type": ["string","null"],
@@ -1579,7 +1577,6 @@
                 "district",
                 "mailingDistrict",
                 "mailingState",
-                "mailingPincode",
                 "mobilePhone",
                 "doorNo",
                 "mailingDoorNo"

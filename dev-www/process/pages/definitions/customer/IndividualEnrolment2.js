@@ -1012,7 +1012,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.mailingPincode",
                                             type: "lov",
-                                            fieldType: "number",
+                                            fieldType: "string",
                                             autolov: true,
                                             inputMap: {
                                                 "mailingPincode": "customer.mailingPincode",
