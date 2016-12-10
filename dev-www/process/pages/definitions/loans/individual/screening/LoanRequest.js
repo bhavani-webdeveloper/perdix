@@ -275,7 +275,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
-                        
+
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -549,10 +549,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "title": "INTEREST_RATE"
                     },
                     {
-                        "key": "loanAccount.securityEmi",
+                        "key": "loanAccount.securityEmiRequired",
                         'enumCode': "decisionmaker",
                         'type': "select",
-                        "title": "SECURITY_EMI"
+                        "title": "SECURITY_EMI_REQUIRED"
                     },
                     {
                         "key": "loanAccount.loanAmount",
