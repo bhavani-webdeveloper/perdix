@@ -552,7 +552,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "key": "loanAccount.securityEmiRequired",
                         'enumCode': "decisionmaker",
                         'type': "select",
-                        "title": "SECURITY_EMI_REQUIRED"
+                        "title": "SECURITY_EMI_REQUIRED "
                     },
                     {
                         "key": "loanAccount.loanAmount",
