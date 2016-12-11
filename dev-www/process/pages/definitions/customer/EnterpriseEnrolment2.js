@@ -76,6 +76,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         model.customer.customerBranchId = branch1[i].value;
                     }
                 }
+                var centres = SessionStore.getCentres();
+                var centreName = [];
+                for (var i = 0; i < centres.length; i++) {
+                    centreName.push(centres[i].id);
+                }
+                model.customer.centreId = centreName[0];
                 model.customer.enterpriseCustomerRelations = [];
             }   
         },
