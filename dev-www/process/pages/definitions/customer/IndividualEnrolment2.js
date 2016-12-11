@@ -42,6 +42,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                  model.customer.customerBranchId = branch1[i].value;
                                 }
                             }
+                             var centres = SessionStore.getCentres();
+                             var centreName = [];
+                             for (var i = 0; i < centres.length; i++) {
+                                 centreName.push(centres[i].id);
+                             }
+                             model.customer.centreId = centreName[0];
+
                             //model.branchId = SessionStore.getBranchId() + '';
                             model.customer.date = model.customer.date || Utils.getCurrentDate();
                             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
