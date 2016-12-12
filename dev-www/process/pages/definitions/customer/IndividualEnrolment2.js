@@ -1463,6 +1463,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 key:"customer.familyMembers",
                                 type:"array",
                                 startEmpty: true,
+                                view: 'fixed',
                                 items: [
                                     {
                                         key:"customer.familyMembers[].relationShip",

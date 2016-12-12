@@ -73,6 +73,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         form: [
             {
                 "type": "box",
+                "colClass": "col-sm-12",
                 "title": "REMARKS_HISTORY",
                 "items": [
                     {
@@ -83,11 +84,32 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         searching: false,
                         getColumns: function() {
                             return [{
-                                title: 'STATUS',
-                                data: 'status'
+                                title: 'ACTION',
+                                data: 'action'
+                            }, {
+                                title: 'FROM_STAGE',
+                                data: 'preStage'
+                            }, {
+                                title: 'TO_STAGE',
+                                data: 'postStage'
+                            }, {
+                                title: 'CREATED_BY',
+                                data: 'createdBy'
+                            }, {
+                                title: 'CREATED_DATE',
+                                data: 'createdDate',
+                                render: function(data, type, full, meta) {
+                                    return moment(data, "YYYY-MM-DD[T]hh:mm:ss[Z]").format('YYYY-MM-DD hh:mm:ss');
+                                }
+                            }, {
+                                title: '',
+                                data: 'createdDate'
                             }, {
                                 title: 'REMARKS',
                                 data: 'remarks'
+                            }, {
+                                title: 'STATUS',
+                                data: 'status'
                             }]
                         }
                     }

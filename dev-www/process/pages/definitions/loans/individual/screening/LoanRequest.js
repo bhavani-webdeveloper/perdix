@@ -909,6 +909,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanAccount.status = '';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
@@ -938,6 +939,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         function(){
 
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                            reqData.loanAccount.status = '';
                             reqData.loanProcessAction = "SAVE";
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
@@ -990,6 +992,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
                 Utils.confirm("Are You Sure?").then(function(){
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanAccount.status = '';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     reqData.stage = model.review.targetStage;
@@ -1027,6 +1030,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanAccount.status = '';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
@@ -1056,6 +1060,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    reqData.loanAccount.status = '';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.stage = "Rejected";
                     reqData.remarks = model.review.remarks;
@@ -1081,6 +1086,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     .then(
                         function(){
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)}
+                            reqData.loanAccount.status = '';
                             reqData.loanProcessAction = 'PROCEED';
                             PageHelper.showLoader();
                             var targetStage = null;
