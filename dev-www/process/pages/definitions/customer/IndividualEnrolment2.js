@@ -227,13 +227,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key:"customer.identityProofImageId",
                                             type:"file",
                                             required: true,
-                                            fileType:"image/*"
-                                        },
+                                            fileType:"application/pdf",
+                                            using: "scanner"
+                                        }/*,
                                         {
                                             key:"customer.identityProofReverseImageId",
                                             type:"file",
                                             fileType:"image/*"
-                                        },
+                                        }*/,
                                         {
                                             key:"customer.identityProofNo",
                                             type:"barcode",
@@ -311,13 +312,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key:"customer.addressProofImageId",
                                             type:"file",
                                             required: true,
-                                            fileType:"image/*"
-                                        },
+                                            fileType:"application/pdf",
+                                            using: "scanner"
+                                        }/*,
                                         {
                                             key:"customer.addressProofReverseImageId",
                                             type:"file",
                                             fileType:"image/*"
-                                        },
+                                        }*/,
                                         {
                                             key:"customer.addressProofNo",
                                             onCapture: EnrollmentHelper.customerAadhaarOnCapture,

@@ -66,6 +66,11 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 		)
 	};
 
+	$scope.downloadFile = function(url, e) {
+		e.preventDefault();
+		Utils.downloadFile(url);
+	};
+
 	$scope.languages = languages;
 
 	$scope.changeLanguage = function(lang) {

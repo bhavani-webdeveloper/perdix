@@ -107,23 +107,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "REPAYMENT_DATE",
                         "type": "date",
                         "required": true
-                    },
-                    {
-                        "type": "actionbox",
-                        "items": [{
-                            "type": "button",
-                            "title": "BACK",
-                            "onClick": "actions.reenter(model, formCtrl, form, $event)"
-                        },
-                        {
-                            "type": "button",
-                            "title": "SEND_BACK",
-                            "onClick": "actions.reject(model, formCtrl, form, $event)"
-                        },
-                        {
-                            "type": "submit",
-                            "title": "CONFIRM_LOAN_CREATION"
-                        }]
                     }
                 ]
             }, {
@@ -318,6 +301,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         ]
                     }
                 ]
+            },
+            {
+                "type": "actionbox",
+                "items": [{
+                    "type": "button",
+                    "title": "BACK",
+                    "onClick": "actions.reenter(model, formCtrl, form, $event)"
+                },
+                {
+                    "type": "button",
+                    "title": "SEND_BACK",
+                    "onClick": "actions.reject(model, formCtrl, form, $event)"
+                },
+                {
+                    "type": "submit",
+                    "title": "CONFIRM_LOAN_CREATION"
+                }]
             }],
             schema: function () {
                 return SchemaResource.getLoanAccountSchema().$promise;

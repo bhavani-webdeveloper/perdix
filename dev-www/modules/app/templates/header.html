@@ -134,9 +134,9 @@
             </ul>
         </div>
     </nav>
-    <div ng-if="$parent.latest_apk_force_upgrade" style="position:fixed;left:0;top:50px;right:0;bottom:0;background-color:rgba(0,0,0,0.65);text-align:center">
+    <div ng-show="$parent.latest_apk_force_upgrade" style="position:fixed;left:0;top:50px;right:0;bottom:0;background-color:rgba(0,0,0,0.65);text-align:center">
         <div style="padding-top:100px">
-            <a href="" ng-href="{{$parent.$parent.latest_apk_url}}" target="_blank" style="color:#fff;display:block;">
+            <a href="#" ng-click="downloadFile($parent.latest_apk_url, $event)" style="color:#fff;display:block;">
                 <i class="fa fa-cloud-download" style="font-size:7rem;text-shadow:0 0 80px #000"></i>
                 <div style="font-size:1.6rem;text-shadow:0 0 30px rgba(0,0,0,0.8)">Upgrade Application</div>
                 <div style="text-shadow:0 0 15px #000">to continue...</div>

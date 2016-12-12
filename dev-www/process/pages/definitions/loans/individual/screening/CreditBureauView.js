@@ -55,7 +55,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                 }
                             },function (errResp){
                                 $log.info("error while processing CB get request");
-                                PageHelper.showErrors(errResp);
+                                //PageHelper.showErrors(errResp);
+                                PageHelper.showProgress('load-loan', "CB Details not available", 2000);
                             })
                             .finally(function(){
                                 PageHelper.hideLoader();

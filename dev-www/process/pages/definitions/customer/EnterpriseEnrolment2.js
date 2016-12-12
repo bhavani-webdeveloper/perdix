@@ -392,10 +392,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.enterpriseRegistrations[].documentId",
                                 type:"file",
                                 required: true,
-                                fileType:"image/*",
                                 title:"REGISTRATION_DOCUMENT",
                                 category:"CustomerEnrollment",
-                                subCategory:"REGISTRATIONDOCUMENT"
+                                subCategory:"REGISTRATIONDOCUMENT",
+                                fileType:"application/pdf",
+                                using: "scanner"
                             }
                         ]
                     },/*,
@@ -706,10 +707,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.enterpriseRegistrations[].documentId",
                                 type:"file",
                                 required: true,
-                                fileType:"image/*",
                                 title:"REGISTRATION_DOCUMENT",
                                 category:"CustomerEnrollment",
-                                subCategory:"REGISTRATIONDOCUMENT"
+                                subCategory:"REGISTRATIONDOCUMENT",
+                                fileType:"application/pdf",
+                                using: "scanner"
                             }
                         ]
                     }/*,
@@ -2202,7 +2204,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
-                                fileType:"image/*"
+                                fileType:"application/pdf",
+                                using: "scanner"
                             },
                          ]
                      }
@@ -2303,7 +2306,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "category":"Loan",
                                 "subCategory":"DOC1",
                                 type: "file",
-                                fileType:"image/*"
+                                fileType:"application/pdf",
+                                using: "scanner"
                             },
                          ]
                      }
