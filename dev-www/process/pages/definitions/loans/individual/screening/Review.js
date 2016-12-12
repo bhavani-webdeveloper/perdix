@@ -102,9 +102,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     return moment(data, "YYYY-MM-DD[T]hh:mm:ss[Z]").format('YYYY-MM-DD hh:mm:ss');
                                 }
                             }, {
-                                title: '',
-                                data: 'createdDate'
-                            }, {
                                 title: 'REMARKS',
                                 data: 'remarks'
                             }, {

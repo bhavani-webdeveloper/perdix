@@ -414,7 +414,7 @@
                                 "type": "string"
                             },
                             "trancheNumber": {
-                                "type": "string"
+                                "type": ["string", null]
                             },
                             "tranchCondition": {
                                 "type": "string"
