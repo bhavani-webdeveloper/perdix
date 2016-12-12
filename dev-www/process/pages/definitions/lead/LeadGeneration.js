@@ -114,6 +114,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                     condition: "model.lead.customerType === 'Enterprise'",
                                     items: [{
                                         key: "lead.businessName"
+                                    },{
+                                        key: "lead.companyRegistered",
+                                        type: "radios",
+                                        enumCode: "decisionmaker"
                                     }, {
                                         key: "lead.businessType",
                                         type: "select",
@@ -124,10 +128,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                         type: "select",
                                         enumCode: "businessActivity",
                                         parentEnumCode: "businessType"
-                                    },{
-                                        key: "lead.companyRegistered",
-                                        type: "radios",
-                                        enumCode: "decisionmaker"
                                     }, {
                                         key: "lead.companyOperatingSince",
                                         type: "date"
