@@ -2285,14 +2285,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"HYPOTHECATED_TO",
                                 type: "radios",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[].isTheMachineHypothecated=='YES'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
                                 title:"HYPOTHECATED_TO_US",
                                 type: "radios",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[].hypothecatedTo=='NO'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].hypothecatedTo=='NO'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
