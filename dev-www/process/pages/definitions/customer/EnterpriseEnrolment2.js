@@ -1827,7 +1827,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         {
             type: "box",
             title: "T_BUSINESS_FINANCIALS",
-            "condition": "model.currentStage=='Screening'",
+            "condition": "model.currentStage=='ScreeningReview'",
+            readonly:true,
             items: [{
                 key: "customer.enterprise.monthlyTurnover",
                 title: "MONTHLY_TURNOVER",

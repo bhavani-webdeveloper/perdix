@@ -784,7 +784,7 @@
                 },
                 "loanType": {
                     "title": "LOAN_TYPE",
-                    "type": "string",
+                    "type": ["string", "null"],
                     "enumCode":"loan_type"
                 },
                 "nominees": {
@@ -1154,7 +1154,6 @@
                 "loanPurpose1",
                 "loanPurpose2",
                 "loanPurpose3",
-                "loanType",
                 "nominees",
                 "numberOfDisbursed",
                 "numberOfDisbursements",

@@ -941,6 +941,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             reqData.loanProcessAction = "SAVE";
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
+                            reqData.loanAccount.psychometricCompleted = "N";
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
