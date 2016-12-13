@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("psychometric.Category"),
+irf.pageCollection.factory(irf.page("psychometric.Language"),
 ["$log", "SessionStore", "PageHelper", "formHelper", "Utils","Psychometric",
     function($log, SessionStore, PageHelper, formHelper, Utils,Psychometric) {
 
@@ -6,72 +6,73 @@ irf.pageCollection.factory(irf.page("psychometric.Category"),
 
         return {
             "type": "schema-form",
-            "title": "Category",
+            "title": "Language",
             initialize: function(model, form, formCtrl) {
             },
             form: [
                 {
                     "type": "box",
-                    "title": "Category Creation/Updation",
+                    "title": "Language Creation/Updation",
                     "items": [
                         {
-                            key: "category.id",
-                            title: "Category ID",
+                            key: "language.id",
+                            title: "Language ID",
                             type: "lov",
                             lovonly: true,
                             fieldType: "number",
                             outputMap: {
-                                "id": "category.id",
-                                "categoryName": "category.categoryName",
-                                "cutoffScore": "category.cutoffScore",
-                                "active": "category.active"
+                                "id": "language.id",
+                                "langCode": "language.langCode",
+                                "language": "language.language"
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
-                                return Psychometric.getCategoryAll().$promise;
+                                return Psychometric.getLanguages().$promise;
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
-                                    item.categoryName,
-                                    item.cutoffScore
+                                    item.langCode,
+                                    item.language
                                 ];
                             }
                         },
                         {
-                            key: "category.categoryName",
-                            title: "Category Name",
+                            key: "language.langCode",
+                            title: "Language Code",
+                            condition: "model.language.id",
+                            readonly: true,
                             required: true
                         },
                         {
-                            key:"category.cutoffScore",
-                            type:"number",
-                            title:"cutoffScore"
+                            key: "language.langCode",
+                            title: "Language Code",
+                            condition: "!model.language.id",
+                            required: true
                         },
                         {
-                            key:"category.active",
-                            title:"Active",
-                            type:"checkbox"
-                        },
-                        
-                    ]
-                },
-                {
-                    type: "actionbox",
-                    condition: "!model.category.id",
-                    items: [
-                        {
-                            type: "submit",
-                            title: "Create Category"
+                            key:"language.language",
+                            title:"Language Name",
+                            required: true
                         }
                     ]
                 },
                 {
                     type: "actionbox",
-                    condition: "model.category.id",
+                    condition: "!model.language.id",
+                    items: [
+                        {
+                            type: "submit",
+                            title: "Create language"
+                        }
+                    ]
+                },
+                {
+                    type: "actionbox",
+                    condition: "model.language.id",
                     items:[
                         {
                             type: "submit",
-                            title: "Update Category"
+                            title: "Update language"
                         },
                         {
                             type: "button",
@@ -79,7 +80,7 @@ irf.pageCollection.factory(irf.page("psychometric.Category"),
                             style: "btn-default",
                             title: "Reset",
                             onClick: function(model) {
-                                model.category = {};
+                                model.language = {};
                             }
                         },
                         
@@ -90,18 +91,13 @@ irf.pageCollection.factory(irf.page("psychometric.Category"),
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "category": {
+                    "language": {
                         "type": "object",
-                        "title": "Category",
+                        "title": "language",
                         "properties": {
-                            "cutoffScore": {
+                            "id": {
                                 "type": "number",
-                                "title": "cutoffScore"
-                            },
-                           "active":{
-                                "type":"boolean",
-                                 default:false,
-                                "title":"Active"
+                                "title": "ID"
                             }
                         }
                     }
@@ -112,9 +108,9 @@ irf.pageCollection.factory(irf.page("psychometric.Category"),
                     Utils.confirm('Are you sure?').then(function() {
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
-                        Psychometric.postCategory(model.category).$promise.then(function(resp){
-                            model.category= resp;
-                            PageHelper.showProgress("category-pages","Category created/updated", 3000);
+                        Psychometric.postLanguage(model.language).$promise.then(function(resp){
+                            model.language= resp;
+                            PageHelper.showProgress("language-pages","language created/updated", 3000);
                         }, function(err){
                             PageHelper.showErrors(err);
                         }).finally(function(){

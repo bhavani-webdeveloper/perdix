@@ -26,6 +26,10 @@ irf.models.factory('Psychometric',
             method: 'GET',
             url: endpoint + '/maintenance/language/all'
         }),
+        postLanguage: {
+            method: 'POST',
+            url: endpoint + '/maintenance/language'
+        },
         getCategoryAll: searchResource({
             method: 'GET',
             url: endpoint + '/maintenance/category/all'
@@ -34,6 +38,10 @@ irf.models.factory('Psychometric',
             method: 'GET',
             url: endpoint + '/maintenance/category/find'
         }),
+        postCategory: {
+            method: 'POST',
+            url: endpoint + '/maintenance/category'
+        },
 
         findQuestions: searchResource({
             method: 'GET',
