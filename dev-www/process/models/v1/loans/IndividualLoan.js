@@ -1,10 +1,10 @@
 irf.models.factory('IndividualLoan',[
-"$resource","$httpParamSerializer","BASE_URL","searchResource",
-function($resource,$httpParamSerializer,BASE_URL,searchResource){
-    var endpoint = BASE_URL + '/api/individualLoan';
+"$resource","$httpParamSerializer","BASE_URL","searchResource","Upload","$q","PageHelper",
+function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper){
+    var endpoint = BASE_URL + '/api/individualLoan'; 
   
 
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
         create:{
             method:'POST',
             url:endpoint
@@ -109,6 +109,25 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/loanActionSummary/:id',
             isArray:true
-        }
+        },
     });
+    resource.ConfirmationUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/individualLoan/batchDisbursementConfirmationUpload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp) {
+                // TODO handle success
+                PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp) {
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        }
+        return resource;
 }]);
