@@ -12,7 +12,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
 
         	return {
         		"type": "page-bundle",
-        		"title": "LOAN_BOOKING_BUNDLE",
+        		"title": "SCREENING",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [],
                 "pre_pages_initialize": function(bundleModel){
