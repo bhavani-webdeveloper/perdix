@@ -1513,14 +1513,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             type:"box",
-                            title:"T_LIABILITIES",
+                            title:"HOUSEHOLD_LIABILITIES",
                             "condition": "model.currentStage == 'Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             items:[
                                 {
                                     key:"customer.liabilities",
                                     type:"array",
                                     startEmpty: true,
-                                    title:"FINANCIAL_LIABILITIES",
+                                    title:"HOUSEHOLD_LIABILITIES",
                                     items:[
                                         // {
                                         //     key:"customer.liabilities[].loanType",
@@ -1588,7 +1588,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             type:"box",
-                            title:"T_LIABILITIES",
+                            title:"HOUSEHOLD_LIABILITIES",
                             "condition": "model.currentStage == 'ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items:[
@@ -1596,7 +1596,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     key:"customer.liabilities",
                                     type:"array",
                                     startEmpty: true,
-                                    title:"FINANCIAL_LIABILITIES",
+                                    title:"HOUSEHOLD_LIABILITIES",
                                     items:[
                                         // {
                                         //     key:"customer.liabilities[].loanType",
