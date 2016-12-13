@@ -1061,13 +1061,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
                                         type: "amount",
+                                        //maximum:99,
                                         required:true,
                                         title: "NO_OF_CHEQUE_BOUNCED"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true,                                       
+                                        required:true, 
+                                        //maximum:99,                                     
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
                                 ]
@@ -1199,14 +1201,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"T_LIABILITIES",
+               title:"HOUSEHOLD_LIABILITIES",
                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                        key:"customer.liabilities",
                        type:"array",
                        startEmpty: true,
-                       title:"FINANCIAL_LIABILITIES",
+                       title:"HOUSEHOLD_LIABILITIES",
                        items:[
                            {
                                key:"customer.liabilities[].loanType",
@@ -1274,7 +1276,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"T_LIABILITIES",
+               title:"HOUSEHOLD_LIABILITIES",
                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
@@ -1282,7 +1284,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        key:"customer.liabilities",
                        type:"array",
                        startEmpty: true,
-                       title:"FINANCIAL_LIABILITIES",
+                       title:"HOUSEHOLD_LIABILITIES",
                        items:[
                            {
                                key:"customer.liabilities[].loanType"/*,
