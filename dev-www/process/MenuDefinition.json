@@ -73,6 +73,8 @@
 			"iconClass": "fa fa-puzzle-piece",
 			"items":[
 				"Page/Engine/psychometric.Config",
+				"Page/Engine/psychometric.Language",
+				"Page/Engine/psychometric.Category",
 				"Page/Engine/psychometric.QuestionMaintenance",
                 "Page/Engine/psychometric.Queue"
 			]
