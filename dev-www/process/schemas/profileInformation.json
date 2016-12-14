@@ -497,13 +497,7 @@
                                             "type": ["integer","null"],
                                             "title": "INCOME_EARNED",
                                             "minimum": 1,
-                                            "maximum": 100000000,
-                                            "captureStages":[
-                                                "Stage02"
-                                            ],
-                                            "x-schema-form": {
-                                                "type": ["number","null"]
-                                            }
+                                            "maximum": 100000000
                                         },
                                         "incomeSource": {
                                             "type": ["string","null"],
