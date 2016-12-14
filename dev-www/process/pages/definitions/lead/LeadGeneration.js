@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
- ["$log", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
+ ["$log", "$state","BankMaster","$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
     "PageHelper", "Utils","entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
+    function($log, $state,BankMaster,$filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
         PageHelper, Utils, entityManager,BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -14,11 +14,17 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                 model.lead = model.lead || {};
                 model.lead.customerType="Enterprise";
                 model.lead.leadStatus="Incomplete";
-
                 model.lead.leadInteractions = [{
                     "interactionDate": Utils.getCurrentDate(),
                     "loanOfficerId": SessionStore.getUsername() + ''
                 }];
+                var bank= BankMaster.get().$promise;
+                var applicationDate;
+                bank.then(function(result){
+                    applicationDate=result.applicationDate;
+                    $log.info(applicationDate);
+                });
+               
 
                  var branch1 = formHelper.enum('branch_id').data;
                     for (var i = 0; i < branch1.length; i++) {
