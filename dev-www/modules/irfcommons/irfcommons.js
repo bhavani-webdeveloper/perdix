@@ -63,7 +63,7 @@ irf.commons.filter("initcap", function() {
 });
 
 
-irf.commons.factory("Utils", ["$log", "$q", "$http", "Queries", function($log, $q, $http, Queries){
+irf.commons.factory("Utils", ["$log", "$q", "$http", "Queries","BankMaster", function($log, $q, $http, Queries,BankMaster){
 	var isCordovaFlag = typeof cordova !== 'undefined';
 	return {
 		isCordova: isCordovaFlag,
@@ -166,6 +166,10 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", "Queries", function($log, $
         },
 		getCurrentDateTime:function(){
             return moment().format();
+        },
+        getSystemDate:function(){
+            var bank= BankMaster.get().$promise;
+            return bank;
         },
         convertJSONTimestampToDate: function(jsonTimestamp){
             var a = moment.utc(jsonTimestamp);
