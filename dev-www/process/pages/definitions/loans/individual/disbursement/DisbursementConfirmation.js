@@ -105,6 +105,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     {
                         "key": "loanAccountDisbursementSchedule.referenceNumber",
                         "title": "REFERENCE_NO",
+                        "required":true,
                         "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
                     },
                     {
