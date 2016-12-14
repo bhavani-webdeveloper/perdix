@@ -57,7 +57,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 					}).$promise.then(
 						function(res) {
 							model.achIndividualLoanSearch = res;
-							$log.info(res);
 							// model.ach.mandateOpenDate = Utils.getCurrentDate();
 							// model.ach.registrationDate = Utils.getCurrentDate();
 							model.ach.reference1 = model.achIndividualLoanSearch.accountNumber;
@@ -358,6 +357,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 								var deferred = $q.defer();
 								Queries.getBankAccounts().then(
 									function(res) {
+										$log.info("hi this is sponser!!!");
+										$log.info(res);
 										var newBody = [];
 										for (var i = 0; i < res.body.length; i++) {
 											if (res.body[i].sponsor_bank_code != null && res.body[i].utility_code != null && res.body[i].sponsor_bank_code!='' && res.body[i].utility_code != '') {
