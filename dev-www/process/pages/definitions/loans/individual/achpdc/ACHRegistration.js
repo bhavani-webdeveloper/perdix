@@ -57,6 +57,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 					}).$promise.then(
 						function(res) {
 							model.achIndividualLoanSearch = res;
+							$log.info(res);
 							// model.ach.mandateOpenDate = Utils.getCurrentDate();
 							// model.ach.registrationDate = Utils.getCurrentDate();
 							model.ach.reference1 = model.achIndividualLoanSearch.accountNumber;
@@ -64,6 +65,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							//model.ach.utilityCode = "HDFC05720000027482";
 							model.ach.accountId = model.achIndividualLoanSearch.accountNumber;
 							model.ach.bankAccountNumber = model.achIndividualLoanSearch.customerBankAccountNumber;
+
+							model.ach.maximumAmount = parseInt(model.achIndividualLoanSearch.maxEmi);
+							model.ach.maximumAmount = model.ach.maximumAmount.toString();
 							//model.ach.ifscCode = model.achIndividualLoanSearch.customerBankIfscCode;
 							//model.ach.sponsorBankCode = "HDFC0999999";
 							model.ach.sponsorAccountCode = null;
@@ -110,6 +114,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							}).$promise.then(
 								function(response) {
 									model.achLoanAccountSearch = response;
+
+
 									//model.ach.accountHolderName = model.achLoanAccountSearch.accountName;
 									model.ach.achEndDate = model.achLoanAccountSearch.maturityDate;
 
@@ -121,8 +127,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 										model.ach.phoneNo = model.achLoanAccountSearch.customer1Phone1;
 									}
 
-									model.ach.maximumAmount = parseInt(model.achLoanAccountSearch.equatedInstallment);
-									model.ach.maximumAmount = model.ach.maximumAmount.toString();
+									//model.ach.maximumAmount = parseInt(model.achLoanAccountSearch.equatedInstallment);
+									//model.ach.maximumAmount = model.achLoanAccountSearch.maxEmi;
+									//model.ach.maximumAmount = model.ach.maximumAmount.toString();
 									model.ach.frequency = model.achLoanAccountSearch.tenureUnit;
 								},
 								function(error) {}
