@@ -425,7 +425,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"questionLangs": {
 								"type": "array",
-								"title": "Text",
+								"title": "Question",
 								"items": {
 									"type": "object",
 									"required": ["langCode", "questionText"],
@@ -454,7 +454,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 										},
 										"optionLangs": {
 											"type": "array",
-											"title": "Text",
+											"title": "Option Text",
 											"items": {
 												"type": "object",
 												"required": ["langCode", "optionText"],
@@ -486,7 +486,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 													},
 													"optionLangs": {
 														"type": "array",
-														"title": "Text",
+														"title": "Option Text",
 														"items": {
 															"type": "object",
 															"required": ["langCode", "optionText"],

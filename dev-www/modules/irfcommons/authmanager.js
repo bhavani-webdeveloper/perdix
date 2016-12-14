@@ -109,7 +109,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 }]);
 
 irf.commons.config(["$httpProvider", function($httpProvider){
-	$httpProvider.interceptors.push(function($q, AuthTokenHelper, AuthPopup) {
+	$httpProvider.interceptors.push(function($q, AuthTokenHelper, AuthPopup, $rootScope) {
 		return {
 			'request': function(config) {
 				var authToken = AuthTokenHelper.getAuthData();
@@ -123,6 +123,9 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 					var deferred = $q.defer();
 					AuthPopup.pushToRelogin(deferred, rejection);
 					return deferred.promise;
+				} else if (rejection.status === 408 || rejection.status === 0) {
+					// CONNECTION_TIMEDOUT
+					$rootScope.$broadcast('server-connection-error', rejection.status);
 				}
 				// $log.error(rejection);
 				return $q.reject(rejection);

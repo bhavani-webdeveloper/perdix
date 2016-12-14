@@ -96,9 +96,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                     });
 
                                     $this.bundlePages.push({
-                                        pageName: 'loans.individual.screening.CBCheck',
-                                        title: 'CB_CHECK',
-                                        pageClass: 'cb-check',
+                                        pageName: 'loans.individual.screening.LoanRequest',
+                                        title: 'LOAN_REQUEST',
+                                        pageClass: 'loan-request',
                                         minimum: 1,
                                         maximum: 1,
                                         model: {
@@ -107,9 +107,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                     });
 
                                     $this.bundlePages.push({
-                                        pageName: 'loans.individual.screening.LoanRequest',
-                                        title: 'LOAN_REQUEST',
-                                        pageClass: 'loan-request',
+                                        pageName: 'loans.individual.screening.CBCheck',
+                                        title: 'CB_CHECK',
+                                        pageClass: 'cb-check',
                                         minimum: 1,
                                         maximum: 1,
                                         model: {
@@ -173,16 +173,16 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
                                 maximum: 1
                             },
                             {
-                                pageName: 'loans.individual.screening.CBCheck',
-                                title: 'CB_CHECK',
-                                pageClass: 'cb-check',
+                                pageName: 'loans.individual.screening.LoanRequest',
+                                title: 'LOAN_REQUEST',
+                                pageClass: 'loan-request',
                                 minimum: 1,
                                 maximum: 1
                             },
                             {
-                                pageName: 'loans.individual.screening.LoanRequest',
-                                title: 'LOAN_REQUEST',
-                                pageClass: 'loan-request',
+                                pageName: 'loans.individual.screening.CBCheck',
+                                title: 'CB_CHECK',
+                                pageClass: 'cb-check',
                                 minimum: 1,
                                 maximum: 1
                             }
