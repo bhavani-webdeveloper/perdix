@@ -2520,6 +2520,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         console.error(err);
                     }
                 }
+                if(model.currentStage=='Application'){
+                    if(model.customer.verifications.length<2){
+                        PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
+                        return false;
+                    }
+                }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
 
