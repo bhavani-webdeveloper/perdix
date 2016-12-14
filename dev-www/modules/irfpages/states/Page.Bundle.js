@@ -134,26 +134,19 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         return function(data) {
                             _pageObj.page.schema = data;
 
-                            if (angular.isFunction(_pageObj.page.formFn)) {
-                                var promise = _pageObj.page.formFn();
+                            if (angular.isFunction(_pageObj.page.form)) {
+                                var promise = _pageObj.page.form();
                                 promise.then(function(data) {
                                     var pageObj = _pageObj;
                                     pageObj.page.form = data;
+                                    $timeout(function() {
+                                        // @TODO Code doesn't reach here for some reason. But initialize is called via directive. Need to discuss with stalin, why this is here?
+                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl, pageObj.bundlePage, bundleModel);
+                                    });
                                 });
                             }
                         };
                     })());
-                } else {
-                    if (angular.isFunction(pageObj.page.formFn)) {
-                        var promise = pageObj.page.formFn();
-                        promise.then(function(data) {
-                            var pageObj = pageObj;
-                            pageObj.page.form = data;
-                        });
-                    }
-                }
-                if (angular.isFunction(pageObj.page.initialize)) {
-                    pageObj.page.initPromise = $q.resolve(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, $scope.bundleModel));
                 }
                 pageObj.formHelper = formHelper;
 
@@ -230,8 +223,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
-    var initPromises = [];
-
     $scope.$on('$viewContentLoaded', function(event) {
         BundleLog.info('$viewContentLoaded');
         $('a[href^="#"]').click(function(e){
@@ -264,7 +255,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     for (var i = 0; i < bundlePage.minimum; i++) {
                         var openPage = initializePage(bundlePage, $scope.bundleModel);
                         $scope.pages.push(openPage);
-                        initPromises.push(openPage.page.initPromise);
                     };
                     bundlePage.openPagesCount = bundlePage.minimum;
                 }
@@ -273,11 +263,9 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 }
             }
 
-            $q.all(initPromises).finally(function(){
-                BundleLog.info("Ready to call post_pages_initialize");
-                $scope.bundlePage.post_pages_initialize($scope.bundleModel);
-                BundleLog.info("Call done post_pages_initialize");
-            });
+            BundleLog.info("Ready to call post_pages_initialize");
+            $scope.bundlePage.post_pages_initialize($scope.bundleModel);
+            BundleLog.info("Call done post_pages_initialize");
         }, function(){
             /* Reject from pre_pages_initialize */
         })

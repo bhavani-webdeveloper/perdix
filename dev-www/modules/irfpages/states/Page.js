@@ -48,18 +48,6 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             $scope.showSectionFarLoader = arg;
         })
 
-        $scope.$on('server-connection-error', function(event, arg) {
-            if (arg === 408) {
-                $scope.error.push({
-                    message: 'Connection timed out while contacting server'
-                });
-            } else {
-                $scope.error.push({
-                    message: 'Server Unreachable. Check your internet connection'
-                });
-            }
-        });
-
         self.loginSuccess = false;
         self.launchRelogin = function () {
             var def = $q.defer();
