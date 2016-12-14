@@ -196,7 +196,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     loanAmount: loanAmount
                 }, function(response){
                     var retryStatus = response.status; 
-                    if((response.status == 'Error' || response.status != 'SUCCESS') && response.status != 'PROCESSED'){
+                    if(CBType == 'BASE' && response.status != 'SUCCESS' && response.status != 'PROCESSED'){
                         var retryCount=0;
                         while (retryCount<3 && retryStatus != 'SUCCESS'){
                             CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},
@@ -212,8 +212,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             retryCount++;
                         }
                     }
-                    if(retryStatus == 'SUCCESS'){
+                    if(retryStatus == 'SUCCESS' || retryStatus == 'PROCESSED'){
                         PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
+                    }
+                    else if(retryStatus == 'ERROR' || retryStatus == 'Error'){
+                        PageHelper.showProgress("cb-check", "Error while placing Credit Bureau Request", 5000);
                     }
                     PageHelper.hideLoader();
                 }, function(errorResponse){
