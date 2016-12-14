@@ -24,7 +24,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId,
                                 requestType:null,
                                 type:null
-                            },function(httpres){
+                            })
+                            .$promise
+                            .then(function(httpres){
                                 for(j=0; j<model.loanAccount.loanCustomerRelations.length; j++){
                                     if(model.loanAccount.loanCustomerRelations[j].relation=='Applicant' && model.loanAccount.loanCustomerRelations[j].customerId==httpres.customerId)
                                         model.applicant = httpres;
