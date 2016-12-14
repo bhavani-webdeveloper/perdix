@@ -70,9 +70,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             "new-co-applicant": function(bundleModel, model, params){
                 $log.info("Insdie new-co-applicant of CBCheck");
-                model.customer.coapplicants.push({
-                                "coapplicantid":params.customer.id,
-                                "coapplicantname":params.customer.firstName});
+                var recordExists = false;
+                for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
+                    if(model.customer.coapplicants[i].coapplicantid == params.customer.id)
+                        recordExists = true;
+                }
+                if(!recordExists){
+                    model.customer.coapplicants.push({
+                                    "coapplicantid":params.customer.id,
+                                    "coapplicantname":params.customer.firstName});
+                }
             },
             "new-loan": function(bundleModel, model, params){
                 $log.info("Inside new-loan of CBCheck");
