@@ -215,15 +215,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     if(retryStatus == 'SUCCESS'){
                         PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
                     }
+                    PageHelper.hideLoader();
                 }, function(errorResponse){
                     PageHelper.hideLoader();
                     if(errorResponse && errorResponse.data && errorResponse.data.error)
                         PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
                     else
                         PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
-                })
-                .finally(function(){
-                    PageHelper.hideLoader();
                 });
             }
         }
