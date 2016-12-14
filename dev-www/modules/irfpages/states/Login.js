@@ -25,19 +25,30 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			}).finally(function(){
 				// $scope.showLoading = false;
 			});
+			$scope.serverConnectionError = false;
 		}, function(arg){ // Error callback
 			$scope.showLoading = false;
 			$log.error(arg);
 			if (arg.data && arg.data.error_description) {
 				$scope.errorMessage = arg.data.error_description;
-			} else {
+			} else if (!$scope.serverConnectionError) {
 				$scope.errorMessage = arg.statusText || (arg.status + " Unknown Error");
 			}
 			if ($scope.errorMessage.trim() === 'User credentials have expired') {
 				$state.go("Reset", {"type": "reset"});
 			}
+			$scope.serverConnectionError = false;
 		});
 	};
+
+	$scope.$on('server-connection-error', function(event, arg) {
+		$scope.serverConnectionError = true;
+		if (arg === 408) {
+			$scope.errorMessage = 'Connection timed out';
+		} else {
+			$scope.errorMessage = 'Server Unreachable';
+		}
+	});
 
 	this.onlineLogin = function(username, password){
 		$log.info("Inside onlineLogin");

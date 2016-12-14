@@ -119,11 +119,12 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 				return config;
 			},
 			'responseError': function(rejection) {
+				console.log("rejection status: " + rejection.status);
 				if (rejection.status === 401 && !(rejection.config && rejection.config.data && rejection.config.data.skip_relogin=='yes')) {
 					var deferred = $q.defer();
 					AuthPopup.pushToRelogin(deferred, rejection);
 					return deferred.promise;
-				} else if (rejection.status === 408 || rejection.status === 0) {
+				} else if (rejection.status === 408 || rejection.status <= 0) {
 					// CONNECTION_TIMEDOUT
 					$rootScope.$broadcast('server-connection-error', rejection.status);
 				}

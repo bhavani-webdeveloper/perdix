@@ -51,11 +51,11 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
         $scope.$on('server-connection-error', function(event, arg) {
             if (arg === 408) {
                 $scope.error.push({
-                    message: 'Connection timed out while contacting server'
+                    message: 'Connection timed out'
                 });
             } else {
                 $scope.error.push({
-                    message: 'Server Unreachable. Check your internet connection'
+                    message: 'Server Unreachable'
                 });
             }
         });
