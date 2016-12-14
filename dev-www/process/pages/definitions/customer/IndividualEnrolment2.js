@@ -2474,22 +2474,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             // $q.all start
                             $q.all(fpPromisesArr).then(function(){
                                 try{
-                                    var liabilities = reqData['customer']['liabilities'];
-                                    if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                        for (var i=0; i<liabilities.length;i++){
-                                            var l = liabilities[i];
-                                            l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                            l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                        }
-                                    }
+                                    // var liabilities = reqData['customer']['liabilities'];
+                                    // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
+                                    //     for (var i=0; i<liabilities.length;i++){
+                                    //         var l = liabilities[i];
+                                    //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                    //     }
+                                    // }
 
-                                    var financialAssets = reqData['customer']['financialAssets'];
-                                    if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                        for (var i=0; i<financialAssets.length;i++){
-                                            var f = financialAssets[i];
-                                            f.amountInPaisa = f.amountInPaisa * 100;
-                                        }
-                                    }
+                                    // var financialAssets = reqData['customer']['financialAssets'];
+                                    // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
+                                    //     for (var i=0; i<financialAssets.length;i++){
+                                    //         var f = financialAssets[i];
+                                    //         f.amountInPaisa = f.amountInPaisa * 100;
+                                    //     }
+                                    // }
                                 } catch(e){
                                     $log.info("Error trying to change amount info.");
                                 }
@@ -2579,22 +2579,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             // $q.all start
                             $q.all(fpPromisesArr).then(function(){
                                 try{
-                                    var liabilities = reqData['customer']['liabilities'];
-                                    if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
-                                        for (var i=0; i<liabilities.length;i++){
-                                            var l = liabilities[i];
-                                            l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                            l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                        }
-                                    }
+                                    // var liabilities = reqData['customer']['liabilities'];
+                                    // if (liabilities && liabilities!=null && typeof liabilities.length == "number" && liabilities.length >0 ){
+                                    //     for (var i=0; i<liabilities.length;i++){
+                                    //         var l = liabilities[i];
+                                    //         l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                    //         l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
+                                    //     }
+                                    // }
 
-                                    var financialAssets = reqData['customer']['financialAssets'];
-                                    if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
-                                        for (var i=0; i<financialAssets.length;i++){
-                                            var f = financialAssets[i];
-                                            f.amountInPaisa = f.amountInPaisa * 100;
-                                        }
-                                    }
+                                    // var financialAssets = reqData['customer']['financialAssets'];
+                                    // if (financialAssets && financialAssets!=null && typeof financialAssets.length == "number" && financialAssets.length >0 ){
+                                    //     for (var i=0; i<financialAssets.length;i++){
+                                    //         var f = financialAssets[i];
+                                    //         f.amountInPaisa = f.amountInPaisa * 100;
+                                    //     }
+                                    // }
                                 } catch(e){
                                     $log.info("Error trying to change amount info.");
                                 }
