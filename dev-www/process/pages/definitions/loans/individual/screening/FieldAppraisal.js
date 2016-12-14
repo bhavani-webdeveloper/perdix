@@ -88,6 +88,18 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                                 coApplicants[i].customerId = customers.urns[coApplicants[i].urn].id;
                                             }
                                             applicant.customerId = customers.urns[applicant.urn].id;*/
+
+                                            $this.bundlePages.push({
+                                                pageName: 'loans.individual.screening.Summary',
+                                                title: 'SUMMARY',
+                                                pageClass: 'summary',
+                                                minimum: 1,
+                                                maximum: 1,
+                                                model: {
+                                                    cbModel: {customerId:res.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore2'}
+                                                }
+                                            });
+                                            
                                             $this.bundlePages.push({
                                                 pageName: 'customer.IndividualEnrolment2',
                                                 title: 'APPLICANT',
