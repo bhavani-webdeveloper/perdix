@@ -15,10 +15,18 @@ MainApp.directive('irfMainMenu', function(){
 });
 
 MainApp.controller("irfMainMenuController", [
-	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition",
-	function($scope, $log, $http, $state, SessionStore, PagesDefinition) {
+	"$scope", "$log", "$http", "Utils", "$state", "SessionStore", "PagesDefinition",
+	function($scope, $log, $http,Utils, $state, SessionStore, PagesDefinition) {
 
 	$scope.ss = SessionStore;
+	$scope.bank = Utils.getSystemDate();
+
+	$scope.bank.then(function(result)
+	{
+		$scope.SystemDate=result.applicationDate;
+		moment($scope.SystemDate).format('DD/MM/YYYY');
+	});
+	
 
 	$scope.photo = SessionStore.getPhoto();
 
