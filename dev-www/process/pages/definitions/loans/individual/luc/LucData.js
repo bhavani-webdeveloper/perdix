@@ -39,10 +39,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         );
                     }
                 },
-                offline: false,
+                offline: true,
                 getOfflineDisplayItem: function(item, index) {
                     return [
-                        //item.lead.leadName
+                        item.loanMonitoringDetails.customerName
                     ]
                 },
 
@@ -61,7 +61,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }, {
                             key: "loanMonitoringDetails.customerName",
                             type: "string",
-                            "readonly": true
+                            //"readonly": true
                         }, {
                             key: "loanMonitoringDetails.address",
                             type: "string",
@@ -575,6 +575,14 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                     },
                     {
                         "type": "actionbox",
+                        //condition: "model.loanMonitoringDetails.lucDone== 'Yes'",
+                        "items": [{
+                            "type": "save",
+                            "title": "OffLine Save"
+                        }]
+                    },
+                    {
+                        "type": "actionbox",
                         condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'||model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
                         "items": [ {
                             type: "button",
@@ -611,6 +619,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 },
 
                 actions: {
+                    preSave: function(model, form, formName) {
+                        var deferred = $q.defer();
+                        if (model.loanMonitoringDetails.customerName) {
+                            deferred.resolve();
+                        } else {
+                            irfProgressMessage.pop('lUC-save', 'Customer Name is required', 3000);
+                            deferred.reject();
+                        }
+                        return deferred.promise;
+                    },
                     submit: function(model, form, formName) {
                         $log.info("Inside submit()");
                         $log.warn(model);

@@ -586,7 +586,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     if (model.lead.leadName) {
                         deferred.resolve();
                     } else {
-                        irfProgressMessage.pop('lead-save', 'lead Name is required', 3000);
+                        irfProgressMessage.pop('lead-save', 'Applicant Name is required', 3000);
                         deferred.reject();
                     }
                     return deferred.promise;
