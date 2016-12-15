@@ -1544,7 +1544,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key: "customer.liabilities[].installmentAmountInPaisa",
-                                            type: "amount"
+                                            type: "amount",
+                                            title:"AVG_INSTALLEMENT_AMOUNT"
                                         },
                                         {
                                             key: "customer.liabilities[].outstandingAmountInPaisa",
@@ -1619,7 +1620,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key: "customer.liabilities[].installmentAmountInPaisa",
-                                            type: "amount"
+                                            type: "amount",
+                                            title:"AVG_INSTALLEMENT_AMOUNT"
                                         },
                                         {
                                             key: "customer.liabilities[].outstandingAmountInPaisa",
