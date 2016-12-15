@@ -322,7 +322,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         }*/,
                                         {
                                             key:"customer.addressProofNo",
-                                            onCapture: EnrollmentHelper.customerAadhaarOnCapture,
+                                            onCapture: function(result, model, form) {
+                                                var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                                                model.customer.addressProofNo = aadhaarData.uid;
+                                            },
                                             type:"qrcode"
                                             
                                         },

@@ -101,9 +101,12 @@
                         <!-- User image -->
                         <li class="user-header bg-theme">
                             <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
-
+                            <p>{{ ss.getUsername() }} - {{ ss.getRole() | translate }}</p>
                             <p>
-                                {{ ss.getUsername() }} - {{ ss.getRole() | translate }}
+                                <small>
+                                    <span class="pull-left"><i class="fa fa-building"></i> {{ ss.getBranch() }}</span>
+                                    <span class="pull-right"><i class="fa fa-clock-o"></i> {{ $parent.userBranchDate }}</span>
+                                </small>
                             </p>
                         </li>
                         <!-- Menu Body -->

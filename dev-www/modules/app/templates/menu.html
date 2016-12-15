@@ -7,10 +7,9 @@
             <div class="pull-left image">
                 <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
             </div>
-            <div class="pull-left info">
-                <p>{{ ss.getUsername() }}</p>
-                <a href="#"><i class="fa fa-building text-danger"></i> {{ ss.getBranch() | translate }} {{ 'BRANCH' | translate }}</a>
-                <p>{{ SystemDate }}</p>
+            <div class="pull-left info" style="padding-top: 0">
+                <p style="margin-bottom: 0">{{ ss.getUsername() }}</p>
+                <a href="#"><i class="fa fa-building text-danger"></i> {{ ss.getBranch() | translate }}<br><i class="fa fa-clock-o text-gray"></i> <b>{{ $parent.userBranchDate }}</b></a>
             </div>
         </div>
         <!-- search form -->

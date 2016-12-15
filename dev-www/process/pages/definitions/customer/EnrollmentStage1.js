@@ -249,6 +249,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProof = 'Aadhar card';
             model.customer.addressProofNo = aadhaarData.uid;
         }
+        return aadhaarData;
     };
 
     return {
