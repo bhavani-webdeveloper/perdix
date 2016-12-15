@@ -14,6 +14,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     "title": "INDIVIDUAL_ENROLLMENT",
                     "subTitle": "",
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                        // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
        
                         model.currentStage = bundleModel.currentStage;
                        

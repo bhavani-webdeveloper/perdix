@@ -15,12 +15,37 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
         		"title": "SCREENING",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [],
+                "offline": true,
+                "getOfflineDisplayItem": function(value, index){
+                    var out = new Array(2);
+                    for (var i=0; i<value.pagesData.length; i++){
+                        var page = value.pagesData[i];
+                        if (page.pageDefinition.pageClass == "applicant"){
+                            out[0] = page.model.customer.firstName;
+                        } else if (page.pageDefinition.pageClass == "business"){
+                            out[1] = page.model.customer.firstName;
+                        }
+                    }
+                    return out;
+                    
+                },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     bundleModel.currentStage = "Screening";
                     var deferred = $q.defer();
+                    var pageData = $stateParams.pageData;
 
                     var $this = this;
+                    if (pageData && _.hasIn(pageData, 'offlineData')) {
+                        
+                        var offlineData = pageData.offlineData;
+                        for (var i=0; i<offlineData.pagesData.length; i++){
+                            $this.bundlePages.push(_.merge(offlineData.pagesData[i].pageDefinition, {model:offlineData.pagesData[i].model}));
+                        }
+                        _.merge(bundleModel, pageData.offlineData.bundleModel);
+                        return;
+                    }
+
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
                         PageHelper.showLoader();
                         bundleModel.loanId = $stateParams.pageId;

@@ -39,12 +39,27 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
          * @param {object} item  The item to be saved in offline storage.
          */
         storeItem: function(collectionId, item){
-            var collection = irfStorageService.retrieveJSON(collectionId);
+            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
             if (collection == null){
                 collection = {};
             }
-            collection[key] = item;
-            irfStorageService.storeJSON(collectionId, collection);
+            var offlineKey = randomStringForCollection(collectionId);
+            collection[offlineKey] = item;
+            irfStorageService.storeJSON("Offline__" + collectionId, collection);
+            return offlineKey;
+        },
+        updateItem: function(collectionId, offlineKey, item){
+            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
+            if (collection == null){
+                return null;
+            }
+
+            if (_.hasIn(collection, offlineKey)){
+                collection[offlineKey] = item;
+            }
+
+            irfStorageService.storeJSON("Offline__" + collectionId, collection);
+            return offlineKey;
         },
         /**
          * Retrieve a list of items stored in offline.
@@ -52,7 +67,7 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
          * @param {string} collectionId Usually the pageId.
          */
         retrieveItems: function(collectionId){
-            return irfStorageService.retrieveJSON(collectionId);
+            return irfStorageService.retrieveJSON("Offline__" + collectionId);
         },
         /**
          * Remove an item from the offline storage.
@@ -60,7 +75,7 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
          * @param {string} id  Id of the item.
          */
         removeItem: function(collectionId, id){
-            var collection = irfStorageService.retrieveJSON(collectionId);
+            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
             if (collection == null){
                 collection = {};
             }

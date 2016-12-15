@@ -187,6 +187,11 @@ irf.pages.config([
 		templateUrl: "modules/irfpages/templates/pages/Page.EngineOffline.html",
 		controller: "PageEngineOfflineCtrl"
 	},{
+		name: "Page.BundleOffline",
+		url: "/BundleOffline/:pageName",
+		templateUrl: "modules/irfpages/templates/pages/Page.BundleOffline.html",
+		controller: "PageBundleOfflineCtrl"
+	},{
 		name: "Page.Timeline",
 		url: "/Timeline/:pageName/:pageId",
 		params: {

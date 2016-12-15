@@ -74,8 +74,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
     }
 }]);
 
-irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "BundleManager", "BundleLog",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, BundleManager, BundleLog) {
+irf.pages.controller("PageBundleCtrl", ["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper) {
     var self = this;
 
     $scope.pages = [];
@@ -134,29 +134,28 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         return function(data) {
                             _pageObj.page.schema = data;
 
-                            if (angular.isFunction(_pageObj.page.form)) {
-                                var promise = _pageObj.page.form();
+                            if (angular.isFunction(_pageObj.page.formFn)) {
+                                var promise = _pageObj.page.formFn();
                                 promise.then(function(data) {
                                     var pageObj = _pageObj;
                                     pageObj.page.form = data;
-                                    $timeout(function() {
-                                        // @TODO Code doesn't reach here for some reason. But initialize is called via directive. Need to discuss with stalin, why this is here?
-                                        pageObj.page.initialize(pageObj.page.model, $scope.page.form, $scope.formCtrl, pageObj.bundlePage, bundleModel);
-                                    });
                                 });
                             }
                         };
                     })());
+                } else {
+                    if (angular.isFunction(pageObj.page.formFn)) {
+                        var promise = pageObj.page.formFn();
+                        promise.then(function(data) {
+                            var pageObj = pageObj;
+                            pageObj.page.form = data;
+                        });
+                    }
+                }
+                if (angular.isFunction(pageObj.page.initialize)) {
+                    pageObj.page.initPromise = $q.resolve(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, $scope.bundleModel));
                 }
                 pageObj.formHelper = formHelper;
-
-                $scope.$on('irf-sf-init', function(event) {
-                    $scope.formCtrl = event.targetScope[$scope.formName];
-                });
-                $scope.$on('sf-render-finished', function(event) {
-                    BundleLog.warn("on sf-render-finished on page, rendering layout");
-                    //setTimeout(renderLayout);
-                });
             } else if (pageObj.page.type == 'search-list') {
                 // pageObj.model = entityManager.getModel(pageObj.pageName);
                 pageObj.page.definition.formName = pageObj.formName;
@@ -191,6 +190,12 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         return pageObj;
     };
 
+    $scope.initialize = function(model, form, formCtrl, pageObj){
+        BundleLog.info("Inside initialize");
+        pageObj.model = model;
+        pageObj.page.initialize(pageObj.model, form, formCtrl, pageObj.singlePageDefinition, $scope.bundleModel);
+    }
+
     $scope.isRemovable = function(bundlePage) {
         return bundlePage.minimum < bundlePage.openPagesCount;
     };
@@ -222,6 +227,51 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             BundleLog.debug($scope.addTabMenu.splice(index, 1));
         }
     };
+
+    /** OFFLINE */
+
+    $scope.saveOffline = function(){
+        if (_.hasIn($scope, 'bundlePage.actions.preOfflineSave')) {
+            $scope.bundlePage.actions.preOfflineSave();
+        } 
+        var offlineData = {
+            bundleModel: $scope.bundleModel,
+            pagesData: []
+        };
+        for (var i=0; i< $scope.pages.length; i++){
+            var pageRelevantObj = {
+                model: $scope.pages[i].model,
+                pageDefinition: $scope.pages[i].singlePageDefinition
+            }
+            offlineData.pagesData.push(pageRelevantObj);
+        }
+
+        $scope.bundleModel.offlineKey = OfflineManager.storeItem($scope.pageName, offlineData);
+        PageHelper.showProgress("offline-save", "Record saved offline.", 5000);
+    }
+
+    $scope.updateOffline = function(key){
+        if (_.hasIn($scope, 'bundlePage.actions.preOfflineUpdate')){
+            $scope.bundlePage.actions.preOfflineUpdate();
+        }
+        var offlineData = {
+            bundleModel: $scope.bundleModel,
+            pagesData: []
+        };
+        for (var i=0; i< $scope.pages.length; i++){
+            var pageRelevantObj = {
+                model: $scope.pages[i].model,
+                pageDefinition: $scope.pages[i].singlePageDefinition
+            }
+            offlineData.pagesData.push(pageRelevantObj);
+        }
+
+        $scope.bundleModel.offlineKey = OfflineManager.updateItem($scope.pageName, $scope.bundleModel.offlineKey, offlineData);
+        PageHelper.showProgress("offline-update", "Offline record updated.", 5000);
+    }
+    /** END OF OFFLINE */
+
+    var initPromises = [];
 
     $scope.$on('$viewContentLoaded', function(event) {
         BundleLog.info('$viewContentLoaded');
@@ -255,6 +305,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     for (var i = 0; i < bundlePage.minimum; i++) {
                         var openPage = initializePage(bundlePage, $scope.bundleModel);
                         $scope.pages.push(openPage);
+                        initPromises.push(openPage.page.initPromise);
                     };
                     bundlePage.openPagesCount = bundlePage.minimum;
                 }
@@ -263,13 +314,20 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 }
             }
 
-            BundleLog.info("Ready to call post_pages_initialize");
-            $scope.bundlePage.post_pages_initialize($scope.bundleModel);
-            BundleLog.info("Call done post_pages_initialize");
+            $q.all(initPromises).finally(function(){
+                BundleLog.info("Ready to call post_pages_initialize");
+                $scope.bundlePage.post_pages_initialize($scope.bundleModel);
+                BundleLog.info("Call done post_pages_initialize");
+            });
         }, function(){
             /* Reject from pre_pages_initialize */
         })
         BundleLog.info("Call done pre_pages_initialize");
 
     });
+
+    $scope.loadOfflinePage = function(event) {
+        event.preventDefault();
+        $state.go('Page.BundleOffline', {pageName: $scope.pageName});
+    };
 }]);

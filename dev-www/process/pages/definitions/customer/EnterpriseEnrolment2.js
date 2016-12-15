@@ -82,7 +82,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     centreName.push(centres[i].id);
                 }
                 model.customer.centreId = centreName[0];
-                model.customer.enterpriseCustomerRelations = [];
+                model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
             }   
         },
         offline: false,

@@ -1,11 +1,25 @@
 <div>
+  <div class="bundle-header">
+    <span class="bundle-title">
+      {{ bundlePage.title | translate }}
+    </span>
+    <span class="offline-page-link" ng-show="bundlePage.offline">
+      |&nbsp; 
+      <small>
+        <a href ng-click="loadOfflinePage($event)" style="color:#eee"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a>
+      </small>
+    </span>
+    <span class="button-holder pull-right">
+      <button ng-show="bundlePage.offline && !bundleModel.offlineKey" ng-click="saveOffline()" class="btn btn-theme btn-xs">{{ "SAVE_OFFLINE" | translate }}</button>
+      <button ng-show="bundlePage.offline && bundleModel.offlineKey" ng-click="updateOffline(bundleModel.offlineKey)" class="btn btn-theme btn-xs">{{ "UPDATE_OFFLINE_RECORD" | translate }}</button>
+    </span>
+  </div>
   <uib-tabset active="activeIndex" class="bundle-tabset">
-    <uib-tab index="$index" ng-repeat="pageObj in pages track by $index" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
+    <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
       <uib-tab-heading>
         {{ pageObj.title | translate }}
         <a ng-click="removeTab($index)" href="" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times-circle {{((activeIndex == $index) || !(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid)) ? 'color-theme' : ''}}"></i></a>
       </uib-tab-heading>
-
       <section ng-hide="pageObj.error" class="content-header">
         <h1>
           <span>
@@ -64,9 +78,9 @@
 
                         <div class="col-sm-8">
                             <div class="row">
-                                
+
                                 <irf-sf
-                                    initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
+                                    initialize="pageObj.page.formInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
                                     irf-schema="pageObj.page.schema"
                                     irf-form="pageObj.page.form"
                                     irf-actions="pageObj.page.actions"
@@ -85,7 +99,7 @@
                     </div>
                     <div ng-switch-default>
                         <irf-sf
-                            initialize="pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
+                            initialize="pageObj.page.formInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
                             irf-schema="pageObj.page.schema"
                             irf-form="pageObj.page.form"
                             irf-actions="pageObj.page.actions"
