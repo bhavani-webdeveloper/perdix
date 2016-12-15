@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
- ["$log", "$state","BankMaster","$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
+ ["$log", "$state","$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
     "PageHelper", "Utils","entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state,BankMaster,$filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
+    function($log, $state,$filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
         PageHelper, Utils, entityManager,BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -18,21 +18,15 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     "interactionDate": Utils.getCurrentDate(),
                     "loanOfficerId": SessionStore.getUsername() + ''
                 }];
-                var bank= BankMaster.get().$promise;
-                var applicationDate;
-                bank.then(function(result){
-                    applicationDate=result.applicationDate;
-                    $log.info(applicationDate);
-                });
-               
+                var applicationDate = SessionStore.getCBSDate();
 
-                 var branch1 = formHelper.enum('branch_id').data;
-                    for (var i = 0; i < branch1.length; i++) {
-                        if ((branch1[i].name) == SessionStore.getBranch()) {
-                            model.lead.branchId = branch1[i].value;
-                            $log.info(model.lead.branchId);
-                        }
+                var branch1 = formHelper.enum('branch_id').data;
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].name) == SessionStore.getBranch()) {
+                        model.lead.branchId = branch1[i].value;
+                        $log.info(model.lead.branchId);
                     }
+                }
 
                 model = Utils.removeNulls(model, true);
 

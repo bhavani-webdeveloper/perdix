@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection", "BankMaster",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection, BankMaster) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection) {
 
 
             function backToLoansList(){
@@ -66,14 +66,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.transactionName = _pageGlobals.transactionName;
                     }
 
-                    var p1 = BankMaster.getCBSDate()
-                        .then(function(date){
-                            model.workingDate = date;
-                            model.repayment.repaymentDate = date;
-                        }, function(){
-                            PageHelper.showProgress("unable-to-load-working-date", "Unable to load working date.", 5000);
-                        })
-
+                    model.workingDate = model.repayment.repaymentDate = SessionStore.getCBSDate();
 
                     PageHelper.showLoader();
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
@@ -139,7 +132,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
 
 
-                    $q.all([p1, promise, p3, p4])
+                    $q.all([promise, p3, p4])
                         .finally(
                             function(){
                                 PageHelper.hideLoader();

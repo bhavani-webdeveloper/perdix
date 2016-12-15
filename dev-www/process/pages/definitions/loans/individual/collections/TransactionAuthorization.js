@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "BankMaster",
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-                  SessionStore, $state, $stateParams, Masters, authService, Utils, BankMaster) {
+                  SessionStore, $state, $stateParams, Masters, authService, Utils) {
 
             return {
                 "type": "schema-form",
@@ -24,14 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         unApprovedPaymentExists: false
                     };
 
-                    var p1 = BankMaster.getCBSDate()
-                        .then(function(date){
-                            model.workingDate = date;
-                        }, function(){
-                            PageHelper.showProgress("unable-to-load-working-date", "Unable to load working date.", 5000);
-                        })
-
-
+                    model.workingDate = SessionStore.getCBSDate();
 
                     model.transAuth = model.transAuth || {};
                     model._input = {isPenalInterestWaivedOff: false, isFeeWaivedOff: false};
@@ -106,7 +99,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         backToLoansList();
                     })
 
-                    $q.all([p1, p2])
+                    $q.all([p2])
                         .finally(function(){
                             if (Utils.compareDates(model.workingDate, model._transAuth.repaymentDate) == 1) {
                                 model.transInfo.backDatedTransaction = true;
