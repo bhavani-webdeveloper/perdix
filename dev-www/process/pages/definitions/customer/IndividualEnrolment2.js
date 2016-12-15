@@ -2311,7 +2311,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"PHYSICAL_ASSETS",
                                     items:[
                                         {
-                                            key: "customer.physicalAssets[].assetType",
+                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
                                             title: "ASSET_TYPE",
                                             type: "select",
                                             enumCode: "asset_type"

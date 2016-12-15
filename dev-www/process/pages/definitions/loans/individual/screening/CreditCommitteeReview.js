@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
         	$log.info("Inside LoanBookingBundle");
         	return {
         		"type": "page-bundle",
-        		"title": "CENTRAL_RISK_REVIEW",
+        		"title": "CREDIT_COMITTEE_REVIEW",
         		"subTitle": "",
         		"bundlePages": [
         			{

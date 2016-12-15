@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
 
         	return {
         		"type": "page-bundle",
-        		"title": "LOAN_BOOKING_BUNDLE",
+        		"title": "FIELD_APPRAISAL_REVIEW",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [
         			{

@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
 
         	return {
         		"type": "page-bundle",
-        		"title": "LOAN_BOOKING_BUNDLE",
+        		"title": "APPLICATION_REVIEW",
         		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
         		"bundlePages": [
         			{
