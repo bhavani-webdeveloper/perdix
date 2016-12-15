@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
     ["$log","SessionStore", "$state",  "formHelper",
         "$stateParams", "LoanAccount", "LoanProcess", "PageHelper",
-        "Groups", "Utils","elementsUtils",
+        "Groups", "Utils","elementsUtils", '$filter',
         function ($log,SessionStore, $state, formHelper, $stateParams,
                   LoanAccount, LoanProcess,  PageHelper,
-                  Groups, Utils) {
+                  Groups, Utils, elementsUtils, $filter) {
 
             function backToQueue(){
                 $state.go("Page.Engine",{
@@ -27,6 +27,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                         break;
                 }
                 return amount;
+            }
+
+            function formatAmount(amount){
+                if (typeof(amount)=="string"){
+                    amount = parseFloat(amount);
+                }
+                return $filter('currency')(amount, "Rs.", 2);
             }
 
             function updateTotal(model){
@@ -63,6 +70,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     PageHelper.showLoader();
 
                     //pageId = PartnerCode.GroupCode.isLegacy
+                    model.bankName = SessionStore.getBankName();
+                    model.branch = SessionStore.getBranch();
+                    model.branchId = SessionStore.getBranchId();
                     var groupParams = $stateParams.pageId.toString().split(".");
                     var isLegacy = false;
                     try{
@@ -101,10 +111,11 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
 
                                 var aRepayment = {
                                     accountId: repData.accountId,
-                                    demandAmount: parseInt(Number(repData.equatedInstallment)),
+                                    demandAmount: parseInt(Number(repData.totalDemandDue)),
                                     payOffAmount: repData.payOffAmount,
                                     payOffAndDueAmount: repData.payOffAndDueAmount,
                                     accountName: repData.accountName,
+                                    productCode: repData.productCode,
                                     numSatisifiedDemands: repData.numSatisifiedDemands,
                                     numDemands: repData.numDemands,
                                     groupCode: repData.groupCode,
@@ -442,20 +453,21 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         var curTime = moment();
                                         var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
                                         pData.addLine(opts['entity_name'], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
-                                            .addLine(opts['branch'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine("Date : " + curTimeStr, {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
+                                            .addLine(opts['branch'], {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL}
+)                                            .addLine("Date : " + curTimeStr, {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
                                             //.addLine("Customer ID : " + repaymentInfo['customerId'], {'center': false, font: PrinterConstants.FONT_SMALL_NORMAL})
                                             .addLine("LOAN REPAYMENT", {'center': true, font: PrinterConstants.FONT_LARGE_BOLD})
                                             .addLine("", {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addLine(repaymentInfo['accountName'], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
+                                            .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
+                                            .addKeyValueLine("Branch Code", opts['branch_id'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Loan A/C No", repaymentInfo['accountNumber'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Transaction Type", repaymentInfo['transactionType'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Transaction ID", repaymentInfo['transactionID'], {font:PrinterConstants.FONT_SMALL_NORMAL})
-                                            .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Amount Paid", repaymentInfo['amountPaid'], {font:PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Total Payoff Amount", repaymentInfo['payOffAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
+                                            .addKeyValueLine("Demand Amount", parseFloat(repaymentInfo['demandAmount'])==0?"Nil": formatAmount(repaymentInfo["demandAmount"]), {font:PrinterConstants.FONT_SMALL_BOLD})
+                                            .addKeyValueLine("Amount Paid", formatAmount(repaymentInfo['amountPaid']), {font:PrinterConstants.FONT_SMALL_BOLD})
+                                            .addKeyValueLine("Total Payoff Amount",  formatAmount(parseFloat(repaymentInfo['payOffAmount']) - parseFloat(repaymentInfo['amountPaid'])), {font:PrinterConstants.FONT_SMALL_BOLD})
                                             // .addKeyValueLine("Demand Amount", repaymentInfo['demandAmount'], {font:PrinterConstants.FONT_SMALL_BOLD})
                                             .addKeyValueLine("Demands Paid/Pending", repaymentInfo['demandsPaidAndPending'], {font:PrinterConstants.FONT_SMALL_BOLD})
                                             .addStrRepeatingLine("-", {font: PrinterConstants.FONT_LARGE_BOLD})
@@ -475,6 +487,20 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     }
 
                                     var fullPrintData = new PrinterData();
+
+                                    var opts = {
+                                        'branch': model.branch,
+                                        'entity_name': model.bankName + " KGFS",
+                                        'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                        'cin': 'U74990TN2011PTC081729',
+                                        'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                        'address2': 'Kanagam Village, Taramani',
+                                        'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                        'website': "http://ruralchannels.kgfs.co.in",
+                                        'helpline': '18001029370',
+                                        'branch_id': model.branchId
+                                    };
+
                                     if(model._partnerCode!="AXIS") {
                                         for (var i = 0; i < model.repayments.length; i++) {
                                             var r = model.repayments[i];
@@ -484,24 +510,14 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                                 'accountNumber': r.accountId,
                                                 'transactionType': r.transactionName,
                                                 'customerName': r.customerName,
-                                                'transactionID': "",
+                                                'transactionID': r.paymentResponse.transactionId,
                                                 'demandAmount': r.demandAmount,
                                                 'amountPaid': r.amount,
                                                 'payOffAmount': r.payOffAmount,
                                                 'accountName': r.accountName,
+                                                'productCode': r.productCode,
                                                 'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
                                             };
-
-                                            var opts = {
-                                                'entity_name': "Pudhuaaru KGFS",
-                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                                'cin': 'U74990TN2011PTC081729',
-                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                                'address2': 'Kanagam Village, Taramani',
-                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                                'website': "http://ruralchannels.kgfs.co.in",
-                                                'helpline': '18001029370'
-                                            }
 
                                             var pData = getPrintReceipt(repaymentInfo, opts);
                                             pData.addLine("", {});
@@ -523,19 +539,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                                 'amountPaid': r.amount,
                                                 'payOffAmount': "",
                                                 'accountName': r.accountName,
-                                                'demandsPaidAndPending': ""
+                                                'demandsPaidAndPending': "",
+                                                'productCode': r.productCode
                                             };
-
-                                            var opts = {
-                                                'entity_name': "Pudhuaaru KGFS",
-                                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                                'cin': 'U74990TN2011PTC081729',
-                                                'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                                'address2': 'Kanagam Village, Taramani',
-                                                'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                                'website': "http://ruralchannels.kgfs.co.in",
-                                                'helpline': '18001029370'
-                                            }
 
                                             var pData = getPrintReceipt(repaymentInfo, opts);
                                             pData.addLine("", {});
@@ -544,6 +550,12 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         }
                                     }
                                     console.log(fullPrintData.getLines());
+                                    var lines = fullPrintData.getLines();
+                                    var outStr = "\n";
+                                    for (var i=0;i<lines.length;i++){
+                                        outStr = outStr + lines[i] + "\n";
+                                    }
+                                    console.log(outStr);
                                     cordova.plugins.irfBluetooth.print(function(){
                                         console.log("succc callback");
                                     }, function(err){
@@ -802,6 +814,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     alert(resp.response);
                                     model.repaymentResponse = resp;
                                     model.ui.submissionDone = true;
+
+                                    _.forOwn(model.repayments, function(repayment){
+                                        repayment.paymentResponse = _.find(resp.repayments, {'accountId': repayment.accountId})
+                                    })
                                 }catch(err){
                                     console.error(err);
                                     PageHelper.showProgress("group-repay","Oops. An Error Occurred",3000);
