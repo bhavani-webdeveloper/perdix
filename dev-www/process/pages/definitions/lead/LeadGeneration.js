@@ -18,7 +18,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     "interactionDate": Utils.getCurrentDate(),
                     "loanOfficerId": SessionStore.getUsername() + ''
                 }];
-                var applicationDate = SessionStore.getCBSDate();
 
                 var branch1 = formHelper.enum('branch_id').data;
                 for (var i = 0; i < branch1.length; i++) {
@@ -259,8 +258,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                             key: "lead.alternateMobileNo",
                                         }, {
                                             key: "lead.addressLine1",
+                                            "title": "DOOR_NO"
                                         }, {
                                             key: "lead.addressLine2",
+                                            "title": "STREET"
                                         }, {
                                             key: "lead.pincode",
                                             type: "lov",

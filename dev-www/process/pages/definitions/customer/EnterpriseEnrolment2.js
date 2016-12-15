@@ -114,6 +114,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
             },
             "lead-loaded": function(bundleModel, model, obj){
+                $log.info(obj);
                             model.customer.mobilePhone = obj.mobileNo;
                             model.customer.gender = obj.gender;
                             model.customer.firstName = obj.businessName;
@@ -430,7 +431,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "businessActivity",
                         parentEnumCode: "businessType",
-                        //parentValueExpr:"model.customer.enterprise.businessType",
+                        parentValueExpr:"model.customer.enterprise.businessType",
                     },
                     {
                         key: "customer.enterprise.businessSector",
@@ -438,7 +439,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "businessSector",
                         parentEnumCode: "businessType",
-                        //parentValueExpr:"model.customer.enterprise.businessLine",
+                        parentValueExpr:"model.customer.enterprise.businessLine",
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
@@ -446,7 +447,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "businessSubSector",
                         parentEnumCode: "businessSector",
-                        //parentValueExpr:"model.customer.enterprise.businessSector",
+                        parentValueExpr:"model.customer.enterprise.businessSector",
                     },
                     {
                         key: "customer.enterprise.itrAvailable",
