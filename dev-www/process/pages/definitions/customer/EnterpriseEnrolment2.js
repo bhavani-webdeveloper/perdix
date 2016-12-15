@@ -121,8 +121,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             model.customer.maritalStatus=obj.maritalStatus;
                             model.customer.customerBranchId=obj.branchId;
                             model.customer.centreId=obj.centreId;
-                            model.customer.landmark=obj.addressLine2;
-                            model.customer.street=obj.addressLine1;
+                            model.customer.street=obj.addressLine2;
+                            model.customer.doorNo=obj.addressLine1;
                             model.customer.pincode=obj.pincode;
                             model.customer.district=obj.district;
                             model.customer.state=obj.state;
