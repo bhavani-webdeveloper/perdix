@@ -2428,6 +2428,121 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 ]
             },
             {
+                "type": "box",
+                "title": "COMMERCIAL_CB_CHECK",
+                "condition": "model.currentStage=='ScreeningReview'",
+                "items": [
+                    {
+                        key:"customer.enterpriseBureauDetails",
+                        title:"CB Check",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.enterpriseBureauDetails[].bureau",
+                                title:"BUREAU",
+                                type:"select",
+                                required:"true",
+                                titleMap: {
+                                      "CIBIL": "CIBIL",
+                                      "Highmark": "Highmark"
+                                }
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].fileId",
+                                title:"FILE",
+                                type:"file",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].doubtful",
+                                title:"DOUBTFUL_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].loss",
+                                title:"LOSS_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].specialMentionAccount",
+                                title:"SPECIAL_MENTION_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].standard",
+                                title:"STANDARD_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].subStandard",
+                                title:"SUB_STANDARD_ACS",
+                                type:"number"
+                            },
+
+                         ] 
+                    },
+                ]
+            },
+            {
+                "type": "box",
+                "title": "COMMERCIAL_CB_CHECK",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                readonly:true,
+                "items": [
+                    {
+                        key:"customer.enterpriseBureauDetails",
+                        title:"CB Check",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.enterpriseBureauDetails[].bureau",
+                                title:"BUREAU",
+                                type:"select",
+                                required:"true",
+                                titleMap: {
+                                      "CIBIL": "CIBIL",
+                                      "Highmark": "Highmark"
+                                }
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].fileId",
+                                title:"FILE",
+                                type:"file",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].doubtful",
+                                title:"DOUBTFUL_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].loss",
+                                title:"LOSS_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].specialMentionAccount",
+                                title:"SPECIAL_MENTION_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].standard",
+                                title:"STANDARD_ACS",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.enterpriseBureauDetails[].subStandard",
+                                title:"SUB_STANDARD_ACS",
+                                type:"number"
+                            },
+
+                         ] 
+                    },
+                ]
+            },
+            {
                 "type": "actionbox",
                 "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
                 "items": [
@@ -2441,7 +2556,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 "type": "actionbox",
-                "condition": "model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
+                "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
                 "items": [
                     {
                         "type": "submit",

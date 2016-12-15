@@ -395,6 +395,41 @@
                         "version"
                     ]
                 },
+                "enterpriseBureauDetails": {
+                    "type": "array",
+                    "title": "COMMERCIAL_CB_CHECK",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "bureau": {
+                                "type": ["string","null"]
+                            },
+                            "fileId": {
+                                "type": ["string","null"],
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF"
+                            },
+                            "doubtful": {
+                                "type": ["integer","null"]
+                            },
+                            "loss": {
+                                "type": ["integer","null"]
+                            },
+                            "specialMentionAccount": {
+                                "type": ["integer","null"]
+                            },
+                            "standard": {
+                                "type": ["integer","null"]
+                            },
+                            "subStandard": {
+                                "type": ["integer","null"]
+                            }
+                        },
+                        "required": [
+                            "bureau"
+                        ]
+                    }
+                },
                 "expenditures": {
                     "type": "array",
                     "title": "EXPENDITURES",
