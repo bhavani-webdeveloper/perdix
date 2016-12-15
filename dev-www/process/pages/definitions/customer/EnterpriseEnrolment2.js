@@ -2433,7 +2433,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "items": [
                     {
                         "type": "button",
-                        "title": "SAVE",
+                        "icon": "fa fa-circle-o",
+                        "title": "SUBMIT",
                         "onClick": "actions.save(model, formCtrl, form, $event)"
                     }
                 ]

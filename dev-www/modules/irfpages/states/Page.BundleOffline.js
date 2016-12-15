@@ -31,7 +31,7 @@ function(
 
 	$scope.loadPage = function(event, data) {
 		event && event.preventDefault();
-		$state.go('Page.Bundle', {pageName: $scope.pageName, pageData: {'offlineData': data}});
+		$state.go('Page.Bundle', {pageName: $scope.pageName, pageData: {'$$offlineData': data}});
 		updateAppTitle($scope.page.title);
 	};
 

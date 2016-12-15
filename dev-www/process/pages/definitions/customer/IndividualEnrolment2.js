@@ -2386,7 +2386,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                              },*/
                                 {
                                     "type": "button",
-                                    "title": "SAVE",
+                                    "icon": "fa fa-circle-o",
+                                    "title": "SUBMIT",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
                                 }]
                         },
@@ -2399,7 +2400,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                              },*/
                                 {
                                     "type": "button",
-                                    "title": "SAVE",
+                                    "icon": "fa fa-circle-o",
+                                    "title": "SUBMIT",
                                     "onClick": "actions.save(model, formCtrl, form, $event)"
                                 },
                                 {
