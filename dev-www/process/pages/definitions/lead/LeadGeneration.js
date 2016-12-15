@@ -322,7 +322,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     title: "PRODUCT_DETAILS",
                     items: [{
                         key: "lead.interestedInProduct",
-                        title:"INTERESTED_IN_LOAN_PRODUCT",
+                        //title:"INTERESTED_IN_LOAN_PRODUCT",
                         type: "select",
                         required:true,
                         enumCode: "decisionmaker",
