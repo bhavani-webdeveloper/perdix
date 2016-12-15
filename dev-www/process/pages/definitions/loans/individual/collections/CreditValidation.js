@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage',
-    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries",
+    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries", "BankMaster",
     function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, PageHelper, formHelper, irfProgressMessage,
-              SessionStore, $state, $stateParams, Masters, authService, Utils, Queries) {
+              SessionStore, $state, $stateParams, Masters, authService, Utils, Queries, BankMaster) {
 
         return {
             "type": "schema-form",
@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     model.pageRules.forceToTransAuthSubMessage = "On submit, transaction moves to Authorization Queue.";  
                 }
 
-                var p1 = Utils.getCBSDate()
+                var p1 = BankMaster.getCBSDate()
                     .then(function(date){
                         model.workingDate = date;
                     }, function(){

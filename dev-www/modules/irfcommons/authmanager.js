@@ -8,8 +8,8 @@
  */
 
 irf.commons.factory('authService',
-['Auth', 'Account', '$q', '$log', 'SessionStore', 'irfStorageService', 'AuthTokenHelper',
-function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelper) {
+['Auth', 'Account', '$q', '$log', 'SessionStore', 'irfStorageService', 'AuthTokenHelper', 'BankMaster',
+function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelper, BankMaster) {
 	var userData = null;
 
 	var login = function(username, password) {
@@ -40,7 +40,15 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		Account.get({'service': 'account'}, function(accountResponse){
 			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
 				accountResponse.centres = resp;
-			}).finally(function() {
+
+				BankMaster.getCBSDate().then(function(cbsDate) {
+					accountResponse.cbsDate = cbsDate;
+				}).finally(function(){
+					setUserData(accountResponse);
+					irfStorageService.storeJSON('UserData', accountResponse);
+					deferred.resolve(accountResponse);
+				});
+			}, function() {
 				setUserData(accountResponse);
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);

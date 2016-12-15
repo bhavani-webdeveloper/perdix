@@ -116,6 +116,10 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 		return dt ? dt.format(self.getDateFormat()) : dt;
 	};
 
+	self.getCBSDate = function() {
+		return moment(session.cbsDate, 'YYYY-MM-DD').format('DD-MMM-YYYY');
+	}
+
 	self.setItem = function(key, value){
 		value = JSON.stringify(value);
 		$window.localStorage.setItem(key, value);

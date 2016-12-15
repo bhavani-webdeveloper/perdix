@@ -1,8 +1,8 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore", "Queries", "$state", "$timeout", "Utils",
-function($scope, $log, SessionStore, Queries, $state, $timeout, Utils) {
+["$scope", "$log", "SessionStore", "Queries", "$state", "$timeout",
+function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
 	document.mainTitle = "Perdix Mobility";
@@ -54,9 +54,6 @@ function($scope, $log, SessionStore, Queries, $state, $timeout, Utils) {
 
 	$scope.$on('irf-login-success', function($event){
 		checkLatestVersion();
-		Utils.getSystemDate().then(function(result) {
-			$scope.userBranchDate = moment(result.applicationDate, 'YYYY-MM-DD').format('DD-MMM-YYYY');
-		});
 	});
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;

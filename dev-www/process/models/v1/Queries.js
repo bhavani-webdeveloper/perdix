@@ -420,25 +420,6 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     }
 
-    resource.getCBSBanks = function(){
-    	var deferred = $q.defer();
-    	var request = {};
-    	resource.getResult("cbsBanks.list", request)
-    		.then(function(records){
-    			if (records && records.results) {
-    				var result = {
-    					headers: {
-    						"x-total-count": records.results.length
-    					},
-    					body: records.results
-    				};
-    				deferred.resolve(result);
-    			}
-    		}, deferred.reject);
-
-    	return deferred.promise;
-    }
-
     resource.getAllLoanPurpose1 = function() {
         var deferred = $q.defer();
         var request = {};

@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "BankMaster",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-                  SessionStore, $state, $stateParams, Masters, authService, Utils) {
+                  SessionStore, $state, $stateParams, Masters, authService, Utils, BankMaster) {
 
             return {
                 "type": "schema-form",
@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                         unApprovedPaymentExists: false
                     };
 
-                    var p1 = Utils.getCBSDate()
+                    var p1 = BankMaster.getCBSDate()
                         .then(function(date){
                             model.workingDate = date;
                         }, function(){
