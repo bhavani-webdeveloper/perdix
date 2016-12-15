@@ -12,7 +12,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             "Page/Engine/lead.leadAssignmentPendingQueue",
             "Page/Engine/lead.IncompleteLeadQueue",
             "Page/Engine/lead.LeadFollowUpQueue",
-            "Page/Engine/lead.ReadyForScreeningQueue",   
+            "Page/Engine/lead.ReadyForScreeningQueue",
         ]
     };
 
@@ -38,7 +38,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 'page': 1,
                 'per_page': 1,
             }).$promise.then(function(response,headerGetter){
-                lapqMenu.data = response.headers['x-total-count'];
+                lapqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 lapqMenu.data = '-';
             });
@@ -58,7 +58,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 'page': 1,
                 'per_page': 1,
             }).$promise.then(function(response,headerGetter){
-                lfuqMenu.data = response.headers['x-total-count'];
+                lfuqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 lfuqMenu.data = '-';
             });
@@ -77,7 +77,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 'page': 1,
                 'per_page': 1,
             }).$promise.then(function(response,headerGetter){
-                ilqMenu.data = response.headers['x-total-count'];
+                ilqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 ilqMenu.data = '-';
             });
@@ -96,7 +96,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response, headerGetter){
-                rfqMenu.data = response.headers['x-total-count'];
+                rfqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 rfqMenu.data = '-';
             })

@@ -8,6 +8,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         "iconClass": "fa fa-book",
         "items": [
             "Page/Engine/loans.individual.booking.LoanInput",
+            "Page/Engine/loans.individual.booking.InitiationQueue",
             "Page/Engine/loans.individual.booking.PendingQueue",
             "Page/Engine/loans.individual.booking.DocumentUploadQueue",
             "Page/Engine/loans.individual.booking.PendingVerificationQueue"
@@ -19,6 +20,20 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
 
+        var iqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.InitiationQueue"];
+        if (iqMenu) {
+            IndividualLoan.search({
+                'stage': 'LoanInitiation',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                iqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                iqMenu.data = '-';
+            });
+        }
+
         var pqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.PendingQueue"];
         if (pqMenu) {
             IndividualLoan.search({
@@ -27,9 +42,9 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
-                pqMenu.data = response.headers['x-total-count'];
+                pqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
-                cvqMenu.data = '-';
+                pqMenu.data = '-';
             });
         }
 
@@ -41,9 +56,9 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
-                duqMenu.data = response.headers['x-total-count'];
+                duqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
-                cvqMenu.data = '-';
+                duqMenu.data = '-';
             });
         }
 
@@ -55,9 +70,9 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
-                pvqMenu.data = response.headers['x-total-count'];
+                pvqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
-                cvqMenu.data = '-';
+                pvqMenu.data = '-';
             });
         }
     });

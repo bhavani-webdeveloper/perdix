@@ -36,7 +36,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    sqMenu.data = response.headers['x-total-count'];
+                    sqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     sqMenu.data = '-';
                 });
@@ -54,7 +54,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    srqMenu.data = response.headers['x-total-count'];
+                    srqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     srqMenu.data = '-';
                 });
@@ -72,7 +72,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    pqMenu.data = response.headers['x-total-count'];
+                    pqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     pqMenu.data = '-';
                 });
@@ -90,7 +90,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    aqMenu.data = response.headers['x-total-count'];
+                    aqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     aqMenu.data = '-';
                 });
@@ -108,7 +108,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    arqMenu.data = response.headers['x-total-count'];
+                    arqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     arqMenu.data = '-';
                 });
@@ -126,7 +126,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    faqMenu.data = response.headers['x-total-count'];
+                    faqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     faqMenu.data = '-';
                 });
@@ -144,7 +144,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    farqMenu.data = response.headers['x-total-count'];
+                    farqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     farqMenu.data = '-';
                 });
@@ -162,7 +162,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    crrqMenu.data = response.headers['x-total-count'];
+                    crrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     crrqMenu.data = '-';
                 });
@@ -180,7 +180,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    ccrqMenu.data = response.headers['x-total-count'];
+                    ccrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     ccrqMenu.data = '-';
                 });
@@ -198,7 +198,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = response.headers['x-total-count'];
+                    lsqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     lsqMenu.data = '-';
                 });
