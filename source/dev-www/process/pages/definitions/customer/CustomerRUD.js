@@ -244,7 +244,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         "offline": true
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf30",
+                                        key:"customer.identityProofReverseImageId",
                                         type:"file",
                                         fileType:"image/*",
                                         "offline": true
@@ -276,7 +276,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         "offline": true
                                     },
                                     {
-                                        key:"customer.udf.userDefinedFieldValues.udf29",
+                                        key:"customer.addressProofReverseImageId",
                                         type:"file",
                                         fileType:"image/*",
                                         "offline": true
