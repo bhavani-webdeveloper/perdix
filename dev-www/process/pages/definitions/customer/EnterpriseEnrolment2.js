@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
 
-    var branch = SessionStore.getBranch(); 
+    var branch = SessionStore.getBranch();  
 
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
@@ -943,7 +943,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 type: "box",
-                title: "CUSTOMER_BANK_ACCOUNTS",
+                title: "BANK_ACCOUNTS",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items: [
                     {
@@ -1092,7 +1092,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                 type: "box",
-                title: "CUSTOMER_BANK_ACCOUNTS",
+                title: "BANK_ACCOUNTS",
                 "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                 readonly:true,
                 items: [
