@@ -362,6 +362,53 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             {
                 "type": "box",
+                "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+                "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
+                "items": [
+                    {
+                        key: "loanAccount.expectedProcessingFeePercentage",
+                        "type": "number",
+                        "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE"
+                    },
+                    {
+                       key: "loanAccount.expectedCommercialCibilCharge",
+                       "type": "amount",
+                        "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE"
+                    },
+                    {
+                       key: "loanAccount.estimatedEmi",
+                       "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly:true
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'",
+                readonly:true,
+                "items": [
+                    {
+                        key: "loanAccount.expectedProcessingFeePercentage",
+                        "type": "number",
+                        "title": "EXPECTED_PROCESSING_FEES_IN_PERCENTAGE"
+                    },
+                    {
+                       key: "loanAccount.expectedCommercialCibilCharge",
+                       "type": "amount",
+                        "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE"
+                    },
+                    {
+                       key: "loanAccount.estimatedEmi",
+                       "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly:true
+                    }
+                ]
+            },
+            {
+                "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'",
                 "items": [
@@ -617,7 +664,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "key": "loanAccount.securityEmiRequired",
                         'enumCode': "decisionmaker",
                         'type': "select",
-                        "title": "SECURITY_EMI_REQUIRED "
+                        "title": "SECURITY_EMI_REQUIRED"
                     },
                     {
                         "key": "loanAccount.loanAmount",
