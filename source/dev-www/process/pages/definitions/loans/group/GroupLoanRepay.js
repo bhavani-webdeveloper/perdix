@@ -22,6 +22,9 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     case 'Scheduled Demand':
                         amount = parseFloat(repaymentObj.demandAmount);
                         break;
+                    case 'Advance Repayment':
+                        amount = parseFloat(repaymentObj.equatedInstallment);
+                        break;
                     default:
                         amount = 0;
                         break;
@@ -73,6 +76,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                     model.bankName = SessionStore.getBankName();
                     model.branch = SessionStore.getBranch();
                     model.branchId = SessionStore.getBranchId();
+                    model.branchCode = SessionStore.getBranchCode();
                     var groupParams = $stateParams.pageId.toString().split(".");
                     var isLegacy = false;
                     try{
@@ -124,6 +128,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                     urnNo: repData.urnNo,
                                     transactionName: txName,
                                     repaymentDate: Utils.getCurrentDate(),
+                                    equatedInstallment: repData.equatedInstallment,
                                     additional: {
 
                                         accountBalance: Number(repData.accountBalance)
@@ -262,8 +267,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                             "Advance Repayment":"Advance Repayment",
                                             "Scheduled Demand":"Scheduled Demand",
                                             "Fee Payment":"Fee Payment",
-                                            "Pre-closure":"Pre-closure",
-                                            "Prepayment":"Prepayment"
+                                            "Pre-closure":"Pre-closure"
                                         },
                                         onChange: function(value, form, model){
                                             var ai = form.arrayIndex;
@@ -459,7 +463,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                             .addLine("LOAN REPAYMENT", {'center': true, font: PrinterConstants.FONT_LARGE_BOLD})
                                             .addLine("", {'center': true, font: PrinterConstants.FONT_SMALL_NORMAL})
                                             .addLine(repaymentInfo['accountName'] + "-" + repaymentInfo["productCode"], {'center': true, font: PrinterConstants.FONT_SMALL_BOLD})
-                                            .addKeyValueLine("Branch Code", opts['branch_id'], {font:PrinterConstants.FONT_SMALL_NORMAL})
+                                            .addKeyValueLine("Branch Code", opts['branch_code'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Customer URN", repaymentInfo['customerURN'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Customer Name", repaymentInfo['customerName'], {font:PrinterConstants.FONT_SMALL_NORMAL})
                                             .addKeyValueLine("Loan A/C No", repaymentInfo['accountNumber'], {font:PrinterConstants.FONT_SMALL_NORMAL})
@@ -498,7 +502,8 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                         'address3': 'Chennai - 600113, Phone: 91 44 66687000',
                                         'website': "http://ruralchannels.kgfs.co.in",
                                         'helpline': '18001029370',
-                                        'branch_id': model.branchId
+                                        'branch_id': model.branchId,
+                                        'branch_code': model.branchCode
                                     };
 
                                     if(model._partnerCode!="AXIS") {
@@ -549,13 +554,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'),
                                             fullPrintData.addLines(pData.getLines());
                                         }
                                     }
-                                    console.log(fullPrintData.getLines());
-                                    var lines = fullPrintData.getLines();
-                                    var outStr = "\n";
-                                    for (var i=0;i<lines.length;i++){
-                                        outStr = outStr + lines[i] + "\n";
-                                    }
-                                    console.log(outStr);
                                     cordova.plugins.irfBluetooth.print(function(){
                                         console.log("succc callback");
                                     }, function(err){

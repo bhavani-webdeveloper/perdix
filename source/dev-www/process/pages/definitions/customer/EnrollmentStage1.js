@@ -272,6 +272,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
+            model.customer.kgfsBankName = SessionStore.getBankName();
             $log.info(formHelper.enum('bank'));
             $log.info("ProfileInformation page got initialized:"+model.branchId);
         },
@@ -448,17 +449,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.district",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.pincode",
                         {
                             key:"customer.state",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.stdCode",
                         "customer.landLineNo",
-                        "customer.mobilePhone",
+                        {
+                            "key": "customer.mobilePhone",
+                            "required": true
+                        },
                         "customer.mailSameAsResidence"
                     ]
                 },{
@@ -473,13 +481,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         {
                             key:"customer.mailingDistrict",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.mailingPincode",
                         {
                             key:"customer.mailingState",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         }
                     ]
                 }

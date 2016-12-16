@@ -228,7 +228,7 @@
                 "district": {
                     "type": "string",
                     "title": "DISTRICT",
-                    "enumCode":"district"
+                    "enumCode":"district_master"
                 },
                 "doorNo": {
                     "type": "string",
@@ -822,7 +822,7 @@
                 "mailingDistrict": {
                     "type": "string",
                     "title": "DISTRICT",
-                    "enumCode":"district"
+                    "enumCode":"district_master"
                 },
                 "mailingDoorNo": {
                     "type": "string",
