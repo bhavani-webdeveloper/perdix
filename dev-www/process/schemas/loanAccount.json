@@ -452,7 +452,7 @@
                 },
                 "frequency": {
                     "title": "FREQUENCY",
-                    "type": "string",
+                    "type": ["null", "string"],
                     "enumCode":"frequency"
                 },
                 "guarantors": {
@@ -1135,7 +1135,6 @@
                 "dscOverride",
                 "dscOverrideRemarks",
                 "endTime",
-                "frequency",
                 "id",
                 "interestRate",
                 "jewelLoanDetails",
@@ -1161,7 +1160,6 @@
                 "partnerCode",
                 "pendingApproval",
                 "processType",
-                "productCode",
                 "productType",
                 "restructure",
                 "sanctionDate",

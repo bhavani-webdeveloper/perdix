@@ -71,6 +71,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 )
         }
 
+        var partnerChange=function (value,model){
+            if (value != 'Kinara')
+            {
+                try
+                {
+                    delete model.additional.product;
+                    model.loanAccount.frequency = null;
+                    model.loanAccount.productCode = null;
+                }
+                catch(err){
+                    console.error(err);
+                }
+            }
+        }
+
         return {
             "type": "schema-form",
             "title": "LOAN_INPUT",
@@ -130,7 +145,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 if ($stateParams.pageId) {
                     PageHelper.showLoader();
                     IndividualLoan.get({id: $stateParams.pageId}).$promise.then(function(resp){
-                        if (resp.currentStage != 'LoanInitiation') {
+                        if (resp.currentStage != 'LoanInitiation' && resp.currentStage != 'PendingForPartner') {
                             PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
                             $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue', pageId: null});
                             return;
@@ -181,7 +196,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         {
                             "key": "loanAccount.partnerCode",
                             "title": "PARTNER",
-                            "type": "select"
+                            "type": "select",
+                            onChange:function(value,form,model){
+                                partnerChange(value,model);
+                            }
                         }]
                     },
                     {
@@ -201,7 +219,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 onChange:function(value,form,model){
                                     getProductDetails(value,model);
                                 },
-                                "parentEnumCode": "partner"
+                                "parentEnumCode": "partner",
+                                "parentValueExpr":"model.loanAccount.partnerCode",
+                                "condition":"(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara') || model.loanAccount.currentStage != 'LoanInitiation'"
                             },
                             {
                                 "key": "loanAccount.tenure",
@@ -492,12 +512,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                                    return Queries.getAllLoanPurpose1();
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.purpose1
                                     ];
+                                },
+                                onSelect: function(result, model, context) {
+                                    model.loanAccount.loanPurpose2 = '';
                                 }
                             },
                             {
@@ -512,7 +535,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                                    return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -658,7 +681,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         },
                                         "outputMap": {
                                             "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
-                                            "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName"
+                                            "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName",
+                                            "id":"loanAccount.guarantors[arrayIndex].guaCustomerId"
                                         },
                                         "searchHelper": formHelper,
                                         "search": function(inputModel, form) {
@@ -984,7 +1008,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info(model);
                     PageHelper.clearErrors();
 
-                    if (!_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
+                    if (model.additional.product && !_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
                         if (!_.isArray(model.loanAccount.guarantors) || model.loanAccount.guarantors.length == 0){
                             PageHelper.showProgress('loan-product-guarantor-required', 'Guarantor is mandatory for the selected product', 5000);
                             return;    
@@ -1119,9 +1143,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if(model.loanAccount.portfolioInsuranceUrn != ''){
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";
                     }
+                    if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara' && model.loanAccount.productCode == null){
+                        PageHelper.showProgress("loan-create","Product Code is mandatory",5000);
+                        return false;
+                    }
+                    if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.productCode == null){
+                        PageHelper.showProgress("loan-create","Product Code is mandatory",5000);
+                        return false;
+                    }
 
                     var reqData = _.cloneDeep(model);
-                    reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+                    if(reqData.loanAccount.frequency)
+                        reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
                     Utils.confirm("Are You Sure?").then(function(){
                         PageHelper.showLoader();
                         if (!$stateParams.pageId) {
@@ -1160,6 +1193,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             });
                         }else{
                             reqData.loanProcessAction="PROCEED";
+                            if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
+                                reqData.stage = 'LoanBooking';
                             IndividualLoan.create(reqData,function(resp,headers){
                                 model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Proceed:" + model.loanAccount.id);
