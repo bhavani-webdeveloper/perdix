@@ -1,5 +1,8 @@
 irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_URL,searchResource){
     var endpoint = BASE_URL + '/api/loanaccounts';
+    /*var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
+    var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';*/
+
     return $resource(endpoint, null, {
         activateLoan: {
             method: 'GET',
@@ -160,6 +163,14 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             method:'POST',
             url:endpoint +'/repay'
         },
+        updateTenure:{
+            method:'POST',
+            url:endpoint +'/loanamendment'
+        },
+       /* downloadNewTenure: searchResource({
+                method: 'GET',
+                url: endpintManagement + "demandDate=:demandDate&branchId=:branchId"
+         }),*/
         getGroupRepaymentDetails:{
             method:'GET',
             url:endpoint+'/grouprepayment/:partnerCode/:groupCode/:isLegacy',

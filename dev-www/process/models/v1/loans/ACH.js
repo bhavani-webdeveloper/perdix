@@ -44,6 +44,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 isArray:true,
                 url: endpoint + '/statusupdate'
             },
+            ACHClose: {
+                method: 'PUT',
+                url: endpoint + '/closeACHMandate'
+            },
             getDemandList: searchResource({
                 method: 'GET',
                 url: endpoint + '/achdemandList'
