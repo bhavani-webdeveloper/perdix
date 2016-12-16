@@ -982,6 +982,13 @@
                      "Stage01"
                   ]
                },
+               "addressProofReverseImageId":{  
+                  "title":"addressProofReverseImageId",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01"
+                  ]
+               },
                "addressProofNo":{
                   "title":"Address Proof Number",
                   "type":"string",
@@ -1019,6 +1026,13 @@
                   "title":"Identity Proof Image",
                   "type":"string",
                   "captureStages":[
+                     "Stage01"
+                  ]
+               },
+               "identityProofReverseImageId":{  
+                  "title":"identityProofReverseImageId",
+                  "type":"string",
+                  "captureStages":[  
                      "Stage01"
                   ]
                },
