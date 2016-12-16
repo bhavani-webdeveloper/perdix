@@ -1904,7 +1904,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             type: "box",
-                            title: "CUSTOMER_BANK_ACCOUNTS",
+                            title: "BANK_ACCOUNTS",
                             "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             items: [
