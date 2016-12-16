@@ -97,7 +97,20 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return true;
                                     }
-                                }
+                                },
+                                {
+                                    name: "Amend",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.LoanAmand',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
+                                },
                             ];
                         }
                     }
