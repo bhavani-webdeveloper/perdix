@@ -17,6 +17,57 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         return true;
     }
 
+    var computeEMI = function(model){
+            var fee = 0;
+            if(model.loanAccount.commercialCibilCharge)
+                if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                    fee+=model.loanAccount.commercialCibilCharge;
+            $log.info(model.loanAccount.commercialCibilCharge);
+
+            // Get the user's input from the form. Assume it is all valid.
+            // Convert interest from a percentage to a decimal, and convert from
+            // an annual rate to a monthly rate. Convert payment period in years
+            // to the number of monthly payments.
+
+            if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenureRequested == '')
+                return;
+            
+            var principal = model.loanAccount.loanAmountRequested;
+            var interest = model.loanAccount.expectedInterestRate / 100 / 12;
+            var payments;
+            if (model.loanAccount.frequencyRequested == 'Yearly')
+                payments = model.loanAccount.tenureRequested * 12;
+            else if (model.loanAccount.frequencyRequested == 'Monthly')
+                payments = model.loanAccount.tenureRequested;
+
+            // Now compute the monthly payment figure, using esoteric math.
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal*x*interest)/(x-1);
+
+            // Check that the result is a finite number. If so, display the results.
+            if (!isNaN(monthly) && 
+                (monthly != Number.POSITIVE_INFINITY) &&
+                (monthly != Number.NEGATIVE_INFINITY)) {
+
+                model.loanAccount.estimatedEmi = round(monthly);
+                //document.loandata.total.value = round(monthly * payments);
+                //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+            }
+            // Otherwise, the user's input was probably invalid, so don't
+            // display anything.
+            else {
+                model.loanAccount.estimatedEmi  = "";
+                //document.loandata.total.value = "";
+                //document.loandata.totalinterest.value = "";
+            }
+
+        };
+
+        // This simple method rounds a number to two decimal places.
+        function round(x) {
+          return Math.ceil(x);
+        }
+
     var navigateToQueue = function(model){
         if(model.currentStage=='Screening')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
@@ -252,19 +303,42 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
                         required:true,
-                        title: "REQUESTED_LOAN_AMOUNT"
+                        title: "REQUESTED_LOAN_AMOUNT",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
                     },
                     {
                         key: "loanAccount.frequencyRequested",
                         type: "select",
                         title: "FREQUENCY_REQUESTED",
-                        enumCode: "frequency"
+                        enumCode: "frequency",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
                     },
                     {
                         key: "loanAccount.tenureRequested",
                         required:true,
                         type: "number",
-                        title: "TENURE_REQUESETED"
+                        title: "TENURE_REQUESETED",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.expectedInterestRate",
+                        type: "number",
+                        title: "EXPECTED_INTEREST_RATE",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.estimatedEmi",
+                        type: "amount",
+                        title: "ESTIMATED_KINARA_EMI",
+                        readonly:true
                     },
                     {
                         key: "loanAccount.emiRequested",
@@ -291,16 +365,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'",
                 "items": [
-                    {
-                        key: "loanAccount.expectedInterestRate",
-                        type: "number",
-                        title: "EXPECTED_INTEREST_RATE"
-                    },
-                    {
-                        key: "loanAccount.estimatedEmi",
-                        type: "amount",
-                        title: "ESTIMATED_KINARA_EMI"
-                    },
                     {
                         key: "loanAccount.estimatedDateOfCompletion",
                         type: "date",
