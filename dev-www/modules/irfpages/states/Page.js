@@ -137,6 +137,8 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
 
         $rootScope.clearErrors = clearErrorsFn;
 
+        var blockUiDefaults={message:"<h1>Please wait...</h1>",title:null,draggable:!0,theme:!1,css:{padding:0,margin:0,width:"30%",top:"40%",left:"35%",textAlign:"center",color:"#000",border:"3px solid #aaa",backgroundColor:"#fff",cursor:"wait"},themedCSS:{width:"30%",top:"40%",left:"35%"},overlayCSS:{backgroundColor:"#000",opacity:.6,cursor:"wait"},cursorReset:"default",growlCSS:{width:"350px",top:"10px",left:"",right:"10px",border:"none",padding:"5px",opacity:.6,cursor:"default",color:"#fff",backgroundColor:"#000","-webkit-border-radius":"10px","-moz-border-radius":"10px","border-radius":"10px"},iframeSrc:/^https/i.test(window.location.href||"")?"javascript:false":"about:blank",forceIframe:!1,baseZ:1e3,centerX:!0,centerY:!0,allowBodyStretch:!0,bindEvents:!0,constrainTabKey:!0,fadeIn:200,fadeOut:400,timeout:0,showOverlay:!0,focusInput:!0,focusableElements:":input:enabled:visible",onBlock:null,onUnblock:null,onOverlayClick:null,quirksmodeOffsetHack:4,blockMsgClass:"blockMsg",ignoreIfBlocked:!1};
+        var blockUiCss = jQuery.extend({}, blockUiDefaults.css, {});
         return {
             clearErrors: clearErrorsFn,
             setError: function (error) {
@@ -205,6 +207,49 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             },
             navigateGoBack: function(){
                 return window.history.back();
+            },
+            showBlockingLoader: function(msg){
+                var $ = jQuery;
+                var opts = $.extend({}, blockUiDefaults, opts || {baseZ: 1050});
+                var lyr1, lyr2, lyr3, s;
+                var z= opts.baseZ;
+                lyr1 = $('<iframe class="blockUI" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="'+/^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'+'"></iframe>');
+                lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
+                s = '<div class="blockUI ' + opts.blockMsgClass + ' blockPage" style="z-index:'+(z+10)+';display:none;position:fixed"></div>';
+                lyr3 = $(s);
+                if (msg) {
+                    lyr3.css($.extend({},blockUiCss,{color: "white", background: "none", border: "none"}));
+                }
+
+                if (!opts.theme /*&& (!opts.applyPlatformOpacityRules)*/)
+                    lyr2.css(opts.overlayCSS);
+                lyr2.css('position', 'fixed');
+                lyr1.css('opacity',0.0);
+                var layers = [lyr1,lyr2,lyr3], $par = $('body');
+                $.each(layers, function() {
+                    this.appendTo($par);
+                });
+
+                if (msg) {
+                    if (opts.theme)
+                        lyr3.find('.ui-widget-content').append(msg);
+                    else
+                        lyr3.append(msg);
+                    if (msg.jquery || msg.nodeType)
+                        $(msg).show();
+                }
+                
+                // lyr1.show();
+                if (opts.showOverlay)
+					lyr2.show();
+				if (msg)
+					lyr3.show();
+				if (opts.onBlock)
+					opts.onBlock.bind(lyr3)();
+
+            },
+            hideBlockingLoader: function(){
+                $(".blockUI").remove();
             }
         }
     }]);
