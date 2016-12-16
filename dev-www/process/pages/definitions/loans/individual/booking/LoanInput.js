@@ -522,13 +522,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 title: "BUSINESS_INCOME",
-                                type: "amount",
+                                //type: "amount",
                                 key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
                                 required: true
                             },
                             {
                                 title: "LOAN_PURPOSE_VALUE",
-                                type: "amount",
+                                //type: "amount",
                                 key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4"
                             }
                             /*,
