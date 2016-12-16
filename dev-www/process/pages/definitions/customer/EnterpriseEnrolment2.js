@@ -287,7 +287,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.referredBy",
-                        title:"REFERRED_BY",
+                        title:"SOURCED",
                         required:true,
                         type: "select",
                         enumCode: "referredBy"
@@ -607,7 +607,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.referredBy",
-                        title:"REFERRED_BY",
+                        title:"SOURCED",
                         type: "select",
                         enumCode: "referredBy"
                     },
