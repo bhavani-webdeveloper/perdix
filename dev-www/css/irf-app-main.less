@@ -416,72 +416,79 @@ ul.nav-tabs {
         }
     }
 }
-.bundle-page .bundle-tabset {
-    background-color: transparent;
-    position: relative;
-    ul.nav-tabs {
-        padding-top: 15px;
-        > li:first-child {
-            margin-left: 42px;
-        }
-        > li > a {
-            color: #666;
-            margin-right: 0;
-            &, &:hover, &:focus {
-                border-top: 3px solid transparent;
+.bundle-page {
+    section.content-header {
+        padding-top: 6px;
+    }
+    .bundle-tabset {
+        background-color: transparent;
+        position: relative;
+        ul.nav-tabs {
+            padding-top: 10px;
+            > li:first-child {
+                margin-left: 42px;
             }
-        }
-        > li.active {
-            > a {
-                color: #000;
+            > li > a {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                color: #666;
+                margin-right: 0;
                 &, &:hover, &:focus {
-                    border-top: 3px solid;
+                    border-top: 3px solid transparent;
+                }
+            }
+            > li.active {
+                > a {
+                    color: #000;
+                    &, &:hover, &:focus {
+                        border-top: 3px solid;
+                    }
                 }
             }
         }
-    }
-    .bundle-dropdown {
-        position:absolute;
-        left:0;
-        > a {
-            display: inline-block;
-            padding: 15px 15px 8px;
-            &, &:hover, &:focus {
-                background-color: transparent;
-            }
-            i.fa {
-                font-size: 18px;
+        .bundle-dropdown {
+            position:absolute;
+            left:0;
+            > a {
+                display: inline-block;
+                padding: 8px 15px 5px;
+                &, &:hover, &:focus {
+                    background-color: transparent;
+                }
+                i.fa {
+                    font-size: 18px;
+                }
             }
         }
-    }
-    .irf-action-dropdown-menu {
-        border-radius: 3px;
-        white-space: nowrap;
-        /* background-color: #ececec; */
-        /* z-index: 3; */
-        -webkit-transition: opacity 0.218s;
-        transition: opacity 0.218s;
-        -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        padding: 6px 0;
-        border: 1px solid #dcdcdc;
-        border: 1px solid rgba(0,0,0,0.2);
-        margin:0;
+        .irf-action-dropdown-menu {
+            border-radius: 3px;
+            white-space: nowrap;
+            /* background-color: #ececec; */
+            /* z-index: 3; */
+            -webkit-transition: opacity 0.218s;
+            transition: opacity 0.218s;
+            -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            padding: 6px 0;
+            border: 1px solid #dcdcdc;
+            border: 1px solid rgba(0,0,0,0.2);
+            margin:0;
 
-        >li>a{
-            display: block;
-            padding: 8px 20px 8px 16px;
-            font-size:1.1em;
-            font-weight:bold;
-            // text-transform: uppercase;
+            >li>a{
+                display: block;
+                padding: 8px 20px 8px 16px;
+                font-size:1.1em;
+                font-weight:bold;
+                // text-transform: uppercase;
+            }
         }
-    }
-    .tab-content {
-        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
-        background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0, rgba(255,255,255,0) 100px); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0,rgba(255,255,255,0) 100px); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  rgba(255,255,255,1) 0,rgba(255,255,255,0) 100px); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+        .tab-content {
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
+            background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0, rgba(255,255,255,0) 100px); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0,rgba(255,255,255,0) 100px); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom,  rgba(255,255,255,1) 0,rgba(255,255,255,0) 100px); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+        }
     }
 }
 /* Page Bundle ends */

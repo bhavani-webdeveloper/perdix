@@ -239,7 +239,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         if (definition.maximum <= definition.openPagesCount) {
             BundleLog.debug($scope.addTabMenu.splice(index, 1));
         }
-        BundleManager.initializePageUI(openPage);
+        //BundleManager.initializePageUI(openPage);
     };
 
     $scope.onTabOpen = function(index, e) {

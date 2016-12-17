@@ -375,17 +375,22 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
 .bundle-page.readonly .bundle-tabset ul.nav-tabs > li:first-child {
   margin-left: 15px;
 }
+.bundle-page section.content-header {
+  padding-top: 6px;
+}
 .bundle-page .bundle-tabset {
   background-color: transparent;
   position: relative;
 }
 .bundle-page .bundle-tabset ul.nav-tabs {
-  padding-top: 15px;
+  padding-top: 10px;
 }
 .bundle-page .bundle-tabset ul.nav-tabs > li:first-child {
   margin-left: 42px;
 }
 .bundle-page .bundle-tabset ul.nav-tabs > li > a {
+  padding-top: 5px;
+  padding-bottom: 5px;
   color: #666;
   margin-right: 0;
 }
@@ -408,7 +413,7 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
 }
 .bundle-page .bundle-tabset .bundle-dropdown > a {
   display: inline-block;
-  padding: 15px 15px 8px;
+  padding: 8px 15px 5px;
 }
 .bundle-page .bundle-tabset .bundle-dropdown > a,
 .bundle-page .bundle-tabset .bundle-dropdown > a:hover,
