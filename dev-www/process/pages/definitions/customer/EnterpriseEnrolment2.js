@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
 
-    var branch = SessionStore.getBranch();  
+    var branch = SessionStore.getBranch();   
 
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
@@ -1328,7 +1328,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                            },
                            {
                                key:"customer.liabilities[].liabilityLoanPurpose",
-                               type:"select"
+                               type:"select",
+                               enumCode: "loan_purpose_1"
                            },
                            {
                                key:"customer.liabilities[].interestOnly",

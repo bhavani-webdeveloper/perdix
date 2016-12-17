@@ -1027,7 +1027,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.mailingPincode",
                                             type: "lov",
-                                            fieldType: "string",
+                                            fieldType: "number",
                                             autolov: true,
                                             inputMap: {
                                                 "mailingPincode": "customer.mailingPincode",
@@ -1647,7 +1647,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select"
+                                            type:"select",
+                                            enumCode: "loan_purpose_1"
                                         },
                                         {
                                            key:"customer.liabilities[].interestOnly",
@@ -1842,9 +1843,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
-                                            title: "SANCTION_AMOUNT",
+                                            title: "SANCTIONED_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
@@ -1947,9 +1948,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             //enumCode: "decisionmaker"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].sanctionAmount",
+                                            key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
-                                            title: "SANCTION_AMOUNT",
+                                            title: "SANCTIONED_AMOUNT",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
