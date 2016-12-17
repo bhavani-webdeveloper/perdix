@@ -39,7 +39,7 @@ irf.pageCollection.factory(irf.page("score.ManageScoreParameters"),
                         type:"tableview",
                         key:"ScoreParameter.DataResponse",
                         selectable: false,
-                        paginate: false,
+                        paginate: true,
                         searching: false,
                         getColumns: function() {
                             return [{
