@@ -199,6 +199,25 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
 		return deferred.promise;
     }
 
+    resource.getBankAccountsByPartner = function(partnerCode){
+        var deferred = $q.defer();
+		request = {};
+        request.partner_code = partnerCode || null;
+        // opts = opts || {partner_code: ""};
+		resource.getResult("bankAccountsByPartnerCode.list", request, 10).then(function(records){
+			if (records && records.results) {
+				var result = {
+					headers: {
+						"x-total-count": records.results.length
+					},
+					body: records.results
+				};
+				deferred.resolve(result);
+			}
+		}, deferred.reject);
+		return deferred.promise;
+    }
+
     resource.getLatestLoanRepayment = function(accountNumber) {
     	var deferred = $q.defer();
     	resource.getResult("latestLoanRepayments.list", {account_number: accountNumber}, 1).then(function(records){

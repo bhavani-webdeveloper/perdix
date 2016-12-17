@@ -111,6 +111,60 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                                 "type": "string"
                             },
                             {
+                                "key": "pdc.partnerCode",
+                                "title": "PARTNER_CODE",
+                                "type": "select",
+                                "enumCode": "partner"
+                            },
+                            {
+                                key: "pdc.collectionAccountBank",
+                                type: "lov",
+                                autolov: true,
+                                title: "COLLECTION_ACCOUNT",
+                                required: true,
+                                bindMap: {
+
+                                },
+                                outputMap: {
+                                    "sponsor_bank_code": "ach.sponsorBankCode",
+                                    "utility_code": "ach.utilityCode",
+                                    "account_code": "ach.sponsorAccountCode"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    var deferred = $q.defer();
+                                    Queries.getBankAccountsByPartner(model.pdc.partnerCode).then(
+                                        function(res) {
+                                            $log.info("hi this is sponser!!!");
+                                            $log.info(res);
+                                            var newBody = [];
+                                            for (var i = 0; i < res.body.length; i++) {
+                                                if (res.body[i].sponsor_bank_code != null && res.body[i].utility_code != null && res.body[i].sponsor_bank_code!='' && res.body[i].utility_code != '') {
+                                                    newBody.push(res.body[i])
+                                                }
+                                            }
+                                            res.body = newBody;
+                                            deferred.resolve(res);
+                                        },
+                                        function(httpRes) {
+                                            deferred.reject(res);
+                                        }
+                                    );
+                                    return deferred.promise;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.sponsor_bank_code + ', ' +
+                                        item.utility_code
+                                    ];
+                                },
+                                onSelect: function(value, model){
+                                    model.pdc.collectionAccountBank = value.bank_name;
+                                    model.pdc.collectionAccountCode = value.account_code;
+                                }
+                            },
+                            {
                                 "type": "fieldset",
                                 "title": "BRANCHES",
                             },
@@ -143,7 +197,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         PageHelper.showLoader();
                         PDC.getDemandList({
                             demandDate: model.pdc.pdcDemandListDate,
-                            branchId: model.pdc.branchIdArray.join(',')
+                            branchId: model.pdc.branchIdArray.join(','),
+                            partnerCode: model.pdc.partnerCode
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.pdcSearch = res;
