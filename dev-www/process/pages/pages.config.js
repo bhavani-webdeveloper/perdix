@@ -102,6 +102,11 @@ irf.pages.config([
 		url: "/Reports/:pageId",
 		templateUrl: "process/pages/templates/Reports.html",
 		controller: "ReportsCtrl"
+	},{
+		name: "Page.ScoreDashboard",
+		url: "/ScoreDashboard",
+		templateUrl: "process/pages/templates/ManageScore.html",
+		controller: "ScoreCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){
