@@ -590,6 +590,53 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             {
                 "type": "box",
+                "title": "ADDITIONAL_LOAN_INFORMATION",
+                readonly:true,
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "items": [
+                    {
+                        key: "loanAccount.estimatedDateOfCompletion",
+                        type: "date",
+                        title: "ESTIMATED_DATE_OF_COMPLETION"
+                    },
+                    {
+                       key: "loanAccount.productCategory",
+                       title:"PRODUCT_TYPE",
+                       readonly:true,
+                       condition:"model.currentStage!='Application'"
+                    },
+                    {
+                       key: "loanAccount.productCategory",
+                       title:"PRODUCT_TYPE",
+                       required:true,
+                       type:"select",
+                       enumCode:"loan_purpose_1",
+                       condition:"model.currentStage=='Application'"
+                    },
+                    {
+                        key: "loanAccount.customerSignDateExpected",
+                        type: "date",
+                        title: "CUSTOMER_SIGN_DATE_EXPECTED"
+                    },
+                    {
+                        key: "loanAccount.proposedHires",
+                        type: "string",
+                        title: "PROPOSED_HIRES"
+                    },
+                    {
+                        key: "loanAccount.percentageIncreasedIncome",
+                        type: "number",
+                        title: "PERCENTAGE_INCREASED_INCOME"
+                    },
+                    {
+                        key: "loanAccount.percentageInterestSaved",
+                        type: "number",
+                        title: "PERCENTAGE_INTEREST_SAVED"
+                    }
+                ]
+            },
+            {
+                "type": "box",
                 "title": "NEW_ASSET_DETAILS",
                 "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Sanction' )",
                 "items": [

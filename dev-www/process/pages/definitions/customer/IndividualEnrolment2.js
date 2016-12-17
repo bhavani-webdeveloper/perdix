@@ -2006,6 +2006,117 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             ]
                         },
                         {
+                "type": "box",
+                "title": "REFERENCES",
+                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                "items": [
+                    {
+                        key:"customer.verifications",
+                        title:"REFERENCES",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.verifications[].relationship",
+                                title:"REFERENCE_TYPE",
+                                type:"select",
+                                required:"true",
+                                enumCode: "business_reference_type"
+                            },
+                             {
+                                key:"customer.verifications[].businessName",
+                                title:"BUSINESS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].referenceFirstName",
+                                title:"FULL_NAME_OF_POC",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].mobileNo",
+                                title:"MOBILE_NO",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.verifications[].businessSector",
+                                title:"BUSINESS_SECTOR",
+                                type:"select",
+                                enumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].businessSubSector",
+                                title:"BUSINESS_SUBSECTOR",
+                                type:"select",
+                                enumCode: "businessSubSector",
+                                parentEnumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },
+
+                         ] 
+                    },
+                ]
+            },
+            {
+                "type": "box",
+                "title": "REFERENCES",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                readonly:true,
+                "items": [
+                    {
+                        key:"customer.verifications",
+                        title:"REFERENCES",
+                        type: "array", 
+                        items:[
+                            {
+                                key:"customer.verifications[].relationship",
+                                title:"REFERENCE_TYPE",
+                                type:"select",
+                                required:"true",
+                                enumCode: "business_reference_type"
+                            },
+                             {
+                                key:"customer.verifications[].businessName",
+                                title:"BUSINESS_NAME",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].referenceFirstName",
+                                title:"FULL_NAME_OF_POC",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].mobileNo",
+                                title:"MOBILE_NO",
+                                type:"number"
+                            },
+                            {
+                                key:"customer.verifications[].businessSector",
+                                title:"BUSINESS_SECTOR",
+                                type:"select",
+                                enumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].businessSubSector",
+                                title:"BUSINESS_SUBSECTOR",
+                                type:"select",
+                                enumCode: "businessSubSector",
+                                parentEnumCode: "businessSector"
+                            },
+                            {
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },
+
+                         ] 
+                    },
+                ]
+            },
+                        {
                             type: "box",
                             title: "PROXY_INDICATORS",
                             condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal'",

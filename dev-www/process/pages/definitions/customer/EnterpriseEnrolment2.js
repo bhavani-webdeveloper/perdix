@@ -1661,7 +1661,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         required: true,
                                         titleMap: {
                                         Cash:"Cash",
-                                        Invoice:"Invoice"
+                                        Invoice:"Invoice",
+                                        Scrap:"Scrap"
                                         }
                                     },
                                     {
@@ -1892,7 +1893,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     type: "radios",
                                     titleMap: {
                                     Cash:"Cash",
-                                    Invoice:"Invoice"
+                                    Invoice:"Invoice",
+                                    Scrap:"Scrap"
                                     }
                                 },
                                 {
