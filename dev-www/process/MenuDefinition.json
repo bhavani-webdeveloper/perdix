@@ -79,6 +79,7 @@
                 "Page/Engine/psychometric.Queue"
 			]
 		},
-		"Page/ReportsDashboard"
+		"Page/ReportsDashboard",
+		"Page/ScoreDashboard"
 	]
 }
