@@ -31,55 +31,49 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
         return key;
     }
 
+    var getOfflineKey = function(id) {
+        if (id)
+            return '$ID$'+id;
+        else
+            return Utils.generateUUID();
+    };
+
+    var getMasterKey = function(name) {
+        return 'Offline__' + name;
+    };
+
     return {
         /**
-         * Add a new item under an id.
+         * Add a new item under a name.
          *
-         * @param {string} collectionId  Usually the page id.
+         * @param {string} collectionName  Usually the page name.
          * @param {object} item  The item to be saved in offline storage.
          */
-        storeItem: function(collectionId, item){
-            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
-            if (collection == null){
-                collection = {};
-            }
-            var offlineKey = randomStringForCollection(collectionId);
-            collection[offlineKey] = item;
-            irfStorageService.storeJSON("Offline__" + collectionId, collection);
-            return offlineKey;
+        storeItem: function(collectionName, collectionId, item){
+            if (!item.$$STORAGE_KEY$$)
+                item.$$STORAGE_KEY$$ = getOfflineKey(collectionId);
+
+            irfStorageService.putJSON(getMasterKey(collectionName), item);
+            return item.$$STORAGE_KEY$$;
         },
-        updateItem: function(collectionId, offlineKey, item){
-            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
-            if (collection == null){
-                return null;
-            }
-
-            if (_.hasIn(collection, offlineKey)){
-                collection[offlineKey] = item;
-            }
-
-            irfStorageService.storeJSON("Offline__" + collectionId, collection);
-            return offlineKey;
+        retrieveItem: function(collectionName, offlineKey) {
+            irfStorageService.getJSON(getMasterKey(collectionName), offlineKey);
         },
         /**
          * Retrieve a list of items stored in offline.
          *
-         * @param {string} collectionId Usually the pageId.
+         * @param {string} collectionName Usually the pageName.
          */
-        retrieveItems: function(collectionId){
-            return irfStorageService.retrieveJSON("Offline__" + collectionId);
+        retrieveItems: function(collectionName){
+            return irfStorageService.getMasterJSON(getMasterKey(collectionName));
         },
         /**
          * Remove an item from the offline storage.
          *
-         * @param {string} id  Id of the item.
+         * @param {string} offlineKey  Id of the item.
          */
-        removeItem: function(collectionId, id){
-            var collection = irfStorageService.retrieveJSON("Offline__" + collectionId);
-            if (collection == null){
-                collection = {};
-            }
-            delete collection[id];
+        removeItem: function(collectionName, offlineKey){
+            irfStorageService.deleteJSON(getMasterKey(collectionName), offlineKey);
         }
     }
 }])

@@ -361,6 +361,9 @@ ul.nav-tabs > li.tab-danger > a:hover,
 ul.nav-tabs > li.tab-danger > a:focus {
   border-color: transparent;
 }
+ul.nav-tabs > li.tab-danger.active > a a {
+  color: #dd4b39;
+}
 ul.nav-tabs > li.tab-danger.active > a,
 ul.nav-tabs > li.tab-danger.active > a:hover,
 ul.nav-tabs > li.tab-danger.active > a:focus {
@@ -369,50 +372,53 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   border-top-color: #dd4b39 !important;
 }
 /* Page Bundle starts */
-.bundle-tabset {
+.bundle-page.readonly .bundle-tabset ul.nav-tabs > li:first-child {
+  margin-left: 15px;
+}
+.bundle-page .bundle-tabset {
   background-color: transparent;
   position: relative;
 }
-.bundle-tabset ul.nav-tabs {
+.bundle-page .bundle-tabset ul.nav-tabs {
   padding-top: 15px;
 }
-.bundle-tabset ul.nav-tabs > li:first-child {
+.bundle-page .bundle-tabset ul.nav-tabs > li:first-child {
   margin-left: 42px;
 }
-.bundle-tabset ul.nav-tabs > li > a {
+.bundle-page .bundle-tabset ul.nav-tabs > li > a {
   color: #666;
   margin-right: 0;
 }
-.bundle-tabset ul.nav-tabs > li > a,
-.bundle-tabset ul.nav-tabs > li > a:hover,
-.bundle-tabset ul.nav-tabs > li > a:focus {
+.bundle-page .bundle-tabset ul.nav-tabs > li > a,
+.bundle-page .bundle-tabset ul.nav-tabs > li > a:hover,
+.bundle-page .bundle-tabset ul.nav-tabs > li > a:focus {
   border-top: 3px solid transparent;
 }
-.bundle-tabset ul.nav-tabs > li.active > a {
+.bundle-page .bundle-tabset ul.nav-tabs > li.active > a {
   color: #000;
 }
-.bundle-tabset ul.nav-tabs > li.active > a,
-.bundle-tabset ul.nav-tabs > li.active > a:hover,
-.bundle-tabset ul.nav-tabs > li.active > a:focus {
+.bundle-page .bundle-tabset ul.nav-tabs > li.active > a,
+.bundle-page .bundle-tabset ul.nav-tabs > li.active > a:hover,
+.bundle-page .bundle-tabset ul.nav-tabs > li.active > a:focus {
   border-top: 3px solid;
 }
-.bundle-tabset .bundle-dropdown {
+.bundle-page .bundle-tabset .bundle-dropdown {
   position: absolute;
   left: 0;
 }
-.bundle-tabset .bundle-dropdown > a {
+.bundle-page .bundle-tabset .bundle-dropdown > a {
   display: inline-block;
   padding: 15px 15px 8px;
 }
-.bundle-tabset .bundle-dropdown > a,
-.bundle-tabset .bundle-dropdown > a:hover,
-.bundle-tabset .bundle-dropdown > a:focus {
+.bundle-page .bundle-tabset .bundle-dropdown > a,
+.bundle-page .bundle-tabset .bundle-dropdown > a:hover,
+.bundle-page .bundle-tabset .bundle-dropdown > a:focus {
   background-color: transparent;
 }
-.bundle-tabset .bundle-dropdown > a i.fa {
+.bundle-page .bundle-tabset .bundle-dropdown > a i.fa {
   font-size: 18px;
 }
-.bundle-tabset .irf-action-dropdown-menu {
+.bundle-page .bundle-tabset .irf-action-dropdown-menu {
   border-radius: 3px;
   white-space: nowrap;
   /* background-color: #ececec; */
@@ -426,13 +432,13 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   border: 1px solid rgba(0, 0, 0, 0.2);
   margin: 0;
 }
-.bundle-tabset .irf-action-dropdown-menu > li > a {
+.bundle-page .bundle-tabset .irf-action-dropdown-menu > li > a {
   display: block;
   padding: 8px 20px 8px 16px;
   font-size: 1.1em;
   font-weight: bold;
 }
-.bundle-tabset .tab-content {
+.bundle-page .bundle-tabset .tab-content {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
   background: -moz-linear-gradient(top, #ffffff 0, rgba(255, 255, 255, 0) 100px);
   /* FF3.6-15 */

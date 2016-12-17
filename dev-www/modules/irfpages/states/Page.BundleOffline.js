@@ -8,6 +8,7 @@ irf.pages.controller("PageBundleOfflineCtrl", [
 	"elementsUtils",
 	"entityManager",
 	"OfflineManager",
+	"Utils",
 function(
 	$log,
 	$scope,
@@ -17,7 +18,8 @@ function(
 	irfStorageService,
 	elementsUtils,
 	entityManager,
-	OfflineManager
+	OfflineManager,
+	Utils
 ) {
 	var self = this;
 	$log.info("Page.BundleOffline.html loaded");
@@ -31,38 +33,35 @@ function(
 
 	$scope.loadPage = function(event, data) {
 		event && event.preventDefault();
-		$state.go('Page.Bundle', {pageName: $scope.pageName, pageData: {'$$offlineData': data}});
+		$state.go('Page.Bundle', {pageName: $scope.pageName, pageData: {'$offlineData': data}});
 		updateAppTitle($scope.page.title);
 	};
 
-	$scope.callback = function(item, index) {
-		$log.debug("Restoring offline data");
-		$scope.loadPage(null, item);
-	};
+	if ($scope.page.offline) {
+		if (angular.isFunction($scope.page.getOfflineDisplayItem)) {
+			var items = OfflineManager.retrieveItems($scope.pageName);
 
-	if ($scope.page.offline && angular.isFunction($scope.page.getOfflineDisplayItem)) {
-		var items = OfflineManager.retrieveItems($scope.pageName);
-		console.log(items);
-
-		var offlineItems = [], displayItems = [];
-		var idx = 0;
-		_.forEach(items, function(value, key) {
-			offlineItems[idx] = value;
-			value.bundleModel.offlineKey = key;
-			try {
-				displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);
-			} catch (e) {
-				displayItems[idx] = ['PARSING_ERROR', e.message];
-			}
-			// for (var i = 0; i < displayItems[idx].length; i++) {
-			// 	if (angular.isNumber(displayItems[idx][i]))
-			// 		displayItems[idx][i] = displayItems[idx][i].toString();
-			// };
-			idx++;
-		});
-		$scope.offlineItems = offlineItems;
-		$scope.displayItems = displayItems;
-
+			var offlineItems = [], displayItems = [];
+			var idx = 0;
+			_.forEach(items, function(value, key) {
+				offlineItems[idx] = value;
+				value.bundleModel.offlineKey = key;
+				try {
+					displayItems[idx] = $scope.page.getOfflineDisplayItem(value, idx);
+				} catch (e) {
+					displayItems[idx] = ['PARSING_ERROR', e.message];
+				}
+				for (var i = 0; i < displayItems[idx].length; i++) {
+					if (angular.isNumber(displayItems[idx][i]))
+						displayItems[idx][i] = displayItems[idx][i].toString();
+				};
+				idx++;
+			});
+			$scope.offlineItems = offlineItems;
+			$scope.displayItems = displayItems;
+		} else {
+			$scope.error = "Display items not defined. Caanot view offline records. Contact admin";
+		}
 	} else {
 		$log.error("Offline not supported for " + $scope.pageName);
 		$scope.loadPage(null);
@@ -70,17 +69,27 @@ function(
 
 	$scope.offlineListInfo = {
 		actions: [{
+			name: "Open",
+			icon: "fa fa-folder-open-o",
+			fn: function(item, index){
+				$log.debug("Restoring offline data");
+				$scope.loadPage(null, item);
+			},
+			isApplicable: function(item, index){
+				return true;
+			}
+		}, {
 			name: "Delete",
 			icon: "fa fa-trash",
 			fn: function(item, index){
-				// _.pullAt($scope.displayItems, index);
-				// _.pullAt($scope.offlineItems, index);
-				// irfStorageService.deleteJSON($scope.pageName, item.$$STORAGE_KEY$$);
+				Utils.confirm("Are You Sure?").then(function(){
+					_.pullAt($scope.displayItems, index);
+					_.pullAt($scope.offlineItems, index);
+					$log.warn(item.$$STORAGE_KEY$$);
+					OfflineManager.removeItem($scope.pageName, item.$$STORAGE_KEY$$);
+				});
 			},
 			isApplicable: function(item, index){
-				//if (index%2==0){
-				//	return false;
-				//}
 				return true;
 			}
 		}]

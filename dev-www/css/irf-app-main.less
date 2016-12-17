@@ -396,6 +396,9 @@ ul.nav-tabs {
             border-color: transparent;
         }
     }
+    > li.tab-danger.active > a a {
+        color: #dd4b39;
+    }
     > li.tab-danger.active > a {
         &, &:hover, &:focus {
             background-color: #fff;
@@ -406,7 +409,14 @@ ul.nav-tabs {
 }
 
 /* Page Bundle starts */
-.bundle-tabset {
+.bundle-page.readonly .bundle-tabset {
+    ul.nav-tabs {
+        > li:first-child {
+            margin-left: 15px;
+        }
+    }
+}
+.bundle-page .bundle-tabset {
     background-color: transparent;
     position: relative;
     ul.nav-tabs {

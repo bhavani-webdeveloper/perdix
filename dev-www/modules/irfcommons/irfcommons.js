@@ -219,7 +219,15 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
         },
         randomString: function(length){
         	return Math.random().toString(36).substring(2, length+2);
-        }
+        },
+		generateUUID: function() {
+			var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+				return v.toString(16);
+			});
+			$log.info("Generated UUID: " + uuid);
+			return uuid;
+		}
 	};
 }]);
 

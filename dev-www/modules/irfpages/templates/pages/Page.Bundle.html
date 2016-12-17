@@ -1,19 +1,18 @@
-<div>
+<div class="bundle-page" ng-class="{readonly:bundlePage.readonly}">
   <section class="content-header">
     <h1>
       <span><a href ng-click="expandCollapseView()" style="color:#333"> {{ bundlePage.title | translate }}</a></span>
-      <span ng-if="bundlePage.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
+      <span ng-show="bundlePage.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
       <span class="button-holder pull-right">
-        <button ng-show="bundlePage.offline && !bundleModel.offlineKey" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ "SAVE" | translate }}</button>
-        <button ng-show="bundlePage.offline && bundleModel.offlineKey" ng-click="updateOffline(bundleModel.offlineKey)" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ "UPDATE_SAVED_RECORD" | translate }}</button>
+        <button ng-show="bundlePage.offline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ (bundleModel.$$STORAGE_KEY$$ ? "UPDATE" : "SAVE") | translate }}</button>
       </span>
     </h1>
   </section>
   <uib-tabset active="activeIndex" class="bundle-tabset">
-    <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}">
+    <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}" ng-click="onTabOpen($index, $event)">
       <uib-tab-heading>
         {{ pageObj.title | translate }}
-        <a ng-click="removeTab($index)" href="" ng-show="isRemovable(pageObj.bundlePage)">&nbsp;<i class="fa fa-times-circle {{((activeIndex == $index) || !(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid)) ? 'color-theme' : ''}}"></i></a>
+        <a ng-click="removeTab($index, $event)" href="" ng-show="isRemovable(pageObj.definition)">&nbsp;<i class="fa fa-times-circle {{((activeIndex == $index) || !(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid)) ? 'color-theme' : ''}}"></i></a>
       </uib-tab-heading>
       <!-- <section ng-hide="pageObj.error" class="content-header">
         <h1>
@@ -34,7 +33,7 @@
           </span>
         </h1>
       </section> -->
-      <section ng-hide="pageObj.error" class="content">
+      <section ng-if="pageObj.page.uiReady" ng-hide="pageObj.error" class="content" ng-init="pageObj=$parent.pageObj">
 
         <div ng-switch="pageObj.page.type" class="row page-row">
           <div ng-switch-when="schema-form">
@@ -75,7 +74,7 @@
                             <div class="row">
 
                                 <irf-sf
-                                    initialize="pageObj.page.formInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
+                                    initialize="pageObj.page.initializeUI(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
                                     irf-schema="pageObj.page.schema"
                                     irf-form="pageObj.page.form"
                                     irf-actions="pageObj.page.actions"
@@ -83,7 +82,7 @@
                                     irf-helper="pageObj.formHelper"
                                     irf-form-name="pageObj.formName"
                                     irf-form-ctrl="pageObj.formCtrl"
-                                    data-page-class="{{ pageObj.bundlePage.pageClass }}"
+                                    data-page-class="{{ pageObj.definition.pageClass }}"
                                     class="page-form">
                                     <div class="cantina-loader-wrapper">
                                         <div classs="cantina-loader"></div>
@@ -94,7 +93,7 @@
                     </div>
                     <div ng-switch-default>
                         <irf-sf
-                            initialize="pageObj.page.formInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
+                            initialize="pageObj.page.initializeUI(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)"
                             irf-schema="pageObj.page.schema"
                             irf-form="pageObj.page.form"
                             irf-actions="pageObj.page.actions"
@@ -102,7 +101,7 @@
                             irf-helper="pageObj.formHelper"
                             irf-form-name="pageObj.formName"
                             irf-form-ctrl="pageObj.formCtrl"
-                            data-page-class="{{ pageObj.bundlePage.pageClass }}"
+                            data-page-class="{{ pageObj.definition.pageClass }}"
                             class="page-form">
                             <div class="cantina-loader-wrapper">
                                 <div classs="cantina-loader"></div>
@@ -120,7 +119,7 @@
         </div>
       </section>
 
-      <section ng-show="pageObj.error" class="content">
+      <section ng-if="pageObj.error" class="content">
         <div class="modal-dialog">
           <div class="modal-content effect2">
             <div class="modal-header">
@@ -139,11 +138,11 @@
       </section>
     </uib-tab>
 
-    <div uib-dropdown is-open="status.isopen" class="bundle-dropdown" ng-show="addTabMenu.length">
+    <div uib-dropdown is-open="status.isopen" class="bundle-dropdown" ng-show="addTabMenu.length && !bundlePage.readonly">
       <a uib-dropdown-toggle href="" class="color-theme"><i class="fa fa-plus-square"></i></a>
       <ul class="dropdown-menu dropdown-menu-left irf-action-dropdown-menu bg-tint-theme" uib-dropdown-menu>
         <li ng-repeat="menu in addTabMenu track by $index">
-            <a ng-click="addTab($index)" href="" >
+            <a ng-click="addTab($index, $event)" href="" >
              {{ menu.title | translate }}</a>
         </li>
       </ul>

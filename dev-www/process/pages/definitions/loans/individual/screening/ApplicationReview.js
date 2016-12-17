@@ -1,31 +1,88 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationReview'),
-	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
-        	$log.info("Inside LoanBookingBundle");
+            $log.info("Inside LoanBookingBundle");
 
 
-        	return {
-        		"type": "page-bundle",
-        		"title": "APPLICATION_REVIEW",
-        		"subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
-        		"bundlePages": [
-        			{
-			            pageName: 'customer.IndividualEnrolment2',
-			            title: 'CO_APPLICANT',
-			            pageClass: 'co-applicant',
-			            minimum: 0,
-			            maximum: 3
-			        },
-			        {
-			            pageName: 'customer.IndividualEnrolment2',
-			            title: 'GUARANTOR',
-			            pageClass: 'guarantor',
-			            minimum: 0,
-			            maximum: 3
-			        }
-        		],
+            return {
+                "type": "page-bundle",
+                "title": "APPLICATION_REVIEW",
+                "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                "readonly": true,
+                "bundleDefinition": [
+                    {
+                        pageName: 'loans.individual.screening.Summary',
+                        title: 'SUMMARY',
+                        pageClass: 'summary',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'customer.IndividualEnrolment2',
+                        title: 'APPLICANT',
+                        pageClass: 'applicant',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'customer.IndividualEnrolment2',
+                        title: 'CO_APPLICANT',
+                        pageClass: 'co-applicant',
+                        minimum: 0,
+                        maximum: 3
+                    },
+                    {
+                        pageName: 'customer.IndividualEnrolment2',
+                        title: 'GUARANTOR',
+                        pageClass: 'guarantor',
+                        minimum: 0,
+                        maximum: 3
+                    },
+                    {
+                        pageName: 'customer.EnterpriseEnrolment2',
+                        title: 'BUSINESS',
+                        pageClass: 'business',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'loans.individual.screening.LoanRequest',
+                        title: 'LOAN_REQUEST',
+                        pageClass: 'loan-request',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'loans.individual.screening.CreditBureauView',
+                        title: 'CREDIT_BUREAU',
+                        pageClass: 'cbview',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
+                        pageName: 'loans.individual.screening.Review',
+                        title: 'REVIEW',
+                        pageClass: 'loan-review',
+                        minimum: 1,
+                        maximum: 1
+                    }
+                ],
+                "bundlePages": [],
+                "offline": true,
+                "getOfflineDisplayItem": function(value, index){
+                    var out = new Array(2);
+                    for (var i=0; i<value.bundlePages.length; i++){
+                        var page = value.bundlePages[i];
+                        if (page.pageClass == "applicant"){
+                            out[0] = page.model.customer.firstName;
+                        } else if (page.pageClass == "business"){
+                            out[1] = page.model.customer.firstName;
+                        }
+                    }
+                    return out;
+                },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     bundleModel.currentStage = "ApplicationReview";
@@ -64,33 +121,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                             }
                                             applicant.customerId = customers.urns[applicant.urn].id;*/
                                             $this.bundlePages.push({
-                                                pageName: 'loans.individual.screening.Summary',
-                                                title: 'SUMMARY',
                                                 pageClass: 'summary',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     cbModel: {customerId:res.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore2'}
                                                 }
                                             });
 
                                             $this.bundlePages.push({
-                                                pageName: 'loans.individual.screening.CreditBureauView',
-                                                title: 'CREDIT_BUREAU',
                                                 pageClass: 'cbview',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     loanAccount: res
                                                 }
                                             });
 
                                             $this.bundlePages.push({
-                                                pageName: 'customer.IndividualEnrolment2',
-                                                title: 'APPLICANT',
                                                 pageClass: 'applicant',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     loanRelation: applicant
                                                 }
@@ -98,11 +143,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
 
                                             for (var i=0;i<coApplicants.length; i++){
                                                 $this.bundlePages.push({
-                                                    pageName: 'customer.IndividualEnrolment2',
-                                                    title: 'CO_APPLICANT',
                                                     pageClass: 'co-applicant',
-                                                    minimum: 1,
-                                                    maximum: 1,
                                                     model: {
                                                         loanRelation: coApplicants[i]
                                                     }
@@ -110,33 +151,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                             }
 
                                             $this.bundlePages.push({
-                                                pageName: 'customer.EnterpriseEnrolment2',
-                                                title: 'BUSINESS',
                                                 pageClass: 'business',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     loanRelation: {customerId:res.customerId}
                                                 }
                                             });
 
                                             $this.bundlePages.push({
-                                                pageName: 'loans.individual.screening.LoanRequest',
-                                                title: 'LOAN_REQUEST',
                                                 pageClass: 'loan-request',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     loanAccount: res
                                                 }
                                             });
 
                                             $this.bundlePages.push({
-                                                pageName: 'loans.individual.screening.Review',
-                                                title: 'REVIEW',
                                                 pageClass: 'loan-review',
-                                                minimum: 1,
-                                                maximum: 1,
                                                 model: {
                                                     loanAccount: res
                                                 }
@@ -161,10 +190,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                     BundleManager.broadcastEvent('origination-stage', 'ApplicationReview');
                     
                 },
-        		eventListeners: {
-        			"on-customer-load": function(pageObj, bundleModel, params){
+                eventListeners: {
+                    "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
-        			},
+                    },
                     "new-enrolment": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
                             case 'applicant':
@@ -181,8 +210,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
 
                         }
                     }
-        		}
-        	}
+                }
+            }
         }
     ]
 )
