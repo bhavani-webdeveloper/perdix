@@ -1254,8 +1254,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                            },
                            {
                                key:"customer.liabilities[].liabilityLoanPurpose",
-                               type:"select",
-                               enumCode: "loan_purpose_1"
+                               /*type:"select",
+                               enumCode: "loan_purpose_1"*/
                            },
                            {
                                key:"customer.liabilities[].interestOnly",
@@ -1263,14 +1263,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                title:"INTEREST_ONLY",
                                enumCode:"decisionmaker"
                            },
-                           {
+                           /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
                            },
                            {
                                key:"customer.liabilities[].principalExpense",
                                title:"PRINCIPAL_EXPENSE"
-                           }
+                           }*/
                        ]
                     }
                 ]
@@ -1328,8 +1328,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                            },
                            {
                                key:"customer.liabilities[].liabilityLoanPurpose",
-                               type:"select",
-                               enumCode: "loan_purpose_1"
+                               /*type:"select",
+                               enumCode: "loan_purpose_1"*/
                            },
                            {
                                key:"customer.liabilities[].interestOnly",
@@ -1337,14 +1337,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                title:"INTEREST_ONLY",
                                enumCode:"decisionmaker"
                            },
-                           {
+                          /* {
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
                            },
                            {
                                key:"customer.liabilities[].principalExpense",
                                title:"PRINCIPAL_EXPENSE"
-                           }
+                           }*/
                        ]
                     }
                 ]

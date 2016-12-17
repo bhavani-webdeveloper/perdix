@@ -1571,8 +1571,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select",
-                                            enumCode: "loan_purpose_1"
+                                            /*type:"select",
+                                            enumCode: "loan_purpose_1"*/
                                         },
                                         {
                                            key:"customer.liabilities[].interestOnly",
@@ -1580,7 +1580,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                            title:"INTEREST_ONLY",
                                            enumCode:"decisionmaker"
                                         },
-                                        {
+                                        /*{
                                            key:"customer.liabilities[].interestExpense",
                                            title:"INTEREST_EXPENSE"
                                         },
@@ -1588,7 +1588,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                            key:"customer.liabilities[].principalExpense",
                                            title:"PRINCIPAL_EXPENSE"
                                         }
-
+*/
                                     ]
                                 }
                             ]
@@ -1647,8 +1647,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key:"customer.liabilities[].liabilityLoanPurpose",
-                                            type:"select",
-                                            enumCode: "loan_purpose_1"
+                                           /* type:"select",
+                                            enumCode: "loan_purpose_1"*/
                                         },
                                         {
                                            key:"customer.liabilities[].interestOnly",
@@ -1656,14 +1656,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                            title:"INTEREST_ONLY",
                                            enumCode:"decisionmaker"
                                         },
-                                        {
+                                        /*{
                                            key:"customer.liabilities[].interestExpense",
                                            title:"INTEREST_EXPENSE"
                                         },
                                         {
                                            key:"customer.liabilities[].principalExpense",
                                            title:"PRINCIPAL_EXPENSE"
-                                        }
+                                        }*/
 
                                     ]
                                 }
