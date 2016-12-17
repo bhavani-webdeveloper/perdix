@@ -228,6 +228,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         key: "loanAccount.loanPurpose1",
@@ -290,6 +291,141 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         type: "select",
                         required:true,
                         enumCode: "decisionmaker",
+                        title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
+                    },
+                    {
+                        key: "loanAccount.estimatedValueOfAssets",
+                        type: "amount",
+                        required:true,
+                        condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
+                        title: "ESTIMATED_VALUE_OF_ASSETS"
+                    },
+                    {
+                        key: "loanAccount.loanAmountRequested",
+                        type: "amount",
+                        required:true,
+                        title: "REQUESTED_LOAN_AMOUNT",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.frequencyRequested",
+                        type: "select",
+                        title: "FREQUENCY_REQUESTED",
+                        enumCode: "frequency",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.tenureRequested",
+                        required:true,
+                        type: "number",
+                        title: "TENURE_REQUESETED",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.expectedInterestRate",
+                        type: "number",
+                        title: "EXPECTED_INTEREST_RATE",
+                        onChange:function(value,form,model){
+                            computeEMI(model);
+                        }
+                    },
+                    {
+                        key: "loanAccount.estimatedEmi",
+                        type: "amount",
+                        title: "ESTIMATED_KINARA_EMI",
+                        readonly:true
+                    },
+                    {
+                        key: "loanAccount.emiRequested",
+                        required:true,
+                        type: "amount",
+                        title: "EMI_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.emiPaymentDateRequested",
+                        type: "date",
+                        title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "!model.loanAccount.customerId",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                    }
+                ]
+            },
+              {
+                "type": "box",
+                "title": "PRELIMINARY_INFORMATION",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                readonly:true,
+                "items": [
+                    {
+                        key: "loanAccount.loanPurpose1",
+                        type: "lov",
+                        autolov: true,
+                        title:"LOAN_PURPOSE_1",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose1": "loanAccount.loanPurpose1"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose1();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose1
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            $log.info(result);
+                            model.loanAccount.loanPurpose2 = '';
+                        }
+                    },
+                    {
+                        key: "loanAccount.loanPurpose2",
+                        type: "lov",
+                        autolov: true,
+                        title:"LOAN_PURPOSE_2",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "purpose2": "loanAccount.loanPurpose2"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.purpose2
+                            ];
+                        }
+                    },
+                    /*{
+                        key: "loanAccount.loanPurpose1",
+                        type: "select",
+                        enumCode: "loan_purpose_1"
+                    },
+                    {
+                        key: "loanAccount.loanPurpose2",
+                        type: "select",
+                        enumCode: "loan_purpose_2",
+                        parentEnumCode: "loan_purpose_1",
+                        parentValueExpr: "model.loanAccount.loanPurpose2"
+                    },*/
+                    {
+                        key: "loanAccount.assetAvailableForHypothecation",
+                        type: "string",
+                        required:true,
                         title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
                     },
                     {
@@ -508,7 +644,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
-                                type: "Date",
+                                type: "date",
                             },
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",
