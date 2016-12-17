@@ -287,7 +287,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },*/
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
-                        type: "radios",
+                        type: "select",
                         required:true,
                         enumCode: "decisionmaker",
                         title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
@@ -349,7 +349,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
-
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -514,7 +513,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                type: "radios",
+                                type: "select",
                                 required:true,
                                 enumCode: "decisionmaker"
                             },
@@ -523,7 +522,21 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title:"HYPOTHECATED_TO_KINARA",
                                 required:true,
                                 enumCode: "decisionmaker",
-                                type: "radios",
+                                type: "select",
+                            },
+                            {
+                             key: "loanAccount.collateral[].electricityAvailable",
+                             title: "ELECTRICITY_AVAIALBLE",
+                             type: "select",
+                             enumCode: "decisionmaker",
+                             required: true
+                            }, 
+                            {
+                             key: "loanAccount.collateral[].spaceAvailable",
+                             title: "SPACE_AVAILABLE",
+                             type: "select",
+                             enumCode: "decisionmaker",
+                             required: true
                             }
 
                          ]
@@ -545,38 +558,38 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].collateralDescription",
                                 title:"MACHINE",
-                                required:true,
+                               
                                 type: "string"
                             },
                             {
                                 key: "loanAccount.collateral[].collateralValue",
                                 title:"PURCHASE_PRICE",
-                                required:true,
+                                
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",
-                                required:true,
+                               
                                 type: "number",
                             },
                             {
                                 key: "loanAccount.collateral[].collateralType",
                                 title:"MACHINE_TYPE",
-                                required:true,
+                                
                                 type: "select",
                                 enumCode: "collateral_type"
                             },
                             {
                                 key: "loanAccount.collateral[].manufacturer",
                                 title:"MANFACTURE_NAME",
-                                required:true,
+                             
                                 type: "string",
                             },
                             {
                                 key: "loanAccount.collateral[].modelNo",
                                 title:"MACHINE_MODEL",
-                                required:true,
+                               
                                 type: "string",
                             },
                             {
@@ -592,16 +605,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",
                                 title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                type: "radios",
-                                required:true,
-                                enumCode: "decisionmaker"
+                                type: "string",
                             },
                             {
                                 key: "loanAccount.collateral[].hypothecatedToBank",
                                 title:"HYPOTHECATED_TO_KINARA",
-                                required:true,
-                                enumCode: "decisionmaker",
-                                type: "radios",
+                                type: "string",
+                            },
+                            {
+                             key: "loanAccount.collateral[].electricityAvailable",
+                             title: "ELECTRICITY_AVAIALBLE",
+                             type: "string",
+                            }, 
+                            {
+                             key: "loanAccount.collateral[].spaceAvailable",
+                             title: "SPACE_AVAILABLE",
+                             type: "string",
+                            
                             }
                          ]
                      }

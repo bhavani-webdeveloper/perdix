@@ -359,7 +359,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "radios",
+                        type: "select",
                         enumCode: "decisionmaker",
                         title: "IS_REGISTERED"
                     },
@@ -671,7 +671,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.companyRegistered",
-                        type: "radios",
+                        type: "select",
                         titleMap: {
                             "YES": "Yes",
                             "NO": "No"
@@ -1438,13 +1438,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key:"customer.supplierDetails[].paymentTerms",
-                                title:"PAYEMNT_TERMS_IN_DAYS",
+                                title:"PAYMENT_TERMS_IN_DAYS",
                                 type: "select",
                                 enumCode: "payment_terms"
                             },
                             {
                                 key:"customer.supplierDetails[].amount",
-                                title:"AMOUNT",
+                                title:"PAYABLE_OUTSTANDING",
                                 type:"amount"
                             },
                          ] 
@@ -1482,8 +1482,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key:"customer.supplierDetails[].amount",
-                                title:"AMOUNT",
-                                type:"amount"
+                                title:"amount",
+                                title:"PAYABLE_OUTSTANDING",
                             },
                          ] 
                      }     
@@ -1709,7 +1709,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.rawMaterialExpenses",
                                 type:"array",
                                 startEmpty: true,
-                                title:"RAW_MATERIAL_EXPENSE",
+                                title:"PURCHASES",
                                 items:[
                                     {
                                         key: "customer.rawMaterialExpenses[].vendorName",
@@ -1941,7 +1941,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             key:"customer.rawMaterialExpenses",
                             type:"array",
                             startEmpty: true,
-                            title:"RAW_MATERIAL_EXPENSES",
+                            title:"PURCHASES",
                             items:[
                                 {
                                     key: "customer.rawMaterialExpenses[].vendorName",
