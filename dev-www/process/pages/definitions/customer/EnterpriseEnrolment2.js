@@ -795,7 +795,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 enumCode: "relationship_type"
                             },
                             {
-                               key: "customer.enterpriseCustomerRelations[].linkedToCustomerId"
+                               key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
+                               title: "CUSTOMER_ID",
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
