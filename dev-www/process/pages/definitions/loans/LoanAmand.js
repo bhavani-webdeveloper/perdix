@@ -75,25 +75,16 @@ irf.pageCollection.factory(irf.page('loans.LoanAmand'), ["$log", "$q", "$timeout
                     type: "button",
                     onClick: function(model) {
                         $log.info("Inside submit()");
-                        $log.warn(model);
-                        var sortFn = function(unordered) {
-                            var out = {};
-                            Object.keys(unordered).sort().forEach(function(key) {
-                                out[key] = unordered[key];
-                            });
-                            return out;
-                        };
                         var reqData = _.cloneDeep(model.amand);
-
                         var promise = LoanAccount.updateTenure(reqData).$promise;
+                        PageHelper.showProgress("tenure-amendment", "Updating Loan....");
                         promise.then(
                             function(response) {
                                 model.amand.tenuredownload = true;
-                                $log.info(response);
-                                irfProgressMessage.pop('New Tenure Updated', 'Loan Save', 2000);
+                                PageHelper.showProgress("tenure-amendment", "Done", 5000);
                             },
                             function(error) {
-                                irfProgressMessage.pop('Tenure Update', 'Error Updating new tenure details.', 4000);
+                                PageHelper.showProgress("tenure-amendment", "Error Updating new tenure details.", 5000);
                                 PageHelper.showErrors(error);
                             });
                     }
@@ -126,14 +117,6 @@ irf.pageCollection.factory(irf.page('loans.LoanAmand'), ["$log", "$q", "$timeout
                             });
                         }*/
                     }]
-                }, ]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "submit",
-                    "style": "btn-theme",
-                    "title": "SUBMIT"
-
                 }, ]
             }],
             schema: {

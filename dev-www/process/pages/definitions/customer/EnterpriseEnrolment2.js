@@ -1202,14 +1202,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"HOUSEHOLD_LIABILITIES",
+               title:"COMPANY_LIABILITIES",
                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                        key:"customer.liabilities",
                        type:"array",
                        startEmpty: true,
-                       title:"HOUSEHOLD_LIABILITIES",
+                       title:"LIABILITIES",
                        items:[
                            {
                                key:"customer.liabilities[].loanType",
