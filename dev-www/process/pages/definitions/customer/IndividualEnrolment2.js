@@ -2035,7 +2035,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
-                                type:"number"
+                                type:"string"
                             },
                             {
                                 key:"customer.verifications[].businessSector",

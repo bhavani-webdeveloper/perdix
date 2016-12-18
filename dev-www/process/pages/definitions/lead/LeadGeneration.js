@@ -1,9 +1,8 @@
-irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
- ["$log", "$state","$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper","entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils","entityManager", "BiometricService", "PagesDefinition", "Queries",
+irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state,$filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper,entityManager, $q, irfProgressMessage,
-        PageHelper, Utils, entityManager,BiometricService, PagesDefinition, Queries) {
+    function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
+        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -12,20 +11,25 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
-                model.lead.customerType="Enterprise";
-                model.lead.leadStatus="Incomplete";
-                model.lead.leadInteractions = [{
-                    "interactionDate": Utils.getCurrentDate(),
-                    "loanOfficerId": SessionStore.getUsername() + ''
-                }];
+                if (!(model.$$STORAGE_KEY$$)) {
+                    model.lead.customerType = "Enterprise";
+                    model.lead.leadStatus = "Incomplete";
+                    model.lead.leadInteractions = [{
+                        "interactionDate": Utils.getCurrentDate(),
+                        "loanOfficerId": SessionStore.getUsername() + ''
+                    }];
 
-                var branch1 = formHelper.enum('branch_id').data;
-                for (var i = 0; i < branch1.length; i++) {
-                    if ((branch1[i].name) == SessionStore.getBranch()) {
-                        model.lead.branchId = branch1[i].value;
-                        $log.info(model.lead.branchId);
+                    var branch1 = formHelper.enum('branch_id').data;
+                    for (var i = 0; i < branch1.length; i++) {
+                        if ((branch1[i].name) == SessionStore.getBranch()) {
+                            model.lead.branchId = branch1[i].value;
+                            $log.info(model.lead.branchId);
+                        }
                     }
+
                 }
+
+
 
                 model = Utils.removeNulls(model, true);
 
@@ -43,8 +47,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                         function(res) {
                             _.assign(model.lead, res);
                             if (model.lead.currentStage == 'Incomplete') {
-                                model.lead.customerType="Enterprise";
-                                model.lead.leadStatus="Incomplete";
+                                model.lead.customerType = "Enterprise";
+                                model.lead.leadStatus = "Incomplete";
                                 model.lead.leadInteractions = [{
                                     "interactionDate": Utils.getCurrentDate(),
                                     "loanOfficerId": SessionStore.getUsername() + ''
@@ -76,12 +80,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     "items": [{
                             key: "lead.branchId",
                             type: "select",
-                            readonly:true
+                            readonly: true
                         }, {
                             key: "lead.centreId",
                             type: "select",
                             parentEnumCode: "branch_id",
-                            parentValueExpr:"model.lead.branchId",
+                            parentValueExpr: "model.lead.branchId",
                             screenFilter: true
                         }, {
                             key: "lead.id",
@@ -98,7 +102,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                             title: "LEAD_DETAILS",
                             items: [{
                                     key: "lead.leadName",
-                                    title:"APPLICANT_NAME"
+                                    title: "APPLICANT_NAME"
                                 }, {
                                     key: "lead.customerType",
                                     type: "select",
@@ -113,7 +117,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                     condition: "model.lead.customerType === 'Enterprise'",
                                     items: [{
                                         key: "lead.businessName"
-                                    },{
+                                    }, {
                                         key: "lead.companyRegistered",
                                         type: "radios",
                                         enumCode: "decisionmaker"
@@ -143,8 +147,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                                             "Rental": "Rental",
                                         }*/
 
-                                    },  
-                                    {
+                                    }, {
                                         type: "fieldset",
                                         title: "INDIVIDUAL_DETAILS",
                                         items: [{
@@ -316,141 +319,144 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     type: "box",
                     title: "PRODUCT_DETAILS",
                     items: [{
-                        key: "lead.interestedInProduct",
-                        title:"INTERESTED_IN_LOAN_PRODUCT",
-                        type: "select",
-                        required:true,
-                        enumCode: "decisionmaker",
-                        "onChange": function(modelValue, form, model) {
-                                if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
-                                    model.lead.leadStatus = "Reject";
-                                } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
-                                    model.lead.leadStatus = "Screening";
-                                } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
-                                    model.lead.leadStatus = "FollowUp";
-                                } else {
-                                    model.lead.leadStatus = "Incomplete";
-                                }
-                               /* if (model.lead.interestedInProduct === 'YES') {
-                                    model.lead.productCategory = "Asset";
-                                    model.lead.productSubCategory = "Loan";
-                                }*/
-                            }
-                            //onChange: "actions.changeStatus(modelValue, form, model)",
-                    }, /*{
-                        key: "lead.productCategory",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                        readonly: true,
-                         type: "select",
-
-                         "Liability": "Liability",
-                             "others": "others"
-                             "investment": "investment"
-                         titleMap: {
-                             "Asset": "Asset",
-                         }
-                    }, {
-                        key: "lead.productSubCategory",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                        readonly: true,
-                        /* type: "select",
-                         titleMap: {
-                             "Loan": "Loan",
-                         }
-                    },*/ {
-                        key: "lead.loanAmountRequested",
-                        type: "amount",
-                        condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
-                    }, {
-                        key: "lead.loanPurpose1",
-                        condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
-                        type: "select",
-                        enumCode: "loan_purpose_1"
-                        /*titleMap: {
-                            "AssetPurchase": "AssetPurchase",
-                            "WorkingCapital": "WorkingCapital",
-                            "BusinessDevelopment": "BusinessDevelopment",
-                            "LineOfCredit": "LineOfCredit",
-
-                        }*/
-                    }, {
-                        key: "lead.productRequiredBy",
-                        type: "select",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                        titleMap: {
-                            "In this week": "In this week",
-                            "In this month": "In this month",
-                            "Next 2 -3 months": "Next 2 -3 months",
-                            "Next 4-6 months": "Next 4-6 months",
-
-                        },
-                        onChange: "actions.changeStatus(modelValue, form, model)"
-                    }, {
-                        key: "lead.screeningDate",
-                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
-                        type: "date",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
-                    }, {
-                        key: "lead.followUpDate",
-                        condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
-                        type: "date",
-                        onChange: "actions.changeStatus(modelValue, form, model)"
-                    }, {
-                        type: "fieldset",
-                        condition: "model.lead.interestedInProduct==='YES'",
-                        title: "PRODUCT_ELIGIBILITY",
-                        items: [{
-                            key: "lead.eligibleForProduct",
-                            type: "radios",
+                            key: "lead.interestedInProduct",
+                            title: "INTERESTED_IN_LOAN_PRODUCT",
+                            type: "select",
+                            required: true,
                             enumCode: "decisionmaker",
-                            onChange: "actions.changeStatus(modelValue, form, model)",
-                        }]
-                    }, {
-                        type: "fieldset",
-                        title: "PRODUCT_REJECTION_REASON",
-                        condition: "model.lead.interestedInProduct==='NO'||model.lead.eligibleForProduct ==='NO'",
-                        items: [{
-                            key: "lead.productRejectReason",
-                            type: "select",
-                            condition: "model.lead.interestedInProduct==='NO'",
-                            titleMap: {
-                                "Has many running loans": "Has many running loans",
-                                "Available from banks": "Available from banks",
-                                "Not planned for now": "Not planned for now",
-                                "Available from banks": "Available from banks",
-                                "Interest rate is not satisfactory": "Interest rate is not satisfactory",
-                                "Too many documents": "Too many documents",
-                                "Interested only for cash collection": "Interested only for cash collection"
-                            }
+                            "onChange": function(modelValue, form, model) {
+                                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                        model.lead.leadStatus = "Reject";
+                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                        model.lead.leadStatus = "Screening";
+                                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                                        model.lead.leadStatus = "FollowUp";
+                                    } else {
+                                        model.lead.leadStatus = "Incomplete";
+                                    }
+                                    /* if (model.lead.interestedInProduct === 'YES') {
+                                         model.lead.productCategory = "Asset";
+                                         model.lead.productSubCategory = "Loan";
+                                     }*/
+                                }
+                                //onChange: "actions.changeStatus(modelValue, form, model)",
+                        },
+                        /*{
+                                               key: "lead.productCategory",
+                                               condition: "model.lead.interestedInProduct==='YES'",
+                                               readonly: true,
+                                                type: "select",
+
+                                                "Liability": "Liability",
+                                                    "others": "others"
+                                                    "investment": "investment"
+                                                titleMap: {
+                                                    "Asset": "Asset",
+                                                }
+                                           }, {
+                                               key: "lead.productSubCategory",
+                                               condition: "model.lead.interestedInProduct==='YES'",
+                                               readonly: true,
+                                               /* type: "select",
+                                                titleMap: {
+                                                    "Loan": "Loan",
+                                                }
+                                           },*/
+                        {
+                            key: "lead.loanAmountRequested",
+                            type: "amount",
+                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                         }, {
-                            key: "lead.productRejectReason",
+                            key: "lead.loanPurpose1",
+                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
-                            condition: "model.lead.eligibleForProduct ==='NO'",
-                            titleMap: {
-                                "High Interest rate": "High Interest rate",
-                                "Negative": "Negative",
-                                "Not Kinara's target segment": "Not Kinara's target segment",
-                                "Not having proper documents": "Not having proper documents",
-                            }
+                            enumCode: "loan_purpose_1"
+                                /*titleMap: {
+                                    "AssetPurchase": "AssetPurchase",
+                                    "WorkingCapital": "WorkingCapital",
+                                    "BusinessDevelopment": "BusinessDevelopment",
+                                    "LineOfCredit": "LineOfCredit",
+
+                                }*/
                         }, {
-                            key: "lead.additionalRemarks",
-                        }, ]
-                    }, {
-                        type: "fieldset",
-                        title: "LEAD_STATUS",
-                        items: [{
-                            key: "lead.leadStatus",
-                            //type: "select",
-                            readonly: true,
-                            /*titleMap: {
-                                "Screening": "Screening",
-                                "FollowUp": "FollowUp",
-                                "Incomplete": "Incomplete",
-                                "Reject": "Reject"
-                            },*/
+                            key: "lead.productRequiredBy",
+                            type: "select",
+                            condition: "model.lead.interestedInProduct==='YES'",
+                            titleMap: {
+                                "In this week": "In this week",
+                                "In this month": "In this month",
+                                "Next 2 -3 months": "Next 2 -3 months",
+                                "Next 4-6 months": "Next 4-6 months",
+
+                            },
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }]
-                    }]
+                        }, {
+                            key: "lead.screeningDate",
+                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
+                            type: "date",
+                            onChange: "actions.changeStatus(modelValue, form, model)"
+                        }, {
+                            key: "lead.followUpDate",
+                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
+                            type: "date",
+                            onChange: "actions.changeStatus(modelValue, form, model)"
+                        }, {
+                            type: "fieldset",
+                            condition: "model.lead.interestedInProduct==='YES'",
+                            title: "PRODUCT_ELIGIBILITY",
+                            items: [{
+                                key: "lead.eligibleForProduct",
+                                type: "radios",
+                                enumCode: "decisionmaker",
+                                onChange: "actions.changeStatus(modelValue, form, model)",
+                            }]
+                        }, {
+                            type: "fieldset",
+                            title: "PRODUCT_REJECTION_REASON",
+                            condition: "model.lead.interestedInProduct==='NO'||model.lead.eligibleForProduct ==='NO'",
+                            items: [{
+                                key: "lead.productRejectReason",
+                                type: "select",
+                                condition: "model.lead.interestedInProduct==='NO'",
+                                titleMap: {
+                                    "Has many running loans": "Has many running loans",
+                                    "Available from banks": "Available from banks",
+                                    "Not planned for now": "Not planned for now",
+                                    "Available from banks": "Available from banks",
+                                    "Interest rate is not satisfactory": "Interest rate is not satisfactory",
+                                    "Too many documents": "Too many documents",
+                                    "Interested only for cash collection": "Interested only for cash collection"
+                                }
+                            }, {
+                                key: "lead.productRejectReason",
+                                type: "select",
+                                condition: "model.lead.eligibleForProduct ==='NO'",
+                                titleMap: {
+                                    "High Interest rate": "High Interest rate",
+                                    "Negative": "Negative",
+                                    "Not Kinara's target segment": "Not Kinara's target segment",
+                                    "Not having proper documents": "Not having proper documents",
+                                }
+                            }, {
+                                key: "lead.additionalRemarks",
+                            }, ]
+                        }, {
+                            type: "fieldset",
+                            title: "LEAD_STATUS",
+                            items: [{
+                                key: "lead.leadStatus",
+                                //type: "select",
+                                readonly: true,
+                                /*titleMap: {
+                                    "Screening": "Screening",
+                                    "FollowUp": "FollowUp",
+                                    "Incomplete": "Incomplete",
+                                    "Reject": "Reject"
+                                },*/
+                                onChange: "actions.changeStatus(modelValue, form, model)"
+                            }]
+                        }
+                    ]
                 },
 
                 {
@@ -508,10 +514,10 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     items: [{
                         key: "lead.leadInteractions",
                         type: "array",
-                         add:null,
-                         remove:null,
+                        add: null,
+                        remove: null,
                         startEmpty: true,
-                        view:"fixed",
+                        view: "fixed",
                         title: "LEAD_INTERACTIONS",
                         items: [{
                             key: "lead.leadInteractions[].interactionDate",
@@ -552,7 +558,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
                     "items": [{
                         "type": "save",
                         "title": "Offline Save"
-                    },{
+                    }, {
                         "type": "submit",
                         "title": "Submit"
                     }]
@@ -589,8 +595,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"),
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                     model.lead.productCategory = "Asset";
-                     model.lead.productSubCategory = "Loan";
+                    model.lead.productCategory = "Asset";
+                    model.lead.productSubCategory = "Loan";
                     $log.warn(model);
                     var sortFn = function(unordered) {
                         var out = {};

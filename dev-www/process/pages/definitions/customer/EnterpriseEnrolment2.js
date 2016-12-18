@@ -1428,6 +1428,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].supplierName",
                                 title:"SUPPLIERS_NAME",
+                                required:true,
                                 type:"string"
                             },
                             {
@@ -2349,7 +2350,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
-                                type:"number"
+                                type:"string",
+                                
                             },
                             {
                                 key:"customer.verifications[].businessSector",
