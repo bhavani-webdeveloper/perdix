@@ -138,6 +138,12 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 								model.psy1.options = [];
 							}
 						}, {
+							key: "psy1.active",
+							type: "checkbox",
+							onChange: function(modelValue, form, model) {
+								model.psy2.active = model.psy1.active;
+							}
+						}, {
 							key: "psy1.questionLangs",
 							type: "array",
 							items: [{
@@ -290,6 +296,10 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 						}, {
 							key: "psy2.difficulty",
 							type: "radios",
+							readonly: true
+						}, {
+							key: "psy2.active",
+							type: "checkbox",
 							readonly: true
 						}, {
 							key: "psy2.questionLangs",
