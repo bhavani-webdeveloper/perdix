@@ -1741,6 +1741,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                                 ]
                             },
+                            ]
+                        },
                             {
                                 type:"fieldset",
                                 title:"ASSETS",
@@ -1791,46 +1793,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     },
                                 ]
                             },
-                            {
-                                key: 'customer.financialSummaries',
-                                type: 'array',
-                                startEmpty: true,
-                                title: "FINANCIAL_SUMMARY",
-                                items: [
-                                    {
-                                        key: "customer.financialSummaries[].sales"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].purchases"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].operatingExpenses"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].householdExpenses"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].fixedObligations"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].netBusinessIncome"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].otherIncome"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].disposableIncome"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].instalmentAmount"
-                                    },
-                                    {
-                                        key: "customer.financialSummaries[].availableSurplus"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                               
                 ]
             },
         {
@@ -1887,7 +1850,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             title:"Through Sales",
                             items:[
                                 {
-                                    key: "customer.incomeThroughSales[].buyerName"
+                                    key: "customer.incomeThroughSales[].buyerName",
+                                    title:"BUYER_NAME",
                                 },
                                 {
                                     key: "customer.incomeThroughSales[].incomeType",
@@ -1941,6 +1905,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"EXPENSES",
                                 items:[]
                         },
+                        {
+                                key:"customer.expenditures",
+                                type:"array",
+                                title:"BUSINESS_EXPENSE",
+                                items:[
+                                    {
+                                        key: "customer.expenditures[].annualExpenses",
+                                        title: "AMOUNT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].expenditureSource",
+                                        title: "EXPENDITURE_SOURCE",
+                                        type: "select",
+                                        enumCode: "business_expense"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].frequency",
+                                        title: "FREQUENCY",
+                                        type: "select",
+                                        enumCode: "frequency"
+                                    }
+                                ]
+                            },
                          {
                             key:"customer.rawMaterialExpenses",
                             type:"array",
@@ -1971,6 +1959,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     title: "DATE",
                                     type: "date"
                                 },
+                                ]
+                            },
                                 {
                                     type:"fieldset",
                                     title:"ASSETS",
@@ -2005,8 +1995,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         {
                                             key: "customer.enterpriseAssets[].assetType",
                                             title: "ASSET_TYPE",
-                                            type: "select",
-                                            enumCode: "enterprise_asset_types"
+                                            type: "string",
+                                            //enumCode: "enterprise_asset_types"
                                         },
                                         {
                                             key: "customer.enterpriseAssets[].vehicleMakeModel",
@@ -2020,50 +2010,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                             type: "amount"
                                         },
                                     ]
-                                },
-                                {
-                                    key: 'customer.financialSummaries',
-                                    type: 'array',
-                                    startEmpty: true,
-                                    title: "FINANCIAL_SUMMARY",
-                                    items: [
-                                        {
-                                            key: "customer.financialSummaries[].sales"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].purchases"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].operatingExpenses"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].householdExpenses"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].fixedObligations"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].netBusinessIncome"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].otherIncome"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].disposableIncome"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].instalmentAmount"
-                                        },
-                                        {
-                                            key: "customer.financialSummaries[].availableSurplus"
-                                        }
-                                    ]
-                                }
-                                
-                            ]
-                        },
+                                },   
+                            
                         
-
+                        
                 ]
             },
             {
