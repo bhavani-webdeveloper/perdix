@@ -2008,7 +2008,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                 "type": "box",
                 "title": "REFERENCES",
-                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                "condition": "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
                         key:"customer.verifications",
@@ -2063,7 +2063,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
             {
                 "type": "box",
                 "title": "REFERENCES",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "condition": "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                 readonly:true,
                 "items": [
                     {
