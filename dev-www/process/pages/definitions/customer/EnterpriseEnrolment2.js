@@ -1545,9 +1545,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].subSector",
                                 title: "SUBSECTOR",
-                                type: "select",
-                                parentEnumCode: "businessSector",
-                                enumCode: "businessSubSector"
+                                type: "string",
+                                /*parentEnumCode: "businessSector",
+                                enumCode: "businessSubSector"*/
                             },
                             {
                                 key: "customer.buyerDetails[].receivablesOutstanding",
@@ -2241,8 +2241,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
-                                type: "radios",
-                                enumCode: "decisionmaker",
+                                type: "string",
+                                //enumCode: "decisionmaker",
                                 condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
