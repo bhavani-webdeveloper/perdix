@@ -842,18 +842,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 ]
             }*/,
             {
-                "type": "actionbox",
-                "condition": "model.loanAccount.customerId &&  !model.loanAccount.id && !(model.currentStage=='ScreeningReview')",
-                "items": [
-                    {
-                        "type": "button",
-                        "icon": "fa fa-circle-o",
-                        "title": "SUBMIT",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
-                    }
-                ]
-            },
-            {
                 "type": "box",
                 "title": "LOAN_SANCTION",
                 "condition": "model.currentStage == 'Sanction'",
@@ -1201,7 +1189,19 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     }
 
                 ]
-            }
+            },
+            {
+                "type": "actionbox",
+                "condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+                "items": [
+                    {
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    }
+                ]
+            },
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;

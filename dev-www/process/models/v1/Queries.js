@@ -254,8 +254,8 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
     resource.getCustomerBasicDetails = function(filter){
         var deferred = $q.defer();
         var request = {};
-        request.urns = _.hasIn(filter, 'urns')?filter.urns:[""];
-        request.ids = _.hasIn(filter, 'ids')?filter.ids:[""];
+        request.urns = (_.hasIn(filter, 'urns') && filter.urns.length>0) ?filter.urns:[""];
+        request.ids = (_.hasIn(filter, 'ids') && filter.ids.length>0) ?filter.ids:[""];
         resource.getResult("customerBasicDetails.list", request, 10).then(function(records){
             if (records && records.results) {
                 var buildOutputObj = {

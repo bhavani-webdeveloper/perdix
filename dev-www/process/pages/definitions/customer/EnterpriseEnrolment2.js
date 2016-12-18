@@ -35,22 +35,23 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                         if(model.customer.enterpriseCustomerRelations)
                         {
-                        var linkedIds = [];
-                        for(i=0;i<model.customer.enterpriseCustomerRelations.length;i++) {
-                            linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
-                        };
-                        Queries.getCustomerBasicDetails({
-                            "ids": linkedIds
-                        }).then(function(result) {
-                            if (result && result.ids) {
-                                for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
-                                    var cust = result.ids[model.customer.enterpriseCustomerRelations[i].linkedToCustomerId];
-                                    if (cust) {
-                                        model.customer.enterpriseCustomerRelations[i].linkedToCustomerName = cust.first_name;
+                            var linkedIds = [];
+                            for(i=0;i<model.customer.enterpriseCustomerRelations.length;i++) {
+                                linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
+                            };
+                            
+                            Queries.getCustomerBasicDetails({
+                                "ids": linkedIds
+                            }).then(function(result) {
+                                if (result && result.ids) {
+                                    for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
+                                        var cust = result.ids[model.customer.enterpriseCustomerRelations[i].linkedToCustomerId];
+                                        if (cust) {
+                                            model.customer.enterpriseCustomerRelations[i].linkedToCustomerName = cust.first_name;
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
                         }
 
                     }, function(httpRes){
@@ -439,7 +440,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "businessSector",
                         parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessLine",
+                        parentValueExpr:"model.customer.enterprise.businessType",
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
@@ -2142,7 +2143,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_TYPE",
                                 required: true,
                                 type: "select",
-                                enumCode: "machine_type"
+                                enumCode: "collateral_type"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineModel",
@@ -2407,20 +2408,17 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
-                                type:"number"
+                                type:"string"
                             },
                             {
                                 key:"customer.verifications[].businessSector",
                                 title:"BUSINESS_SECTOR",
-                                type:"select",
-                                enumCode: "businessSector"
+                                type:"string"
                             },
                             {
                                 key:"customer.verifications[].businessSubSector",
                                 title:"BUSINESS_SUBSECTOR",
-                                type:"select",
-                                enumCode: "businessSubSector",
-                                parentEnumCode: "businessSector"
+                                type:"string"
                             },
                             {
                                 key:"customer.verifications[].selfReportedIncome",

@@ -1537,7 +1537,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             type:"select",
                                             enumCode:"loan_source"
                                         },
-                                        "customer.liabilities[].instituteName",
+                                        // "customer.liabilities[].instituteName",
                                         {
                                             key: "customer.liabilities[].loanAmountInPaisa",
                                             type: "amount"
