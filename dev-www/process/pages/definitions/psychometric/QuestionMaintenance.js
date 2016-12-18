@@ -562,7 +562,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"questionLangs": {
 								"type": "array",
-								"title": "Text",
+								"title": "Question",
 								"items": {
 									"type": "object",
 									"required": ["langCode", "questionText"],
