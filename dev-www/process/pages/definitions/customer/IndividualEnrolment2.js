@@ -1027,7 +1027,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.mailingPincode",
                                             type: "lov",
-                                            fieldType: "number",
+                                            fieldType: "string",
                                             autolov: true,
                                             inputMap: {
                                                 "mailingPincode": "customer.mailingPincode",
@@ -1067,7 +1067,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 ];
                                             },
                                             onSelect: function(result, model, context) {
-                                                model.customer.mailingPincode = result.pincode;
+                                                model.customer.mailingPincode = (new Number(result.pincode)).toString();
                                                 model.customer.mailingLocality = result.division;
                                                 model.customer.mailingState = result.state;
                                                 model.customer.mailingDistrict = result.district;
@@ -2463,7 +2463,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"PHYSICAL_ASSETS",
                                     items:[
                                         {
-                                            key: "customer.physicalAssets[].assetType",
+                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
                                             title: "ASSET_TYPE",
                                             type: "select",
                                             enumCode: "asset_type"
