@@ -173,6 +173,13 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 										fileType: "image/*",
 										imageCompressionRatio: 100,
 										notitle: true,
+				                        getDataUrl: function(modelValue) {
+				                        	var dataUrl = modelValue;
+				                        	if (modelValue) {
+				                        		dataUrl = modelValue.replace("<img src=\"", "").replace("\">", "");
+				                        	}
+				                            return dataUrl;
+				                        },
 										customHandle: function(file, progress, modelValue, form, model) {
 											var deferred = $q.defer();
 											elementsUtils.fileToBase64(file).then(function(base64File) {
@@ -219,10 +226,11 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 											fileType: "image/*",
 											notitle: true,
 					                        getDataUrl: function(modelValue) {
+					                        	var dataUrl = modelValue;
 					                        	if (modelValue) {
-					                        		modelValue = modelValue.replace("<img src=\"", "").replace("\">", "");
+					                        		dataUrl = modelValue.replace("<img src=\"", "").replace("\">", "");
 					                        	}
-					                            return modelValue;
+					                            return dataUrl;
 					                        },
 											customHandle: function(file, progress, modelValue, form, model) {
 												var deferred = $q.defer();
@@ -272,10 +280,11 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 												fileType: "image/*",
 												notitle: true,
 						                        getDataUrl: function(modelValue) {
+						                        	var dataUrl = modelValue;
 						                        	if (modelValue) {
-						                        		modelValue = modelValue.replace("<img src=\"", "").replace("\">", "");
+						                        		dataUrl = modelValue.replace("<img src=\"", "").replace("\">", "");
 						                        	}
-						                            return modelValue;
+						                            return dataUrl;
 						                        },
 												customHandle: function(file, progress, modelValue, form, model) {
 													var deferred = $q.defer();
