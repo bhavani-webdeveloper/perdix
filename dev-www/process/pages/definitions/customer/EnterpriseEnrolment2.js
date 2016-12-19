@@ -1285,7 +1285,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"HOUSEHOLD_LIABILITIES",
+               title:"COMPANY_LIABILITIES",
                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
@@ -1293,7 +1293,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                        key:"customer.liabilities",
                        type:"array",
                        startEmpty: true,
-                       title:"HOUSEHOLD_LIABILITIES",
+                       title:"COMPANY_LIABILITIES",
                        items:[
                            {
                                key:"customer.liabilities[].loanType"/*,
@@ -1808,26 +1808,26 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                
                 ]
             },
-        {
-            type: "box",
-            title: "T_BUSINESS_FINANCIALS",
-            "condition": "model.currentStage=='ScreeningReview'",
-            readonly:true,
-            items: [{
-                key: "customer.enterprise.monthlyTurnover",
-                title: "MONTHLY_TURNOVER",
-                required: true,
-                type: "amount"
-            }, {
-                key: "customer.enterprise.monthlyBusinessExpenses",
-                title: "MONTHLY_BUSINESS_EXPENSES",
-                type: "amount"
-            }, {
-                key: "customer.enterprise.avgMonthlyNetIncome",
-                title: "AVERAGE_MONTHLY_NET_INCOME",
-                type: "amount"
-            }]
-        },
+            {
+                type: "box",
+                title: "T_BUSINESS_FINANCIALS",
+                "condition": "model.currentStage=='ScreeningReview'",
+                readonly:true,
+                items: [{
+                    key: "customer.enterprise.monthlyTurnover",
+                    title: "MONTHLY_TURNOVER",
+                    required: true,
+                    type: "amount"
+                }, {
+                    key: "customer.enterprise.monthlyBusinessExpenses",
+                    title: "MONTHLY_BUSINESS_EXPENSES",
+                    type: "amount"
+                }, {
+                    key: "customer.enterprise.avgMonthlyNetIncome",
+                    title: "AVERAGE_MONTHLY_NET_INCOME",
+                    type: "amount"
+                }]
+            },
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
