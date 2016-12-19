@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("demo.ReferenceCode"),
-["$log", "SessionStore","Files",
-    function($log, SessionStore,Files)
+["$log", "ReferenceCode", "SessionStore","Files","formHelper","PageHelper",
+    function($log, ReferenceCode, SessionStore, Files, formHelper, PageHelper)
     {
 
         var branch = SessionStore.getBranch();
@@ -28,17 +28,40 @@ irf.pageCollection.factory(irf.page("demo.ReferenceCode"),
                     {
                         key:"code.searchBy",
                         title:"Search By",
-                        type:"select",
-                        enumCode:""
+                        type:"lov",
+                        lovonly:true,
+                        outputmap:
+                        {
+                            "searchBy":"code.searchBy",
+                            "Parent":"code.displayName",
+
+                        },
+                        searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                return ReferenceCode.allClassifier().$promise;
+                            },
+                           onSelect: function(valueObj, model, context)
+                            {
+                                            model.code.ReferenceCode = valueObj.value;
+                            },
+                            getListDisplayItem: function(item, index)
+                            {
+                                return [
+                                    
+                                    item.code,
+                                    item.displayName,
+                                    item.name,
+
+                                   //item.parent
+                                ];
+                            }
+
                     },
+
                     {
                         key:"code.parent",
                         title:"Parent",
-                        type:"select",
-                        enumCode:"centre",
-                        parentEnumCode: "branch_id",
-                            parentValueExpr:"model.customer.branchId",
-                            screenFilter: true
+                       
                     },
                     {
                                 type:"tableview",
@@ -123,14 +146,19 @@ irf.pageCollection.factory(irf.page("demo.ReferenceCode"),
 
 titlename:function (model, form, formCtrl) 
             {
-                $log.info("Spoke Merger Customer Page got initialized");
-                model.customer = {};
-                model.customer.config = [];
-                model.customer.config[0] = {
-                    key: "min_req",
-                    value: "4",
-                    description: "some sample config"
-                };
+                     Utils.confirm('Are you sure?').then(function() {
+                        PageHelper.clearErrors();
+                        PageHelper.showLoader();
+                        ReferenceCode.postCategory(model.category).$promise.then(function(resp){
+                            model.category= resp;
+                            PageHelper.showProgress("category-pages","Category created/updated", 3000);
+                        }, function(err){
+                            PageHelper.showErrors(err);
+                        }).finally(function(){
+                            PageHelper.hideLoader();
+                        });
+                    });
+
             },
                 submit: function(model, form, formName)
                 {
