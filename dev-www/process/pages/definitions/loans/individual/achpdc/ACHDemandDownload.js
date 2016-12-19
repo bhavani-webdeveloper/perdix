@@ -97,9 +97,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                                 ACH.achDemandListUpload(file, progress)
                                     .then(
                                         function(response){
-                                            PageHelper.showProgres("ach-upload", "Upload success!", 5000);
+                                            PageHelper.showProgress("ach-upload", "Upload success!", 5000);
                                         }, function(httpResponse){
-                                            PageHelper.showProgres("ach-upload", "Upload Failed!", 5000);
+                                            PageHelper.showProgress("ach-upload", "Upload Failed!", 5000);
                                         }
                                     )
                                     .finally(function(){
