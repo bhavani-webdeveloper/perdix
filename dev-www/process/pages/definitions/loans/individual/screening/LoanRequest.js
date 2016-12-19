@@ -1026,23 +1026,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: "textarea",
                                 required: true
                             },
-                              {
-                                key:"loanAccount.disbursementSchedules",
-                                title:"DISBURSEMENT_SCHEDULES",
-                                add:null,
-                                remove:null,
-                                items:[
-                                    {
-                                        key:"loanAccount.disbursementSchedules[].trancheNumber",
-                                        title:"TRANCHE_NUMBER",
-                                        readonly:true
-                                    },
-                                    {
-                                        key:"loanAccount.disbursementSchedules[].disbursementAmount",
-                                        title:"DISBURSEMENT_AMOUNT",
-                                        type:"amount"
-                                    },
-                                    {
+                              
+                                   /* {
                                         key: "loanAccount.disbursementSchedules[].rejectReason",
                                         type: "lov",
                                         autolov: true,
@@ -1082,7 +1067,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                             ];
                                         }
                                     }
-                                
+                                */
                             
 
                             {
