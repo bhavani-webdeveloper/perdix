@@ -12,7 +12,8 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
             "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
             "Page/Engine/loans.individual.collections.CreditValidationQueue",
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
-            "Page/Engine/loans.individual.collections.DepositStage"
+            "Page/Engine/loans.individual.collections.DepositStage",
+            "Page/Engine/loans.individual.collections.MonthlyDemandList"
         ]
     };
 

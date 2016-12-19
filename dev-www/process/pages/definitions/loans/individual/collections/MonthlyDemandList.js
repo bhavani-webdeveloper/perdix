@@ -21,7 +21,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
             },
             form: [{
                 "type": "box",
-                "title": "ACH_INPUT",
+                "title": "MONTHLY_DEMAND_LIST_DOWNLOAD",
                 "items": [{
                     "type": "fieldset",
                     "title": "DOWNLOAD_MONTHLY_DEMAND_LIST",
