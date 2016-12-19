@@ -9,6 +9,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
         "items": [
             "Page/Engine/loans.individual.disbursement.ReadyForDisbursementQueue",
             "Page/Engine/loans.individual.disbursement.DisbursementConfirmationQueue",
+            "Page/Engine/loans.individual.disbursement.DisbursementConfirmationUpload",
             "Page/Engine/loans.individual.disbursement.RejectedDisbursementQueue",
             "Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
             "Page/Engine/loans.individual.disbursement.PendingFROQueue",
