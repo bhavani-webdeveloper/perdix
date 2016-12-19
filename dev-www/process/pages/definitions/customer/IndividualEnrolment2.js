@@ -1580,6 +1580,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                            title:"INTEREST_ONLY",
                                            enumCode:"decisionmaker"
                                         },
+                                        {
+                                            key: "customer.liabilities[].interestRate",
+                                            type: "number",
+                                            title: "RATE_OF_INTEREST"
+                                        },
                                         /*{
                                            key:"customer.liabilities[].interestExpense",
                                            title:"INTEREST_EXPENSE"
@@ -1655,6 +1660,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                            type:"radios",
                                            title:"INTEREST_ONLY",
                                            enumCode:"decisionmaker"
+                                        },
+                                        {
+                                            key: "customer.liabilities[].interestRate",
+                                            type: "number",
+                                            title: "RATE_OF_INTEREST"
                                         },
                                         /*{
                                            key:"customer.liabilities[].interestExpense",

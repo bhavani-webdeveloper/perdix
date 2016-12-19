@@ -17,7 +17,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             }
         }
         return true;
-    }
+    } 
 
     return {
         "type": "schema-form",
@@ -1265,6 +1265,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                title:"INTEREST_ONLY",
                                enumCode:"decisionmaker"
                            },
+                           {
+                               key:"customer.liabilities[].interestRate",
+                               type:"number",
+                               title:"RATE_OF_INTEREST"
+                           },
+                           
                            /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
@@ -1338,6 +1344,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                type:"radios",
                                title:"INTEREST_ONLY",
                                enumCode:"decisionmaker"
+                           },
+                           {
+                               key:"customer.liabilities[].interestRate",
+                               type:"number",
+                               title:"RATE_OF_INTEREST"
                            },
                           /* {
                                key:"customer.liabilities[].interestExpense",
