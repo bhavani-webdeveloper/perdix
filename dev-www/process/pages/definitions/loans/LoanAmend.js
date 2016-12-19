@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
 
                 model.amand = {};
                 //model.authToken = AuthTokenHelper.getAuthData().access_token;
-                model.amand.amendmentType = "Tenure";
+                model.amand.amendmentType = "TENURE";
                 var loanAccountNo = ($stateParams.pageId.split("."))[0];
                 var promise = LoanAccount.get({
                     accountId: loanAccountNo
@@ -76,6 +76,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     onClick: function(model) {
                         $log.info("Inside submit()");
                         var reqData = _.cloneDeep(model.amand);
+                        reqData.tenure = reqData.tenure + " " + reqData.frequency;
                         var promise = LoanAccount.updateTenure(reqData).$promise;
                         PageHelper.showProgress("tenure-amendment", "Updating Loan....");
                         promise.then(

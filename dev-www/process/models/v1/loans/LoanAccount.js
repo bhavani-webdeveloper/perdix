@@ -164,7 +164,7 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             url:endpoint +'/repay'
         },
         updateTenure:{
-            method:'POST',
+            method:'POST', 
             url:endpoint +'/loanamendment'
         },
        /* downloadNewTenure: searchResource({

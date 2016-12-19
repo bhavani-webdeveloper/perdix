@@ -103,7 +103,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
-                                            pageName: 'loans.LoanAmand',
+                                            pageName: 'loans.LoanAmend',
                                             pageId: [item.accountNumber,item.urnNo].join(".")
                                         })
                                     },
