@@ -1026,6 +1026,65 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: "textarea",
                                 required: true
                             },
+                              {
+                                key:"loanAccount.disbursementSchedules",
+                                title:"DISBURSEMENT_SCHEDULES",
+                                add:null,
+                                remove:null,
+                                items:[
+                                    {
+                                        key:"loanAccount.disbursementSchedules[].trancheNumber",
+                                        title:"TRANCHE_NUMBER",
+                                        readonly:true
+                                    },
+                                    {
+                                        key:"loanAccount.disbursementSchedules[].disbursementAmount",
+                                        title:"DISBURSEMENT_AMOUNT",
+                                        type:"amount"
+                                    },
+                                    {
+                                        key: "loanAccount.disbursementSchedules[].rejectReason",
+                                        type: "lov",
+                                        autolov: true,
+                                        title:"REJECT_REASON",
+                                        bindMap: {
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+
+                                            var trancheConditions = formHelper.enum('tranche_conditions').data;
+                                            var out = [];
+                                            for (var i=0;i<trancheConditions.length; i++){
+                                                var t = trancheConditions[i];
+                                                var min = _.hasIn(t, "field1")?parseInt(t.field1) - 1: 0;
+                                                var max = _.hasIn(t, "field2")?parseInt(t.field2) - 1: 100;
+
+                                                if (context.arrayIndex>=min && context.arrayIndex <=max){
+                                                    out.push({
+                                                        name: trancheConditions[i].name,
+                                                        value: trancheConditions[i].value
+                                                    })
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
+                                    }
+                                
+                            
+
                             {
                                 title: "REJECT_REASON",
                                 key: "review.rejectReason",

@@ -14,8 +14,10 @@
                     "minLength": 12,
                     "maxLength": 12
                 },
-                "whatsAppMobileNo1": {
-                    "type": "number"
+                "whatsAppMobileNo": {
+                    "type": ["string", "null"],
+                    "maxLength": 10
+
                 },
                 "nameInLocalLanguage":{
                     "type":["string","null"],
