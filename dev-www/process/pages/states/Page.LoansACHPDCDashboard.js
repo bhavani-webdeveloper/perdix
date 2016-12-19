@@ -9,6 +9,7 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
                 "Page/Engine/loans.individual.achpdc.ACHPDCQueue",
                 "Page/Engine/loans.individual.achpdc.ACHMandateDownload",
                 "Page/Engine/loans.individual.achpdc.ACHMandateQueue",
+                "Page/Engine/loans.individual.achpdc.ACHClose",
                 "Page/Engine/loans.individual.achpdc.PDCRegistration"
             ]
         };
