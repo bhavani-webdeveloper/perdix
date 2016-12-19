@@ -235,7 +235,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 											customHandle: function(file, progress, modelValue, form, model) {
 												var deferred = $q.defer();
 												elementsUtils.fileToBase64(file).then(function(base64File) {
-													deferred.resolve("<img src=\"" + base64File1 + "\">");
+													deferred.resolve("<img src=\"" + base64File + "\">");
 												});
 												return deferred.promise;
 											}
@@ -289,7 +289,7 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 												customHandle: function(file, progress, modelValue, form, model) {
 													var deferred = $q.defer();
 													elementsUtils.fileToBase64(file).then(function(base64File) {
-														deferred.resolve("<img src=\"" + base64File1 + "\">");
+														deferred.resolve("<img src=\"" + base64File + "\">");
 													});
 													return deferred.promise;
 												}
