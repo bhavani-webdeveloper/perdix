@@ -58,7 +58,7 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             }
 
         }),
-        save:{
+        save:{ 
             method:'POST',
             url:endpoint+'/',
         },

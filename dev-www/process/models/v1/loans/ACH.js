@@ -85,6 +85,25 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
             return deferred.promise;
         };
 
+         resource.monthlyDemandUpload = function(file, progress, opts) {
+            var deferred = $q.defer();
+            opts=opts || {};
+            opts.file=file;
+            Upload.upload({
+                url: "http://devkinara.perdix.in:8081/testphp/upload.php",
+                data: opts
+            }).then(function(resp){
+                // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp){
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
+
         resource.achDemandListUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({

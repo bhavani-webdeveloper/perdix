@@ -67,7 +67,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                 "items": [{
                     "type": "fieldset",
                     "title": "UPLOAD_STATUS",
-                    "items": [{
+                    "items": [
+                         {
+                               key: "ach.customerId",
+                               title: "CUSTOMER_ID",
+                            },
+                    {
                             "key": "ach.achDemandListFileId",
                             "notitle": true,
                             "type": "file",
@@ -75,7 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                             "subCategory": "cat2",
                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             customHandle: function(file, progress, modelValue, form, model) {
-                                ACH.achDemandListUpload(file, progress);
+                                ACH.monthlyDemandUpload(file, progress,{customerId:model.ach.customerId});
                             }
                         }
                     ]
