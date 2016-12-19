@@ -1027,6 +1027,15 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 required: true
                             },
                             {
+                                title: "REJECT_REASON",
+                                key: "review.rejectReason",
+                                type: "select",
+                                titleMap: {
+                                 "Reason1": "Reason",
+                                },
+                                required: true
+                            },
+                            {
                                 key: "review.rejectButton",
                                 type: "button",
                                 title: "REJECT",
@@ -1054,20 +1063,18 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             }
                         ]
                     },
-                    {
-                        type: "section",
-                        condition: "model.review.action=='SEND_BACK'",
-                        items: [
-                            {
-                                title: "REMARKS",
-                                key: "review.remarks",
-                                type: "textarea",
-                                required: true
-                            },
-                   {
+            {
+                type: "section",
+                condition: "model.review.action=='SEND_BACK'",
+                items: [{
+                    title: "REMARKS",
+                    key: "review.remarks",
+                    type: "textarea",
+                    required: true
+                }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'ScreeningReview'",
                     required: true,
                     titleMap: {
@@ -1077,17 +1084,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'Application'",
                     required: true,
                     titleMap: {
                         "Screening": "Screening",
                         "ScreeningReview": "ScreeningReview",
                     }
-                },{
+                }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'Psychometric'",
                     required: true,
                     titleMap: {
@@ -1095,10 +1102,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "ScreeningReview": "ScreeningReview",
                         "Application": "Application",
                     }
-                },  {
+                }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'ApplicationReview'",
                     required: true,
                     titleMap: {
@@ -1109,7 +1116,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'FieldAppraisal'",
                     required: true,
                     titleMap: {
@@ -1121,7 +1128,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'FieldAppraisalReview'",
                     required: true,
                     titleMap: {
@@ -1134,7 +1141,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'CentralRiskReview'",
                     required: true,
                     titleMap: {
@@ -1145,10 +1152,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "FieldAppraisal": "FieldAppraisal",
                         "FieldAppraisalReview": "FieldAppraisalReview",
                     },
-                } ,{
+                }, {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type:"select",
+                    type: "select",
                     condition: "model.currentStage == 'CreditCommitteeReview'",
                     required: true,
                     titleMap: {
@@ -1160,15 +1167,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         "FieldAppraisalReview": "FieldAppraisalReview",
                         "CentralRiskReview": "CentralRiskReview"
                     },
-                },
-                            {
-                                key: "review.sendBackButton",
-                                type: "button",
-                                title: "SEND_BACK",
-                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                            }
-                        ]
-                    },
+                }, {
+                    key: "review.sendBackButton",
+                    type: "button",
+                    title: "SEND_BACK",
+                    onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                }]
+            },
                     {
                         type: "section",
                         condition: "model.review.action=='PROCEED'",
