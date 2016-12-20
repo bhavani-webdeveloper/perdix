@@ -46,11 +46,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
                             ACH.demandDownloadStatus({
-                                "demandDate": model.achCollections.demandDate,
+                                "demandDate": model.demandlist.demandDate,
                                 "branchId": branchIDArray.join(",")
                             }).$promise.then(
                                 function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=ach_demands&date=" + model.achCollections.demandDate);
+                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=overall_demand_report&date=" + model.demandlist.demandDate);
                                     PageHelper.showProgress("page-init", "Success", 5000);
                                 },
                                 function(error) {

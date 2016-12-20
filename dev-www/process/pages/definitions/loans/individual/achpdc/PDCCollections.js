@@ -195,10 +195,20 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         }
                         model.showUpdateSection = false;
                         PageHelper.showLoader();
+                        
+                        var loanProducts = formHelper.enum("loan_product").data;
+                        var lpArr = [];
+                        for (var i=0; i<loanProducts.length; i++){
+                            var a = loanProducts[i];
+                            if (a.parentCode == model.pdc.partnerCode){
+                                lpArr.push(a.field1);
+                            }
+                        }
+
                         PDC.getDemandList({
                             demandDate: model.pdc.pdcDemandListDate,
                             branchId: model.pdc.branchIdArray.join(','),
-                            partnerCode: model.pdc.partnerCode
+                            productCode: lpArr.join(',')
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.pdcSearch = res;
