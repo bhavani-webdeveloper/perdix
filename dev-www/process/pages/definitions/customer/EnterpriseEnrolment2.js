@@ -61,9 +61,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         PageHelper.hideLoader();
                     })
             } else {
-                if (bundlePageObj){
-                    model._bundlePageObj = bundlePageObj;
-                }
                 model.customer = model.customer || {};
                  if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                      model.customer.enterprise = {};
@@ -84,7 +81,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
                 model.customer.centreId = centreName[0];
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
-            }   
+            }
+            if (bundlePageObj){
+                model._bundlePageObj = bundlePageObj;
+            }
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
