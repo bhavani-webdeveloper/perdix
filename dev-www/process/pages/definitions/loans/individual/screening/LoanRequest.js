@@ -1026,59 +1026,50 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 type: "textarea",
                                 required: true
                             },
-                              
-                                   /* {
-                                        key: "loanAccount.disbursementSchedules[].rejectReason",
-                                        type: "lov",
-                                        autolov: true,
-                                        title:"REJECT_REASON",
-                                        bindMap: {
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model, context) {
+                            {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
 
-                                            var trancheConditions = formHelper.enum('tranche_conditions').data;
-                                            var out = [];
-                                            for (var i=0;i<trancheConditions.length; i++){
-                                                var t = trancheConditions[i];
-                                                var min = _.hasIn(t, "field1")?parseInt(t.field1) - 1: 0;
-                                                var max = _.hasIn(t, "field2")?parseInt(t.field2) - 1: 100;
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
 
-                                                if (context.arrayIndex>=min && context.arrayIndex <=max){
-                                                    out.push({
-                                                        name: trancheConditions[i].name,
-                                                        value: trancheConditions[i].value
-                                                    })
-                                                }
-                                            }
-                                            return $q.resolve({
-                                                headers: {
-                                                    "x-total-count": out.length
-                                                },
-                                                body: out
-                                            });
-                                        },
-                                        onSelect: function(valueObj, model, context){
-                                            model.loanAccount.disbursementSchedules[context.arrayIndex].tranchCondition = valueObj.value;
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.name
-                                            ];
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                             out.push({
+                                                name: t.name,
+                                            })
                                         }
                                     }
-                                */
-                            
-
-                            {
-                                title: "REJECT_REASON",
-                                key: "review.rejectReason",
-                                type: "select",
-                                titleMap: {
-                                 "Reason1": "Reason",
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
                                 },
-                                required: true
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
                             },
+                                
                             {
                                 key: "review.rejectButton",
                                 type: "button",

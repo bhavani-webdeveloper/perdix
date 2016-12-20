@@ -1229,7 +1229,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "box",
-                            "title": "T_FAMILY_DETAILS",
+                            "title": "FAMILY_DETAILS",
                             "condition": "model.currentStage=='Screening'",
                             "items": [
                                 {
@@ -1255,7 +1255,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "box",
-                            "title": "T_FAMILY_DETAILS",
+                            "title": "FAMILY_DETAILS",
                             "condition": "model.currentStage=='ScreeningReview'",
                             readonly:true,
                             "items": [
@@ -1283,7 +1283,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "box",
-                            "title": "T_FAMILY_SELF_DETAILS",
+                            "title": "FAMILY_SELF_DETAILS",
                             "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [{
                                 key:"customer.familyMembers",
@@ -1462,7 +1462,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         },
                         {
                             "type": "box",
-                            "title": "T_FAMILY_DETAILS",
+                            "title": "FAMILY_DETAILS",
                             "condition": " model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [{
