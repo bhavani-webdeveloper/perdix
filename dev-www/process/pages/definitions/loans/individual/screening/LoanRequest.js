@@ -425,20 +425,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
                         type: "string",
-                        required:true,
                         title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
                     },
                     {
                         key: "loanAccount.estimatedValueOfAssets",
                         type: "amount",
-                        required:true,
                         condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
                         title: "ESTIMATED_VALUE_OF_ASSETS"
                     },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
-                        required:true,
                         title: "REQUESTED_LOAN_AMOUNT",
                         onChange:function(value,form,model){
                             computeEMI(model);
@@ -455,7 +452,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.tenureRequested",
-                        required:true,
                         type: "number",
                         title: "TENURE_REQUESETED",
                         onChange:function(value,form,model){
@@ -478,7 +474,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.emiRequested",
-                        required:true,
                         type: "amount",
                         title: "EMI_REQUESTED"
                     },
