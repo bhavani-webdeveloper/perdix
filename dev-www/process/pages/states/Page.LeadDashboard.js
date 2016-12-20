@@ -8,11 +8,11 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         "iconClass": "fa fa-book",
         "items": [
             "Page/Engine/lead.LeadGeneration",
-            "Page/Engine/lead.LeadBulkUpload",
-            "Page/Engine/lead.leadAssignmentPendingQueue",
             "Page/Engine/lead.IncompleteLeadQueue",
             "Page/Engine/lead.LeadFollowUpQueue",
             "Page/Engine/lead.ReadyForScreeningQueue",
+            "Page/Engine/lead.LeadBulkUpload",
+            "Page/Engine/lead.leadAssignmentPendingQueue"  
         ]
     };
 
