@@ -1,6 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getCurrentBranch();
+		$log.info(branch.branchName);
 		return {
 			"type": "search-list",
 			"title": "LUC_RESCHEDULED_QUEUE",
@@ -42,7 +43,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCReschedule",
 						//'centreId': searchOptions.centreId,
-						//'branchName': searchOptions.branchName,
+						//'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,

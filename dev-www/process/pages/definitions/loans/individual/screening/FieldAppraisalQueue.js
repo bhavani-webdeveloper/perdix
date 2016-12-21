@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getCurrentBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 		for (var i = 0; i < centres.length; i++) {
@@ -73,7 +73,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalQu
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisal',
 	                    'centreCode':centreId[0],
-	                    'branchName':branch,
+	                    'branchName':branch.branchName,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

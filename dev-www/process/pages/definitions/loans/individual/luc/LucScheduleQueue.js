@@ -1,6 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getCurrentBranch();
+		$log.info(branch.branchName);
+/*		var branches = formHelper.enum('branch_id').data;
+					var branchName;
+					for (var i = 0; i < branches.length; i++) {
+						if (branches[i].code == searchOptions.branch_id)
+							branchName = branches[i].name;
+					}*/
+
 		return {
 			"type": "search-list",
 			"title": "LUC_SCHEDULED_QUEUE",
@@ -71,7 +79,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 						'currentStage':"LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
 						//'centreId': searchOptions.centreId,
-						//'branchName': searchOptions.branchName,
+						//'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicationName,

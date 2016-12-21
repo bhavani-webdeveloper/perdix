@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getCurrentBranch();
 		return {
 			"type": "search-list",
 			"title": "CENTRAL_RISK_REVIEW_QUEUE",
@@ -82,12 +82,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					var branches = formHelper.enum('branch_id').data;
-					var branchName;
-					for (var i=0; i<branches.length;i++){
-	                    if(branches[i].code==searchOptions.branch)
-	                        branchName = branches[i].name;
-	                }
+				
 					return IndividualLoan.search({
 	                    'stage': 'CentralRiskReview',
 						'enterprisePincode':searchOptions.pincode,
@@ -95,7 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': branchName,
+	                    'branchName': branch.branchName,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

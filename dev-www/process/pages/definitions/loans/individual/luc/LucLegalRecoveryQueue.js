@@ -1,7 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucLegalRecoveryQueue"), 
 	["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getBranch();
+		var branch = SessionStore.getCurrentBranch();
+		$log.info(branch.branchName);
 		return {
 			"type": "search-list",
 			"title": "LUC_LEGAL_AND RECOVERY_QUEUE",
@@ -49,7 +50,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucLegalRecoveryQueue"
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCLegalRecovery",
 						//'centreId': searchOptions.centreId,
-						//'branchName': searchOptions.branchName,
+						//'branchName':  branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,
