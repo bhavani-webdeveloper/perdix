@@ -10,13 +10,24 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
 
             initialize: function(model, form, formCtrl) {
                 model.authToken = AuthTokenHelper.getAuthData().access_token;
+               
                 model.userLogin = SessionStore.getLoginname();
                 model.demandlist = model.demandlist || {};
                 model.demandlist.demandDate = model.demandlist.demandDate || Utils.getCurrentDate();
                 //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
-                for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
+                 var branch1 = formHelper.enum('branch_id').data;
+                    for (var i = 0; i < branch1.length; i++) {
+                        if ((branch1[i].name) == SessionStore.getBranch()) {
+                            model.demandlist.branchId = branch1[i].value;
+                            
+                        }
+                    }
+
+               /* for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
                     branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
-                }
+                    /download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=overall_demand_report&date=" + model.demandlist.demandDate
+                    branchIDArray.join(",")
+                }*/
 
             },
             form: [{
@@ -47,10 +58,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                             PageHelper.showLoader();
                             ACH.demandDownloadStatus({
                                 "demandDate": model.demandlist.demandDate,
-                                "branchId": branchIDArray.join(",")
+                                "branchId": model.demandlist.branchId, 
                             }).$promise.then(
                                 function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=overall_demand_report&date=" + model.demandlist.demandDate);
+                                    window.open(irf.BI_BASE_URL + "/download.php?branch_Id=" + model.demandlist.branchId + "&auth_token=" + model.authToken + "&report_name=overall_demand_report&date=" + model.demandlist.demandDate );
                                     PageHelper.showProgress("page-init", "Success", 5000);
                                 },
                                 function(error) {
@@ -60,30 +71,6 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                             });
                         }
                     }]
-                }]
-            }, {
-                "type": "box",
-                "title": "UPLOAD_MONTHLY_REALIZATION_REPORT",
-                "items": [{
-                    "type": "fieldset",
-                    "title": "UPLOAD_STATUS",
-                    "items": [
-                         {
-                               key: "ach.customerId",
-                               title: "CUSTOMER_ID",
-                            },
-                    {
-                            "key": "ach.achDemandListFileId",
-                            "notitle": true,
-                            "type": "file",
-                            "category": "ACH",
-                            "subCategory": "cat2",
-                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            customHandle: function(file, progress, modelValue, form, model) {
-                                ACH.monthlyDemandUpload(file, progress,{customerId:model.ach.customerId});
-                            }
-                        }
-                    ]
                 }]
             }],
             schema: function() {
