@@ -274,18 +274,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             ];
                         }
                     },
-                    /*{
-                        key: "loanAccount.loanPurpose1",
-                        type: "select",
-                        enumCode: "loan_purpose_1"
-                    },
-                    {
-                        key: "loanAccount.loanPurpose2",
-                        type: "select",
-                        enumCode: "loan_purpose_2",
-                        parentEnumCode: "loan_purpose_1",
-                        parentValueExpr: "model.loanAccount.loanPurpose2"
-                    },*/
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
                         type: "select",
@@ -353,6 +341,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
+                        key: "loanAccount.expectedPortfolioInsurancePremium",
+                        title: "Expected_PORTFOLIO_INSURENCE_PREMIUM",
+                        readonly:true
+                    },
+                    {
                         "type": "section",
                         "htmlClass": "alert alert-warning",
                         "condition": "!model.loanAccount.customerId",
@@ -410,18 +403,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             ];
                         }
                     },
-                    /*{
-                        key: "loanAccount.loanPurpose1",
-                        type: "select",
-                        enumCode: "loan_purpose_1"
-                    },
-                    {
-                        key: "loanAccount.loanPurpose2",
-                        type: "select",
-                        enumCode: "loan_purpose_2",
-                        parentEnumCode: "loan_purpose_1",
-                        parentValueExpr: "model.loanAccount.loanPurpose2"
-                    },*/
                     {
                         key: "loanAccount.assetAvailableForHypothecation",
                         type: "string",
@@ -481,6 +462,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "date",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.expectedPortfolioInsurancePremium",
+                        title: "Expected_PORTFOLIO_INSURENCE_PREMIUM",
+                        readonly:true
                     },
                     {
                         "type": "section",
@@ -1260,6 +1246,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
+                    reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
@@ -1283,6 +1270,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             save: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
+
                 /* TODO Call save service for the loan */
                 Utils.confirm("Are You Sure?")
                     .then(
@@ -1291,6 +1279,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = '';
                             reqData.loanProcessAction = "SAVE";
+                            reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             reqData.loanAccount.psychometricCompleted = "N";
@@ -1319,6 +1308,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
                             reqData.loanProcessAction = "SAVE";
+                            reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             reqData.remarks = model.review.remarks;
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
@@ -1381,6 +1371,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
+                    //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
