@@ -16,9 +16,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                 model.demandlist.demandDate = model.demandlist.demandDate || Utils.getCurrentDate();
                 //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
                  var branch1 = formHelper.enum('branch_id').data;
+                 $log.info(branch1);
                     for (var i = 0; i < branch1.length; i++) {
                         if ((branch1[i].name) == SessionStore.getBranch()) {
-                            model.demandlist.branchId = branch1[i].value;
+                            model.demandlist.branchId = branch1[i].id;
                             
                         }
                     }
@@ -37,8 +38,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                     "type": "fieldset",
                     "title": "DOWNLOAD_MONTHLY_DEMAND_LIST",
                     "items": [{
-                        "key": "demandlist.demandDate",
-                        "title": "INSTALLMENT_MONTH",
+                        "key": "demandlist.demandDate1",
+                        "title": "FROM_DATE",
+                        "type": "date"
+                    },{
+                        "key": "demandlist.demandDate2",
+                        "title": "TO_DATE",
                         "type": "date"
                     }, {
                         "title": "DOWNLOAD",
@@ -47,29 +52,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                         "type": "button",
                         "notitle": true,
                         "readonly": false,
-                        "onClick": function(model, formCtrl, form, $event) {
-                            if (!model.demandlist.demandDate) {
-                                PageHelper.setError({
-                                    'message': 'Installment Date is mandatory.'
-                                });
-                                return false;
-                            }
-                            PageHelper.clearErrors();
-                            PageHelper.showLoader();
-                            ACH.demandDownloadStatus({
-                                "demandDate": model.demandlist.demandDate,
-                                "branchId": model.demandlist.branchId, 
-                            }).$promise.then(
-                                function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?branch_Id=" + model.demandlist.branchId + "&auth_token=" + model.authToken + "&report_name=overall_demand_report&date=" + model.demandlist.demandDate );
-                                    PageHelper.showProgress("page-init", "Success", 5000);
-                                },
-                                function(error) {
-                                    PageHelper.showProgress("page-init", error, 5000);
-                                }).finally(function() {
-                                PageHelper.hideLoader();
-                            });
-                        }
+                        "onClick": function(model, form, schemaForm, event) {
+                            var fileId = irf.BI_BASE_URL + "/download.php?&auth_token=" + model.authToken + "&report_name=overall_demand_report&from_date=" + model.demandlist.demandDate1 + "&to_date=" + model.demandlist.demandDate2 + "&branch_id=" + model.demandlist.branchId ;
+                            Utils.downloadFile(fileId );
+                        },
                     }]
                 }]
             }],
