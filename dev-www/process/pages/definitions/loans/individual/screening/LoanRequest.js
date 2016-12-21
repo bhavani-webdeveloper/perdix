@@ -337,12 +337,17 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        type: "date",
+                        type: "select",
+                        titleMap: {
+                                        "5th": "5th",
+                                        "10th": "10th",
+                                        "15th": "15th",
+                                    },
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
-                        title: "Expected_PORTFOLIO_INSURENCE_PREMIUM",
+                        title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
                         readonly:true
                     },
                     {
@@ -455,7 +460,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.emiRequested",
-                        type: "amount",
+                        type: "select",
+                        titleMap: {
+                                        "5th": "5th",
+                                        "10th": "10th",
+                                        "15th": "15th",
+                        },
                         title: "EMI_REQUESTED"
                     },
                     {
@@ -465,7 +475,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     },
                     {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
-                        title: "Expected_PORTFOLIO_INSURENCE_PREMIUM",
+                        title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
                         readonly:true
                     },
                     {
@@ -764,7 +774,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
-                                type: "Date",
+                                type: "date",
                             },
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",
