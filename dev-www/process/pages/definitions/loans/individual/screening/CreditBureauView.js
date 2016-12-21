@@ -188,6 +188,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             .$promise
                             .then(function(httpres){
                                 // Data processing for UI - starts
+                                // CIBIL
                                 if (httpres && httpres.cibil && httpres.cibil.cibilLoanDetails && httpres.cibil.cibilLoanDetails.length) {
                                     for (i in httpres.cibil.cibilLoanDetails) {
                                         var cld = httpres.cibil.cibilLoanDetails[i];
@@ -219,6 +220,31 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                                         cld.paymentHistory2Months[j] = dt.format('MM-YY');
                                                         dt = dt.subtract(1, 'months');
                                                     }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else if (httpres && httpres.highMark && httpres.highMark.highmarkloanDetails && httpres.highMark.highmarkloanDetails.length) {
+                                    for (i in httpres.highMark.highmarkloanDetails) {
+                                        var hmld = httpres.highMark.highmarkloanDetails[i];
+                                        if (hmld.combinedPaymentHistory) {
+                                            hmld.combinedPaymentHistoryList = hmld.combinedPaymentHistory.split('|');
+                                            for (var j = 0; j < hmld.combinedPaymentHistoryList.length; j++) {
+                                                hmld.combinedPaymentHistoryList[j] = hmld.combinedPaymentHistoryList[j].split(',');
+                                                hmld.combinedPaymentHistoryList[j][0] = hmld.combinedPaymentHistoryList[j][0].replace(':', '-');
+                                            }
+                                            if (hmld.combinedPaymentHistoryList.length > 12) {
+                                                var ln = hmld.combinedPaymentHistoryList.length;
+                                                var a1 = hmld.combinedPaymentHistoryList.slice(0, 12);
+                                                var a2 = hmld.combinedPaymentHistoryList.slice(12, ln);
+                                                hmld.combinedPaymentHistoryList2 = a2;
+                                                hmld.combinedPaymentHistoryList = a1;
+                                                ln = ln - 12;
+                                                if (ln > 12) {
+                                                    a1 = hmld.combinedPaymentHistoryList2.slice(0, 12);
+                                                    a2 = hmld.combinedPaymentHistoryList2.slice(12, ln);
+                                                    hmld.combinedPaymentHistoryList2 = a1;
+                                                    hmld.combinedPaymentHistoryList3 = a2;
                                                 }
                                             }
                                         }
@@ -278,68 +304,71 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 "items": [
                     {
                         type:"fieldset",
-                        title:"HighMark",
-                        items:[]
-                    },
-                    {
-                        "key":"applicant.highMark.dateOfIssue",
-                        "title":"DATE_OF_ISSUE",
-                        "type":"date"
-                    },
-                    {
-                        "key":"applicant.highMark.highmarkScore",
-                        "title":"SCORE",
-                    },
-                    {
-                        type:"tableview",
-                        key:"applicant.highMark.highmarkloanDetails",
-                        title:"LOAN_DETAILS",
-                        paginate:false,
-                        searching:false,
-                        selectable: false,
-                        getActions:function (){
-                            return [{
-                                name: "Payment History",
-                                desc: "",
-                                icon: "fa fa-pencil-square-o",
-                                fn: function(item, index) {
-                                    var paymentHistory = item.combinedPaymentHistory.split('|').join('<br/>');
-                                    showModal("Payment History",
-                                        "<dl class='dl-horizontal'><dt>Payment History</dt><dd>" + paymentHistory
-                                        + "</dd></dl>"
-                                    );
-                                },
-                                isApplicable: function(item, index) {
-
-                                    return true;
-                                }
-                            }];
-
-                        },
-                        getColumns: function(){
-                            return [{
-                                title: 'ACCOUNT_TYPE',
-                                data: 'accountType'
-                            }, {
-                                title: 'STATUS',
-                                data: 'accountStatus'
-                            }, {
-                                title: 'DISBURSEMENT_DATE',
-                                data: 'disbursedDate'
-                            },{
-                                title: 'LAST_PAYMENT_DATE',
-                                data: 'lastPaymentDate'
-                            },{
-                                title: 'CLOSED_DATE',
-                                data: 'closedDate'
-                            },{
-                                title: 'WRITE_OFF_AMOUNT',
-                                data: 'writeOffAmount'
-                            },{
-                                title: 'CURRENT_BALANCE',
-                                data: 'currentBalance'
-                            }]
-                        }
+                        title:"HighMark - CRIF HIGH MARK - CONSUMER CREDIT REPORT",
+                        items:[
+                            {
+                                type: "section",
+                                html:
+// HighMark Rendering
+'<h4 style="padding:5px" ng-show="model.applicant.highMark.highmarkScore"><small>APPLICANT</small><span class="pull-right">Date of Issue: {{model.applicant.highMark.dateOfIssue}}</span></h4>'+
+'<h4 ng-show="model.applicant.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:40px">{{model.applicant.highMark.highmarkScore}}</span></h4>'+
+    '<div>&nbsp;</div>'+
+    '<table style="width:100%" ng-show="model.applicant.highMark.highmarkloanDetails.length">'+
+        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
+        '<tr class="" ng-repeat-start="ld in model.applicant.highMark.highmarkloanDetails">'+
+            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountType}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">Disbursed Date:</i> {{ld.disbursedDate}}<br><i style="color:#999">Last Payment Date:</i> {{ld.lastPaymentDate}}<br><i style="color:#999">Closed Date:</i> {{ld.closedDate}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">Total Writeoff Amt:</i> {{ld.writeOffAmount}}<br><i style="color:#999">Current balance:</i> {{ld.currentBalance}}</td>'+
+            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
+            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">Payment History/Asset Classification:</span></td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
+            '<td colspan="4" style="padding:5px">'+
+                '<table style="width:100%">'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="phl in ld.combinedPaymentHistoryList track by $index" style="padding-top:5px">'+
+                            '<div style="font-family:monospace">{{phl[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1 in ld.combinedPaymentHistoryList track by $index">'+
+                            '<div style="font-size:12px">{{ph1[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList2.length">'+
+                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph2[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index">'+
+                            '<div style="font-size:12px">{{ph2[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList3.length">'+
+                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph3[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index">'+
+                            '<div style="font-size:12px">{{ph3[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                '</table>'+
+            '</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="4"><hr></td>'+
+        '</tr>'+
+    '</table>'+
+'<div ng-hide="model.applicant.highMark.highmarkScore.length">'+
+'<center>No Scores available</center>'+
+'</div>'
+                            }
+                        ]
                     },
                     {
                         type:"fieldset",
