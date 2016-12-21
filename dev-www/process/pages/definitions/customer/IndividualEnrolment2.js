@@ -1178,11 +1178,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "type": "amount",
                                             "title": "AMOUNT"
                                         },
-                                        {
+                                        /*{
                                             "key": "customer.expenditures[].frequency",
                                             "type": "string",
                                             "title": "FREQUENCY"
-                                        }
+                                        }*/
                                      ]
                                 }
                               
