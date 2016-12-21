@@ -16,13 +16,13 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                 model.demandlist.demandDate = model.demandlist.demandDate || Utils.getCurrentDate();
                 //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
                  var branch1 = formHelper.enum('branch_id').data;
-                 $log.info(branch1);
+                /* $log.info(branch1);
                     for (var i = 0; i < branch1.length; i++) {
                         if ((branch1[i].name) == SessionStore.getBranch()) {
                             model.demandlist.branchId = branch1[i].id;
                             
                         }
-                    }
+                    }*/
 
                /* for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
                     branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
@@ -38,6 +38,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                     "type": "fieldset",
                     "title": "DOWNLOAD_MONTHLY_DEMAND_LIST",
                     "items": [{
+                        "key": "demandlist.branchId",
+                        "title": "Branch_ID",
+                        "type": "select",
+                        "enumCode": "branch_id",
+                    },{
                         "key": "demandlist.demandDate1",
                         "title": "FROM_DATE",
                         "type": "date"
