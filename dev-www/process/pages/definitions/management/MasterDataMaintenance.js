@@ -57,11 +57,11 @@ irf.pageCollection.factory(irf.page("management.MasterDataMaintenance"),
                             model.master.uploadName = result.name;
                             model.master.uploadNameValue= result.value;
                         }
-                    },/*{
+                    },{
                         "key": "master.templateFile",
                         "title": "TEMPLATE_URL",
                         "type": "string"
-                    },*/
+                    },
                     {
                         "type": "button",
                         "title": "DOWNLOAD",

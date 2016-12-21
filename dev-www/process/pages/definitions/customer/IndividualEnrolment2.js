@@ -1682,7 +1682,78 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
-                            "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
+                            "condition": "model.currentStage=='Screening'",
+                            "items": [
+                                {
+                                    type:"fieldset",
+                                    title:"HOUSE_DETAILS",
+                                    items:[
+                                        {
+                                            key:"customer.ownership",
+                                            required:true,
+                                            type:"select"
+                                        },
+                                        {
+                                            key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                            type: "select",
+                                            title: "IN_CURRENT_ADDRESS_SINCE"
+                                        },
+                                        {
+                                            key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                            type:"select",
+                                            required:true,
+                                            title: "IN_CURRENT_AREA_SINCE"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "customer.latitude",
+                                    "title": "HOUSE_LOCATION",
+                                    "type": "geotag",
+                                    "latitude": "customer.latitude",
+                                    "longitude": "customer.longitude"
+                                }
+                            ]
+                        },
+                         {
+                            "type": "box",
+                            "title": "T_HOUSE_VERIFICATION",
+                            "condition": "model.currentStage=='ScreeningReview'",
+                            readonly:true,
+                            "items": [
+                                {
+                                    type:"fieldset",
+                                    title:"HOUSE_DETAILS",
+                                    items:[
+                                        {
+                                            key:"customer.ownership",
+                                            type:"select"
+                                        },
+                                        {
+                                            key:"customer.udf.userDefinedFieldValues.udf29", // customer.inCurrentAddressSince
+                                            type: "select",
+                                            title: "IN_CURRENT_ADDRESS_SINCE"
+                                        },
+                                        {
+                                            key:"customer.udf.userDefinedFieldValues.udf30", // customer.inCurrentAreaSince
+                                            type:"select",
+                                            title: "IN_CURRENT_AREA_SINCE"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "customer.latitude",
+                                    "title": "HOUSE_LOCATION",
+                                    "type": "geotag",
+                                    "latitude": "customer.latitude",
+                                    "longitude": "customer.longitude"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "box",
+                            "title": "T_HOUSE_VERIFICATION",
+                            "condition": " model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [
                                 {
                                     type:"fieldset",
@@ -1732,7 +1803,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
-                            "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
                                 {
