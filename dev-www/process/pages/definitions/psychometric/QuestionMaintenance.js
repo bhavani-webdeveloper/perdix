@@ -195,6 +195,23 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							type: "array",
 							items: [{
 								key: "psy1.options[].optionScore",
+								type: "select",
+								titleMap: [{
+									name: "0.0",
+									value: 0.0
+								}, {
+									name: "0.25",
+									value: 0.25
+								}, {
+									name: "0.5",
+									value: 0.5
+								}, {
+									name: "0.75",
+									value: 0.75
+								}, {
+									name: "1.0",
+									value: 1.0
+								}]
 							}, {
 								key: "psy1.options[].optionLangs",
 								type: "array",
@@ -249,6 +266,23 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 								startEmpty: true,
 								items: [{
 									key: "psy1.options[].linkedOptions[].optionScore",
+									type: "select",
+									titleMap: [{
+										name: "0.0",
+										value: 0.0
+									}, {
+										name: "0.25",
+										value: 0.25
+									}, {
+										name: "0.5",
+										value: 0.5
+									}, {
+										name: "0.75",
+										value: 0.75
+									}, {
+										name: "1.0",
+										value: 1.0
+									}]
 								}, {
 									key: "psy1.options[].linkedOptions[].optionLangs",
 									type: "array",
@@ -352,6 +386,23 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							type: "array",
 							items: [{
 								key: "psy2.options[].optionScore",
+								type: "select",
+								titleMap: [{
+									name: "0.0",
+									value: 0.0
+								}, {
+									name: "0.25",
+									value: 0.25
+								}, {
+									name: "0.5",
+									value: 0.5
+								}, {
+									name: "0.75",
+									value: 0.75
+								}, {
+									name: "1.0",
+									value: 1.0
+								}]
 							}, {
 								key: "psy2.options[].optionLangs",
 								type: "array",
@@ -452,7 +503,8 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"active": {
 								"type": "boolean",
-								"title": "Active"
+								"title": "Active",
+								"default": true
 							},
 							"questionLangs": {
 								"type": "array",
@@ -579,7 +631,8 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 							},
 							"active": {
 								"type": "boolean",
-								"title": "Active"
+								"title": "Active",
+								"default": true
 							},
 							"questionLangs": {
 								"type": "array",

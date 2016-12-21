@@ -62,6 +62,11 @@ irf.commons.filter("initcap", function() {
 	}
 });
 
+irf.commons.filter("userDate", ["SessionStore", function(SessionStore) {
+	return function(rawDate) {
+		return SessionStore.getFormatedDate(moment(rawDate, SessionStore.getSystemDateFormat()));
+	}
+}]);
 
 irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 	var isCordovaFlag = typeof cordova !== 'undefined';
