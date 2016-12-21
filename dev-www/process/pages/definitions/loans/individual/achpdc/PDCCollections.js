@@ -123,12 +123,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                                 title: "COLLECTION_ACCOUNT",
                                 required: true,
                                 bindMap: {
-
                                 },
                                 outputMap: {
-                                    "sponsor_bank_code": "ach.sponsorBankCode",
-                                    "utility_code": "ach.utilityCode",
-                                    "account_code": "ach.sponsorAccountCode"
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
@@ -372,7 +368,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                 "type": "actionbox",
                 "condition": "model.showUpdateSection",
                 "items": [{
-                    "type": "button",
+                    "type": "submit",
                     "notitle": true,
                     "condition": "model.showUpdateSection",
                     "title": "SUBMIT",
@@ -409,9 +405,13 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     }
                     if (model.updateDemand.length > 0) {
                         console.log(model.updateDemand);
+                        var reqData = {
+                            "depositBankAccountCode": model.pdc.collectionAccountCode,
+                            "repaymentDtos": model.updateDemand
+                        };
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
-                        PDC.bulkRepay(model.updateDemand).$promise.then(function(response) {
+                        PDC.bulkRepay(reqData).$promise.then(function(response) {
                             PageHelper.showProgress("page-init", "Done.", 2000);
                             $state.reload();
                             // allDemands = [];

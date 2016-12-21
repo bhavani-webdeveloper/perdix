@@ -92,7 +92,19 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload")
                         "type": "file",
                         "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         customHandle: function(file, progress, modelValue, form, model) {
-                            PDC.pdcReverseFeedListUpload(file, progress);
+                            PageHelper.showBlockingLoader("Processing...");
+                            PDC.pdcReverseFeedListUpload(file, progress)
+                                .then(
+                                        function(response){
+                                            PageHelper.showProgress("pdc-upload", "Upload success!", 5000);
+                                        }, function(httpResponse){
+                                            PageHelper.showProgress("pdc-upload", "Upload Failed!", 5000);
+                                        }
+                                    )
+                                    .finally(function(){
+                                        PageHelper.hideBlockingLoader();
+                                    })
+
                         }
                     }]
                 }]
