@@ -77,8 +77,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                             ];
                         },
                         onSelect: function(result, model, context) {
-                            console.log(result);
-                            console.log(model);
                             model.pdc.branchSetCode = result.branch_set_code;
                             model.pdc.branchSetName = result.branch_set_name;
                             model.pdc.branchIdArray = JSON.parse(result.branch_ids);
@@ -157,7 +155,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                                 },
                                 onSelect: function(value, model){
                                     model.pdc.collectionAccountBank = value.bank_name;
-                                    model.pdc.collectionAccountCode = value.account_code;
+                                    model.pdc.collectionAccountCode = value.account_number;
                                 }
                             },
                             {

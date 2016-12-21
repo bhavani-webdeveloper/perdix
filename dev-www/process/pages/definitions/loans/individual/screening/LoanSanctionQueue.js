@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "CENTRAL_RISK_REVIEW_QUEUE",
+			"title": "SANCTION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -170,11 +170,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 					},
 					getActions: function() {
 						return [{
-							name: "CENTRAL_RISK_REVIEW",
+							name: "SANCTION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.CentralRiskReview', {
+								entityManager.setModel('loans.individual.screening.SanctionInput', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
