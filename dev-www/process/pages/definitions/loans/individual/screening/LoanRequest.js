@@ -566,7 +566,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             $log.info(result);
                             model.loanAccount.loanparameter=result.ParameterName;
                         }
-                    
                 }, {
                     key: "loanAccount.loanMitigants[].mitigant",
                     type: "lov",
