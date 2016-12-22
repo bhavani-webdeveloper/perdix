@@ -533,6 +533,78 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     }
                 ]
             },
+        {
+            "type": "box",
+            "title": "LOAN_MITIGANTS",
+            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+            "items": [{
+                key: "loanAccount.loanMitigants",
+                type: "array",
+                title: "LOAN_MITIGANTS",
+                items: [{
+                    key: "loanAccount.loanMitigants[].parameter",
+                    title: "PARAMETER_NAME",
+                    type: "lov",
+                    outputMap: {
+                        "name": "loanAccount.loanMitigants[arrayIndex].parameter"
+                    },
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model) {
+                        return ReferenceCode.allClassifier().$promise;
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.code
+                        ];
+                    },
+                    onSelect: function(result, model, context) {
+                        PageHelper.showLoader();
+                        ReferenceCode.allCodes({
+                            classifier: result.code
+                        }).$promise.then(function(result) {
+                            if (result && result.body && result.body.length) {
+                                model.reference.codes = result.body;
+                                model.reference.parentClassifier = result.body[0].parentClassifier;
+                            }
+                        }).finally(function() {
+                            PageHelper.hideLoader();
+                        });
+                    }
+                    
+                }, {
+                    key: "loanAccount.loanMitigants[].mitigant",
+                    title: "MITIGANT",
+                    lovonly: true,
+                    type: "lov",
+                    outputMap: {
+                        "name": "reference.parentClassifier"
+                    },
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model) {
+                        return ReferenceCode.allClassifier().$promise;
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.code,
+                            item.displayName,
+                            item.name
+                        ];
+                    },
+                    onSelect: function(result, model, context) {
+                        PageHelper.showLoader();
+                        for (var i = 0; i < model.reference.codes.length; i++) {
+                            model.reference.codes[i].parentClassifier = result.code;
+
+                        }
+                        PageHelper.hideLoader();
+                    }
+                }, {
+                    key: "loanAccount.loanMitigants[].riskScore",
+                    title: "RISK_SCORE"
+                }]
+            }]
+        },
+
             {
                 "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",

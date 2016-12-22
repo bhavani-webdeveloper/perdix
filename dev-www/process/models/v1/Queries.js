@@ -472,5 +472,23 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
+    resource.getloanParameters = function(){
+        var deferred = $q.defer();
+        resource.getResult("loanParameters.list").then(
+            function(res){
+                $log.info("checking checking");
+                $log.info(res);
+                if (res && res.results && res.results.length){
+                    deferred.resolve(res.results[0]);
+                } else {
+                    deferred.reject(res);
+                }
+            }, function(err){
+                deferred.reject(err);
+            }
+        )
+        return deferred.promise;
+    }
+
 	return resource;
 }]);

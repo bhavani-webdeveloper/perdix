@@ -23,12 +23,15 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     for (var i = 0; i < branch1.length; i++) {
                         if ((branch1[i].name) == SessionStore.getBranch()) {
                             model.lead.branchId = branch1[i].value;
-                            $log.info(model.lead.branchId);
                         }
                     }
 
                 }
 
+                   Queries.getloanParameters({
+                            }).then(function(result) {
+                                $log.info(result);
+                            });
 
 
                 model = Utils.removeNulls(model, true);
