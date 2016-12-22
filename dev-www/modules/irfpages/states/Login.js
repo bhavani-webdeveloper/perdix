@@ -1,14 +1,40 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q', 'SysQueries',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q, SysQueries){
+
+	var loadUserBranches = function(username){
+		var deferred = $q.defer();
+		SysQueries.getUserBranches(username)
+			.then(function(response){
+				var branches = response.body;
+				var out = [];
+				for (var i=0; i<branches.length; i++){
+					out.push({
+						branchId: branches[i].branch_id,
+						branchCode: branches[i].branch_code,
+						branchName: branches[i].branch_name
+					})
+				}
+				SessionStore.setItem('UserAllowedBranches', out);
+				deferred.resolve();
+			}, function(httpResponse){
+				$log.error("Error trying to load allowed branches of user.")
+				deferred.resolve();
+			})
+		return deferred.promise;
+	}
 
 	var onlineLogin = function(username, password, refresh) {
 		authService.loginAndGetUser(username,password).then(function(arg){ // Success callback
 			$scope.showLoading = true;
 
+			/* Load user branches */
+			
+
 			var p = [
 				irfStorageService.cacheAllMaster(true, refresh),
-				irfTranslateLoader({forceServer: refresh})
+				irfTranslateLoader({forceServer: refresh}),
+				loadUserBranches(username)
 			]
 			$q.all(p).then(function(msg){
 				$log.info(msg);

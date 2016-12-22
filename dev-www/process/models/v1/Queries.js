@@ -11,7 +11,7 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
 	});
 
 	resource.getResult = function(id, params, limit, offset) {
-		return resource.query({identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
+        return resource.query({name: id}, {identifier:id, limit:limit || 0, offset:offset || 0, parameters:params}).$promise;
 	};
 
 	resource.getPagesDefinition = function(userId, skip_relogin) {

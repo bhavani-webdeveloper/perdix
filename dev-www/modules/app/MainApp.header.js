@@ -10,15 +10,16 @@ MainApp.directive('irfHeader', function(){
 		link: function(scope, elem, attrs, ctrl) {
 			//ctrl.init(elem);
 		},
-		controller: "irfHeaderController"
+		controller: "irfHeaderController",
+		controllerAs: "c"
 	};
 });
 
 MainApp.controller("irfHeaderController",
 ["$scope", "$log", "$http", "irfConfig", "SessionStore", "$translate", "languages", "$state",
-	"authService", "irfSimpleModal", "irfProgressMessage",
+	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper",
 function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $state,
-	authService, irfSimpleModal, irfProgressMessage) {
+	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper) {
 
 	$scope.ss = SessionStore;
 
@@ -26,6 +27,47 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 
 	$("a[href='#']").click(function(e){e.preventDefault()});
 
+	$scope.branchSwitch = {
+		"showBranchSelect": false,
+		"currentBranch": SessionStore.getCurrentBranch()
+	};
+
+	this.toggleSwitchBranch = function(){
+		$scope.branchSwitch.showBranchSelect = !!!$scope.branchSwitch.showBranchSelect;
+	}
+
+	this.updateNewBranch = function($event, selectedBranch){
+		var $this = this;
+		var currentBranch = SessionStore.getCurrentBranch();
+		Utils.confirm("Are you sure you want to switch to " + selectedBranch.branchName + "?")
+		.then(function(){
+
+			PageHelper.showBlockingLoader("Switching...");
+			Auth.changeBranch({userId: SessionStore.getLoginname(), branchName: selectedBranch.branchName})
+				.$promise
+				.then(function(response){
+					$this.toggleSwitchBranch();
+					$state.reload();
+					SessionStore.setCurrentBranch(selectedBranch);
+				}, function(httpResponse){
+					Utils.alert("Unknown error while trying to switch branch");
+				})
+				.finally(function(){
+					PageHelper.hideBlockingLoader();
+				})
+			
+		})
+	}
+
+	$scope.preventClose = function($event){
+		$event.stopPropagation();
+	}
+
+
+
+	/* Loading branch details */
+	var branches = SessionStore.getItem("UserAllowedBranches");
+	$scope.branchSwitch.allowedBranches = branches;
 	$scope.showLogs = function() {
 		var allLogs = $log.getAllLogs();
 		var body = '<div class="log-div">' + allLogs + '</div>';

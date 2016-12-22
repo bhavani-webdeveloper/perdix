@@ -144,19 +144,28 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 
 	self.setSession = function(session) {
 		angular.extend(self.session, session);
-		if (_.hasIn(session, "branchId")){
-			self.session.currentBranch = {
+	};
+
+	self.getCurrentBranch = function(){
+		var currentBranch = self.getItem('UserCurrentBranch');
+		if (currentBranch){
+			return currentBranch;
+		} else {
+			return {
 				branchCode: session.branchCode,
 				branchName: session.branchName,
 				branchId: session.branchId
 			}
-		} else {
-			self.session.currentBranch = {}
 		}
-	};
-
-	self.getCurrentBranch = function(){
 		return self.session.currentBranch;
+	}
+
+	self.setCurrentBranch = function(currentBranch){
+		if (_.hasIn(currentBranch, 'branchId') && _.hasIn(currentBranch, 'branchName') && _.hasIn(currentBranch, 'branchCode')){
+			self.setItem("UserCurrentBranch", currentBranch);
+			return true;
+		}
+		return false;
 	}
 
 	return self;

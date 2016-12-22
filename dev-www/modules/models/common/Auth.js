@@ -42,6 +42,10 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 		'logout': {
 			method: 'POST',
 			url: endpoint + '/api/logout?cacheBuster=' + Date.now()
+		},
+		'changeBranch': {
+			method: "GET",
+			url: endpoint + "/api/changedBranch"
 		}
 	});
 

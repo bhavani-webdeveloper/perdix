@@ -92,19 +92,31 @@
                     </ul>
                 </li>
                 <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown user user-menu">
+                <li class="dropdown user user-menu" >
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="" ng-src="{{ photo }}" class="user-image" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
                         <span class="hidden-xs">{{ ss.getUsername() }}</span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" ng-click="preventClose($event)">
                         <!-- User image -->
                         <li class="user-header bg-theme">
                             <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
                             <p>{{ ss.getUsername() }} - {{ ss.getRole() | translate }}</p>
                             <p>
                                 <small>
-                                    <span class="pull-left"><i class="fa fa-building"></i> {{ ss.getBranch() }}</span>
+                                    <span class="pull-left">
+                                        <span ng-if="!branchSwitch.showBranchSelect">
+                                            <i class="fa fa-building"></i> 
+                                            {{ branchSwitch.currentBranch.branchName }}
+                                            <a href="" ng-click="c.toggleSwitchBranch($event)" class="change-branch-shortcut"> (Change)</a>
+                                        </span>
+                                        <span ng-if="branchSwitch.showBranchSelect">
+                                            <select style="background: transparent; color:black;" ng-options="item as item.branchName for item in branchSwitch.allowedBranches track by item.branchId" ng-model="branchSwitch.selectedBranch" ng-change="c.updateNewBranch($event, branchSwitch.selectedBranch)"></select>
+                                            <!--&nbsp;&nbsp;<i class="fa fa-check" aria-hidden="true" ng-click="c.updateNewBranch($event, branchSwitch.selectedBranch)"></i> -->
+                                            &nbsp;&nbsp;<i class="fa fa-times" aria-hidden="true" ng-click="c.toggleSwitchBranch($event)"></i>
+                                        </span>
+                                        
+                                    </span>
                                     <span class="pull-right"><i class="fa fa-clock-o"></i> {{ ss.getFormatedCBSDate() }}</span>
                                 </small>
                             </p>

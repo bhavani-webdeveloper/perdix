@@ -22,6 +22,8 @@ MainApp.controller("irfMainMenuController", [
 
 	$scope.photo = SessionStore.getPhoto();
 
+	$scope.currentBranch = SessionStore.getCurrentBranch();
+
 	$http.get("process/MenuDefinition.json").then(function(response){
 		PagesDefinition.getUserAllowedDefinition(response.data).then(function(resp){
 			$scope.definition = resp;
