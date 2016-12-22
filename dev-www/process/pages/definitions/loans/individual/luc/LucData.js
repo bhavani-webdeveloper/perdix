@@ -172,8 +172,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
 
 
-                                }, {
+                                }]
+                            },{
                                     key: "loanMonitoringDetails.machineDetails",
+                                    condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
                                     type: "array",
                                     startEmpty: true,
                                     title: "MACHINE",
@@ -214,8 +216,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             "VHFPL": "VHFPL",
                                         },
                                     }]
-                                }]
-                            }, {
+                                },
+                                 {
                                 type: "fieldset",
                                 title: "",
                                 condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
