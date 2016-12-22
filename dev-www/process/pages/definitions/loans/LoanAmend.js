@@ -1,7 +1,6 @@
-irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "LoanAccount", "irfProgressMessage",
+irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout", "SessionStore", "$state", "LoanProcess", "formHelper", "$stateParams", "LoanAccount", "irfProgressMessage",
     "PageHelper", "irfStorageService", "$filter", "Files", "elementsUtils", "Queries", "Utils", "AuthTokenHelper",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, LoanAccount, irfProgressMessage,
-        PageHelper, StorageService, $filter, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, LoanCollection, AuthTokenHelper) {
+    function($log, $q, $timeout, SessionStore, $state, LoanProcess, formHelper, $stateParams, LoanAccount, irfProgressMessage, PageHelper, StorageService, $filter, Files, elementsUtils, Queries, Utils, AuthTokenHelper ) {
 
         function backToLoansList() {
             try {
@@ -83,6 +82,23 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                             function(response) {
                                 model.amand.tenuredownload = true;
                                 PageHelper.showProgress("tenure-amendment", "Done", 5000);
+                                PageHelper.showBlockingLoader();
+                                LoanProcess.generatedefaultschedule({accountNumber: model.amand.accountId})
+                                    .$promise
+                                    .then(function(response){
+                                            PageHelper.showProgress("tenure-amendment-load-schedule", "Schedule updated", 4000);
+                                            Queries.getLoanAccountByAccountNumber(model.amand.accountId)
+                                                .then(function(res){
+                                                    model.amand.loanId = res.id;
+                                                }, function(httpRes){
+                                                    PageHelper.showProgress("tenure-amendment-load-schedule", "Failed to Load Loan Details", 4000);
+                                                })
+                                        }, function(httpRes){
+                                            PageHelper.showProgress("tenure-amendment-load-schedule", "Failed to update schedule", 4000);
+                                        }
+                                    ).finally(function(){
+                                        PageHelper.hideBlockingLoader();
+                                    })
                             },
                             function(error) {
                                 PageHelper.showProgress("tenure-amendment", "Error Updating new tenure details.", 5000);
@@ -100,23 +116,9 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                         "type": "button",
                         "notitle": true,
                         "readonly": false,
-                        /*"onClick": function(model, formCtrl, form, $event) {
-                            PageHelper.clearErrors();
-                            PageHelper.showLoader();
-                            ACH.demandDownloadStatus({
-                                "demandDate": model.achCollections.demandDate,
-                                "branchId": branchIDArray.join(",")
-                            }).$promise.then(
-                                function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=ach_demands&date=" + model.achCollections.demandDate);
-                                    PageHelper.showProgress("page-init", "Success", 5000);
-                                },
-                                function(error) {
-                                    PageHelper.showProgress("page-init", error, 5000);
-                                }).finally(function() {
-                                PageHelper.hideLoader();
-                            });
-                        }*/
+                        "onClick": function(model, formCtrl, form, $event) {
+                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=installment_schedule_loan&record_id=" + model.amand.loanId)
+                        }
                     }]
                 }, ]
             }],
