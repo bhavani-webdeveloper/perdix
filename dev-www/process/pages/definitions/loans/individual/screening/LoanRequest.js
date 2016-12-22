@@ -17,7 +17,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         return true;
     }
 
-    var computeEMI = function(model){
+    var computeEstimatedEMI = function(model){
             var fee = 0;
             if(model.loanAccount.commercialCibilCharge)
                 if(!_.isNaN(model.loanAccount.commercialCibilCharge))
@@ -39,6 +39,47 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 payments = model.loanAccount.tenureRequested * 12;
             else if (model.loanAccount.frequencyRequested == 'Monthly')
                 payments = model.loanAccount.tenureRequested;
+
+            // Now compute the monthly payment figure, using esoteric math.
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal*x*interest)/(x-1);
+
+            // Check that the result is a finite number. If so, display the results.
+            if (!isNaN(monthly) && 
+                (monthly != Number.POSITIVE_INFINITY) &&
+                (monthly != Number.NEGATIVE_INFINITY)) {
+
+                model.loanAccount.estimatedEmi = round(monthly);
+                //document.loandata.total.value = round(monthly * payments);
+                //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+            }
+            // Otherwise, the user's input was probably invalid, so don't
+            // display anything.
+            else {
+                model.loanAccount.estimatedEmi  = "";
+                //document.loandata.total.value = "";
+                //document.loandata.totalinterest.value = "";
+            }
+
+        };
+
+    var computeEMI = function(model){
+
+            // Get the user's input from the form. Assume it is all valid.
+            // Convert interest from a percentage to a decimal, and convert from
+            // an annual rate to a monthly rate. Convert payment period in years
+            // to the number of monthly payments.
+
+            if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                return;
+            
+            var principal = model.loanAccount.loanAmount;
+            var interest = model.loanAccount.interestRate / 100 / 12;
+            var payments;
+            if (model.loanAccount.frequencyRequested == 'Yearly')
+                payments = model.loanAccount.tenure * 12;
+            else if (model.loanAccount.frequencyRequested == 'Monthly')
+                payments = model.loanAccount.tenure;
 
             // Now compute the monthly payment figure, using esoteric math.
             var x = Math.pow(1 + interest, payments);
@@ -294,7 +335,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         required:true,
                         title: "REQUESTED_LOAN_AMOUNT",
                         onChange:function(value,form,model){
-                            computeEMI(model);
+                            computeEstimatedEMI(model);
                         }
                     },
                     {
@@ -303,7 +344,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         title: "FREQUENCY_REQUESTED",
                         enumCode: "frequency",
                         onChange:function(value,form,model){
-                            computeEMI(model);
+                            computeEstimatedEMI(model);
                         }
                     },
                     {
@@ -312,7 +353,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         type: "number",
                         title: "TENURE_REQUESETED",
                         onChange:function(value,form,model){
-                            computeEMI(model);
+                            computeEstimatedEMI(model);
                         }
                     },
                     {
@@ -320,7 +361,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         type: "number",
                         title: "EXPECTED_INTEREST_RATE",
                         onChange:function(value,form,model){
-                            computeEMI(model);
+                            computeEstimatedEMI(model);
                         }
                     },
                     {
@@ -422,35 +463,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
-                        title: "REQUESTED_LOAN_AMOUNT",
-                        onChange:function(value,form,model){
-                            computeEMI(model);
-                        }
+                        title: "REQUESTED_LOAN_AMOUNT"
                     },
                     {
                         key: "loanAccount.frequencyRequested",
                         type: "select",
                         title: "FREQUENCY_REQUESTED",
-                        enumCode: "frequency",
-                        onChange:function(value,form,model){
-                            computeEMI(model);
-                        }
+                        enumCode: "frequency"
                     },
                     {
                         key: "loanAccount.tenureRequested",
                         type: "number",
-                        title: "TENURE_REQUESETED",
-                        onChange:function(value,form,model){
-                            computeEMI(model);
-                        }
+                        title: "TENURE_REQUESETED"
                     },
                     {
                         key: "loanAccount.expectedInterestRate",
                         type: "number",
-                        title: "EXPECTED_INTEREST_RATE",
-                        onChange:function(value,form,model){
-                            computeEMI(model);
-                        }
+                        title: "EXPECTED_INTEREST_RATE"
                     },
                     {
                         key: "loanAccount.estimatedEmi",
@@ -894,35 +923,94 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             }*/,
             {
                 "type": "box",
+                "title": "LOAN_RECOMMENDATION",
+                "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                "items": [
+                {
+                    "key": "loanAccount.loanAmount",
+                    "type": "amount",
+                    required:true,
+                    "title": "LOAN_AMOUNT",
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    "key": "loanAccount.tenure",
+                    "title":"DURATION_IN_MONTHS",
+                    required:true,
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    "key": "loanAccount.interestRate",
+                    "type": "number",
+                    required:true,
+                    "title": "INTEREST_RATE",
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    key: "loanAccount.estimatedEmi",
+                    type: "amount",
+                    title: "ESTIMATED_KINARA_EMI",
+                    readonly:true
+                },
+                {
+                    "key": "loanAccount.processingFeePercentage",
+                    "type": "number",
+                    required:true,
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                },
+                {
+                   key: "loanAccount.estimatedEmi",
+                   "type": "amount",
+                    "title": "EXPECTED_SECURITY_EMI",
+                    readonly:true
+                },
+                {
+                    "key": "loanAccount.commercialCibilCharge",
+                    "type": "amount",
+                    "title": "COMMERCIAL_CIBIL_CHARGE"
+                }]
+            },
+            {
+                "type": "box",
                 "title": "LOAN_SANCTION",
                 "condition": "model.currentStage == 'Sanction'",
                 "items": [
                     {
                         "key": "loanAccount.interestRate",
                         "type": "number",
-                        "title": "INTEREST_RATE"
+                        "title": "INTEREST_RATE",
+                        readonly:true
                     },
                     {
                         "key": "loanAccount.securityEmiRequired",
                         'enumCode': "decisionmaker",
                         'type': "select",
-                        "title": "SECURITY_EMI_REQUIRED"
+                        "title": "SECURITY_EMI_REQUIRED",
+                        readonly:true
                     },
                     {
                         "key": "loanAccount.loanAmount",
                         "type": "amount",
-                        required:true,
-                        "title": "LOAN_AMOUNT"
+                        "title": "LOAN_AMOUNT",
+                        readonly:true
                     },
                     {
                         "key": "loanAccount.processingFeePercentage",
                         "type": "number",
-                        "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                        "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                        readonly:true
                     },
                     {
                         "key": "loanAccount.commercialCibilCharge",
                         "type": "amount",
-                        "title": "COMMERCIAL_CIBIL_CHARGE"
+                        "title": "COMMERCIAL_CIBIL_CHARGE",
+                        readonly:true
                     },
                     // {
                     //     "key": "loanAccount.portfolioInsuranceUrn",
@@ -961,7 +1049,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     // },
                     {
                         "key": "loanAccount.tenure",
-                        "title":"DURATION_IN_MONTHS"
+                        "title":"DURATION_IN_MONTHS",
+                        readonly:true
                     },
                     {
                         "type": "fieldset",
