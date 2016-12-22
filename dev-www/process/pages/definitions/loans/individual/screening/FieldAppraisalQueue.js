@@ -1,18 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-		var branch = SessionStore.getCurrentBranch();
-		var centres = SessionStore.getCentres();
-		var centreId=[];
-		for (var i = 0; i < centres.length; i++) {
-			centreId.push(centres[i].centreId);
-		}
+		
 		return {
 			"type": "search-list",
 			"title": "FIELD_APPRAISAL_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -67,6 +62,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalQu
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branch = SessionStore.getCurrentBranch();
+		            var centres = SessionStore.getCentres();
+		            var centreId=[];
+		            for (var i = 0; i < centres.length; i++) {
+			            centreId.push(centres[i].centreId);
+		            }
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }

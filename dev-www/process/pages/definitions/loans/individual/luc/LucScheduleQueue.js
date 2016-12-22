@@ -1,20 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getCurrentBranch();
-		$log.info(branch.branchName);
-/*		var branches = formHelper.enum('branch_id').data;
-					var branchName;
-					for (var i = 0; i < branches.length; i++) {
-						if (branches[i].code == searchOptions.branch_id)
-							branchName = branches[i].name;
-					}*/
-
+	
 		return {
 			"type": "search-list",
 			"title": "LUC_SCHEDULED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
+				
 				$log.info("luc Schedule Queue got initialized");
+				
 			},
 			definition: {
 				title: "SEARCH LUC",
@@ -26,7 +20,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
-						"branchName": {
+						/*"branchName": {
 							"title": "HUB_NAME",
 							"type": "string",
 							"enumCode": "branch",
@@ -44,7 +38,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 								"parentEnumCode": "branch",
 								"screenFilter": true
 							}
-						},
+						},*/
 						"applicantName": {
 							"title": "APPLICANT_NAME",
 							"type": "string"
@@ -72,14 +66,20 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				getResultsPromise: function(searchOptions, pageOpts) { 
+				var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
-						//'centreId': searchOptions.centreId,
-						//'branchName': branch.branchName,
+						'centreId': centreId[0],
+						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicationName,

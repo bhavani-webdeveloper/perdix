@@ -1,7 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getCurrentBranch();
-		$log.info(branch.branchName);
+	
 		return {
 			"type": "search-list",
 			"title": "LUC_RESCHEDULED_QUEUE",
@@ -27,6 +26,13 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 							"title": "BUSINESS_NAME",
 							"type": "number"
 						},
+						"lucRescheduledDate": {
+							"title": "LUC_RESCHEDULED_DATE",
+							"type": "string",
+							"x-schema-form": {
+								"type": "date"
+							}
+						},
 						"accountNumber": {
 							"title": "LOAN_ACCOUNT_NUMBER",
 							"type": "number"
@@ -37,13 +43,20 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				getResultsPromise: function(searchOptions, pageOpts) { 
+				var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCReschedule",
-						//'centreId': searchOptions.centreId,
-						//'branchName': branch.branchName,
+						'centreId': centreId[0],
+						'branchName': branch.branchName,
+						'lucRescheduledDate':searchOptions.lucRescheduledDate,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,

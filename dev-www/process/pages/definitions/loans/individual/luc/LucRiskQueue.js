@@ -1,7 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-		var branch = SessionStore.getCurrentBranch();
-		$log.info(branch.branchName);
+
 		return {
 			"type": "search-list",
 			"title": "LUC_RISK_QUEUE",
@@ -43,13 +42,19 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				getResultsPromise: function(searchOptions, pageOpts) { 
+				var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCEscalate",
-						//'centreId': searchOptions.centreId,
-						//'branchName': branch.branchName,
+						'centreId': centreId[0],
+						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,

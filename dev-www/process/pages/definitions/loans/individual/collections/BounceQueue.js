@@ -38,7 +38,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
             autoSearch: false,
             sorting:true,
             sortByColumns:{
-                "name":"Customer Name",
+                "name":"Customer Name", 
                 "centre_name":"Centre",
                 "sanction_date":"Sanction Date"
             },

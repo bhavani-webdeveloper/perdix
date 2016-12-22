@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucLegalRecoveryQueue"
 			"title": "LUC_LEGAL_AND RECOVERY_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("luc  Queue got initialized");
+				$log.info("luc Schedule Queue got initialized");
 			},
 			definition: {
 				title: "SEARCH CUSTOMER",
@@ -45,12 +45,18 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucLegalRecoveryQueue"
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
 						'currentStage':"LUCLegalRecovery",
-						//'centreId': searchOptions.centreId,
-						//'branchName':  branch.branchName,
+						'centreId': centreId[0],
+						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'applicantName': searchOptions.applicantName,
