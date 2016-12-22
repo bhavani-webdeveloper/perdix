@@ -123,20 +123,6 @@ irf.pageCollection.factory(irf.page("management.UserBranches"),
                     ]
                 }
                 ]
-            }, {
-                type: "actionbox",
-                condition: "!model.userRoles.user_role_id",
-                items: [{
-                    type: "submit",
-                    title: "Add User Role"
-                }]
-            }, {
-                type: "actionbox",
-                condition: "model.userRoles.user_role_id",
-                items: [{
-                    type: "submit",
-                    title: "Update User Role"
-                }]
             }],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
