@@ -1256,7 +1256,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
-                    reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                    //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
@@ -1289,7 +1289,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = '';
                             reqData.loanProcessAction = "SAVE";
-                            reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                            //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             reqData.loanAccount.psychometricCompleted = "N";
@@ -1318,7 +1318,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
                             reqData.loanProcessAction = "SAVE";
-                            reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                            //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             reqData.remarks = model.review.remarks;
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
