@@ -28,11 +28,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
 
                 }
 
-                   Queries.getloanParameters({
-                            }).then(function(result) {
-                                $log.info(result);
-                            });
-
 
                 model = Utils.removeNulls(model, true);
 

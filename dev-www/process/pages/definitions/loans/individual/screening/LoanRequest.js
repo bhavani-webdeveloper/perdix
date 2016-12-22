@@ -543,65 +543,54 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 title: "LOAN_MITIGANTS",
                 items: [{
                     key: "loanAccount.loanMitigants[].parameter",
-                    title: "PARAMETER_NAME",
                     type: "lov",
-                    outputMap: {
-                        "name": "loanAccount.loanMitigants[arrayIndex].parameter"
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model) {
-                        return ReferenceCode.allClassifier().$promise;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.code
-                        ];
-                    },
-                    onSelect: function(result, model, context) {
-                        PageHelper.showLoader();
-                        ReferenceCode.allCodes({
-                            classifier: result.code
-                        }).$promise.then(function(result) {
-                            if (result && result.body && result.body.length) {
-                                model.reference.codes = result.body;
-                                model.reference.parentClassifier = result.body[0].parentClassifier;
-                            }
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        });
-                    }
+                    autolov: true,
+                        title:"PARAMETER_NAME",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "ParameterName": "loanAccount.loanMitigants[arrayIndex].parameter",
+                            //"Score":"loanAccount.loanMitigants[arrayIndex].riskScore",
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            return Queries.getloanParameters();
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.ParameterName,
+                                item.Score
+                            ];
+                        },
+                        onSelect: function(result, model, context) {
+                            $log.info(result);
+                            model.loanAccount.loanparameter=result.ParameterName;
+                        }
                     
                 }, {
                     key: "loanAccount.loanMitigants[].mitigant",
-                    title: "MITIGANT",
-                    lovonly: true,
                     type: "lov",
-                    outputMap: {
-                        "name": "reference.parentClassifier"
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model) {
-                        return ReferenceCode.allClassifier().$promise;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.code,
-                            item.displayName,
-                            item.name
-                        ];
-                    },
-                    onSelect: function(result, model, context) {
-                        PageHelper.showLoader();
-                        for (var i = 0; i < model.reference.codes.length; i++) {
-                            model.reference.codes[i].parentClassifier = result.code;
-
+                    autolov: true,
+                        title:"MITIGANT",
+                        bindMap: {
+                        },
+                        outputMap: {
+                            "mitigant": "loanAccount.loanMitigants[arrayIndex].mitigant"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                             $log.info(model.loanAccount.loanparameter);
+                            return Queries.getloanMitigants(model.loanAccount.loanparameter);
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.mitigant
+                            ];
                         }
-                        PageHelper.hideLoader();
-                    }
-                }, {
+                }, /*{
                     key: "loanAccount.loanMitigants[].riskScore",
                     title: "RISK_SCORE"
-                }]
+                }*/]
             }]
         },
 

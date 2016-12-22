@@ -472,23 +472,38 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
-    resource.getloanParameters = function(){
+    resource.getloanParameters = function() {
         var deferred = $q.defer();
-        resource.getResult("loanParameters.list").then(
-            function(res){
-                $log.info("checking checking");
-                $log.info(res);
-                if (res && res.results && res.results.length){
-                    deferred.resolve(res.results[0]);
-                } else {
-                    deferred.reject(res);
-                }
-            }, function(err){
-                deferred.reject(err);
+        var request = {};
+        resource.getResult("loanParameters.list", request).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
             }
-        )
+        }, deferred.reject);
         return deferred.promise;
-    }
+    };
+
+    resource.getloanMitigants = function(mitigant) {
+        var deferred = $q.defer();
+        resource.getResult("loanMitigants.list", {"mitigant":mitigant}).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
 
 	return resource;
 }]);
