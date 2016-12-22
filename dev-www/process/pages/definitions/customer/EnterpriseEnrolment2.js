@@ -52,6 +52,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 }
                             });
+                            BundleManager.broadcastEvent('business-loaded', {customer: model.customer});
                         }
 
                     }, function(httpRes){

@@ -168,6 +168,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
+            BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
