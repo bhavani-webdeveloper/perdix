@@ -17,9 +17,9 @@ MainApp.directive('irfHeader', function(){
 
 MainApp.controller("irfHeaderController",
 ["$scope", "$log", "$http", "irfConfig", "SessionStore", "$translate", "languages", "$state",
-	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper",
+	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account",
 function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $state,
-	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper) {
+	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account) {
 
 	$scope.ss = SessionStore;
 
@@ -46,9 +46,16 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 			Auth.changeBranch({userId: SessionStore.getLoginname(), branchName: selectedBranch.branchName})
 				.$promise
 				.then(function(response){
-					$this.toggleSwitchBranch();
-					$state.reload();
-					SessionStore.setCurrentBranch(selectedBranch);
+					/* Now load centres for the user */
+					Account.getCentresForUser(selectedBranch.branchId, SessionStore.getLoginname())
+						.then(function(centres){
+							selectedBranch.centresMappedToUser = centres;
+						})
+						.finally(function(){
+							$this.toggleSwitchBranch();
+							$state.reload();
+							SessionStore.setCurrentBranch(selectedBranch);	
+						})
 				}, function(httpResponse){
 					Utils.alert("Unknown error while trying to switch branch");
 				})

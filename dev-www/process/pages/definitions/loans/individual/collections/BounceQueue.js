@@ -6,7 +6,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchId = SessionStore.getBranchId();
+            model.branchId = SessionStore.getCurrentBranch().branchId;
             model.pageConfig = {
                 isAllBranchAllowed: false,
                 centresRestricted: false
@@ -20,7 +20,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     }
 
                     if (model.pageConfig.isAllBranchAllowed === false){
-                        model.centres = SessionStore.getCentres();
+                        model.centres = SessionStore.getCurrentBranch().centresMappedToUser;
 
                         /* Default centre */
                         if (model.centres && model.centres.length>0){
