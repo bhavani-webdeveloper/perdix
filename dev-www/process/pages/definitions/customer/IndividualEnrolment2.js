@@ -2101,21 +2101,34 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"REFERENCE_TYPE",
                                 type:"select",
                                 required:"true",
-                                enumCode: "business_reference_type"
-                            },
-                             {
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
+                               titleMap: {
+                                        "Personal Neighbour": "Personal Neighbour",
+                                        "Personal Relative/friend": "Personal Relative/friend"
+                                    }
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME_OF_POC",
+                                title:"FULL_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
+                                type:"string"
+                            },
+                            {
+                                key:"customer.verifications[].occupation",
+                                title:"OCCUPATION",
+                                type:"select"
+                            },
+                            {
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },
+                            /*{
+                                key:"customer.verifications[].businessName",
+                                title:"BUSINESS_NAME",
                                 type:"string"
                             },
                             {
@@ -2131,11 +2144,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 enumCode: "businessSubSector",
                                 parentEnumCode: "businessSector"
                             },
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
-                            },
+                            */
 
                          ] 
                     },
@@ -2157,21 +2166,35 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"REFERENCE_TYPE",
                                 type:"select",
                                 required:"true",
-                                enumCode: "business_reference_type"
-                            },
-                             {
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
+                                titleMap: {
+                                        "Personal Neighbour": "Personal Neighbour",
+                                        "Personal Relative/friend": "Personal Relative/friend"
+                                    }
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME_OF_POC",
+                                title:"FULL_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
+                                type:"string"
+                            },
+                            /*{
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },*/
+                            {
+                                key:"customer.verifications[].selfReportedIncome",
+                                title:"SELF_REPORTED_INCOME",
+                                type:"number"
+                            },
+
+                            /*{
+                                key:"customer.verifications[].businessName",
+                                title:"BUSINESS_NAME",
                                 type:"string"
                             },
                             {
@@ -2183,13 +2206,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 key:"customer.verifications[].businessSubSector",
                                 title:"BUSINESS_SUBSECTOR",
                                 type:"string",
-                            },
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
-                            },
-
+                            },*/
+                            
                          ] 
                     },
                 ]

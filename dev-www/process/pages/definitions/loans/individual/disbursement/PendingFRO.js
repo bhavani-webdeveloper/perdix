@@ -56,7 +56,8 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                 {
                     "key": "loanAccountDisbursementSchedule.fro_status",
                     "title": "STATUS",
-                    "type": "radios",
+                    required:true,
+                    "type": "select",
                     "titleMap": {
                                 "1": "Approve",
                                 "2": "Reject"
