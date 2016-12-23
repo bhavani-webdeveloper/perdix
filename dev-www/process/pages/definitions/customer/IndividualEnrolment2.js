@@ -955,7 +955,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     items: [
                                     {
                                       key:"customer.careOf",
-                                      required:true,
+                                      //required:true,
                                       title:"C/O",  
                                     },
                                         "customer.doorNo",
@@ -1953,7 +1953,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                                     type: "amount",
-                                                    title: "BALANCE_AS_ON_15TH"
+                                                    title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -2057,7 +2057,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                                     type: "amount",
-                                                    title: "BALANCE_AS_ON_15TH"
+                                                    title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -2172,20 +2172,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             {
                                 key:"customer.verifications[].mobileNo",
                                 title:"MOBILE_NO",
-                                type:"number"
+                                type:"string"
                             },
                             {
                                 key:"customer.verifications[].businessSector",
                                 title:"BUSINESS_SECTOR",
-                                type:"select",
-                                enumCode: "businessSector"
+                                type:"string",
                             },
                             {
                                 key:"customer.verifications[].businessSubSector",
                                 title:"BUSINESS_SUBSECTOR",
-                                type:"select",
-                                enumCode: "businessSubSector",
-                                parentEnumCode: "businessSector"
+                                type:"string",
                             },
                             {
                                 key:"customer.verifications[].selfReportedIncome",

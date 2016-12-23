@@ -772,7 +772,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             {
                                 key: "loanAccount.collateral[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
-                                type: "date",
+                                "type": "date",
+                                "format": 'dd-mm-yyyy',
+                                "minDate":  Utils.getCurrentDate(),
+                                 maxDate: new Date(),
                             },
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",

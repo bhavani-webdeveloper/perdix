@@ -457,7 +457,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "decisionmaker"
                     },
-                    {
+                    /*{
                         key: "customer.enterprise.electricityAvailable",
                         title: "ELECTRICITY_AVAIALBLE",
                         type: "select",
@@ -470,7 +470,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "decisionmaker",
                         required: true
-                    },
+                    },*/
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -770,7 +770,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "string",
                         // enumCode: "decisionmaker"
                     },
-                    {
+                   /* {
                         key: "customer.enterprise.electricityAvailable",
                         title: "ELECTRICITY_AVAIALBLE",
                         type: "select",
@@ -783,7 +783,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "select",
                         enumCode: "decisionmaker",
                         required: true
-                    },
+                    },*/
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -1060,7 +1060,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
-                                        title: "BALANCE_AS_ON_15TH"
+                                        title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -1174,7 +1174,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
-                                        title: "BALANCE_AS_ON_15TH"
+                                        title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -1205,7 +1205,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"COMPANY_LIABILITIES",
+               title:"BUSINESS_LIABILITIES",
                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
@@ -1286,7 +1286,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             {
                type:"box",
-               title:"COMPANY_LIABILITIES",
+               title:"BUSINESS_LIABILITIES",
                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                readonly:true,
                 items:[
@@ -1574,7 +1574,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+               "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -1809,6 +1809,27 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                
                 ]
             },
+             {
+                type: "box",
+                title: "T_BUSINESS_FINANCIALS",
+                "condition": "model.currentStage=='Screening'",
+                items: [{
+                        key: "customer.enterprise.monthlyTurnover",
+                        title: "MONTHLY_TURNOVER",
+                        required:true,
+                        type: "amount"
+                    },
+                    {
+                        key: "customer.enterprise.monthlyBusinessExpenses",
+                        title: "MONTHLY_BUSINESS_EXPENSES",
+                        type: "amount"
+                    },
+                    {
+                        key: "customer.enterprise.avgMonthlyNetIncome",
+                        title: "AVERAGE_MONTHLY_NET_INCOME",
+                        type: "amount"
+                    }]
+            },
             {
                 type: "box",
                 title: "T_BUSINESS_FINANCIALS",
@@ -2032,23 +2053,23 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
+               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'|| model.currentStage=='FieldAppraisal'",
                 items:[
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
-                        required:true,
+                        //required:true,
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.noOfMaleEmployees",
-                        required:true,
+                        //required:true,
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.avgMonthlySalary",
-                        required:true,
+                        //required:true,
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
@@ -2143,7 +2164,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.fixedAssetsMachinaries[].fundingSource",
                                 title:"FUNDING_SOURCE",
                                 type: "select",
-                                enumCode: "funding_source"
+                                enumCode: "machinery_funding_source"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
@@ -2160,7 +2181,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
                                 title:"CAN_BE_HYPOTHECATED_TO_US",
-                                type: "string",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                                 condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                             },
                             {
