@@ -6,7 +6,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranchId();
+            // model.branch = SessionStore.getBranchId();
+            model.branch = SessionStore.getCurrentBranch().branch_id;
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",

@@ -2,7 +2,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage")
 ["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper",
 function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper){
 
-    var branch = SessionStore.getBranch();
+    // var branch = SessionStore.getBranch();
+    var branch = SessionStore.getCurrentBranch().branchName;
 
     var computeTotal = function(model){
         model.totalAmount=0;

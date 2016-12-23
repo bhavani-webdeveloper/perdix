@@ -7,7 +7,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranch();
+            // model.branch = SessionStore.getBranch();
+            model.branch = SessionStore.getCurrentBranch().branchName;
             model.stage = 'FROApproval';
         },
         definition: {
