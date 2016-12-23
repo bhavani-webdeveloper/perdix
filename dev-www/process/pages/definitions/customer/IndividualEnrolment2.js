@@ -2102,8 +2102,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 type:"select",
                                 required:"true",
                                titleMap: {
-                                        "Personal Neighbour": "Personal Neighbour",
-                                        "Personal Relative/friend": "Personal Relative/friend"
+                                        "Neighbour": "Neighbour",
+                                        "Relative/friend": "Relative/friend"
                                     }
                             },
                             {
@@ -2167,8 +2167,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 type:"select",
                                 required:"true",
                                 titleMap: {
-                                        "Personal Neighbour": "Personal Neighbour",
-                                        "Personal Relative/friend": "Personal Relative/friend"
+                                        "Neighbour": "Neighbour",
+                                        "Relative/friend": "Relative/friend"
                                     }
                             },
                             {
