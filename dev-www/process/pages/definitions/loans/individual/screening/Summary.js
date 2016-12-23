@@ -6,6 +6,65 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
     var branch = SessionStore.getBranch();
 
+    var prepareForms = function(model, form){
+        
+        for (i in model.scoreDetails) {
+            form.push({
+                type: "box",
+                items: [
+                    {
+                        type: "tableview",
+                        key: "scoreDetails.data",
+                        title: model.scoreDetails[i].title,
+                        selectable: false,
+                        paginate: false,
+                        searching: false,
+                        getColumns: function(){
+                            return model.scoreDetails[i].columns;
+                        }
+                    }
+                ]
+            });
+            // form.push()
+        }
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "sectorDetails.data",
+                    title: model.sectorDetails.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.sectorDetails.columns;
+                    }
+                }
+            ]
+        });
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "subSectorDetails.data",
+                    title: model.subSectorDetails.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.subSectorDetails.columns;
+                    }
+                }
+            ]
+        });
+    }
+
     return {
         "type": "schema-form",
         "title": "",
@@ -14,18 +73,33 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};
+            var $this = this;
+            var deferred = $q.defer();
+            
             if (_.hasIn(model, 'cbModel')){
-
-                Scoring.get({
+                
+                var p1 = Scoring.get({
                     auth_token:AuthTokenHelper.getAuthData().access_token,
                     LoanId:model.cbModel.loanId,
                     ScoreName:model.cbModel.scoreName
                 },function(httpres){
                     model.ScoreDetails = httpres.ScoreDetails;
+
+                    // this.form.push()
                 },function (errResp){
 
                 });
-                Enrollment.getCustomerById({id:model.cbModel.customerId})
+
+                var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
+                    .$promise
+                    .then(function(res){
+                        model.scoreDetails = [res[0], res[1], res[2], res[3]];
+                        model.sectorDetails = res[4];
+                        model.subSectorDetails = res[5];
+                        prepareForms(model, $this.form);
+                    })
+
+                var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId})
                     .$promise
                     .then(function(res){
                         model.customer = res;
@@ -35,7 +109,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     .finally(function(){
                         PageHelper.hideLoader();
                     })
-            } 
+                $q.all([p1,p2,p3]).finally(function(){
+                    
+                    deferred.resolve();
+                })
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
         },
         eventListeners: {
         },
@@ -174,52 +255,56 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 ]
             }
         ],
-        formInitialiize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+        initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
             var deferred = $q.defer();
-/*
+
+            
+            return deferred.promise;
+            
+
             // Business Summary - starts
             var sFieldsLeft = [], sFieldsRight = [];
-            var bsCnt = Math.floor(model.businessSummary.length/2);
-            for (i = 0; i < bsCnt; i++) {
-                var bs = model.businessSummary[i];
-                model.businessSummaryFields[bs.key] = bs.value;
-                sFieldsLeft.push({
-                    title: bs.key,
-                    key: "businessSummaryFields." + bs.key
-                });
-            }
-            for (i = bsCnt; i < model.businessSummary.length; i++) {
-                var bs = model.businessSummary[i];
-                model.businessSummaryFields[bs.key] = bs.value;
-                sFieldsRight.push({
-                    title: bs.key,
-                    key: "businessSummaryFields." + bs.key
-                });
-            }
-            var businessSummaryForm = {
-                type: "box",
-                title: "Business Summary",
-                colClass: "col-sm-12",
-                "readonly": true,
-                items: [
-                    {
-                        type: "section",
-                        htmlClass: "row",
-                        items: [
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                items: sFieldsLeft
-                            },
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                items: sFieldsRight
-                            }
-                        ]
-                    }
-                ]
-            };
+            // var bsCnt = Math.floor(model.businessSummary.length/2);
+            // for (i = 0; i < bsCnt; i++) {
+            //     var bs = model.businessSummary[i];
+            //     model.businessSummaryFields[bs.key] = bs.value;
+            //     sFieldsLeft.push({
+            //         title: bs.key,
+            //         key: "businessSummaryFields." + bs.key
+            //     });
+            // }
+            // for (i = bsCnt; i < model.businessSummary.length; i++) {
+            //     var bs = model.businessSummary[i];
+            //     model.businessSummaryFields[bs.key] = bs.value;
+            //     sFieldsRight.push({
+            //         title: bs.key,
+            //         key: "businessSummaryFields." + bs.key
+            //     });
+            // }
+            // var businessSummaryForm = {
+            //     type: "box",
+            //     title: "Business Summary",
+            //     colClass: "col-sm-12",
+            //     "readonly": true,
+            //     items: [
+            //         {
+            //             type: "section",
+            //             htmlClass: "row",
+            //             items: [
+            //                 {
+            //                     type: "section",
+            //                     htmlClass: "col-sm-6",
+            //                     items: sFieldsLeft
+            //                 },
+            //                 {
+            //                     type: "section",
+            //                     htmlClass: "col-sm-6",
+            //                     items: sFieldsRight
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // };
             // Business SUmmary - ends
 
             // Scores - starts
@@ -245,39 +330,57 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             // Scores - ends
 
             // Deviation & Mitigation - starts
-            var deviationForm = {
+            // var deviationForm = {
+            //     type: "box",
+            //     colClass: "col-sm-12",
+            //     items: [
+            //         {
+            //             type: "tableview",
+            //             key: "deviationDetails.data",
+            //             title: model.deviationDetails[i].title,
+            //             selectable: false,
+            //             paginate: false,
+            //             searching: false,
+            //             getColumns: function(){
+            //                 return model.deviationDetails[i].columns;
+            //             }
+            //         }
+            //     ]
+            // };
+            // Deviation & Mitigation - ends
+
+            // Sector & Sub-sector - starts
+            var sectorDetailsForm = {
                 type: "box",
                 colClass: "col-sm-12",
                 items: [
                     {
                         type: "tableview",
-                        key: "deviationDetails.data",
-                        title: model.deviationDetails[i].title,
+                        key: "sectorDetails.data",
+                        title: model.sectorDetails.title,
                         selectable: false,
                         paginate: false,
                         searching: false,
                         getColumns: function(){
-                            return model.deviationDetails[i].columns;
+                            return model.sectorDetails.columns;
                         }
                     }
                 ]
             };
-            // Deviation & Mitigation - ends
 
-            // Sector & Sub-sector - starts
-            var sectorSubSectorForm = {
+            var subSectorDetailsForm = {
                 type: "box",
                 colClass: "col-sm-12",
                 items: [
                     {
                         type: "tableview",
-                        key: "sectorSubSectorDetails.data",
-                        title: model.sectorSubSectorDetails[i].title,
+                        key: "subSectorDetails.data",
+                        title: model.subSectorDetails.title,
                         selectable: false,
                         paginate: false,
                         searching: false,
                         getColumns: function(){
-                            return model.sectorSubSectorDetails[i].columns;
+                            return model.subSectorDetails.columns;
                         }
                     }
                 ]
@@ -285,30 +388,33 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             // Sector & Sub-sector - ends
 
             // Loan recommendations - starts
-            var sectorSubSectorForm = {
-                type: "box",
-                colClass: "col-sm-12",
-                items: [
-                    {
-                        type: "tableview",
-                        key: "sectorSubSectorDetails.data",
-                        title: model.sectorSubSectorDetails[i].title,
-                        selectable: false,
-                        paginate: false,
-                        searching: false,
-                        getColumns: function(){
-                            return model.sectorSubSectorDetails[i].columns;
-                        }
-                    }
-                ]
-            };
+            // var sectorSubSectorForm = {
+            //     type: "box",
+            //     colClass: "col-sm-12",
+            //     items: [
+            //         {
+            //             type: "tableview",
+            //             key: "sectorSubSectorDetails.data",
+            //             title: model.sectorSubSectorDetails[i].title,
+            //             selectable: false,
+            //             paginate: false,
+            //             searching: false,
+            //             getColumns: function(){
+            //                 return model.sectorSubSectorDetails[i].columns;
+            //             }
+            //         }
+            //     ]
+            // };
             // Loan recommendations - ends
 
-            this.form = [businessSummaryForm];
-            this.form.concat(scoreForms);
-            this.form.push(deviationForm);
-            this.form.push(sectorSubSectorForm);
-*/
+            // this.form = [businessSummaryForm];
+            // this.form.concat(scoreForms);
+            // this.form.push(deviationForm);
+            // this.form.push(sectorSubSectorForm);
+            // this.form.concat(scoreForms);
+            // this.form.push(sectorDetailsForm);
+            // this.form.push(subSectorDetailsForm);
+
             deferred.resolve();
             return deferred.promise;
         },

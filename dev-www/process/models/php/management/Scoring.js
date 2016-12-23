@@ -6,6 +6,11 @@ irf.models.factory('Scoring',function($resource,$httpParamSerializer, searchReso
         get:{
             method:'GET',
             url:endpoint + '/getScoreDetails.php'
+        },
+        financialSummary: {
+            method: 'GET',
+            url: irf.BI_BASE_URL + "/financial_summary.php",
+            isArray: true
         }
     });
 });
