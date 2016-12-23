@@ -138,59 +138,59 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12",
-            items: [
-                {
-                    type: "tableview",
-                    key: "houseHoldPL.data",
-                    title: model.houseHoldPL.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.houseHoldPL.columns;
-                    }
-                }
-            ]
-        })
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12",
+        //     items: [
+        //         {
+        //             type: "tableview",
+        //             key: "houseHoldPL.data",
+        //             title: model.houseHoldPL.title,
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return model.houseHoldPL.columns;
+        //             }
+        //         }
+        //     ]
+        // })
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12",
-            items: [
-                {
-                    type: "tableview",
-                    key: "businessPL.data",
-                    title: model.businessPL.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.businessPL.columns;
-                    }
-                }
-            ]
-        })
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12",
+        //     items: [
+        //         {
+        //             type: "tableview",
+        //             key: "businessPL.data",
+        //             title: model.businessPL.title,
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return model.businessPL.columns;
+        //             }
+        //         }
+        //     ]
+        // })
         
-        form.push({
-            type: "box",
-            colClass: "col-sm-12",
-            items: [
-                {
-                    type: "tableview",
-                    key: "balanceSheet.data",
-                    title: model.balanceSheet.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.balanceSheet.columns;
-                    }
-                }
-            ]
-        })
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12",
+        //     items: [
+        //         {
+        //             type: "tableview",
+        //             key: "balanceSheet.data",
+        //             title: model.balanceSheet.title,
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return model.balanceSheet.columns;
+        //             }
+        //         }
+        //     ]
+        // })
         
         form.push({
             type: "box",
