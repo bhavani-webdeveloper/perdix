@@ -7,14 +7,35 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     var branch = SessionStore.getBranch();
 
     var prepareForms = function(model, form){
+
         
+        
+        form.push({
+            type: "box",
+            "colClass": "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "enterpriseDetails.data",
+                    title: model.enterpriseDetails.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.enterpriseDetails.columns;
+                    }
+                }
+            ]
+        });
+
         for (i in model.scoreDetails) {
             form.push({
                 type: "box",
+                "colClass": "col-sm-6",
                 items: [
                     {
                         type: "tableview",
-                        key: "scoreDetails.data",
+                        key: "scoreDetails[" + i + "].data",
                         title: model.scoreDetails[i].title,
                         selectable: false,
                         paginate: false,
@@ -45,7 +66,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
-
+        
         form.push({
             type: "box",
             colClass: "col-sm-12",
@@ -63,6 +84,79 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "houseHoldPL.data",
+                    title: model.houseHoldPL.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.houseHoldPL.columns;
+                    }
+                }
+            ]
+        })
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "businessPL.data",
+                    title: model.businessPL.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.businessPL.columns;
+                    }
+                }
+            ]
+        })
+        
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "balanceSheet.data",
+                    title: model.balanceSheet.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.balanceSheet.columns;
+                    }
+                }
+            ]
+        })
+        
+        form.push({
+            type: "box",
+            colClass: "col-sm-12",
+            items: [
+                {
+                    type: "tableview",
+                    key: "bankStatement.data",
+                    title: model.bankStatement.title,
+                    selectable: false,
+                    paginate: false,
+                    searching: false,
+                    getColumns: function(){
+                        return model.bankStatement.columns;
+                    }
+                }
+            ]
+        })
+        
     }
 
     return {
@@ -93,9 +187,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
                     .$promise
                     .then(function(res){
-                        model.scoreDetails = [res[0], res[1], res[2], res[3]];
-                        model.sectorDetails = res[4];
-                        model.subSectorDetails = res[5];
+                        model.scoreDetails = [res[1], res[2], res[3], res[4]];
+                        model.sectorDetails = res[5];
+                        model.subSectorDetails = res[6];
+                        model.enterpriseDetails = res[0];
+                        model.houseHoldPL = res[7];
+                        model.businessPL = res[8];
+                        model.balanceSheet = res[9];
+                        model.bankStatement = res[10];
+                        
                         prepareForms(model, $this.form);
                     })
 
