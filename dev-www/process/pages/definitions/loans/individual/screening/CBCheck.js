@@ -173,7 +173,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     type: 'button',  
                                     title: 'Submit for CBCheck',
                                     "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
-                                    "onClick": "actions.save(model.customer.applicantid,'BASE',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
+                                    "onClick": "actions.save(model.customer.coapplicants[arrayIndex].coapplicantid,'BASE',model.customer.loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
                                 }]
                             }
                             ]

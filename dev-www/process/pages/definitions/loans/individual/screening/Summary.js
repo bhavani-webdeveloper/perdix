@@ -8,6 +8,31 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
     var prepareForms = function(model, form){
 
+        /* Populate values for Balance Sheet */
+        model.assetsAndLiabilities = {};
+        model.assetsAndLiabilities.cashInBank = model.balanceSheet.data[0]['Cash in bank'];
+        model.assetsAndLiabilities.payables = model.balanceSheet.data[0]['Payables'];
+        model.assetsAndLiabilities.accountsReceivable = model.balanceSheet.data[0]['Accounts receivables'];
+        model.assetsAndLiabilities.shortTermDebts = model.balanceSheet.data[0]['Short-term debts '];
+        model.assetsAndLiabilities.rawMaterial = model.balanceSheet.data[0]['Raw material'];
+        model.assetsAndLiabilities.currentPortionOfLongTermDeb = model.balanceSheet.data[0]['Current portion of long-term debt'];
+        model.assetsAndLiabilities.workInProgress = model.balanceSheet.data[0]['Work in progress'];
+        model.assetsAndLiabilities.finishedGoods = model.balanceSheet.data[0]['Finished goods'];
+        model.assetsAndLiabilities.totalCurrentAssets = model.balanceSheet.data[0]['Total current assets'];
+        model.assetsAndLiabilities.totalCurrentLiabilities = model.balanceSheet.data[0]['Total current liabilities'];
+        model.assetsAndLiabilities.machinery = model.balanceSheet.data[0]['Machinery'];
+        model.assetsAndLiabilities.longTermDebt = model.balanceSheet.data[0]['Long-term debt'];
+        model.assetsAndLiabilities.land = model.balanceSheet.data[0]['Land'];
+        model.assetsAndLiabilities.ownCapital = model.balanceSheet.data[0]['Own capital'];
+        model.assetsAndLiabilities.building = model.balanceSheet.data[0]['Building'];
+        model.assetsAndLiabilities.vehicle = model.balanceSheet.data[0]['Vehicle'];
+        model.assetsAndLiabilities.furnitureAndFixtures = model.balanceSheet.data[0]['Furniture & Fixtures'];
+        model.assetsAndLiabilities.totalFixedAssets = model.balanceSheet.data[0]['Total fixed assets'];
+        model.assetsAndLiabilities.totalLengTermLiabilities = model.balanceSheet.data[0]['Total long-term liabilities'];
+        model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
+        model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
+
+
         
         
         form.push({
@@ -353,7 +378,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         ]
                     }
                 ]
-            }
+            },
+            {
+                type: "box",
+                colClass: "col-sm-12",
+                items: [
+                    {
+                        type: "section",
+                        colClass: "col-sm-12",
+                        // html: "Hello guys. My name is {{ model.assetsAndL}}"
+                        "html": '<style>.table-sub-header{background: #ccc; font-style: italic;}.table-bottom-summary{font-weight: bold; background: #aaa;}</style><table class="table table-striped"> <colgroup> <col width="25%"> <col width="25%"> <col width="25%"> <col width="25%"> </colgroup> <thead> <tr> <th colspan="2">Assets</th> <th colspan="2">Liabilities</th> </tr><tr class="table-sub-header"> <th colspan="2">Current Assets</th> <th colspan="2">Current Liabilities</th> </tr></thead> <tbody> <tr> <td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables}}</td></tr><tr> <td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts}}</td></tr><tr> <td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb}}</td></tr><tr> <td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress}}</td><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods}}</td></tr><tr> <td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities}}</td></tr><tr class="table-sub-header"> <th colspan="2">{{"FIXED_ASSETS" | translate}}</th> <th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th> </tr><tr> <td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt}}</td></tr><tr> <td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital}}</td></tr><tr> <td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building}}</td><td></td><td></td></tr><tr> <td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle}}</td><td></td><td></td></tr><tr> <td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures}}</td><td></td><td></td></tr><tr> <td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities}}</td></tr><tr> </tr><tr class="table-bottom-summary"> <th>{{"TOTAL_ASSETS" | translate}}</th> <th>{{model.assetsAndLiabilities.totalAssets}}</th> <th>{{"TOTAL_LIABILITIES" | translate}}</th> <th>{{model.assetsAndLiabilities.totalLiabilities}}</th> </tr></tbody></table>'
+                    }
+                ]
+            },
         ],
         initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
             var deferred = $q.defer();
