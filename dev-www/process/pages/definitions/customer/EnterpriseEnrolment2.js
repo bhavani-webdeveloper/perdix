@@ -1224,7 +1224,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type:"select",
                                 enumCode:"loan_source"
                            },
-                           "customer.liabilities[].instituteName",
+                           //"customer.liabilities[].instituteName",
                            {
                                key: "customer.liabilities[].loanAmountInPaisa",
                                type: "amount"
@@ -1304,7 +1304,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                key:"customer.liabilities[].loanSource"/*,
                                 type:"select"*/ //Made as free text till list of values are given by Kinara
                            },
-                           "customer.liabilities[].instituteName",
+                           //"customer.liabilities[].instituteName",
                            {
                                key: "customer.liabilities[].loanAmountInPaisa",
                                type: "amount"

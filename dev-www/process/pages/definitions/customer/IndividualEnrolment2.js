@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
             function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                      PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager){
 
-                var pageParams = {
+                var pageParams = { 
                     readonly: true
                 }
 
@@ -1618,7 +1618,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key:"customer.liabilities[].loanSource"/*,
                                             type:"select"*/ //Made as free text till list of values are given by Kinara
                                         },
-                                        "customer.liabilities[].instituteName",
+                                        //"customer.liabilities[].instituteName",
                                         {
                                             key: "customer.liabilities[].loanAmountInPaisa",
                                             type: "amount"
