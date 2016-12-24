@@ -570,6 +570,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             "items": [{
                 key: "loanAccount.loanMitigants",
                 type: "array",
+                startEmpty: true,
                 title: "LOAN_MITIGANTS",
                 items: [{
                     key: "loanAccount.loanMitigants[].parameter",
