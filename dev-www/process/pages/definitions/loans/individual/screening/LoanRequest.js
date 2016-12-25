@@ -1418,6 +1418,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         reqData.stage = 'LoanInitiation';
                     }
                     PageHelper.showProgress("update-loan", "Working...");
+
+                    // 
+                   
                     IndividualLoan.update(reqData)
                         .$promise
                         .then(function(res){
@@ -1543,6 +1546,31 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         reqData.stage = 'LoanInitiation';
                     }
                     PageHelper.showProgress("update-loan", "Working...");
+
+                    if (reqData.loanAccount.currentStage == 'Screening'){
+                        return Queries.getQueryForScore1(reqData.loanAccount.id)
+                            .then(function(result){
+                                reqData.loanAccount.literateWitnessFirstName = result.cbScore;
+                                reqData.loanAccount.literateWitnessMiddleName = result.businessInvolvement;
+                            }, function(response){
+                                    
+                            })
+                            .finally(function(){
+                                IndividualLoan.update(reqData)
+                                    .$promise
+                                    .then(function(res){
+                                        PageHelper.showProgress("update-loan", "Done.", 3000);
+                                        return navigateToQueue(model);
+                                    }, function(httpRes){
+                                        PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                    .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
+                            })
+                    }
+
                     IndividualLoan.update(reqData)
                         .$promise
                         .then(function(res){

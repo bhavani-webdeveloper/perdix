@@ -503,6 +503,17 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
+    resource.getQueryForScore1 = function(loanId) {
+        var deferred = $q.defer();
+        var request = {"loanId": loanId};
+        resource.getResult("queryForScore1", request).then(function(records){
+            if (records && records.results && records.results.length > 0) {
+                deferred.resolve(records.results[0]);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
     resource.getloanMitigants = function(mitigant) {
         var deferred = $q.defer();
         resource.getResult("loanMitigants.list", {"mitigant":mitigant}).then(function(records){
