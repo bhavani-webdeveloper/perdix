@@ -290,6 +290,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 .$promise
                 .then(function(resp){
                     model.ScoreDetails = resp.ScoreDetails;
+                }, function(httpRes){
+                    $log.info("Some error getting Consolidated Score");
+                })
+                .finally(function(){
                     var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId})
                         .$promise;
                     onSuccessPromise
@@ -306,9 +310,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             prepareForms(model, $this.form);
                         })
                     return onSuccessPromise;
-                }, function(httpRes){
-                    $log.info("Some error getting Consolidated Score");
-                });
+                })
+                ;
 
                 // var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
                 //     .$promise
