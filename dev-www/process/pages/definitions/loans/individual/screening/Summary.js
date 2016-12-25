@@ -86,6 +86,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 form.push({
                     type: "box",
                     "colClass": "col-sm-6",
+                    title: model.scoreDetails[i].title + " (" + model.totalScores.data[0][model.scoreDetails[i].title] + ")",
                     condition: "model.currentStage!='ScreeningReview'",
                     items: [
                         {
@@ -284,7 +285,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 var p1 = Scoring.get({
                     auth_token:AuthTokenHelper.getAuthData().access_token,
                     LoanId:model.cbModel.loanId,
-                    ScoreName:"ConsolidatedScore"
+                    ScoreName: model.currentStage!='ScreeningReview'?"ConsolidatedScore": "RiskScore1"
                 })
                 .$promise
                 .then(function(resp){
@@ -301,6 +302,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             model.businessPL = res[8];
                             model.balanceSheet = res[9];
                             model.bankStatement = res[10];
+                            model.totalScores = res[11];
                             prepareForms(model, $this.form);
                         })
                     return onSuccessPromise;
