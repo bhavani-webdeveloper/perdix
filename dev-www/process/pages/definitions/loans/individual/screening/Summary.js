@@ -82,29 +82,34 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         });
 
         for (i in model.scoreDetails) {
-            form.push({
-                type: "box",
-                "colClass": "col-sm-6",
-                items: [
-                    {
-                        type: "tableview",
-                        key: "scoreDetails[" + i + "].data",
-                        title: model.scoreDetails[i].title,
-                        selectable: false,
-                        paginate: false,
-                        searching: false,
-                        getColumns: function(){
-                            return model.scoreDetails[i].columns;
+            (function(i){
+                form.push({
+                    type: "box",
+                    "colClass": "col-sm-6",
+                    condition: "model.currentStage!='ScreeningReview'",
+                    items: [
+                        {
+                            type: "tableview",
+                            key: "scoreDetails[" + i + "].data",
+                            title: model.scoreDetails[i].title,
+                            selectable: false,
+                            paginate: false,
+                            searching: false,
+                            getColumns: function(){
+                                return model.scoreDetails[i].columns;
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                });
+            })(i)
+            
             // form.push()
         }
 
         form.push({
             type: "box",
             colClass: "col-sm-12",
+            condition: "model.currentStage!='ScreeningReview'",
             items: [
                 {
                     type: "tableview",
@@ -123,6 +128,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
             type: "box",
             colClass: "col-sm-12",
+            condition: "model.currentStage!='ScreeningReview'",
             items: [
                 {
                     type: "tableview",
@@ -278,29 +284,44 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 var p1 = Scoring.get({
                     auth_token:AuthTokenHelper.getAuthData().access_token,
                     LoanId:model.cbModel.loanId,
-                    ScoreName:model.cbModel.scoreName
-                },function(httpres){
-                    model.ScoreDetails = httpres.ScoreDetails;
-
-                    // this.form.push()
-                },function (errResp){
-
+                    ScoreName:"ConsolidatedScore"
+                })
+                .$promise
+                .then(function(resp){
+                    model.ScoreDetails = resp.ScoreDetails;
+                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId})
+                        .$promise;
+                    onSuccessPromise
+                        .then(function(res){
+                            model.scoreDetails = [res[1], res[2], res[3], res[4]];
+                            model.sectorDetails = res[5];
+                            model.subSectorDetails = res[6];
+                            model.enterpriseDetails = res[0];
+                            model.houseHoldPL = res[7];
+                            model.businessPL = res[8];
+                            model.balanceSheet = res[9];
+                            model.bankStatement = res[10];
+                            prepareForms(model, $this.form);
+                        })
+                    return onSuccessPromise;
+                }, function(httpRes){
+                    $log.info("Some error getting Consolidated Score");
                 });
 
-                var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
-                    .$promise
-                    .then(function(res){
-                        model.scoreDetails = [res[1], res[2], res[3], res[4]];
-                        model.sectorDetails = res[5];
-                        model.subSectorDetails = res[6];
-                        model.enterpriseDetails = res[0];
-                        model.houseHoldPL = res[7];
-                        model.businessPL = res[8];
-                        model.balanceSheet = res[9];
-                        model.bankStatement = res[10];
+                // var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
+                //     .$promise
+                //     .then(function(res){
+                //         model.scoreDetails = [res[1], res[2], res[3], res[4]];
+                //         model.sectorDetails = res[5];
+                //         model.subSectorDetails = res[6];
+                //         model.enterpriseDetails = res[0];
+                //         model.houseHoldPL = res[7];
+                //         model.businessPL = res[8];
+                //         model.balanceSheet = res[9];
+                //         model.bankStatement = res[10];
                         
-                        prepareForms(model, $this.form);
-                    })
+                //         prepareForms(model, $this.form);
+                //     })
 
                 var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId})
                     .$promise
@@ -312,8 +333,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     .finally(function(){
                         PageHelper.hideLoader();
                     })
-                $q.all([p1,p2,p3]).finally(function(){
-                    
+                $q.all([p1,p3]).finally(function(){
                     deferred.resolve();
                 })
             } else {
@@ -406,6 +426,53 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                         type: "amount"
                                     }
                                 ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "SCORING_DETAILS",
+                "condition": "model.currentStage=='ScreeningReview'",
+                "items": [
+                    {
+                        type:"tableview",
+                        key:"ScoreDetails[0].Parameters",
+                        // title:"SCORING_DETAILS",
+                        selectable: false,
+                        paginate: false,
+                        searching: false,
+                        getColumns: function(){
+                            return [{
+                                title: 'PARAMETER',
+                                data: 'ParameterName'
+                            }, {
+                                title: 'VALUE',
+                                data: 'UserInput'
+                            }, {
+                                title: 'SCORE',
+                                data: 'ParamterScore'
+                            },{
+                                title: 'RESULT',
+                                data: 'ParameterPassStatus'
+                            }]
+                        }
+                    },
+                    {
+                        type:"fieldset",
+                        title:"",
+                        items:[
+                            {
+                                "key":"ScoreDetails[0].OverallWeightedScore",
+                                "title":"TOTAL_SCREENING_SCORE",
+                                readonly:true
+                            },
+                            {
+                                "key":"ScoreDetails[0].OverallPassStatus",
+                                "title":"OVERALL_PASS_STATUS",
+                                readonly:true
                             }
                         ]
                     }
