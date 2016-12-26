@@ -67,8 +67,8 @@
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
                 "Page/Engine/management.SpokeMerger",
-                "Page/Engine/management.MasterDataMaintenance"
-
+                "Page/Engine/management.MasterDataMaintenance",
+				"Page/Engine/management.UserBranches"
             ]
         },
         {
