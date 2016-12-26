@@ -37,6 +37,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         // else {
 
                             model.customer = model.customer || {};
+                            if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                                model.customer.enterprise = {};
+                            }
                             var branch1 = formHelper.enum('branch_id').data;
                             for (var i = 0; i < branch1.length; i++) {
                                 if ((branch1[i].name) == SessionStore.getBranch()) {
@@ -1142,7 +1145,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "title": "HOUSEHOLD_FINANCIALS",
                             "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                             "items": [
-                                {
+                               /* {
                                     "key": "customer.otherBusinessIncomes",
                                     "type": "array",
                                     "title": "OTHER_INCOME_SOURCE",
@@ -1158,7 +1161,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "title": "INCOME_SOURCE"
                                         }
                                     ]
-                                },
+                                },*/
                                 {
                                     "key": "customer.expenditures",
                                     "type": "array",
@@ -1194,7 +1197,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "condition": "model.currentStage =='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             readonly:true,
                             "items": [
-                                {
+                                /*{
                                     "key": "customer.otherBusinessIncomes",
                                     "type": "array",
                                     "title": "OTHER_INCOME_SOURCE",
@@ -1208,7 +1211,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "title": "AMOUNT"
                                         }
                                     ]
-                                },
+                                },*/
                                 {
                                     "key": "customer.expenditures",
                                     "type": "array",
@@ -2320,21 +2323,23 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"UTILIZATION_OF_BUSINESS_PREMISES ",
                                     type:"radios",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode: "utilisation_of_business"
                                 },
                                 {
                                     key:"customer.approachForTheBusinessPremises",
                                     title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
                                     type:"radios",
                                     required:"true",
-                                    enumCode:"connectivity_status "
+                                    enumCode:"status_scale_2"
+                                    //enumCode:"connectivity_status "
                                 },
                                 {
                                     key:"customer.safetyMeasuresForEmployees",
                                     title:"SAFETY_MEASURES_FOR_EMPLOYEES",
                                     type:"radios",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode:"decisionmaker",
+                                    //enumCode: "status_scale"
                                 },
                                 {
                                     key:"customer.childLabours",
@@ -2355,7 +2360,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"STOCK_MATERIAL_MANAGEMENT",
                                     type:"radios",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode:"status_scale_2"
+                                    //enumCode: "status_scale"
+                                },
+                                {
+                                    key:"customer.customerWalkInToTheBusiness",
+                                    title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
+                                    type:"radios",
+                                    required:"true",
+                                    enumCode:"status_scale"
+                                    //enumCode: "status_scale"
                                 },
 
                             ]
@@ -2446,6 +2460,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.multipleBuyers",
                                     title:"MULTIPLE_BUYERS_MORE_THAN_3",
+                                    "condition": "model.customer.enterprise.businessType == 'Manufacturing'",
                                     type:"string",
                                     required:"true",
                                     enumCode:"decisionmaker",
@@ -2469,21 +2484,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"UTILIZATION_OF_BUSINESS_PREMISES ",
                                     type:"string",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode: "utilisation_of_business"
                                 },
                                 {
                                     key:"customer.approachForTheBusinessPremises",
                                     title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
                                     type:"string",
                                     required:"true",
-                                    enumCode:"connectivity_status "
+                                    enumCode:"status_scale_2"
                                 },
                                 {
                                     key:"customer.safetyMeasuresForEmployees",
                                     title:"SAFETY_MEASURES_FOR_EMPLOYEES",
                                     type:"string",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode: "decisionmaker"
                                 },
                                 {
                                     key:"customer.childLabours",
@@ -2504,7 +2519,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     title:"STOCK_MATERIAL_MANAGEMENT",
                                     type:"string",
                                     required:"true",
-                                    enumCode: "status_scale"
+                                    enumCode: "status_scale_2"
+                                },
+                                {
+                                    key:"customer.customerWalkInToTheBusiness",
+                                    title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
+                                    "condition": "model.customer.enterprise.businessType == 'Trading'",
+                                    type:"string",
+                                    required:"true",
+                                    enumCode:"status_scale"
+                                    //enumCode: "status_scale"
                                 },
 
                             ]

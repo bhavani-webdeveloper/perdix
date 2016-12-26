@@ -1382,8 +1382,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type: "select",
-                                enumCode: "customer_since"
+                                type:"number"
+                                /*type: "select",
+                                enumCode: "customer_since"*/
                             },
                             {
                                 key: "customer.buyerDetails[].paymentDate",
@@ -1524,7 +1525,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type: "date"
+                                type:"number"
+                               // type: "date"
                             },
                             
                             {

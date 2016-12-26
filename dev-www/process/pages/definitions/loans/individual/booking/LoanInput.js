@@ -151,6 +151,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             return;
                         }
                         model.loanAccount = resp;
+                        $log.info(resp);
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
