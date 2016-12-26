@@ -150,8 +150,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue', pageId: null});
                             return;
                         }
+                        $log.info("resp");
                         model.loanAccount = resp;
-                        $log.info(resp);
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
@@ -480,6 +480,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 key:"loanAccount.securityEmiRequired",
+                                type:"select",
                                 required: true
                             },
                             {
