@@ -42,14 +42,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                         "title": "BRANCH",
                         "type": "select",
                         "enumCode": "branch_code",
+                        "required": true
                     },{
                         "key": "demandlist.demandDate1",
                         "title": "FROM_DATE",
-                        "type": "date"
+                        "type": "date",
+                        "required": true
                     },{
                         "key": "demandlist.demandDate2",
                         "title": "TO_DATE",
-                        "type": "date"
+                        "type": "date",
+                        "required": true
                     }, {
                         "title": "DOWNLOAD",
                         "htmlClass": "btn-block",

@@ -188,7 +188,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         if (PageHelper.isFormInvalid(formCtrl)){
                             return;
                         }
-                        
+
                         if (!model.pdc || !model.pdc.pdcDemandListDate) {
                             PageHelper.setError({
                                 'message': 'Installment Date is mandatory.'
@@ -411,7 +411,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     if (model.updateDemand.length > 0) {
                         console.log(model.updateDemand);
                         var reqData = {
-                            "depositBankAccountCode": model.pdc.collectionAccountCode,
+                            "depositBankAccountNumber": model.pdc.collectionAccountCode,
                             "repaymentDtos": model.updateDemand
                         };
                         PageHelper.clearErrors();
