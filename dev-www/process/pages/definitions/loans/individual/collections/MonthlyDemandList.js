@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                 model.demandlist = model.demandlist || {};
                 model.demandlist.demandDate = model.demandlist.demandDate || Utils.getCurrentDate();
                 //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
-                 var branch1 = formHelper.enum('branch_id').data;
+                //  var branch1 = formHelper.enum('branch_id').data;
                 /* $log.info(branch1);
                     for (var i = 0; i < branch1.length; i++) {
                         if ((branch1[i].name) == SessionStore.getBranch()) {
@@ -38,10 +38,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                     "type": "fieldset",
                     "title": "DOWNLOAD_MONTHLY_DEMAND_LIST",
                     "items": [{
-                        "key": "demandlist.branchId",
-                        "title": "Branch_ID",
+                        "key": "demandlist.branchCode",
+                        "title": "BRANCH",
                         "type": "select",
-                        "enumCode": "branch_id",
+                        "enumCode": "branch_code",
                     },{
                         "key": "demandlist.demandDate1",
                         "title": "FROM_DATE",
@@ -58,7 +58,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                         "notitle": true,
                         "readonly": false,
                         "onClick": function(model, form, schemaForm, event) {
-                            var fileId = irf.BI_BASE_URL + "/download.php?&auth_token=" + model.authToken + "&report_name=overall_demand_report&from_date=" + model.demandlist.demandDate1 + "&to_date=" + model.demandlist.demandDate2 + "&branch_id=" + model.demandlist.branchId ;
+                            var fileId = irf.BI_BASE_URL + "/download.php?&auth_token=" + model.authToken + "&report_name=overall_demand_report&from_date=" + model.demandlist.demandDate1 + "&to_date=" + model.demandlist.demandDate2 + "&branch_code=" + model.demandlist.branchCode ;
                             Utils.downloadFile(fileId );
                         },
                     }]

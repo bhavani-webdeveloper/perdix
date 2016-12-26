@@ -195,6 +195,16 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			// console.warn(key);
 			var r = irfStorageService.getMaster(key);
 			var branchId = ""+SessionStore.getBranchId();
+
+			/* Special Handling for custom (derived) enum Codes */
+			if (r==null){
+				switch(key){
+					case "branch_code":
+						var r= irfStorageService.getMaster('branch');
+						break;
+				}
+			}
+
 			if (r && _.isArray(r.data)) {
 				var ret = {parentClassifier:r.parentClassifier,data:[]};
 				switch (key.toString().trim()) {
@@ -230,6 +240,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
                             ret.data[i].value = Number(ret.data[i].code);
                         }
                         break;
+					case 'branch_code':
+						ret.data = _.clone(r.data);
+						for (var i=0; i<ret.data.length; i++){
+							ret.data[i].value = ret.data[i].field1;
+						}
+						break;
 					case 'partner':
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
