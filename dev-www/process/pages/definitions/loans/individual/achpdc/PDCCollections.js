@@ -55,6 +55,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                 "items": [{
                     "key": "pdc.pdcDemandListDate",
                     "title": "INSTALLMENT_DATE",
+                    required: true,
                     "type": "date"
                 },
                     {
@@ -62,6 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                         type: "lov",
                         autolov: true,
                         title:"COLLECTIONS_BRANCH_SET",
+                        required: true,
                         bindMap: {
                         },
                         outputMap: {
@@ -112,7 +114,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                                 "key": "pdc.partnerCode",
                                 "title": "PARTNER_CODE",
                                 "type": "select",
-                                "enumCode": "partner"
+                                "enumCode": "partner",
+                                "required": true
                             },
                             {
                                 key: "pdc.collectionAccountBank",
@@ -181,6 +184,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     "title": "SEARCH_ALL_DEMAND",
                     "onClick": function(model, formCtrl, form) {
                         PageHelper.clearErrors();
+
+                        if (PageHelper.isFormInvalid(formCtrl)){
+                            return;
+                        }
+                        
                         if (!model.pdc || !model.pdc.pdcDemandListDate) {
                             PageHelper.setError({
                                 'message': 'Installment Date is mandatory.'
@@ -369,8 +377,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                     "type": "submit",
                     "notitle": true,
                     "condition": "model.showUpdateSection",
-                    "title": "SUBMIT",
-                    "onClick": "actions.submit(model, formCtrl)"
+                    "title": "SUBMIT"
                 }]
             }],
             schema: function() {

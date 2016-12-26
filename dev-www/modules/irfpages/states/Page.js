@@ -250,6 +250,16 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
             },
             hideBlockingLoader: function(){
                 $(".blockUI").remove();
+            },
+            isFormInvalid: function(formController, showMsg){
+                showMsg = showMsg || true;
+                formController.scope.$broadcast('schemaFormValidate');
+                if (formController && formController.$invalid) {
+                    if (showMsg) 
+                        this.showProgress("form-validation","Your form have errors. Please check.", 5000);
+                    return true;
+                }
+                return false;
             }
         }
     }]);
