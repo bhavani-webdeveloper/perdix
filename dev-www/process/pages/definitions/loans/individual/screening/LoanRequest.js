@@ -1449,7 +1449,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                             //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
-                            reqData.loanAccount.psychometricCompleted = "N";
+                            reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
                             PageHelper.showLoader();
                             IndividualLoan.create(reqData)
                                 .$promise
