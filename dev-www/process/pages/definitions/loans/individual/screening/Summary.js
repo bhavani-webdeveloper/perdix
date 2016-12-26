@@ -60,6 +60,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
 
 
+        for (var i=0;i< model.deviationDetails.data.length; i++){
+            var d = model.deviationDetails.data[i];
+            if (d.Mitigant && d.Mitigant.length!=00){
+                d.ListOfMitigants = d.Mitigant.split("|");
+            }
+        }
 
         
         
@@ -257,6 +263,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NON_EMI_BOUNCED" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | currency : "" : 2 }}</td><td>{{ bankStatement["Deposits"] | currency : "" : 2 }}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | currency : "" : 2 }}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | currency : "" : 2 }}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
                 }
             ]
+        });
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12 table-box",
+            title: "DEVIATION_AND_MITIGATIONS",
+            condition: "model.currentStage != 'ScreeningReview'",
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: '<table class="table"><colgroup><col width="5%"><col width="35%"><col width="20%"><col width="35%"></colgroup><thead><tr><th></th><th>Parameter Name</th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td> <span data-ng-if="rowData.ParameterScore >= 0.0 && rowData.ParameterScore < 1.99 "> <span class="square-color-box bg-red-active"></span> </span> <span data-ng-if="rowData.ParameterScore >= 2.0 && rowData.ParameterScore < 3.99 "> <span class="square-color-box bg-yellow-active"></span> </span> <span data-ng-if="rowData.ParameterScore >= 4.0 && rowData.ParameterScore <= 5.0 "> <span class="square-color-box bg-green-active"></span> </span></td><td>{{ rowData["Parameter"] }}</td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
+                }
+            ]
         })
         
         // form.push({
@@ -289,22 +309,36 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             model.customer = {};
             var $this = this;
             var deferred = $q.defer();
+
+            var scoreName = null;
+            switch(model.currentStage){
+                case "ScreeningReview":
+                    scoreName = "RiskScore1";
+                    break;
+                case "ApplicationReview":
+                    scoreName = "RiskScore2";
+                    break;
+                case "FieldAppraisalReview":
+                    scoreName = "RiskScore3";
+                    break;
+                default:
+                    scoreName = "ConsolidatedScore";
+                    break;
+            }
             
             if (_.hasIn(model, 'cbModel')){
                 
                 var p1 = Scoring.get({
-                    auth_token:AuthTokenHelper.getAuthData().access_token,
-                    LoanId:model.cbModel.loanId,
-                    ScoreName: model.currentStage!='ScreeningReview'?"ConsolidatedScore": "RiskScore1"
+                    auth_token: AuthTokenHelper.getAuthData().access_token,
+                    LoanId: model.cbModel.loanId,
+                    ScoreName: scoreName
                 })
                 .$promise
-                .then(function(resp){
-                    model.ScoreDetails = resp.ScoreDetails;
-                }, function(httpRes){
-                    $log.info("Some error getting Consolidated Score");
+                .then(function(response){
+                    model.ScoreDetails = response.ScoreDetails;
                 })
                 .finally(function(){
-                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId})
+                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName})
                         .$promise;
                     onSuccessPromise
                         .then(function(res){
@@ -317,6 +351,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             model.balanceSheet = res[9];
                             model.bankAccountDetails = res[10];
                             model.totalScores = res[11];
+                            model.deviationDetails = res[12];
                             prepareForms(model, $this.form);
                         })
                     return onSuccessPromise;
