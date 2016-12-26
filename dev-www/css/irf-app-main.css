@@ -693,3 +693,28 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   /* Non-prefixed version, currently
                                   not supported by any browser */
 }
+.table-box .box.box-theme {
+  border: none;
+}
+.table-box .box-header .box-title {
+  font-size: 1.1em;
+  float: left;
+  padding: 30px 25px;
+  text-transform: uppercase;
+  font-style: oblique;
+}
+.table-box .box-body {
+  background: #FAFAFA;
+}
+.table-box th {
+  border-bottom: 2px solid #ebebeb;
+}
+hr.dotted {
+  border-top: 2px dotted #ccc;
+}
+tr.top-bar {
+  border-top: 2px solid #f4f4f4;
+}
+tr.top-bar.with-bold {
+  font-weight: 600;
+}
