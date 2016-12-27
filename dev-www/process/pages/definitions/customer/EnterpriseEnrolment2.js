@@ -2172,7 +2172,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
-                                enumCode: "decisionmaker"
+                                enumCode: "decisionmaker",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    if (modelValue && modelValue.toLowerCase() === 'no')
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedTo = null;
+                                    else if(modelValue && modelValue.toLowerCase() === 'yes')
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedToUs = null;
+                                }
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
