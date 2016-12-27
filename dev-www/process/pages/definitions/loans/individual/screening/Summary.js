@@ -440,6 +440,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             model.bankAccountDetails = res[10];
                             model.totalScores = res[11];
                             model.deviationDetails = res[12];
+                            model.ratioDetails = res[13];
+
+                            model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
+                            _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
                             prepareForms(model, $this.form);
                         })
                     return onSuccessPromise;
