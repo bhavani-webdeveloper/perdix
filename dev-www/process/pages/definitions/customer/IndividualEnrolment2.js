@@ -2214,6 +2214,81 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     },
                 ]
             },
+            {
+                            type:"box",
+                            title:"PHYSICAL_ASSETS",
+                            "condition": "model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
+                            items:[
+                                {
+                                    key:"customer.physicalAssets",
+                                    type:"array",
+                                    startEmpty: true,
+                                    title:"PHYSICAL_ASSETS",
+                                    items:[
+                                        {
+                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
+                                            title: "ASSET_TYPE",
+                                            type: "select",
+                                            enumCode: "asset_type"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].vehicleModel",
+                                            title: "VEHICLE_MAKE_MODEL",
+                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
+                                            type: "string"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].registeredOwner",
+                                            title: "REGISTERED_OWNER",
+                                            type: "string"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].ownedAssetValue",
+                                            title: "VALUE_OF_THE_ASSET",
+                                            type: "amount"
+                                        },
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            type:"box",
+                            title:"PHYSICAL_ASSETS",
+                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            readonly:true,
+                            items:[
+                                {
+                                    key:"customer.physicalAssets",
+                                    type:"array",
+                                    startEmpty: true,
+                                    title:"PHYSICAL_ASSETS",
+                                    items:[
+                                        {
+                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
+                                            title: "ASSET_TYPE",
+                                            type: "select",
+                                            enumCode: "asset_type"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].vehicleModel",
+                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
+                                            title: "VEHICLE_MAKE_MODEL",
+                                            type: "string"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].registeredOwner",
+                                            title: "REGISTERED_OWNER",
+                                            type: "string"
+                                        },
+                                        {
+                                            key: "customer.physicalAssets[].ownedAssetValue",
+                                            title: "VALUE_OF_THE_ASSET",
+                                            type: "string"
+                                        },
+                                    ]
+                                }
+                            ]
+                        },
                         {
                             type: "box",
                             title: "PROXY_INDICATORS",
@@ -2532,81 +2607,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 
                             ]
                         },
-                        {
-                            type:"box",
-                            title:"PHYSICAL_ASSETS",
-                            "condition": "model.currentStage == 'Application'  || model.currentStage=='FieldAppraisal'",
-                            items:[
-                                {
-                                    key:"customer.physicalAssets",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"PHYSICAL_ASSETS",
-                                    items:[
-                                        {
-                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
-                                            title: "ASSET_TYPE",
-                                            type: "select",
-                                            enumCode: "asset_type"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].vehicleModel",
-                                            title: "VEHICLE_MAKE_MODEL",
-                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].registeredOwner",
-                                            title: "REGISTERED_OWNER",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].ownedAssetValue",
-                                            title: "VALUE_OF_THE_ASSET",
-                                            type: "amount"
-                                        },
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            type:"box",
-                            title:"PHYSICAL_ASSETS",
-                            "condition": "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
-                            readonly:true,
-                            items:[
-                                {
-                                    key:"customer.physicalAssets",
-                                    type:"array",
-                                    startEmpty: true,
-                                    title:"PHYSICAL_ASSETS",
-                                    items:[
-                                        {
-                                            key: "customer.physicalAssets[].nameOfOwnedAsset",
-                                            title: "ASSET_TYPE",
-                                            type: "select",
-                                            enumCode: "asset_type"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].vehicleModel",
-                                            condition: "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'",
-                                            title: "VEHICLE_MAKE_MODEL",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].registeredOwner",
-                                            title: "REGISTERED_OWNER",
-                                            type: "string"
-                                        },
-                                        {
-                                            key: "customer.physicalAssets[].ownedAssetValue",
-                                            title: "VALUE_OF_THE_ASSET",
-                                            type: "string"
-                                        },
-                                    ]
-                                }
-                            ]
-                        },
+                        
 
                         {
                             "type": "actionbox",
