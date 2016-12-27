@@ -1525,7 +1525,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type:"number"
+                                //type:"number"
                                // type: "date"
                             },
                             

@@ -486,9 +486,9 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
-    resource.getloanParameters = function() {
+    resource.getloanParameters = function(loanId,score) {
         var deferred = $q.defer();
-        var request = {};
+        var request = {"loanId":loanId,"score":score};
         resource.getResult("loanParameters.list", request).then(function(records){
             if (records && records.results) {
                 var result = {

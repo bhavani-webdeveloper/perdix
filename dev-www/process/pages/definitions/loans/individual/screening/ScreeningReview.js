@@ -108,6 +108,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                     var guarantors = [];
                                     var business;
                                     var urnNos = [];
+                                    res.mscore="RiskScore1";
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
@@ -188,7 +189,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                             $this.bundlePages.push({
                                                 pageClass: 'loan-review',
                                                 model: {
-                                                    loanAccount: res
+                                                    loanAccount: res, 
                                                 }
                                             });
                                             

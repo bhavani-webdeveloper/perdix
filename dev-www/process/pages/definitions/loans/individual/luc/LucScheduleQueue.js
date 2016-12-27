@@ -58,8 +58,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 							"title": "LOAN_ACCOUNT_NUMBER",
 							"type": "string"
 						},
-						
-
 					},
 					"required": ["LoanAccountNumber"]
 				},

@@ -101,6 +101,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                     var guarantors = [];
                                     var business;
                                     var urnNos = [];
+                                    res.mscore="RiskScore3";
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];

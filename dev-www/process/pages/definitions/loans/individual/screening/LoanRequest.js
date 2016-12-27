@@ -154,7 +154,10 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
-
+                $log.info(model.loanAccount.accountUserDefinedFields.loanId);
+                $log.info(model.loanAccount.mscore);
+                $log.info(model.loanAccount.id);
+                
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -563,10 +566,11 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                     }
                 ]
             },
+
         {
             "type": "box",
             "title": "LOAN_MITIGANTS",
-            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'",
+            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
             "items": [{
                 key: "loanAccount.loanMitigants",
                 type: "array",
@@ -580,22 +584,22 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                         bindMap: {
                         },
                         outputMap: {
-                            "ParameterName": "loanAccount.loanMitigants[arrayIndex].parameter",
+                            "Parameter": "loanAccount.loanMitigants[arrayIndex].parameter",
                             //"Score":"loanAccount.loanMitigants[arrayIndex].riskScore",
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            return Queries.getloanParameters();
+                            return Queries.getloanParameters(model.loanAccount.id,model.loanAccount.mscore);
                         },
                         getListDisplayItem: function(item, index) {
                             return [
-                                item.ParameterName,
-                                item.Score
+                                item.Parameter,
+                                item.ParameterScore
                             ];
                         },
                         onSelect: function(result, model, context) {
                             $log.info(result);
-                            model.loanAccount.loanparameter=result.ParameterName;
+                            model.loanAccount.loanparameter=result.Parameter;
                         }
                 }, {
                     key: "loanAccount.loanMitigants[].mitigant",
