@@ -493,17 +493,12 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                     },
                     {
                         key: "loanAccount.emiRequested",
-                        type: "select",
-                        titleMap: {
-                                        "5th": "5th",
-                                        "10th": "10th",
-                                        "15th": "15th",
-                        },
+                        type: "amount",
                         title: "EMI_REQUESTED"
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        type: "date",
+                        type: "string",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -594,7 +589,8 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                         getListDisplayItem: function(item, index) {
                             return [
                                 item.Parameter,
-                                item.ParameterScore
+                                item.ParameterScore,
+
                             ];
                         },
                         onSelect: function(result, model, context) {
@@ -932,7 +928,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
             {
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
-                "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",
