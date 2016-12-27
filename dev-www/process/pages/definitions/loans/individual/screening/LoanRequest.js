@@ -735,6 +735,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                     {
                         key: "loanAccount.proposedHires",
                         type: "string",
+                        required:true,
                         title: "PROPOSED_HIRES"
                     },
                     {
