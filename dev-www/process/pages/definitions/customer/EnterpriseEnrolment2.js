@@ -1817,12 +1817,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.enterprise.monthlyTurnover",
                         title: "MONTHLY_TURNOVER",
                         required:true,
-                        type: "amount"
+                        type: "amount",
+                 
                     },
                     {
                         key: "customer.enterprise.monthlyBusinessExpenses",
                         title: "MONTHLY_BUSINESS_EXPENSES",
-                        type: "amount"
+                        type: "amount",
+                    
                     },
                     {
                         key: "customer.enterprise.avgMonthlyNetIncome",
