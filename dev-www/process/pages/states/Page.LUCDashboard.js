@@ -16,16 +16,20 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 
 		PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 			$scope.dashboardDefinition = resp;
-			var branchId = SessionStore.getBranchId();
-			var branchName = SessionStore.getBranch();
+			var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
 
 			var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucScheduleQueue"];
 			if (lsqMenu) {
 				LUC.search({
 					'accountNumber': '',
 					'currentStage':"LUCSchedule",
-					//'centreId': searchOptions.centreId,
-					//'branchName': searchOptions.branchName,
+					'centreId': centreId[0],
+					'branchName': branch.branchName,
 					'page': 1,
 					'per_page': 1,
 					'applicantName': '',
@@ -42,8 +46,8 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				LUC.search({
 					'accountNumber': '',
 					'currentStage':"LUCReschedule",
-					//'centreId': searchOptions.centreId,
-					//'branchName': searchOptions.branchName,
+					'centreId': centreId[0],
+					'branchName': branch.branchName,
 					'page': 1,
 					'per_page': 1,
 					'applicantName': '',
@@ -60,8 +64,8 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				LUC.search({
 					'accountNumber': '',
 					'currentStage':"LUCEscalate",
-					//'centreId': searchOptions.centreId,
-					//'branchName': searchOptions.branchName,
+					'centreId': centreId[0],
+					'branchName': branch.branchName,
 					'page': 1,
 					'per_page': 1,
 					'applicantName': '',
@@ -78,8 +82,8 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				LUC.search({
 					'accountNumber': '',
 					'currentStage':"LUCLegalRecovery",
-					//'centreId': searchOptions.centreId,
-					//'branchName': searchOptions.branchName,
+					'centreId': centreId[0],
+					'branchName': branch.branchName,
 					'page': 1,
 					'per_page': 1,
 					'applicantName': '',
