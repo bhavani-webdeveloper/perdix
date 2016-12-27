@@ -724,3 +724,12 @@ tr.top-bar.with-bold {
   border: 1px solid rgba(0, 0, 0, 0.2);
   display: block;
 }
+.bg-a-yellow {
+  background: #FFFF50;
+}
+.bg-a-green {
+  background: #50D050;
+}
+.bg-a-red {
+  background: #FF5050;
+}

@@ -67,51 +67,125 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             }
         }
 
-        
+        var bsLeft = [];
+        var bsRight = [];
+        model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+
+        var bsCounter = 0;
+        _.forIn(model.enterpriseDetailsData, function(value, key){
+            if (bsCounter++ % 2 ==0){
+                bsLeft.push({
+                    key: "enterpriseDetailsData." + key,
+                    title: key,
+                    type: "string",
+                    readonly: true,
+                })
+            } else {
+                bsRight.push({
+                    key: "enterpriseDetailsData." + key,
+                    title: key,
+                    type: "string",
+                    readonly: true
+                })
+            }
+        })
+
+        form.push({
+            "type": "box",
+                "colClass": "col-sm-12 table-box",
+                "title": "Business Summary",
+                "readonly": true,
+                "items": [
+                    {
+                        type: "section",
+                        htmlClass: "row",
+                        items: [
+                            {
+                                type: "section",
+                                htmlClass: "col-sm-6",
+                                items: bsLeft
+                            },
+                            {
+                                type: "section",
+                                htmlClass: "col-sm-6",
+                                items: bsRight
+                            }
+                        ]
+                    }
+                ]
+        })
         
         form.push({
             type: "box",
-            "colClass": "col-sm-12",
+            colClass: "col-sm-12 table-box",
+            title: "SCORES",
+            condition: "model.currentStage!='ScreeningReview'",
             items: [
                 {
-                    type: "tableview",
-                    key: "enterpriseDetails.data",
-                    title: model.enterpriseDetails.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.enterpriseDetails.columns;
-                    }
-                }
-            ]
-        });
-
-        for (i in model.scoreDetails) {
-            (function(i){
-                form.push({
-                    type: "box",
-                    "colClass": "col-sm-6",
-                    title: model.scoreDetails[i].title + " (" + model.totalScores.data[0][model.scoreDetails[i].title] + ")",
-                    condition: "model.currentStage!='ScreeningReview'",
+                    type: "section",
+                    htmlClass: "row",
                     items: [
                         {
-                            type: "tableview",
-                            key: "scoreDetails[" + i + "].data",
-                            title: model.scoreDetails[i].title,
-                            selectable: false,
-                            paginate: false,
-                            searching: false,
-                            getColumns: function(){
-                                return model.scoreDetails[i].columns;
-                            }
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            title: model.scoreDetails[0].title,
+                            html: '<h3>{{ model.scoreDetails[0].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[0].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[0].data"><td data-ng-repeat="column in model.scoreDetails[0].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                        },
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            title: model.scoreDetails[1].title,
+                            html: '<h3>{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[1].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[1].data"><td data-ng-repeat="column in model.scoreDetails[1].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
                         }
                     ]
-                });
-            })(i)
+                },
+                {
+                    type: "section",
+                    htmlClass: "row",
+                    items: [
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            title: model.scoreDetails[2].title,
+                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[2].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[2].data"><td data-ng-repeat="column in model.scoreDetails[2].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                        },
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            title: model.scoreDetails[3].title,
+                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[3].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[3].data"><td data-ng-repeat="column in model.scoreDetails[3].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                        }
+                    ]
+                }
+                
+            ]
+        })
+
+        // for (i in model.scoreDetails) {
+        //     (function(i){
+        //         form.push({
+        //             type: "box",
+        //             "colClass": "col-sm-6",
+        //             title: model.scoreDetails[i].title + " (" + model.totalScores.data[0][model.scoreDetails[i].title] + ")",
+        //             condition: "model.currentStage!='ScreeningReview'",
+        //             items: [
+        //                 {
+        //                     type: "tableview",
+        //                     key: "scoreDetails[" + i + "].data",
+        //                     title: model.scoreDetails[i].title,
+        //                     selectable: false,
+        //                     paginate: false,
+        //                     searching: false,
+        //                     getColumns: function(){
+        //                         return model.scoreDetails[i].columns;
+        //                     }
+        //                 }
+        //             ]
+        //         });
+        //     })(i)
             
-            // form.push()
-        }
+        //     // form.push()
+        // }
 
         form.push({
             type: "box",
@@ -274,10 +348,24 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    html: '<table class="table"><colgroup><col width="5%"><col width="35%"><col width="20%"><col width="35%"></colgroup><thead><tr><th></th><th>Parameter Name</th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td> <span data-ng-if="rowData.ParameterScore >= 0.0 && rowData.ParameterScore < 1.99 "> <span class="square-color-box bg-red-active"></span> </span> <span data-ng-if="rowData.ParameterScore >= 2.0 && rowData.ParameterScore < 3.99 "> <span class="square-color-box bg-yellow-active"></span> </span> <span data-ng-if="rowData.ParameterScore >= 4.0 && rowData.ParameterScore <= 5.0 "> <span class="square-color-box bg-green-active"></span> </span></td><td>{{ rowData["Parameter"] }}</td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
+                    html: '<table class="table"><colgroup><col width="35%"><col width="5%"><col width="20%"><col width="35%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td><span data-ng-if="rowData.ParameterScore >= 0.0 && rowData.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="rowData.ParameterScore >= 2.0 && rowData.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="rowData.ParameterScore >= 4.0 && rowData.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
                 }
             ]
-        })
+        });
+
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12 table-box",
+        //     title: "BUSINESS_SUMMARY",
+        //     condition: "model.currentStage != 'ScreeningReview'",
+        //     items: [
+        //         {
+        //             type: "section",
+        //             colClass: "col-sm-12",
+        //             html: '<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==0"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==1"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td></tr></tbody></table>'
+        //         }
+        //     ]
+        // })
         
         // form.push({
         //     type: "box",
@@ -395,92 +483,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         },
         
         form: [
-            {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "Business Summary",
-                "readonly": true,
-                "items": [
-                    {
-                        type: "section",
-                        htmlClass: "row",
-                        items: [
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                items: [
-                                    {
-                                        title: "Company Name",
-                                        key: "business.firstName"
-                                    },
-                                    {
-                                        title: "CONSTITUTION",
-                                        key: "business.enterprise.businessConstitution",
-                                        type: "select",
-                                        enumCode: "constitution"
-                                    },
-                                    {
-                                        title: "BUSINESS_SECTOR",
-                                        key: "business.enterprise.businessSector",
-                                        type: "select",
-                                        enumCode: "businessSector",
-                                        parentEnumCode: "businessType",
-                                        parentValueExpr:"model.business.enterprise.businessType",
-                                    },
-                                    {
-                                        key: "business.enterprise.businessSubsector",
-                                        title: "BUSINESS_SUBSECTOR",
-                                        type: "select",
-                                        enumCode: "businessSubSector",
-                                        parentEnumCode: "businessSector",
-                                        parentValueExpr:"model.business.enterprise.businessSector",
-                                    },
-                                    {
-                                       key: "loanAccount.productCategory",
-                                       title:"PRODUCT_TYPE",
-                                       condition:"model.currentStage!='Application'"
-                                    }
-                                ]
-                            },
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                items: [
-                                    {
-                                        key: "business.customerBranchId",
-                                        title:"BRANCH_NAME",
-                                        type: "select",
-                                        enumCode: "branch_id"
-                                    },
-                                    {
-                                        key:"business.centreId",
-                                        type:"select",
-                                        title:"CENTRE_NAME",
-                                        enumCode: "centre",
-                                        parentValueExpr:"model.business.customerBranchId",
-                                        parentEnumCode:"branch_id",
-                                    },
-                                    {
-                                        key: "business.enterprise.monthlyTurnover",
-                                        title: "MONTHLY_TURNOVER",
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "business.enterprise.monthlyBusinessExpenses",
-                                        title: "MONTHLY_BUSINESS_EXPENSES",
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "business.enterprise.avgMonthlyNetIncome",
-                                        title: "AVERAGE_MONTHLY_NET_INCOME",
-                                        type: "amount"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
             {
                 "type": "box",
                 "colClass": "col-sm-12",
