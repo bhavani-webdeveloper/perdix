@@ -135,7 +135,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             type: "section",
                             htmlClass: "col-sm-6",
                             title: model.scoreDetails[1].title,
-                            html: '<h3>{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[1].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[1].data"><td data-ng-repeat="column in model.scoreDetails[1].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[1].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[1].data"><td data-ng-repeat="column in model.scoreDetails[1].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
                         }
                     ]
                 },
@@ -147,13 +147,13 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             type: "section",
                             htmlClass: "col-sm-6",
                             title: model.scoreDetails[2].title,
-                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[2].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[2].data"><td data-ng-repeat="column in model.scoreDetails[2].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[2].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[2].data"><td data-ng-repeat="column in model.scoreDetails[2].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
                         },
                         {
                             type: "section",
                             htmlClass: "col-sm-6",
                             title: model.scoreDetails[3].title,
-                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[3].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[3].data"><td data-ng-repeat="column in model.scoreDetails[3].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
+                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><tbody><tr><th data-ng-repeat="column in model.scoreDetails[3].columns"> {{ column.title }}</th></tr><tr data-ng-repeat="data in model.scoreDetails[3].data"><td data-ng-repeat="column in model.scoreDetails[3].columns"> {{ data[column.data] }}</th></tr></tbody></table>'
                         }
                     ]
                 }
