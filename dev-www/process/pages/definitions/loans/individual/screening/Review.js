@@ -107,6 +107,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             }, {
                                 title: 'STATUS',
                                 data: 'status'
+                            },
+                            {
+                                title: 'TIME_SPENT_IN_MINS',
+                                data: 'timeSpent'
                             }]
                         }
                     }
