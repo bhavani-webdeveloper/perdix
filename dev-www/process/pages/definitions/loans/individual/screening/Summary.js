@@ -1,10 +1,11 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager",
 function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
 
     var branch = SessionStore.getBranch();
+    var scoreName;
 
     var prepareForms = function(model, form){
 
@@ -66,6 +67,30 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 d.ListOfMitigants = d.Mitigant.split("|");
             }
         }
+
+        model.deviationParameter = [];
+        for (var i=0;i< model.deviationDetails.data.length; i++){
+            var d = model.deviationDetails.data[i];
+            model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
+            delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
+            delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
+            model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
+            if (d.Mitigant && d.Mitigant.length!=00){
+                d.ListOfMitigants = d.Mitigant.split("|");
+                for (var j =0; j < d.ListOfMitigants.length; j++) {
+                    model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
+                }
+                
+            }
+        }
+        model.additional = {};
+        model.additional = {deviations:{deviationParameter: model.deviationParameter,scoreName:scoreName}};
+        BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
+
+        $log.info("Karthik here");
+        $log.info(model.additional);
+
+        
 
         var bsLeft = [];
         var bsRight = [];
@@ -398,7 +423,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             var $this = this;
             var deferred = $q.defer();
 
-            var scoreName = null;
+            scoreName = null;
             switch(model.currentStage){
                 case "ScreeningReview":
                     scoreName = "RiskScore1";
@@ -412,6 +437,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 default:
                     scoreName = "ConsolidatedScore";
                     break;
+            }
+
+            if (bundlePageObj){
+                model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
             
             if (_.hasIn(model, 'cbModel')){
@@ -440,6 +469,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             model.bankAccountDetails = res[10];
                             model.totalScores = res[11];
                             model.deviationDetails = res[12];
+                            model.deviationParameter = res[12];
                             model.ratioDetails = res[13];
 
                             model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
@@ -481,6 +511,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             } else {
                 deferred.resolve();
             }
+
             return deferred.promise;
         },
         eventListeners: {

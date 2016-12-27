@@ -232,6 +232,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                 $log.info("Unknown page class");
 
                         }
+                    },
+                    "deviation-loaded":function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-deviation", params);
                     }
         		}
         	}

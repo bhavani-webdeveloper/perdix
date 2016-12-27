@@ -17,6 +17,27 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
         return true;
     }
 
+    var validateAndPopulateMitigants = function(model){
+        delete model.loanAccount.loanMitigants;
+        model.loanAccount.loanMitigants = [];
+        if (model.deviations && model.deviations.deviationParameter && model.deviations.deviationParameter.length>0){
+            for (i=0; i<model.deviations.deviationParameter.length; i++){
+                if(model.deviations.deviationParameter[i].mitigants && model.deviations.deviationParameter[i].mitigants.length>0){
+                    for (k=0;k<model.deviations.deviationParameter[i].mitigants.length; k++){
+                        if(model.deviations.deviationParameter[i].mitigants[k].selected){
+                            model.loanAccount.loanMitigants.push({
+                                parameter:model.deviations.deviationParameter[i].Parameter,
+                                riskScore:model.deviations.scoreName,
+                                mitigant:model.deviations.deviationParameter[i].mitigants[k].mitigantName
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     var computeEstimatedEMI = function(model){
             var fee = 0;
             if(model.loanAccount.commercialCibilCharge)
@@ -267,6 +288,34 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                 model.loanAccount.guarantors.push({
                     'guaCustomerId': params.customer.id
                 });
+            },
+            "load-deviation":function(bundleModel, model, params){
+                $log.info("Inside Deviation List");
+                model.deviations = {};
+                model.deviations.deviationParameter = [];
+                model.deviations.deviationParameter = params.deviations.deviationParameter;
+                model.deviations.scoreName = params.deviations.scoreName;
+                if(model.deviations.deviationParameter && model.deviations.deviationParameter.length==0)
+                   delete model.loanAccount.loanMitigants; 
+                else
+                {
+                    if(model.loanAccount.loanMitigants && model.loanAccount.loanMitigants.length > 0){
+                        for (i=0; i<model.deviations.deviationParameter.length; i++){
+                            for (j=0; j<model.loanAccount.loanMitigants.length; j++){
+                                if(model.deviations.deviationParameter[i].Parameter == model.loanAccount.loanMitigants[j].parameter && model.loanAccount.loanMitigants[j].riskScore == model.deviations.scoreName){
+                                    if(model.deviations.deviationParameter[i].mitigants && model.deviations.deviationParameter[i].mitigants.length>0){
+                                        for (k=0; k<model.deviations.deviationParameter[i].mitigants.length; k++){
+                                            if(model.deviations.deviationParameter[i].mitigants[k].mitigantName == model.loanAccount.loanMitigants[j].mitigant){
+                                                model.deviations.deviationParameter[i].mitigants[k].selected = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         form: [
@@ -493,12 +542,17 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                     },
                     {
                         key: "loanAccount.emiRequested",
-                        type: "amount",
+                        type: "select",
+                        titleMap: {
+                                        "5th": "5th",
+                                        "10th": "10th",
+                                        "15th": "15th",
+                        },
                         title: "EMI_REQUESTED"
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        type: "string",
+                        type: "date",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -562,10 +616,11 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                 ]
             },
 
-        {
+        /*{
             "type": "box",
             "title": "LOAN_MITIGANTS",
-            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
+            "condition": "model.currentStage=='Screening' || model.currentStage=='Application'||model.currentStage=='FieldAppraisal'",
+            readonly:true,
             "items": [{
                 key: "loanAccount.loanMitigants",
                 type: "array",
@@ -573,54 +628,78 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                 title: "LOAN_MITIGANTS",
                 items: [{
                     key: "loanAccount.loanMitigants[].parameter",
-                    type: "lov",
-                    autolov: true,
-                        title:"PARAMETER_NAME",
-                        bindMap: {
-                        },
-                        outputMap: {
-                            "Parameter": "loanAccount.loanMitigants[arrayIndex].parameter",
-                            //"Score":"loanAccount.loanMitigants[arrayIndex].riskScore",
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return Queries.getloanParameters(model.loanAccount.id,model.loanAccount.mscore);
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.Parameter,
-                                item.ParameterScore,
-
-                            ];
-                        },
-                        onSelect: function(result, model, context) {
-                            $log.info(result);
-                            model.loanAccount.loanparameter=result.Parameter;
-                        }
-                }, {
+                    title:"PARAMETER_NAME"
+                }, 
+                {
                     key: "loanAccount.loanMitigants[].mitigant",
-                    type: "lov",
-                    autolov: true,
-                        title:"MITIGANT",
-                        bindMap: {
+                    title:"MITIGANT"
+                }]
+            }]
+        },*/
+        {
+            "type": "box",
+            "title": "LOAN_MITIGANTS",
+            "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage=='FieldAppraisalReview'",
+            "items": [{
+                key: "deviations.deviationParameter",
+                type: "array",
+                startEmpty: true,
+                add:null,
+                remove:null,
+                "view":"fixed",
+                "titleExpr": "model.deviations.deviationParameter[arrayIndex].Parameter",
+                items: [{
+                    key: "deviations.deviationParameter[].mitigants",
+                    type: "array",
+                    startEmpty: true,
+                    add:null,
+                    remove:null,
+                    notitle:true,
+                    "view":"fixed",
+                    items: [{
+                        "type":"section",
+                        "htmlClass": "row",
+                        "items":[{
+                            "type": "section",
+                            "htmlClass": "col-xs-2 col-md-2",
+                            "items": [{
+                                key:"deviations.deviationParameter[].mitigants[].selected",
+                                type: "checkbox",
+                                schema: {
+                                    default:false
+                                }
+                            }]
                         },
-                        outputMap: {
-                            "mitigant": "loanAccount.loanMitigants[arrayIndex].mitigant"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                             $log.info(model.loanAccount.loanparameter);
-                            return Queries.getloanMitigants(model.loanAccount.loanparameter);
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.mitigant
-                            ];
-                        }
-                }, /*{
-                    key: "loanAccount.loanMitigants[].riskScore",
-                    title: "RISK_SCORE"
-                }*/]
+                        {
+                            "type": "section",
+                            "htmlClass": "col-xs-10 col-md-10",
+                            "items": [{
+                                key:"deviations.deviationParameter[].mitigants[].mitigantName",
+                                type:"textarea",
+                                readonly:true
+                            }]
+                        }]
+                    }]
+                }]
+            }]
+        },
+        {
+            "type": "box",
+            "title": "LOAN_MITIGANTS",
+            "condition": "model.currentStage=='Screening' || model.currentStage=='Application'||model.currentStage=='FieldAppraisal'",
+            readonly:true,
+            "items": [{
+                key: "loanAccount.loanMitigants",
+                type: "array",
+                startEmpty: true,
+                add:null,
+                remove:null,
+                "view":"fixed",
+                "titleExpr": "model.loanAccount.loanMitigants[arrayIndex].parameter",
+                items: [{
+                    key: "loanAccount.loanMitigants[].mitigant",
+                    "type":"textarea"
+                }]
             }]
         },
 
@@ -928,7 +1007,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
             {
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",
@@ -1438,6 +1517,9 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                 $log.info("Inside save()");
 
                 /* TODO Call save service for the loan */
+                if(!validateAndPopulateMitigants(model)){
+                    return;
+                }
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
@@ -1525,6 +1607,9 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                 /* TODO Call proceed servcie for the loan account */
 
                 if (!validateForm(formCtrl)){
+                    return;
+                }
+                if(!validateAndPopulateMitigants(model)){
                     return;
                 }
 

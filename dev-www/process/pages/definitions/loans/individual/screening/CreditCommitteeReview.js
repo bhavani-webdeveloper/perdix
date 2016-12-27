@@ -208,6 +208,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                 $log.info("Unknown page class");
 
                         }
+                    },
+                    "deviation-loaded":function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-deviation", params);
                     }
         		}
         	}

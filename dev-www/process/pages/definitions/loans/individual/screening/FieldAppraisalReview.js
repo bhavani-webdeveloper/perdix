@@ -211,6 +211,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                 $log.info("Unknown page class");
 
                         }
+                    },
+                    "deviation-loaded":function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-deviation", params);
                     }
         		}
         	}
