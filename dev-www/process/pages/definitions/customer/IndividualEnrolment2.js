@@ -111,7 +111,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 
 
                             for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                $log.info("hi");
                                 $log.info(model.customer.familyMembers[i].relationShip);
                                 model.customer.familyMembers[i].educationStatus=obj.educationStatus;
                                 /*if (model.customer.familyMembers[i].relationShip == "self") {
