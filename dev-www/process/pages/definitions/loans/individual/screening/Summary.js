@@ -64,7 +64,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         for (var i=0;i< model.deviationDetails.data.length; i++){
             var d = model.deviationDetails.data[i];
             if (d.Mitigant && d.Mitigant.length!=00){
-                d.ListOfMitigants = d.Mitigant.split("|");
+                if (d.Mitigant && d.Mitigant!=null){
+                    d.ListOfMitigants = d.Mitigant.split("|");
+                }
+                
+                if (d.ChosenMitigant && d.ChosenMitigant!=null){
+                    d.ChosenMitigants = d.ChosenMitigant.split("|")
+                }
+                
             }
         }
 
@@ -425,7 +432,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    html: '<table class="table"><colgroup><col width="35%"><col width="5%"><col width="20%"><col width="35%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td><span data-ng-if="rowData.ParameterScore >= 0.0 && rowData.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="rowData.ParameterScore >= 2.0 && rowData.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="rowData.ParameterScore >= 4.0 && rowData.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
+                    html: '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"><col width="30%"><col width="30"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th><th>Chosen Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td><span data-ng-if="rowData.ParameterScore >= 0.0 && rowData.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="rowData.ParameterScore >= 2.0 && rowData.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="rowData.ParameterScore >= 4.0 && rowData.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td><td><ol><li ng-repeat="m in rowData.ChosenMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
                 }
             ]
         });
