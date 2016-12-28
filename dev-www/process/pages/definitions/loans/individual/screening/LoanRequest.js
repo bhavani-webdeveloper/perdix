@@ -538,12 +538,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                     },
                     {
                         key: "loanAccount.emiRequested",
-                        type: "select",
-                        titleMap: {
-                                        "5th": "5th",
-                                        "10th": "10th",
-                                        "15th": "15th",
-                        },
+                        type: "string",
                         title: "EMI_REQUESTED"
                     },
                     {
@@ -1004,7 +999,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
             {
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
-                "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",

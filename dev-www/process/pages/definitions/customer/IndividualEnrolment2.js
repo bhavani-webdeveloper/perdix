@@ -1531,7 +1531,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 key: "customer.familyMembers[].incomes[].incomeSource",
                                                 type:"select"
                                             },
-                                            "customer.familyMembers[].incomes[].incomeEarned",
+                                            {
+                                                Key:"customer.familyMembers[].incomes[].incomeEarned",
+                                            },
                                             {
                                                 key: "customer.familyMembers[].incomes[].frequency",
                                                 type: "select"
@@ -2145,33 +2147,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             {
                                 key:"customer.verifications[].occupation",
                                 title:"OCCUPATION",
-                                type:"select"
+                                type:"select",
+                                "enumCode": "occupation",
                             },
                             {
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
                             },
-                            /*{
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].businessSector",
-                                title:"BUSINESS_SECTOR",
-                                type:"select",
-                                enumCode: "businessSector"
-                            },
-                            {
-                                key:"customer.verifications[].businessSubSector",
-                                title:"BUSINESS_SUBSECTOR",
-                                type:"select",
-                                enumCode: "businessSubSector",
-                                parentEnumCode: "businessSector"
-                            },
-                            */
-
                          ] 
                     },
                 ]
@@ -2207,32 +2190,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"MOBILE_NO",
                                 type:"string"
                             },
-                            /*{
+                            {
+                                key:"customer.verifications[].occupation",
+                                title:"OCCUPATION",
+                                 type:"select",
+                                "enumCode": "occupation",
+                            },
+                            {
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
-                            },*/
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
                             },
-
-                            /*{
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].businessSector",
-                                title:"BUSINESS_SECTOR",
-                                type:"string",
-                            },
-                            {
-                                key:"customer.verifications[].businessSubSector",
-                                title:"BUSINESS_SUBSECTOR",
-                                type:"string",
-                            },*/
                             
                          ] 
                     },
