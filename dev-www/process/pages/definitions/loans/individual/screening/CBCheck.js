@@ -6,6 +6,49 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
     var branch = SessionStore.getBranch();
 
+    var fnPost = function(customerId, CBType, loanAmount, loanPurpose){
+        $log.info("Inside submit()");
+        PageHelper.showLoader();
+        loanPurpose = 'Business Loan - General';
+        CreditBureau.postcreditBureauCheck({
+            customerId: customerId,
+            type: CBType,
+            purpose: loanPurpose,
+            loanAmount: loanAmount
+        }, function(response){
+            var retryStatus = response.status; 
+            if(CBType == 'BASE' && response.status != 'SUCCESS' && response.status != 'PROCESSED'){
+                var retryCount=0;
+                while (retryCount<3 && retryStatus != 'SUCCESS'){
+                    CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},
+                        function(httpres){
+                            retryStatus = response.status;
+                        }, function (err){
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress("cb-check", "Failed while placing retry Request", 5000);
+                            retryStatus = 'err';
+                        });
+                    if(retryStatus == 'SUCCESS' || retryStatus == 'err')
+                        break;
+                    retryCount++;
+                }
+            }
+            if(retryStatus == 'SUCCESS' || retryStatus == 'PROCESSED'){
+                PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
+            }
+            else if(retryStatus == 'ERROR' || retryStatus == 'Error'){
+                PageHelper.showProgress("cb-check", "Error while placing Credit Bureau Request", 5000);
+            }
+            PageHelper.hideLoader();
+        }, function(errorResponse){
+            PageHelper.hideLoader();
+            if(errorResponse && errorResponse.data && errorResponse.data.error)
+                PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
+            else
+                PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+        });
+    }
+
     return {
         "type": "schema-form",
         "title": "CB_CHECK",
@@ -131,9 +174,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 },
                                 { 
                                     type: 'button',  
+                                    key:"customer.coapplicants[].cibilbutton",
                                     title: 'Submit for CBCheck',
                                     "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
-                                    "onClick": "actions.save(model.customer.applicantid,'CIBIL',model.customer.coapplicants[arrayIndex].loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
+                                    "onClick": function(model, schemaForm, form, event) {
+                                        fnPost(model.customer.coapplicants[event.arrayIndex].coapplicantid,'CIBIL',model.customer.coapplicants[event.arrayIndex].loanAmount, model.customer.coapplicants[event.arrayIndex].loanPurpose1)
+                                    }
                                 }]
                             },
                             {
@@ -170,10 +216,13 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     type:"string"
                                 },
                                 { 
-                                    type: 'button',  
+                                    type: 'button',
+                                    key:"customer.coapplicants[].highmarkbutton",
                                     title: 'Submit for CBCheck',
                                     "condition":"model.customer.loanSaved && model.customer.coapplicants.length",
-                                    "onClick": "actions.save(model.customer.coapplicants[arrayIndex].coapplicantid,'BASE',model.customer.loanAmount, model.customer.coapplicants[arrayIndex].loanPurpose1)"
+                                    "onClick": function(model, schemaForm, form, event) {
+                                        fnPost(model.customer.coapplicants[event.arrayIndex].coapplicantid,'BASE',model.customer.coapplicants[event.arrayIndex].loanAmount, model.customer.coapplicants[event.arrayIndex].loanPurpose1);
+                                    }
                                 }]
                             }
                             ]
@@ -186,46 +235,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         },
         actions: {
             save: function(customerId, CBType, loanAmount, loanPurpose){
-                $log.info("Inside submit()");
-                PageHelper.showLoader();
-                loanPurpose = 'Business Loan - General';
-                CreditBureau.postcreditBureauCheck({
-                    customerId: customerId,
-                    type: CBType,
-                    purpose: loanPurpose,
-                    loanAmount: loanAmount
-                }, function(response){
-                    var retryStatus = response.status; 
-                    if(CBType == 'BASE' && response.status != 'SUCCESS' && response.status != 'PROCESSED'){
-                        var retryCount=0;
-                        while (retryCount<3 && retryStatus != 'SUCCESS'){
-                            CreditBureau.reinitiateCBCheck({inqUnqRefNo:response.inqUnqRefNo},
-                                function(httpres){
-                                    retryStatus = response.status;
-                                }, function (err){
-                                    PageHelper.hideLoader();
-                                    PageHelper.showProgress("cb-check", "Failed while placing retry Request", 5000);
-                                    retryStatus = 'err';
-                                });
-                            if(retryStatus == 'SUCCESS' || retryStatus == 'err')
-                                break;
-                            retryCount++;
-                        }
-                    }
-                    if(retryStatus == 'SUCCESS' || retryStatus == 'PROCESSED'){
-                        PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
-                    }
-                    else if(retryStatus == 'ERROR' || retryStatus == 'Error'){
-                        PageHelper.showProgress("cb-check", "Error while placing Credit Bureau Request", 5000);
-                    }
-                    PageHelper.hideLoader();
-                }, function(errorResponse){
-                    PageHelper.hideLoader();
-                    if(errorResponse && errorResponse.data && errorResponse.data.error)
-                        PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
-                    else
-                        PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
-                });
+                fnPost(customerId, CBType, loanAmount, loanPurpose);
             }
         }
 
