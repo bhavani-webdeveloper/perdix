@@ -76,7 +76,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             })
                             model.customer.applicantid = model.loanAccount.loanCustomerRelations[i].customerId;
                             model.customer.loanAmount = model.loanAccount.loanAmountRequested;
-                            model.customer.loanPurpose1 = '';
+                            model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
                             model.customer.loanSaved = true;
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant'){
@@ -84,10 +84,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             .$promise
                             .then(function(res){
                                 model.customer.coapplicants.push({
-                                "coapplicantid":model.loanAccount.loanCustomerRelations[i].customerId,
+                                "coapplicantid":res.id,
                                 "coapplicantname":res.firstName,
                                 "loanAmount":model.loanAccount.loanAmountRequested,
-                                "loanPurpose1":''});
+                                "loanPurpose1":model.loanAccount.loanPurpose1});
                                 model.customer.loanSaved = true;
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
