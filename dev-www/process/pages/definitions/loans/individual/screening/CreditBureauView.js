@@ -157,14 +157,131 @@ irf.pageCollection.factory("CIBILAppendix", [function(){
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.CreditBureauView"),
-["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+["$log", "$q", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
 "CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix",
-function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
+function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,
     CreditBureau,AuthTokenHelper,showModal, CIBILAppendix){
 
     var branch = SessionStore.getBranch();
+
+    var HIGHMARK_HTML = 
+'<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><small>{{CBDATA.customer.first_name||CBDATA.customerId}}</small><span class="pull-right">Date of Issue: {{CBDATA.highMark.dateOfIssue}}</span></h4>'+
+'<h4 ng-show="CBDATA.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:40px">{{CBDATA.highMark.highmarkScore}}</span></h4>'+
+    '<div>&nbsp;</div>'+
+    '<table style="width:100%" ng-show="CBDATA.highMark.highmarkloanDetails.length">'+
+        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
+        '<tr class="" ng-repeat-start="ld in CBDATA.highMark.highmarkloanDetails">'+
+            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountType}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">Disbursed Date:</i> {{ld.disbursedDate}}<br><i style="color:#999">Last Payment Date:</i> {{ld.lastPaymentDate}}<br><i style="color:#999">Closed Date:</i> {{ld.closedDate}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">Total Writeoff Amt:</i> {{ld.writeOffAmount}}<br><i style="color:#999">Current balance:</i> {{ld.currentBalance}}</td>'+
+            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
+            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">Payment History/Asset Classification:</span></td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
+            '<td colspan="4" style="padding:5px">'+
+                '<table style="width:100%">'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="phl in ld.combinedPaymentHistoryList track by $index" style="padding-top:5px">'+
+                            '<div style="font-family:monospace">{{phl[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1 in ld.combinedPaymentHistoryList track by $index">'+
+                            '<div style="font-size:12px">{{ph1[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList2.length">'+
+                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph2[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index">'+
+                            '<div style="font-size:12px">{{ph2[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList3.length">'+
+                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph3[1]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index">'+
+                            '<div style="font-size:12px">{{ph3[0]}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                '</table>'+
+            '</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="4"><hr></td>'+
+        '</tr>'+
+    '</table>'+
+'<div ng-hide="CBDATA.highMark.highmarkScore.length">'+
+'<center>{{CBDATA.customer.first_name||CBDATA.customerId}} - No Scores available</center>'+
+'</div>';
+
+    var CIBIL_HTML =
+'<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><small>{{CBDATA.customer.first_name||CBDATA.customerId}}</small><span class="pull-right">DATE: {{CBDATA.cibil.dateOfIssue|userDate}}</span></h4>'+
+'<h4 ng-show="CBDATA.cibil.cibilScore.length">CIBIL TRANSUNION SCORE(S):</h4>'+
+    '<table style="width:100%" ng-show="CBDATA.cibil.cibilScore.length">'+
+        '<tr><th style="padding:5px">SCORE NAME</th><th style="padding:5px">SCORE</th><th style="padding:5px">SCORE DATE</th></tr>'+
+        '<tr class="bg-tint-theme" ng-repeat="s in CBDATA.cibil.cibilScore">'+
+            '<td style="padding-left:15px;font-size:18px">{{s.scoreName=="PLSCORE"?"PERSONAL LOAN SCORE":(s.scoreName=="CIBILTUSCR"?"CIBIL TRANSUNION SCORE":s.scoreName)}}</td>'+
+            '<td style="font-size:40px">{{s.score|number}}</td>'+
+            '<td style="font-size:18px">{{s.scoreDate|userDate}}</td>'+
+        '</tr>'+
+    '</table>'+
+    '<div>&nbsp;</div>'+
+    '<h4 ng-show="CBDATA.cibil.cibilLoanDetails.length">ACCOUNT(S):</h4>'+
+    '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanDetails.length">'+
+        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
+        '<tr class="" ng-repeat-start="ld in CBDATA.cibil.cibilLoanDetails">'+
+            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountTypeText}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">OPENED:</i> {{ld.disbursedDate|userDate}}<br><i style="color:#999">LAST PAYMENT:</i> {{ld.lastPaymentDate|userDate}}<br><i style="color:#999">CLOSED:</i> {{ld.closedDate|userDate}}</td>'+
+            '<td style="padding-top:15px"><i style="color:#999">WRITEOFF:</i> {{ld.writeOffAmount}}<br><i style="color:#999">CURRENT BALANCE:</i> {{ld.currentBalance}}</td>'+
+            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.paymentHistory1List.length">'+
+            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">DAYS PAST DUE/ASSET CLASSIFICATION (UP TO 36 MONTHS; LEFT TO RIGHT)</span></td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="ld.paymentHistory1List.length">'+
+            '<td colspan="4" style="padding:5px">'+
+                '<table style="width:100%">'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1 in ld.paymentHistory1List track by $index" style="padding-top:5px">'+
+                            '<div style="font-family:monospace">{{ph1}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1m in ld.paymentHistory1Months track by $index">'+
+                            '<div style="font-size:12px">{{ph1m}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="ld.paymentHistory2List.length">'+
+                        '<td ng-repeat="ph2 in ld.paymentHistory2List track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph2}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph2m in ld.paymentHistory2Months track by $index">'+
+                            '<div style="font-size:12px">{{ph2m}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                '</table>'+
+            '</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="4"><hr></td>'+
+        '</tr>'+
+    '</table>'+
+'<div ng-hide="CBDATA.cibil.cibilScore.length">'+
+'<center>{{CBDATA.customer.first_name||CBDATA.customerId}} - No Scores available</center>'+
+'</div>';
 
     return {
         "type": "schema-form",
@@ -257,11 +374,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                     else if(model.loanAccount.loanCustomerRelations[j].relation=='Co-Applicant'){
                                         model.coapplicants.push(httpres);
                                         var index = model.coapplicants.length-1;
-                                        Enrollment.getCustomerById({id: model.coapplicants[index].customerId})
-                                        .$promise
+                                        Queries.getCustomerBasicDetails({ids: [model.coapplicants[index].customerId]})
                                         .then(
                                             function (res) {
-                                                model.coapplicants[index].customer = res;
+                                                $log.info('---------------------------------------------------------');
+                                                $log.info(res);
+                                                model.coapplicants[index].customer = res.ids[model.coapplicants[index].customerId];
                                             }, function (httpRes) {
                                                 PageHelper.showProgress('load-loan', "Error while loading co Applicant details", 2000);
                                             }
@@ -269,11 +387,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                     }
                                 }
                                 if (model.applicant.customerId){
-                                    Enrollment.getCustomerById({id: model.applicant.customerId})
-                                    .$promise
+                                    Queries.getCustomerBasicDetails({ids: [model.applicant.customerId]})
                                     .then(
                                         function (res) {
-                                            model.applicant.customer = res;
+                                            model.applicant.customer = res.ids[model.applicant.customerId];
                                         }, function (httpRes) {
                                             PageHelper.showProgress('load-loan', "Error while loading customer details", 2000);
                                         }
@@ -308,65 +425,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         items:[
                             {
                                 type: "section",
-                                html:
-// HighMark Rendering
-'<h4 style="padding:5px" ng-show="model.applicant.highMark.highmarkScore"><small>APPLICANT</small><span class="pull-right">Date of Issue: {{model.applicant.highMark.dateOfIssue}}</span></h4>'+
-'<h4 ng-show="model.applicant.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:40px">{{model.applicant.highMark.highmarkScore}}</span></h4>'+
-    '<div>&nbsp;</div>'+
-    '<table style="width:100%" ng-show="model.applicant.highMark.highmarkloanDetails.length">'+
-        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
-        '<tr class="" ng-repeat-start="ld in model.applicant.highMark.highmarkloanDetails">'+
-            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountType}}</td>'+
-            '<td style="padding-top:15px"><i style="color:#999">Disbursed Date:</i> {{ld.disbursedDate}}<br><i style="color:#999">Last Payment Date:</i> {{ld.lastPaymentDate}}<br><i style="color:#999">Closed Date:</i> {{ld.closedDate}}</td>'+
-            '<td style="padding-top:15px"><i style="color:#999">Total Writeoff Amt:</i> {{ld.writeOffAmount}}<br><i style="color:#999">Current balance:</i> {{ld.currentBalance}}</td>'+
-            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
-        '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
-            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">Payment History/Asset Classification:</span></td>'+
-        '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList.length">'+
-            '<td colspan="4" style="padding:5px">'+
-                '<table style="width:100%">'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="phl in ld.combinedPaymentHistoryList track by $index" style="padding-top:5px">'+
-                            '<div style="font-family:monospace">{{phl[1]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph1 in ld.combinedPaymentHistoryList track by $index">'+
-                            '<div style="font-size:12px">{{ph1[0]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList2.length">'+
-                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index" style="padding-top:15px">'+
-                            '<div style="font-family:monospace">{{ph2[1]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph2 in ld.combinedPaymentHistoryList2 track by $index">'+
-                            '<div style="font-size:12px">{{ph2[0]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme" ng-show="ld.combinedPaymentHistoryList3.length">'+
-                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index" style="padding-top:15px">'+
-                            '<div style="font-family:monospace">{{ph3[1]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph3 in ld.combinedPaymentHistoryList3 track by $index">'+
-                            '<div style="font-size:12px">{{ph3[0]}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                '</table>'+
-            '</td>'+
-        '</tr>'+
-        '<tr ng-repeat-end>'+
-            '<td colspan="4"><hr></td>'+
-        '</tr>'+
-    '</table>'+
-'<div ng-hide="model.applicant.highMark.highmarkScore.length">'+
-'<center>No Scores available</center>'+
-'</div>'
+                                html: '<div ng-init="CBDATA=model.applicant">' + HIGHMARK_HTML + '</div>'
                             }
                         ]
                     },
@@ -376,258 +435,41 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         items:[
                             {
                                 type: "section",
-                                html:
-// CIBIL Rendering
-'<h4 style="padding:5px" ng-show="model.applicant.cibil.cibilScore.length"><small>APPLICANT</small><span class="pull-right">DATE: {{model.applicant.cibil.dateOfIssue|userDate}}</span></h4>'+
-'<h4 ng-show="model.applicant.cibil.cibilScore.length">CIBIL TRANSUNION SCORE(S):</h4>'+
-    '<table style="width:100%" ng-show="model.applicant.cibil.cibilScore.length">'+
-        '<tr><th style="padding:5px">SCORE NAME</th><th style="padding:5px">SCORE</th><th style="padding:5px">SCORE DATE</th></tr>'+
-        '<tr class="bg-tint-theme" ng-repeat="s in model.applicant.cibil.cibilScore">'+
-            '<td style="padding-left:15px;font-size:18px">{{s.scoreName=="PLSCORE"?"PERSONAL LOAN SCORE":(s.scoreName=="CIBILTUSCR"?"CIBIL TRANSUNION SCORE":s.scoreName)}}</td>'+
-            '<td style="font-size:40px">{{s.score|number}}</td>'+
-            '<td style="font-size:18px">{{s.scoreDate|userDate}}</td>'+
-        '</tr>'+
-    '</table>'+
-    '<div>&nbsp;</div>'+
-    '<h4 ng-show="model.applicant.cibil.cibilLoanDetails.length">ACCOUNT(S):</h4>'+
-    '<table style="width:100%" ng-show="model.applicant.cibil.cibilLoanDetails.length">'+
-        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
-        '<tr class="" ng-repeat-start="ld in model.applicant.cibil.cibilLoanDetails">'+
-            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountTypeText}}</td>'+
-            '<td style="padding-top:15px"><i style="color:#999">OPENED:</i> {{ld.disbursedDate|userDate}}<br><i style="color:#999">LAST PAYMENT:</i> {{ld.lastPaymentDate|userDate}}<br><i style="color:#999">CLOSED:</i> {{ld.closedDate|userDate}}</td>'+
-            '<td style="padding-top:15px"><i style="color:#999">WRITEOFF:</i> {{ld.writeOffAmount}}<br><i style="color:#999">CURRENT BALANCE:</i> {{ld.currentBalance}}</td>'+
-            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
-        '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="ld.paymentHistory1List.length">'+
-            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">DAYS PAST DUE/ASSET CLASSIFICATION (UP TO 36 MONTHS; LEFT TO RIGHT)</span></td>'+
-        '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="ld.paymentHistory1List.length">'+
-            '<td colspan="4" style="padding:5px">'+
-                '<table style="width:100%">'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph1 in ld.paymentHistory1List track by $index" style="padding-top:5px">'+
-                            '<div style="font-family:monospace">{{ph1}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph1m in ld.paymentHistory1Months track by $index">'+
-                            '<div style="font-size:12px">{{ph1m}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme" ng-show="ld.paymentHistory2List.length">'+
-                        '<td ng-repeat="ph2 in ld.paymentHistory2List track by $index" style="padding-top:15px">'+
-                            '<div style="font-family:monospace">{{ph2}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph2m in ld.paymentHistory2Months track by $index">'+
-                            '<div style="font-size:12px">{{ph2m}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                '</table>'+
-            '</td>'+
-        '</tr>'+
-        '<tr ng-repeat-end>'+
-            '<td colspan="4"><hr></td>'+
-        '</tr>'+
-    '</table>'+
-'<div ng-hide="model.applicant.cibil.cibilScore.length">'+
-'<center>No Scores available</center>'+
-'</div>'
-
+                                html: '<div ng-init="CBDATA=model.applicant">' + CIBIL_HTML + '</div>'
                             }
                         ]
-                    }]
-                },
-                {
+                    }
+                ]
+            },
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 title:"CO_APPLICANT",
                 condition:"model.coapplicants.length>0",
                 readonly:true,
                 "items": [
-                        {
-                            "key":"coapplicants",
-                            type:"array",
-                            title: ".",
-                            view: "fixed",
-                            notitle:true,
-                            "startEmpty": true,
-                            "add":null,
-                            "remove":null,
-                            items:[
-                                {
-                                    type:"fieldset",
-                                    title:"HighMark",
-                                    items:[]
-                                },
-                                {
-                                    "key":"coapplicants[].highMark.dateOfIssue",
-                                    "title":"DATE_OF_ISSUE",
-                                    "type":"date"
-                                },
-                                {
-                                    "key":"coapplicants[].highMark.highmarkScore",
-                                    "title":"SCORE",
-                                },
-                                {
-                                    type:"tableview",
-                                    key:"coapplicants[].highMark.highmarkloanDetails",
-                                    title:"LOAN_DETAILS",
-                                    paginate:false,
-                                    searching:false,
-                                    selectable: false,
-                                    getActions:function (){
-                                        return [{
-                                        name: "Payment History",
-                                        desc: "",
-                                        icon: "fa fa-pencil-square-o",
-                                        fn: function(item, index) {
-                                            var paymentHistory = item.combinedPaymentHistory.split('|').join('<br/>');
-                                            showModal("Payment History",
-                                                "<dl class='dl-horizontal'><dt>Payment History</dt><dd>" + paymentHistory
-                                                + "</dd></dl>"
-                                            );
-                                        },
-                                        isApplicable: function(item, index) {
-
-                                            return true;
-                                        }
-                                    }];
-
-                                    },
-                                    getColumns: function(){
-                                        return [{
-                                            title: 'ACCOUNT_TYPE',
-                                            data: 'accountType'
-                                        }, {
-                                            title: 'STATUS',
-                                            data: 'accountStatus'
-                                        }, {
-                                            title: 'DISBURSEMENT_DATE',
-                                            data: 'disbursedDate'
-                                        },{
-                                            title: 'LAST_PAYMENT_DATE',
-                                            data: 'lastPaymentDate'
-                                        },{
-                                            title: 'CLOSED_DATE',
-                                            data: 'closedDate'
-                                        },{
-                                            title: 'WRITE_OFF_AMOUNT',
-                                            data: 'writeOffAmount'
-                                        },{
-                                            title: 'CURRENT_BALANCE',
-                                            data: 'currentBalance'
-                                        }]
-                                    }
-                                },
-                                {
-                                    type:"fieldset",
-                                    title:"CIBIL",
-                                    items:[]
-                                },
-                                {
-                                    "key":"coapplicants[].cibil.dateOfIssue",
-                                    "title":"DATE_OF_ISSUE",
-                                    "type":"date"
-                                },
-                                {
-                                    type:"tableview",
-                                    key:"coapplicants[].cibil.cibilScore",
-                                    title:"CIBIL_SCORE",
-                                    paginate:false,
-                                    searching:false,
-                                    selectable: false,
-                                    getActions:function (){
-                                        return [];
-
-                                    },
-                                    getColumns: function(){
-                                        return [{
-                                            title: 'SCORE_NAME',
-                                            data: 'scoreName'
-                                        }, {
-                                            title: 'SCORE_DATE',
-                                            data: 'scoreDate'
-                                        }, {
-                                            title: 'SCORE',
-                                            data: 'score'
-                                        }]
-                                    }
-                                },
-                                {
-                                    type:"tableview",
-                                    key:"coapplicants[].cibil.cibilLoanDetails",
-                                    title:"LOAN_DETAILS",
-                                    paginate:false,
-                                    searching:false,
-                                    selectable: false,
-                                    getActions:function (){
-                                        return [{
-                                        name: "Payment History1",
-                                        desc: "",
-                                        icon: "fa fa-pencil-square-o",
-                                        fn: function(item, index) {
-                                            var paymentHistory = item.paymentHistory1;
-                                            showModal("Payment History",
-                                                "<dl class='dl-horizontal'><dt>Payment History</dt><dd>" + paymentHistory
-                                                + "</dd></dl>"
-                                            );
-                                        },
-                                        isApplicable: function(item, index) {
-
-                                            return true;
-                                        }
-                                    },
-                                    {
-                                        name: "Payment History2",
-                                        desc: "",
-                                        icon: "fa fa-pencil-square-o",
-                                        fn: function(item, index) {
-                                            var paymentHistory = item.paymentHistory2;
-                                            showModal("Payment History",
-                                                "<dl class='dl-horizontal'><dt>Payment History</dt><dd>" + paymentHistory
-                                                + "</dd></dl>"
-                                            );
-                                        },
-                                        isApplicable: function(item, index) {
-
-                                            return true;
-                                        }
-                                    }];
-
-                                    },
-                                    getColumns: function(){
-                                        return [{
-                                            title: 'ACCOUNT_TYPE',
-                                            data: 'accountType'
-                                        }, {
-                                            title: 'STATUS',
-                                            data: 'accountStatus'
-                                        }, {
-                                            title: 'DISBURSEMENT_DATE',
-                                            data: 'disbursedDate'
-                                        },{
-                                            title: 'LAST_PAYMENT_DATE',
-                                            data: 'lastPaymentDate'
-                                        },{
-                                            title: 'CLOSED_DATE',
-                                            data: 'closedDate'
-                                        },{
-                                            title: 'WRITE_OFF_AMOUNT',
-                                            data: 'writeOffAmount'
-                                        },{
-                                            title: 'CURRENT_BALANCE',
-                                            data: 'currentBalance'
-                                        }]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-                            
-            
+                    {
+                        type:"fieldset",
+                        title:"HighMark - CRIF HIGH MARK - CONSUMER CREDIT REPORT",
+                        items:[
+                            {
+                                type: "section",
+                                html: '<div ng-repeat="CBDATA in model.coapplicants">' + HIGHMARK_HTML + '</div><hr><hr>'
+                            }
+                        ]
+                    },
+                    {
+                        type:"fieldset",
+                        title:"CIBIL - Credit Information Bureau (India) Limited",
+                        items:[
+                            {
+                                type: "section",
+                                html: '<div ng-repeat="CBDATA in model.coapplicants">' + CIBIL_HTML + '</div><hr><hr>'
+                            }
+                        ]
+                    }
+                ]
+            }
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
