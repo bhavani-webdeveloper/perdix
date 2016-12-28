@@ -22,7 +22,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             console.log(model.loanRelation);
                             if(model.loanRelation){
                             var custId = model.loanRelation.customerId;
-                                Enrollment.getCustomerById({id:custId})
+                                Enrollment.getCustomerById({id:custId}) 
                                         .$promise
                                         .then(function(res){
                                             model.customer = res;
@@ -32,6 +32,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         .finally(function(){
                                             PageHelper.hideLoader();
                                         })
+
                             }
                         } 
                         // else {
@@ -52,7 +53,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                  centreName.push(centres[i].id);
                              }
                              model.customer.centreId = centreName[0];
-
                             //model.branchId = SessionStore.getBranchId() + '';
                             model.customer.date = model.customer.date || Utils.getCurrentDate();
                             model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
@@ -84,6 +84,30 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
                         }
 
+                        if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
+                                model.customer.enterprise = {};
+                            }
+
+                        if (_.hasIn(model, 'loanRelation')){
+                            console.log(model.loanRelation);
+                            if(model.loanRelation){
+                                if(model.loanRelation.enterpriseId)
+                                {
+                                    var busId = model.loanRelation.enterpriseId;
+                                    Enrollment.getCustomerById({id:busId}) 
+                                        .$promise
+                                        .then(function(res){
+                                            model.customer.enterprise = res.enterprise; 
+                                        }, function(httpRes){
+                                            PageHelper.showErrors(httpRes);
+                                        })
+                                        .finally(function(){
+                                            PageHelper.hideLoader();
+                                        })
+                                }
+                            }
+                        }
+                            
                     },
                     eventListeners: {
                         "test-listener": function(bundleModel, model, obj){
@@ -2374,6 +2398,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.multipleBuyers",
                                     title:"MULTIPLE_BUYERS_MORE_THAN_3",
+                                    condition: "model.customer.enterprise.businessType == 'Manufacturing'",
                                     type:"radios",
                                     required:"true",
                                     enumCode:"decisionmaker",
@@ -2439,6 +2464,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.customerWalkInToTheBusiness",
+                                    condition: "model.customer.enterprise.businessType == 'Trading'",
                                     title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
                                     type:"radios",
                                     required:"true",
@@ -2534,7 +2560,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.multipleBuyers",
                                     title:"MULTIPLE_BUYERS_MORE_THAN_3",
-                                    "condition": "model.customer.enterprise.businessType == 'Manufacturing'",
+                                    condition: "model.customer.enterprise.businessType == 'Manufacturing'",
                                     type:"string",
                                     required:"true",
                                     enumCode:"decisionmaker",
@@ -2598,7 +2624,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.customerWalkInToTheBusiness",
                                     title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
-                                    "condition": "model.customer.enterprise.businessType == 'Trading'",
+                                    condition: "model.customer.enterprise.businessType == 'Trading'",
                                     type:"string",
                                     required:"true",
                                     enumCode:"status_scale"

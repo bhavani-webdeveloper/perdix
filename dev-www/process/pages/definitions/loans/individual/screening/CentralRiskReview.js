@@ -106,6 +106,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                         var cust = res.loanCustomerRelations[i];
                                         if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
                                             applicant = cust;
+                                            applicant.enterpriseId=res.customerId;
                                             urnNos.push(cust.urn);
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);

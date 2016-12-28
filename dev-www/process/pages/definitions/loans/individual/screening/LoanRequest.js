@@ -174,11 +174,7 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
             model.currentStage = bundleModel.currentStage;
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
-                $log.info(model.loanAccount);
-                $log.info(model.loanAccount.accountUserDefinedFields.loanId);
-                $log.info(model.loanAccount.mscore);
-                $log.info(model.loanAccount.id);
-                
+                $log.info(model.loanAccount);   
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
