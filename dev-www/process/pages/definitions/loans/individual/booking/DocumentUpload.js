@@ -167,14 +167,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
                             var urn = [];
+                            var ids = [];
                             for(var i =0; i <model.loanAccount.loanCustomerRelations.length; i++)
                             {
-                                urn.push(model.loanAccount.loanCustomerRelations[i].urn);   
+                                if (model.loanAccount.loanCustomerRelations[i].urn)
+                                    urn.push(model.loanAccount.loanCustomerRelations[i].urn);
+                                else if (model.loanAccount.loanCustomerRelations[i].customerId)
+                                    ids.push(model.loanAccount.loanCustomerRelations[i].customerId)
                             }
-                            urn.push(model.loanAccount.urnNo);
+                            if (model.loanAccount.urnNo !=null)
+                                urn.push(model.loanAccount.urnNo);
+                            ids.push(model.loanAccount.customerId);
                             return Queries.getCustomersBankAccounts({
                                customer_urns : urn,
-                               customer_ids : model.loanAccount.customerId
+                               customer_ids : ids
                             });
                         },
                         onSelect: function(result, model, context) {
