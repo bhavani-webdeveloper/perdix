@@ -533,12 +533,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title: "CUSTOMER_NAME"
                             },
                             {
+                                key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
+                                title: "EXPERIENCE_IN_BUSINESS",
+                                required:true,
+                            },
+                            {
                                 key: "customer.enterpriseCustomerRelations[].businessInvolvement",
                                 title: "BUSINESS_INVOLVEMENT",
                                 required:true,
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
+                            
                             {
                                 key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                                 title: "PARTNER_OF_ANY_OTHER_COMPANY",
@@ -803,6 +809,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
                                 readonly: true,
                                 title: "CUSTOMER_NAME"
+                            },
+                            {
+                                key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
+                                title: "EXPERIENCE_IN_BUSINESS",
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].businessInvolvement",
@@ -2365,7 +2375,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
                             },
+                            {
+                            type: "fieldset",
+                            title: "REFERENCE_CHECK",
+                            "condition": "model.currentStage=='FieldAppraisal'",
+                            items: [
+                            {
+                                key:"customer.verifications[].customerResponse",
+                                title:"CUSTOMER_RESPONSE",
+                                type:"select",
+                                titleMap: [{
+                                                value: "positive",
+                                                name: "positive"
+                                            },{
+                                                value: "Negative",
+                                                name: "Negative"
+                                            }]
 
+                            },
+                            {
+                                key:"customer.verifications[].remarks",
+                                title:"REMARKS",
+                            },
+                            ]
+                            }
                          ] 
                     },
                 ]
@@ -2418,6 +2451,22 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
                             },
+                            {
+                            type: "fieldset",
+                            title: "REFERENCE_CHECK",
+                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            items: [
+                            {
+                                key:"customer.verifications[].customerResponse",
+                                title:"CUSTOMER_RESPONSE",
+                                type:"string",
+                            },
+                            {
+                                key:"customer.verifications[].remarks",
+                                title:"REMARKS",
+                            }
+                            ]
+                            }
 
                          ] 
                     },

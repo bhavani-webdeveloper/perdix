@@ -2155,6 +2155,30 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
                             },
+                            {
+                            type: "fieldset",
+                            title: "REFERENCE_CHECK",
+                            "condition": "model.currentStage=='FieldAppraisal'",
+                            items: [
+                            {
+                                key:"customer.verifications[].customerResponse",
+                                title:"CUSTOMER_RESPONSE",
+                                type:"select",
+                                titleMap: [{
+                                                value: "positive",
+                                                name: "positive"
+                                            },{
+                                                value: "Negative",
+                                                name: "Negative"
+                                            }]
+
+                            },
+                            {
+                                key:"customer.verifications[].remarks",
+                                title:"REMARKS",
+                            },
+                            ]
+                            }
                          ] 
                     },
                 ]
@@ -2201,6 +2225,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
                             },
+                            {
+                            type: "fieldset",
+                            title: "REFERENCE_CHECK",
+                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            items: [
+                            {
+                                key:"customer.verifications[].customerResponse",
+                                title:"CUSTOMER_RESPONSE",
+                                type:"string",
+                            },
+                            {
+                                key:"customer.verifications[].remarks",
+                                title:"REMARKS",
+                            }
+                            ]
+                            }
                             
                          ] 
                     },
@@ -2431,7 +2471,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     //enumCode: "status_scale"
                                 },
                                 {
-                                    key:"customer.customerWalkInToTheBusiness",
+                                    key:"customer.customerWalkinToBusiness",
                                     condition: "model.customer.enterprise.businessType == 'Trading'",
                                     title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
                                     type:"radios",
@@ -2590,7 +2630,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     enumCode: "status_scale_2"
                                 },
                                 {
-                                    key:"customer.customerWalkInToTheBusiness",
+                                    key:"customer.customerWalkinToBusiness",
                                     title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
                                     condition: "model.customer.enterprise.businessType == 'Trading'",
                                     type:"string",

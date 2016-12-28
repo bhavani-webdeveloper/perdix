@@ -105,8 +105,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                     {
                         "key": "loanAccountDisbursementSchedule.referenceNumber",
                         "title": "REFERENCE_NO",
+                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'&& model.loanAccountDisbursementSchedule.udf1=='Rejected'"
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.referenceNumber",
+                        "title": "REFERENCE_NO",
                         "required":true,
-                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'"
+                        "condition":"model.loanAccountDisbursementSchedule.modeOfDisbursement!='CASH'&& model.loanAccountDisbursementSchedule.udf1=='Confirmed'"
                     },
                     {
                         "key":"loanAccountDisbursementSchedule.udf5",
