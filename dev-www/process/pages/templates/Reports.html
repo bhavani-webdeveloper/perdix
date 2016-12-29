@@ -43,6 +43,44 @@
       </div>
     </div> -->
 	<div class="row">
+      <div class="col-sm-6">
+
+        <div class="box box-theme no-border">
+          <div class="box-body">
+            <!--<select ng-model="selectedName" ng-options="x for x in names"></select>
+			<select ng-model="regionSelected" ng-change="listHubs()">
+    			<option ng-repeat="row in regionName" value="{{row}}">{{row}}</option>
+			</select>-->
+			<form ng-submit="processForm()" name="myFormName">
+			<select 
+			name="myRegionSelect" 
+			id="myRegionSelect"
+      		ng-options="row.name for row in regionName track by row.id"
+      		ng-model="selectedRegion"
+	  		ng-change="listHubs()"></select>
+			
+			<select 
+			name="myHubSelect" 
+			id="myHubSelect"
+      		ng-options="row.hubname for row in HubNames track by row.id"
+      		ng-model="selectedHub"
+	  		ng-change="listBranches()"></select>
+			
+			<select 
+			name="myUserSelect" 
+			id="myUserSelect"
+      		ng-options="row.user for row in loanOfficers track by row.id"
+      		ng-model="selectedUser"></select>
+			
+			<input type="submit" value="Apply Filter"/>
+			</form>
+			
+          </div>
+        </div>
+
+      </div>
+    </div>
+	<div class="row">
   
 	<!--<div ng-repeat="ReportValue in dataset" >	-->
 	
@@ -64,11 +102,16 @@
 					
 					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'SimpleTable'">
 						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr>
-							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						<tr ng-if="SingleReport.DrillDownReq == '1'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+							</th>
+						</tr>
+						<tr ng-if="SingleReport.DrillDownReq == '0'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
 						</tr>
 						<tr ng-repeat="row in RepeatTables">
-							<td ng-repeat="col in row">{{ col }}</td>
+							<td ng-repeat="col in row" align="right">{{ col }}</td>
 						</tr>
 						</table>
 					</div>
@@ -76,8 +119,13 @@
 					
 					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'TwoDimensional'">
 						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr>
-							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						<tr ng-if="SingleReport.DrillDownReq == '1'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+							</th>
+						</tr>
+						<tr ng-if="SingleReport.DrillDownReq == '0'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
 						</tr>
 						<tr ng-repeat="row in RepeatTables">
 							<td ng-repeat="col in row">{{ col }}</td>
@@ -87,8 +135,13 @@
 					
 					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'Merge'">
 						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr>
-							<th ng-repeat="(key, value) in RepeatTables[0]">{{ key }}</th>
+						<tr ng-if="SingleReport.DrillDownReq == '1'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+							</th>
+						</tr>
+						<tr ng-if="SingleReport.DrillDownReq == '0'">
+							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
 						</tr>
 						<tr ng-repeat="row in RepeatTables">
 							<td ng-repeat="col in row">{{ col }}</td>
