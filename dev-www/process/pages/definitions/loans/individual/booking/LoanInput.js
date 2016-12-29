@@ -103,7 +103,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
                     for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
-                        if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT') {
+                        if (model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
                             model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn
                             });
@@ -1118,26 +1118,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
-                    model.loanAccount.loanCustomerRelations = [];
-                    model.loanAccount.loanCustomerRelations.push({
-                        urn:model.loanAccount.applicant,
-                        relation:'APPLICANT'
-                    });
-                    if(model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length){
-                        for (var i = 0; i < model.loanAccount.coBorrowers.length; i++) {
-                            model.loanAccount.loanCustomerRelations.push({
-                                urn:model.loanAccount.coBorrowers[i].coBorrowerUrnNo,
-                                relation:'COAPPLICANT'
-                            });
-                        }
-                    }
-                    if(model.loanAccount.guarantors && model.loanAccount.guarantors.length > 0){
-                        for (var i = model.loanAccount.guarantors.length - 1; i >= 0; i--) {
-                            if(model.loanAccount.guarantors.guaUrnNo){
+                    // BUG FIX DO-customer id going null
+                    if (!(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length)) {
+                        model.loanAccount.loanCustomerRelations = [];
+                        model.loanAccount.loanCustomerRelations.push({
+                            urn:model.loanAccount.applicant,
+                            relation:'Applicant'
+                        });
+                        if(model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length){
+                            for (var i = 0; i < model.loanAccount.coBorrowers.length; i++) {
                                 model.loanAccount.loanCustomerRelations.push({
-                                    urn:model.loanAccount.guarantors[i].guaUrnNo,
-                                    relation:'GUARANTOR'
+                                    urn:model.loanAccount.coBorrowers[i].coBorrowerUrnNo,
+                                    relation:'Co-Applicant'
                                 });
+                            }
+                        }
+                        if(model.loanAccount.guarantors && model.loanAccount.guarantors.length > 0){
+                            for (var i = model.loanAccount.guarantors.length - 1; i >= 0; i--) {
+                                if(model.loanAccount.guarantors.guaUrnNo){
+                                    model.loanAccount.loanCustomerRelations.push({
+                                        urn:model.loanAccount.guarantors[i].guaUrnNo,
+                                        relation:'GUARANTOR'
+                                    });
+                                }
                             }
                         }
                     }
