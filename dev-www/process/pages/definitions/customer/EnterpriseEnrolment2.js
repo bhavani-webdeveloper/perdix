@@ -535,6 +535,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
                                 title: "EXPERIENCE_IN_BUSINESS",
+                                type:"select",
+                                "enumCode": "years_in_current_area",
                                 required:true,
                             },
                             {
@@ -813,6 +815,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
                                 title: "EXPERIENCE_IN_BUSINESS",
+                                type:"select",
+                                "enumCode": "years_in_current_area"
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].businessInvolvement",
