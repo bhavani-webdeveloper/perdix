@@ -1138,7 +1138,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 if(model.loanAccount.guarantors.guaUrnNo){
                                     model.loanAccount.loanCustomerRelations.push({
                                         urn:model.loanAccount.guarantors[i].guaUrnNo,
-                                        relation:'GUARANTOR'
+                                        relation:'Guarantor'
                                     });
                                 }
                             }

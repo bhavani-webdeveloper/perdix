@@ -273,8 +273,8 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if (addToRelation) {
                     model.loanAccount.loanCustomerRelations.push({
                         'customerId': params.customer.id,
-                        'relation': "GUARANTOR",
-                        'urn':params.customer.urnNo
+                        'relation': "Guarantor",
+                        'urn': params.customer.urnNo
                     })
                 };
 
