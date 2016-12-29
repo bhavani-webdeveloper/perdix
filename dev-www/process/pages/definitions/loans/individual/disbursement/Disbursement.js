@@ -126,7 +126,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            return Queries.getBankAccountsByPartner("Kinara");
+                            return Queries.getBankAccountsByProduct(model.additional.productCode);
                         },
                         getListDisplayItem: function(item, index) {
                             return [
