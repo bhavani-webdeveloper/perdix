@@ -60,6 +60,43 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
 
+        /* Scoring Sections */
+
+        /* Populate seperate scoring section for ScreeningReview screen */
+        // model.screeningScoreDetails = {
+        //     columns: [
+        //         {
+        //             "title": "Parameter",
+        //             "data": "Parameter"
+        //         },
+        //         {
+        //             "title": "Actual Value",
+        //             "data": "Actual Value"
+        //         },
+        //         {
+        //             "title": "ParameterScore",
+        //             "data": "ParameterScore"
+        //         }
+        //     ],
+        //     data: []
+        // };
+        // // debugger;
+        // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
+        //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
+        //     _.forEach(score1Data, function(data){
+        //         data["Actual Value"] = data["Applicant"];
+        //         delete data.Applicant;
+        //         delete data["Co-Applicant"];
+        //     });
+
+        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
+        // }
+        // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
+        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
+        // }
+
+        // debugger;
+
 
         for (var i=0;i< model.deviationDetails.data.length; i++){
             var d = model.deviationDetails.data[i];
@@ -147,64 +184,63 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 ]
         })
 
-        form.push({
-            "type": "box",
-            "colClass": "col-sm-12",
-            "title": "SCORING_DETAILS",
-            "condition": "model.currentStage=='ScreeningReview'",
-            "items": [
-                {
-                    type:"tableview",
-                    key:"ScoreDetails[0].Parameters",
-                    // title:"SCORING_DETAILS",
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return [{
-                            title: 'PARAMETER',
-                            data: 'ParameterName'
-                        }, {
-                            title: 'VALUE',
-                            data: 'UserInput'
-                        }, {
-                            title: 'SCORE',
-                            data: 'ParamterScore'
-                        },{
-                            title: 'RESULT',
-                            data: 'ParameterPassStatus'
-                        }]
-                    }
-                },
-                {
-                    type:"fieldset",
-                    title:"",
-                    items:[
-                        {
-                            "key":"ScoreDetails[0].OverallWeightedScore",
-                            "title":"TOTAL_SCREENING_SCORE",
-                            readonly:true
-                        },
-                        {
-                            "key":"ScoreDetails[0].OverallPassStatus",
-                            "title":"OVERALL_PASS_STATUS",
-                            readonly:true
-                        }
-                    ]
-                }
-            ]
-        });
+        // form.push({
+        //     "type": "box",
+        //     "colClass": "col-sm-12",
+        //     "title": "SCORING_DETAILS",
+        //     "condition": "model.currentStage=='ScreeningReview'",
+        //     "items": [
+        //         {
+        //             type:"tableview",
+        //             key:"ScoreDetails[0].Parameters",
+        //             // title:"SCORING_DETAILS",
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return [{
+        //                     title: 'PARAMETER',
+        //                     data: 'ParameterName'
+        //                 }, {
+        //                     title: 'VALUE',
+        //                     data: 'UserInput'
+        //                 }, {
+        //                     title: 'SCORE',
+        //                     data: 'ParamterScore'
+        //                 },{
+        //                     title: 'RESULT',
+        //                     data: 'ParameterPassStatus'
+        //                 }]
+        //             }
+        //         },
+        //         {
+        //             type:"fieldset",
+        //             title:"",
+        //             items:[
+        //                 {
+        //                     "key":"ScoreDetails[0].OverallWeightedScore",
+        //                     "title":"TOTAL_SCREENING_SCORE",
+        //                     readonly:true
+        //                 },
+        //                 {
+        //                     "key":"ScoreDetails[0].OverallPassStatus",
+        //                     "title":"OVERALL_PASS_STATUS",
+        //                     readonly:true
+        //                 }
+        //             ]
+        //         }
+        //     ]
+        // });
         
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "SCORES",
-            condition: "model.currentStage!='ScreeningReview'",
             items: [
                 {
                     type: "section",
                     htmlClass: "row",
-                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div>'
+                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
                 },
                 {
                     type: "section",
@@ -214,13 +250,13 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             type: "section",
                             htmlClass: "col-sm-6",
                             title: model.scoreDetails[0].title,
-                            html: '<h3>{{ model.scoreDetails[0].title }} ({{ model.totalScores.data[0][model.scoreDetails[0].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter Name</th><th></th><th>Actual Value</th></tr><tr data-ng-repeat="data in model.scoreDetails[0].data"><td> {{ data["Parameter"] }}</td><td> <span data-ng-if="data.ParameterScore >= 0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >= 2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >= 4.0 && data.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ data.Applicant }}</td></tr></tbody></table>'
+                            html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.scoreDetails[0].title}}({{model.totalScores.data[0][model.scoreDetails[0].title]}})</h3><table class="table"> <colgroup> <col width="50%"> <col width="10%"> <col width="40%"> </colgroup> <tbody> <tr> <th>Parameter Name</th> <th></th> <th>Actual Value</th> </tr><tr data-ng-repeat="data in model.scoreDetails[0].data"> <td>{{data["Parameter"]}}</td><td><span data-ng-if="data.ParameterScore >=0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >=2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >=4.0 && data.ParameterScore <=5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{data.Applicant}}</td></tr></tbody></table>'
                         },
                         {
                             type: "section",
                             htmlClass: "col-sm-6",
                             title: model.scoreDetails[1].title,
-                            html: '<h3>{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[1].data"><td>{{ data.Parameter }}</td><td> <span data-ng-if="data.ParameterScore >= 0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >= 2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >= 4.0 && data.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+                            html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[1].data"><td>{{ data.Parameter }}</td><td> <span data-ng-if="data.ParameterScore >= 0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >= 2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >= 4.0 && data.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                         }
                     ]
                 },
@@ -231,12 +267,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         {
                             type: "section",
                             htmlClass: "col-sm-6",
+                            condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[2].title,
                             html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span data-ng-if="data.ParameterScore >= 0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >= 2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >= 4.0 && data.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                         },
                         {
                             type: "section",
                             htmlClass: "col-sm-6",
+                            condition: "model.currentStage!='ScreeningReview'",
                             title: model.scoreDetails[3].title,
                             html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span data-ng-if="data.ParameterScore >= 0.0 && data.ParameterScore < 1.99 "> <span class="square-color-box bg-a-red"></span> </span> <span data-ng-if="data.ParameterScore >= 2.0 && data.ParameterScore < 3.99 "> <span class="square-color-box bg-a-yellow"></span> </span> <span data-ng-if="data.ParameterScore >= 4.0 && data.ParameterScore <= 5.0 "> <span class="square-color-box bg-a-green"></span> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
                         }

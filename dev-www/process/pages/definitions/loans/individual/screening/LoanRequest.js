@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
-["$log", "$q","LoanAccount", 'Scoring', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+["$log", "$q","LoanAccount", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
 "BundleManager", "PsychometricTestService", 
-function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
+function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
     BundleManager, PsychometricTestService){
 
@@ -1655,18 +1655,51 @@ function($log, $q, LoanAccount, Scoring, AuthTokenHelper, SchemaResource, PageHe
                             })
                     }
 
-                    IndividualLoan.update(reqData)
-                        .$promise
-                        .then(function(res){
-                            PageHelper.showProgress("update-loan", "Done.", 3000);
-                            return navigateToQueue(model);
-                        }, function(httpRes){
-                            PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
-                            PageHelper.showErrors(httpRes);
+                    var p1;
+                    if (reqData.loanAccount.currentStage == 'Sanction'){
+                        /* Auto population of Loan Collateral */
+                        p1 = Enrollment.getCustomerById({id:model.loanAccount.customerId})
+                            .$promise
+                            .then(function(enterpriseCustomer){
+                                model.availableMachines = [];
+                                if (_.isArray(enterpriseCustomer.fixedAssetsMachinaries)){
+                                    reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
+                                    for (var i=0;i<enterpriseCustomer.fixedAssetsMachinaries.length; i++){
+                                        var machine = enterpriseCustomer.fixedAssetsMachinaries[i];
+                                        reqData.loanAccount.collateral.push(
+                                            {
+                                                collateralDescription: machine.machineDescription,
+                                                collateralType: machine.machineType,
+                                                collateralValue: machine.presentValue,
+                                                manufacturer: machine.manufacturerName,
+                                                modelNo: machine.machineModel,
+                                                serialNo: machine.serialNumber
+                                            }
+                                        )
+                                    }    
+                                }
+                                
+                            }, function(httpResponse){
+
+                            });
+                    }
+
+                    $q.all([p1])
+                        .finally(function(httpRes){
+                            IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                return navigateToQueue(model);
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
                         })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        })
+                    
                 })
             },
             reject: function(model, formCtrl, form, $event){
