@@ -306,6 +306,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     { /*TODO Not working when this is enabled */
                        key: "customer.enterprise.companyOperatingSince",
                        title:"OPERATING_SINCE",
+                       required:true,
                        type: "date"
                     },
                     {
@@ -628,7 +629,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                        key: "customer.enterprise.companyOperatingSince",
                        title:"OPERATING_SINCE",
-                       required:true,
                        type: "date"
                     },
                     {
