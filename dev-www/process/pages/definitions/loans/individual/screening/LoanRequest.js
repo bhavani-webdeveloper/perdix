@@ -1447,7 +1447,8 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             {
                 "type": "actionbox",
-                "condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+                //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+                "condition": "model.loanAccount.customerId ",
                 "items": [
                     {
                         "type": "button",
