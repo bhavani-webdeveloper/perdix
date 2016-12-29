@@ -167,9 +167,11 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     var branch = SessionStore.getBranch();
 
     var HIGHMARK_HTML = 
-'<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><small>{{CBDATA.customer.first_name||CBDATA.customerId}}</small><span class="pull-right">Date of Issue: {{CBDATA.highMark.dateOfIssue}}</span></h4>'+
-'<h4 ng-show="CBDATA.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:40px">{{CBDATA.highMark.highmarkScore}}</span></h4>'+
-    '<div>&nbsp;</div>'+
+'<div>'+
+    '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+    '<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">Date of Issue: {{CBDATA.highMark.dateOfIssue}}</span></h4>'+
+    '<h4 ng-show="CBDATA.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:50px;font-weight:bold">{{CBDATA.highMark.highmarkScore}}</span></h4>'+
+    '<div ng-show="CBDATA.highMark.highmarkloanDetails.length">&nbsp;</div>'+
     '<table style="width:100%" ng-show="CBDATA.highMark.highmarkloanDetails.length">'+
         '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
         '<tr class="" ng-repeat-start="ld in CBDATA.highMark.highmarkloanDetails">'+
@@ -221,22 +223,29 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             '<td colspan="4"><hr></td>'+
         '</tr>'+
     '</table>'+
-'<div ng-hide="CBDATA.highMark.highmarkScore.length">'+
-'<center>{{CBDATA.customer.first_name||CBDATA.customerId}} - No Scores available</center>'+
+    '<div ng-hide="CBDATA.highMark.highmarkloanDetails.length">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
+    '</div>'+
+    '<div ng-show="CBDATA.highMark.highmarkloanDetails.length" style="text-align:center;border-bottom:1px dashed #999;line-height:0.1em;margin:10px 0 20px;">'+
+        '<span style="background:#fff;padding:0 10px;color:#999;font-size:14px;">END OF HIGHMARK REPORT</span>'+
+    '</div>'+
+    '<br>'+
 '</div>';
 
     var CIBIL_HTML =
-'<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><small>{{CBDATA.customer.first_name||CBDATA.customerId}}</small><span class="pull-right">DATE: {{CBDATA.cibil.dateOfIssue|userDate}}</span></h4>'+
-'<h4 ng-show="CBDATA.cibil.cibilScore.length">CIBIL TRANSUNION SCORE(S):</h4>'+
+'<div>'+
+    '<h3 ng-show="CBDATA.cibil.cibilScore.length" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
+    '<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">DATE: {{CBDATA.cibil.dateOfIssue|userDate}}</span></h4>'+
+    '<h4 ng-show="CBDATA.cibil.cibilScore.length">CIBIL TRANSUNION SCORE(S):</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilScore.length">'+
         '<tr><th style="padding:5px">SCORE NAME</th><th style="padding:5px">SCORE</th><th style="padding:5px">SCORE DATE</th></tr>'+
         '<tr class="bg-tint-theme" ng-repeat="s in CBDATA.cibil.cibilScore">'+
             '<td style="padding-left:15px;font-size:18px">{{s.scoreName=="PLSCORE"?"PERSONAL LOAN SCORE":(s.scoreName=="CIBILTUSCR"?"CIBIL TRANSUNION SCORE":s.scoreName)}}</td>'+
-            '<td style="font-size:40px">{{s.score|number}}</td>'+
+            '<td style="font-size:40px">{{s.score}}</td>'+
             '<td style="font-size:18px">{{s.scoreDate|userDate}}</td>'+
         '</tr>'+
     '</table>'+
-    '<div>&nbsp;</div>'+
+    '<div ng-show="CBDATA.cibil.cibilScore.length">&nbsp;</div>'+
     '<h4 ng-show="CBDATA.cibil.cibilLoanDetails.length">ACCOUNT(S):</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanDetails.length">'+
         '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
@@ -279,8 +288,13 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             '<td colspan="4"><hr></td>'+
         '</tr>'+
     '</table>'+
-'<div ng-hide="CBDATA.cibil.cibilScore.length">'+
-'<center>{{CBDATA.customer.first_name||CBDATA.customerId}} - No Scores available</center>'+
+    '<div ng-hide="CBDATA.cibil.cibilScore.length">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - CIBIL Scores NOT available</b></center>'+
+    '</div>'+
+    '<div ng-show="CBDATA.cibil.cibilScore.length" style="text-align:center;border-bottom:1px dashed #999;line-height:0.1em;margin:10px 0 20px;">'+
+        '<span style="background:#fff;padding:0 10px;color:#999;font-size:14px;">END OF CIBIL REPORT</span>'+
+    '</div>'+
+    '<br>'+
 '</div>';
 
     return {
@@ -291,19 +305,19 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};
+            model.applicant = {};
             model.coapplicants = [];
             PageHelper.showLoader();
             if (_.hasIn(model, 'loanAccount')){
-                if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length >0){
-                    for (var i = 0; i <model.loanAccount.loanCustomerRelations.length; i++) {
-                        if(model.loanAccount.loanCustomerRelations[i].relation=='Applicant' || model.loanAccount.loanCustomerRelations[i].relation=='Co-Applicant'){
-                            CreditBureau.getCBDetails({
-                                customerId:model.loanAccount.loanCustomerRelations[i].customerId,
-                                requestType:null,
-                                type:null
-                            })
-                            .$promise
-                            .then(function(httpres){
+                if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length) {
+                    var bureauPromises = [];
+                    for (i in model.loanAccount.loanCustomerRelations) {
+                        var lcRelation = model.loanAccount.loanCustomerRelations[i];
+                        if (lcRelation.relation == 'Applicant' || lcRelation.relation == 'Co-Applicant'){
+                            var bureauPromise = CreditBureau.getCBDetails({customerId: lcRelation.customerId, requestType: null, type: null}).$promise;
+                            bureauPromises.push(bureauPromise);
+
+                            bureauPromise.then(function(httpres) {
                                 // Data processing for UI - starts
                                 // CIBIL
                                 if (httpres && httpres.cibil && httpres.cibil.cibilLoanDetails && httpres.cibil.cibilLoanDetails.length) {
@@ -341,7 +355,9 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                             }
                                         }
                                     }
-                                } else if (httpres && httpres.highMark && httpres.highMark.highmarkloanDetails && httpres.highMark.highmarkloanDetails.length) {
+                                } else
+                                // HIGHMARK
+                                if (httpres && httpres.highMark && httpres.highMark.highmarkloanDetails && httpres.highMark.highmarkloanDetails.length) {
                                     for (i in httpres.highMark.highmarkloanDetails) {
                                         var hmld = httpres.highMark.highmarkloanDetails[i];
                                         if (hmld.combinedPaymentHistory) {
@@ -368,33 +384,16 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                     }
                                 }
                                 // Data processing for UI - ends
-                                for(j=0; j<model.loanAccount.loanCustomerRelations.length; j++){
-                                    if(model.loanAccount.loanCustomerRelations[j].relation=='Applicant' && model.loanAccount.loanCustomerRelations[j].customerId==httpres.customerId)
-                                        model.applicant = httpres;
-                                    else if(model.loanAccount.loanCustomerRelations[j].relation=='Co-Applicant'){
-                                        model.coapplicants.push(httpres);
-                                        var index = model.coapplicants.length-1;
-                                        Queries.getCustomerBasicDetails({ids: [model.coapplicants[index].customerId]})
-                                        .then(
-                                            function (res) {
-                                                $log.info('---------------------------------------------------------');
-                                                $log.info(res);
-                                                model.coapplicants[index].customer = res.ids[model.coapplicants[index].customerId];
-                                            }, function (httpRes) {
-                                                PageHelper.showProgress('load-loan', "Error while loading co Applicant details", 2000);
-                                            }
-                                        )
-                                    }
-                                }
-                                if (model.applicant.customerId){
-                                    Queries.getCustomerBasicDetails({ids: [model.applicant.customerId]})
-                                    .then(
-                                        function (res) {
-                                            model.applicant.customer = res.ids[model.applicant.customerId];
-                                        }, function (httpRes) {
-                                            PageHelper.showProgress('load-loan', "Error while loading customer details", 2000);
+
+                                for (j in model.loanAccount.loanCustomerRelations) {
+                                    var relationGuy = model.loanAccount.loanCustomerRelations[j];
+                                    if (relationGuy.customerId == httpres.customerId) {
+                                        if (relationGuy.relation == 'Applicant') {
+                                            model.applicant = httpres;
+                                        } else if (relationGuy.relation == 'Co-Applicant') {
+                                            model.coapplicants.push(httpres);
                                         }
-                                    )
+                                    }
                                 }
                             },function (errResp){
                                 $log.info("error while processing CB get request");
@@ -406,12 +405,26 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                             });
                         }
                     }
+                    $q.all(bureauPromises).finally(function() {
+                        var objectifiedBureaus = {};
+                        objectifiedBureaus[model.applicant.customerId] = model.applicant;
+                        var customerIds = [model.applicant.customerId];
+                        for (k in model.coapplicants) {
+                            objectifiedBureaus[model.coapplicants[k].customerId] = model.coapplicants[k];
+                            customerIds.push(model.coapplicants[k].customerId);
+                        }
+
+                        Queries.getCustomerBasicDetails({ids: customerIds}).then(function (res) {
+                            _.forOwn(res.ids, function(v, k) {
+                                objectifiedBureaus[k].customer = v;
+                            });
+                        });
+                    });
                 }
             }
         },
         eventListeners: {
         },
-        
         form: [
             {
                 "type": "box",
@@ -420,24 +433,8 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 readonly:true,
                 "items": [
                     {
-                        type:"fieldset",
-                        title:"HighMark - CRIF HIGH MARK - CONSUMER CREDIT REPORT",
-                        items:[
-                            {
-                                type: "section",
-                                html: '<div ng-init="CBDATA=model.applicant">' + HIGHMARK_HTML + '</div>'
-                            }
-                        ]
-                    },
-                    {
-                        type:"fieldset",
-                        title:"CIBIL - Credit Information Bureau (India) Limited",
-                        items:[
-                            {
-                                type: "section",
-                                html: '<div ng-init="CBDATA=model.applicant">' + CIBIL_HTML + '</div>'
-                            }
-                        ]
+                        type: "section",
+                        html: '<div ng-init="CBDATA=model.applicant">' + HIGHMARK_HTML + CIBIL_HTML + '</div>'
                     }
                 ]
             },
@@ -449,24 +446,8 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 readonly:true,
                 "items": [
                     {
-                        type:"fieldset",
-                        title:"HighMark - CRIF HIGH MARK - CONSUMER CREDIT REPORT",
-                        items:[
-                            {
-                                type: "section",
-                                html: '<div ng-repeat="CBDATA in model.coapplicants">' + HIGHMARK_HTML + '</div><hr><hr>'
-                            }
-                        ]
-                    },
-                    {
-                        type:"fieldset",
-                        title:"CIBIL - Credit Information Bureau (India) Limited",
-                        items:[
-                            {
-                                type: "section",
-                                html: '<div ng-repeat="CBDATA in model.coapplicants">' + CIBIL_HTML + '</div><hr><hr>'
-                            }
-                        ]
+                        type: "section",
+                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + HIGHMARK_HTML + CIBIL_HTML + '<hr><hr></div>'
                     }
                 ]
             }
