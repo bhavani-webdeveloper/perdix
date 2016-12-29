@@ -232,10 +232,18 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
 		return deferred.promise;
     }
 
-    resource.getBankAccountsByProduct = function(productCode){
+    resource.getBankAccountsByProduct = function(productCode, allowDisbursementAccounts, allowCollectionAccounts){
         var deferred = $q.defer();
         request = {};
         request.product_code = productCode || null;
+        request.allow_collection = [0, 1];
+        request.allow_disbursement = [0, 1];
+        if (allowCollectionAccounts == true){
+            request.allow_collection = [1];
+        }
+         if (allowDisbursementAccounts == true){
+            request.allow_disbursement = [1];
+        }
         // opts = opts || {partner_code: ""};
         resource.getResult("bankAccountsByProductCode.list", request, 10).then(function(records){
             if (records && records.results) {
