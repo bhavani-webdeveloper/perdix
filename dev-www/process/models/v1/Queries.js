@@ -232,6 +232,26 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
 		return deferred.promise;
     }
 
+    resource.getBankAccountsByProduct = function(productCode){
+        var deferred = $q.defer();
+        request = {};
+        request.product_code = productCode || null;
+        // opts = opts || {partner_code: ""};
+        resource.getResult("bankAccountsByProductCode.list", request, 10).then(function(records){
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+
     resource.getLatestLoanRepayment = function(accountNumber) {
     	var deferred = $q.defer();
     	resource.getResult("latestLoanRepayments.list", {account_number: accountNumber}, 1).then(function(records){
