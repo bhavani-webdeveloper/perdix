@@ -81,13 +81,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                             .$promise
                             .then(
                                 function(res){
-                                    // $this.bundlePages.push({
-                                    //     pageClass: 'loan-request',
-                                    //     model: {
-                                    //         loanAccount: res
-                                    //     }
-                                    // });
-
                                     var applicant;
                                     var coApplicants = [];
                                     var guarantors = [];
@@ -102,57 +95,58 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);
                                             urnNos.push(cust.urn);
+                                        } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
+                                            guarantors.push(cust);
                                         }
-                                        /* TODO HANDLE Guarantors */
                                     }
 
+                                    $this.bundlePages.push({
+                                        pageClass: 'applicant',
+                                        model: {
+                                            loanRelation: applicant
+                                        }
+                                    });
 
-                                    /*Queries.getCustomerBasicDetails({urns: urnNos})
-                                        .then(function(customers){
-                                            for (var i=0;i<coApplicants.length; i++){
-                                                coApplicants[i].customerId = customers.urns[coApplicants[i].urn].id;
+                                    for (var i=0;i<coApplicants.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'co-applicant',
+                                            model: {
+                                                loanRelation: coApplicants[i]
                                             }
-                                            applicant.customerId = customers.urns[applicant.urn].id;*/
-                                            $this.bundlePages.push({
-                                                pageClass: 'applicant',
-                                                model: {
-                                                    loanRelation: applicant
-                                                }
-                                            });
+                                        });
+                                    }
 
-                                            for (var i=0;i<coApplicants.length; i++){
-                                                $this.bundlePages.push({
-                                                    pageClass: 'co-applicant',
-                                                    model: {
-                                                        loanRelation: coApplicants[i]
-                                                    }
-                                                });
+                                    for (var i=0;i<guarantors.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'guarantor',
+                                            model: {
+                                                loanRelation: guarantors[i]
                                             }
+                                        });
+                                    }
 
-                                            $this.bundlePages.push({
-                                                pageClass: 'business',
-                                                model: {
-                                                    loanRelation: {customerId: loanCustomerId}
-                                                }
-                                            })
+                                    $this.bundlePages.push({
+                                        pageClass: 'business',
+                                        model: {
+                                            loanRelation: {customerId: loanCustomerId}
+                                        }
+                                    })
 
-                                            $this.bundlePages.push({
-                                                pageClass: 'loan-request',
-                                                model: {
-                                                    loanAccount: res
-                                                }
-                                            });
+                                    $this.bundlePages.push({
+                                        pageClass: 'loan-request',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
 
-                                            $this.bundlePages.push({
-                                                pageClass: 'loan-review',
-                                                model: {
-                                                    loanAccount: res
-                                                }
-                                            });
-                                            deferred.resolve();
-                                        /*}, function(httpRes){
-                                            PageHelper.showErrors(httpRes);
-                                        })*/
+                                    $this.bundlePages.push({
+                                        pageClass: 'loan-review',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+                                    deferred.resolve();
+
                                 }, function(httpRes){
                                     deferred.reject();
                                     PageHelper.showErrors(httpRes);

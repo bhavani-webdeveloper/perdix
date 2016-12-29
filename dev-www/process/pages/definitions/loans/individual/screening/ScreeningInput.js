@@ -148,7 +148,7 @@ function (
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);
                                             urnNos.push(cust.urn);
-                                        } else if (cust.relation == 'GUARANTOR'){
+                                        } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
                                             guarantors.push(cust);
                                         }
                                     }
