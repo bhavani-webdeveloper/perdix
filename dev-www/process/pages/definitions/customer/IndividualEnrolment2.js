@@ -1189,9 +1189,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "key": "customer.expenditures",
                                     "type": "array",
                                     "title": "EXPENDITURES",
-                                    //"view": "fixed",
-                                    // "add": null,
-                                    // "remove": null,
+                                    "view": "fixed",
+                                     "add": null,
+                                     "remove": null,
                                     "items": [
                                         
                                         {
