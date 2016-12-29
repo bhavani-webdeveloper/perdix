@@ -1,13 +1,8 @@
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+		function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
-		var centreId=[];
-		for (var i = 0; i < centres.length; i++) {
-			centreId.push(centres[i].centreId);
-		}
 		return {
 			"type": "search-list",
 			"title": "REJECTED_QUEUE",
@@ -21,11 +16,33 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 				searchForm: [
 					"*"
 				],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"applicantName": {
+						"branch": 
+						{
+	                        "title": "HUB_NAME",
+	                        "type": "integer",
+	                        "enumCode": "branch_id",
+	                        "x-schema-form": {
+	                            "type": "select"
+							}
+	                    },
+						"centre": 
+						{
+	                        "title": "CENTRE",
+	                        "type": ["null", "number"],
+	                        "enumCode": "centre",
+	                        "screenFilter": true,
+	                        "x-schema-form": {
+	                            "type": "select",
+	                        	"parentEnumCode":"branch_id"
+							}
+	                    },
+	                    "applicantName":
+						{
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
@@ -45,24 +62,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 	                    },
-	                    "screeningDate": 
-	                    {
-	                        "title": "SCREENING_DATE",
+	                    "pincode": {
+	                        "title": "PIN_CODE",
 	                        "type": "string",
-	                        "x-schema-form": {
-	                            "type": "date"
-	                        }
+	                        
 	                    },
-	                     "status": 
-	                    {
-                            "type":"string",
-                            "title":"STATUS",
-                            "enumCode": "origination_status",
-                            "x-schema-form": {
-                            	"type": "select"
-                            }
-                        }
-
 					},
 					"required": []
 				},
@@ -70,18 +74,20 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+					var branches = formHelper.enum('branch_id').data;
+					var branchName;
+					for (var i=0; i<branches.length;i++){
+	                    if(branches[i].code==searchOptions.branch)
+	                        branchName = branches[i].name;
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Rejected',
-	                    'centreCode':centreId[0],
-	                    'branchName':branch,
-	                    'screeningDate':searchOptions.screeningDate,
+						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
+	                    'branchName': branchName,
+	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
@@ -108,13 +114,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 					},
 					getListItem: function(item) {
 						return [
+							item.branchName,
+							item.centreName,
 							item.screeningDate,
 							item.applicantName,
-							item.businessName,
-							item.customerId,
+							item.customerName,
 							item.area,
-							item.cityTownVillage,
-							item.pincode
+							item.villageName,
+							item.enterprisePincode
 						]
 					},
 					getTableConfig: function() {
@@ -128,49 +135,41 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 						return [{
 							title: 'ID',
 							data: 'id'
-						}, {
+						},
+						{
+							title: 'HUB_NAME',
+							data: 'branchName'
+						},
+						{
+							title: 'SPOKE_NAME',
+							data: 'centreName'
+						},
+						{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						}, {
+						}, 
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
+						},
+						{
 							title: 'BUSINESS_NAME',
-							data: 'businessName'
-						},{
-							title: 'CUSTOMER_ID',
-							data: 'customerId'
-						}, {
+							data: 'customerName'
+						}, 
+						{
 							title: 'AREA',
 							data: 'area'
-						}, {
+						}, 
+						{
 							title: 'CITY_TOWN_VILLAGE',
-							data: 'cityTownVillage'
-						}, {
-							title: 'PINCODE',
-							data: 'pincode'
+							data: 'villageName'
+						}, 
+						{
+							title: 'PIN_CODE',
+							data: 'enterprisePincode'
 						}]
 					},
-					getActions: function() {
-						return [{
-							name: "REJECTED",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								entityManager.setModel('loan.Rejected', {
-									_request: item
-								});
-								$state.go("Page.Engine", {
-									pageName: "loans.individual.booking.Rejected",
-									pageId: item.id
-								});
-							},
-							isApplicable: function(item, index) {
-
-								return true;
-							}
-						}];
-					}
+					
 				}
 			}
 		};
