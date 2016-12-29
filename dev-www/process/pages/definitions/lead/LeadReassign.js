@@ -25,6 +25,8 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         },
                         function(res) {
                             _.assign(model.lead, res);
+
+                            model.lead.branchId=res.branchId;
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -68,10 +70,10 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     type: "box",
                     title: "ASSIGN_SPOKE",
                     items: [{
-                        "key": "lead.branchId",
+                        "key": "lead.branchName",
                         "title": "HUB_NAME",
                         "type": "select",
-                        "enumCode": "branch_id",
+                        "enumCode": "branch",
                         readonly: true
                     }, {
                         key: "lead.centreId",

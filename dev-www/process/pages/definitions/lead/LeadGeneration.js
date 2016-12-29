@@ -19,13 +19,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                         "loanOfficerId": SessionStore.getUsername() + ''
                     }];
 
-                    var branch1 = formHelper.enum('branch_id').data;
-                    for (var i = 0; i < branch1.length; i++) {
-                        if ((branch1[i].name) == SessionStore.getBranch()) {
-                            model.lead.branchId = branch1[i].value;
-                        }
-                    }
-
+                    model.lead.branchId = SessionStore.getBranchId();
+                    model.lead.branchName = SessionStore.getBranch();
                 }
 
 
@@ -76,7 +71,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                     "type": "box",
                     "title": "LEAD_PROFILE",
                     "items": [{
-                            key: "lead.branchId",
+                            key: "lead.branchName",
                             type: "select",
                             readonly: true
                         }, {
