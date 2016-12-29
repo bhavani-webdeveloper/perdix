@@ -169,6 +169,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 							data: 'enterprisePincode'
 						}]
 					},
+					getActions: function() {
+						return [];
+					}
 					
 				}
 			}
