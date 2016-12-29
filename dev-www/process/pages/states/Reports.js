@@ -12,31 +12,28 @@ irf.pages.controller("ReportsCtrl",
         $scope.dashboardDefinition = response;
     });
 	
-	BIReports.reportFilterList().$promise.then(function(response) {
-        $scope.regionName = [
-		{id: '1', name: 'Option A'},
-      {id: '2', name: 'Option B'},
-      {id: '3', name: 'Option C'}
-		];
+	BIReports.reportFilterList({"DropDownType" : "region" , "selectedValue" :""}).$promise.then(function(response) {
+        $scope.regionName = response.items;
     });
 	
 	
 	$scope.listHubs = function(){
-		alert($scope.selectedRegion.id);
-		$scope.HubNames = [{id: '1', hubname: 'Option A'},
-      {id: '2', hubname: 'Option B'},
-      {id: '3', hubname: 'Option C'}];
+		
+	  	BIReports.reportFilterList({"DropDownType" : "Hub" , "selectedValue" : $scope.selectedRegion.id}).$promise.then(function(response) {
+        	$scope.HubNames = response.items;
+    	});
 	}
 	
 	$scope.listBranches = function(){
-		alert($scope.selectedHub.id);
-		$scope.loanOfficers = [{id: '1', user: 'Option A'},
-      {id: '2', user: 'Option B'},
-      {id: '3', user: 'Option C'}];
+		
+	  
+	  BIReports.reportFilterList({"DropDownType" : "branch" , "selectedValue" : $scope.selectedHub.id}).$promise.then(function(response) {
+        	$scope.loanOfficers = response.items;
+    	});
 	}
 	
 	$scope.processForm = function(){
-    alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedUser.id);
+    alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedHub.id);
 }
 	
 	
