@@ -12,11 +12,37 @@ irf.pages.controller("ReportsCtrl",
         $scope.dashboardDefinition = response;
     });
 	
+	BIReports.reportFilterList().$promise.then(function(response) {
+        $scope.regionName = [
+		{id: '1', name: 'Option A'},
+      {id: '2', name: 'Option B'},
+      {id: '3', name: 'Option C'}
+		];
+    });
+	
+	
+	$scope.listHubs = function(){
+		alert($scope.selectedRegion.id);
+		$scope.HubNames = [{id: '1', hubname: 'Option A'},
+      {id: '2', hubname: 'Option B'},
+      {id: '3', hubname: 'Option C'}];
+	}
+	
+	$scope.listBranches = function(){
+		alert($scope.selectedHub.id);
+		$scope.loanOfficers = [{id: '1', user: 'Option A'},
+      {id: '2', user: 'Option B'},
+      {id: '3', user: 'Option C'}];
+	}
+	
+	$scope.processForm = function(){
+    alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedUser.id);
+}
+	
+	
 	$scope.ResultDataSet = [];
 	
-	$scope.onTabLoad = function(tabIndex, activeindex){
-		
-		
+	$scope.onTabLoad = function(tabIndex, activeindex){	
 		
 		if(!$scope.ResultDataSet[activeindex])
 		{
@@ -41,12 +67,21 @@ irf.pages.controller("ReportsCtrl",
     	});
 		}
 		
+		$scope.onheaderClick = function(key, report_id){
+			
+			var drillDownUrl = irf.REPORT_BASE_URL + '/ReportDrilldown.php?report_id='+report_id+'&key='+key;
+                    $log.info(drillDownUrl);
+                    window.open(drillDownUrl);
+		};
+		
 	};
 	
 	BIReports.reportTabList({"menu_id":$stateParams.pageId}).$promise.then(function(response) {
         console.log(response);
 		$scope.TabDefinition = response;
     });
+	
+	
 	
 	
     BIReports.reportList({"sd":"sd"}).$promise.then(function(resp){
