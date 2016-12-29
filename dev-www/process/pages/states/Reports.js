@@ -12,29 +12,29 @@ irf.pages.controller("ReportsCtrl",
         $scope.dashboardDefinition = response;
     });
 	
+	//for hub dropdown
 	BIReports.reportFilterList({"DropDownType" : "region" , "selectedValue" :""}).$promise.then(function(response) {
         $scope.regionName = response.items;
     });
 	
-	
+	//for branch dropdown on select
 	$scope.listHubs = function(){
-		
-	  	BIReports.reportFilterList({"DropDownType" : "Hub" , "selectedValue" : $scope.selectedRegion.id}).$promise.then(function(response) {
+		BIReports.reportFilterList({"DropDownType" : "Hub" , "selectedValue" : $scope.selectedRegion.id}).$promise.then(function(response) {
         	$scope.HubNames = response.items;
     	});
 	}
 	
+	//for users dropdown on select
 	$scope.listBranches = function(){
-		
-	  
-	  BIReports.reportFilterList({"DropDownType" : "branch" , "selectedValue" : $scope.selectedHub.id}).$promise.then(function(response) {
+		BIReports.reportFilterList({"DropDownType" : "branch" , "selectedValue" : $scope.selectedHub.id}).$promise.then(function(response) {
         	$scope.loanOfficers = response.items;
     	});
 	}
 	
+	//on pressing the button apply filter
 	$scope.processForm = function(){
-    alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedHub.id);
-}
+    	alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedHub.id);
+	}
 	
 	
 	$scope.ResultDataSet = [];
