@@ -2085,6 +2085,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.avgMonthlySalary",
+                        condition:"model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 ",
                         //required:true,
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
