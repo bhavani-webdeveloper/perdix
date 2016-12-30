@@ -1192,7 +1192,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                                 resp.loanProcessAction="PROCEED";
                                 if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == 'Kinara')
-                                    reqData.stage = 'LoanBooking';
+                                    resp.stage = 'LoanBooking';
                                 //reqData.loanProcessAction="PROCEED";
                                 PageHelper.showLoader();
                                 IndividualLoan.create(resp,function(resp,headers){
