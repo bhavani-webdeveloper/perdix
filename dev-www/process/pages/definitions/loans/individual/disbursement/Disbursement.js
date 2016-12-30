@@ -126,8 +126,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
-                            return Queries.getBankAccounts();
                             //return Queries.getBankAccountsByProduct(model.additional.productCode,true,false);
+                            return Queries.getBankAccountsByProduct(model.additional.productCode,true,false);
                         },
                         getListDisplayItem: function(item, index) {
                             return [
