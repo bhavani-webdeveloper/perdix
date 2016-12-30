@@ -1010,6 +1010,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info(model);
                     PageHelper.clearErrors();
 
+                    model.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted || "N";
+
                     if (model.additional.product && !_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
                         if (!_.isArray(model.loanAccount.guarantors) || model.loanAccount.guarantors.length == 0){
                             PageHelper.showProgress('loan-product-guarantor-required', 'Guarantor is mandatory for the selected product', 5000);
