@@ -110,6 +110,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.loanAccount.coBorrowers.push(lcR);
                         } else if (lcR.relation === 'Guarantor' && model.loanAccount.guarantors.length == 0) {
                             lcR.guaUrnNo = lcR.urn;
+                            delete lcR.id;
                             model.loanAccount.guarantors.push(lcR);
                         }
                     }
