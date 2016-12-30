@@ -99,16 +99,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
-                    //model.loanAccount.guarantors=model.loanAccount.guarantors || [{guaFirstName:""}];
+
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
-                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
-                        if (model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            model.loanAccount.coBorrowers.push({
-                                coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn
-                            });
+                    model.loanAccount.guarantors = [];
+                    for (var i in model.loanAccount.loanCustomerRelations) {
+                        var lcR = model.loanAccount.loanCustomerRelations[i];
+                        if (lcR.relation === 'Co-Applicant') {
+                            lcR.coBorrowerUrnNo = lcR.urn;
+                            model.loanAccount.coBorrowers.push(lcR);
+                        } else if (lcR.relation === 'Guarantor' && model.loanAccount.guarantors.length == 0) {
+                            lcR.guaUrnNo = lcR.urn;
+                            model.loanAccount.guarantors.push(lcR);
                         }
                     }
+                    /*
+{
+    customerId: null,
+    id: 9914,
+    loanId: 6140,
+    relation: 'Applicant',
+    relationShipWithApplicant: null,
+    urn: null,
+    version: 0
+}
+                    */
 
                     model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
                     if (model.loanAccount.nominees.length == 0)
@@ -362,6 +377,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     }
                                 },
                                 "outputMap": {
+                                    "id": "loanAccount.applicantId",
                                     "urnNo": "loanAccount.applicant",
                                     "firstName":"customer.applicantName"
                                 },
@@ -398,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     {
                                         "key": "loanAccount.coBorrowers",
                                         "title": "COAPPLICANTS",
-                                        "titleExpr": "model.loanAccount.coBorrowers[arrayIndex].coBorrowerName",
+                                        "titleExpr": "model.loanAccount.coBorrowers[arrayIndex].customerId + ': ' + model.loanAccount.coBorrowers[arrayIndex].coBorrowerName",
                                         "type": "array",
                                         "startEmpty": true,
                                         "schema": {
@@ -431,6 +447,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                     }
                                                 },
                                                 "outputMap": {
+                                                    "id": "loanAccount.coBorrowers[arrayIndex].customerId",
                                                     "urnNo": "loanAccount.coBorrowers[arrayIndex].coBorrowerUrnNo",
                                                     "firstName":"loanAccount.coBorrowers[arrayIndex].coBorrowerName"
                                                 },
@@ -684,7 +701,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "outputMap": {
                                             "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
                                             "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName",
-                                            "id":"loanAccount.guarantors[arrayIndex].guaCustomerId"
+                                            "id":"loanAccount.guarantors[arrayIndex].customerId"
                                         },
                                         "searchHelper": formHelper,
                                         "search": function(inputModel, form) {
@@ -739,15 +756,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.applicant;
                                             break;
                                         case "coapplicant":
-                                            if(_.isEmpty(model.loanAccount.coBorrowerUrnNo)){
+                                            if(_.isEmpty(model.loanAccount.coBorrowers)){
                                                 Utils.alert("Please Select a Co-Applicant");
                                                 model.additional.portfolioUrnSelector="";
                                                 break;
                                             }
-                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
+                                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowers[0].coBorrowerUrnNo;
                                             break;
                                         case "guarantor":
-                                            if(_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)){
+                                            if(_.isEmpty(model.loanAccount.guarantors)){
                                                 Utils.alert("Please Select a Guarantor");
                                                 model.additional.portfolioUrnSelector="";
                                                 break;
@@ -1020,7 +1037,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2;
-                    if (model.loanAccount.applicant === model.loanAccount.coBorrowerUrnNo) {
+                    if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length && model.loanAccount.applicant === model.loanAccount.coBorrowers[0].coBorrowerUrnNo) {
                         PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
                         return false;
                     }
@@ -1035,7 +1052,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.showProgress("loan-create","Applicant & Guarantor cannot be same",5000);
                                 return false;
                             }
-                            if (model.loanAccount.coBorrowerUrnNo === model.loanAccount.guarantors[i].guaUrnNo) {
+                            if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length && model.loanAccount.coBorrowers[0].coBorrowerUrnNo === model.loanAccount.guarantors[i].guaUrnNo) {
                                 PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
                                 return false;
                             }
@@ -1121,28 +1138,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     // BUG FIX DO-customer id going null
-                    if (!(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length)) {
-                        model.loanAccount.loanCustomerRelations = [];
-                        model.loanAccount.loanCustomerRelations.push({
-                            urn:model.loanAccount.applicant,
-                            relation:'Applicant'
-                        });
-                        if(model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length){
-                            for (var i = 0; i < model.loanAccount.coBorrowers.length; i++) {
-                                model.loanAccount.loanCustomerRelations.push({
-                                    urn:model.loanAccount.coBorrowers[i].coBorrowerUrnNo,
-                                    relation:'Co-Applicant'
-                                });
+                    model.loanAccount.loanCustomerRelations = [];
+                    model.loanAccount.loanCustomerRelations.push({
+                        customerId: model.loanAccount.applicantId,
+                        urn: model.loanAccount.applicant,
+                        relation: 'Applicant'
+                    });
+                    if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length) {
+                        for (var i in model.loanAccount.coBorrowers) {
+                            var coB = model.loanAccount.coBorrowers[i];
+                            if (coB.urn || coB.customerId) {
+                                coB.relation = 'Co-Applicant';
+                                coB.urn = coB.coBorrowerUrnNo;
+                                model.loanAccount.loanCustomerRelations.push(coB);
                             }
                         }
-                        if(model.loanAccount.guarantors && model.loanAccount.guarantors.length > 0){
-                            for (var i = model.loanAccount.guarantors.length - 1; i >= 0; i--) {
-                                if(model.loanAccount.guarantors.guaUrnNo){
-                                    model.loanAccount.loanCustomerRelations.push({
-                                        urn:model.loanAccount.guarantors[i].guaUrnNo,
-                                        relation:'Guarantor'
-                                    });
-                                }
+                    }
+                    if (model.loanAccount.guarantors && model.loanAccount.guarantors.length) {
+                        for (var i in model.loanAccount.guarantors) {
+                            var gua = model.loanAccount.guarantors[i];
+                            if (gua.urn || gua.customerId) {
+                                gua.relation = 'Guarantor';
+                                gua.urn = gua.guaUrnNo;
+                                model.loanAccount.loanCustomerRelations.push(gua);
                             }
                         }
                     }
@@ -1173,6 +1191,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Save:" + model.loanAccount.id);
                                 resp.loanProcessAction="PROCEED";
+                                if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == 'Kinara')
+                                    reqData.stage = 'LoanBooking';
                                 //reqData.loanProcessAction="PROCEED";
                                 PageHelper.showLoader();
                                 IndividualLoan.create(resp,function(resp,headers){
