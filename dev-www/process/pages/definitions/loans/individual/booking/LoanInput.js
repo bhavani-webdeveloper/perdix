@@ -102,7 +102,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
-                    model.loanAccount.guarantors = [];
+                    //model.loanAccount.guarantors = [];
                     for (var i in model.loanAccount.loanCustomerRelations) {
                         var lcR = model.loanAccount.loanCustomerRelations[i];
                         if (lcR.relation === 'Co-Applicant') {
