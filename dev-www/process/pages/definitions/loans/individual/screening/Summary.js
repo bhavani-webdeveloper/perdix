@@ -4,6 +4,23 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
 
+    var HOUSEHOLD_PL_HTML = 
+'<table class="table">'+
+    '<colgroup>'+
+        '<col width="30%"> <col width="40%"> <col width="30%">'+
+    '</colgroup>'+
+    '<tbody>'+
+        '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income}}</th> </tr>'+
+        '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness}}</td> </tr>'+
+        '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries}}</td> </tr>'+
+        '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes}}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses}}</th> </tr>'+
+        '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense}}</td> </tr>'+
+        '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities}}</td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome}}</td> </tr>'+
+    '</tbody>'+
+'</table>';
+
     var branch = SessionStore.getBranch();
     var scoreName;
 
@@ -46,19 +63,39 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
         model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
 
+        if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
+            model.pl.householdCoApplicant = {};
+            model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
+            model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
+            model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
+            model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
+            model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
+            model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
+            model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
+            model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
+        }
+
         model.pl.business.invoice = model.businessPL.data[0]['Invoice'];
+        model.pl.business.invoicePCT = model.businessPL.data[0]['Invoice pct'];
         model.pl.business.cashRevenue = model.businessPL.data[0]['Cash'];
+        model.pl.business.cashRevenuePCT = model.businessPL.data[0]['Cash pct'];
         model.pl.business.scrapIncome = model.businessPL.data[0]['Scrap or any business related income'];
+        model.pl.business.scrapIncomePCT = model.businessPL.data[0]['Scrap or any business related income pct'];
         model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Total Business Revenue'];
         model.pl.business.purchases = model.businessPL.data[0]['Purchases'];
+        model.pl.business.purchasesPCT = model.businessPL.data[0]['Purchases pct'];
         model.pl.business.grossIncome = model.businessPL.data[0]['Gross Income'];
         model.pl.business.Opex = model.businessPL.data[0]['Opex'];
         model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
+        model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
         model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
         model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
+        model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
         model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
+        model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
         model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
+        model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
         /* Scoring Sections */
 
@@ -405,17 +442,32 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
-            title: "HOUSEHOLD_PL",
+            title: "Household P&L Statement - Applicant",
             condition: "model.currentStage != 'ScreeningReview'",
             items: [
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    // html: "Hello guys. My name is {{ model.assetsAndL}}"
-                    "html": '<table class="table"> <colgroup> <col width="30%"> <col width="40%"> <col width="30%"> </colgroup> <tbody> <tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.pl.household.income}}</th> </tr><tr> <td></td><td>{{"SALARY_FROM_BUSINESS" | translate}}</td><td>{{model.pl.household.salaryFromBusiness}}</td></tr><tr> <td></td><td>{{"OTHER_INCOME_SALARIES" | translate}}</td><td>{{model.pl.household.otherIncomeSalaries}}</td></tr><tr> <td></td><td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td><td>{{model.pl.household.familyMemberIncomes}}</td></tr><tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th><th></th><th>{{model.pl.household.Expenses}}</th></tr><tr> <td></td><td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td><td>{{model.pl.household.declaredEducationExpense}}</td></tr><tr> <td></td><td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td><td>{{model.pl.household.emiHouseholdLiabilities}}</td></tr><tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td><td></td><td>{{model.pl.household.netHouseholdIncome}}</td></tr></tbody></table>'
+                    html: '<div ng-init="household = model.pl.household">' + HOUSEHOLD_PL_HTML + '</div>'
                 }
             ]
         });
+        
+        if (model.pl.householdCoApplicant) {
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: "Household P&L Statement - Co-Applicant",
+                condition: "model.currentStage != 'ScreeningReview'",
+                items: [
+                    {
+                        type: "section",
+                        colClass: "col-sm-12",
+                        html: '<div ng-init="household = model.pl.householdCoApplicant">' + HOUSEHOLD_PL_HTML + '</div>'
+                    }
+                ]
+            });
+        }
         
         
         form.push({
@@ -427,8 +479,29 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    // html: "Hello guys. My name is {{ model.assetsAndL}}"
-                    "html": '<table class="table"> <colgroup> <col width="30%"> <col width="40%"> <col width="30%"> </colgroup> <tbody> <tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> </tr><tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice}}</td></tr><tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue}}</td></tr><tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome}}</td></tr><tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome}}</td></tr><tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases}}</td></tr><tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome}}</th> </tr><tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex}}</td></tr><tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.pl.business.EBITDA}}</td></tr><tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td></tr><tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities}}</td></tr><tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome}}</td></tr><tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.kinaraEmi}}</td></tr><tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.pl.business.netIncome}}</td> </tr><tr class="table-bottom-summary"> <td>{{"FINAL_KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.finalKinaraEmi}}</td></tr></tbody></table> '
+                    html:
+'<table class="table">'+
+    '<colgroup>'+
+        '<col width="30%"> <col width="40%"> <col width="30%"> <col width="10%">'+
+    '</colgroup>'+
+    '<tbody>'+
+        '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
+        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice}}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue}}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome}}</td> <td>{{model.pl.business.scrapIncomePCT}}</td> </tr>'+
+        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome}}</td> <td></td> </tr>'+
+        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases}}</td> <td>{{model.pl.business.purchasesPCT}}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome}}</th> <th></th> </tr>'+
+        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex}}</td> <td></td> </tr>'+
+        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.pl.business.EBITDA}}</td> <td>{{model.pl.business.EBITDA_PCT}}</td> </tr>'+
+        '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
+        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities}}</td> <td></td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome}}</td> <td>{{model.pl.business.netBusinessIncomePCT}}</td> </tr>'+
+        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.kinaraEmi}}</td> <td>{{model.pl.business.kinaraEmiPCT}}</td> </tr>'+
+        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.pl.business.netIncome}}</td> <td></td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi}}</td> <td>{{model.pl.business.finalKinaraEmiPCT}}</td> </tr>'+
+    '</tbody>'+
+'</table>'
                 }
             ]
         });
@@ -443,7 +516,30 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    "html": '<table class="table table-striped"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th colspan="2">Assets</th><th colspan="2">Liabilities</th></tr></thead><tbody><tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr><tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables}}</td></tr><tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts}}</td></tr><tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb}}</td></tr><tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress}}</td><td></td><td></td></tr><tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods}}</td><td></td><td></td></tr><tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities}}</td></tr><tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt}}</td></tr><tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building}}</td><td></td><td></td></tr><tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle}}</td><td></td><td></td></tr><tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures}}</td><td></td><td></td></tr><tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities}}</td></tr><tr></tr><tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities}}</th></tr></tbody></table>'
+                    "html":
+'<table class="table table-striped">'+
+    '<colgroup><col width="25%">'+
+        '<col width="25%"><col width="25%"><col width="25%">'+
+    '</colgroup>'+
+    '<thead>'+
+        '<tr><th colspan="2">Assets</th><th colspan="2">Liabilities</th></tr>'+
+    '</thead>'+
+    '<tbody>'+
+        '<tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr>'+
+        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables}}</td></tr>'+
+        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts}}</td></tr>'+
+        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb}}</td></tr>'+
+        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities}}</td></tr>'+
+        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt}}</td></tr>'+
+        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities}}</td></tr><tr></tr>'+
+        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities}}</th></tr>'+
+    '</tbody>'+
+'</table>'
                 }
             ]
         });
@@ -556,10 +652,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         .$promise;
                     onSuccessPromise
                         .then(function(res){
+                            model.enterpriseDetails = res[0];
                             model.scoreDetails = [res[1], res[2], res[3], res[4]];
                             model.sectorDetails = res[5];
                             model.subSectorDetails = res[6];
-                            model.enterpriseDetails = res[0];
                             model.houseHoldPL = res[7];
                             model.businessPL = res[8];
                             model.balanceSheet = res[9];
@@ -568,6 +664,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             model.deviationDetails = res[12];
                             model.deviationParameter = res[12];
                             model.ratioDetails = res[13];
+                            model.houseHoldPL_CoApplicant = res[14];
 
                             model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
                             _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
