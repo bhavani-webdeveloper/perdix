@@ -78,8 +78,28 @@ irf.pageCollection.factory(irf.page("management.UserBranches"),
                             type: "button",
                             title: "REMOVE",
                             readonly: false,
-                            onClick: function(model, formCtrl, form){
-                                console.log(arguments);
+                            onClick: function(model, formCtrl, form, event){
+                                var arrIndex = event.arrayIndex;
+                                var branchToRemove = model.userBranch.branches[arrIndex];
+                                if (branchToRemove.branch.branch_name == model.userBranch.home_branch) {
+                                    Utils.alert("You cannot remove user's home branch!");
+                                    return;
+                                }
+
+                                var reqData = {
+                                    "userBranchId" : branchToRemove.id
+                                }
+
+                                PageHelper.showLoader();
+                                UserBranch.delete(reqData)
+                                    .$promise
+                                    .then(function(response){
+                                        PageHelper.showProgress("branch-removal", 'Done.', 5000);
+                                        refreshCurrentBranches(model.userBranch.user_id, model);
+                                    })
+                                    .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
                             }
                         }
                     ]

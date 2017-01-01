@@ -2,6 +2,9 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
     function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons) {
         $log.info("Page.LoanOriginationDashboard.html loaded");
 
+        var currentBranch = SessionStore.getCurrentBranch();
+
+
         var fullDefinition = {
             "title": "Loan Origination Dashboard",
             "iconClass": "fa fa-users",
@@ -126,6 +129,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     faqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -162,6 +166,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     crrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {

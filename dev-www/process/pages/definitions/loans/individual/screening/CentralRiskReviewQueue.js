@@ -1,13 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-		var branch = SessionStore.getCurrentBranch();
 		return {
 			"type": "search-list",
 			"title": "CENTRAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				var currBranch = SessionStore.getCurrentBranch();
+				model.branch = currBranch.branchName;
+
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -23,8 +24,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 						"branch": 
 						{
 	                        "title": "HUB_NAME",
-	                        "type": "integer",
-	                        "enumCode": "branch_id",
+	                        "type": "string",
+	                        "enumCode": "branch",
 	                        "x-schema-form": {
 	                            "type": "select"
 							}
@@ -90,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': branch.branchName,
+	                    'branchName': searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

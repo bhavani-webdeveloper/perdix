@@ -13,6 +13,10 @@ irf.models.factory('UserBranch', function($resource, $httpParamSerializer, searc
         save: {
             method: "POST",
             url: endpoint + "/user_branch_add.php"
+        },
+        delete: {
+            method: "POST",
+            url: endpoint + "/user_branch_delete.php"
         }
     });
 
