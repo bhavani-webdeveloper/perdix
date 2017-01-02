@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page("score.CreateParameterValues"),
             "type": "schema-form",
             "title": "Create Parameter Values",
             initialize: function (model, form, formCtrl) {
-				
+				PageHelper.showLoader();
 				var self = this;
                 self.form = [];
 				
@@ -16,8 +16,11 @@ irf.pageCollection.factory(irf.page("score.CreateParameterValues"),
 					
 					self.formSource[0].items[0].titleMap = resp.DataResponse;
 					
-					/*console.log($stateParams.pageId);
-					model.form.ScoreName = $stateParams.pageId;*/
+					if($stateParams.pageId == null)
+					self.form = self.formSource;
+					
+					console.log($stateParams.pageId);
+					//model.form.ScoreName = $stateParams.pageId;
 							
 					//self.form = self.formSource;
 						}, function(errResp){
@@ -26,7 +29,12 @@ irf.pageCollection.factory(irf.page("score.CreateParameterValues"),
 							PageHelper.hideLoader();
 					});
 				
-				BIReports.ListAssignedParameters({"ScoreName": "RiskScore1"}).$promise.then(function(resp){
+				if($stateParams.pageId != null){
+					
+					//model.Parameter.ScoreName = $stateParams.pageId;
+					
+					BIReports.ListAssignedParameters({"ScoreName": $stateParams.pageId}).$promise.then(function(resp){
+						
 						
 						self.formSource[0].items[1].titleMap = resp.DataResponse;
 						self.form = self.formSource;
@@ -36,6 +44,9 @@ irf.pageCollection.factory(irf.page("score.CreateParameterValues"),
 						}).finally(function(){
 							PageHelper.hideLoader();
 						});
+				}
+				
+				PageHelper.hideLoader();			
             
             },
 			form: [],
@@ -50,7 +61,7 @@ irf.pageCollection.factory(irf.page("score.CreateParameterValues"),
                             "type": "select",
 							"onChange": function(modelValue, form, model) {
 								//alert(model.Parameter.ScoreName);
-								//$state.go('Page.Engine', {pageName: 'score.CreateParameterValues', pageId: model.Parameter.ScoreName});
+								$state.go('Page.Engine', {pageName: 'score.CreateParameterValues', pageId: model.Parameter.ScoreName});
 							}
                         },
                         {
