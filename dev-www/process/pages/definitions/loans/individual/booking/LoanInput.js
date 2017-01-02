@@ -195,6 +195,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     // });
                     if(model.loanAccount.productCode)
                         getProductDetails(model.loanAccount.productCode,model);
+
+                    LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
                 };
                 // code for existing loan
                 $log.info("Loan Number:::" + $stateParams.pageId);
@@ -222,8 +224,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
-
-                        LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
 
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
