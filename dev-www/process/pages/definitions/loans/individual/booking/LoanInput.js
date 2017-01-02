@@ -185,13 +185,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     getSanctionedAmount(model);
                     $log.info(model);
 
-                    model.additional.minAmountForSecurityEMI = 0;
-                    Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
-                        model.additional.minAmountForSecurityEMI = Number(value);
-                        $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
-                    },function(err){
-                        $log.info("Max Security EMI is not available");
-                    });
+                    // model.additional.minAmountForSecurityEMI = 0;
+                    // Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
+                    //     model.additional.minAmountForSecurityEMI = Number(value);
+                    //     $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
+                    // },function(err){
+                    //     $log.info("Max Security EMI is not available");
+                    // });
                     if(model.loanAccount.productCode)
                         getProductDetails(model.loanAccount.productCode,model);
                 };
@@ -1106,7 +1106,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
 
-                    if (model.additional.product && model.additional.product.productType != 'OD' && model.additional.minAmountForSecurityEMI > 0){
+                    /*if (model.additional.product && model.additional.product.productType != 'OD' && model.additional.minAmountForSecurityEMI > 0){
                         //if (model.additional.minAmountForSecurityEMI>model.loanAccount.loanAmount && model.loanAccount.securityEmiRequired == 'Yes'){
                         //    PageHelper.showProgress("loan-create","Securty EMI is required for loan amount greater than " + model.additional.minAmountForSecurityEMI,5000);
                         //    return false;
@@ -1117,7 +1117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                     }
                     else
-                        model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';
+                        model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';*/
 
                     var trancheTotalAmount=0;
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
