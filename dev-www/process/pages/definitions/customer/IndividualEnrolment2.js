@@ -26,6 +26,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         .$promise
                                         .then(function(res){
                                             model.customer = res;
+                                            if (model.customer.stockMaterialManagement) {
+                                                model.proxyIndicatorsHasValue = true;
+                                                $log.debug('PROXY_INDICATORS already has value');
+                                            }
                                         }, function(httpRes){
                                             PageHelper.showErrors(httpRes);
                                         })
@@ -107,7 +111,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             }
                         }
-                            
                     },
                     eventListeners: {
                         "test-listener": function(bundleModel, model, obj){
@@ -2324,7 +2327,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type: "box",
                             title: "PROXY_INDICATORS",
-                            condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal'",
+                            condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal' && !model.proxyIndicatorsHasValue",
                             items: [
                                 {
                                     key:"customer.properAndMatchingSignboard",
@@ -2485,7 +2488,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         {
                             type: "box",
                             title: "PROXY_INDICATORS",
-                            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction' || (model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal' && model.proxyIndicatorsHasValue)",
                             readonly:true,
                             items: [
                                 {
