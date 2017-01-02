@@ -133,7 +133,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 // TODO default values needs more cleanup
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
-                    model.additional = {branchName : branchName};
+                    model.additional = model.additional || {};
+                    model.additional.branchName = branchName;
                     model.loanAccount.bankId = bankId;
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
@@ -207,6 +208,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         $log.info("resp");
                         model.loanAccount = resp;
+
+                        model.additional = model.additional || {};
+
+                        if (model.loanAccount.portfolioInsuranceUrn == model.loanAccount.applicant){
+                            model.additional.portfolioUrnSelector = "applicant";
+                        }
+
+                        if (model.loanAccount.guarantors && model.loanAccount.guarantors.length > 0 && model.loanAccount.guarantors[0].guaUrnNo == model.loanAccount.portfolioInsuranceUrn){
+                            model.additional.portfolioUrnSelector = "guarantor";
+                        }
+
+                        if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
+                            model.additional.portfolioUrnSelector = "coapplicant";
+                        }
 
                         LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
 
@@ -827,6 +842,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.portfolioInsuranceUrn",
                                 "title":"URN_NO"
+                            },
+                            {
+                                key: "loanAccount.portfolioInsuranceCustomerName",
+                                title: "NAME",
+                                readonly: true
                             }
                         ]
                     },

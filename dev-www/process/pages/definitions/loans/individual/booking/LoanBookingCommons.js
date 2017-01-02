@@ -41,6 +41,10 @@ irf.commons.factory('LoanBookingCommons', [ 'Queries',
                     }
                 }
 
+                if (loanAccount.portfolioInsuranceUrn){
+                    urns.push(loanAccount.portfolioInsuranceUrn);
+                }
+
                 Queries.getCustomerBasicDetails({
                     urns: urns,
                     ids: ids
@@ -48,9 +52,11 @@ irf.commons.factory('LoanBookingCommons', [ 'Queries',
                     function (resQuery) {
                         loanAccount.entityName = resQuery.ids[loanAccount.customerId].first_name;
                         loanAccount.applicantName = resQuery.urns[loanAccount.applicant].first_name;
+                        loanAccount.portfolioInsuranceCustomerName = resQuery.urns[loanAccount.portfolioInsuranceUrn].first_name;
                         for (var i=0;i<loanAccount.coBorrowers.length; i++){
                             loanAccount.coBorrowers[i].coBorrowerName = resQuery.ids[loanAccount.coBorrowers[i].customerId].first_name;
                         }
+                        
                     },
                     function (errQuery) {
                     }
