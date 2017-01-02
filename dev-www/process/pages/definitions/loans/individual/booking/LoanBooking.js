@@ -31,6 +31,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     .then(
                         function (res) {
 
+                            $log.info(res);
+
 
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'LoanBooking'){
@@ -121,10 +123,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "PARTNER_NAME",
                         "readonly": true
                     },
-                    {
+                    /*{
                         "key": "loanAccount.loanType",
                         "readonly": true
-                    },
+                    },*/
                     {
                         "key": "loanAccount.frequency",
                         "readonly": true

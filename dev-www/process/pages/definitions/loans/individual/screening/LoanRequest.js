@@ -745,7 +745,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 readonly:true,
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'",
                 "items": [
                     {
                         key: "loanAccount.estimatedDateOfCompletion",
@@ -765,6 +765,39 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                        type:"select",
                        enumCode:"loan_purpose_1",
                        condition:"model.currentStage=='Application'"
+                    },
+                    {
+                        key: "loanAccount.customerSignDateExpected",
+                        type: "date",
+                        title: "CUSTOMER_SIGN_DATE_EXPECTED"
+                    },
+                    {
+                        key: "loanAccount.proposedHires",
+                        type: "string",
+                        title: "PROPOSED_HIRES"
+                    },
+                    {
+                        key: "loanAccount.percentageIncreasedIncome",
+                        type: "number",
+                        title: "PERCENTAGE_INCREASED_INCOME"
+                    },
+                    {
+                        key: "loanAccount.percentageInterestSaved",
+                        type: "number",
+                        title: "PERCENTAGE_INTEREST_SAVED"
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "ADDITIONAL_LOAN_INFORMATION",
+                readonly:true,
+                "condition": "model.currentStage=='Sanction' ",
+                "items": [
+                    {
+                        key: "loanAccount.estimatedDateOfCompletion",
+                        type: "date",
+                        title: "ESTIMATED_DATE_OF_COMPLETION"
                     },
                     {
                         key: "loanAccount.customerSignDateExpected",
