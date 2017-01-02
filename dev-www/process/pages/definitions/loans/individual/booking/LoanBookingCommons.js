@@ -50,11 +50,17 @@ irf.commons.factory('LoanBookingCommons', [ 'Queries',
                     ids: ids
                 }).then(
                     function (resQuery) {
-                        loanAccount.entityName = resQuery.ids[loanAccount.customerId].first_name;
-                        loanAccount.applicantName = resQuery.urns[loanAccount.applicant].first_name;
-                        loanAccount.portfolioInsuranceCustomerName = resQuery.urns[loanAccount.portfolioInsuranceUrn].first_name;
+                        if (_.hasIn(resQuery.ids, loanAccount.customerId))
+                            loanAccount.entityName = resQuery.ids[loanAccount.customerId].first_name;
+                        
+                        if (_.hasIn(resQuery.urns, loanAccount.applicant))
+                            loanAccount.applicantName = resQuery.urns[loanAccount.applicant].first_name;
+                        
+                        if (_.hasIn(resQuery.urns, loanAccount.portfolioInsuranceUrn))
+                            loanAccount.portfolioInsuranceCustomerName = resQuery.urns[loanAccount.portfolioInsuranceUrn].first_name;
                         for (var i=0;i<loanAccount.coBorrowers.length; i++){
-                            loanAccount.coBorrowers[i].coBorrowerName = resQuery.ids[loanAccount.coBorrowers[i].customerId].first_name;
+                            if (_.hasIn(resQuery.ids, loanAccount.coBorrowers[i].customerId))
+                                loanAccount.coBorrowers[i].coBorrowerName = resQuery.ids[loanAccount.coBorrowers[i].customerId].first_name;
                         }
                         
                     },

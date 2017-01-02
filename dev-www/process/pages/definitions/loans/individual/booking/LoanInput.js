@@ -437,7 +437,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "outputMap": {
                                     "id": "loanAccount.applicantId",
                                     "urnNo": "loanAccount.applicant",
-                                    "firstName":"customer.applicantName"
+                                    "firstName":"loanAccount.applicantName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
