@@ -7,7 +7,7 @@ commons.constant("languages", {
 		"codeLanguage": "En",
 		"titleLanguage": "English",
 		"titleEnglish": "English"
-	},
+	}/*,
 	"hi": {
 		"code": "hi",
 		"codeLanguage": "क",
@@ -19,7 +19,7 @@ commons.constant("languages", {
 		"codeLanguage": "த",
 		"titleLanguage": "தமிழ்",
 		"titleEnglish": "Tamil"
-	}
+	}*/
 });
 
 irf.commons.factory("irfConfig", function(){

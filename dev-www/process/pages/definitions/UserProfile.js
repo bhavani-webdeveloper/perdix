@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("UserProfile"),
-["$log", "$q", "SessionStore", "languages", "$translate", "irfProgressMessage",
+["$log", "$q", "SessionStore", "languages", "dateFormats", "$translate", "irfProgressMessage",
 	"irfStorageService", "irfElementsConfig","PageHelper", "irfSimpleModal", "irfTranslateLoader", "Account",
-function($log, $q, SessionStore, languages, $translate, PM,
+function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 	irfStorageService, irfElementsConfig,PageHelper, irfSimpleModal, irfTranslateLoader, Account) {
 
 	var languageTitleMap = [];
@@ -9,7 +9,6 @@ function($log, $q, SessionStore, languages, $translate, PM,
 		languageTitleMap.push({value:v.code, name:v.titleEnglish + ' - ' + v.titleLanguage});
 	});
 
-	var dateFormats = ["YYYY-DD-MM", "DD-MM-YYYY", "DD-MMM-YYYY", "Do MMM YYYY", "dddd Do MMM YYYY"];
 	var dateTitleMap = [];
 	var now = moment(new Date());
 	_.each(dateFormats, function(v,k){

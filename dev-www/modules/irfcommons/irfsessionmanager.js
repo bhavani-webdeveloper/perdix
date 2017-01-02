@@ -1,6 +1,8 @@
 var irfSessionManager = angular.module("irf.SessionManager", []);
 
-irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $window){
+irfSessionManager.constant("dateFormats", ["DD-MM-YYYY", "DD-MMM-YYYY", "Do MMM YYYY", "dddd Do MMM YYYY", "YYYY-DD-MM"]);
+
+irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", function($log, $window, dateFormats){
 	var self = this;
 
 	self.session = {
@@ -114,7 +116,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", function($log, $wi
 	};
 
 	self.getDateFormat = function() {
-		return (self.settings && self.settings.dateFormat) ? self.settings.dateFormat : self.getSystemDateFormat();
+		return (self.settings && self.settings.dateFormat) ? self.settings.dateFormat : dateFormats[0];
 	};
 
 	self.getFormatedDate = function(dt) {
