@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -207,6 +207,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         $log.info("resp");
                         model.loanAccount = resp;
+
+                        LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
@@ -332,7 +335,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "outputMap": {
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
-                                    "firstName":"customer.firstName",
+                                    "firstName":"loanAccount.entityName",
                                     "customerBranchId":"loanAccount.loanCentre.branchId",
                                     "centreId":"loanAccount.loanCentre.centreId"
                                 },
@@ -387,7 +390,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "readonly": true
                             },
                             {
-                                "key": "customer.firstName",
+                                "key": "loanAccount.entityName",
                                 "title": "ENTITY_NAME",
                                 "readonly": true
                             },
@@ -443,7 +446,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                "key":"customer.applicantName",
+                                "key":"loanAccount.applicantName",
                                 "title":"APPLICANT_NAME",
                                 "readonly": true
                             },

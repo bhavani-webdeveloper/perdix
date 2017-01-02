@@ -23,6 +23,38 @@ irf.commons.factory('LoanBookingCommons', [ 'Queries',
                         return c.field5;
                     }
                 }
+            },
+            getLoanAccountRelatedCustomersLegacy: function(loanAccount){
+                var ids = [];
+                var urns = [];
+                if (loanAccount.customerId){
+                    ids.push(loanAccount.customerId);
+                }
+
+                if (loanAccount.applicant){
+                    urns.push(loanAccount.applicant);
+                }
+
+                if (loanAccount.coBorrowers && loanAccount.coBorrowers.length > 0) {
+                    for (var i=0;i<loanAccount.coBorrowers.length; i++){
+                        ids.push(loanAccount.coBorrowers[i].customerId);
+                    }
+                }
+
+                Queries.getCustomerBasicDetails({
+                    urns: urns,
+                    ids: ids
+                }).then(
+                    function (resQuery) {
+                        loanAccount.entityName = resQuery.ids[loanAccount.customerId].first_name;
+                        loanAccount.applicantName = resQuery.urns[loanAccount.applicant].first_name;
+                        for (var i=0;i<loanAccount.coBorrowers.length; i++){
+                            loanAccount.coBorrowers[i].coBorrowerName = resQuery.ids[loanAccount.coBorrowers[i].customerId].first_name;
+                        }
+                    },
+                    function (errQuery) {
+                    }
+                );
             }
         }
     }
