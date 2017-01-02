@@ -417,7 +417,7 @@
                                 "type": ["string", null]
                             },
                             "tranchCondition": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             }
                         },
                         "required": [
