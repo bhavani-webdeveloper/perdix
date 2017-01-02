@@ -62,6 +62,45 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         $log.info(model.additional.product.interestBracket);
                         if (model.additional.product.frequency == 'M')
                             model.loanAccount.frequency = 'Monthly';
+                        if(model.loanAccount.loanPurpose1!=null){
+                            var purpose1_found = false;
+                            Queries.getLoanPurpose1(model.loanAccount.productCode).then(function(resp1){
+                                loanPurpose1List = [];
+                                loanPurpose1List = resp1.body;
+                                if(loanPurpose1List && loanPurpose1List.length>0){
+                                    for (var i = loanPurpose1List.length - 1; i >= 0; i--) {
+                                        if(model.loanAccount.loanPurpose1 == loanPurpose1List[i].purpose1)
+                                            purpose1_found = true;
+                                    }
+                                    if(!purpose1_found)
+                                        model.loanAccount.loanPurpose1 = null;
+                                }
+                                else
+                                    model.loanAccount.loanPurpose1 = null;
+
+                                if(model.loanAccount.loanPurpose2!=null){
+                                    var purpose2_found = false;
+                                    Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1).then(function(resp2){
+                                        loanPurpose2List = [];
+                                        loanPurpose2List = resp2.body;
+                                        if(loanPurpose2List && loanPurpose2List.length>0){
+                                            for (var i = loanPurpose2List.length - 1; i >= 0; i--) {
+                                                if(model.loanAccount.loanPurpose2 == loanPurpose2List[i].purpose2)
+                                                    purpose2_found = true;
+                                            }
+                                            if(!purpose2_found)
+                                                model.loanAccount.loanPurpose2 = null;
+                                        }
+                                        else
+                                            model.loanAccount.loanPurpose2 = null;
+                                    },function(err){
+                                        $log.info("Error while fetching Loan Purpose 1 by Product");
+                                    });
+                                }
+                            },function(err){
+                                $log.info("Error while fetching Loan Purpose 1 by Product");
+                            });
+                        }
                     },
                     function(httpRes){
                         PageHelper.showProgress('loan-create', 'Failed to load the Product details. Try again.', 4000);
@@ -532,7 +571,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getAllLoanPurpose1();
+                                    if(model.loanAccount.productCode != null)
+                                        return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                                    else
+                                        return Queries.getAllLoanPurpose1();
+                                    
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -555,7 +598,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                                    if(model.loanAccount.productCode != null)
+                                        return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                                    else
+                                        return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
