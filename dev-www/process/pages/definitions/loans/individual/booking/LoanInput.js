@@ -1199,7 +1199,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 IndividualLoan.create(resp,function(resp,headers){
                                     $log.info(resp);
                                     PageHelper.showProgress("loan-create","Loan Created",5000);
-                                    $state.go('Page.Landing', null);
+                                    $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId: null});
                                 },function(errresp){
                                     $log.info(errresp);
                                     PageHelper.showErrors(errresp);
@@ -1227,7 +1227,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Proceed:" + model.loanAccount.id);
                                 PageHelper.showLoader();
-                                $state.go('Page.Engine', {pageName: 'loans.individual.Queue', pageId: null});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId: null});
                             },function(errResp){
                                 $log.info(errResp);
                                 PageHelper.showErrors(errResp);

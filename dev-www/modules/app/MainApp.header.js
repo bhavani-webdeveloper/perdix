@@ -53,8 +53,8 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 						})
 						.finally(function(){
 							$this.toggleSwitchBranch();
-							$state.reload();
 							SessionStore.setCurrentBranch(selectedBranch);	
+							window.location.reload();
 						})
 				}, function(httpResponse){
 					Utils.alert("Unknown error while trying to switch branch");
@@ -75,6 +75,7 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 	/* Loading branch details */
 	var branches = SessionStore.getItem("UserAllowedBranches");
 	$scope.branchSwitch.allowedBranches = branches;
+	$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;
 	$scope.showLogs = function() {
 		var allLogs = $log.getAllLogs();
 		var body = '<div class="log-div">' + allLogs + '</div>';

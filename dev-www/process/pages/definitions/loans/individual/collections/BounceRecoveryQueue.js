@@ -6,7 +6,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branch = SessionStore.getBranchId();
+            model.branch = SessionStore.getCurrentBranch().branchId;
+            model.branchName = SessionStore.getCurrentBranch().branchName;
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -29,13 +30,12 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": "integer",
+                        "type": ["integer", "null"],
                         "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
                         "x-schema-form": {
-                            "type": "select",
-                            "filter": {
-                                "parentCode as branch": "model.branch"
-                            }
+                            type: "select",
+                            "parentValueExpr": "model.branch"
                         }
                     }
                 }
