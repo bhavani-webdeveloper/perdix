@@ -1168,6 +1168,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
+                                startEmpty: true,
                                 items: [
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].startMonth",

@@ -3,6 +3,8 @@ irf.pages.controller("LoansCollectionsDashboardCtrl",
 function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollection) {
     $log.info("Page.LoansCollectionsDashboard.html loaded");
 
+    var currentBranchId = SessionStore.getCurrentBranch().branchId;
+
     var fullDefinition = {
         "title": "Collections Dashboard",
         "iconClass": "fa fa-reply",
@@ -29,30 +31,26 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
                 LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id }).$promise.then(function(response,headerGetter){
                     bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
                 }, function() {
-                    cvqMenu.data = '-';
+                    bqMenu.data = '-';
                 });
             };
         }
 
         var bpqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BouncePromiseQueue"];
         if (bpqMenu) {
-            LoanProcess.bounceCollectionDemand({ 'branchId': branchId }).$promise.then(function(response,headerGetter){
+            LoanProcess.bounceCollectionDemand({ 'branchId': currentBranchId }).$promise.then(function(response,headerGetter){
                 bpqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
             }, function() {
-                cvqMenu.data = '-';
+                bpqMenu.data = '-';
             });
         }
 
         var brqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceRecoveryQueue"];
         if (brqMenu) {
-
-            LoanProcess.p2pKGFSList({
-                'branchId': branchId,
-                'customerCategoryHubManager':'C,D'
-            }).$promise.then(function(response,headerGetter){
+            LoanProcess.bounceCollectionDemand({ 'branchId': currentBranchId }).$promise.then(function(response,headerGetter){
                 brqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
             }, function() {
-                cvqMenu.data = '-';
+                brqMenu.data = '-';
             });
         }
 

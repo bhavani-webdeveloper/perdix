@@ -53,9 +53,11 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage
                 }).$promise;*/
+
+                var branchId = SessionStore.getCurrentBranch().branchId;
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,
-                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
+                    'branchId': branchId,
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'promisreToPayDate': searchOptions.promisreToPayDate,
