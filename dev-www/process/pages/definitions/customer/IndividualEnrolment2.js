@@ -1957,7 +1957,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
-                                            title: "SANCTIONED_AMOUNT",
+                                            title: "OUTSTANDING_BALANCE",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {
@@ -2062,7 +2062,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.customerBankAccounts[].sanctionedAmount",
                                             type: "amount",
-                                            title: "SANCTIONED_AMOUNT",
+                                            title: "OUTSTANDING_BALANCE",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
                                         {

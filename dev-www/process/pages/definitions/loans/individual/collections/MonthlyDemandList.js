@@ -14,15 +14,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                 model.userLogin = SessionStore.getLoginname();
                 model.demandlist = model.demandlist || {};
                 model.demandlist.demandDate = model.demandlist.demandDate || Utils.getCurrentDate();
-                //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
-                //  var branch1 = formHelper.enum('branch_id').data;
-                /* $log.info(branch1);
-                    for (var i = 0; i < branch1.length; i++) {
-                        if ((branch1[i].name) == SessionStore.getBranch()) {
-                            model.demandlist.branchId = branch1[i].id;
-                            
-                        }
-                    }*/
+                 var branch1 = formHelper.enum('branch_id').data;
+                model.demandlist.branchCode=SessionStore.getBranchCode();
 
                /* for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
                     branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));

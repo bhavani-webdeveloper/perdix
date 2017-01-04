@@ -143,7 +143,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION_REVIEW",
+							name: "FIELD_APPRAISAL_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

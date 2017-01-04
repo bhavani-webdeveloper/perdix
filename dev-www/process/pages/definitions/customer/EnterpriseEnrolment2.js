@@ -1045,7 +1045,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
                                 type: "amount",
                                 required:true,
-                                title: "SANCTIONED_AMOUNT"
+                                title: "OUTSTANDING_BALANCE"
                             },
                             {
                                 key: "customer.customerBankAccounts[].limit",
@@ -1158,7 +1158,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].sanctionedAmount",
                                 condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
                                 type: "amount",
-                                title: "SANCTIONED_AMOUNT"
+                                title: "OUTSTANDING_BALANCE"
                             },
                             {
                                 key: "customer.customerBankAccounts[].limit",
