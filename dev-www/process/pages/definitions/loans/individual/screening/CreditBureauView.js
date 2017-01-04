@@ -146,12 +146,74 @@ irf.pageCollection.factory("CIBILAppendix", [function(){
             "accountType": "Other"
         }
     };
+    var ownershipIndicators = {
+        "1":"INDIVIDUAL",
+        "2":"AUTHORIZED USER",
+        "3":"GUARANTOR",
+        "4":"JOINT"
+    };
+    var enquiryPurposes = {
+        "01":"Auto Loan (Personal)",
+        "02":"Housing Loan",
+        "03":"Property Loan",
+        "04":"Loan Against Shares/Securities",
+        "05":"Personal Loan",
+        "06":"Consumer Loan",
+        "07":"Gold Loan",
+        "08":"Education Loan",
+        "09":"Loan to Professional",
+        "10":"Credit Card",
+        "11":"Leasing",
+        "12":"Overdraft",
+        "13":"Two-wheeler Loan",
+        "14":"Non-Funded Credit Facility",
+        "15":"Loan Against Bank Deposits",
+        "16":"Fleet Card",
+        "17":"Commercial Vehicle Loan",
+        "18":"Telco – Wireless",
+        "19":"Telco – Broadband",
+        "20":"Telco – Landline",
+        "40":"Microfinance – Business Loan",
+        "41":"Microfinance – Personal Loan",
+        "42":"Microfinance – Housing Loan",
+        "43":"Microfinance – Other",
+        "51":"Business Loan – General",
+        "52":"Business Loan – Priority Sector – Small Business",
+        "53":"Business Loan – Priority Sector – Agriculture",
+        "54":"Business Loan – Priority Sector – Others",
+        "55":"Business Non-Funded Credit Facility – General",
+        "56":"Business Non-Funded Credit Facility – Priority Sector – Small Business",
+        "57":"Business Non-Funded Credit Facility – Priority Sector – Agriculture",
+        "58":"Business Non-Funded Credit Facility – Priority Sector-Others",
+        "59":"Business Loan Against Bank Deposits",
+        "80":"Microfinance Detailed Report (Applicable to Enquiry Purpose only)",
+        "81":"Summary Report (Applicable to Enquiry Purpose only)",
+        "88":"Locate Plus for Insurance (Applicable to Enquiry Purpose only)",
+        "89":"VB OLM Retrieval Service (Applicable to Enquiry Purpose for VB OLM Request only)",
+        "90":"Account Review (Applicable to Enquiry Purpose only)",
+        "91":"Retro Enquiry (Applicable to Enquiry Purpose only)",
+        "92":"Locate Plus (Applicable to Enquiry Purpose only)",
+        "93":"For Individual (Applicable to Enquiry Purpose only)",
+        "94":"Indicative Report (Applicable to Enquiry Purpose for CRS Request only)",
+        "95":"Consumer Disclosure Report (Applicable to Enquiry Purpose only)",
+        "96":"Bank OLM Retrieval Service (Applicable to Enquiry Purpose for CRS Request only)",
+        "97":"Adviser Liability (Applicable to Enquiry Purpose only)",
+        "00":"Other",
+        "98":"Secured (Account Group for Portfolio Review response)",
+        "99":"Unsecured (Account Group for Portfolio Review response)"
+    };
     return {
         getAccountType: function(value) {
             var at = accountTypes[value];
             if (at && at.accountType)
                 return at.accountType;
             return value;
+        },
+        getOwnershipIndicator: function(value) {
+            return ownershipIndicators[value];
+        },
+        getEnquiryPurpose: function(value) {
+            return enquiryPurposes[value];
         }
     };
 }]);
@@ -250,7 +312,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanDetails.length">'+
         '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
         '<tr class="" ng-repeat-start="ld in CBDATA.cibil.cibilLoanDetails">'+
-            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountTypeText}}</td>'+
+            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountTypeText}}<br><i style="color:#999">OWNERSHIP:</i> {{ld.ownershipIndicatorText}}</td>'+   
             '<td style="padding-top:15px"><i style="color:#999">OPENED:</i> {{ld.disbursedDate|userDate}}<br><i style="color:#999">LAST PAYMENT:</i> {{ld.lastPaymentDate|userDate}}<br><i style="color:#999">CLOSED:</i> {{ld.closedDate|userDate}}</td>'+
             '<td style="padding-top:15px"><i style="color:#999">WRITEOFF:</i> {{ld.writeOffAmount}}<br><i style="color:#999">CURRENT BALANCE:</i> {{ld.currentBalance}}</td>'+
             '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
@@ -278,6 +340,49 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                     '</tr>'+
                     '<tr class="bg-tint-theme">'+
                         '<td ng-repeat="ph2m in ld.paymentHistory2Months track by $index">'+
+                            '<div style="font-size:12px">{{ph2m}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                '</table>'+
+            '</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="4"><hr></td>'+
+        '</tr>'+
+    '</table>'+
+    '<div ng-show="CBDATA.cibil.enquirySegment.length">&nbsp;</div>'+
+    '<h4 ng-show="CBDATA.cibil.enquirySegment.length">ENQUIRIES:</h4>'+
+    '<table style="width:100%" ng-show="CBDATA.cibil.enquirySegment.length">'+
+        '<tr><th style="padding:5px">MEMBER</th><th style="padding:5px">ENQUIRY DATE</th><th style="padding:5px">ENQUIRY PURPOSE</th><th style="padding:5px">ENQUIRY AMOUNT</th></tr>'+
+        '<tr class="" ng-repeat-start="es in CBDATA.cibil.enquirySegment">'+
+            '<td style="padding-left:15px;padding-top:15px">{{es.enquiringMemberShortName}}</td>'+   
+            '<td style="padding-top:15px">{{es.dateOfEnquiry|userDate}}</td>'+
+            '<td style="padding-top:15px">{{es.enquiryPurposeText}}</td>'+
+            '<td style="padding-top:15px">{{es.enquiryAmount}}</td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="es.paymentHistory1List.length">'+
+            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">DAYS PAST DUE/ASSET CLASSIFICATION (UP TO 36 MONTHS; LEFT TO RIGHT)</span></td>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-show="es.paymentHistory1List.length">'+
+            '<td colspan="4" style="padding:5px">'+
+                '<table style="width:100%">'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1 in es.paymentHistory1List track by $index" style="padding-top:5px">'+
+                            '<div style="font-family:monospace">{{ph1}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph1m in es.paymentHistory1Months track by $index">'+
+                            '<div style="font-size:12px">{{ph1m}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme" ng-show="es.paymentHistory2List.length">'+
+                        '<td ng-repeat="ph2 in es.paymentHistory2List track by $index" style="padding-top:15px">'+
+                            '<div style="font-family:monospace">{{ph2}}</div>'+
+                        '</td>'+
+                    '</tr>'+
+                    '<tr class="bg-tint-theme">'+
+                        '<td ng-repeat="ph2m in es.paymentHistory2Months track by $index">'+
                             '<div style="font-size:12px">{{ph2m}}</div>'+
                         '</td>'+
                     '</tr>'+
@@ -324,6 +429,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                     for (i in httpres.cibil.cibilLoanDetails) {
                                         var cld = httpres.cibil.cibilLoanDetails[i];
                                         cld.accountTypeText = CIBILAppendix.getAccountType(cld.accountType);
+                                        cld.ownershipIndicatorText = CIBILAppendix.getOwnershipIndicator(cld.ownershipIndicator);
                                         $log.info(cld.accountType + ": " + cld.accountTypeText);
                                         if (cld.paymentHistory1) {
                                             cld.paymentHistory1List = cld.paymentHistory1.match(/.{1,3}/g);
@@ -381,6 +487,12 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                                if (httpres && httpres.cibil && httpres.cibil.enquirySegment && httpres.cibil.enquirySegment.length) {
+                                    for (i in httpres.cibil.enquirySegment) {
+                                        var ces = httpres.cibil.enquirySegment[i];
+                                        ces.enquiryPurposeText = CIBILAppendix.getEnquiryPurpose(ces.enquiryPurpose);
                                     }
                                 }
                                 // Data processing for UI - ends
