@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", 
+"BundleManager", "PsychometricTestService", "LeadHelper",
 function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService){
+    BundleManager, PsychometricTestService, LeadHelper){
 
     var branch = SessionStore.getBranch();
 
@@ -225,6 +225,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 }
             },
             "lead-loaded": function(bundleModel, model, obj) {
+                model.lead = obj;
                 model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                 model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                 model.loanAccount.screeningDate = obj.screeningDate;
@@ -1558,11 +1559,25 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
                             PageHelper.showLoader();
+
+                            var completeLead = false;
+                            if (!_.hasIn(reqData.loanAccount, "id")){
+                                completeLead = true;
+                            }
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
                                     model.loanAccount = res.loanAccount;
                                     BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                    if (completeLead===true && _.hasIn(model, "lead.id")){
+                                        var reqData = {
+                                            lead: _.cloneDeep(model.lead),
+                                            stage: "Completed"
+                                        }
+
+                                        reqData.lead.leadStatus = "Complete";
+                                        LeadHelper.proceedData(reqData)
+                                    }
                                 }, function(httpRes){
                                     PageHelper.showErrors(httpRes);
                                 })

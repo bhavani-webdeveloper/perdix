@@ -50,13 +50,13 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
                 irfProgressMessage.pop('lead-update', 'Working...');
                 res.leadAction = "PROCEED";
                 if (res.lead.leadStatus == "Screening") {
-                res.stage = 'ReadyForScreening';
+                    res.stage = 'ReadyForScreening';
                 }else if(res.lead.leadStatus == "Reject")
                 {
-                  res.stage = 'Inprocess';  
+                    res.stage = 'Inprocess';  
                 }else if(res.lead.leadStatus == "Incomplete")
                 {
-                   res.stage = 'Incomplete'; 
+                    res.stage = 'Incomplete'; 
                 }
                 //res.lead.leadInteractions=[{"id":'',"leadId":''}];
                 Lead.updateLead(res, function(res, headers) {
