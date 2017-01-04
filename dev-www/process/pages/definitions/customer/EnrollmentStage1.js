@@ -2,6 +2,15 @@ irf.pageCollection.factory("EnrollmentHelper",
 ["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
 function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
 
+    var validatePanCard = function(str, form){
+        const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
+        if (panRegex.test(panRegex)){
+
+        }else {
+            console.log(form);
+        }
+    }
+
     var fixData = function(model){
         /* TODO Validations */
 
@@ -258,7 +267,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         proceedData: proceedData,
         validateData: validateData,
         parseAadhaar: parseAadhaar,
-        customerAadhaarOnCapture: customerAadhaarOnCapture
+        customerAadhaarOnCapture: customerAadhaarOnCapture,
+        validatePanCard: validatePanCard
     };
 }]);
 
