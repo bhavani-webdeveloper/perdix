@@ -50,7 +50,12 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
                     model.loanSummary = resp;
 
-
+                    if (_.isArray(model.loanSummary) && model.loanSummary.length > 0){
+                        var lastEntry = model.loanSummary[0];
+                        var aTime = new moment(lastEntry.createdDate);
+                        var bTime = new moment();
+                        model.minutesInCurrentStage = Utils.millisecondsToStr(bTime.diff(aTime));
+                    }
                 },function (errResp){
 
                 })
@@ -76,6 +81,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 "colClass": "col-sm-12",
                 "title": "REMARKS_HISTORY",
                 "items": [
+                    {
+                        "type": "section",
+                        "htmlClass": "",
+                        "html":"<div class='callout callout-info text-white'><h1>{{ model.minutesInCurrentStage }}</h1> <p>spent in current stage.</p></div>"
+                    },
                     {
                         type:"tableview",
                         key:"loanSummary",
@@ -109,8 +119,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 data: 'status'
                             },
                             {
-                                title: 'TIME_SPENT_IN_MINS',
-                                data: 'timeSpent'
+                                title: 'TIME_SPENT',
+                                data: 'timeSpent',
+                                render: function(data, type, full, meta){
+                                    return Utils.millisecondsToStr(data * 60 * 1000);
+                                }
                             }]
                         }
                     }
