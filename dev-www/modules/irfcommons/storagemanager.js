@@ -180,6 +180,11 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 		},
 		getMaster: function(classifier) {
 			return masters[classifier];
+		},
+		setMaster: function(classifier, master) {
+			if (classifier && master && master.data && master.data.length) {
+				masters[classifier] = master;
+			}
 		}
 	};
 	return factoryObj;
