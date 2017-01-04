@@ -2694,6 +2694,33 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         return false;
                     }
                 }
+                if(model.currentStage=='ScreeningReview'){
+                    var commercialCheckFailed = false;
+                    if(model.customer.enterpriseBureauDetails && model.customer.enterpriseBureauDetails.length>0){
+                        for (var i = model.customer.enterpriseBureauDetails.length - 1; i >= 0; i--) {
+                            if(!model.customer.enterpriseBureauDetails[i].fileId
+                                || !model.customer.enterpriseBureauDetails[i].bureau
+                                || model.customer.enterpriseBureauDetails[i].doubtful==null 
+                                || model.customer.enterpriseBureauDetails[i].loss==null 
+                                || model.customer.enterpriseBureauDetails[i].specialMentionAccount==null 
+                                || model.customer.enterpriseBureauDetails[i].standard==null 
+                                || model.customer.enterpriseBureauDetails[i].subStandard==null){
+                                commercialCheckFailed = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        commercialCheckFailed = true;
+                    if(commercialCheckFailed && model.customer.customerBankAccounts && model.customer.customerBankAccounts.length>0){
+                        for (var i = model.customer.customerBankAccounts.length - 1; i >= 0; i--) {
+                            if(model.customer.customerBankAccounts[i].accountType == 'OD' || model.customer.customerBankAccounts[i].accountType == 'CC'){
+                                PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                return false;
+                            }
+                        }
+                    }
+                }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);
 
