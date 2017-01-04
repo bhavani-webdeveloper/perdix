@@ -216,6 +216,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                             case 'guarantor':
                                 $log.info("New guarantor");
                                 break;
+                            case 'business':
+                                $log.info("New Business");
+                                BundleManager.broadcastEvent("enterprise-updated", params.customer);
+                                break;
                             default:
                                 $log.info("Unknown page class");
 
@@ -223,6 +227,9 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                     },
                     "deviation-loaded":function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-deviation", params);
+                    },
+                    "business-loaded": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent('enterprise-updated', params.customer);
                     }
         		}
         	}

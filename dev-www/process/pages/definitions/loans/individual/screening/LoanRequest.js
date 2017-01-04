@@ -258,6 +258,10 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                 model.loanAccount.loanCentre.centreId = params.customer.centreId;
             },
+            "enterprise-updated": function(bundleModel, model, param){
+                $log.info("INside updated Enterprise of LoanRequest");
+                model.enterprise = param;
+            },
             "new-guarantor": function(bundleModel, model, params){
                 $log.info("Insdie guarantor of LoanRequest");
                 // model.loanAccount.coApplicant = params.customer.id;
@@ -1657,6 +1661,34 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if (model.loanAccount.currentStage === 'Application' && model.loanAccount.psychometricCompleted != 'Completed') {
                     PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
                     return;
+                }
+
+                if(model.currentStage=='ScreeningReview'){
+                    var commercialCheckFailed = false;
+                    if(model.enterprise.enterpriseBureauDetails && model.enterprise.enterpriseBureauDetails.length>0){
+                        for (var i = model.enterprise.enterpriseBureauDetails.length - 1; i >= 0; i--) {
+                            if(!model.enterprise.enterpriseBureauDetails[i].fileId
+                                || !model.enterprise.enterpriseBureauDetails[i].bureau
+                                || model.enterprise.enterpriseBureauDetails[i].doubtful==null 
+                                || model.enterprise.enterpriseBureauDetails[i].loss==null 
+                                || model.enterprise.enterpriseBureauDetails[i].specialMentionAccount==null 
+                                || model.enterprise.enterpriseBureauDetails[i].standard==null 
+                                || model.enterprise.enterpriseBureauDetails[i].subStandard==null){
+                                commercialCheckFailed = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        commercialCheckFailed = true;
+                    if(commercialCheckFailed && model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
+                        for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
+                            if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC'){
+                                PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                return false;
+                            }
+                        }
+                    }
                 }
 
                 Utils.confirm("Are You Sure?").then(function(){

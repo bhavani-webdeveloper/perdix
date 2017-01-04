@@ -52,9 +52,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 }
                             });
-                            BundleManager.broadcastEvent('business-loaded', {customer: model.customer});
                         }
-
+                        BundleManager.pushEvent('business-loaded', model._bundlePageObj, {customer: model.customer})
                     }, function(httpRes){
                         PageHelper.showErrors(httpRes);
                     })
@@ -2672,6 +2671,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
+                
                 var sortFn = function(unordered){
                     var out = {};
                     Object.keys(unordered).sort().forEach(function(key) {
@@ -2689,7 +2689,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 }
                 if(model.currentStage=='Application'){
-                    if(model.customer.verifications.length<2){
+                    if (model.customer.verifications.length<2){
                         PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
                         return false;
                     }
