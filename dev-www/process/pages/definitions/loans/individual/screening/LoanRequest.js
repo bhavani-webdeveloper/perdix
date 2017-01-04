@@ -543,7 +543,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
-                        type: "date",
+                        type: "string",
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {

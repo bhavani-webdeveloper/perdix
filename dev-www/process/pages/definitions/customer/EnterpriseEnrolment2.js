@@ -1718,15 +1718,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"BUSINESS_EXPENSE",
                                 items:[
                                     {
-                                        key: "customer.expenditures[].annualExpenses",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
                                         key: "customer.expenditures[].expenditureSource",
                                         title: "EXPENDITURE_SOURCE",
                                         type: "select",
                                         enumCode: "business_expense"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].annualExpenses",
+                                        title: "AMOUNT",
+                                        type: "amount"
                                     },
                                     {
                                         key: "customer.expenditures[].frequency",
@@ -1962,15 +1962,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"BUSINESS_EXPENSE",
                                 items:[
                                     {
-                                        key: "customer.expenditures[].annualExpenses",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
                                         key: "customer.expenditures[].expenditureSource",
                                         title: "EXPENDITURE_SOURCE",
                                         type: "select",
                                         enumCode: "business_expense"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].annualExpenses",
+                                        title: "AMOUNT",
+                                        type: "amount"
                                     },
                                     {
                                         key: "customer.expenditures[].frequency",
@@ -2300,16 +2300,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
-                                type: "string",
-                                //enumCode: "decisionmaker",
+                                type: "radios",
+                                enumCode: "decisionmaker",
                                 condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
                                 title:"HYPOTHECATED_TO_US",
-                                type: "radios",
+                                type: "select",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].hypothecatedTo=='NO'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
