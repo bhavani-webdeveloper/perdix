@@ -17,7 +17,11 @@
                 "whatsAppMobileNo": {
                     "type": ["string", "null"],
                     "maxLength": 10
-
+                },
+                "email": {
+                    "type": ["string", "null"],
+                    "pattern": "^\\S+@\\S+$",
+                    "title": "EMAIL"    
                 },
                 "nameInLocalLanguage":{
                     "type":["string","null"],
@@ -116,7 +120,8 @@
                 },
                 "addressProofNo": {
                     "type": ["string","null"],
-                    "title": "ADDRESS_PROOF_NO"
+                    "title": "ADDRESS_PROOF_NO",
+                    "pattern":"^[2-9]{1}[0-9]{11}$"
                 },
                 "addressProofValidUptoDate": {
                     "type": ["string","null"],
@@ -781,7 +786,8 @@
                 },
                 "identityProofNo": {
                     "type": ["string","null"],
-                    "title": "IDENTITY_PROOFNO"
+                    "title": "IDENTITY_PROOFNO",
+                    "pattern":"^[A-Z0-9]{10}$"
                 },
                 "centreCode": {
                     "type": ["null", "number"],

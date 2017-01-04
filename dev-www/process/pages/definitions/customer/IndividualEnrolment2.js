@@ -251,7 +251,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.identityProof",
                                             readonly:true,
-                                            //type:"select"
                                         },
                                         {
                                             key:"customer.identityProofImageId",
@@ -259,12 +258,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             required: true,
                                             fileType:"application/pdf",
                                             using: "scanner"
-                                        }/*,
-                                        {
-                                            key:"customer.identityProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        }*/,
+                                        },
                                         {
                                             key:"customer.identityProofNo",
                                             type:"barcode",
@@ -273,65 +267,12 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 model.customer.identityProofNo = result.text;
                                             }
                                         },
-                                        /*{
-                                            key:"customer.idProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.idProofValidUptoDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofSameAsIdProof"
-                                        }*/
                                     ]
                                 },
 
-
-                                /*{
-                                    type:"fieldset",
-                                    title:"IDENTITY_PROOF",
-                                    items:[
-                                        {
-                                            key:"customer.identityProof",
-                                            type:"select"
-                                        },
-                                        {
-                                            key:"customer.identityProofImageId",
-                                            type:"file",
-                                            required: true,
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.identityProofNo",
-                                            type:"barcode",
-                                            onCapture: function(result, model, form) {
-                                                $log.info(result);
-                                                model.customer.identityProofNo = result.text;
-                                            }
-                                        },
-                                        {
-                                            key:"customer.idProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.idProofValidUptoDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofSameAsIdProof"
-                                        }
-                                    ]
-                                },*/
                                 {
                                     type:"fieldset",
                                     title:"ADDRESS_PROOF",
-                                    //condition:"!model.customer.addressProofSameAsIdProof",
                                     items:[
                                         {
                                             key:"customer.addressProof",
@@ -344,12 +285,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             required: true,
                                             fileType:"application/pdf",
                                             using: "scanner"
-                                        }/*,
-                                        {
-                                            key:"customer.addressProofReverseImageId",
-                                            type:"file",
-                                            fileType:"image/*"
-                                        }*/,
+                                        },
                                         {
                                             key:"customer.addressProofNo",
                                             onCapture: function(result, model, form) {
@@ -359,14 +295,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             type:"qrcode"
                                             
                                         },
-                                        /*{
-                                            key:"customer.addressProofIssueDate",
-                                            type:"date"
-                                        },
-                                        {
-                                            key:"customer.addressProofValidUptoDate",
-                                            type:"date"
-                                        },*/
                                     ]
                                 },
 
@@ -375,9 +303,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "type": "array",
                                     "title": "ADDITIONAL_KYC",
                                     startEmpty: true,
-                                    //"add": null,
-                                    //"remove": null,
-                                    //"view": "fixed",
                                     "items": [
                                         {
                                             
@@ -976,7 +901,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     "type": "string",
                                     "key": "customer.email",
-                                    "title": "EMAIL"
                                 },
                                 {
                                     type: "fieldset",
