@@ -51,7 +51,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     model.loanSummary = resp;
 
                     if (_.isArray(model.loanSummary) && model.loanSummary.length > 0){
-                        var lastEntry = model.loanSummary[0];
+                        var lastEntry = model.loanSummary[model.loanSummary.length - 1];
                         var aTime = new moment(lastEntry.createdDate);
                         var bTime = new moment();
                         model.minutesInCurrentStage = Utils.millisecondsToStr(bTime.diff(aTime));
