@@ -231,7 +231,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     /*var HIGHMARK_HTML = 
 '<div>'+
     '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
-    '<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">Date of Issue: {{CBDATA.highMark.dateOfIssue}}</span></h4>'+
+    '<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">Date of Issue: <b>{{CBDATA.highMark.dateOfIssue}}</b></span></h4>'+
     '<h4 ng-show="CBDATA.highMark.highmarkScore">CRIF HIGHMARK SCORE(S): <span style="font-size:50px;font-weight:bold">{{CBDATA.highMark.highmarkScore}}</span></h4>'+
     '<div ng-show="CBDATA.highMark.highmarkloanDetails.length">&nbsp;</div>'+
     '<table style="width:100%" ng-show="CBDATA.highMark.highmarkloanDetails.length">'+
@@ -293,12 +293,20 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     '</div>'+
     '<br>'+
 '</div>';*/
-var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>';
+    var HIGHMARK_HTML =
+'<div>'+
+    '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+    '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
+    '<div ng-hide="CBDATA.highMark.reportHtml">'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
+    '</div>'+
+'</div>';
 
     var CIBIL_HTML =
 '<div>'+
     '<h3 ng-show="CBDATA.cibil.cibilScore.length" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
-    '<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">DATE: {{CBDATA.cibil.dateOfIssue|userDate}}</span></h4>'+
+    '<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">DATE: <b>{{CBDATA.cibil.dateOfIssue|userDate}}</b></span></h4>'+
+
     '<h4 ng-show="CBDATA.cibil.cibilScore.length">CIBIL TRANSUNION SCORE(S):</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilScore.length">'+
         '<tr><th style="padding:5px">SCORE NAME</th><th style="padding:5px">SCORE</th><th style="padding:5px">SCORE DATE</th></tr>'+
@@ -308,15 +316,70 @@ var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:1
             '<td style="font-size:18px">{{s.scoreDate|userDate}}</td>'+
         '</tr>'+
     '</table>'+
+
+    '<div ng-show="CBDATA.cibil.cibilScore.length">&nbsp;</div>'+
+    '<h4 ng-show="CBDATA.cibil.cibilLoanSummaryInfo.length">SUMMARY:</h4>'+
+    '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanSummaryInfo.length">'+
+        '<tr>'+
+            '<th colspan="5" style="padding:5px">ACCOUNT(S)</th>'+
+        '</tr>'+
+        '<tr>'+
+            '<th style="padding:5px">ACCOUNT TYPE</th>'+
+            '<th style="padding:5px;text-align:right">ACCOUNTS</th>'+
+            '<th style="padding:5px;text-align:right">ADVANCES</th>'+
+            '<th style="padding:5px;text-align:right">BALANCES</th>'+
+            '<th style="padding:5px;text-align:right">DATE OPENED</th>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-repeat-start="lsi in CBDATA.cibil.cibilLoanSummaryInfo">'+
+            '<td style="padding-left:10px;border-top:1px solid #666;vertical-align:top"><b>{{lsi.accountType}}</b></td>'+
+            '<td style="border-top:1px solid #666;text-align:right;vertical-align:top">'+
+                '<i style="color:#666">TOTAL:</i> <b>{{lsi.totalAccounts}}</b><hr style="margin-bottom:0;border-top-color:#999">'+
+                '<i style="color:#666">OVERDUE:</i> <b>{{lsi.overDueAccounts}}</b><hr style="margin-bottom:0;border-top-color:#999">'+
+                '<i style="color:#666">ZERO-BALANCE:</i> <b>{{lsi.zeroBalanceAccounts}}</b>'+
+            '</td>'+
+            '<td style="border-top:1px solid #666;text-align:right;vertical-align:top">'+
+                '<i style="color:#666">HIGH CR/SANC. AMT:</i> <b>{{lsi.advances}}</b>'+
+            '</td>'+
+            '<td style="border-top:1px solid #666;text-align:right;vertical-align:top">'+
+                '<i style="color:#666">CURRENT:</i> <b>{{lsi.currentBalance}}</b><hr style="margin-bottom:0;border-top-color:#999">'+
+                '<i style="color:#666">OVERDUE:</i> <b>{{lsi.amountOverDue}}</b>'+
+            '</td>'+
+            '<td style="border-top:1px solid #666;text-align:right;vertical-align:top">'+
+                '<i style="color:#666">RECENT:</i> <b>{{lsi.recentOpenDate|userDate}}</b><hr style="margin-bottom:0;border-top-color:#999">'+
+                '<i style="color:#666">OLDEST:</i> <b>{{lsi.oldestOpenDate|userDate}}</b>'+
+            '</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="5"><hr style="margin-bottom:0;border-top-color:#999"></td>'+
+        '</tr>'+
+    '</table>'+
+
     '<div ng-show="CBDATA.cibil.cibilScore.length">&nbsp;</div>'+
     '<h4 ng-show="CBDATA.cibil.cibilLoanDetails.length">ACCOUNT(S):</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanDetails.length">'+
-        '<tr><th style="padding:5px">ACCOUNT</th><th style="padding:5px">DATES</th><th style="padding:5px">AMOUNTS</th><th style="padding:5px">STATUS</th></tr>'+
+        '<tr>'+
+            '<th style="padding:5px">ACCOUNT</th>'+
+            '<th style="padding:5px">DATES</th>'+
+            '<th style="padding:5px;text-align:right">AMOUNTS</th>'+
+            '<th style="padding:5px">STATUS</th>'+
+        '</tr>'+
         '<tr class="" ng-repeat-start="ld in CBDATA.cibil.cibilLoanDetails">'+
-            '<td style="padding-left:15px;padding-top:15px"><i style="color:#999">TYPE:</i> {{ld.accountTypeText}}<br><i style="color:#999">OWNERSHIP:</i> {{ld.ownershipIndicatorText}}</td>'+   
-            '<td style="padding-top:15px"><i style="color:#999">OPENED:</i> {{ld.disbursedDate|userDate}}<br><i style="color:#999">LAST PAYMENT:</i> {{ld.lastPaymentDate|userDate}}<br><i style="color:#999">CLOSED:</i> {{ld.closedDate|userDate}}</td>'+
-            '<td style="padding-top:15px"><i style="color:#999">WRITEOFF:</i> {{ld.writeOffAmount}}<br><i style="color:#999">CURRENT BALANCE:</i> {{ld.currentBalance}}</td>'+
-            '<td style="padding-top:15px">{{ld.accountStatus}}</td>'+
+            '<td style="padding-top:15px;vertical-align:top">'+
+                '<i style="color:#999">TYPE:</i> <b>{{ld.accountTypeText}}</b><br>'+
+                '<i style="color:#999">OWNERSHIP:</i> <b>{{ld.ownershipIndicatorText}}</b>'+
+            '</td>'+
+            '<td style="padding-top:15px;vertical-align:top">'+
+                '<i style="color:#999">OPENED:</i> <b>{{ld.disbursedDate|userDate}}</b><br>'+
+                '<i style="color:#999">LAST PAYMENT:</i> <b>{{ld.lastPaymentDate|userDate}}</b><br>'+
+                '<i style="color:#999">CLOSED:</i> <b>{{ld.closedDate|userDate}}</b>'+
+            '</td>'+
+            '<td style="padding-top:15px;vertical-align:top;text-align:right">'+
+                '<i style="color:#999">HIGH CR/SANC:</i> <b>{{ld.highCreditOrSanctionedAmount}}</b><br>'+
+                '<i style="color:#999">WRITEOFF:</i> <b>{{ld.writeOffAmount}}</b><br>'+
+                '<i style="color:#999">CURRENT BALANCE:</i> <b>{{ld.currentBalance}}</b><br>'+
+                '<i style="color:#999">OVERDUE:</i> <b>{{ld.amountOverdue}}</b>'+
+            '</td>'+
+            '<td style="padding-top:15px;vertical-align:top"><b>{{ld.accountStatus}}</b></td>'+
         '</tr>'+
         '<tr class="bg-tint-theme" ng-show="ld.paymentHistory1List.length">'+
             '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">DAYS PAST DUE/ASSET CLASSIFICATION (UP TO 36 MONTHS; LEFT TO RIGHT)</span></td>'+
@@ -348,55 +411,31 @@ var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:1
             '</td>'+
         '</tr>'+
         '<tr ng-repeat-end>'+
-            '<td colspan="4"><hr></td>'+
+            '<td colspan="4"><hr style="margin-bottom:0;border-top-color:#999"></td>'+
         '</tr>'+
     '</table>'+
+
     '<div ng-show="CBDATA.cibil.enquirySegment.length">&nbsp;</div>'+
     '<h4 ng-show="CBDATA.cibil.enquirySegment.length">ENQUIRIES:</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.enquirySegment.length">'+
-        '<tr><th style="padding:5px">MEMBER</th><th style="padding:5px">ENQUIRY DATE</th><th style="padding:5px">ENQUIRY PURPOSE</th><th style="padding:5px">ENQUIRY AMOUNT</th></tr>'+
-        '<tr class="" ng-repeat-start="es in CBDATA.cibil.enquirySegment">'+
-            '<td style="padding-left:15px;padding-top:15px">{{es.enquiringMemberShortName}}</td>'+   
-            '<td style="padding-top:15px">{{es.dateOfEnquiry|userDate}}</td>'+
-            '<td style="padding-top:15px">{{es.enquiryPurposeText}}</td>'+
-            '<td style="padding-top:15px">{{es.enquiryAmount}}</td>'+
+        '<tr>'+
+            '<th style="padding:5px">MEMBER</th>'+
+            '<th style="padding:5px">ENQUIRY DATE</th>'+
+            '<th style="padding:5px">ENQUIRY PURPOSE</th>'+
+            '<th style="padding:5px;text-align:right">ENQUIRY AMOUNT</th>'+
         '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="es.paymentHistory1List.length">'+
-            '<td colspan="4"><span style="font-weight:bold;font-size:12px;padding-left:5px">DAYS PAST DUE/ASSET CLASSIFICATION (UP TO 36 MONTHS; LEFT TO RIGHT)</span></td>'+
-        '</tr>'+
-        '<tr class="bg-tint-theme" ng-show="es.paymentHistory1List.length">'+
-            '<td colspan="4" style="padding:5px">'+
-                '<table style="width:100%">'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph1 in es.paymentHistory1List track by $index" style="padding-top:5px">'+
-                            '<div style="font-family:monospace">{{ph1}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph1m in es.paymentHistory1Months track by $index">'+
-                            '<div style="font-size:12px">{{ph1m}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme" ng-show="es.paymentHistory2List.length">'+
-                        '<td ng-repeat="ph2 in es.paymentHistory2List track by $index" style="padding-top:15px">'+
-                            '<div style="font-family:monospace">{{ph2}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                    '<tr class="bg-tint-theme">'+
-                        '<td ng-repeat="ph2m in es.paymentHistory2Months track by $index">'+
-                            '<div style="font-size:12px">{{ph2m}}</div>'+
-                        '</td>'+
-                    '</tr>'+
-                '</table>'+
-            '</td>'+
-        '</tr>'+
-        '<tr ng-repeat-end>'+
-            '<td colspan="4"><hr></td>'+
+        '<tr class="{{$even?\'bg-tint-theme\':\'\'}}" ng-repeat="es in CBDATA.cibil.enquirySegment">'+
+            '<td style="padding:5px">{{es.enquiringMemberShortName}}</td>'+
+            '<td style="padding:5px">{{es.dateOfEnquiry|userDate}}</td>'+
+            '<td style="padding:5px">{{es.enquiryPurposeText|uppercase}}</td>'+
+            '<td style="padding:5px;text-align:right">{{es.enquiryAmount}}</td>'+
         '</tr>'+
     '</table>'+
+
     '<div ng-hide="CBDATA.cibil.cibilScore.length">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - CIBIL Scores NOT available</b></center>'+
     '</div>'+
+
     '<div ng-show="CBDATA.cibil.cibilScore.length" style="text-align:center;border-bottom:1px dashed #999;line-height:0.1em;margin:10px 0 20px;">'+
         '<span style="background:#fff;padding:0 10px;color:#999;font-size:14px;">END OF CIBIL REPORT</span>'+
     '</div>'+
@@ -537,8 +576,6 @@ var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:1
                         for (i in customerIds) {
                             objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
                         }
-
-                        
                     });
                 }
             }
@@ -546,7 +583,9 @@ var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:1
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             $timeout(function(){
                 _.forOwn(objectifiedBureaus, function(v, k) {
-                    $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
+                    if (v.highMark && v.highMark.reportHtml) {
+                        $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
+                    }
                 });
             });
         },

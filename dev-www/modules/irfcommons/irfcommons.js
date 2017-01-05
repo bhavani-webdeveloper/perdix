@@ -64,7 +64,9 @@ irf.commons.filter("initcap", function() {
 
 irf.commons.filter("userDate", ["SessionStore", function(SessionStore) {
 	return function(rawDate) {
-		return SessionStore.getFormatedDate(moment(rawDate, SessionStore.getSystemDateFormat()));
+		if (rawDate)
+			return SessionStore.getFormatedDate(moment(rawDate, SessionStore.getSystemDateFormat()));
+		return rawDate;
 	}
 }]);
 
