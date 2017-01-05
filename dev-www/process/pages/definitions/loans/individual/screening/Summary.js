@@ -198,21 +198,22 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         var bsCounter = 0;
         var bsLeft = [];
         var bsRight = [];
-        _.forIn(model.enterpriseDetailsData, function(value, key) {
-            if (bsCounter++ % 2 ==0) {
-                bsLeft.push({
-                    key: "enterpriseDetailsData." + key,
-                    title: key,
-                    type: "string",
-                    readonly: true,
-                })
+        var bsCounter = 0;
+        _.forIn(model.enterpriseDetailsData, function(value, key){
+            var item = {
+                key: "enterpriseDetailsData." + key,
+                title: key,
+                type: "string",
+                readonly: true,
+            };
+
+            if (key == "FRO Remarks"){
+                item.type = "textarea";    
+            }
+            if (bsCounter++ % 2 ==0){
+                bsLeft.push(item)
             } else {
-                bsRight.push({
-                    key: "enterpriseDetailsData." + key,
-                    title: key,
-                    type: "string",
-                    readonly: true
-                })
+                bsRight.push(item)
             }
         });
 
