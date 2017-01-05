@@ -196,11 +196,27 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.removeTab = function(index, e) {
         e && e.preventDefault();
         Utils.confirm("Are You Sure?").then(function() {
-            var definition = $scope.pages[index].definition;
-            $scope.pages.splice(index, 1);
-            --definition.openPagesCount;
-            if ($scope.addTabMenu.indexOf(definition) == -1) {
-                $scope.addTabMenu.push(definition);
+            var removal = function(index) {
+                var definition = $scope.pages[index].definition;
+                $scope.pages.splice(index, 1);
+                --definition.openPagesCount;
+                if ($scope.addTabMenu.indexOf(definition) == -1) {
+                    $scope.addTabMenu.push(definition);
+                }
+            };
+            var i = index;
+            var pageObj = $scope.pages[i];
+            if (angular.isFunction(pageObj.page.preDestroy)) {
+                var promisedReturn = pageObj.page.preDestroy(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, $scope.bundleModel);
+                if (promisedReturn && angular.isFunction(promisedReturn.then)) {
+                    promisedReturn.then(function() {
+                        removal(i);
+                    });
+                } else {
+                    removal(i);
+                }
+            } else {
+                removal(i);
             }
         });
     };

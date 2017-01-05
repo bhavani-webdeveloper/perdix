@@ -112,6 +112,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             }
                         }
                     },
+                    preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                        return $q.resolve();
+                    },
                     eventListeners: {
                         "test-listener": function(bundleModel, model, obj){
 

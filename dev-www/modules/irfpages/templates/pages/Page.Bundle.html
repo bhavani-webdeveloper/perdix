@@ -9,7 +9,7 @@
     </h1>
   </section>
   <uib-tabset active="activeIndex" class="bundle-tabset">
-    <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}" ng-click="onTabOpen($index, $event)">
+    <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}" select="onTabOpen($index, $event)">
       <uib-tab-heading>
         {{ pageObj.title | translate }}
         <a ng-click="removeTab($index, $event)" href="" ng-show="isRemovable(pageObj.definition)">&nbsp;<i class="fa fa-times-circle {{((activeIndex == $index) || !(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid)) ? 'color-theme' : ''}}"></i></a>
