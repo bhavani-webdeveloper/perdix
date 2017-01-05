@@ -967,6 +967,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         type: "array",
                         title: "BANK_ACCOUNTS",
                         startEmpty: true,
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            modelValue.bankStatements = [];
+                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                            var noOfMonthsToDisplay = 6;
+                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                                modelValue.bankStatements.push({
+                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                                });
+                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                            }
+                        },
                         items: [
                             {
                                 key: "customer.customerBankAccounts[].ifscCode",
@@ -1054,6 +1066,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
+                                startEmpty: true,
                                 items: [
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].startMonth",

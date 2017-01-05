@@ -128,7 +128,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	}
 
 	self.getFormatedCBSDate = function() {
-		return moment(session.cbsDate, 'YYYY-MM-DD').format(self.getDateFormat());
+		return moment(session.cbsDate, self.getSystemDateFormat()).format(self.getDateFormat());
 	}
 
 	self.setItem = function(key, value){
