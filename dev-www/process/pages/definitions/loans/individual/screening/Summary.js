@@ -4,27 +4,27 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
 
-    var HOUSEHOLD_PL_HTML = 
-'<table class="table">'+
-    '<colgroup>'+
-        '<col width="30%"> <col width="40%"> <col width="30%">'+
-    '</colgroup>'+
-    '<tbody>'+
-        '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income}}</th> </tr>'+
-        '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness}}</td> </tr>'+
-        '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries}}</td> </tr>'+
-        '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes}}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses}}</th> </tr>'+
-        '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense}}</td> </tr>'+
-        '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities}}</td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome}}</td> </tr>'+
-    '</tbody>'+
-'</table>';
-
     var branch = SessionStore.getBranch();
     var scoreName;
 
-    var prepareForms = function(model, form){
+    var prepareData = function(res, model) {
+
+        model.enterpriseDetails = res[0];
+        model.scoreDetails = [res[1], res[2], res[3], res[4]];
+        model.sectorDetails = res[5];
+        model.subSectorDetails = res[6];
+        model.houseHoldPL = res[7];
+        model.businessPL = res[8];
+        model.balanceSheet = res[9];
+        model.bankAccountDetails = res[10];
+        model.totalScores = res[11];
+        model.deviationDetails = res[12];
+        model.deviationParameter = res[12];
+        model.ratioDetails = res[13];
+        model.houseHoldPL_CoApplicant = res[14];
+
+        model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
+        _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
 
         /* Populate values for Balance Sheet */
         model.assetsAndLiabilities = {};
@@ -171,15 +171,35 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         $log.info("Karthik here");
         $log.info(model.additional);
 
-        
-
-        var bsLeft = [];
-        var bsRight = [];
         model.enterpriseDetailsData = model.enterpriseDetails.data[0];
 
+    }; // END OF prepareData()
+
+
+    var HOUSEHOLD_PL_HTML = 
+    '<table class="table">'+
+        '<colgroup>'+
+            '<col width="30%"> <col width="40%"> <col width="30%">'+
+        '</colgroup>'+
+        '<tbody>'+
+            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income}}</th> </tr>'+
+            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes}}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses}}</th> </tr>'+
+            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities}}</td> </tr>'+
+            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome}}</td> </tr>'+
+        '</tbody>'+
+    '</table>';
+
+    var prepareForms = function(model, form) {
+
         var bsCounter = 0;
-        _.forIn(model.enterpriseDetailsData, function(value, key){
-            if (bsCounter++ % 2 ==0){
+        var bsLeft = [];
+        var bsRight = [];
+        _.forIn(model.enterpriseDetailsData, function(value, key) {
+            if (bsCounter++ % 2 ==0) {
                 bsLeft.push({
                     key: "enterpriseDetailsData." + key,
                     title: key,
@@ -194,7 +214,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     readonly: true
                 })
             }
-        })
+        });
 
         form.push({
             "type": "box",
@@ -603,7 +623,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     ]
         // });
 
-    }
+    }; // END OF prepareForms()
 
     return {
         "type": "schema-form",
@@ -632,250 +652,48 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     break;
             }
 
-            if (bundlePageObj){
+            if (bundlePageObj) {
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
             
-            if (_.hasIn(model, 'cbModel')){
-                
+            if (_.hasIn(model, 'cbModel')) {
                 var p1 = Scoring.get({
                     auth_token: AuthTokenHelper.getAuthData().access_token,
                     LoanId: model.cbModel.loanId,
                     ScoreName: scoreName
-                })
-                .$promise
-                .then(function(response){
+                }).$promise.then(function(response){
                     model.ScoreDetails = response.ScoreDetails;
-                })
-                .finally(function(){
-                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName})
-                        .$promise;
-                    onSuccessPromise
-                        .then(function(res){
-                            model.enterpriseDetails = res[0];
-                            model.scoreDetails = [res[1], res[2], res[3], res[4]];
-                            model.sectorDetails = res[5];
-                            model.subSectorDetails = res[6];
-                            model.houseHoldPL = res[7];
-                            model.businessPL = res[8];
-                            model.balanceSheet = res[9];
-                            model.bankAccountDetails = res[10];
-                            model.totalScores = res[11];
-                            model.deviationDetails = res[12];
-                            model.deviationParameter = res[12];
-                            model.ratioDetails = res[13];
-                            model.houseHoldPL_CoApplicant = res[14];
-
-                            model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
-                            _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
-                            prepareForms(model, $this.form);
-                        })
+                }).finally(function(){
+                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName}).$promise;
+                    onSuccessPromise.then(function(res){
+                        prepareData(res, model);
+                    });
                     return onSuccessPromise;
-                })
-                ;
+                });
 
-                // var p2 = Scoring.financialSummary({loan_id: model.cbModel.loanId})
-                //     .$promise
-                //     .then(function(res){
-                //         model.scoreDetails = [res[1], res[2], res[3], res[4]];
-                //         model.sectorDetails = res[5];
-                //         model.subSectorDetails = res[6];
-                //         model.enterpriseDetails = res[0];
-                //         model.houseHoldPL = res[7];
-                //         model.businessPL = res[8];
-                //         model.balanceSheet = res[9];
-                //         model.bankStatement = res[10];
-                        
-                //         prepareForms(model, $this.form);
-                //     })
+                var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId}).$promise.then(function(res) {
+                    model.customer = res;
+                }, function(httpRes) {
+                    PageHelper.showErrors(httpRes);
+                }).finally(function() {
+                    PageHelper.hideLoader();
+                });
 
-                var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId})
-                    .$promise
-                    .then(function(res){
-                        model.customer = res;
-                    }, function(httpRes){
-                        PageHelper.showErrors(httpRes);
-                    })
-                    .finally(function(){
-                        PageHelper.hideLoader();
-                    })
-                $q.all([p1,p3]).finally(function(){
+                $q.all([p1,p3]).finally(function() {
                     deferred.resolve();
-                })
+                });
             } else {
                 deferred.resolve();
             }
-
             return deferred.promise;
         },
-        eventListeners: {
-        },
-        
-        form: [
-            
-        ],
+        eventListeners: {},
+        form: [],
         initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-            var deferred = $q.defer();
-
-            
-            return deferred.promise;
-            
-
-            // Business Summary - starts
-            var sFieldsLeft = [], sFieldsRight = [];
-            // var bsCnt = Math.floor(model.businessSummary.length/2);
-            // for (i = 0; i < bsCnt; i++) {
-            //     var bs = model.businessSummary[i];
-            //     model.businessSummaryFields[bs.key] = bs.value;
-            //     sFieldsLeft.push({
-            //         title: bs.key,
-            //         key: "businessSummaryFields." + bs.key
-            //     });
-            // }
-            // for (i = bsCnt; i < model.businessSummary.length; i++) {
-            //     var bs = model.businessSummary[i];
-            //     model.businessSummaryFields[bs.key] = bs.value;
-            //     sFieldsRight.push({
-            //         title: bs.key,
-            //         key: "businessSummaryFields." + bs.key
-            //     });
-            // }
-            // var businessSummaryForm = {
-            //     type: "box",
-            //     title: "Business Summary",
-            //     colClass: "col-sm-12",
-            //     "readonly": true,
-            //     items: [
-            //         {
-            //             type: "section",
-            //             htmlClass: "row",
-            //             items: [
-            //                 {
-            //                     type: "section",
-            //                     htmlClass: "col-sm-6",
-            //                     items: sFieldsLeft
-            //                 },
-            //                 {
-            //                     type: "section",
-            //                     htmlClass: "col-sm-6",
-            //                     items: sFieldsRight
-            //                 }
-            //             ]
-            //         }
-            //     ]
-            // };
-            // Business SUmmary - ends
-
-            // Scores - starts
-            var scoreForms = [];
-            for (i in model.scoreDetails) {
-                scoreForms.push({
-                    type: "box",
-                    items: [
-                        {
-                            type: "tableview",
-                            key: "scoreDetails.data",
-                            title: model.scoreDetails[i].title,
-                            selectable: false,
-                            paginate: false,
-                            searching: false,
-                            getColumns: function(){
-                                return model.scoreDetails[i].columns;
-                            }
-                        }
-                    ]
-                });
-            }
-            // Scores - ends
-
-            // Deviation & Mitigation - starts
-            // var deviationForm = {
-            //     type: "box",
-            //     colClass: "col-sm-12",
-            //     items: [
-            //         {
-            //             type: "tableview",
-            //             key: "deviationDetails.data",
-            //             title: model.deviationDetails[i].title,
-            //             selectable: false,
-            //             paginate: false,
-            //             searching: false,
-            //             getColumns: function(){
-            //                 return model.deviationDetails[i].columns;
-            //             }
-            //         }
-            //     ]
-            // };
-            // Deviation & Mitigation - ends
-
-            // Sector & Sub-sector - starts
-            var sectorDetailsForm = {
-                type: "box",
-                colClass: "col-sm-12",
-                items: [
-                    {
-                        type: "tableview",
-                        key: "sectorDetails.data",
-                        title: model.sectorDetails.title,
-                        selectable: false,
-                        paginate: false,
-                        searching: false,
-                        getColumns: function(){
-                            return model.sectorDetails.columns;
-                        }
-                    }
-                ]
-            };
-
-            var subSectorDetailsForm = {
-                type: "box",
-                colClass: "col-sm-12",
-                items: [
-                    {
-                        type: "tableview",
-                        key: "subSectorDetails.data",
-                        title: model.subSectorDetails.title,
-                        selectable: false,
-                        paginate: false,
-                        searching: false,
-                        getColumns: function(){
-                            return model.subSectorDetails.columns;
-                        }
-                    }
-                ]
-            };
-            // Sector & Sub-sector - ends
-
-            // Loan recommendations - starts
-            // var sectorSubSectorForm = {
-            //     type: "box",
-            //     colClass: "col-sm-12",
-            //     items: [
-            //         {
-            //             type: "tableview",
-            //             key: "sectorSubSectorDetails.data",
-            //             title: model.sectorSubSectorDetails[i].title,
-            //             selectable: false,
-            //             paginate: false,
-            //             searching: false,
-            //             getColumns: function(){
-            //                 return model.sectorSubSectorDetails[i].columns;
-            //             }
-            //         }
-            //     ]
-            // };
-            // Loan recommendations - ends
-
-            // this.form = [businessSummaryForm];
-            // this.form.concat(scoreForms);
-            // this.form.push(deviationForm);
-            // this.form.push(sectorSubSectorForm);
-            // this.form.concat(scoreForms);
-            // this.form.push(sectorDetailsForm);
-            // this.form.push(subSectorDetailsForm);
-
-            deferred.resolve();
-            return deferred.promise;
+            var f = [];
+            prepareForms(model, f);
+            this.form = f;
+            return $q.resolve();
         },
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -894,8 +712,5 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 $log.warn(model);
             }
         }
-
     };
-}
-
-]);
+}]);
