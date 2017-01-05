@@ -54,6 +54,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         maximum: 1
                     },
                     {
+                        pageName: 'loans.individual.screening.CreditBureauView',
+                        title: 'CREDIT_BUREAU',
+                        pageClass: 'cbview',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
@@ -112,6 +119,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         pageClass: 'summary',
                                         model: {
                                             cbModel: {customerId:res.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore2'}
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'cbview',
+                                        model: {
+                                            loanAccount: res
                                         }
                                     });
                                     
