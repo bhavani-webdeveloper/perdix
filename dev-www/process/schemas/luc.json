@@ -83,11 +83,11 @@
 				},
 				"lucDone": {
 					"title": "LUC_DONE",
-					"type": "number"
+					"type": "string"
 				},
 				"lucRescheduled": {
 					"title": "LUC_RESCHEDULED",
-					"type": "number"
+					"type": "string"
 				},
 				"lucRescheduleReason": {
 					"title": "LUC_RESCHEDULE_REASON",
@@ -99,7 +99,7 @@
 				},
 				"lucEscalated": {
 					"title": "LUC_ESCALATED",
-					"type": "number"
+					"type": "string"
 				},
 				"lucEscalatedReason": {
 					"title": "LUC_ESCALALATION_REASON",
