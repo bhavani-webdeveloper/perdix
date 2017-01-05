@@ -54,7 +54,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                         var lastEntry = model.loanSummary[model.loanSummary.length - 1];
                         var aTime = new moment(lastEntry.createdDate);
                         var bTime = new moment();
-                        model.minutesInCurrentStage = Utils.millisecondsToStr(bTime.diff(aTime));
+                        model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
                     }
                 },function (errResp){
 

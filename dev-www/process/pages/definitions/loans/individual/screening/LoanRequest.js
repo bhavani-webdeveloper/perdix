@@ -188,6 +188,29 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
+
+            /* Deviations and Mitigations grouping */
+            if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                var loanMitigantsGrouped = {};
+                for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                    var item = model.loanAccount.loanMitigants[i];
+                    if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                        loanMitigantsGrouped[item.parameter] = [];
+                    }
+                    loanMitigantsGrouped[item.parameter].push(item);
+                }
+                model.loanMitigantsByParameter = [];
+                _.forOwn(loanMitigantsGrouped, function(mitigants, key){
+                    var chosenMitigants = "<ul>";
+                    
+                    for (var i=0; i<mitigants.length; i++){
+                        chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
+                    }
+                    chosenMitigants = chosenMitigants + "</ul>";
+                    model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
+                })
+            }
+            /* End of Deviations and Mitigations grouping */
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
         offline: false,
@@ -296,27 +319,42 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 model.deviations.deviationParameter = [];
                 model.deviations.deviationParameter = params.deviations.deviationParameter;
                 model.deviations.scoreName = params.deviations.scoreName;
-                if(model.deviations.deviationParameter && model.deviations.deviationParameter.length==0)
-                   delete model.loanAccount.loanMitigants; 
-                else
-                {
-                    if(model.loanAccount.loanMitigants && model.loanAccount.loanMitigants.length > 0){
-                        for (i=0; i<model.deviations.deviationParameter.length; i++){
-                            for (j=0; j<model.loanAccount.loanMitigants.length; j++){
-                                if(model.deviations.deviationParameter[i].Parameter == model.loanAccount.loanMitigants[j].parameter && model.loanAccount.loanMitigants[j].riskScore == model.deviations.scoreName){
-                                    if(model.deviations.deviationParameter[i].mitigants && model.deviations.deviationParameter[i].mitigants.length>0){
-                                        for (k=0; k<model.deviations.deviationParameter[i].mitigants.length; k++){
-                                            if(model.deviations.deviationParameter[i].mitigants[k].mitigantName == model.loanAccount.loanMitigants[j].mitigant){
-                                                model.deviations.deviationParameter[i].mitigants[k].selected = true;
-                                                break;
-                                            }
-                                        }
+
+                if (_.isArray(model.deviations.deviationParameter)){
+                    _.forEach(model.deviations.deviationParameter, function(deviation){
+                        if (_.hasIn(deviation, 'ChosenMitigants') && _.isArray(deviation.ChosenMitigants)){
+                            _.forEach(deviation.ChosenMitigants, function(mitigantChosen){
+                                for (var i=0; i< deviation.mitigants.length; i++){
+                                    if (deviation.mitigants[i].mitigantName == mitigantChosen){
+                                        deviation.mitigants[i].selected = true;
                                     }
                                 }
-                            }
+                            })
                         }
-                    }
+                    })
                 }
+
+                // if(model.deviations.deviationParameter && model.deviations.deviationParameter.length==0)
+                //    delete model.loanAccount.loanMitigants; 
+                // else
+                // {
+                //     if(model.loanAccount.loanMitigants && model.loanAccount.loanMitigants.length > 0){
+                //         for (i=0; i<model.deviations.deviationParameter.length; i++){
+                //             for (j=0; j<model.loanAccount.loanMitigants.length; j++){
+                //                 if(model.deviations.deviationParameter[i].Parameter == model.loanAccount.loanMitigants[j].parameter && model.loanAccount.loanMitigants[j].riskScore == model.deviations.scoreName){
+                //                     if(model.deviations.deviationParameter[i].mitigants && model.deviations.deviationParameter[i].mitigants.length>0){
+                //                         for (k=0; k<model.deviations.deviationParameter[i].mitigants.length; k++){
+                //                             if(model.deviations.deviationParameter[i].mitigants[k].mitigantName == model.loanAccount.loanMitigants[j].mitigant){
+                //                                 model.deviations.deviationParameter[i].mitigants[k].selected = true;
+                //                                 break;
+                //                             }
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
             }
         },
         form: [
@@ -670,7 +708,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             "type": "section",
                             "htmlClass": "col-xs-10 col-md-10",
                             "items": [{
-                                key:"deviations.deviationParameter[].mitigants[].mitigantName",
+                                key: "deviations.deviationParameter[].mitigants[].mitigantName",
                                 type:"textarea",
                                 readonly:true
                             }]
@@ -679,22 +717,42 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 }]
             }]
         },
+        // {
+        //     "type": "box",
+        //     "title": "LOAN_MITIGANTS",
+        //     "condition": "model.currentStage=='Screening' || model.currentStage=='Application'||model.currentStage=='FieldAppraisal'",
+        //     readonly:true,
+        //     "items": [{
+        //         key: "loanAccount.loanMitigants",
+        //         type: "array",
+        //         startEmpty: true,
+        //         add:null,
+        //         remove:null,
+        //         "view":"fixed",
+        //         "titleExpr": "model.loanAccount.loanMitigants[arrayIndex].parameter",
+        //         items: [{
+        //             key: "loanAccount.loanMitigants[].mitigant",
+        //             "type":"textarea"
+        //         }]
+        //     }]
+        // },
         {
             "type": "box",
             "title": "LOAN_MITIGANTS",
             "condition": "model.currentStage=='Screening' || model.currentStage=='Application'||model.currentStage=='FieldAppraisal'",
             readonly:true,
             "items": [{
-                key: "loanAccount.loanMitigants",
+                key: "loanMitigantsByParameter",
                 type: "array",
                 startEmpty: true,
                 add:null,
                 remove:null,
                 "view":"fixed",
-                "titleExpr": "model.loanAccount.loanMitigants[arrayIndex].parameter",
+                "titleExpr": "model.loanMitigantsByParameter[arrayIndex].Parameter",
                 items: [{
-                    key: "loanAccount.loanMitigants[].mitigant",
-                    "type":"textarea"
+                    key: "loanMitigantsByParameter[].Mitigants",
+                    "type":"section",
+                    "html": "<div ng-bind-html='model.loanMitigantsByParameter[arrayIndex].Mitigants'></div>    "
                 }]
             }]
         },
