@@ -358,9 +358,9 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     '<h4 ng-show="CBDATA.cibil.cibilLoanDetails.length">ACCOUNT(S):</h4>'+
     '<table style="width:100%" ng-show="CBDATA.cibil.cibilLoanDetails.length">'+
         '<tr>'+
-            '<th style="padding:5px">ACCOUNT</th>'+
-            '<th style="padding:5px">DATES</th>'+
-            '<th style="padding:5px;text-align:right">AMOUNTS</th>'+
+            '<th style="padding:5px;width:30%">ACCOUNT</th>'+
+            '<th style="padding:5px;width:30%">DATES</th>'+
+            '<th style="padding:5px;width:20%;text-align:right">AMOUNTS</th>'+
             '<th style="padding:5px">STATUS</th>'+
         '</tr>'+
         '<tr class="" ng-repeat-start="ld in CBDATA.cibil.cibilLoanDetails">'+
