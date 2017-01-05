@@ -626,6 +626,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
     }; // END OF prepareForms()
 
+    var prepareDataDeferred = $q.defer();
+    var prepareDataPromise = prepareDataDeferred.promise;
+
     return {
         "type": "schema-form",
         "title": "",
@@ -658,7 +661,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             }
             
             if (_.hasIn(model, 'cbModel')) {
-                var p1 = Scoring.get({
+                Scoring.get({
                     auth_token: AuthTokenHelper.getAuthData().access_token,
                     LoanId: model.cbModel.loanId,
                     ScoreName: scoreName
@@ -668,20 +671,21 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName}).$promise;
                     onSuccessPromise.then(function(res){
                         prepareData(res, model);
+                        model.$prepared = true;
+                        prepareDataDeferred.resolve();
                     });
-                    return onSuccessPromise;
-                });
 
-                var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId}).$promise.then(function(res) {
-                    model.customer = res;
-                }, function(httpRes) {
-                    PageHelper.showErrors(httpRes);
-                }).finally(function() {
-                    PageHelper.hideLoader();
-                });
+                    var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId}).$promise.then(function(res) {
+                        model.customer = res;
+                    }, function(httpRes) {
+                        PageHelper.showErrors(httpRes);
+                    }).finally(function() {
+                    });
 
-                $q.all([p1,p3]).finally(function() {
-                    deferred.resolve();
+                    $q.all([onSuccessPromise, p3]).finally(function() {
+                        PageHelper.hideLoader();
+                        deferred.resolve();
+                    });
                 });
             } else {
                 deferred.resolve();
@@ -691,9 +695,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         eventListeners: {},
         form: [],
         initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-            var f = [];
-            prepareForms(model, f);
-            this.form = f;
+            var $this = this;
+            if (model.$prepared) {
+                prepareForms(model, $this.form);
+            } else {
+                prepareDataPromise.then(function() {
+                    prepareForms(model, $this.form);
+                    formCtrl.redraw();
+                });
+            }
             return $q.resolve();
         },
         schema: function() {
