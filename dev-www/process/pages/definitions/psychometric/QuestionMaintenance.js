@@ -14,9 +14,13 @@ irf.pageCollection.factory(irf.page("psychometric.QuestionMaintenance"),
 				model.psy1.type = "SINGLE";
 				model = Utils.removeNulls(model, true);
 				$log.info("question maintenance page got initiated");
+				var $this = this;
+				$this.createForm().then(function(f) {
+					$this.form = f;
+				});
 			},
 			form: [],
-			formFn: function() {
+			createForm: function() {
 				var deferred = $q.defer();
 				Psychometric.getLanguages().$promise.then(function(languages) {
 					languagesTitleMap = [];

@@ -222,28 +222,9 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				var promise = $scope.page.schema();
 				promise.then(function(data){
 					$scope.page.schema = data;
-
-					if (angular.isFunction($scope.page.formFn)) {
-						var promise = $scope.page.formFn();
-						promise.then(function(data){
-							$scope.page.form = data;
-							$timeout(function() {
-								$scope.page.initialize($scope.model, $scope.page.form, $scope.formCtrl);
-							});
-						});
-					}
 				});
-			} else {
-				if (angular.isFunction($scope.page.formFn)) {
-					var promise = $scope.page.formFn();
-					promise.then(function(data){
-						$scope.page.form = data;
-						$timeout(function() {
-							$scope.page.initialize($scope.model, $scope.page.form, $scope.formCtrl);
-						});
-					});
-				}
 			}
+			// formFn support discontinued
 			$scope.formHelper = formHelper;
 
 			$scope.$on('irf-sf-init', function(event){

@@ -105,25 +105,10 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                             var _pageObj = pageObj;
                             return function(data) {
                                 _pageObj.page.schema = data;
-
-                                if (angular.isFunction(_pageObj.page.formFn)) {
-                                    var promise = _pageObj.page.formFn();
-                                    promise.then(function(data) {
-                                        var pageObj = _pageObj;
-                                        pageObj.page.form = data;
-                                    });
-                                }
                             };
                         })());
-                    } else {
-                        if (angular.isFunction(pageObj.page.formFn)) {
-                            var promise = pageObj.page.formFn();
-                            promise.then(function(data) {
-                                var pageObj = pageObj;
-                                pageObj.page.form = data;
-                            });
-                        }
                     }
+                    // formFn support discontinued
                     pageObj.formHelper = formHelper;
                 } else if (pageObj.page.type == 'search-list') {
                     // pageObj.model = entityManager.getModel(pageObj.pageName);
