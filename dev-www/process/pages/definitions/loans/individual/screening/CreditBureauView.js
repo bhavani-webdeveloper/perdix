@@ -221,14 +221,14 @@ irf.pageCollection.factory("CIBILAppendix", [function(){
 irf.pageCollection.factory(irf.page("loans.individual.screening.CreditBureauView"),
 ["$log", "$q", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
-"CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix",
+"CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix","$timeout",
 function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,
-    CreditBureau,AuthTokenHelper,showModal, CIBILAppendix){
+    CreditBureau,AuthTokenHelper,showModal, CIBILAppendix, $timeout){
 
     var branch = SessionStore.getBranch();
 
-    var HIGHMARK_HTML = 
+    /*var HIGHMARK_HTML = 
 '<div>'+
     '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
     '<h4 style="padding:5px" ng-show="CBDATA.highMark.highmarkScore"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">Date of Issue: {{CBDATA.highMark.dateOfIssue}}</span></h4>'+
@@ -292,7 +292,8 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
         '<span style="background:#fff;padding:0 10px;color:#999;font-size:14px;">END OF HIGHMARK REPORT</span>'+
     '</div>'+
     '<br>'+
-'</div>';
+'</div>';*/
+var HIGHMARK_HTML = '<iframe id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>';
 
     var CIBIL_HTML =
 '<div>'+
@@ -402,6 +403,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     '<br>'+
 '</div>';
 
+    var objectifiedBureaus = {};
     return {
         "type": "schema-form",
         "title": "",
@@ -518,7 +520,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                         }
                     }
                     $q.all(bureauPromises).finally(function() {
-                        var objectifiedBureaus = {};
+                        objectifiedBureaus = {};
                         objectifiedBureaus[model.applicant.customerId] = model.applicant;
                         var customerIds = [model.applicant.customerId];
                         for (k in model.coapplicants) {
@@ -531,9 +533,22 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                 objectifiedBureaus[k].customer = v;
                             });
                         });
+
+                        for (i in customerIds) {
+                            objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
+                        }
+
+                        
                     });
                 }
             }
+        },
+        initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+            $timeout(function(){
+                _.forOwn(objectifiedBureaus, function(v, k) {
+                    $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
+                });
+            });
         },
         eventListeners: {
         },
