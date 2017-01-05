@@ -1805,16 +1805,18 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                     reqData.loanAccount.collateral = reqData.loanAccount.collateral || [];
                                     for (var i=0;i<enterpriseCustomer.fixedAssetsMachinaries.length; i++){
                                         var machine = enterpriseCustomer.fixedAssetsMachinaries[i];
-                                        reqData.loanAccount.collateral.push(
-                                            {
-                                                collateralDescription: machine.machineDescription,
-                                                collateralType: machine.machineType,
-                                                collateralValue: machine.presentValue,
-                                                manufacturer: machine.manufacturerName,
-                                                modelNo: machine.machineModel,
-                                                serialNo: machine.serialNumber
-                                            }
-                                        )
+                                        if (machine.hypothecatedToUs == "YES" || machine.hypothecatedToUs == "Yes"){
+                                            reqData.loanAccount.collateral.push(
+                                                {
+                                                    collateralDescription: machine.machineDescription,
+                                                    collateralType: machine.machineType,
+                                                    collateralValue: machine.presentValue,
+                                                    manufacturer: machine.manufacturerName,
+                                                    modelNo: machine.machineModel,
+                                                    serialNo: machine.serialNumber
+                                                }
+                                            )
+                                        }
                                     }    
                                 }
                                 
