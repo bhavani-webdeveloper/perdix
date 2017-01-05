@@ -13,7 +13,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.sectorDetails = res[5];
         model.subSectorDetails = res[6];
-        model.houseHoldPL = res[7];
+        model.houseHoldPL = res[7].sections;
         model.businessPL = res[8];
         model.balanceSheet = res[9];
         model.bankAccountDetails = res[10];
@@ -21,7 +21,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
-        model.houseHoldPL_CoApplicant = res[14];
+        model.psychometricScores = res[14];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -51,28 +51,41 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
 
         model.pl  = {
-            household: {},
+            household: [],
             business: {}
         };
-        model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
-        model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
-        model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
-        model.pl.household.familyMemberIncomes = model.houseHoldPL.data[0]['Family Member Incomes'];
-        model.pl.household.Expenses = model.houseHoldPL.data[0]['Total Expenses'];
-        model.pl.household.declaredEducationExpense = model.houseHoldPL.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-        model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
-        model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
+        // model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
+        // model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
+        // model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
+        // model.pl.household.familyMemberIncomes = model.houseHoldPL.data[0]['Family Member Incomes'];
+        // model.pl.household.Expenses = model.houseHoldPL.data[0]['Total Expenses'];
+        // model.pl.household.declaredEducationExpense = model.houseHoldPL.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
+        // model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
+        // model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
 
-        if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
-            model.pl.householdCoApplicant = {};
-            model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
-            model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
-            model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
-            model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
-            model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
-            model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-            model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
-            model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
+        // if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
+        //     model.pl.householdCoApplicant = {};
+        //     model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
+        //     model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
+        //     model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
+        //     model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
+        //     model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
+        //     model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
+        //     model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
+        //     model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
+        // }
+
+        for (var i=0; i<model.houseHoldPL.length; i++){
+            model.pl.household.push({
+                income : model.houseHoldPL[i].data[0]['Total Incomes'],
+                salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
+                otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
+                familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
+                Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
+                declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
+                netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income']
+            })
         }
 
         model.pl.business.invoice = model.businessPL.data[0]['Invoice'];
@@ -406,6 +419,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
+        form.push({
+            type: "box",
+            colClass: "col-sm-12 table-box",
+            title: "Psychometric Score (Total: " + model.psychometricScores.totalScore + ")",
+            condition: "model.currentStage != 'ScreeningReview'",
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: '<table class="table"><colgroup><col width="60%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Category</th><th>Score</th></tr></thead><tbody><tr ng-repeat="rowData in model.psychometricScores.data"><td>{{ rowData["Category Name"] }}</td><td>{{ rowData["Score"] }}</td></tr></tbody></table>'
+                }
+            ]
+        })
+
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12",
@@ -460,35 +487,51 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     ]
         // })
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "Household P&L Statement - Applicant",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<div ng-init="household = model.pl.household">' + HOUSEHOLD_PL_HTML + '</div>'
-                }
-            ]
-        });
-        
-        if (model.pl.householdCoApplicant) {
+        for (var i=0;i<model.pl.household.length; i++){
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "Household P&L Statement - Co-Applicant",
+                title: "Household P&L Statement - " + model.houseHoldPL[i].relation_detail,
                 condition: "model.currentStage != 'ScreeningReview'",
                 items: [
                     {
                         type: "section",
                         colClass: "col-sm-12",
-                        html: '<div ng-init="household = model.pl.householdCoApplicant">' + HOUSEHOLD_PL_HTML + '</div>'
+                        html: '<div ng-init="household = model.pl.household['+ i +']">' + HOUSEHOLD_PL_HTML + '</div>'
                     }
                 ]
-            });
+            });    
         }
+
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12 table-box",
+        //     title: "Household P&L Statement - Applicant",
+        //     condition: "model.currentStage != 'ScreeningReview'",
+        //     items: [
+        //         {
+        //             type: "section",
+        //             colClass: "col-sm-12",
+        //             html: '<div ng-init="household = model.pl.household">' + HOUSEHOLD_PL_HTML + '</div>'
+        //         }
+        //     ]
+        // });
+        
+        // if (model.pl.householdCoApplicant) {
+        //     form.push({
+        //         type: "box",
+        //         colClass: "col-sm-12 table-box",
+        //         title: "Household P&L Statement - Co-Applicant",
+        //         condition: "model.currentStage != 'ScreeningReview'",
+        //         items: [
+        //             {
+        //                 type: "section",
+        //                 colClass: "col-sm-12",
+        //                 html: '<div ng-init="household = model.pl.householdCoApplicant">' + HOUSEHOLD_PL_HTML + '</div>'
+        //             }
+        //         ]
+        //     });
+        // }
         
         
         form.push({
