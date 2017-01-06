@@ -254,6 +254,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         enumCode: "businessSector",
                         parentEnumCode: "businessType",
                         parentValueExpr:"model.customer.enterprise.businessType",
+                        onChange: function(modelValue, form, model, formCtrl, event) {
+                            model.customer.enterprise.businessSubsector = null;
+                        }
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
