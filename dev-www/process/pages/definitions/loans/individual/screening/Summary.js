@@ -334,8 +334,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             htmlClass: "col-sm-12",
                             title: model.scoreDetails[0].title,
                             html:
-'<div ng-if="model.currentStage!=\'ScreeningReview\'" ng-init="_score=model.scoreDetails[0]">'+
-    '<h3>{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+'<div ng-init="_score=model.scoreDetails[0]">'+
+    '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
     '<table class="table">'+
         '<colgroup>'+
             '<col width="25%">'+
