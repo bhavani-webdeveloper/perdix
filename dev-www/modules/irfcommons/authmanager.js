@@ -40,15 +40,13 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		Account.get({'service': 'account'}, function(accountResponse){
 			Account.getCentresForUser(accountResponse.branchId, accountResponse.login).then(function(resp) {
 				accountResponse.centres = resp;
-
-				BankMaster.getCBSDate().then(function(cbsDate) {
-					accountResponse.cbsDate = cbsDate;
-				}).finally(function(){
-					setUserData(accountResponse);
-					irfStorageService.storeJSON('UserData', accountResponse);
-					deferred.resolve(accountResponse);
-				});
-			}, function() {
+				return BankMaster.getCBSDate();
+			}).then(function(cbsDate) {
+				accountResponse.cbsDate = cbsDate;
+				return Account.getUserRole().$promise;
+			}).then(function(role) {
+				
+			}).finally(function() {
 				setUserData(accountResponse);
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);

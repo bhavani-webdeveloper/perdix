@@ -22,7 +22,8 @@ irf.pageCollection.factory(irf.page("management.Roles"),
                             fieldType: "number",
                             outputMap: {
                                 "id": "roles.role_id",
-                                "name": "roles.role_name"
+                                "name": "roles.role_name",
+                                "accessLevel": "roles.role_access_level"
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
@@ -31,13 +32,20 @@ irf.pageCollection.factory(irf.page("management.Roles"),
                             getListDisplayItem: function(item, index) {
                                 return [
                                     item.id,
-                                    item.name
+                                    item.name,
+                                    "Access Level: " + item.accessLevel
                                 ];
                             }
                         },
                         {
                             key: "roles.role_name",
                             title: "Role Name",
+                            required: true
+                        },
+                        {
+                            key: "roles.role_access_level",
+                            title: "Access Level",
+                            type: "number",
                             required: true
                         }
                     ]

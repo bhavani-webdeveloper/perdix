@@ -2,6 +2,7 @@ irf.models.factory('Account',
 ["$resource", "$httpParamSerializer", "BASE_URL", "$q",
 function($resource,$httpParamSerializer,BASE_URL, $q){
     var endpoint = BASE_URL + '/api/account';
+    var userManagementEndpoint = irf.MANAGEMENT_BASE_URL + "/user-management";
     /*
      * :service can be {change_expired_password,change_password,reset_password}
      * :action can be {init,finish}
@@ -44,6 +45,10 @@ function($resource,$httpParamSerializer,BASE_URL, $q){
             headers: {
                 $no_auth: true
             }
+        },
+        getUserRole: {
+            method: 'GET',
+            url: userManagementEndpoint + 'getRole.php'
         }
     });
 
