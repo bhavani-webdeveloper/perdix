@@ -713,14 +713,17 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
     }; // END OF prepareForms()
 
-    var prepareDataDeferred = $q.defer();
-    var prepareDataPromise = prepareDataDeferred.promise;
+    var prepareDataDeferred;
+    var prepareDataPromise;
 
     return {
         "type": "schema-form",
         "title": "",
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+            prepareDataDeferred = $q.defer();
+            prepareDataPromise = prepareDataDeferred.promise;
+
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};
