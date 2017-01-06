@@ -258,10 +258,48 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.enterprise.businessSubsector",
                         title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        enumCode: "businessSubSector",
-                        parentEnumCode: "businessSector",
-                        parentValueExpr:"model.customer.enterprise.businessSector",
+                        type: "lov",
+                        autolov: true,
+                        bindMap: {
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var businessSubsectors = formHelper.enum('businessSubSector').data;
+                            var businessSectors = formHelper.enum('businessSector').data;
+
+                            var selectedBusinessSector  = null;
+                            
+                            for (var i=0;i<businessSectors.length;i++){
+                                if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
+                                    selectedBusinessSector = businessSectors[i];
+                                    break;
+                                }
+                            }
+
+                            var out = [];
+                            for (var i=0;i<businessSubsectors.length; i++){
+                                if (businessSubsectors[i].parentCode == selectedBusinessSector.code){
+                                    out.push({
+                                        name: businessSubsectors[i].name,
+                                        value: businessSubsectors[i].value
+                                    })    
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context){
+                            model.customer.enterprise.businessSubsector = valueObj.value;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
                     },
                     {
                         key: "customer.enterprise.itrAvailable",
