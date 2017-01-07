@@ -142,6 +142,13 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 		}
 	};
 
+	$scope.skip = function() {
+		if ($scope.test.questions[$scope.currentIndex].linkOrder === 1) {
+			$scope.next();
+		}
+		$scope.next();
+	};
+
 	var prepareQuestionnaire = function() {
 		$scope.error = null;
 		$scope.testStatus = 'Preparing';

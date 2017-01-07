@@ -1,1 +1,155 @@
-.psychometric-page .gap-10{margin-right:10px}.psychometric-page .box{min-height:500px}.psychometric-page .box .box-body.instructions h3 button{margin-top:23px}.psychometric-page .box .box-body.instructions .instruction-container{position:relative;width:100%;padding-top:67%}.psychometric-page .box .box-body.instructions .instruction-container img.bg{position:absolute;top:0;left:0;width:100%;z-index:5}.psychometric-page .box .box-body.instructions .instruction-container p.instruction-1{position:absolute;top:7%;left:24%;z-index:10}.psychometric-page .box .box-body.instructions .instruction-container p.instruction-2{position:absolute;top:3%;right:33%;z-index:10}.psychometric-page .box .box-body.instructions .instruction-container p.instruction-3{position:absolute;top:17%;right:13%;z-index:10}.psychometric-page .box .box-body.instructions .instruction-container p.instruction-4{position:absolute;top:46%;left:64%;z-index:10}.psychometric-page .box .box-body.instructions .instruction-container p.instruction-5{position:absolute;top:73%;right:20%;z-index:10}.psychometric-page .box h3{font-size:60px;font-weight:bold;font-family:'Source Sans Pro',sans-serif;color:#ccc;margin-top:0;margin-left:8px}.psychometric-page .box h3 small{font-size:25px;font-weight:bold;color:#ccc;vertical-align:super}.psychometric-page .box h3 a.play-pause{color:#aaa;float:right;padding:0 6px;font-size:30px;font-weight:normal}.psychometric-page .box h3 a.play-pause span{font-size:15px;font-weight:lighter}.psychometric-page .box h3 .test-duration{font-size:30px;font-weight:normal;color:#888}.psychometric-page .box h3 .test-duration em{font-size:20px;font-weight:normal}.psychometric-page .box article{padding:15px}.psychometric-page .box article.card{padding-top:100px;text-align:center;font-size:50px}.psychometric-page .box article *{font-size:18px}.psychometric-page .box article .question.pictorial{max-height:360px}.psychometric-page .box article .question.pictorial img{max-height:360px}.psychometric-page .box article ul.options{padding:15px 0 0 10px;list-style:none}.psychometric-page .box article ul.options.pictorial li{width:50%;height:360px;padding:6px;float:left;overflow:hidden}.psychometric-page .box article ul.options.pictorial li.selected{border:1px solid #ccc;border-radius:2px}.psychometric-page .box article ul.options.pictorial li .radio-label img{width:100%;max-height:360px}.psychometric-page .box article ul.options li+li{padding-top:12px}.psychometric-page .box article ul.options li.selected .radio-label{font-weight:600}.psychometric-page .box article ul.options .control-indicator{top:6px}.psychometric-page .box article ul.options .radio-label{padding-right:0}
+.psychometric-page .gap-10 {
+  margin-right: 10px;
+}
+.psychometric-page .box {
+  min-height: 500px;
+}
+.psychometric-page .box .box-body.instructions h3 button {
+  margin-top: 23px;
+}
+.psychometric-page .box .box-body.instructions .instruction-container {
+  position: relative;
+  width: 100%;
+  padding-top: 67%;
+}
+.psychometric-page .box .box-body.instructions .instruction-container img.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-1 {
+  position: absolute;
+  top: 7%;
+  left: 24%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-2 {
+  position: absolute;
+  top: 3%;
+  right: 33%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-3 {
+  position: absolute;
+  top: 17%;
+  right: 13%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-4 {
+  position: absolute;
+  top: 46%;
+  left: 64%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.instructions .instruction-container p.instruction-5 {
+  position: absolute;
+  top: 73%;
+  right: 20%;
+  z-index: 10;
+}
+.psychometric-page .box .box-body.test .button-bar {
+  clear: both;
+}
+.psychometric-page .box .box-body.test .button-bar button.next,
+.psychometric-page .box .box-body.test .button-bar button.skip {
+  margin: 15px;
+}
+.psychometric-page .box .box-body.test .button-bar button.next.affix,
+.psychometric-page .box .box-body.test .button-bar button.skip.affix {
+  bottom: 0;
+}
+.psychometric-page .box h3 {
+  font-size: 60px;
+  font-weight: bold;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #ccc;
+  margin-top: 0;
+  margin-left: 8px;
+}
+.psychometric-page .box h3 small {
+  font-size: 25px;
+  font-weight: bold;
+  color: #ccc;
+  vertical-align: super;
+}
+.psychometric-page .box h3 a.play-pause {
+  color: #aaa;
+  float: right;
+  padding: 0 6px;
+  font-size: 30px;
+  font-weight: normal;
+}
+.psychometric-page .box h3 a.play-pause span {
+  font-size: 15px;
+  font-weight: lighter;
+}
+.psychometric-page .box h3 .test-duration {
+  font-size: 30px;
+  font-weight: normal;
+  color: #888;
+}
+.psychometric-page .box h3 .test-duration em {
+  font-size: 20px;
+  font-weight: normal;
+}
+.psychometric-page .box article {
+  padding: 15px;
+}
+.psychometric-page .box article.card {
+  padding-top: 100px;
+  text-align: center;
+  font-size: 50px;
+}
+.psychometric-page .box article * {
+  font-size: 18px;
+}
+.psychometric-page .box article .question.pictorial {
+  max-height: 360px;
+}
+.psychometric-page .box article .question.pictorial img {
+  max-height: 360px;
+}
+.psychometric-page .box article .option.linked {
+  font-weight: bold;
+  font-style: italic;
+  padding-top: 12px;
+  padding-left: 20px;
+}
+.psychometric-page .box article .option.linked + ul.options.radios {
+  padding-left: 40px;
+}
+.psychometric-page .box article ul.options {
+  padding: 15px 0 0 10px;
+  list-style: none;
+}
+.psychometric-page .box article ul.options.pictorial li {
+  width: 48%;
+  height: 360px;
+  padding: 6px;
+  float: left;
+  overflow: hidden;
+  margin: 5px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+.psychometric-page .box article ul.options.pictorial li.selected {
+  border: 2px solid #000;
+}
+.psychometric-page .box article ul.options.pictorial li .radio-label img {
+  width: 100%;
+  max-height: 360px;
+}
+.psychometric-page .box article ul.options li + li {
+  padding-top: 12px;
+}
+.psychometric-page .box article ul.options li.selected .radio-label {
+  font-weight: 600;
+}
+.psychometric-page .box article ul.options .control-indicator {
+  top: 6px;
+}
+.psychometric-page .box article ul.options .radio-label {
+  padding-right: 0;
+}

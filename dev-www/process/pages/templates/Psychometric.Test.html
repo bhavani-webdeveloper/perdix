@@ -51,7 +51,7 @@
               <img class="bg" src="" ng-src="{{instructionImage}}">
             </div>
           </div>
-          <div class="box-body" ng-show="stage==STAGES.TEST">
+          <div class="box-body test" ng-show="stage==STAGES.TEST">
             <h3>
               {{ indexText() }}<small>/{{ test.questions.length }}</small>
               <span class="test-duration pull-right"></span>
@@ -72,7 +72,6 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
             <article ng-hide="testPaused" ng-if="test.questions[currentIndex].pictorial && (!test.questions[currentIndex].linked || test.questions[currentIndex].linkOrder == 1)">
               <div class="question pictorial" ng-bind-html="test.questions[currentIndex].questionText"></div>
@@ -88,10 +87,10 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
             <article ng-hide="testPaused" ng-if="!test.questions[currentIndex].pictorial && test.questions[currentIndex].linked && test.questions[currentIndex].linkOrder == 2">
               <div class="question linked" ng-bind-html="test.questions[currentIndex].questionText"></div>
+              <div class="option linked"><i class="fa fa-dot-circle-o">&nbsp;</i>{{ (test.questions[currentIndex-1].options | filter:{id:test.questions[currentIndex-1].answerId}:true)[0].optionText }}</div>
               <ul class="options radios">
                 <li ng-repeat="option in test.questions[currentIndex].options | filter:{linkedOption:test.questions[currentIndex-1].answerId}:true" ng-class="{selected:test.questions[currentIndex].answerId==option.id}">
                   <label class="radio-item radio-theme">
@@ -104,15 +103,18 @@
                   </label>
                 </li>
               </ul>
-              <button class="btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </article>
+            <div class="button-bar">
+              <button ng-hide="testPaused" data-spy="affix" data-offset-bottom="0" class="skip btn btn-default pull-left" ng-click="skip()">Skip</button>
+              <button ng-hide="testPaused" data-spy="affix" data-offset-bottom="0" class="next btn btn-theme pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
+            </div>
             <article ng-show="testPaused" class="card">
               Take a break!
               <br>
               <span class="break-duration"></span>
             </article>
           </div>
-          <div class="box-body" ng-show="stage==STAGES.END">
+          <div class="box-body end" ng-show="stage==STAGES.END">
             <article class="card">
               {{testStatus=='Close'?"Answers submitted successfully":testStatus}}
               <br>

@@ -48,7 +48,7 @@ function($resource,$httpParamSerializer,BASE_URL, $q){
         },
         getUserRole: {
             method: 'GET',
-            url: userManagementEndpoint + 'getRole.php'
+            url: userManagementEndpoint + '/getRole.php'
         }
     });
 

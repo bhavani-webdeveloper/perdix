@@ -50,6 +50,17 @@
                 }
             }
         }
+        .box-body.test {
+            .button-bar {
+                clear: both;
+                button.next, button.skip {
+                    margin: 15px;
+                    &.affix {
+                        bottom: 0;
+                    }
+                }
+            }
+        }
         min-height: 500px;
         h3 {
             font-size: 60px;
@@ -101,19 +112,30 @@
                     max-height: 360px;
                 }
             }
+            .option.linked {
+                font-weight: bold;
+                font-style: italic;
+                padding-top: 12px;
+                padding-left: 20px;
+                + ul.options.radios {
+                    padding-left: 40px;
+                }
+            }
             ul.options {
                 padding: 15px 0 0 10px;
                 list-style: none;
                 &.pictorial {
                     li {
-                        width: 50%;
+                        width: 48%;
                         height: 360px;
                         padding: 6px;
                         float: left;
                         overflow: hidden;
+                        margin: 5px;
+                        border: 1px solid #999;
+                        border-radius: 2px;
                         &.selected {
-                            border: 1px solid #ccc;
-                            border-radius: 2px;
+                            border: 2px solid #000;
                         }
                         .radio-label img {
                             width: 100%;
