@@ -106,7 +106,7 @@
             </article>
             <div class="button-bar">
               <button ng-hide="testPaused" data-spy="affix" data-offset-bottom="0" class="skip btn btn-default pull-left" ng-click="skip()">Skip</button>
-              <button ng-hide="testPaused" data-spy="affix" data-offset-bottom="0" class="next btn btn-theme pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
+              <button ng-hide="testPaused" data-spy="affix" data-offset-bottom="0" class="next btn btn-{{test.questions[currentIndex].answerId?'theme':'default'}} pull-right" ng-disabled="!test.questions[currentIndex].answerId" ng-click="next()">Next</button>
             </div>
             <article ng-show="testPaused" class="card">
               Take a break!
