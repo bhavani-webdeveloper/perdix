@@ -143,8 +143,10 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 	};
 
 	$scope.skip = function() {
+		$scope.test.questions[$scope.currentIndex].answerId = 0;
 		if ($scope.test.questions[$scope.currentIndex].linkOrder === 1) {
 			$scope.next();
+			$scope.test.questions[$scope.currentIndex].answerId = 0;
 		}
 		$scope.next();
 	};
