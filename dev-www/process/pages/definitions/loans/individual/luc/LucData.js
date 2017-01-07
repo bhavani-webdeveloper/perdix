@@ -14,6 +14,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 initialize: function(model, form, formCtrl) {
 
                     model.loanMonitoringDetails = model.loanMonitoringDetails || {};
+                    if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails==null){
+                                model.loanMonitoringDetails.socialImpactDetails = {};
+                     }
                     //model.branchId = SessionStore.getBranchId() + '';
                     //model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                     model = Utils.removeNulls(model, true);
@@ -47,6 +50,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
                                             model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
                                             model.loanMonitoringDetails.machineDetails[i].serialNumber = response.collateral[i].serialNo;
+
                                             model.loanMonitoringDetails.machineDetails[i].udf1 = response.collateral[i].machineAttachedToBuilding;
                                             model.loanMonitoringDetails.machineDetails[i].udf2 = response.collateral[i].hypothecatedToBank;
                                             assetvalue=assetvalue + response.collateral[i].collateralValue;
@@ -84,10 +88,27 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             model.loanMonitoringDetails.address= model.loanMonitoringDetails.address||response1.enterprise.businessAddress1;
                                             model.loanMonitoringDetails.customerName= model.loanMonitoringDetails.customerName||response1.firstName;
                                             model.loanMonitoringDetails.proprietoryName= model.loanMonitoringDetails.proprietoryName||response1.firstName;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome= model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome||response1.enterprise.avgMonthlyNetIncome;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary=model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary||response1.enterprise.employeeSalary;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue=model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue||response1.enterprise.monthlyTurnover;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers=model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers||response1.enterprise.buyerDetails.length;
+
+                                             if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails==null)
+                                             {
+                                             model.loanMonitoringDetails.socialImpactDetails = {};
+                                             }
+
+                                             var buyerlength;
+
+
+                                            if(model.loanMonitoringDetails.currentStage = "LUCSchedule")
+                                            {
+                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome= response1.enterprise.avgMonthlyNetIncome;
+                                            model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary=response1.enterprise.employeeSalary;
+                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue=response1.enterprise.monthlyTurnover;
+
+                                            if(response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {    
+                                              model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers=response1.enterprise.buyerDetails.length;
+                                            }
+                                            
+                                            }
+                                           
 
                                         }, function(httpRes){
                                             PageHelper.showErrors(httpRes);
@@ -159,6 +180,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanPurposeCategory",
+                                "readonly":true,
                                 type: "select",
                                 enumCode: "loan_purpose_1"
                             }, {
@@ -290,12 +312,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         key: "loanMonitoringDetails.machineDetails[].udf1",
                                         type: "select",
                                         title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                        enumCode: "decisionmaker",
+                                        enumCode: "decisionmaker1",
                                     },{
                                         key: "loanMonitoringDetails.machineDetails[].udf2",
                                         type: "select",
                                         title:"HYPOTHECATED_TO_KINARA",
-                                        enumCode: "decisionmaker",
+                                        enumCode: "decisionmaker1",
                                     }, {
                                         key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
                                         type: "select",
@@ -548,7 +570,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "number",
                                 "onChange": function(modelValue, form, model) {
                                     model.loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen -
-                                        model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
+                                    model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
                                 }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
