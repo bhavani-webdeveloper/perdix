@@ -32,6 +32,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.MonthlyDemandL
                     "title": "DOWNLOAD_MONTHLY_DEMAND_LIST",
                     "items": [{
                         "key": "demandlist.branchCode",
+                        readonly:true,
                         "title": "BRANCH",
                         "type": "select",
                         "enumCode": "branch_code",

@@ -1,9 +1,9 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
-    ["$log", "$state", "$stateParams", "LUC","Enrollment","IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries",
 
-        function($log, $state, $stateParams, LUC,Enrollment,IndividualLoan,LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
+        function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
             PageHelper, Utils, PagesDefinition, Queries) {
 
             var branch = SessionStore.getBranch();
@@ -14,9 +14,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 initialize: function(model, form, formCtrl) {
 
                     model.loanMonitoringDetails = model.loanMonitoringDetails || {};
-                    if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails==null){
-                                model.loanMonitoringDetails.socialImpactDetails = {};
-                     }
+                    if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                        model.loanMonitoringDetails.socialImpactDetails = {};
+                    }
                     //model.branchId = SessionStore.getBranchId() + '';
                     //model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                     model = Utils.removeNulls(model, true);
@@ -36,16 +36,17 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             function(res) {
                                 $log.info(res);
                                 _.assign(model.loanMonitoringDetails, res);
-                                 var loanId= res.loanId;
+                                var loanId = res.loanId;
 
-                            var loanresponse= IndividualLoan.get({id: loanId}).$promise;
-                            loanresponse.then(
-                                function(response)
-                                {
-                                    $log.info("printing loan account");
-                                    $log.info(response);
-                                    //model.loanMonitoringDetails.machineDetails = [];
-                                    var assetvalue =0;
+                                var loanresponse = IndividualLoan.get({
+                                    id: loanId
+                                }).$promise;
+                                loanresponse.then(
+                                    function(response) {
+                                        $log.info("printing loan account");
+                                        $log.info(response);
+                                        //model.loanMonitoringDetails.machineDetails = [];
+                                        var assetvalue = 0;
                                         for (i = 0; i < response.collateral.length; i++) {
                                             model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
                                             model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
@@ -53,79 +54,78 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                             model.loanMonitoringDetails.machineDetails[i].udf1 = response.collateral[i].machineAttachedToBuilding;
                                             model.loanMonitoringDetails.machineDetails[i].udf2 = response.collateral[i].hypothecatedToBank;
-                                            assetvalue=assetvalue + response.collateral[i].collateralValue;
+                                            assetvalue = assetvalue + response.collateral[i].collateralValue;
 
-                                            if (response.collateral[i].machineOld==false)
-                                            {
-                                               model.loanMonitoringDetails.machineDetails[i].assetType="OLD"; 
-                                            }else
-                                            {
-                                                model.loanMonitoringDetails.machineDetails[i].assetType="NEW"; 
+                                            if (response.collateral[i].machineOld == false) {
+                                                model.loanMonitoringDetails.machineDetails[i].assetType = "OLD";
+                                            } else {
+                                                model.loanMonitoringDetails.machineDetails[i].assetType = "NEW";
                                             }
                                         }
 
-                                     model.loanMonitoringDetails.totalCreationAssetValue= assetvalue;
-                                   /* if (!(model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length)) {
-                                        model.loanMonitoringDetails.machineDetails = [];
-                                        for (i = 0; i < response.collateral.length; i++) {
-                                            model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
-                                            model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
-                                            model.loanMonitoringDetails.machineDetails[i].serialNumber = response.collateral[i].serialNo;
-                                        }
-                                    }*/
-
-                                    model.loanMonitoringDetails.loanPurpose= model.loanMonitoringDetails.loanPurpose||response.loanPurpose2;
-                                    model.loanMonitoringDetails.loanPurposeCategory= model.loanMonitoringDetails.loanPurposeCategory||response.loanPurpose1;
-                                   
-                                    var custId = response.customerId;
-
-                                    Enrollment.getCustomerById({id:custId})
-                                        .$promise
-                                        .then(function(response1){
-                                            $log.info("printing customer");
-                                            $log.info(response1);
-
-                                            model.loanMonitoringDetails.address= model.loanMonitoringDetails.address||response1.enterprise.businessAddress1;
-                                            model.loanMonitoringDetails.customerName= model.loanMonitoringDetails.customerName||response1.firstName;
-                                            model.loanMonitoringDetails.proprietoryName= model.loanMonitoringDetails.proprietoryName||response1.firstName;
-
-                                             if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails==null)
-                                             {
-                                             model.loanMonitoringDetails.socialImpactDetails = {};
+                                        model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
+                                        /* if (!(model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length)) {
+                                             model.loanMonitoringDetails.machineDetails = [];
+                                             for (i = 0; i < response.collateral.length; i++) {
+                                                 model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
+                                                 model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
+                                                 model.loanMonitoringDetails.machineDetails[i].serialNumber = response.collateral[i].serialNo;
                                              }
+                                         }*/
 
-                                             var buyerlength;
+                                        model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
+                                        model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
+
+                                        var custId = response.customerId;
+
+                                        if (custId) {
+                                            Enrollment.getCustomerById({
+                                                    id: custId
+                                                })
+                                                .$promise
+                                                .then(function(response1) {
+                                                    $log.info("printing customer");
+                                                    $log.info(response1);
+
+                                                    model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || response1.enterprise.businessAddress1;
+                                                    model.loanMonitoringDetails.customerName = model.loanMonitoringDetails.customerName || response1.firstName;
+                                                    model.loanMonitoringDetails.proprietoryName = model.loanMonitoringDetails.proprietoryName || response1.firstName;
+
+                                                    if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                                                        model.loanMonitoringDetails.socialImpactDetails = {};
+                                                    }
+
+                                                    var buyerlength;
 
 
-                                            if(model.loanMonitoringDetails.currentStage = "LUCSchedule")
-                                            {
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome= response1.enterprise.avgMonthlyNetIncome;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary=response1.enterprise.employeeSalary;
-                                            model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue=response1.enterprise.monthlyTurnover;
+                                                    if (model.loanMonitoringDetails.currentStage = "LUCSchedule") {
+                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
+                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = response1.enterprise.employeeSalary;
+                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
 
-                                            if(response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {    
-                                              model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers=response1.enterprise.buyerDetails.length;
-                                            }
-                                            
-                                            }
-                                           
+                                                        if (response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {
+                                                            model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.enterprise.buyerDetails.length;
+                                                        }
 
-                                        }, function(httpRes){
-                                            PageHelper.showErrors(httpRes);
-                                        })
-                                        .finally(function(){
-                                            PageHelper.hideLoader();
-                                        });
+                                                    }
 
-                                },
-                                function(httpRes)
-                                {
-                                  PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
-                                }   
-                            );
 
-                            model = Utils.removeNulls(model, true);
-                            PageHelper.hideLoader();
+                                                }, function(httpRes) {
+                                                    PageHelper.showErrors(httpRes);
+                                                })
+                                                .finally(function() {
+                                                    PageHelper.hideLoader();
+                                                });
+
+                                        }
+                                    },
+                                    function(httpRes) {
+                                        PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000);
+                                    }
+                                );
+
+                                model = Utils.removeNulls(model, true);
+                                PageHelper.hideLoader();
 
                             }
                         );
@@ -180,7 +180,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanPurposeCategory",
-                                "readonly":true,
+                                "readonly": true,
                                 type: "select",
                                 enumCode: "loan_purpose_1"
                             }, {
@@ -235,11 +235,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucDone=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucRescheduled="No";
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                        if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                            model.loanMonitoringDetails.lucRescheduled = "No";
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
@@ -247,10 +246,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucRescheduled=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                        if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
@@ -279,62 +277,61 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
 
                                 }]
-                            },{
-                                    key: "loanMonitoringDetails.machineDetails",
-                                    condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
-                                    type: "array",
-                                    //startEmpty: true,
-                                    //view:"fixed",
-                                    title: "MACHINE",
-                                    items: [{
-                                        key: "loanMonitoringDetails.machineDetails[].make",
-                                        type: "string",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].type",
-                                        type: "string",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].year",
-                                        type: "date",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].model",
-                                        type: "string",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].serialNumber",
-                                        type: "string",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].assetType",
-                                        type: "select",
-                                        titleMap: {
-                                            "NEW": "NEW",
-                                            "OLD": "OLD",
-                                        },
-                                    },{
-                                        key: "loanMonitoringDetails.machineDetails[].udf1",
-                                        type: "select",
-                                        title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                        enumCode: "decisionmaker1",
-                                    },{
-                                        key: "loanMonitoringDetails.machineDetails[].udf2",
-                                        type: "select",
-                                        title:"HYPOTHECATED_TO_KINARA",
-                                        enumCode: "decisionmaker1",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
-                                        type: "select",
-                                        enumCode: "decisionmaker1",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
-                                        type: "select",
-                                        enumCode: "decisionmaker1",
-                                    }, {
-                                        key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
-                                        type: "select",
-                                        titleMap: {
-                                            "VHFPL": "VHFPL",
-                                        },
-                                    }]
-                                },
-                                 {
+                            }, {
+                                key: "loanMonitoringDetails.machineDetails",
+                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
+                                type: "array",
+                                //startEmpty: true,
+                                //view:"fixed",
+                                title: "MACHINE",
+                                items: [{
+                                    key: "loanMonitoringDetails.machineDetails[].make",
+                                    type: "string",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].type",
+                                    type: "string",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].year",
+                                    type: "date",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].model",
+                                    type: "string",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].serialNumber",
+                                    type: "string",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].assetType",
+                                    type: "select",
+                                    titleMap: {
+                                        "NEW": "NEW",
+                                        "OLD": "OLD",
+                                    },
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].udf1",
+                                    type: "select",
+                                    title: "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
+                                    enumCode: "decisionmaker1",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].udf2",
+                                    type: "select",
+                                    title: "HYPOTHECATED_TO_KINARA",
+                                    enumCode: "decisionmaker1",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].hypothecationLabelBeenApplied",
+                                    type: "select",
+                                    enumCode: "decisionmaker1",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].companyNameInOriginalInvoice",
+                                    type: "select",
+                                    enumCode: "decisionmaker1",
+                                }, {
+                                    key: "loanMonitoringDetails.machineDetails[].hypothecatedTo",
+                                    type: "select",
+                                    titleMap: {
+                                        "VHFPL": "VHFPL",
+                                    },
+                                }]
+                            }, {
                                 type: "fieldset",
                                 title: "",
                                 condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
@@ -404,22 +401,20 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucDone=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucRescheduled="No";
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                        if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                            model.loanMonitoringDetails.lucRescheduled = "No";
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
                                     condition: "model.loanMonitoringDetails.lucDone=='No'",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
-                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucRescheduled=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
@@ -438,10 +433,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     key: "loanMonitoringDetails.lucEscalatedReason",
                                     type: "select",
                                     titleMap: {
-                                            "Mis utilized": "Mis utilized",
-                                            "Not utilized": "Not utilized",
-                                            "Partially utilized": "Partially utilized",
-                                        },
+                                        "Mis utilized": "Mis utilized",
+                                        "Not utilized": "Not utilized",
+                                        "Partially utilized": "Partially utilized",
+                                    },
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
                                 }]
                             }, {
@@ -508,22 +503,20 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucDone=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucRescheduled="No";
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                        if (model.loanMonitoringDetails.lucDone == "Yes") {
+                                            model.loanMonitoringDetails.lucRescheduled = "No";
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
                                     condition: "model.loanMonitoringDetails.lucDone=='No'",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
-                                     "onChange": function(modelValue, form, model) {
-                                        if(model.loanMonitoringDetails.lucRescheduled=="Yes")
-                                        {
-                                            model.loanMonitoringDetails.lucEscalated="No";
-                                        }  
+                                    "onChange": function(modelValue, form, model) {
+                                        if (model.loanMonitoringDetails.lucRescheduled == "Yes") {
+                                            model.loanMonitoringDetails.lucEscalated = "No";
+                                        }
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
@@ -540,12 +533,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     condition: "model.loanMonitoringDetails.lucDone=='No'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
-                                     type: "select",
+                                    type: "select",
                                     titleMap: {
-                                            "Mis utilized": "Mis utilized",
-                                            "Not utilized": "Not utilized",
-                                            "Partially utilized": "Partially utilized",
-                                        },
+                                        "Mis utilized": "Mis utilized",
+                                        "Not utilized": "Not utilized",
+                                        "Partially utilized": "Partially utilized",
+                                    },
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' ",
                                 }]
                             },
@@ -570,7 +563,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 type: "number",
                                 "onChange": function(modelValue, form, model) {
                                     model.loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee = model.loanMonitoringDetails.socialImpactDetails.totalNumberOfMen -
-                                    model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
+                                        model.loanMonitoringDetails.socialImpactDetails.menPartTimeEmployee;
                                 }
                             }, {
                                 key: "loanMonitoringDetails.socialImpactDetails.menFullTimeEmployee",
@@ -680,8 +673,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                             }
                         }]
-                    },
-                    {
+                    }, {
                         "type": "actionbox",
                         condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                         "items": [{
@@ -710,25 +702,23 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }
                             }
                         }]
-                    },{
+                    }, {
                         "type": "actionbox",
                         condition: "model.loanMonitoringDetails.lucDone== 'Yes'",
                         "items": [{
                             "type": "submit",
                             "title": "Close"
                         }]
-                    },
-                    {
+                    }, {
                         "type": "actionbox",
                         "items": [{
                             "type": "save",
                             "title": "OffLine Save"
                         }]
-                    },
-                    {
+                    }, {
                         "type": "actionbox",
                         condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'||model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
-                        "items": [ {
+                        "items": [{
                             type: "button",
                             icon: "fa fa-step-backward",
                             title: "Sent Back",
