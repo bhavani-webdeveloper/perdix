@@ -367,7 +367,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                         fileType: "*/*",
                                         category: "Loan",
                                         subCategory: "DOC1",
-                                        "notitle": true
+                                        "notitle": true,
+                                        using: "scanner"
                                     }]
                                 }]
                             }] // END of array items
