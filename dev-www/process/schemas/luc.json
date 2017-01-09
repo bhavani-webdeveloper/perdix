@@ -75,7 +75,7 @@
 				},
 				"isAssetsOrdered": {
 					"title": "ARE_ASSETS_ORDERED",
-					"type": "number"
+					"type":"string"
 				},
 				"reasonForNotOrderingAssets": {
 					"title": "REASONS_FOR_NOT_ORDERING_ASSETS",
