@@ -43,9 +43,9 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				return BankMaster.getCBSDate();
 			}).then(function(cbsDate) {
 				accountResponse.cbsDate = cbsDate;
-				return Account.getUserRole().$promise;
+				return Account.getUserRole({'userId':accountResponse.login}).$promise;
 			}).then(function(role) {
-				
+				accountResponse.role = role;
 			}).finally(function() {
 				setUserData(accountResponse);
 				irfStorageService.storeJSON('UserData', accountResponse);

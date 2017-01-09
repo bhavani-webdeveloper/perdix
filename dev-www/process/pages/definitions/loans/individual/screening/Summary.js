@@ -218,7 +218,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '</tbody>'+
     '</table>';
 
-    var prepareForms = function(model, form) {
+    var prepareForms = function(model) {
+        var form = [];
 
         var bsCounter = 0;
         var bsLeft = [];
@@ -711,6 +712,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     ]
         // });
 
+        return form;
     }; // END OF prepareForms()
 
     var prepareDataDeferred;
@@ -773,7 +775,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     });
 
                     $q.all([onSuccessPromise, p3]).finally(function() {
-                        PageHelper.hideLoader();
                         deferred.resolve();
                     });
                 });
@@ -783,15 +784,21 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             return deferred.promise;
         },
         eventListeners: {},
-        form: [],
+        form: [{
+            type: 'section',
+            html: '<br><br><br><center>Loading...</center>'
+        }],
         initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+            PageHelper.showLoader();
             var $this = this;
             if (model.$prepared) {
-                prepareForms(model, $this.form);
+                $this.form = prepareForms(model);
+                PageHelper.hideLoader();
             } else {
                 prepareDataPromise.then(function() {
-                    prepareForms(model, $this.form);
+                    $this.form = prepareForms(model);
                     formCtrl.redraw();
+                    PageHelper.hideLoader();
                 });
             }
             return $q.resolve();

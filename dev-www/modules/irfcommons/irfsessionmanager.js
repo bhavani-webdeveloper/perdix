@@ -67,16 +67,15 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	};
 
 	self.getRole = function() {
-		var role;
-		switch(session.roleCode) {
-			case 'A':
-				role = 'WEALTH_MANAGER';
-				break;
-			case 'SA':
-				role = 'SENIOR_WEALTH_MANAGER';
-				break;
+		if (session.role) {
+			return session.role.name;
+		} else {
+			return session.roleCode;
 		}
-		return role;
+	};
+
+	self.getUserRole = function() {
+		return session.role;
 	};
 
 	self.getLanguage = function() {

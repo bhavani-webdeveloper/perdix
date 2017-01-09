@@ -581,13 +581,13 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             }
         },
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-            $timeout(function(){
+            //formCtrl.scope.$on('irf-sf-init', function(){
                 _.forOwn(objectifiedBureaus, function(v, k) {
                     if (v.highMark && v.highMark.reportHtml) {
                         $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
                     }
                 });
-            });
+            //});
         },
         eventListeners: {
         },
