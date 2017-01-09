@@ -100,13 +100,24 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     var buyerlength;
 
 
+
                                                     if (model.loanMonitoringDetails.currentStage = "LUCSchedule") {
+
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
-                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = response1.enterprise.employeeSalary;
+
+                                                        if(response1.enterprise.familyMembers && response.enterprise.familyMembers.length)
+                                                        {
+                                                           model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary += response1.enterprise.familyMembers[i].salary; 
+                                                        }
+                                                        
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
 
+
+
                                                         if (response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {
+
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.enterprise.buyerDetails.length;
+
                                                         }
 
                                                     }
