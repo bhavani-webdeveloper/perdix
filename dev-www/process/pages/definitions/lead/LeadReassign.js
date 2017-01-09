@@ -80,7 +80,8 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         "enumCode": "centre",
                         type: "select",
                         "parentEnumCode": "branch_id",
-                        "parentValueExpr": "model.lead.branchId"
+                        "parentValueExpr": "model.lead.branchId",
+                        required: true
                     }, ]
                 },
 
