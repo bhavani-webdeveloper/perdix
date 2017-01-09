@@ -17,6 +17,31 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
         return true;
     }
 
+    var getRelationFromClass = function(relation){
+        if (relation == 'guarantor'){
+            return 'Guarantor';
+        } else if (relation == 'applicant'){
+            return 'Applicant';
+        } else if (relation == 'co-applicant'){
+            return 'Co-Applicant';
+        }
+    }
+
+    var preLoanSaveOrProceed = function(loanAccount){
+        if (_.hasIn(loanAccount, 'guarantors') && _.isArray(loanAccount.guarantors)){
+            for (var i=0;i<loanAccount.guarantors.length; i++){
+                var guarantor = loanAccount.guarantors[i];
+                if (!_.hasIn(guarantor, 'guaUrnNo') || _.isNull(guarantor, 'guaUrnNo')){
+                    PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                    return false;
+                }
+
+            }
+        }
+        
+        return true;
+    }
+
     var validateAndPopulateMitigants = function(model){
         delete model.loanAccount.loanMitigants;
         model.loanAccount.loanMitigants = [];
@@ -242,10 +267,6 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     });
                     model.loanAccount.applicant = params.customer.urnNo;
                 }
-                /* TODO remove this later */
-                if (!_.hasIn(model.loanAccount, "customerId") || model.loanAccount.customerId == null){
-                    model.loanAccount.customerId = params.customer.id;
-                }
             },
             "lead-loaded": function(bundleModel, model, obj) {
                 model.lead = obj;
@@ -310,8 +331,46 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     model.loanAccount.guarantors = [];
                 }
                 model.loanAccount.guarantors.push({
-                    'guaCustomerId': params.customer.id
+                    'guaCustomerId': params.customer.id,
+                    'guaUrnNo': params.customer.urnNo
                 });
+            },
+            "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                $log.info("Inside enrolment-removed");
+                /**
+                 * Following should happen
+                 * 
+                 * 1. Remove customer from Loan Customer Relations
+                 * 2. Remove custoemr from the placeholders. If Applicant, remove from applicant. If Guarantor, remove from guarantors.
+                 */
+
+                // 1.
+                for (var i=0;i<model.loanAccount.loanCustomerRelations.length;i++){
+                    var t = model.loanAccount.loanCustomerRelations[i];
+                    if (t.customerId == enrolmentDetails.customerId && t.relation == getRelationFromClass(enrolmentDetails.customerClass)){
+                        model.loanAccount.loanCustomerRelations.splice(i,1);
+                        break;
+                    }
+                }
+
+                // 2.
+                switch(enrolmentDetails.customerClass){
+                    case 'guarantor':
+                        for (var i=0;i<model.loanAccount.guarantors.length; i++){
+                            var item = model.loanAccount.guarantors[i];
+                            if (item.guaCustomerId == enrolmentDetails.customerId){
+                                model.loanAccount.guarantors.splice(i,1);
+                            }
+                        }
+                        break;
+                    case 'applicant':
+                        
+                        break;
+                    case 'co-applicant':
+                        
+                        break;
+
+                }
             },
             "load-deviation":function(bundleModel, model, params){
                 $log.info("Inside Deviation List");
@@ -1609,6 +1668,9 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if(!validateAndPopulateMitigants(model)){
                     return;
                 }
+                if (!preLoanSaveOrProceed(model.loanAccount)){
+                    return;
+                }
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
@@ -1620,6 +1682,9 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             // reqData.remarks = model.review.remarks;
                             reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                             reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
+                            
+                            
+                            
                             PageHelper.showLoader();
 
                             var completeLead = false;
@@ -1652,9 +1717,15 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             holdButton: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
                 /* TODO Call save service for the loan */
+
+                if (!preLoanSaveOrProceed(model.loanAccount)){
+                    return;
+                }
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
+
+                            
 
                             var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                             reqData.loanAccount.status = 'HOLD';
@@ -1681,7 +1752,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if (!validateForm(formCtrl)){
                     return;
                 }
+                if (!preLoanSaveOrProceed(model.loanAccount)){
+                    return;
+                }
                 Utils.confirm("Are You Sure?").then(function(){
+                    
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
                     reqData.loanProcessAction = "PROCEED";
@@ -1716,6 +1791,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     return;
                 }
 
+
                 if (model.loanAccount.currentStage === 'Application' && model.loanAccount.psychometricCompleted != 'Completed') {
                     PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
                     return;
@@ -1747,6 +1823,10 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             }
                         }
                     }
+                }
+
+                if (!preLoanSaveOrProceed(model.loanAccount)){
+                    return;
                 }
 
                 Utils.confirm("Are You Sure?").then(function(){

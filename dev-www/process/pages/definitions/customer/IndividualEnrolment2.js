@@ -113,6 +113,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         }
                     },
                     preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                        // console.log("Inside preDestroy");
+                        // console.log(arguments);
+                        if (bundlePageObj){
+                            var enrolmentDetails = {
+                                'customerId': model.customer.id,
+                                'customerClass': bundlePageObj.pageClass,
+                                'firstName': model.customer.firstName
+                            }
+                            // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
+                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                        }
                         return $q.resolve();
                     },
                     eventListeners: {
