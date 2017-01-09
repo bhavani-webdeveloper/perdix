@@ -210,8 +210,8 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 });
             }
 
-            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
-            if (lsqMenu) {
+            var lrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
+            if (lrqMenu) {
                 IndividualLoan.search({
                     'stage':  'Rejected',
                     'enterprisePincode': '',
@@ -222,9 +222,9 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    lsqMenu.data = Number(response.headers['x-total-count']);
+                    lrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    lsqMenu.data = '-';
+                    lrqMenu.data = '-';
                 });
             }
 

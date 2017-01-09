@@ -627,7 +627,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 }
                             },
-                            {
+                            /*{
                                 title: "BUSINESS_INCOME",
                                 //type: "amount",
                                 key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
@@ -637,7 +637,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 title: "LOAN_PURPOSE_VALUE",
                                 //type: "amount",
                                 key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4"
-                            }
+                            }*/
                             /*,
                             {
                                 "key": "loanAccount.loanPurpose3",

@@ -47,6 +47,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         $log.info(response);
                                         //model.loanMonitoringDetails.machineDetails = [];
                                         var assetvalue = 0;
+                                        if (response.collateral &&  response.collateral.length && model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length) {
                                         for (i = 0; i < response.collateral.length; i++) {
                                             model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
                                             model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
@@ -62,6 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                 model.loanMonitoringDetails.machineDetails[i].assetType = "NEW";
                                             }
                                         }
+                                       }
 
                                         model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
                                         /* if (!(model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length)) {
