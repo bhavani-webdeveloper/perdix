@@ -1141,6 +1141,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     else
                         model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';*/
+                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';
 
                     var trancheTotalAmount=0;
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
