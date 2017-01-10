@@ -62,7 +62,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         });
 
                                         var assetvalue = 0;
-                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
+                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") 
+                                        {
                                             $log.info("inside sc");
                                             if (response.collateral && response.collateral.length) {
                                                  $log.info("inside col");
@@ -71,6 +72,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                 for (i = 0; i < response.collateral.length; i++) {
                                                     $log.info("inside for");
                                                     var machineModel = {};
+                                                    var machineModel1 = {};
                                                     machineModel.type = response.collateral[i].collateralType;
                                                     machineModel.model = response.collateral[i].modelNo;
                                                     machineModel.udf1 = response.collateral[i].machineAttachedToBuilding;
@@ -78,6 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     machineModel.serialNumber = response.collateral[i].serialNo;
                                                     machineModel.make = response.collateral[i].manufacturer;
                                                     machineModel.serialNumber = response.collateral[i].serialNo;
+                                                    machineModel1.date = response.collateral[i].expectedPurchaseDate;
                                                     assetvalue = assetvalue + response.collateral[i].collateralValue;
 
                                                     if (response.collateral[i].machineOld == false) {
@@ -85,7 +88,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     } else {
                                                         machineModel.assetType = "NEW";
                                                     }
-                                                    model.loanMonitoringDetails.machineDetails.push(machineModel);
+                                    
+                                                    if(machineModel1.date !== null)
+                                                    {
+                                                     model.loanMonitoringDetails.machineDetails.push(machineModel);   
+                                                    }
+                                                    
                                                 }
                                             }
 
