@@ -63,10 +63,13 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                         var assetvalue = 0;
                                         if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
+                                            $log.info("inside sc");
                                             if (response.collateral && response.collateral.length) {
+                                                 $log.info("inside col");
                                                 model.loanMonitoringDetails.machineDetails = [];
                                                 var machineModel = {};
                                                 for (i = 0; i < response.collateral.length; i++) {
+                                                    $log.info("inside for");
                                                     machineModel.type = response.collateral[i].collateralType;
                                                     machineModel.model = response.collateral[i].modelNo;
                                                     machineModel.udf1 = response.collateral[i].machineAttachedToBuilding;
@@ -82,6 +85,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         machineModel.assetType = "NEW";
                                                     }
                                                     model.loanMonitoringDetails.machineDetails.push(machineModel);
+                                                    $log.info(model.loanMonitoringDetails.machineDetails);
                                                 }
 
                                             }
