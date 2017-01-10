@@ -201,16 +201,159 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             }] // END of array items
                         }]
                     }] // END of box items
+            },
+            {
+                "type": "box",
+                "title": "POST_REVIEW",
+                "condition": "model.loanAccount.id",
+                "items": [
+                    {
+                        key: "review.action",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='REJECT'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
+
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                             out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                                
+                            {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='HOLD'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.holdButton(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='SEND_BACK'",
+                        items: [{
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            required: true
+                        }, {
+                            key: "review.targetStage",
+                            title: "SEND_BACK_TO_STAGE",
+                            type: "select",
+                            required: true,
+                            titleMap: {
+                                "LoanInitiation": "LoanInitiation",
+                                "LoanBooking": "LoanBooking",
+                                "DocumentUpload":"DocumentUpload"
+
+                            },
+                        }, {
+                            key: "review.sendBackButton",
+                            type: "button",
+                            title: "SEND_BACK",
+                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                        }]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='PROCEED'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "PROCEED",
+                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    }
+                ]
             }, {
                 "type": "actionbox",
                 "items": [{
                     "type": "button",
                     "title": "BACK",
                     "onClick": "actions.goBack(model, formCtrl, form, $event)"
-                }, {
+                }/*, {
                     "type": "submit",
                     "title": "Submit"
-                }]
+                }*/]
             }],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -228,7 +371,86 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 }
             },
             actions: {
-                submit: function(model, form, formName) {
+                reject: function(model, formCtrl, form, $event){
+                    $log.info("Inside reject()");
+                    Utils.confirm("Are You Sure?").then(function(){
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.stage = "Rejected";
+                        reqData.remarks = model.review.remarks;
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                $state.go('Page.Engine', {
+                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                });
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    })
+                },
+                holdButton: function(model, formCtrl, form, $event){
+                    $log.info("Inside save()");
+                    Utils.confirm("Are You Sure?")
+                        .then(
+                            function(){
+                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                                reqData.loanAccount.status = 'HOLD';
+                                reqData.loanProcessAction = "SAVE";
+                                reqData.remarks = model.review.remarks;
+                                PageHelper.showLoader();
+                                IndividualLoan.create(reqData)
+                                    .$promise
+                                    .then(function(res){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                        });
+                                    }, function(httpRes){
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                    .finally(function(httpRes){
+                                        PageHelper.hideLoader();
+                                    })
+                            }
+                        );
+                },
+                sendBack: function(model, formCtrl, form, $event){
+                    $log.info("Inside sendBack()");
+                    Utils.confirm("Are You Sure?").then(function(){
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.remarks = model.review.remarks;
+                        reqData.stage = model.review.targetStage;
+                        reqData.remarks = model.review.remarks;
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                $state.go('Page.Engine', {
+                                    pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                });
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    })
+
+                },
+                proceed: function(model, form, formName) {
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED'

@@ -17,6 +17,51 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         };
 
+        var validateForm = function(formCtrl){
+            formCtrl.scope.$broadcast('schemaFormValidate');
+            if (formCtrl && formCtrl.$invalid) {
+                PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                return false;
+            }
+            return true;
+        };
+
+        var navigateToQueue = function(model){
+            if(model.currentStage=='LoanInitiation')
+                $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId:null});
+            if(model.currentStage=='PendingForPartner')
+                $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingForPartnerQueue', pageId:null});
+        };
+
+        var populateLoanCustomerRelations = function(model){
+            model.loanAccount.loanCustomerRelations = [];
+            model.loanAccount.loanCustomerRelations.push({
+                customerId: model.loanAccount.applicantId,
+                urn: model.loanAccount.applicant,
+                relation: 'Applicant'
+            });
+            if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length) {
+                for (var i in model.loanAccount.coBorrowers) {
+                    var coB = model.loanAccount.coBorrowers[i];
+                    if (coB.urn || coB.customerId) {
+                        coB.relation = 'Co-Applicant';
+                        coB.urn = coB.coBorrowerUrnNo;
+                        model.loanAccount.loanCustomerRelations.push(coB);
+                    }
+                }
+            }
+            if (model.loanAccount.guarantors && model.loanAccount.guarantors.length) {
+                for (var i in model.loanAccount.guarantors) {
+                    var gua = model.loanAccount.guarantors[i];
+                    if (gua.urn || gua.customerId) {
+                        gua.relation = 'Guarantor';
+                        gua.urn = gua.guaUrnNo;
+                        model.loanAccount.loanCustomerRelations.push(gua);
+                    }
+                }
+            }
+        }
+
         var calculateTotalValue = function(value, form, model){
             if (_.isNumber(model.loanAccount.collateral[form.arrayIndex].quantity) && _.isNumber(value)){
                 model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].loanToValue;
@@ -131,6 +176,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup
+                model.currentStage = 'LoanInitiation';
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
@@ -210,6 +256,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
                         $log.info("resp");
                         model.loanAccount = resp;
+                        model.currentStage = resp.currentStage;
 
                         model.additional = model.additional || {};
 
@@ -1069,16 +1116,197 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 ]
             },
             {
+                "type": "box",
+                "title": "POST_REVIEW",
+                "condition": "model.loanAccount.id",
+                "items": [
+                    {
+                        key: "review.action",
+                        condition: "model.currentStage == 'PendingForPartner'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        condition: "model.currentStage == 'LoanInitiation'",
+                        type: "radios",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='REJECT'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
+
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                             out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                                
+                            {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='HOLD'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.holdButton(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='SEND_BACK'",
+                        items: [{
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            required: true
+                        }, {
+                            key: "review.targetStage",
+                            title: "SEND_BACK_TO_STAGE",
+                            type: "select",
+                            condition: "model.currentStage == 'PendingForPartner'",
+                            required: true,
+                            titleMap: {
+                                "LoanInitiation": "LoanInitiation"
+                            },
+                        }, {
+                            key: "review.targetStage",
+                            title: "SEND_BACK_TO_STAGE",
+                            type: "select",
+                            condition: "model.currentStage == 'LoanInitiation'",
+                            required: true,
+                            titleMap: {
+                                "Screening": "Screening",
+                                "ScreeningReview": "ScreeningReview",
+                                "Application": "Application",
+                                "ApplicationReview": "ApplicationReview",
+                                "FieldAppraisal": "FieldAppraisal",
+                                "FieldAppraisalReview": "FieldAppraisalReview",
+                                "CentralRiskReview": "CentralRiskReview",
+                                "LoanSanction": "LoanSanction"
+                            },
+                        }, {
+                            key: "review.sendBackButton",
+                            type: "button",
+                            title: "SEND_BACK",
+                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                        }]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='PROCEED'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "PROCEED",
+                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    }
+                ]
+            }/*,
+            {
                 "type": "actionbox",
-                "items": [/*{
+                //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+                "condition": "model.loanAccount.customerId",
+                "items": [
+                    {
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "items": [\*{
                     "type": "save",
                     "title": "SAVE_OFFLINE",
-                },*/
+                },*\
                 {
                     "type": "submit",
                     "title": "SUBMIT"
                 }]
-            }],
+            }*/],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
@@ -1093,7 +1321,95 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     return deferred.promise;
                 },
-                submit: function(model, form, formName) {
+                reject: function(model, formCtrl, form, $event){
+                    $log.info("Inside reject()");
+                    if (!validateForm(formCtrl)){
+                        return;
+                    }
+                    Utils.confirm("Are You Sure?").then(function(){
+                        populateLoanCustomerRelations(model);
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.stage = "Rejected";
+                        if(reqData.loanAccount.frequency)
+                            reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+                        reqData.remarks = model.review.remarks;
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                return navigateToQueue(model);
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    })
+                },
+                holdButton: function(model, formCtrl, form, $event){
+                    $log.info("Inside save()");
+                    Utils.confirm("Are You Sure?")
+                        .then(
+                            function(){
+                                populateLoanCustomerRelations(model);
+                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                                reqData.loanAccount.status = 'HOLD';
+                                reqData.loanProcessAction = "SAVE";
+                                if(reqData.loanAccount.frequency)
+                                    reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+                                reqData.remarks = model.review.remarks;
+                                PageHelper.showLoader();
+                                IndividualLoan.create(reqData)
+                                    .$promise
+                                    .then(function(res){
+                                        return navigateToQueue(model);
+                                    }, function(httpRes){
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                    .finally(function(httpRes){
+                                        PageHelper.hideLoader();
+                                    })
+                            }
+                        );
+                },
+                sendBack: function(model, formCtrl, form, $event){
+                    $log.info("Inside sendBack()");
+                    if (!validateForm(formCtrl)){
+                        return;
+                    }
+                    populateLoanCustomerRelations(model);
+                    Utils.confirm("Are You Sure?").then(function(){
+                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.remarks = model.review.remarks;
+                        reqData.stage = model.review.targetStage;
+                        reqData.remarks = model.review.remarks;
+                        if(reqData.loanAccount.frequency)
+                            reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                return navigateToQueue(model);
+                            }, function(httpRes){
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    })
+
+                },
+                proceed: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
 
@@ -1209,32 +1525,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     // BUG FIX DO-customer id going null
-                    model.loanAccount.loanCustomerRelations = [];
-                    model.loanAccount.loanCustomerRelations.push({
-                        customerId: model.loanAccount.applicantId,
-                        urn: model.loanAccount.applicant,
-                        relation: 'Applicant'
-                    });
-                    if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length) {
-                        for (var i in model.loanAccount.coBorrowers) {
-                            var coB = model.loanAccount.coBorrowers[i];
-                            if (coB.urn || coB.customerId) {
-                                coB.relation = 'Co-Applicant';
-                                coB.urn = coB.coBorrowerUrnNo;
-                                model.loanAccount.loanCustomerRelations.push(coB);
-                            }
-                        }
-                    }
-                    if (model.loanAccount.guarantors && model.loanAccount.guarantors.length) {
-                        for (var i in model.loanAccount.guarantors) {
-                            var gua = model.loanAccount.guarantors[i];
-                            if (gua.urn || gua.customerId) {
-                                gua.relation = 'Guarantor';
-                                gua.urn = gua.guaUrnNo;
-                                model.loanAccount.loanCustomerRelations.push(gua);
-                            }
-                        }
-                    }
+                    populateLoanCustomerRelations(model);
 
                     if(model.loanAccount.portfolioInsuranceUrn != ''){
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";
@@ -1266,7 +1557,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     resp.stage = 'LoanBooking';
                                 //reqData.loanProcessAction="PROCEED";
                                 PageHelper.showLoader();
-                                IndividualLoan.create(resp,function(resp,headers){
+                                IndividualLoan.update(resp,function(resp,headers){
                                     $log.info(resp);
                                     PageHelper.showProgress("loan-create","Loan Created",5000);
                                     $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId: null});
@@ -1293,11 +1584,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             reqData.loanProcessAction="PROCEED";
                             if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
                                 reqData.stage = 'LoanBooking';
-                            IndividualLoan.create(reqData,function(resp,headers){
+                            IndividualLoan.update(reqData,function(resp,headers){
                                 model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Proceed:" + model.loanAccount.id);
                                 PageHelper.showLoader();
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId: null});
+                                // $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId: null});
+                                return navigateToQueue(model);
                             },function(errResp){
                                 $log.info(errResp);
                                 PageHelper.showErrors(errResp);
