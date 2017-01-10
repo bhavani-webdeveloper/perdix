@@ -1787,6 +1787,12 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if (!preLoanSaveOrProceed(model.loanAccount)){
                     return;
                 }
+
+                if (model.review.remarks==null || model.review.remarks ==""){
+                    PageHelper.showProgress("update-loan", "Remarks is mandatory");
+                    return false;
+                }
+                
                 Utils.confirm("Are You Sure?")
                     .then(
                         function(){
@@ -1815,9 +1821,15 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             sendBack: function(model, formCtrl, form, $event){
                 $log.info("Inside sendBack()");
-                if (!validateForm(formCtrl)){
-                    return;
+                // if (!validateForm(formCtrl)){
+                //     return;
+                // }
+
+                if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
+                    PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
+                    return false;
                 }
+
                 if (!preLoanSaveOrProceed(model.loanAccount)){
                     return;
                 }
@@ -1994,8 +2006,9 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             reject: function(model, formCtrl, form, $event){
                 $log.info("Inside reject()");
-                if (!validateForm(formCtrl)){
-                    return;
+                if (model.review.remarks==null || model.review.remarks ==""){
+                    PageHelper.showProgress("update-loan", "Remarks is mandatory");
+                    return false;
                 }
                 Utils.confirm("Are You Sure?").then(function(){
 
