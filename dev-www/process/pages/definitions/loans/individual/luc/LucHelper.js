@@ -71,11 +71,12 @@ irf.pageCollection.factory("LucHelper", ["$log", "$q", "LUC", 'PageHelper', 'irf
                 PageHelper.showLoader();
                 irfProgressMessage.pop('Go Back', 'Working...');
                 res.loanMonitoringAction = "PROCEED";
-                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule") 
+                if (res.loanMonitoringDetails.currentStage =="LUCSchedule"||res.loanMonitoringDetails.currentStage == "LUCReschedule")
                 {
                     res.stage="LUCEscalate";
                 } 
-                else if (res.loanMonitoringDetails.currentStage == "LUCEscalate") {
+                else if (res.loanMonitoringDetails.currentStage == "LUCEscalate") 
+                {
                     res.stage="LUCLegalRecovery";
                 } 
                 LUC.update(res, function(res, headers) {
