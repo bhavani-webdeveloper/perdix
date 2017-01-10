@@ -41,36 +41,42 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 var loanresponse = IndividualLoan.get({
                                     id: loanId
                                 }).$promise;
+
                                 loanresponse.then(
                                     function(response) {
                                         $log.info("printing loan account");
                                         $log.info(response);
-                                        //model.loanMonitoringDetails.machineDetails = [];
                                         var assetvalue = 0;
-                                        if (response.collateral &&  response.collateral.length && model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length) {
-                                            model.loanMonitoringDetails.machineDetails=model.loanMonitoringDetails.machineDetails||[];
-                                        for (i = 0; i < response.collateral.length; i++) {
-                                            model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
-                                            model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
-                                            model.loanMonitoringDetails.machineDetails[i].serialNumber = response.collateral[i].serialNo;
+                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") 
+                                        {
+                                            if (response.collateral && response.collateral.length && model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length) {
+                                                model.loanMonitoringDetails.machineDetails = [];
+                                                var machineModel = {};
+                                                for (i = 0; i < response.collateral.length; i++) {
+                                                    machineModel.type = response.collateral[i].collateralType;
+                                                    machineModel.model = response.collateral[i].modelNo;
+                                                    machineModel.udf1 = response.collateral[i].machineAttachedToBuilding;
+                                                    machineModel.udf2 = response.collateral[i].hypothecatedToBank;
+                                                    machineModel.serialNumber = response.collateral[i].serialNo;
+                                                    machineModel.make = response.collateral[i].manufacturer;
+                                                    machineModel.serialNumber = response.collateral[i].serialNo;
+                                                    assetvalue = assetvalue + response.collateral[i].collateralValue;
 
-                                            model.loanMonitoringDetails.machineDetails[i].udf1 = response.collateral[i].machineAttachedToBuilding;
-                                            model.loanMonitoringDetails.machineDetails[i].udf2 = response.collateral[i].hypothecatedToBank;
-                                            assetvalue = assetvalue + response.collateral[i].collateralValue;
+                                                    if (response.collateral[i].machineOld == false) {
+                                                        machineModel.assetType = "OLD";
+                                                    } else {
+                                                        machineModel.assetType = "NEW";
+                                                    }
+                                                    model.loanMonitoringDetails.machineDetails.push(machineModel);
+                                                }
 
-                                            if (response.collateral[i].machineOld == false) {
-                                                model.loanMonitoringDetails.machineDetails[i].assetType = "OLD";
-                                            } else {
-                                                model.loanMonitoringDetails.machineDetails[i].assetType = "NEW";
                                             }
+
+                                            model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
+                                            model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
+                                            model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
+
                                         }
-                                       }
-
-                                        model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
-
-
-                                        model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
-                                        model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
 
                                         var custId = response.customerId;
 
@@ -91,25 +97,23 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
 
-                                                    var buyerlength;
-
-
-
                                                     if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
 
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
-
-                                                        if(response1.enterprise.familyMembers && response.enterprise.familyMembers.length)
-                                                        {
-                                                           model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary += response1.enterprise.familyMembers[i].salary; 
-                                                        }
-                                                        
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
 
-                                                        if (response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {
+                                                        var salary=0;
 
-                                                            model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.enterprise.buyerDetails.length;
+                                                        if (response1.familyMembers && response1.familyMembers.length) {
+                                                            for(i=0;i<response1.familyMembers.length;i++)
+                                                            {
+                                                                salary =salary+response1.familyMembers[i].salary; 
+                                                            }
+                                                        }
+                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = salary;
 
+                                                        if (response1.buyerDetails && response1.buyerDetails.length) {
+                                                            model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
                                                         }
                                                     }
 
@@ -185,11 +189,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 key: "loanMonitoringDetails.loanPurposeCategory",
                                 "readonly": true,
                                 type: "select",
-                                title:"LOAN_PURPOSE_1",
+                                title: "LOAN_PURPOSE_1",
                                 enumCode: "loan_purpose_1"
                             }, {
                                 key: "loanMonitoringDetails.loanPurpose",
-                                title:"LOAN_PURPOSE_2",
+                                title: "LOAN_PURPOSE_2",
                                 "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanAmount",
@@ -666,7 +670,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 };
                                 var reqData = _.cloneDeep(model);
 
-                               
+
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.reschedule(reqData).then(function(resp) {
                                         $state.go('Page.LUCDashboard', null);
@@ -695,7 +699,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 {
                                     model.stage="LUCEscalate";
                                 }*/
-                               
+
                                 var sortFn = function(unordered) {
                                     var out = {};
                                     Object.keys(unordered).sort().forEach(function(key) {
