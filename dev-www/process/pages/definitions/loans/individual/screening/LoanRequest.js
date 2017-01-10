@@ -1639,6 +1639,22 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                         "CentralRiskReview": "CentralRiskReview"
                     },
                 }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type: "select",
+                    condition: "model.currentStage == 'Sanction'",
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                        "FieldAppraisal": "FieldAppraisal",
+                        "FieldAppraisalReview": "FieldAppraisalReview",
+                        "CentralRiskReview": "CentralRiskReview",
+                        "CreditCommitteeReview": "CreditCommitteeReview",
+                    },
+                }, {
                     key: "review.sendBackButton",
                     type: "button",
                     title: "SEND_BACK",

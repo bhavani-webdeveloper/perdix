@@ -228,6 +228,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                 break;
 
                         }
+                    },
+                    "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
+                        if (enrolmentDetails.customerId){
+                            BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
+                        }
                     }
         		}
         	}

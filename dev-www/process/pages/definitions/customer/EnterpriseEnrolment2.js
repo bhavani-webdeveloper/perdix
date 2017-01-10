@@ -1842,25 +1842,28 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"ASSETS",
                                 items:[]
                             },
-                            {
-                                key: "customer.enterprise.cashAtBank",
-                                title: "CASH_AT_BANK",
-                                type: "amount"
-                            },
+                            // {
+                            //     key: "customer.enterprise.cashAtBank",
+                            //     title: "CASH_AT_BANK",
+                            //     type: "amount"
+                            // },
                             {
                                 key: "customer.enterprise.rawMaterial",
                                 title: "RAW_MATERIAL",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.enterprise.workInProgress",
                                 title: "WIP",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.enterprise.finishedGoods",
                                 title: "FINISHED_GOODS",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: 'customer.enterpriseAssets',
