@@ -2226,7 +2226,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].purchasePrice",
                                 title:"PURCHASE_PRICE",
-                                type: "number"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
@@ -2236,7 +2237,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].presentValue",
                                 title:"PRESSENT_VALUE",
-                                type: "number"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineNew",

@@ -1880,18 +1880,19 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                     for (var i=0;i<enterpriseCustomer.fixedAssetsMachinaries.length; i++){
                                         var machine = enterpriseCustomer.fixedAssetsMachinaries[i];
                                         if (machine.hypothecatedToUs == "YES" || machine.hypothecatedToUs == "Yes"){
-                                            reqData.loanAccount.collateral.push(
-                                                {
-                                                    collateralDescription: machine.machineDescription,
-                                                    collateralType: machine.machineType,
-                                                    collateralValue: machine.presentValue,
-                                                    manufacturer: machine.manufacturerName,
-                                                    modelNo: machine.machineModel,
-                                                    serialNo: machine.serialNumber,
-                                                    collateralValue: machine.purchasePrice,
-                                                    machineOld: !_.isNull(machine.isTheMachineNew)?!machine.isTheMachineNew:null 
-                                                }
-                                            )
+                                            var c = {
+                                                collateralDescription: machine.machineDescription,
+                                                collateralType: machine.machineType,
+                                                manufacturer: machine.manufacturerName,
+                                                modelNo: machine.machineModel,
+                                                serialNo: machine.serialNumber,
+                                                collateralValue: machine.purchasePrice,
+                                                loanToValue: machine.presentValue,
+                                                machineOld: !_.isNull(machine.isTheMachineNew)?!machine.isTheMachineNew:null,
+                                                quantity: machine.quantity || 1
+                                            }; 
+                                            c.totalValue = c.quantity * c.loanToValue;
+                                            reqData.loanAccount.collateral.push(c)
                                         }
                                     }    
                                 }
