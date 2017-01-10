@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                                         var assetvalue = 0;
                                         if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-                                            if (response.collateral && response.collateral.length && model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length) {
+                                            if (response.collateral && response.collateral.length) {
                                                 model.loanMonitoringDetails.machineDetails = [];
                                                 var machineModel = {};
                                                 for (i = 0; i < response.collateral.length; i++) {
@@ -104,9 +104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     $log.info(response1);
 
                                                     model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || (response1.doorNo + " " + response1.street + " " + response1.locality);
-                                                    //model.loanMonitoringDetails.customerName = model.loanMonitoringDetails.customerName || response1.firstName;
-                                                    //model.loanMonitoringDetails.proprietoryName = model.loanMonitoringDetails.proprietoryName || response1.firstName;
-
+                                                    
                                                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
