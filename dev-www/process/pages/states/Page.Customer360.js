@@ -1,8 +1,8 @@
 irf.pages.controller("Customer360Ctrl",
 ["$log", "$scope", "$stateParams", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
-"entityManager", "Utils", "PageHelper", "$filter",
+"entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper",
 function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
-	entityManager, Utils, PageHelper, $filter){
+	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper){
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
@@ -126,12 +126,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 				"items": []
 			}]
 		}]
-	}/*,{
-		"type": "box",
-		"title": "PRODUCT_SUMMARY",
-		"colClass": "col-sm-12",
-		"items": []
-	}*/];
+	}];
 
 	var enterprisePortfolioForm = [{
 		"type": "box",
@@ -184,6 +179,67 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		}]
 	}];
 
+	var reportBox = {
+		"type": "box",
+		"title": "REPORTS",
+		"colClass": "col-sm-12",
+		"items": [{
+			"type": "fieldset",
+			"title": "Customer Statement"
+		},{
+			"type": "section",
+			"htmlClass": "row",
+			"items": [{
+				"type": "section",
+				"htmlClass": "col-sm-5",
+				"items": [{
+					"key": "reports.fromDate",
+					"title": "FROM_DATE",
+					"type": "date"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-5",
+				"items": [{
+					"key": "reports.toDate",
+					"title": "TO_DATE",
+					"type": "date"
+				}]
+			},{
+				"type": "section",
+				"htmlClass": "col-sm-2",
+				"items": [{
+					"notitle": true,
+					"title": "DOWNLOAD",
+					"type": "button",
+					"fieldHtmlClass": "btn-block",
+					"onClick": function(model, form) {
+						PageHelper.clearErrors();
+						if (!model.reports || !model.reports.fromDate || !model.reports.toDate) {
+							PageHelper.setError({message:"'From' date & 'To' date are required"});
+							return;
+						} else if (moment(model.reports.fromDate, SessionStore.getSystemDateFormat()).isAfter(moment(model.reports.toDate, SessionStore.getSystemDateFormat()), 'day')) {
+							PageHelper.setError({message:"'From' date should be less than 'To' date"});
+							return;
+						} else if (moment(model.reports.toDate, SessionStore.getSystemDateFormat()).isAfter(moment(), 'day')) {
+							PageHelper.setError({message:"'To' date cannot exceed today"});
+							return;
+						}
+						var requestParams = {
+							auth_token: AuthTokenHelper.getAuthData().access_token,
+							report_name: "customer_statement",
+							customer_id: model.customer.id,
+							from_date: model.reports.fromDate,
+							to_date: model.reports.toDate
+						};
+						url = irf.BI_BASE_URL + "/download.php?" + $httpParamSerializer(requestParams);
+						Utils.downloadFile(url);
+					}
+				}]
+			}]
+		}]
+	};
+
 	Enrollment.getSchema().$promise.then(function(customerSchemaResponse){
 		Enrollment.get({id:$scope.customerId}).$promise.then(function(response){
 			var fullDefinition = customerDefinition;
@@ -211,6 +267,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 		} else {
 			$scope.introForm = customerPortfolioForm;
 		}
+		$scope.introForm.push(reportBox);
 		$log.info($scope.pageTitle);
 
 		$scope.model.customer.idAndBcCustId = data.id + ' / ' + data.bcCustId;
