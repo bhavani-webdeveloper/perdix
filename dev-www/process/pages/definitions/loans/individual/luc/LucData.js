@@ -70,6 +70,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                 var machineModel = {};
                                                 for (i = 0; i < response.collateral.length; i++) {
                                                     $log.info("inside for");
+                                                    var machineModel = {};
                                                     machineModel.type = response.collateral[i].collateralType;
                                                     machineModel.model = response.collateral[i].modelNo;
                                                     machineModel.udf1 = response.collateral[i].machineAttachedToBuilding;
@@ -85,8 +86,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         machineModel.assetType = "NEW";
                                                     }
                                                     model.loanMonitoringDetails.machineDetails.push(machineModel);
-                                                    $log.info(model.loanMonitoringDetails.machineDetails);
                                                 }
+
 
                                             }
 
