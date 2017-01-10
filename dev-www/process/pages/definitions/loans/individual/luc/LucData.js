@@ -87,8 +87,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     }
                                                     model.loanMonitoringDetails.machineDetails.push(machineModel);
                                                 }
-
-
                                             }
 
                                             model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
