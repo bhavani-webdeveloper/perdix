@@ -15,7 +15,17 @@
                 "Page/Engine/EnrollmentHouseVerificationQueue",
                 "Page/EngineOffline/AssetsLiabilitiesAndHealth",
                 "Page/Engine/CustomerFormDownloads",
-                "Page/Engine/customer360.RecaptureQueue"
+                "Page/Engine/customer360.RecaptureQueue",
+                "Page/Engine/loans.individual.documentTracking.BatchInTransist",
+                "Page/Engine/loans.individual.documentTracking.DocumentFiling",
+                "Page/Engine/loans.individual.documentTracking.DocumentVerification",
+                "Page/Engine/loans.individual.documentTracking.IncompleteDispatch",
+                "Page/Engine/loans.individual.documentTracking.IncompleteDocuments",
+                "Page/Engine/loans.individual.documentTracking.PendingDispatch",
+                "Page/Engine/loans.individual.documentTracking.PendingForDispatch",
+                "Page/Engine/loans.individual.documentTracking.PendingForFiling",
+                "Page/Engine/loans.individual.documentTracking.PendingForVerification",
+                "Page/Engine/loans.individual.documentTracking.SuccessfullyFiled"
             ]
         },
         "Page/LeadDashboard",
@@ -39,6 +49,7 @@
             ]
         },
         "Page/LUCDashboard",
+        "Page/LoansDocumentTrackingDashboard",
         {
             "title": "GROUP_LOANS",
             "iconClass": "fa fa-users",
