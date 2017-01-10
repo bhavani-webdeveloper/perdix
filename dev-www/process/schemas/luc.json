@@ -139,7 +139,7 @@
 				},
 				"address": {
 					"title": "ADDRESS",
-					"type": "string"
+					"type": ["string", "null"]
 				},
 				"udf1": {
 					"title": "UDF1",
