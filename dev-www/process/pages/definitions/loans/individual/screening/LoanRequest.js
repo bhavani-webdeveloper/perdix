@@ -327,13 +327,25 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     })
                 };
 
-                if (!_.hasIn(model.loanAccount, 'guarantors')) {
-                    model.loanAccount.guarantors = [];
+                model.loanAccount.guarantors = model.loanAccount.guarantors || [];
+
+                var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
+                    if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
+                        return true;
+                })
+
+                if (existingGuarantorIndex<0){
+                    model.loanAccount.guarantors.push({
+                        'guaCustomerId': params.customer.id,
+                        'guaUrnNo': params.customer.urnNo
+                    });
+                } else {
+                    if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
+                        model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
+                    }
                 }
-                model.loanAccount.guarantors.push({
-                    'guaCustomerId': params.customer.id,
-                    'guaUrnNo': params.customer.urnNo
-                });
+
+                
             },
             "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
                 $log.info("Inside enrolment-removed");
