@@ -345,23 +345,16 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                  */
 
                 // 1.
-                for (var i=0;i<model.loanAccount.loanCustomerRelations.length;i++){
-                    var t = model.loanAccount.loanCustomerRelations[i];
-                    if (t.customerId == enrolmentDetails.customerId && t.relation == getRelationFromClass(enrolmentDetails.customerClass)){
-                        model.loanAccount.loanCustomerRelations.splice(i,1);
-                        break;
-                    }
-                }
-
+                _.remove(model.loanAccount.loanCustomerRelations, function(customer){
+                    return (customer.customerId==enrolmentDetails.customerId && customer.relation == getRelationFromClass(enrolmentDetails.customerClass)) ;
+                })
+                
                 // 2.
                 switch(enrolmentDetails.customerClass){
                     case 'guarantor':
-                        for (var i=0;i<model.loanAccount.guarantors.length; i++){
-                            var item = model.loanAccount.guarantors[i];
-                            if (item.guaCustomerId == enrolmentDetails.customerId){
-                                model.loanAccount.guarantors.splice(i,1);
-                            }
-                        }
+                        _.remove(model.loanAccount.guarantors, function(guarantor){
+                            return (guarantor.guaCustomerId == enrolmentDetails.customerId)
+                        })
                         break;
                     case 'applicant':
                         
@@ -1893,7 +1886,9 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                                     collateralValue: machine.presentValue,
                                                     manufacturer: machine.manufacturerName,
                                                     modelNo: machine.machineModel,
-                                                    serialNo: machine.serialNumber
+                                                    serialNo: machine.serialNumber,
+                                                    collateralValue: machine.purchasePrice,
+                                                    machineOld: !_.isNull(machine.isTheMachineNew)?!machine.isTheMachineNew:null 
                                                 }
                                             )
                                         }

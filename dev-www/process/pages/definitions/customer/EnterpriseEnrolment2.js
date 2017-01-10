@@ -183,6 +183,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             "origination-stage": function(bundleModel, model, obj){
                 model.currentStage = obj
+            },
+            "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                $log.info("Inside remove-customer-relation of EnterpriseEnrolment2");
+                /**
+                 * Following to be Done
+                 * 
+                 * 1. Remove customer from Enterprise Customer Relation if exists.
+                 */
+
+                _.remove(model.customer.enterpriseCustomerRelations, function(relation){
+                    return relation.linkedToCustomerId==enrolmentDetails.customerId;
+                })
             }
         },
         form: [
@@ -522,7 +534,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.enterpriseCustomerRelations[].relationshipType",
                                 title: "RELATIONSHIP_TYPE",
                                 type: "select",
-                                enumCode: "relationship_type"
+                                enumCode: "relationship_type",
+                                required: true
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
@@ -2228,7 +2241,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
                                 title:"IS_THE_MACHINE_NEW",
-                                type: "radios",
+                                type: "select",
                                 enumCode: "decisionmaker"
                             },
                             {
