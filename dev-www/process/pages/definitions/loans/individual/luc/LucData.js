@@ -67,14 +67,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                        }
 
                                         model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
-                                        /* if (!(model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length)) {
-                                             model.loanMonitoringDetails.machineDetails = [];
-                                             for (i = 0; i < response.collateral.length; i++) {
-                                                 model.loanMonitoringDetails.machineDetails[i].type = response.collateral[i].collateralType;
-                                                 model.loanMonitoringDetails.machineDetails[i].model = response.collateral[i].modelNo;
-                                                 model.loanMonitoringDetails.machineDetails[i].serialNumber = response.collateral[i].serialNo;
-                                             }
-                                         }*/
+
 
                                         model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
                                         model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
@@ -102,7 +95,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
 
 
-                                                    if (model.loanMonitoringDetails.currentStage = "LUCSchedule") {
+                                                    /*if (model.loanMonitoringDetails.currentStage = "LUCSchedule") {
 
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
 
@@ -113,15 +106,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
 
-
-
                                                         if (response1.enterprise.buyerDetails && response1.enterprise.buyerDetails.length) {
 
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.enterprise.buyerDetails.length;
 
                                                         }
-
-                                                    }
+                                                    }*/
 
 
                                                 }, function(httpRes) {
@@ -675,7 +665,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 };
                                 var reqData = _.cloneDeep(model);
 
-                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
+                               
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.reschedule(reqData).then(function(resp) {
                                         $state.go('Page.LUCDashboard', null);
@@ -697,6 +687,14 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             onClick: function(model) {
                                 $log.info("Inside submit()");
                                 $log.warn(model);
+
+                                $log.info(model.loanMonitoringDetails.currentStage);
+
+                                /*if (model.loanMonitoringDetails.currentStage == "LUCSchedule")
+                                {
+                                    model.stage="LUCEscalate";
+                                }*/
+                               
                                 var sortFn = function(unordered) {
                                     var out = {};
                                     Object.keys(unordered).sort().forEach(function(key) {
@@ -706,7 +704,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 };
                                 var reqData = _.cloneDeep(model);
 
-                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.escalate(reqData).then(function(resp) {
                                         $state.go('Page.LUCDashboard', null);
@@ -731,7 +728,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }]
                     }, {
                         "type": "actionbox",
-                        condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'||model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
+                        condition: "model.loanMonitoringDetails.currentStage=='LUCEscalate'|| model.loanMonitoringDetails.currentStage=='LUCLegalRecovery'",
                         "items": [{
                             type: "button",
                             icon: "fa fa-step-backward",
@@ -748,7 +745,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 };
                                 var reqData = _.cloneDeep(model);
 
-                                //reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
                                 if (reqData.loanMonitoringDetails.id) {
                                     LucHelper.goBack(reqData).then(function(resp) {
                                         $state.go('Page.LUCDashboard', null);
