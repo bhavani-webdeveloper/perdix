@@ -1215,7 +1215,8 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                         'enumCode': "decisionmaker",
                         'type': "select",
                         "title": "SECURITY_EMI_REQUIRED",
-                        readonly:true
+                        readonly:true,
+                        required: true
                     },
                     {
                         "key": "loanAccount.loanAmount",
