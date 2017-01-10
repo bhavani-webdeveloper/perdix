@@ -251,7 +251,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
@@ -262,16 +262,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
                                     type: "select",
@@ -282,7 +282,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Non operational Machinery": "Non operational Machinery",
                                         "Non delivery of Machine": "Non delivery of Machine",
                                     },
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
 
 
                                 }]
@@ -417,7 +417,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
@@ -428,16 +428,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'&& (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
                                     type: "select",
@@ -446,7 +446,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Not utilized": "Not utilized",
                                         "Partially utilized": "Partially utilized",
                                     },
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
                             }, {
                                 type: "fieldset",
@@ -519,7 +519,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     }
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduled",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
                                     "onChange": function(modelValue, form, model) {
@@ -530,16 +530,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduledDate",
                                     type: "date",
-                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes'",
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalated",
                                     type: "radios",
                                     enumCode: "decisionmaker1",
-                                    condition: "model.loanMonitoringDetails.lucDone=='No'",
+                                    condition: "model.loanMonitoringDetails.lucDone=='No' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }, {
                                     key: "loanMonitoringDetails.lucEscalatedReason",
                                     type: "select",
@@ -548,7 +548,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Not utilized": "Not utilized",
                                         "Partially utilized": "Partially utilized",
                                     },
-                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' ",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
                             },
 
