@@ -201,7 +201,8 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             "vtc":null,
             "dist":null,
             "state":null,
-            "pc":null
+            "pc":null,
+            "po": null
         };
         var aadhaarDoc = $.parseXML(aadhaarXml);
         aadhaarXmlData = $(aadhaarDoc).find('PrintLetterBarcodeData');
@@ -232,6 +233,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.district = aadhaarData.dist;
         model.customer.state = aadhaarData.state;
         model.customer.pincode = aadhaarData.pc;
+        model.customer.postOffice = aadhaarData.po;
         if (aadhaarData.dob) {
             $log.debug('aadhaarData dob: ' + aadhaarData.dob);
             if (!isNaN(aadhaarData.dob.substring(2, 3))) {
