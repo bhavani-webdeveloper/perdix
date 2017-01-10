@@ -95,7 +95,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
 
 
-                                                    /*if (model.loanMonitoringDetails.currentStage = "LUCSchedule") {
+                                                    if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
 
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
 
@@ -111,8 +111,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.enterprise.buyerDetails.length;
 
                                                         }
-                                                    }*/
-
+                                                    }
 
                                                 }, function(httpRes) {
                                                     PageHelper.showErrors(httpRes);
@@ -186,9 +185,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 key: "loanMonitoringDetails.loanPurposeCategory",
                                 "readonly": true,
                                 type: "select",
+                                title:"LOAN_PURPOSE_1",
                                 enumCode: "loan_purpose_1"
                             }, {
                                 key: "loanMonitoringDetails.loanPurpose",
+                                title:"LOAN_PURPOSE_2",
                                 "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanAmount",
