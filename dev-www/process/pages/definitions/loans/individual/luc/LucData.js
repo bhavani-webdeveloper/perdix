@@ -46,9 +46,23 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     function(response) {
                                         $log.info("printing loan account");
                                         $log.info(response);
+
+                                        var urn = response.applicant;
+                                        var linkedurns = [urn];
+                                        Queries.getCustomerBasicDetails({
+                                            "urns": linkedurns
+                                        }).then(function(result) {
+                                            if (result && result.urns) {
+                                                    var cust = result.urns[urn];
+                                                    if (cust) {
+                                                        model.loanMonitoringDetails.customerName = cust.first_name;
+                                                        model.loanMonitoringDetails.proprietoryName = cust.first_name;
+                                                    }  
+                                            }
+                                        });
+
                                         var assetvalue = 0;
-                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") 
-                                        {
+                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
                                             if (response.collateral && response.collateral.length && model.loanMonitoringDetails.machineDetails && model.loanMonitoringDetails.machineDetails.length) {
                                                 model.loanMonitoringDetails.machineDetails = [];
                                                 var machineModel = {};
@@ -89,9 +103,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     $log.info("printing customer");
                                                     $log.info(response1);
 
-                                                    model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || response1.enterprise.businessAddress1;
-                                                    model.loanMonitoringDetails.customerName = model.loanMonitoringDetails.customerName || response1.firstName;
-                                                    model.loanMonitoringDetails.proprietoryName = model.loanMonitoringDetails.proprietoryName || response1.firstName;
+                                                    model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || (response1.doorNo + " " + response1.street + " " + response1.locality);
+                                                    //model.loanMonitoringDetails.customerName = model.loanMonitoringDetails.customerName || response1.firstName;
+                                                    //model.loanMonitoringDetails.proprietoryName = model.loanMonitoringDetails.proprietoryName || response1.firstName;
 
                                                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
@@ -102,12 +116,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
 
-                                                        var salary=0;
+                                                        var salary = 0;
 
                                                         if (response1.familyMembers && response1.familyMembers.length) {
-                                                            for(i=0;i<response1.familyMembers.length;i++)
-                                                            {
-                                                                salary =salary+response1.familyMembers[i].salary; 
+                                                            for (i = 0; i < response1.familyMembers.length; i++) {
+                                                                salary = salary + response1.familyMembers[i].salary;
                                                             }
                                                         }
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = salary;
@@ -160,7 +173,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }, {
                             key: "loanMonitoringDetails.customerName",
                             type: "string",
-                            //"readonly": true
+                            "readonly": true
                         }, {
                             key: "loanMonitoringDetails.address",
                             type: "string",
