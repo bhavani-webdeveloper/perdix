@@ -221,8 +221,10 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			if (angular.isFunction($scope.page.schema)) {
 				var promise = $scope.page.schema();
 				promise.then(function(data){
-					$scope.page.schema = data;
+					$scope.schema = data;
 				});
+			} else {
+				$scope.schema = $scope.page.schema;
 			}
 			// formFn support discontinued
 			$scope.formHelper = formHelper;

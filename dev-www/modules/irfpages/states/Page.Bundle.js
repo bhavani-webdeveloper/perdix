@@ -104,9 +104,11 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                         promise.then((function(data) {
                             var _pageObj = pageObj;
                             return function(data) {
-                                _pageObj.page.schema = data;
+                                _pageObj.schema = data;
                             };
                         })());
+                    } else if (angular.isObject(pageObj.page.schema)) {
+                        pageObj.schema = pageObj.page.schema;
                     }
                     // formFn support discontinued
                     pageObj.formHelper = formHelper;
