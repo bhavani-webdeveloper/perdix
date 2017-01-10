@@ -1058,7 +1058,7 @@
                     "type": "string"
                 },
                 "securityEmiRequired": {
-                    "type": "string",
+                    "type": ["null","string"],
                     "title": "SECURITY_EMI",
                     "x-schema-form":{
                         "type":"radios",

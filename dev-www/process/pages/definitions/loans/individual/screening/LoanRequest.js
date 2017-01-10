@@ -1206,6 +1206,79 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     readonly:true
                 },
                 {
+                    "key": "loanAccount.securityEmiRequired",
+                    "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    'enumCode': "decisionmaker",
+                    'type': "select",
+                    "title": "SECURITY_EMI_REQUIRED",
+                    // readonly:true,
+                    required: true
+                },
+                {
+                    "key": "loanAccount.commercialCibilCharge",
+                    "type": "amount",
+                    "title": "COMMERCIAL_CIBIL_CHARGE"
+                }]
+            },
+            {
+                "type": "box",
+                "title": "LOAN_RECOMMENDATION",
+                "condition": "model.currentStage=='Sanction'",
+                "readonly": true,
+                "items": [
+                {
+                    "key": "loanAccount.loanAmount",
+                    "type": "amount",
+                    required:true,
+                    "title": "LOAN_AMOUNT",
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    "key": "loanAccount.tenure",
+                    "title":"DURATION_IN_MONTHS",
+                    required:true,
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    "key": "loanAccount.interestRate",
+                    "type": "number",
+                    required:true,
+                    "title": "INTEREST_RATE",
+                    onChange:function(value,form,model){
+                        computeEMI(model);
+                    }
+                },
+                {
+                    key: "loanAccount.estimatedEmi",
+                    type: "amount",
+                    title: "ESTIMATED_KINARA_EMI",
+                    readonly:true
+                },
+                {
+                    "key": "loanAccount.processingFeePercentage",
+                    "type": "number",
+                    required:true,
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                },
+                {
+                   key: "loanAccount.estimatedEmi",
+                   "type": "amount",
+                    "title": "EXPECTED_SECURITY_EMI",
+                    readonly:true
+                },
+                {
+                    "key": "loanAccount.securityEmiRequired",
+                    'enumCode': "decisionmaker",
+                    'type': "select",
+                    "title": "SECURITY_EMI_REQUIRED",
+                    // readonly:true,
+                    required: true
+                },
+                {
                     "key": "loanAccount.commercialCibilCharge",
                     "type": "amount",
                     "title": "COMMERCIAL_CIBIL_CHARGE"
@@ -1216,38 +1289,25 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "title": "LOAN_SANCTION",
                 "condition": "model.currentStage == 'Sanction'",
                 "items": [
-                    {
-                        "key": "loanAccount.interestRate",
-                        "type": "number",
-                        "title": "INTEREST_RATE",
-                        readonly:true
-                    },
-                    {
-                        "key": "loanAccount.securityEmiRequired",
-                        'enumCode': "decisionmaker",
-                        'type': "select",
-                        "title": "SECURITY_EMI_REQUIRED",
-                        readonly:true,
-                        required: true
-                    },
-                    {
-                        "key": "loanAccount.loanAmount",
-                        "type": "amount",
-                        "title": "LOAN_AMOUNT",
-                        readonly:true
-                    },
-                    {
-                        "key": "loanAccount.processingFeePercentage",
-                        "type": "number",
-                        "title": "PROCESSING_FEES_IN_PERCENTAGE",
-                        readonly:true
-                    },
-                    {
-                        "key": "loanAccount.commercialCibilCharge",
-                        "type": "amount",
-                        "title": "COMMERCIAL_CIBIL_CHARGE",
-                        readonly:true
-                    },
+                    
+                    // {
+                    //     "key": "loanAccount.loanAmount",
+                    //     "type": "amount",
+                    //     "title": "LOAN_AMOUNT",
+                    //     readonly:true
+                    // },
+                    // {
+                    //     "key": "loanAccount.processingFeePercentage",
+                    //     "type": "number",
+                    //     "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    //     readonly:true
+                    // },
+                    // {
+                    //     "key": "loanAccount.commercialCibilCharge",
+                    //     "type": "amount",
+                    //     "title": "COMMERCIAL_CIBIL_CHARGE",
+                    //     readonly:true
+                    // },
                     // {
                     //     "key": "loanAccount.portfolioInsuranceUrn",
                     //     "title": "INSURANCE_URN",
@@ -1283,11 +1343,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     //         model.loanAccount.portfolioInsuranceUrn = valueObj.urnNo;
                     //     }
                     // },
-                    {
-                        "key": "loanAccount.tenure",
-                        "title":"DURATION_IN_MONTHS",
-                        readonly:true
-                    },
+                    // {
+                    //     "key": "loanAccount.tenure",
+                    //     "title":"DURATION_IN_MONTHS",
+                    //     readonly:true
+                    // },
                     {
                         "type": "fieldset",
                         "title": "DISBURSEMENT_DETAILS",
