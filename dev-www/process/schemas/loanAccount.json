@@ -1060,18 +1060,7 @@
                 "securityEmiRequired": {
                     "type": ["null","string"],
                     "title": "SECURITY_EMI",
-                    "x-schema-form":{
-                        "type":"radios",
-                        "titleMap":[{
-                            "name":"Yes",
-                            "value":"Yes"
-                            },
-                            {
-                            "name":"No",
-                            "value":"No"
-                            }
-                        ]
-                    }
+                    "enumCode": "decisionmaker"
                 },
                 "startTime": {
                     "type": "string"

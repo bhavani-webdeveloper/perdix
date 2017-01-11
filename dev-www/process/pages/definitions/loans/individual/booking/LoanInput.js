@@ -603,7 +603,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
-                                required: true
+                                required: true,
+                                enumCode: "decisionmaker"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
@@ -1457,7 +1458,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                     else
                         model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';*/
-                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';
+                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
 
                     var trancheTotalAmount=0;
                     model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
