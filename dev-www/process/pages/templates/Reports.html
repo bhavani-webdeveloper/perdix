@@ -1,171 +1,133 @@
-<style>
-        svg {
-            display: block;
-            width: 100%;
-			margin: 5px;
-        }
-        .bi-chart {
-            height: 300px;
-			width: 100%;
-        }
-    </style>
 <div>
-  <!-- <section ng-hide="error" class="content-header">
-	<h1>
-      <span><a href style="color:#333">Page Title</a></span>
-      <small>Small Title</small>
+  <style>
+    svg {
+      display: block;
+      width: 100%;
+      margin: 5px;
+    }
+    .bi-chart {
+      height: 300px;
+      width: 100%;
+    }
+    .bundle-page .bundle-tabset ul.nav-tabs > li:first-child {
+      margin-left: 15px !important;
+    }
+    .content {
+      min-height: 0px;
+      padding-bottom: 0px;
+    }
+    .filter-form select {
+      background-color: transparent;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+  </style>
+  <section class="content-header">
+    <h1>
+      <span><a href style="color:#333">Reports Dashboard</a></span>
+      <form ng-submit="processForm()" name="myFormName" style="display: inline;" class="filter-form pull-right">
+        <small>View Report As:</small>
+        <select
+          name="myRegionSelect"
+          id="myRegionSelect"
+          ng-options="row.name for row in regionName track by row.id"
+          ng-model="selectedRegion"
+          ng-change="listHubs()"></select>
+        <select
+          name="myHubSelect"
+          id="myHubSelect"
+          ng-options="row.hubname for row in HubNames track by row.id"
+          ng-model="selectedHub"
+          ng-change="listBranches()"></select>
+        <select
+          name="myUserSelect"
+          id="myUserSelect"
+          ng-options="row.user for row in loanOfficers track by row.id"
+          ng-model="selectedUser"></select>
+        <input type="submit" class="btn btn-default btn-xs" value="Apply Filter"/>
+      </form>
     </h1>
   </section>
 
-  <section class="content">-->
-    <div class="row">
-      <!-- <irf-dashboard-box definition="dashboardDefinition"></irf-dashboard-box> -->
-    </div>
-	<!--
-    <div class="row">
-      <div class="col-sm-6">
-
-        <div class="box box-theme no-border">
-          <div class="box-header">
-            <h3 class="box-title">
-              <i class="{{ menu.iconClass }}" ng-if="menu.iconClass" style="color:#666"> </i>
-              Menu Title
-            </h3>
-            <div class="box-tools pull-right">
-              <button type="button" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+  <div class="bundle-page">
+    <uib-tabset active="active" class="bundle-tabset">
+      <uib-tab class="tab-theme uib-tab nav-item" select="onTabLoad(TabNames.menu_id, $index)" ng-repeat="TabNames in TabDefinition.ReportData" heading="{{ TabNames.menu_name }}">
+        <section class="content">
+          <div class="row">
+            <div class="col-sm-12">
+              <div ng-hide="ResultDataSet[$index].length">
+                <br>
+                <br>
+                <center>No Reports Available...</center>
+                <br>
+                <br>
+              </div>
+              <div ng-repeat="SingleReport in ResultDataSet[$index]">
+                <div class="{{ SingleReport.ClassName }}">
+                  <div class="box box-theme">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">{{ SingleReport.TableTitle }}</h3>
+                      <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                      </div>
+                    </div>
+                    <div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'SimpleTable'">
+                      <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+                        <tr ng-if="SingleReport.DrillDownReq == '1'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                          </th>
+                        </tr>
+                        <tr ng-if="SingleReport.DrillDownReq == '0'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
+                        </tr>
+                        <tr ng-repeat="row in RepeatTables">
+                          <td ng-repeat="col in row" align="right">{{ col }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'TwoDimensional'">
+                      <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+                        <tr ng-if="SingleReport.DrillDownReq == '1'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                          </th>
+                        </tr>
+                        <tr ng-if="SingleReport.DrillDownReq == '0'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
+                        </tr>
+                        <tr ng-repeat="row in RepeatTables">
+                          <td ng-repeat="col in row">{{ col }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'Merge'">
+                      <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+                        <tr ng-if="SingleReport.DrillDownReq == '1'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
+                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                          </th>
+                        </tr>
+                        <tr ng-if="SingleReport.DrillDownReq == '0'">
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
+                        </tr>
+                        <tr ng-repeat="row in RepeatTables">
+                          <td ng-repeat="col in row">{{ col }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'CHART'">
+                      <div id="{{SingleReport.ChartIDName}}" class="bi-chart"><svg></svg></div>
+                    </div>
+                  </div>
+                </div>      
+              </div>
             </div>
           </div>
-          <div class="box-body">
-            Test Box
-          </div>
-        </div>
-
-      </div>
-    </div> -->
-	<div class="row">
-      <div class="col-sm-9">
-
-        <div class="box box-theme no-border">
-          <div class="box-body">
-            <!--<select ng-model="selectedName" ng-options="x for x in names"></select>
-			<select ng-model="regionSelected" ng-change="listHubs()">
-    			<option ng-repeat="row in regionName" value="{{row}}">{{row}}</option>
-			</select>-->
-			<form ng-submit="processForm()" name="myFormName">
-			<select 
-			name="myRegionSelect" 
-			id="myRegionSelect"
-      		ng-options="row.name for row in regionName track by row.id"
-      		ng-model="selectedRegion"
-	  		ng-change="listHubs()"></select>
-			
-			<select 
-			name="myHubSelect" 
-			id="myHubSelect"
-      		ng-options="row.hubname for row in HubNames track by row.id"
-      		ng-model="selectedHub"
-	  		ng-change="listBranches()"></select>
-			
-			<select 
-			name="myUserSelect" 
-			id="myUserSelect"
-      		ng-options="row.user for row in loanOfficers track by row.id"
-      		ng-model="selectedUser"></select>
-			
-			<input type="submit" value="Apply Filter"/>
-			</form>
-			
-          </div>
-        </div>
-
-      </div>
-    </div>
-	<div class="row">
-  
-	<!--<div ng-repeat="ReportValue in dataset" >	-->
-	
-	<uib-tabset active="active" class="bundle-tabset">
-    	<uib-tab class="tab-theme uib-tab nav-item" select="onTabLoad(TabNames.menu_id, $index)" ng-repeat="TabNames in TabDefinition.ReportData" heading="{{ TabNames.menu_name }}">
-		
-		<section ng-hide="error" class="content-header"></section>
-		<div ng-repeat="SingleReport in ResultDataSet[$index]" class="content">
-			<div class="{{ SingleReport.ClassName }}">
-				<div class="box box-theme">
-					
-					<div class="box-header with-border">
-	                  <h3 class="box-title">{{ SingleReport.TableTitle }}</h3>
-					  <div class="box-tools pull-right">
-	                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-	                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-	                  </div>
-	                </div><!-- /.box-header -->
-					
-					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'SimpleTable'">
-						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr ng-if="SingleReport.DrillDownReq == '1'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
-							</th>
-						</tr>
-						<tr ng-if="SingleReport.DrillDownReq == '0'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
-						</tr>
-						<tr ng-repeat="row in RepeatTables">
-							<td ng-repeat="col in row" align="right">{{ col }}</td>
-						</tr>
-						</table>
-					</div>
-					
-					
-					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'TwoDimensional'">
-						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr ng-if="SingleReport.DrillDownReq == '1'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
-							</th>
-						</tr>
-						<tr ng-if="SingleReport.DrillDownReq == '0'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
-						</tr>
-						<tr ng-repeat="row in RepeatTables">
-							<td ng-repeat="col in row">{{ col }}</td>
-						</tr>
-						</table>
-					</div>
-					
-					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'Merge'">
-						<table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
-						<tr ng-if="SingleReport.DrillDownReq == '1'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-							<a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
-							</th>
-						</tr>
-						<tr ng-if="SingleReport.DrillDownReq == '0'">
-							<th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
-						</tr>
-						<tr ng-repeat="row in RepeatTables">
-							<td ng-repeat="col in row">{{ col }}</td>
-						</tr>
-						</table>
-					</div>
-					
-										
-					<div class="box-body table-responsive" ng-if="SingleReport.ReportType == 'CHART'">
-						
-						<div id="{{SingleReport.ChartIDName}}" class="bi-chart"><svg></svg></div>					
-    					
-					</div>
-					
-					<!--<div class="overlay" ng-hide="myVar">
-						<i class="fa fa-refresh fa-spin"></i>
-					</div>-->
-				</div>
-	 		</div>		
-		</div>
-		
-		</uib-tab>
-	</uib-tabset>
-	<!--</div>-->
-	</div>
-  <!--</section>-->
+        </section>
+      </uib-tab>
+    </uib-tabset>
+  </div>
 </div>
