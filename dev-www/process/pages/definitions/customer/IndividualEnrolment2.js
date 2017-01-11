@@ -1470,14 +1470,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         items:[
                                             {
                                                 key: "customer.familyMembers[].incomes[].incomeSource",
-                                                type:"select"
+                                                type:"string"
                                             },
                                             {
-                                                Key:"customer.familyMembers[].incomes[].incomeEarned",
+                                                key:"customer.familyMembers[].incomes[].incomeEarned",
+                                                type: "amount",
+                                                title: "INCOME_EARNED"
                                             },
                                             {
                                                 key: "customer.familyMembers[].incomes[].frequency",
-                                                type: "select"
+                                                type: "string"
                                             }
 
                                         ]
@@ -1910,6 +1912,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             title: "OUTSTANDING_BALANCE",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
+                                        // {
+                                        //     key:"customer.customerBankAccounts[].bankStatementId",
+                                        //     type:"file",
+                                        //     required: true,
+                                        //     fileType:"application/pdf",
+                                        //     "category": "CustomerEnrollment",
+                                        //     "subCategory": "IDENTITYPROOF",
+                                        //     using: "scanner"
+                                        // },
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",

@@ -74,7 +74,7 @@ function (
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 3
+                            maximum: 4
                         },
                         {
                             pageName: 'customer.IndividualEnrolment2',

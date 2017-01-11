@@ -951,7 +951,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
-                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Sanction' )",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='Application' || model.currentStage=='FieldAppraisal')",
                 "items": [
                     {
                       key:"loanAccount.collateral",
@@ -1046,7 +1046,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
                 "readonly": true,
-                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='SanctionReview' )",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
                 "items": [
                     {
                       key:"loanAccount.collateral",

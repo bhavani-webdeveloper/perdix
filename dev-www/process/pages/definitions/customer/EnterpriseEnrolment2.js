@@ -1116,6 +1116,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].limit",
                                 type: "amount"
                             },
+                            // {
+                            //     key:"customer.customerBankAccounts[].bankStatementId",
+                            //     type:"file",
+                            //     required: true,
+                            //     fileType:"application/pdf",
+                            //     "category": "CustomerEnrollment",
+                            //     "subCategory": "IDENTITYPROOF",
+                            //     using: "scanner"
+                            // },
                             {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
