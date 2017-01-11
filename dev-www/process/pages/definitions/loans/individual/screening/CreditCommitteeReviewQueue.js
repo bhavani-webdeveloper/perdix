@@ -181,7 +181,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 					},
 					getActions: function() {
 						return [{
-							name: "CENTRAL_RISK_REVIEW",
+							name: "CREDIT_COMMITTEE_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
