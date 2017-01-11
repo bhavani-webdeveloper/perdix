@@ -17,10 +17,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                         model.loanMonitoringDetails.socialImpactDetails = {};
                     }
-                    //model.branchId = SessionStore.getBranchId() + '';
-                    //model.lead.currentDate = model.lead.currentDate || Utils.getCurrentDate();
                     model = Utils.removeNulls(model, true);
-                    //model.lead.branchName = SessionStore.getBranch();
                     $log.info("luc page got initiated");
 
                     if (!(model && model.loanMonitoringDetails && model.loanMonitoringDetails.id && model.$$STORAGE_KEY$$)) {
@@ -46,27 +43,53 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     function(response) {
                                         $log.info("printing loan account");
                                         $log.info(response);
-
                                         var urn = response.applicant;
                                         var linkedurns = [urn];
                                         Queries.getCustomerBasicDetails({
                                             "urns": linkedurns
                                         }).then(function(result) {
                                             if (result && result.urns) {
-                                                    var cust = result.urns[urn];
-                                                    if (cust) {
-                                                        model.loanMonitoringDetails.customerName = cust.first_name;
-                                                        model.loanMonitoringDetails.proprietoryName = cust.first_name;
-                                                    }  
+                                                var cust = result.urns[urn]
+                                                if (cust) {
+                                                    model.loanMonitoringDetails.customerName = cust.first_name;
+                                                    model.loanMonitoringDetails.proprietoryName = cust.first_name;
+
+                                                    Enrollment.getCustomerById({
+                                                            id: cust.id
+                                                        })
+                                                        .$promise
+                                                        .then(function(response2) {
+                                                            $log.info("printing customer2");
+                                                            $log.info(response2);
+
+                                                            if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
+                                                                model.loanMonitoringDetails.socialImpactDetails = {};
+                                                            }
+
+                                                            if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
+                                                                if (response2.familyMembers && response2.familyMembers.length) {
+                                                                    for (i = 0; i < response2.familyMembers.length; i++) {
+                                                                        if (response2.familyMembers[i].relationShip == "self") {
+                                                                            model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = response2.familyMembers[i].salary;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }, function(httpRes) {
+                                                            PageHelper.showErrors(httpRes);
+                                                        })
+                                                        .finally(function() {
+                                                            PageHelper.hideLoader();
+                                                        });
+                                                }
                                             }
                                         });
 
                                         var assetvalue = 0;
-                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule") 
-                                        {
+                                        if (model.loanMonitoringDetails.currentStage == "LUCSchedule" && !(model.loanMonitoringDetails.lucEscalatedReason)) {
                                             $log.info("inside sc");
                                             if (response.collateral && response.collateral.length) {
-                                                 $log.info("inside col");
+                                                $log.info("inside col");
                                                 model.loanMonitoringDetails.machineDetails = [];
                                                 var machineModel = {};
                                                 for (i = 0; i < response.collateral.length; i++) {
@@ -88,19 +111,15 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     } else {
                                                         machineModel.assetType = "NEW";
                                                     }
-                                    
-                                                    if(machineModel1.date !== null)
-                                                    {
-                                                     model.loanMonitoringDetails.machineDetails.push(machineModel);   
+
+                                                    if (machineModel1.date !== null) {
+                                                        model.loanMonitoringDetails.machineDetails.push(machineModel);
                                                     }
-                                                    
                                                 }
                                             }
-
                                             model.loanMonitoringDetails.totalCreationAssetValue = assetvalue;
                                             model.loanMonitoringDetails.loanPurpose = model.loanMonitoringDetails.loanPurpose || response.loanPurpose2;
                                             model.loanMonitoringDetails.loanPurposeCategory = model.loanMonitoringDetails.loanPurposeCategory || response.loanPurpose1;
-
                                         }
 
                                         var custId = response.customerId;
@@ -113,27 +132,13 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                 .then(function(response1) {
                                                     $log.info("printing customer");
                                                     $log.info(response1);
-
                                                     model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || (response1.doorNo + " " + response1.street + " " + response1.locality);
-                                                    
                                                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
-
                                                     if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
-
-                                                        var salary = 0;
-
-                                                        if (response1.familyMembers && response1.familyMembers.length) {
-                                                            for (i = 0; i < response1.familyMembers.length; i++) {
-                                                                salary = salary + response1.familyMembers[i].salary;
-                                                            }
-                                                        }
-                                                        model.loanMonitoringDetails.socialImpactDetails.preLoanProprietorSalary = salary;
-
                                                         if (response1.buyerDetails && response1.buyerDetails.length) {
                                                             model.loanMonitoringDetails.socialImpactDetails.preLoanNumberOfCustomersOrBuyers = response1.buyerDetails.length;
                                                         }
@@ -145,7 +150,6 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                 .finally(function() {
                                                     PageHelper.hideLoader();
                                                 });
-
                                         }
                                     },
                                     function(httpRes) {
