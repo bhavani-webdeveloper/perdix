@@ -1004,6 +1004,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             {
                                 key: "loanAccount.collateral[].expectedPurchaseDate",
                                 title:"EXPECTED_PURCHASE_DATE",
+                                required:true,
                                 "type": "date",
                                 //"format": 'dd-mm-yyyy',
                                 "min":  Utils.getCurrentDate(),
