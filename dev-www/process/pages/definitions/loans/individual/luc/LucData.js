@@ -51,7 +51,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             if (result && result.urns) {
                                                 var cust = result.urns[urn]
                                                 if (cust) {
-                                                    model.loanMonitoringDetails.customerName = cust.first_name;
+                                                    //model.loanMonitoringDetails.customerName = cust.first_name;
                                                     model.loanMonitoringDetails.proprietoryName = cust.first_name;
 
                                                     Enrollment.getCustomerById({
@@ -137,6 +137,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
                                                     if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
+                                                        model.loanMonitoringDetails.customerName = response1.firstName;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
                                                         if (response1.buyerDetails && response1.buyerDetails.length) {
