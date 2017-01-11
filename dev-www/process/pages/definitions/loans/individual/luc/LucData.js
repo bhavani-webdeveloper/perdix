@@ -133,11 +133,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                                     $log.info("printing customer");
                                                     $log.info(response1);
                                                     model.loanMonitoringDetails.address = model.loanMonitoringDetails.address || (response1.doorNo + " " + response1.street + " " + response1.locality);
+                                                    model.loanMonitoringDetails.customerName = response1.firstName;
                                                     if (!_.hasIn(model.loanMonitoringDetails, 'socialImpactDetails') || model.loanMonitoringDetails.socialImpactDetails == null) {
                                                         model.loanMonitoringDetails.socialImpactDetails = {};
                                                     }
                                                     if (model.loanMonitoringDetails.currentStage == "LUCSchedule") {
-                                                        model.loanMonitoringDetails.customerName = response1.firstName;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyNetIncome = response1.enterprise.avgMonthlyNetIncome;
                                                         model.loanMonitoringDetails.socialImpactDetails.preLoanMonthlyRevenue = response1.enterprise.monthlyTurnover;
                                                         if (response1.buyerDetails && response1.buyerDetails.length) {
