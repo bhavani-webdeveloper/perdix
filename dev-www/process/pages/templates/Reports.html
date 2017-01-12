@@ -33,29 +33,15 @@
     <h1>
       <span><a href style="color:#333">Reports Dashboard</a></span>
       <div
-        ng-show="currentUserRole.accessLevel <= 3"
+        ng-show="currentUserAccessLevel <= filterAccessLevels[filterAccessLevels.length-1]"
         class="filter-form pull-right">
         <small>View As:</small>
         <select
-          ng-show="currentUserRole.accessLevel <= 1"
-          name="myRegionSelect"
-          id="myRegionSelect"
-          ng-options="row.name for row in regionName track by row.id"
-          ng-model="selectedRegion"
-          ng-change="listHubs()"></select>
-        <select
-          ng-show="currentUserRole.accessLevel <= 2"
-          name="myHubSelect"
-          id="myHubSelect"
-          ng-options="row.hubname for row in HubNames track by row.id"
-          ng-model="selectedHub"
-          ng-change="listBranches()"></select>
-        <select
-          name="myUserSelect"
-          id="myUserSelect"
-          ng-options="row.user for row in loanOfficers track by row.id"
-          ng-model="selectedUser"></select>
-        <button ng-click="processFilter()" class="btn btn-default btn-xs"><i class="fa fa-filter">&nbsp;</i>Apply Filter</button>
+          ng-repeat="fal in filterAccessLevels"
+          ng-options="node.name for node in fNodes[$index] track by node.id"
+          ng-model="fSelect[$index]"
+          ng-change="listNextAccessLevelItems(filterAccessLevels[$index + 1], fSelect[$index].id, $index + 1)"></select>
+        <button ng-click="applyFilter()" class="btn btn-default btn-xs"><i class="fa fa-filter">&nbsp;</i>Apply Filter</button>
       </div>
     </h1>
   </section>
@@ -86,7 +72,7 @@
                       <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
                         <tr ng-if="SingleReport.DrillDownReq == '1'">
                           <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                            <a ng-click="onHeaderClick(key, SingleReport.unique_id)">{{ key }}</a>
                           </th>
                         </tr>
                         <tr ng-if="SingleReport.DrillDownReq == '0'">
@@ -101,7 +87,7 @@
                       <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
                         <tr ng-if="SingleReport.DrillDownReq == '1'">
                           <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                            <a ng-click="onHeaderClick(key, SingleReport.unique_id)">{{ key }}</a>
                           </th>
                         </tr>
                         <tr ng-if="SingleReport.DrillDownReq == '0'">
@@ -116,7 +102,7 @@
                       <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
                         <tr ng-if="SingleReport.DrillDownReq == '1'">
                           <th ng-repeat="(key, value) in RepeatTables[0]" align="left">
-                            <a ng-click="onheaderClick(key, SingleReport.unique_id)">{{ key }}</a>
+                            <a ng-click="onHeaderClick(key, SingleReport.unique_id)">{{ key }}</a>
                           </th>
                         </tr>
                         <tr ng-if="SingleReport.DrillDownReq == '0'">

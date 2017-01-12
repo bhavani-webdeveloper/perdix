@@ -5,65 +5,54 @@ irf.pages.controller("ReportsCtrl",
 
 	var userName = SessionStore.getLoginname();
 
-	$scope.currentUserRole = SessionStore.getUserRole();
+	var currentUserRole = SessionStore.getUserRole();
 
-	//sample
+	$scope.currentUserAccessLevel = currentUserRole.accessLevel;
+
 	PageHelper.showLoader();
-	
-	BIReports.reportMenuList().$promise.then(function(response) {
-		$scope.dashboardDefinition = response;
-	});
 
-	//for hub dropdown
-	BIReports.reportFilterList({"DropDownType":"region", "selectedValue":""}).$promise.then(function(response) {
-		$scope.regionName = response.items;
-	});
+	var allAccessLevels = [10, 20, 30]; // filtering not available for 40
 
-	//for branch dropdown on select
-	$scope.listHubs = function() {
-		$scope.HubNames = [];
-		$scope.loanOfficers = [];
-		BIReports.reportFilterList({"DropDownType":"Hub", "selectedValue":$scope.selectedRegion.id}).$promise.then(function(response) {
-			$scope.HubNames = response.items;
+	$scope.filterAccessLevels = allAccessLevels.slice(allAccessLevels.indexOf($scope.currentUserAccessLevel));
+	$scope.fSelect = Array($scope.filterAccessLevels.length);
+	$scope.fNodes = Array($scope.filterAccessLevels.length);
+
+	$scope.listNextAccessLevelItems = function(accessLevel, selectedValue, index) {
+		for (i = index; i < $scope.filterAccessLevels.length; i++) $scope.fSelect[i] = [];
+		BIReports.reportFilterList({ "accessLevel": accessLevel, "selectedValue": selectedValue }).$promise.then(function(response) {
+			$scope.fNodes[index] = response.items;
 		});
 	}
 
-	//for users dropdown on select
-	$scope.listBranches = function() {
-		BIReports.reportFilterList({"DropDownType":"branch", "selectedValue":$scope.selectedHub.id}).$promise.then(function(response) {
-			$scope.loanOfficers = response.items;
-		});
-	}
+	$scope.listNextAccessLevelItems($scope.filterAccessLevels[0], '', 0);
 
-	//on pressing the button apply filter
-	$scope.processFilter = function() {
-		alert($scope.selectedRegion.id+'/'+$scope.selectedHub.id+'/'+$scope.selectedHub.id);
+	$scope.applyFilter = function() {
+		var user = $scope.fSelect[$scope.filterAccessLevels.length - 1];
+		$log.debug(user);
 	}
 
 	$scope.ResultDataSet = [];
 
-	$scope.onTabLoad = function(tabIndex, activeindex){	
-		
+	$scope.onTabLoad = function(tabIndex, activeindex) {
 		if(!$scope.ResultDataSet[activeindex]) {
 			PageHelper.showLoader();
 			BIReports.reportDataList({"report_id":tabIndex}).$promise.then(function(response) {
-			
-			$scope.dataset = [];
-			
-			angular.forEach(response.ReportData, function(value, key){
+				$scope.dataset = [];
 				
-				if(value.ReportType == 'CHART') {
+				angular.forEach(response.ReportData, function(value, key) {
 					$scope.dataset[key] = value;
-				} else {
-					$scope.dataset[key] = value;
-				}
+					/*if(value.ReportType == 'CHART') {
+						$scope.dataset[key] = value;
+					} else {
+						$scope.dataset[key] = value;
+					}*/
+				});
+				$scope.ResultDataSet[activeindex] = $scope.dataset;
+				PageHelper.hideLoader();
 			});
-			$scope.ResultDataSet[activeindex] = $scope.dataset;
-			PageHelper.hideLoader();
-		});
 		}
 		
-		$scope.onheaderClick = function(key, report_id) {
+		$scope.onHeaderClick = function(key, report_id) {
 			var drillDownUrl = irf.REPORT_BASE_URL + '/ReportDrilldown.php?report_id='+report_id+'&key='+key;
 			$log.info(drillDownUrl);
 			window.open(drillDownUrl);
@@ -74,14 +63,5 @@ irf.pages.controller("ReportsCtrl",
 		console.log(response);
 		$scope.TabDefinition = response;
 	});
-/*
-	BIReports.reportList({"sd":"sd"}).$promise.then(function(resp){
-		self.formSource[0].items[0].titleMap = resp;
-		self.form = self.formSource;
-	}, function(errResp){
-		PageHelper.showErrors(errResp);
-	}).finally(function(){
-		PageHelper.hideLoader();
-	});
-*/
+
 }]);

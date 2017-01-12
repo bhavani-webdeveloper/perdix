@@ -14,15 +14,15 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
         },
 		reportDataList: {
             method: 'GET',
-            url: endpoint + '/biportal/api/ReportDefinition.php?report_id=:report_id'
+            url: endpoint + '/biportal/api/ReportDefinition.php'
         },
 		reportFilterList: {
             method: 'GET',
-            url: endpoint + '/biportal/api/AccessLevelDefinition.php?DropDownType=:DropDownType&selectedValue=:selectedValue'
+            url: endpoint + '/biportal/api/AccessLevelDefinition.php'
         },
 		reportTabList: {
             method: 'GET',
-            url: endpoint + '/biportal/api/TabDefinition.php?menu_id=:menu_id'
+            url: endpoint + '/biportal/api/TabDefinition.php'
         },		
         listOfscoreServices: {
             method: 'GET',
@@ -38,7 +38,7 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
         },
 		UpdateScore: {
             method: 'POST',
-            url: endpoint2 + '/scoring/Api/UpdateScore.php?ScoreName=:ScoreName'
+            url: endpoint2 + '/scoring/Api/UpdateScore.php'
         },
 		ListAllScoreParams:{
             method: 'GET',
@@ -50,7 +50,7 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
         },
 		UpdateScoreParams: {
             method: 'POST',
-            url: endpoint2 + '/scoring/Api/UpdateScore.php?ScoreName=:ScoreName'
+            url: endpoint2 + '/scoring/Api/UpdateScore.php'
         },
 		ListScoreElements: {
             method: 'POST',
@@ -82,7 +82,7 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
         },
 		ListAssignedParameters: {
             method: 'GET',
-            url: endpoint2 + '/scoring/Api/listScoreParameters.php?ScoreName=:ScoreName'
+            url: endpoint2 + '/scoring/Api/listScoreParameters.php'
         },
 		CreateParameterValues: {
             method: 'POST',
@@ -90,11 +90,11 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
         },
 		GetSpecificParamValue: {
             method: 'GET',
-            url: endpoint2 + '/scoring/Api/getParameterValues.php?Id=:Id'
+            url: endpoint2 + '/scoring/Api/getParameterValues.php'
         },
 		UpdateParamValue: {
             method: 'POST',
-            url: endpoint2 + '/scoring/Api/UpdateParameterValues.php?Id=:Id'
+            url: endpoint2 + '/scoring/Api/UpdateParameterValues.php'
         }
 		
     });
