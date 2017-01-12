@@ -15,6 +15,7 @@
 				"lucDone",
 				"lucRescheduled",
 				"lucRescheduleReason",
+				"lucRescheduledDate",
 				"lucEscalated",
 				"lucEscalatedReason",
 				"socialImpactDetailsId",
