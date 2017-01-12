@@ -63,6 +63,18 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
         return true;
     }
 
+    var validateCibilHighmark = function(model){
+        if (model.loanAccount && model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length>0){
+            for (i=0; i<model.loanAccount.loanCustomerRelations.length; i++){
+                if(!model.loanAccount.loanCustomerRelations[i].cibilCompleted || !model.loanAccount.loanCustomerRelations[i].highmarkCompleted){
+                    PageHelper.showProgress("pre-save-validation", "CIBIL and Highmark is not completed",5000);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     var computeEstimatedEMI = function(model){
             var fee = 0;
             if(model.loanAccount.commercialCibilCharge)
@@ -419,6 +431,17 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 //         }
                 //     }
                 // }
+            },
+            "cb-check-update": function(bundleModel, model, params){
+                $log.info("Inside cb-check-update of LoanRequest");
+                for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                    if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                        if(params.cbType == 'BASE')
+                            model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                        else if(params.cbType == 'CIBIL')
+                            model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
+                    }
+                }
             }
         },
         form: [
@@ -1884,6 +1907,12 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 }
                 if(!validateAndPopulateMitigants(model)){
                     return;
+                }
+
+                if(model.currentStage=='Screening'){
+                    if(!validateCibilHighmark(model)){
+                        return;
+                    }
                 }
 
 

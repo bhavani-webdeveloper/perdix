@@ -281,6 +281,12 @@ function (
                         if (enrolmentDetails.customerId){
                             BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                         }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer){
+                        $log.info(cbCustomer);
+                        if(cbCustomer.customerId){
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
                     }
         		},
                 preSave: function(offlineData) {
