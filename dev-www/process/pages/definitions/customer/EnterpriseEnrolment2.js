@@ -2380,7 +2380,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
-                                type: "radios",
+                                type: "string",
                                 enumCode: "decisionmaker",
                                 condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
