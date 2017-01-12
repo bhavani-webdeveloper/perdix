@@ -192,9 +192,9 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 
 irf.commons.factory("formHelper",
 ["$log", "$state", "irfStorageService", "SessionStore", "entityManager", "irfProgressMessage",
-"$filter", "Files", "$q", "elementsUtils",
+"$filter", "Files", "$q", "elementsUtils", "$timeout",
 function($log, $state, irfStorageService, SessionStore, entityManager, irfProgressMessage,
-	$filter, Files, $q, elementsUtils){
+	$filter, Files, $q, elementsUtils, $timeout){
 	return {
 		enum: function(key) {
 			// console.warn(key);
@@ -301,6 +301,23 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 			$log.warn('Going TO submit');
 			actions.submit(model, formCtrl, formName);
 			return true;
+		},
+		validate: function(formCtrl) {
+			var deferred = $q.defer();
+			if (!formCtrl) {
+				deferred.reject();
+			}else {
+				$timeout(function(){
+					formCtrl.scope.$broadcast('schemaFormValidate');
+					if (formCtrl.$valid) {
+						deferred.resolve();
+					} else {
+						irfProgressMessage.pop('form-error', 'Your form have errors. Please fix them.',5000);
+						deferred.reject();
+					}
+				});
+			}
+			return deferred.promise;
 		},
     	getFileStreamAsDataURL: function(fileId, params,stripDescriptors) {
 	        var deferred = $q.defer();

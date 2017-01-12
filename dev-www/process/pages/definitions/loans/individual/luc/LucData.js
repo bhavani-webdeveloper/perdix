@@ -685,7 +685,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             type: "button",
                             icon: "fa fa-step-backward",
                             title: "ReSchedule",
-                            onClick: function(model) {
+                            onClick: function(model, formCtrl) {
                                 $log.info("Inside submit()");
                                 $log.warn(model);
                                 var sortFn = function(unordered) {
@@ -695,18 +695,17 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     });
                                     return out;
                                 };
-                                var reqData = _.cloneDeep(model);
+                                formHelper.validate(formCtrl).then(function() {
+                                    var reqData = _.cloneDeep(model);
+                                    if (reqData.loanMonitoringDetails.id) {
+                                        LucHelper.reschedule(reqData).then(function(resp) {
+                                            $state.go('Page.LUCDashboard', null);
+                                        });
 
-
-                                if (reqData.loanMonitoringDetails.id) {
-                                    LucHelper.reschedule(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
-                                    });
-
-                                } else {
-                                    $log.info("Id is not in the model");
-                                }
-
+                                    } else {
+                                        $log.info("Id is not in the model");
+                                    }
+                                });
                             }
                         }]
                     }, {
@@ -716,17 +715,9 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             type: "button",
                             icon: "fa fa-step-forward",
                             title: "Escalate",
-                            onClick: function(model) {
+                            onClick: function(model, formCtrl) {
                                 $log.info("Inside submit()");
                                 $log.warn(model);
-
-                                $log.info(model.loanMonitoringDetails.currentStage);
-
-                                /*if (model.loanMonitoringDetails.currentStage == "LUCSchedule")
-                                {
-                                    model.stage="LUCEscalate";
-                                }*/
-
                                 var sortFn = function(unordered) {
                                     var out = {};
                                     Object.keys(unordered).sort().forEach(function(key) {
@@ -734,15 +725,17 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     });
                                     return out;
                                 };
-                                var reqData = _.cloneDeep(model);
 
-                                if (reqData.loanMonitoringDetails.id) {
-                                    LucHelper.escalate(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
-                                    });
-                                } else {
-                                    $log.info("Id is not in the model");
-                                }
+                                formHelper.validate(formCtrl).then(function() {
+                                    var reqData = _.cloneDeep(model);
+                                    if (reqData.loanMonitoringDetails.id) {
+                                        LucHelper.escalate(reqData).then(function(resp) {
+                                            $state.go('Page.LUCDashboard', null);
+                                        });
+                                    } else {
+                                        $log.info("Id is not in the model");
+                                    }
+                                });
                             }
                         }]
                     }, {
@@ -765,7 +758,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             type: "button",
                             icon: "fa fa-step-backward",
                             title: "Sent Back",
-                            onClick: function(model) {
+                            onClick: function(model, formCtrl) {
                                 $log.info("Inside submit()");
                                 $log.warn(model);
                                 var sortFn = function(unordered) {
@@ -775,17 +768,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     });
                                     return out;
                                 };
-                                var reqData = _.cloneDeep(model);
-
-                                if (reqData.loanMonitoringDetails.id) {
-                                    LucHelper.goBack(reqData).then(function(resp) {
-                                        $state.go('Page.LUCDashboard', null);
-                                    });
-
-                                } else {
-                                    $log.info("Id is not in the model");
-                                }
-
+                                formHelper.validate(formCtrl).then(function() {
+                                    var reqData = _.cloneDeep(model);
+                                    if (reqData.loanMonitoringDetails.id) {
+                                        LucHelper.goBack(reqData).then(function(resp) {
+                                            $state.go('Page.LUCDashboard', null);
+                                        });
+                                    } else {
+                                        $log.info("Id is not in the model");
+                                    }
+                                });
                             }
                         }]
                     },
