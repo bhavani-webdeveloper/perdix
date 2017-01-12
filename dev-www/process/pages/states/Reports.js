@@ -5,6 +5,8 @@ irf.pages.controller("ReportsCtrl",
 
     var userName = SessionStore.getLoginname();
 
+    $scope.currentUserRole = SessionStore.getUserRole();
+
 	//sample
     PageHelper.showLoader();
 	

@@ -26,15 +26,22 @@
   <section class="content-header">
     <h1>
       <span><a href style="color:#333">Reports Dashboard</a></span>
-      <form ng-submit="processForm()" name="myFormName" style="display: inline;" class="filter-form pull-right">
-        <small>View Report As:</small>
+      <form
+        ng-show="currentUserRole.accessLevel <= 3"
+        ng-submit="processForm()"
+        name="myFormName"
+        style="display: inline;"
+        class="filter-form pull-right">
+        <small>View As:</small>
         <select
+          ng-show="currentUserRole.accessLevel <= 1"
           name="myRegionSelect"
           id="myRegionSelect"
           ng-options="row.name for row in regionName track by row.id"
           ng-model="selectedRegion"
           ng-change="listHubs()"></select>
         <select
+          ng-show="currentUserRole.accessLevel <= 2"
           name="myHubSelect"
           id="myHubSelect"
           ng-options="row.hubname for row in HubNames track by row.id"
