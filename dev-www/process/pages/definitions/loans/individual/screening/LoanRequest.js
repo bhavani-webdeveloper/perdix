@@ -38,6 +38,16 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
 
             }
         }
+
+        if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)){
+            _.forEach(loanAccount.collateral, function(collateral){
+                if (_.isNull(collateral.id)){
+                    /* ITS A NEW COLLATERAL ADDED */
+                    collateral.loanToValue = collateral.collateralValue;
+                    collateral.totalValue = collateral.loanToValue * collateral.quantity;
+                }
+            })
+        }
         
         return true;
     }
@@ -995,6 +1005,12 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                 type: "number",
                             },
                             {
+                                key: "loanAccount.collateral[].quantity",
+                                title:"QUANTITY",
+                                required:true,
+                                type: "number",
+                            },
+                            {
                                 key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",
                                 required:true,
@@ -1086,7 +1102,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             {
                                 key: "loanAccount.collateral[].collateralValue",
                                 title:"PURCHASE_PRICE",
-                                
+                                type: "number",
+                            },
+                            {
+                                key: "loanAccount.collateral[].quantity",
+                                title:"QUANTITY",
                                 type: "number",
                             },
                             {

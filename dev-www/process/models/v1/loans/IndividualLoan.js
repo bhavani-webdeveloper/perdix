@@ -91,6 +91,27 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
                             }
                         }
                     }
+
+                    if (_.hasIn(data, 'securityEmiRequired') && !_.isNull(data.securityEmiRequired) && _.isString(data.securityEmiRequired)){
+                        data.securityEmiRequired = data.securityEmiRequired.toUpperCase();
+                    }
+
+                    if (_.isArray(data.collateral)){
+                        _.forEach(data.collateral, function(collateral){
+                            if (_.hasIn(collateral, 'machineAttachedToBuilding') && !_.isNull(collateral.machineAttachedToBuilding) && _.isString(collateral.machineAttachedToBuilding)){
+                                collateral.machineAttachedToBuilding = collateral.machineAttachedToBuilding.toUpperCase();
+                            }
+                            if (_.hasIn(collateral, 'hypothecatedToBank') && !_.isNull(collateral.hypothecatedToBank) && _.isString(collateral.hypothecatedToBank)){
+                                collateral.hypothecatedToBank = collateral.hypothecatedToBank.toUpperCase();
+                            }
+                            if (_.hasIn(collateral, 'electricityAvailable') && !_.isNull(collateral.electricityAvailable) && _.isString(collateral.electricityAvailable)){
+                                collateral.electricityAvailable = collateral.electricityAvailable.toUpperCase();
+                            }
+                            if (_.hasIn(collateral, 'spaceAvailable') && !_.isNull(collateral.spaceAvailable) && _.isString(collateral.spaceAvailable)){
+                                collateral.spaceAvailable = collateral.spaceAvailable.toUpperCase();
+                            }
+                        })
+                    }
                 }
 
                 return data;
