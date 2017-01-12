@@ -20,6 +20,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                     model = Utils.removeNulls(model, true);
                     $log.info("luc page got initiated");
 
+
                     if (!(model && model.loanMonitoringDetails && model.loanMonitoringDetails.id && model.$$STORAGE_KEY$$)) {
                         PageHelper.showLoader();
                         PageHelper.showProgress("page-init", "Loading...");
@@ -33,6 +34,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             function(res) {
                                 $log.info(res);
                                 _.assign(model.loanMonitoringDetails, res);
+                                model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
                                 var loanId = res.loanId;
 
                                 var loanresponse = IndividualLoan.get({
@@ -45,6 +47,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         $log.info(response);
                                         var urn = response.applicant;
                                         var linkedurns = [urn];
+                                        model.loanMonitoringDetails.udf1=model.loanMonitoringDetails.udf1||response.accountNumber;
                                         Queries.getCustomerBasicDetails({
                                             "urns": linkedurns
                                         }).then(function(result) {
@@ -199,6 +202,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                         }, {
                             key: "loanMonitoringDetails.loanId",
                             type: "number",
+                            "readonly": true
+                        },{
+                            key: "loanMonitoringDetails.udf1",
+                            type: "string",
+                            title:"ACCOUNT_NUMBER",
                             "readonly": true
                         }]
                     }, {

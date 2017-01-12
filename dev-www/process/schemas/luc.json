@@ -214,6 +214,10 @@
 					"title": "BY_WHEN_REMAINING_AMOUNT_WILL_BE_USED",
 					"type": "string"
 				},
+				"udf1": {
+							"title": "UFD1",
+							"type": "string"
+						},
 				"socialImpactDetails": {
 					"title": "SOCIAL_IMPACT_DETAILS",
 					"type": "object",
@@ -228,10 +232,6 @@
 						"womenPartTimeEmployee",
 						"womenFullTimeEmployee",
 						"noOfFirstJobsWomen",
-						"preLoanMonthlyRevenue",
-						"preLoanMonthlyNetIncome",
-						"preLoanProprietorSalary",
-						"preLoanNumberOfCustomersOrBuyers",
 						"postLoanMonthlyRevenue",
 						"postLoanMonthlyNetIncome",
 						"postLoanProprietorSalary",
@@ -334,12 +334,6 @@
 					"items": {
 						"type": "object",
 						"required": [
-							"make",
-							"type",
-							"year",
-							"model",
-							"serialNumber",
-							"assetType",
 							"hypothecationLabelBeenApplied",
 							"companyNameInOriginalInvoice",
 							"hypothecatedTo"

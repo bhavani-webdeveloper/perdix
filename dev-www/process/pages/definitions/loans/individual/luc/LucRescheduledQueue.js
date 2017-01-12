@@ -116,13 +116,22 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRescheduledQueue"),
 							data: 'loanId'
 						}, {
 							title: 'Disbursement Date',
-							data: 'disbursementDate'
+							data: 'disbursementDate',
+							render: function(data, type, full, meta) {
+								return (moment(data).format("DD-MM-YYYY"));
+							}
 						}, {
 							title: 'LUC Date',
-							data: 'lucDate'
+							data: 'lucDate',
+							render: function(data, type, full, meta) {
+								return (moment(data).format("DD-MM-YYYY"));
+							}
 						}, {
 							title: 'Rescheduled Date',
-							data: 'lucRescheduledDate'
+							data: 'lucRescheduledDate',
+							render: function(data, type, full, meta) {
+								return (moment(data).format("DD-MM-YYYY"));
+							}
 						},{
 							title: 'Rescheduled Reason',
 							data: 'lucRescheduleReason'
