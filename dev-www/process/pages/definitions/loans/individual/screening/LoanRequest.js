@@ -41,7 +41,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
 
         if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)){
             _.forEach(loanAccount.collateral, function(collateral){
-                if (_.isNull(collateral.id)){
+                if (!_hasIn(collateral, "id") || _.isNull(collateral.id)){
                     /* ITS A NEW COLLATERAL ADDED */
                     collateral.loanToValue = collateral.collateralValue;
                     collateral.totalValue = collateral.loanToValue * collateral.quantity;
