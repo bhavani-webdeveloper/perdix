@@ -68,7 +68,20 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         },
         getCustomerById: {
             method: 'GET',
-            url: endpoint+'/:id'
+            url: endpoint+'/:id',
+            transformResponse: function(data){
+                var customer = JSON.parse(data);
+                if (status === 200){
+                    if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
+                        _.forEach(customer.customerBankAccounts, function(bankAccount){
+                            if (_.hasIn(bankAccount, 'netBankingAvailable') && !_.isNull(bankAccount.netBankingAvailable) && _.isString(bankAccount.netBankingAvailable)){
+                                bankAccount.netBankingAvailable = bankAccount.netBankingAvailable.toUpperCase();
+                            }
+                        })
+                    }
+                }
+                return customer;
+            }
         },
         getWithHistory: {
             method: 'GET',

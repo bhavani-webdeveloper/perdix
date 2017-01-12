@@ -1038,6 +1038,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].ifscCode",
                                 type: "lov",
                                 lovonly: true,
+                                required: true,
                                 inputMap: {
                                     "ifscCode": {
                                         "key": "customer.customerBankAccounts[].ifscCode"
@@ -1074,10 +1075,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankName",
+                                required: true,
                                 readonly: true
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankBranchName",
+                                required: true,
                                 readonly: true
                             },
                             {

@@ -1846,6 +1846,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key: "customer.customerBankAccounts[].ifscCode",
                                             type: "lov",
                                             lovonly: true,
+                                            required: true,
                                             inputMap: {
                                                 "ifscCode": {
                                                     "key": "customer.customerBankAccounts[].ifscCode"
@@ -1882,11 +1883,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].customerBankName",
-                                            readonly: true
+                                            readonly: true,
+                                            required: true
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].customerBankBranchName",
-                                            readonly: true
+                                            readonly: true,
+                                            required: true
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].customerNameAsInBank"
