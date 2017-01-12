@@ -105,6 +105,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "required": true
                     },
                     {
+                        key: "loanAccount.emiPaymentDateRequested",
+                        type: "string",
+                        title: "EMI_PAYMENT_DATE_REQUESTED",
+                        readonly: true
+                    },
+                    {
                         "key": "loanAccount.firstRepaymentDate",
                         "title": "REPAYMENT_DATE",
                         "type": "date",
