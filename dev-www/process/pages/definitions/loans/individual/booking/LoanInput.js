@@ -1414,6 +1414,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     $log.info(model);
                     PageHelper.clearErrors();
 
+                    if (!validateForm(form)){
+                        return;
+                    }
+
                     model.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted || "N";
 
                     if (model.additional.product && !_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){

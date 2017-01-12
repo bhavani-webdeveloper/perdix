@@ -1736,6 +1736,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
+                PageHelper.clearErrors();
                 /* TODO Call proceed servcie for the loan account */
 
                 Utils.confirm("Are You Sure?").then(function(){
@@ -1769,6 +1770,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             save: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
+                PageHelper.clearErrors();
 
                 /* TODO Call save service for the loan */
                 if(!validateAndPopulateMitigants(model)){
@@ -1822,6 +1824,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             holdButton: function(model, formCtrl, form, $event){
                 $log.info("Inside save()");
+                PageHelper.clearErrors();
                 /* TODO Call save service for the loan */
 
                 if (!preLoanSaveOrProceed(model.loanAccount)){
@@ -1861,6 +1864,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             sendBack: function(model, formCtrl, form, $event){
                 $log.info("Inside sendBack()");
+                PageHelper.clearErrors();
                 // if (!validateForm(formCtrl)){
                 //     return;
                 // }
@@ -1900,6 +1904,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             },
             proceed: function(model, formCtrl, form, $event){
                 $log.info("Inside submit()");
+                PageHelper.clearErrors();
                 /* TODO Call proceed servcie for the loan account */
 
                 if (!validateForm(formCtrl)){
