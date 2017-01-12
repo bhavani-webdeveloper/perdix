@@ -1030,7 +1030,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                 required:true,
                                 "type": "date",
                                 //"format": 'dd-mm-yyyy',
-                                "min":  Utils.getCurrentDate(),
+                                "minDate": SessionStore.getCBSDate(),
                             },
                             {
                                 key: "loanAccount.collateral[].machineAttachedToBuilding",
