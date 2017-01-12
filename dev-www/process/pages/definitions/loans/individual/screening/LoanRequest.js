@@ -2059,7 +2059,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                    reqData.loanAccount.status = '';
+                    reqData.loanAccount.status = 'REJECTED';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.stage = "Rejected";
                     reqData.remarks = model.review.remarks;
