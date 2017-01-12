@@ -328,6 +328,10 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 $log.info("INside updated Enterprise of LoanRequest");
                 model.enterprise = param;
             },
+            "applicant-updated": function(bundleModel, model, param){
+                $log.info("INside updated Applicant of LoanRequest");
+                model.applicant = param;
+            },
             "new-guarantor": function(bundleModel, model, params){
                 $log.info("Insdie guarantor of LoanRequest");
                 // model.loanAccount.coApplicant = params.customer.id;
@@ -1944,6 +1948,13 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if (model.loanAccount.currentStage === 'Application' && model.loanAccount.psychometricCompleted != 'Completed') {
                     PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
                     return;
+                }
+
+                if (model.currentStage == 'FieldAppraisal'){
+                    if (!_.hasIn(model.applicant, 'stockMaterialManagement') || _.isNull(model.applicant.stockMaterialManagement)) {
+                        PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
+                        return;
+                    }
                 }
 
                 if(model.currentStage=='ScreeningReview'){

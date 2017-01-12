@@ -15,6 +15,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     "subTitle": "",
                     initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                         // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+
+                        if (bundlePageObj){
+                            model._bundlePageObj = _.cloneDeep(bundlePageObj);
+                        }
        
                         model.currentStage = bundleModel.currentStage;
                        
@@ -26,6 +30,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         .$promise
                                         .then(function(res){
                                             model.customer = res;
+                                            BundleManager.pushEvent('customer-loaded', model._bundlePageObj, {customer: res})
                                             if (model.customer.stockMaterialManagement) {
                                                 model.proxyIndicatorsHasValue = true;
                                                 $log.debug('PROXY_INDICATORS already has value');
@@ -84,9 +89,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 ]
                             }
                         // }
-                        if (bundlePageObj){
-                            model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                        }
+                        
 
                         if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                                 model.customer.enterprise = {};
@@ -2293,77 +2296,77 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.properAndMatchingSignboard",
                                     title:"PROPER_MATCHING_SIGNBOARD",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.bribeOffered",
                                     title:"BRIBE_OFFERED",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.shopOrganized",
                                     title:"SHOP_SHED_ORGANIZED",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "status_scale_2"
                                 },
                                 {
                                     key:"customer.isIndustrialArea",
                                     title:"IN_INDUSTRIAL_AREA",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.customerAttitudeToKinara",
                                     title:"CUSTOMER_ATTITUDE_TO_KINARA",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "status_scale_2"
                                 },
                                 {
                                     key:"customer.bookKeepingQuality",
                                     title:"BOOK_KEEPING_QUALITY",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "status_scale_2"
                                 },
                                 {
                                     key:"customer.challengingChequeBounce",
                                     title:"CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.allMachinesAreOperational",
                                     title:"ALL_MACHINES_OPERATIONAL?",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.employeeSatisfaction",
                                     title:"EMPLOYEE_SATISFACTION",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "status_scale_2"
                                 },
                                 {
                                     key:"customer.politicalOrPoliceConnections",
                                     title:"POLITICAL_POLICE_CONNECTIONS",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.multipleProducts",
                                     title:"MULTIPLE_PRODUCTS_MORE_THAN_3",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
@@ -2371,35 +2374,35 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     key:"customer.multipleBuyers",
                                     title:"MULTIPLE_BUYERS_MORE_THAN_3",
                                     condition: "model.customer.enterprise.businessType == 'Manufacturing'",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.seasonalBusiness",
                                     title:"SEASONAL_BUSINESS",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.incomeStability",
                                     title:"INCOME STABILITY",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "income_stability"
                                 },
                                 {
                                     key:"customer.utilisationOfBusinessPremises",
                                     title:"UTILIZATION_OF_BUSINESS_PREMISES ",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode: "utilisation_of_business"
                                 },
                                 {
                                     key:"customer.approachForTheBusinessPremises",
                                     title:"APPROACH_FOR_THE_BUSINESS_PREMISES",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"status_scale_2"
                                     //enumCode:"connectivity_status "
@@ -2407,7 +2410,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.safetyMeasuresForEmployees",
                                     title:"SAFETY_MEASURES_FOR_EMPLOYEES",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                     //enumCode: "status_scale"
@@ -2415,21 +2418,21 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.childLabours",
                                     title:"CHILD_LABOURERS",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.isBusinessEffectingTheEnvironment",
                                     title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"decisionmaker",
                                 },
                                 {
                                     key:"customer.stockMaterialManagement",
                                     title:"STOCK_MATERIAL_MANAGEMENT",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"status_scale_2"
                                     //enumCode: "status_scale"
@@ -2438,7 +2441,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     key:"customer.customerWalkinToBusiness",
                                     condition: "model.customer.enterprise.businessType == 'Trading'",
                                     title:"CUSTOMER_WALK_IN_TO_THE_BUSINESS",
-                                    type:"radios",
+                                    type:"select",
                                     required:"true",
                                     enumCode:"status_scale"
                                     //enumCode: "status_scale"

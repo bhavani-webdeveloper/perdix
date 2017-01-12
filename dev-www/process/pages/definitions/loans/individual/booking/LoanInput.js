@@ -1380,9 +1380,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    if (!validateForm(formCtrl)){
-                        return;
-                    }
+                    
                     populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};

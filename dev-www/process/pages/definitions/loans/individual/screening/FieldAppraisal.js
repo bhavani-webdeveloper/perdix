@@ -196,12 +196,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
         			"on-customer-load": function(pageObj, bundleModel, params){
                         
         			},
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        switch (pageObj.pageClass){
+                            case 'applicant':
+                                $log.info("Applicant loaded");
+                                BundleManager.broadcastEvent("applicant-updated", params.customer);
+                                break;
+                        }
+                    },
                     "new-enrolment": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
                             case 'applicant':
                                 $log.info("New applicant");
                                 bundleModel.applicant = params.customer;
                                 BundleManager.broadcastEvent("new-applicant", params);
+                                BundleManager.broadcastEvent("applicant-updated", params.customer);
                                 break;
                             case 'co-applicant':
                                 $log.info("New co-applicant");
