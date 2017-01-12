@@ -87,17 +87,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
         // }
 
-        for (var i=0; i<model.houseHoldPL.length; i++){
-            model.pl.household.push({
-                income : model.houseHoldPL[i].data[0]['Total Incomes'],
-                salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
-                otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
-                familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
-                Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
-                declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
-                emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
-                netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income']
-            })
+        if(model.houseHoldPL && model.houseHoldPL.length){
+            for (var i=0; i<model.houseHoldPL.length; i++){
+                model.pl.household.push({
+                    income : model.houseHoldPL[i].data[0]['Total Incomes'],
+                    salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
+                    otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
+                    familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
+                    Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
+                    declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                    emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
+                    netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income']
+                })
+            }
         }
 
         model.pl.business.invoice = model.businessPL.data[0]['Invoice'];

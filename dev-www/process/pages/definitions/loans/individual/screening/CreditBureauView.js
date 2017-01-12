@@ -453,13 +453,14 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             model.customer = {};
             model.applicant = {};
             model.coapplicants = [];
+            model.guarantors = [];
             PageHelper.showLoader();
             if (_.hasIn(model, 'loanAccount')){
                 if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length) {
                     var bureauPromises = [];
                     for (i in model.loanAccount.loanCustomerRelations) {
                         var lcRelation = model.loanAccount.loanCustomerRelations[i];
-                        if (lcRelation.relation == 'Applicant' || lcRelation.relation == 'Co-Applicant'){
+                        if (lcRelation.relation == 'Applicant' || lcRelation.relation == 'Co-Applicant' || lcRelation.relation == 'Guarantor'){
                             var bureauPromise = CreditBureau.getCBDetails({customerId: lcRelation.customerId, requestType: null, type: null}).$promise;
                             bureauPromises.push(bureauPromise);
 
@@ -545,6 +546,8 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                                             model.applicant = httpres;
                                         } else if (relationGuy.relation == 'Co-Applicant') {
                                             model.coapplicants.push(httpres);
+                                        } else if (relationGuy.relation == 'Guarantor') {
+                                            model.guarantors.push(httpres);
                                         }
                                     }
                                 }
@@ -565,6 +568,10 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                         for (k in model.coapplicants) {
                             objectifiedBureaus[model.coapplicants[k].customerId] = model.coapplicants[k];
                             customerIds.push(model.coapplicants[k].customerId);
+                        }
+                        for (k in model.guarantors) {
+                            objectifiedBureaus[model.guarantors[k].customerId] = model.guarantors[k];
+                            customerIds.push(model.guarantors[k].customerId);
                         }
 
                         Queries.getCustomerBasicDetails({ids: customerIds}).then(function (res) {
@@ -614,6 +621,19 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                     {
                         type: "section",
                         html: '<div ng-repeat="CBDATA in model.coapplicants">' + HIGHMARK_HTML + CIBIL_HTML + '<hr><hr></div>'
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                title:"GUARANTOR",
+                condition:"model.guarantors.length>0",
+                readonly:true,
+                "items": [
+                    {
+                        type: "section",
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' + HIGHMARK_HTML + CIBIL_HTML + '<hr><hr></div>'
                     }
                 ]
             }
