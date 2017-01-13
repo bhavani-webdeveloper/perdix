@@ -254,6 +254,27 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     model.customer.guarantors[i].loanAmount = params.loanAccount.loanAmountRequested;
                     model.customer.guarantors[i].loanPurpose1 = params.loanAccount.loanPurpose1;
                 }
+            },
+            "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
+                $log.info("Inside remove-customer-relation of CBCheck");
+                if (enrolmentDetails.customerClass == 'co-applicant'){
+                    _.remove(model.customer.coapplicants, function(g){
+                        if (g.coapplicantid == enrolmentDetails.customerId){
+                            return true;
+                        }
+                        return false;
+                    })
+                } else if (enrolmentDetails.customerClass == 'applicant'){
+                    model.customer.applicantname = null;
+                    model.customer.applicantid = null;
+                } else if (enrolmentDetails.customerClass == 'guarantor'){
+                    _.remove(model.customer.guarantors, function(g){
+                        if (g.guarantorid == enrolmentDetails.customerId){
+                            return true;
+                        }
+                        return false;
+                    })
+                }
             }
         },
         
