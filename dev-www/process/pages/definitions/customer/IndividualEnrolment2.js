@@ -1918,15 +1918,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             title: "OUTSTANDING_BALANCE",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
                                         },
-                                        // {
-                                        //     key:"customer.customerBankAccounts[].bankStatementId",
-                                        //     type:"file",
-                                        //     required: true,
-                                        //     fileType:"application/pdf",
-                                        //     "category": "CustomerEnrollment",
-                                        //     "subCategory": "IDENTITYPROOF",
-                                        //     using: "scanner"
-                                        // },
+                                        {
+                                            key:"customer.customerBankAccounts[].bankStatementDocId",
+                                            type:"file",
+                                            required: true,
+                                            title:"BANK_STATEMENT_UPLOAD",
+                                            fileType:"application/pdf",
+                                            "category": "CustomerEnrollment",
+                                            "subCategory": "IDENTITYPROOF",
+                                            using: "scanner"
+                                        },
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",
@@ -2031,6 +2032,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             type: "amount",
                                             title: "OUTSTANDING_BALANCE",
                                             condition:"model.customer.customerBankAccounts[arrayIndex].accountType=='OD' || model.customer.customerBankAccounts[arrayIndex].accountType=='CC'"
+                                        },
+                                        {
+                                            key:"customer.customerBankAccounts[].bankStatementDocId",
+                                            type:"file",
+                                            title:"BANK_STATEMENT_UPLOAD",
+                                            fileType:"application/pdf",
+                                            "category": "CustomerEnrollment",
+                                            "subCategory": "IDENTITYPROOF",
+                                            using: "scanner"
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements",
