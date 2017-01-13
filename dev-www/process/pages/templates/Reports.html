@@ -31,11 +31,10 @@
   </style>
   <section class="content-header">
     <h1>
-      <span><a href style="color:#333">Reports Dashboard</a></span>
+      <span><a href style="color:#333">Reports Dashboard</a></span> <small>{{filterUsername}}</small>
       <div
         ng-show="currentUserAccessLevel <= filterAccessLevels[filterAccessLevels.length-1]"
         class="filter-form pull-right">
-        <small>View As:</small>
         <select
           ng-repeat="fal in filterAccessLevels"
           ng-options="node.name for node in fNodes[$index] track by node.id"

@@ -95,11 +95,15 @@ irf.pages.config([
 	},{
 		name: "Page.ReportsDashboard",
 		url: "/ReportsDashboard",
-		templateUrl: "process/pages/templates/ReportsDashboard.html",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "ReportsDashboardCtrl"
 	},{
 		name: "Page.Reports",
 		url: "/Reports/:pageId",
+		params: {
+			pageId: null,
+			pageData: null
+		},
 		templateUrl: "process/pages/templates/Reports.html",
 		controller: "ReportsCtrl"
 	},{

@@ -1,7 +1,12 @@
 irf.pages.controller("ReportsCtrl",
-["$log", "$scope", "SessionStore", "$stateParams", "$q", "BIReports", "PageHelper",
-	function($log, $scope, SessionStore, $stateParams, $q, BIReports, PageHelper){
+["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper",
+	function($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper){
 	$log.info("ReportsCtrl loaded");
+
+	var pageData = $stateParams.pageData;
+	if (pageData && pageData.user && pageData.user.name) {
+		$scope.filterUsername = pageData.user.name;
+	}
 
 	var userName = SessionStore.getLoginname();
 
@@ -28,7 +33,17 @@ irf.pages.controller("ReportsCtrl",
 
 	$scope.applyFilter = function() {
 		var user = $scope.fSelect[$scope.filterAccessLevels.length - 1];
-		$log.debug(user);
+		var _f = [];
+		for (var i = 0; i < $scope.fSelect.length; i++) {
+			_f.push($scope.fSelect[i].id);
+		}
+		$state.go("Page.Reports", {
+			pageId: $stateParams.pageId,
+			pageData: {
+				filter: _f.join(':'),
+				user: user
+			}
+		});
 	}
 
 	$scope.ResultDataSet = [];
@@ -36,7 +51,11 @@ irf.pages.controller("ReportsCtrl",
 	$scope.onTabLoad = function(tabIndex, activeindex) {
 		if(!$scope.ResultDataSet[activeindex]) {
 			PageHelper.showLoader();
-			BIReports.reportDataList({"report_id":tabIndex}).$promise.then(function(response) {
+			var reportData = {"report_id":tabIndex, "user_id": userName};
+			if (pageData && pageData.user && pageData.user.id) {
+				reportData.user_id = pageData.user.id;
+			}
+			BIReports.reportDataList(reportData).$promise.then(function(response) {
 				$scope.dataset = [];
 				
 				angular.forEach(response.ReportData, function(value, key) {
@@ -59,9 +78,15 @@ irf.pages.controller("ReportsCtrl",
 		};
 	};
 
-	BIReports.reportTabList({"menu_id":$stateParams.pageId}).$promise.then(function(response) {
+	var tabData = {"menu_name":$stateParams.pageId};
+	if (pageData && pageData.filter) {
+		tabData.filter = pageData.filter;
+	}
+	BIReports.reportTabList(tabData).$promise.then(function(response) {
 		console.log(response);
 		$scope.TabDefinition = response;
+	}).finally(function() {
+		PageHelper.hideLoader();
 	});
 
 }]);
