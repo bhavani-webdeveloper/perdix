@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureInventory"), ["$log", "$state", "document", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureInventory"), ["$log", "$state", "Inventory", "InventoryHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
-    function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state, Inventory, InventoryHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -13,6 +13,8 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.inventory = model.inventory || {};
+                var branch1 = formHelper.enum('branch_id').data;
+                //model.inventory.branchId = SessionStore.getBranchId();
                 $log.info("Capture Inventory page  is initiated ");
             },
 
@@ -29,23 +31,23 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                     type: "box",
                     title: "CAPTURE_INVENTORY",
                     items: [{
-                        key: "inventory.inventoryTrackerDto",
-                        type: "array",
-                        startEmpty: true,
-                        view: "fixed",
-                        title: "INVENTORY",
-                        items: [{
-                            key: "inventory.inventoryTrackerDto[].branchId",
-                            type: "date",
-                            readonly: true,
-                        }, {
-                            key: "inventory.inventoryTrackerDto[].inventoryName",
-                            readonly: true,
-                        }, {
-                            key: "inventory.inventoryTrackerDto[].numberOfInventories",
-
-                        }]
-                    }]
+                            key: "inventory.branchId",
+                            "type": "select",
+                            "enumCode": "branch_code",
+                        },
+                        {
+                            key: "inventory.consumableInventoryDetails",
+                            type: "array",
+                            startEmpty: true,
+                            view: "fixed",
+                            title: "INVENTORY",
+                            items: [{
+                                key: "inventory.consumableInventoryDetails[].inventoryName",
+                            }, {
+                                key: "inventory.consumableInventoryDetails[].numberOfInventories",
+                            }]
+                        }
+                    ]
                 },
 
 
@@ -66,30 +68,33 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                 "properties": {
                     "inventory": {
                         "type": "object",
-                        "required": [
-                        ],
+                        "required": [],
                         "properties": {
-                            "inventoryTrackerDto": {
+                            "branchId": {
+                                            "title": "BRANCH_NAME",
+                                            "type": "string"
+                                        },
+
+                            "consumableInventoryDetails": {
                                 "type": "array",
                                 "items": {
                                     "type": "object",
                                     "required": [
-                                        "branchId",
                                         "inventoryName",
                                         "numberOfInventories"
                                     ],
                                     "properties": {
                                         "branchId": {
-                                            "title": "MAKE",
+                                            "title": "BRANCH_NAME",
                                             "type": "string"
                                         },
                                         "inventoryName": {
-                                            "title": "TYPE",
+                                            "title": "DOCUMENT_NAME",
                                             "type": "string"
                                         },
                                         "numberOfInventories": {
-                                            "title": "YEAR",
-                                            "type": "string"
+                                            "title": "NO_OF_DOCUMENTS",
+                                            "type": "number"
                                         }
                                     }
                                 }
@@ -99,7 +104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                 }
             },
             actions: {
-                preSave: function(model, form, formName) {
+                /*preSave: function(model, form, formName) {
                     $log.info("Inside save()");
                     var deferred = $q.defer();
                     if (model.doc) {
@@ -109,12 +114,29 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                         deferred.reject();
                     }
                     return deferred.promise;
-                },
+                },*/
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    irfProgressMessage.pop('Dispatch-save', 'Dispatch is successfully created', 3000);
                     $log.warn(model);
+                    var sortFn = function(unordered) {
+                        var out = {};
+                        Object.keys(unordered).sort().forEach(function(key) {
+                            out[key] = unordered[key];
+                        });
+                        return out;
+                    };
+                    var reqData = _.cloneDeep(model.inventory);
+                    var promise = Inventory.captureInventory(reqData).$promise;
+                    promise.then(function(response) {
+                        $log.info(resonse);
+                        PageHelper.showProgress('inventory', 'Done.', 5000);
+                        Utils.removeNulls(response, true);
+                        model.inventory = response;
+                    }, function(error) {
+                        PageHelper.showProgress('inventory', 'Oops. Some error.', 5000);
+                        PageHelper.showErrors(httpRes);
+                    })
                 }
             }
         };
