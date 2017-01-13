@@ -8,10 +8,10 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
             url: endpoint + '/report_list.php',
             isArray: true
         },
-        reportMenuList: {
+        /*reportMenuList: {
             method: 'GET',
             url: endpoint + '/biportal/api/MenuDefinition.php'
-        },
+        },*/
 		reportDataList: {
             method: 'GET',
             url: endpoint + '/biportal/api/ReportDefinition.php'
