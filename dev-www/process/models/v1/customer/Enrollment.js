@@ -1,5 +1,24 @@
 irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
+
+    var transformResponse = function(customer){
+        if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
+            _.forEach(customer.customerBankAccounts, function(bankAccount){
+                if (_.hasIn(bankAccount, 'netBankingAvailable') && !_.isNull(bankAccount.netBankingAvailable) && _.isString(bankAccount.netBankingAvailable)){
+                    bankAccount.netBankingAvailable = bankAccount.netBankingAvailable.toUpperCase();
+                }
+            })
+        }
+
+        if (_.hasIn(customer, 'buyerDetails') && _.isArray(customer.buyerDetails)){
+            _.forEach(customer.buyerDetails, function(buyer){
+                if (_.hasIn(buyer, 'customerSince') && !_.isNull(buyer.customerSince) && _.isString(buyer.customerSince)){
+                    buyer.customerSince = parseFloat(buyer.customerSince);
+                }
+            })
+        }
+    }
+
     /*
      * $get : /api/enrollments/{blank/withhistory/...}/{id}
      *  eg: /enrollments/definitions -> $get({service:'definition'})
@@ -28,7 +47,15 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         }),
         put:{
             method:'PUT',
-            url:endpoint+'/:service'
+            url:endpoint+'/:service',
+            transformResponse:function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status == 200){
+                    var customer = data.customer;
+                    transformResponse(customer);
+                }
+                return data;
+            }
         },
         update:{
             method:'PUT',
@@ -39,6 +66,14 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             url:endpoint+'/:service/:format',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            transformResponse:function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status == 200){
+                    var customer = data.customer;
+                    transformResponse(customer);
+                }
+                return data;
             },
             transformRequest: function (data) {
                 return $httpParamSerializer(data);
@@ -64,21 +99,23 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         },
         updateEnrollment: {
             method: 'PUT',
-            url: endpoint
+            url: endpoint,
+            transformResponse:function(data, headersGetter, status){
+                data = JSON.parse(data);
+                if (status == 200){
+                    var customer = data.customer;
+                    transformResponse(customer);
+                }
+                return data;
+            },
         },
         getCustomerById: {
             method: 'GET',
             url: endpoint+'/:id',
-            transformResponse: function(data){
+            transformResponse: function(data, headersGetter, status){
                 var customer = JSON.parse(data);
                 if (status === 200){
-                    if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
-                        _.forEach(customer.customerBankAccounts, function(bankAccount){
-                            if (_.hasIn(bankAccount, 'netBankingAvailable') && !_.isNull(bankAccount.netBankingAvailable) && _.isString(bankAccount.netBankingAvailable)){
-                                bankAccount.netBankingAvailable = bankAccount.netBankingAvailable.toUpperCase();
-                            }
-                        })
-                    }
+                    transformResponse(customer);
                 }
                 return customer;
             }
