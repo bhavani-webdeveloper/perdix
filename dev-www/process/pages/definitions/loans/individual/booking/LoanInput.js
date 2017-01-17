@@ -188,8 +188,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
+                    model.loanAccount.guarantors = [];
                     //model.loanAccount.guarantors = [];
-                    for (var i in model.loanAccount.loanCustomerRelations) {
+                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                        if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' || 
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
+                            model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
+                        }
+                        else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' || 
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
+                            model.loanAccount.coBorrowers.push({
+                                coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                            });
+                        }
+                        else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' || 
+                                model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                            model.loanAccount.guarantors.push({
+                                guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                            });
+                        }
+                    }
+                    /*for (var i in model.loanAccount.loanCustomerRelations) {
                         var lcR = model.loanAccount.loanCustomerRelations[i];
                         if (lcR.relation === 'Co-Applicant') {
                             lcR.coBorrowerUrnNo = lcR.urn;
@@ -199,7 +220,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             delete lcR.id;
                             model.loanAccount.guarantors.push(lcR);
                         }
-                    }
+                    }*/
                     /*
 {
     customerId: null,
