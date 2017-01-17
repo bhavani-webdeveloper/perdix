@@ -233,6 +233,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     },
                                     onSelect: function(valueObj, model, context){
                                         PageHelper.showProgress('customer-load', 'Loading customer...');
+
+                                        var enrolmentDetails = {
+                                            'customerId': model.customer.id,
+                                            'customerClass': model._bundlePageObj.pageClass,
+                                            'firstName': model.customer.firstName
+                                        };
+
+                                        if (_.hasIn(model, 'customer.id')){
+                                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)    
+                                        }
+
                                         Enrollment.getCustomerById({id: valueObj.id})
                                                 .$promise
                                                 .then(function(res){
