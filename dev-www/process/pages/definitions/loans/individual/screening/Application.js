@@ -47,6 +47,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         maximum: 1
                     },
                     {
+                        pageName: 'loans.individual.screening.CreditBureauView',
+                        title: 'CREDIT_BUREAU',
+                        pageClass: 'cbview',
+                        minimum: 1,
+                        maximum: 1
+                    },
+                    {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
@@ -134,6 +141,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
 
                                     $this.bundlePages.push({
                                         pageClass: 'loan-request',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
                                         }
