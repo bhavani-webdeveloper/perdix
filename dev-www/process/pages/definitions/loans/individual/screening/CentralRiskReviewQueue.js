@@ -139,7 +139,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					getColumns: function() {
 						return [{
 							title: 'ID',
-							data: 'id'
+							data: 'loanId'
 						},
 						{
 							title: 'HUB_NAME',

@@ -144,7 +144,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 					getColumns: function() {
 						return [{
 							title: 'ID',
-							data: 'id'
+							data: 'loanId'
 						},
 						{
 							title: 'HUB_NAME',
