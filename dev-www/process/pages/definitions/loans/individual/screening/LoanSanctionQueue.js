@@ -133,7 +133,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 					getColumns: function() {
 						return [{
 							title: 'ID',
-							data: 'loanId'
+							data: 'id'
 						},
 						{
 							title: 'HUB_NAME',
