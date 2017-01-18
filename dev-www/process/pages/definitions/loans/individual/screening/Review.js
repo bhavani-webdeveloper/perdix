@@ -117,6 +117,15 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             }, {
                                 title: 'STATUS',
                                 data: 'status'
+                            }, {
+                                title: 'LOAN_AMOUNT',
+                                data: 'loanAmount'
+                            }, {
+                                title: 'INTEREST_RATE',
+                                data: 'interestRate'
+                            }, {
+                                title: 'TENURE',
+                                data: 'tenure'
                             },
                             {
                                 title: 'TIME_SPENT',
