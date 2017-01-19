@@ -13,7 +13,8 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.inventory = model.inventory || {};
-                var branch1 = formHelper.enum('branch_id').data;
+                model.inventory.branchId = SessionStore.getBranchId();
+              
                 //model.inventory.branchId = SessionStore.getBranchId();
                 $log.info("Capture Inventory page  is initiated ");
             },
@@ -32,19 +33,22 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                     title: "CAPTURE_INVENTORY",
                     items: [{
                             key: "inventory.branchId",
+                            readonly:true,
                             "type": "select",
-                            "enumCode": "branch_code",
+                            "enumCode": "branch_id",
                         },
                         {
-                            key: "inventory.consumableInventoryDetails",
+                            key: "inventory.inventryTrackingDetails",
                             type: "array",
                             startEmpty: true,
                             view: "fixed",
                             title: "INVENTORY",
                             items: [{
-                                key: "inventory.consumableInventoryDetails[].inventoryName",
+                                key: "inventory.inventryTrackingDetails[].inventoryName",
+                                type:"select",
+                                enumCode:"Inventory_details"
                             }, {
-                                key: "inventory.consumableInventoryDetails[].numberOfInventories",
+                                key: "inventory.inventryTrackingDetails[].numberOfInventories",
                             }]
                         }
                     ]
@@ -72,10 +76,10 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                         "properties": {
                             "branchId": {
                                             "title": "BRANCH_NAME",
-                                            "type": "string"
+                                            "type": "number"
                                         },
 
-                            "consumableInventoryDetails": {
+                            "inventryTrackingDetails": {
                                 "type": "array",
                                 "items": {
                                     "type": "object",
@@ -135,7 +139,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                         model.inventory = response;
                     }, function(error) {
                         PageHelper.showProgress('inventory', 'Oops. Some error.', 5000);
-                        PageHelper.showErrors(httpRes);
+                        PageHelper.showErrors(error);
                     })
                 }
             }
