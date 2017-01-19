@@ -1476,6 +1476,48 @@
                                 "type": ["string","null"],
                                 "title": "RELATIONSHIP",
                                 "enumCode": "relationship"
+                            },
+                            "address": {
+                                "type": "string",
+                                "title": "ADDRESS"
+                            },
+                            "knownSince": {
+                                "type": "integer",
+                                "title": "KNOWN_SINCE",
+                                "minimum": 0,
+                                "maximum": 99
+                            },
+                            "opinion": {
+                                "type": "string",
+                                "title": "OPINION_ON_APPLICANT"
+                            },
+                            "financialStatus": {
+                                "type": "string",
+                                "title": "FINANCIAL_STATUS"
+                            },
+                            "goodsSold": {
+                                "type": ["string","null"],
+                                "title": "GOODS_SOLD"
+                            },
+                            "goodsBought": {
+                                "type": ["string","null"],
+                                "title": "GOODS_BOUGHT"
+                            },
+                            "paymentTerms": {
+                                "type": ["string","null"],
+                                "title": "PAYMENT_TERMS"
+                            },
+                            "modeOfPayment": {
+                                "type": ["string","null"],
+                                "title": "MODE_OF_PAYMENT"
+                            },
+                            "outstandingPayable": {
+                                "type": ["number","null"],
+                                "title": "OUTSTANDING_PAYABLE"
+                            },
+                            "outstandingReceivable": {
+                                "type": ["number","null"],
+                                "title": "OUTSTANDING_RECEIVABLE"
                             }
                         },
                         "required": [

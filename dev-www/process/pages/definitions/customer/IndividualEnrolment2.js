@@ -2115,7 +2115,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         title:"REFERENCES",
                         type: "array", 
                         items:[
-                            {
+                            /*{
                                 key:"customer.verifications[].relationship",
                                 title:"REFERENCE_TYPE",
                                 type:"select",
@@ -2124,50 +2124,77 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         "Neighbour": "Neighbour",
                                         "Relative/friend": "Relative/friend"
                                     }
-                            },
+                            },*/
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME",
-                                type:"string"
+                                title:"CONTACT_PERSON_NAME",
+                                type:"string",
+                                required:true
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
-                                title:"MOBILE_NO",
-                                type:"string"
+                                title:"CONTACT_NUMBER",
+                                type:"string",
+                                required:true
                             },
                             {
                                 key:"customer.verifications[].occupation",
                                 title:"OCCUPATION",
                                 type:"select",
                                 "enumCode": "occupation",
-                            },
+                            }/*,
                             {
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
+                            }*/,
+                            {
+                                key:"customer.verifications[].address",
+                                type:"textarea"
                             },
                             {
                             type: "fieldset",
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage=='FieldAppraisal'",
                             items: [
-                            {
-                                key:"customer.verifications[].customerResponse",
-                                title:"CUSTOMER_RESPONSE",
-                                type:"select",
-                                titleMap: [{
-                                                value: "positive",
-                                                name: "positive"
-                                            },{
-                                                value: "Negative",
-                                                name: "Negative"
-                                            }]
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    required:true,
+                                    type:"select",
+                                    titleMap: [{
+                                                    value: "positive",
+                                                    name: "positive"
+                                                },{
+                                                    value: "Negative",
+                                                    name: "Negative"
+                                                }]
 
-                            },
-                            {
-                                key:"customer.verifications[].remarks",
-                                title:"REMARKS",
-                            },
+                                }/*,
+                                {
+                                    key:"customer.verifications[].remarks",
+                                    title:"REMARKS",
+                                }*/,
+                                {
+                                    key:"customer.verifications[].knownSince",
+                                    required:true
+                                },
+                                {
+                                    key:"customer.verifications[].relationship",
+                                    title:"REFERENCE_TYPE1",
+                                    type:"select",
+                                    required:true,
+                                   titleMap: {
+                                            "Neighbour": "Neighbour",
+                                            "Relative/friend": "Relative/friend"
+                                        }
+                                },
+                                {
+                                    key:"customer.verifications[].opinion"
+                                },
+                                {
+                                    key:"customer.verifications[].financialStatus"
+                                }
                             ]
                             }
                          ] 
@@ -2185,7 +2212,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                         title:"REFERENCES",
                         type: "array", 
                         items:[
-                            {
+                            /*{
                                 key:"customer.verifications[].relationship",
                                 title:"REFERENCE_TYPE",
                                 type:"select",
@@ -2194,15 +2221,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         "Neighbour": "Neighbour",
                                         "Relative/friend": "Relative/friend"
                                     }
-                            },
+                            },*/
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME",
+                                title:"CONTACT_PERSON_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
-                                title:"MOBILE_NO",
+                                title:"CONTACT_NUMBER",
                                 type:"string"
                             },
                             {
@@ -2210,26 +2237,50 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 title:"OCCUPATION",
                                  type:"select",
                                 "enumCode": "occupation",
-                            },
+                            }/*,
                             {
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
+                            }*/,
+                            {
+                                key:"customer.verifications[].address",
+                                type:"textarea"
                             },
                             {
                             type: "fieldset",
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             items: [
-                            {
-                                key:"customer.verifications[].customerResponse",
-                                title:"CUSTOMER_RESPONSE",
-                                type:"string",
-                            },
-                            {
-                                key:"customer.verifications[].remarks",
-                                title:"REMARKS",
-                            }
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"string",
+                                }/*,
+                                {
+                                    key:"customer.verifications[].remarks",
+                                    title:"REMARKS",
+                                }*/
+                                ,
+                                {
+                                    key:"customer.verifications[].knownSince"
+                                },
+                                {
+                                    key:"customer.verifications[].relationship",
+                                    title:"REFERENCE_TYPE1",
+                                    type:"select",
+                                    required:"true",
+                                   titleMap: {
+                                            "Neighbour": "Neighbour",
+                                            "Relative/friend": "Relative/friend"
+                                        }
+                                },
+                                {
+                                    key:"customer.verifications[].opinion"
+                                },
+                                {
+                                    key:"customer.verifications[].financialStatus"
+                                }
                             ]
                             }
                             

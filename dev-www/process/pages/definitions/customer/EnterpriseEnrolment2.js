@@ -2448,15 +2448,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME_OF_POC",
+                                title:"CONTACT_PERSON_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
-                                title:"MOBILE_NO",
+                                title:"CONTACT_NUMBER",
                                 type:"string",
                                 
-                            },
+                            }/*,
                             {
                                 key:"customer.verifications[].businessSector",
                                 title:"BUSINESS_SECTOR",
@@ -2474,6 +2474,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
+                            }*/,
+                            {
+                                key:"customer.verifications[].address",
+                                type:"textarea"
                             },
                             {
                             type: "fieldset",
@@ -2491,12 +2495,37 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                                 value: "Negative",
                                                 name: "Negative"
                                             }]
-
-                            },
-                            {
-                                key:"customer.verifications[].remarks",
-                                title:"REMARKS",
-                            },
+                                }/*,
+                                {
+                                    key:"customer.verifications[].remarks",
+                                    title:"REMARKS",
+                                },*/,
+                                {
+                                    key:"customer.verifications[].knownSince",
+                                    required:true
+                                },
+                                {
+                                    key:"customer.verifications[].goodsSold",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].goodsBought",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].paymentTerms"
+                                },
+                                {
+                                    key:"customer.verifications[].modeOfPayment"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingPayable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingReceivable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                }
                             ]
                             }
                          ] 
@@ -2528,14 +2557,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME_OF_POC",
+                                title:"CONTACT_PERSON_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
-                                title:"MOBILE_NO",
+                                title:"CONTACT_NUMBER",
                                 type:"string"
-                            },
+                            }/*,
                             {
                                 key:"customer.verifications[].businessSector",
                                 title:"BUSINESS_SECTOR",
@@ -2550,21 +2579,50 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.verifications[].selfReportedIncome",
                                 title:"SELF_REPORTED_INCOME",
                                 type:"number"
+                            }*/,
+                            {
+                                key:"customer.verifications[].address",
+                                type:"textarea"
                             },
                             {
                             type: "fieldset",
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             items: [
-                            {
-                                key:"customer.verifications[].customerResponse",
-                                title:"CUSTOMER_RESPONSE",
-                                type:"string",
-                            },
-                            {
-                                key:"customer.verifications[].remarks",
-                                title:"REMARKS",
-                            }
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"string",
+                                }/*,
+                                {
+                                    key:"customer.verifications[].remarks",
+                                    title:"REMARKS",
+                                }*/,
+                                {
+                                    key:"customer.verifications[].knownSince"
+                                },
+                                {
+                                    key:"customer.verifications[].goodsSold",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].goodsBought",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].paymentTerms"
+                                },
+                                {
+                                    key:"customer.verifications[].modeOfPayment"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingPayable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingReceivable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                }
                             ]
                             }
 
