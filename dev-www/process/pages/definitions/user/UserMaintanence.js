@@ -127,6 +127,18 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                 actions: {
                     submit: function(model, form, formName){
                         $log.info("Inside submit()");
+
+                        if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
+
+                        } else {
+                            /* New User */
+                            if (model.user.password != model.user.confirmPassword){
+                                PageHelper.showProgress("user-validate", "Password and Confirm Password doesnt match", 5000);
+                                return;
+                            }
+                        }
+                        
+
                         PageHelper.showLoader();
                         PageHelper.showProgress("user-update", 'Working...');
                         Utils.confirm("Are you sure?")
