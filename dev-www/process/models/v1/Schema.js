@@ -8,6 +8,10 @@ irf.models.factory('SchemaResource',function($resource,$httpParamSerializer,BASE
         getDisbursementSchema:{
             method:'GET',
             url:'process/schemas/disbursement.json'
+        },
+        getUserSchema: {
+            method: "GET",
+            url: "process/schemas/user.json"
         }
     });
 });
