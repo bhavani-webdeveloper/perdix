@@ -195,7 +195,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                     if (reqData.inventoryTrackerDto.id) {
 
                             InventoryHelper.proceedData(reqData).then(function(resp) {
-                                //$state.go('Page.LeadDashboard', null);
+                                $state.go('Page.InventoryDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.inventoryTrackerDto, true);
                                 model.inventory.inventoryTrackerDto = res.inventoryTrackerDto;
@@ -204,7 +204,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
                     } else {
                         InventoryHelper.saveData(reqData).then(function(res) {
                             InventoryHelper.proceedData(res).then(function(resp) {
-                                //$state.go('Page.LeadDashboard', null);
+                                $state.go('Page.InventoryDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res.inventoryTrackerDto, true);
                                 model.inventory.inventoryTrackerDto = res.inventoryTrackerDto;
