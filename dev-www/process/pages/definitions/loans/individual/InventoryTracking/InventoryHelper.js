@@ -28,7 +28,6 @@ irf.pageCollection.factory("InventoryHelper", ["$log", "$q", "Inventory", 'PageH
         var proceedData = function(res) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
-            $log.info(res);
             if (res.inventoryTrackerDto.id === undefined || res.inventoryTrackerDto.id === null) {
                 $log.info("lead id null, cannot proceed");
                 deferred.reject(null);

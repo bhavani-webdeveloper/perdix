@@ -133,13 +133,15 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                     var reqData = _.cloneDeep(model.inventory);
                     var promise = Inventory.captureInventory(reqData).$promise;
                     promise.then(function(response) {
-                        $log.info(resonse);
-                        PageHelper.showProgress('inventory', 'Done.', 5000);
-                        Utils.removeNulls(response, true);
+                        $log.info(response);
+                        PageHelper.showProgress('inventory', 'Inventory Updated.', 5000);
                         model.inventory = response;
+                        $state.go('Page.InventoryDashboard', null);
+
                     }, function(error) {
                         PageHelper.showProgress('inventory', 'Oops. Some error.', 5000);
                         PageHelper.showErrors(error);
+                        $state.go('Page.InventoryDashboard', null);
                     })
                 }
             }
