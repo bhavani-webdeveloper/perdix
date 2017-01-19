@@ -93,6 +93,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LUCDashboardCtrl"
 	},{
+		name: "Page.InventoryDashboard",
+		url: "/InventoryDashboard",
+		templateUrl: "process/pages/templates/Page.InventoryDashboard.html",
+		controller: "InventoryDashboardCtrl"
+	},{
 		name: "Page.PsychometricTest",
 		url: "/PsychometricTest/:participantId/:applicationId",
 		templateUrl: "process/pages/templates/Psychometric.Test.html",
