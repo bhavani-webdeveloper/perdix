@@ -127,6 +127,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                 actions: {
                     submit: function(model, form, formName){
                         $log.info("Inside submit()");
+                        PageHelper.clearErrors();
 
                         if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
 
