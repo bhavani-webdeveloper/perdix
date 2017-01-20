@@ -49,13 +49,13 @@
               <img class="bg" src="" ng-src="{{instructionImage}}">
             </div>
             <div class="instruction-agreement-container">
-              <p ng-repeat="_a in (AGREEMENT[chosenLanguage.langCode] || AGREEMENT['en']).text">
+              <p ng-repeat="_a in (AGREEMENT[chosenLanguage] || AGREEMENT['en']).text">
                 <i class="fa fa-hand-o-right">&nbsp;</i>
                 <span ng-bind-html="_a"></span>
               </p>
             </div>
             <div>
-              <button class="btn btn-lg btn-{{test?'theme':(testStatus == 'Failed'?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?(AGREEMENT[chosenLanguage.langCode] || AGREEMENT['en']).agree:(testStatus == 'Failed'?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
+              <button class="btn btn-lg btn-{{test?'theme':(testStatus == 'Failed'?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?(AGREEMENT[chosenLanguage] || AGREEMENT['en']).agree:(testStatus == 'Failed'?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
               <button ng-show="testStatus == 'Failed'" class="btn btn-lg btn-default pull-right gap-10" ng-click="moveStage(STAGES.INSTRUCTIONS)">Retry</button>
             </div>
           </div>
