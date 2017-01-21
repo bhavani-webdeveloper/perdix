@@ -67,6 +67,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1
+                    },
+                    {
+                        pageName: 'loans.individual.misc.BalanceSheetHistory',
+                        title: 'BALANCE_SHEET_HISTORY',
+                        pageClass: 'balance-sheet-history',
+                        minimum: 1,
+                        maximum: 1
                     }
                 ],
                 "bundlePages": [],
@@ -122,6 +129,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                         model: {
                                             cbModel: {customerId:res.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore3'}
                                         }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'balance-sheet-history',
+                                        model: {customerUrn:res.urnNo, loanId:bundleModel.loanId}
                                     });
 
                                     $this.bundlePages.push({
