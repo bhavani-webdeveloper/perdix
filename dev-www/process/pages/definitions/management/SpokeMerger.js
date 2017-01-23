@@ -1,7 +1,6 @@
-irf.pageCollection.factory(irf.page("management.SpokeMerger"),
- ["$log", "Maintenance", "$state", "$stateParams", "Lead", "SessionStore",
+irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Maintenance","Enrollment" ,"$state", "$stateParams", "Lead", "SessionStore",
     "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries",
-    function($log, Maintenance, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, Maintenance,Enrollment, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -11,7 +10,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"),
             "title": "Spoke Merger",
 
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-               model.customer = model.customer || {};
+                model.customer = model.customer || {};
                 model = Utils.removeNulls(model, true);
                 $log.info("Spoke Merger page ");
             },
@@ -46,6 +45,22 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"),
                             parentValueExpr: "model.branchId",
                             screenFilter: true
                         }, {
+                            key: "customer.allMembers",
+                            title: "Is All Customer",
+                            type: "select",
+                            titleMap: {
+                                1: "YES",
+                                0: "NO"
+                            }
+                        }, 
+                       
+                        {
+                            key: "customer.customerIds",
+                            title: "Customer Id",
+                        },
+
+
+                        {
                             type: "actionbox",
                             // condition: "model.spoke.config",
                             items: [{
