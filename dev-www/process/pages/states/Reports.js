@@ -52,8 +52,8 @@ irf.pages.controller("ReportsCtrl",
 		if(!$scope.ResultDataSet[activeindex]) {
 			PageHelper.showLoader();
 			var reportData = {"report_id":tabIndex, "user_id": userName};
-			if (pageData && pageData.user && pageData.user.id) {
-				reportData.user_id = pageData.user.id;
+			if (pageData && pageData.filter) {
+				tabData.filter = pageData.filter;
 			}
 			BIReports.reportDataList(reportData).$promise.then(function(response) {
 				$scope.dataset = [];
