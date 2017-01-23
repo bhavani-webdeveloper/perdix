@@ -9,6 +9,11 @@ irf.models.factory('Maintenance', ["$resource", "$httpParamSerializer", "BASE_UR
                 url: endpoint + '/centreMerger'
             },
 
+            updateBranch: {
+                method: 'PUT',
+                url: endpoint + '/branchMerger'
+            },
+
             getMasterData1: {
                 method: 'GET',
                 url: biEndPoint + '/upload_list.php'
