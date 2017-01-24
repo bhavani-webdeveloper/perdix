@@ -2660,7 +2660,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.isBusinessEffectingTheEnvironment",
-                                    title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT?",
+                                    title:"IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
                                     type:"string",
                                     required:"true",
                                     enumCode:"decisionmaker",
