@@ -33,6 +33,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
+                        bundleModel.business = model.customer;
 
                         if(model.customer.enterpriseCustomerRelations)
                         {

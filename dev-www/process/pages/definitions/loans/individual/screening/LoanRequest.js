@@ -27,7 +27,9 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
         }
     }
 
-    var preLoanSaveOrProceed = function(loanAccount){
+    var preLoanSaveOrProceed = function(model){
+        var loanAccount = model.loanAccount;
+
         if (_.hasIn(loanAccount, 'guarantors') && _.isArray(loanAccount.guarantors)){
             for (var i=0;i<loanAccount.guarantors.length; i++){
                 var guarantor = loanAccount.guarantors[i];
@@ -47,6 +49,36 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     collateral.totalValue = collateral.loanToValue * collateral.quantity;
                 }
             })
+        }
+
+        // Psychometric Required for applicants & co-applicants
+        if (_.isArray(loanAccount.loanCustomerRelations)) {
+            var enterpriseCustomerRelations = model._bundleModel.business.enterpriseCustomerRelations;
+            for (i in loanAccount.loanCustomerRelations) {
+                if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                    if (_.isArray(enterpriseCustomerRelations)) {
+                        var psychometricRequiredUpdated = false;
+                        for (j in enterpriseCustomerRelations) {
+                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && enterpriseCustomerRelations[j].businessInvolvement == 'Full time') {
+                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                                psychometricRequiredUpdated = true;
+                            }
+                        }
+                        if (!psychometricRequiredUpdated) {
+                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                        }
+                    } else {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                    }
+                } else {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                }
+                if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
+                    loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
+                }
+            }
         }
         
         return true;
@@ -235,6 +267,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
+            model._bundleModel = bundleModel;
 
             /* Deviations and Mitigations grouping */
             if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
@@ -1839,7 +1872,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 if(!validateAndPopulateMitigants(model)){
                     return;
                 }
-                if (!preLoanSaveOrProceed(model.loanAccount)){
+                if (!preLoanSaveOrProceed(model)){
                     return;
                 }
                 Utils.confirm("Are You Sure?")
@@ -1890,7 +1923,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 PageHelper.clearErrors();
                 /* TODO Call save service for the loan */
 
-                if (!preLoanSaveOrProceed(model.loanAccount)){
+                if (!preLoanSaveOrProceed(model)){
                     return;
                 }
 
@@ -1937,7 +1970,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     return false;
                 }
 
-                if (!preLoanSaveOrProceed(model.loanAccount)){
+                if (!preLoanSaveOrProceed(model)){
                     return;
                 }
                 Utils.confirm("Are You Sure?").then(function(){
@@ -2024,7 +2057,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     }
                 }
 
-                if (!preLoanSaveOrProceed(model.loanAccount)){
+                if (!preLoanSaveOrProceed(model)){
                     return;
                 }
 
