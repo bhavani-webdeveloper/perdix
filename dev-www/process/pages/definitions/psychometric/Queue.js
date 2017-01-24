@@ -1,12 +1,64 @@
 irf.pageCollection.factory(irf.page("psychometric.Queue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "Psychometric", "PsychometricTestService", "PageHelper",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, Psychometric, PsychometricTestService, PageHelper) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
+	"Psychometric", "PsychometricTestService", "PageHelper", "irfSimpleModal", "Queries",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons,
+		Psychometric, PsychometricTestService, PageHelper, irfSimpleModal, Queries) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 		for (var i = 0; i < centres.length; i++) {
 			centreId.push(centres[i].centreId);
 		}
+
+		var startPsychometricTest = function(participantId, applicationId) {
+			PsychometricTestService.start(participantId, applicationId).then(function(resp) {
+				PageHelper.showLoader();
+				IndividualLoan.get({
+					id: resp.applicationId
+				}, function(reqData) {
+					reqData.psychometricCompleted = 'Completed';
+					IndividualLoan.update({
+						loanProcessAction: 'SAVE',
+						loanAccount: reqData
+					}).$promise.then(function(loanResp){
+						
+					}, function(errResp){
+						PageHelper.setErrors(errResp);
+					}).finally(function(){
+						$state.go('Page.Engine', {
+							pageName: 'psychometric.Queue',
+							pageId: null
+						});
+						PageHelper.hideLoader();
+					});
+				});
+			}, function(errResp) {
+				$log.error('Psychometric Test failed');
+			});
+		};
+
+		var participantBodyHtml =
+'<div ng-show="model.$showLoader" class="text-center">Loading...</div>'+
+'<div ng-hide="model.$showLoader">'+
+	'<table class="table table-striped">'+
+		'<tr>'+
+			'<th style="width: 10px">#</th> <th>Participant ID</th> <th>Participant Name</th> <th>Relationship</th> <th style="width: 40px">Test</th>'+
+		'</tr>'+
+		'<tr ng-repeat="r in model.loanCustomerRelations track by $index">'+
+			'<td ng-bind="$index+1"></td>'+
+			'<td ng-bind="r.customerId"></td>'+
+			'<td ng-bind="r.customerName"></td>'+
+			'<td ng-bind="r.relation"></td>'+
+			'<td>'+
+				'<button ng-show="r.psychometricRequired==\'YES\' && r.psychometricCompleted==\'NO\'" ng-click="$close([r.customerId, r.loanId]);" class="btn btn-sm btn-theme"><i class="fa fa-eye-slash">&nbsp;</i>Start</button>'+
+				'<div ng-show="r.psychometricRequired==\'YES\' && r.psychometricCompleted==\'YES\'" class="text-center">Completed</div>'+
+				'<div ng-show="r.psychometricRequired==\'NO\'" class="text-center text-gray">NA</div>'+
+			'</td>'+
+		'</tr>'+
+	'</table>'+
+'</div>'
+;
+
 		return {
 			"type": "search-list",
 			"title": "Psychometric Test",
@@ -143,33 +195,36 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					},
 					getActions: function() {
 						return [{
-							name: "PSYCHOMETRIC_TEST",
+							name: "List Participants",
 							desc: "",
-							icon: "fa fa-eye-slash",
+							icon: "fa fa-genderless", //fa-eye-slash
 							fn: function(item, index) {
-								PsychometricTestService.start(item.applicant, item.id).then(function(resp){
-									PageHelper.showLoader();
-									IndividualLoan.get({
-										id: resp.applicationId
-									}, function(reqData) {
-										reqData.psychometricCompleted = 'Completed';
-										IndividualLoan.update({
-											loanProcessAction: 'SAVE',
-											loanAccount: reqData
-										}).$promise.then(function(loanResp){
-											
-										}, function(errResp){
-											PageHelper.setErrors(errResp);
-										}).finally(function(){
-											$state.go('Page.Engine', {
-												pageName: 'psychometric.Queue',
-												pageId: null
-											});
-											PageHelper.hideLoader();
-										});
-									});
-								}, function(errResp) {
-									$log.error('Psychometric Test failed');
+								var participantModel = {
+									$showLoader: true
+								};
+
+								IndividualLoan.get({id: item.loanId}).$promise.then(function(loanAccount) {
+									participantModel.loanCustomerRelations = loanAccount.loanCustomerRelations;
+									if (_.isArray(participantModel.loanCustomerRelations)) {
+										var ids = [];
+										for (i in participantModel.loanCustomerRelations) {
+											ids.push(participantModel.loanCustomerRelations[i].customerId);
+										}
+									}
+									return Queries.getCustomerBasicDetails({ids:ids});
+								}).then(function(basicDetails) {
+									for (i in participantModel.loanCustomerRelations) {
+										participantModel.loanCustomerRelations[i].customerName = basicDetails.ids[participantModel.loanCustomerRelations[i].customerId].first_name;
+									}
+								}).finally(function() {
+									participantModel.$showLoader = false;
+								});
+
+								var modalInstance = irfSimpleModal('Choose a participant', participantBodyHtml, participantModel);
+								modalInstance.result.then(function(result) {
+									if (_.isArray(result) && result.length == 2) {
+										startPsychometricTest(result[0], result[1]);
+									}
 								});
 							},
 							isApplicable: function(item, index) {

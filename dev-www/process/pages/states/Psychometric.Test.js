@@ -28,13 +28,14 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 	$scope.applicationId = $stateParams.applicationId;
 	$scope.createdBy = SessionStore.getLoginname();
 
+	// UI related starts
 	$scope.participantCustomer = $scope.participantId;
 	$scope.createdByUser = SessionStore.getUsername();
-/*
+
 	Queries.getCustomerBasicDetails({ids:[$scope.participantId]}).then(function(resp){
 		$scope.participantCustomer = resp.ids[$scope.participantId]['first_name'];
 	});
-*/
+	// UI related ends
 
 	if (!(PsychometricTestService && _.isFunction(PsychometricTestService.deferred) && PsychometricTestService.deferred())) {
 		$log.error("Psychometric Test Service Requested through invalid route");
@@ -160,7 +161,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 		$scope.lastIndex = -1;
 		$log.info("Chosen language: " + $scope.chosenLanguage);
 		Psychometric.getTest({
-			"participantId": 1, //$scope.participantId,
+			"participantId": $scope.participantId,
 			"applicationId": $scope.applicationId,
 			"createdBy": $scope.createdBy,
 			"langCode": $scope.chosenLanguage

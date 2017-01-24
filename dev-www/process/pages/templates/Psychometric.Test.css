@@ -54,6 +54,7 @@
 }
 .psychometric-page .box .box-body.instructions .instruction-agreement-container > p {
   font-size: larger;
+  margin-bottom: 15px;
 }
 .psychometric-page .box .box-body.test .button-bar {
   /*position: fixed;
