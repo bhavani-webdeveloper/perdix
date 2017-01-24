@@ -2484,18 +2484,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage=='FieldAppraisal'",
                             items: [
-                            {
-                                key:"customer.verifications[].customerResponse",
-                                title:"CUSTOMER_RESPONSE",
-                                type:"select",
-                                titleMap: [{
-                                                value: "positive",
-                                                name: "positive"
-                                            },{
-                                                value: "Negative",
-                                                name: "Negative"
-                                            }]
-                                }/*,
+                                /*,
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
@@ -2525,6 +2514,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].outstandingReceivable",
                                     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"select",
+                                    titleMap: [{
+                                                    value: "positive",
+                                                    name: "positive"
+                                                },{
+                                                    value: "Negative",
+                                                    name: "Negative"
+                                                }]
                                 }
                             ]
                             }
@@ -2589,11 +2590,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             items: [
-                                {
-                                    key:"customer.verifications[].customerResponse",
-                                    title:"CUSTOMER_RESPONSE",
-                                    type:"string",
-                                }/*,
+                                /*,
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
@@ -2622,6 +2619,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].outstandingReceivable",
                                     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"string",
                                 }
                             ]
                             }

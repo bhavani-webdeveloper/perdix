@@ -2157,20 +2157,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage=='FieldAppraisal'",
                             items: [
-                                {
-                                    key:"customer.verifications[].customerResponse",
-                                    title:"CUSTOMER_RESPONSE",
-                                    required:true,
-                                    type:"select",
-                                    titleMap: [{
-                                                    value: "positive",
-                                                    name: "positive"
-                                                },{
-                                                    value: "Negative",
-                                                    name: "Negative"
-                                                }]
-
-                                }/*,
+                                /*,
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
@@ -2194,6 +2181,20 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.verifications[].financialStatus"
+                                },
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    required:true,
+                                    type:"select",
+                                    titleMap: [{
+                                                    value: "positive",
+                                                    name: "positive"
+                                                },{
+                                                    value: "Negative",
+                                                    name: "Negative"
+                                                }]
+
                                 }
                             ]
                             }
@@ -2252,11 +2253,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             title: "REFERENCE_CHECK",
                             "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
                             items: [
-                                {
-                                    key:"customer.verifications[].customerResponse",
-                                    title:"CUSTOMER_RESPONSE",
-                                    type:"string",
-                                }/*,
+                                /*,
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
@@ -2280,6 +2277,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 },
                                 {
                                     key:"customer.verifications[].financialStatus"
+                                },
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"string",
                                 }
                             ]
                             }
