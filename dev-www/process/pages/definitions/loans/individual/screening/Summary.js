@@ -33,7 +33,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
-        model.psychometricScores = res[14];
+        model.psychometricScores = res[14].sections;
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -466,19 +466,21 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "Psychometric Score (Total: " + model.psychometricScores.totalScore + ")",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<table class="table"><colgroup><col width="60%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Category</th><th>Score</th></tr></thead><tbody><tr ng-repeat="rowData in model.psychometricScores.data"><td>{{ rowData["Category Name"] }}</td><td>{{ rowData["Score"] }}</td></tr></tbody></table>'
-                }
-            ]
-        })
+        for (i in model.psychometricScores) {
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: "Psychometric Score (Total: " + model.psychometricScores[i].totalScore + ") - " + model.psychometricScores[i].relation_detail,
+                condition: "model.currentStage != 'ScreeningReview'",
+                items: [
+                    {
+                        type: "section",
+                        colClass: "col-sm-12",
+                        html: '<table class="table"><colgroup><col width="60%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Category</th><th>Score</th></tr></thead><tbody><tr ng-repeat="rowData in model.psychometricScores['+i+'].data"><td>{{ rowData["Category Name"] }}</td><td>{{ rowData["Score"] }}</td></tr></tbody></table>'
+                    }
+                ]
+            })
+        }
 
         // form.push({
         //     type: "box",
