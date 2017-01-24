@@ -2161,7 +2161,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
-                                }*/,
+                                }*/
                                 {
                                     key:"customer.verifications[].knownSince",
                                     required:true
@@ -2258,7 +2258,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
                                 }*/
-                                ,
                                 {
                                     key:"customer.verifications[].knownSince"
                                 },
@@ -2281,7 +2280,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key:"customer.verifications[].customerResponse",
                                     title:"CUSTOMER_RESPONSE",
-                                    type:"string",
+                                    type:"string"
                                 }
                             ]
                             }

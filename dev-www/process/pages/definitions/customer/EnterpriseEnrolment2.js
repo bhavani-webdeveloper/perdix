@@ -2488,7 +2488,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
-                                },*/,
+                                },*/
                                 {
                                     key:"customer.verifications[].knownSince",
                                     required:true
@@ -2502,10 +2502,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
                                 },
                                 {
-                                    key:"customer.verifications[].paymentTerms"
+                                    key:"customer.verifications[].paymentTerms",
+                                    type:"select",
+                                    enumCode: "payment_terms"
                                 },
                                 {
-                                    key:"customer.verifications[].modeOfPayment"
+                                    key:"customer.verifications[].modeOfPayment",
+                                    type:"select",
+                                    enumCode: "payment_mode"
                                 },
                                 {
                                     key:"customer.verifications[].outstandingPayable",
@@ -2594,7 +2598,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].remarks",
                                     title:"REMARKS",
-                                }*/,
+                                }*/
                                 {
                                     key:"customer.verifications[].knownSince"
                                 },
@@ -2607,10 +2611,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
                                 },
                                 {
-                                    key:"customer.verifications[].paymentTerms"
+                                    key:"customer.verifications[].paymentTerms",
+                                    type:"select",
+                                    enumCode: "payment_terms"
                                 },
                                 {
-                                    key:"customer.verifications[].modeOfPayment"
+                                    key:"customer.verifications[].modeOfPayment",
+                                    type:"select",
+                                    enumCode: "payment_mode"
                                 },
                                 {
                                     key:"customer.verifications[].outstandingPayable",
@@ -2623,7 +2631,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].customerResponse",
                                     title:"CUSTOMER_RESPONSE",
-                                    type:"string",
+                                    type:"string"
                                 }
                             ]
                             }
