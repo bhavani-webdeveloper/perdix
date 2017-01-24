@@ -74,6 +74,21 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 
 	/* Loading branch details */
 	var branches = SessionStore.getItem("UserAllowedBranches");
+	var homebranchCode = SessionStore.getBranchCode();
+	/* Need to add homebranch to list, if its already not there */
+	var indexForHome = _.findIndex(branches, function(b){
+		return b.branchCode == homebranchCode;
+	})
+
+	if (indexForHome == -1){
+		var homeBranch = {
+			branchCode: SessionStore.getBranchCode(),
+			branchId : SessionStore.getBranchId,
+			branchName: SessionStore.getBranch()
+		};
+		branches.push(homeBranch);
+	}
+
 	$scope.branchSwitch.allowedBranches = branches;
 	$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;
 	$scope.showLogs = function() {
