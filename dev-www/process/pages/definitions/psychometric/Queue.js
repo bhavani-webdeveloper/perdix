@@ -16,7 +16,20 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 				IndividualLoan.get({
 					id: resp.applicationId
 				}, function(reqData) {
-					reqData.psychometricCompleted = 'Completed';
+					var allTestCompleted = true;
+					if (_.isArray(reqData.loanCustomerRelations)) {
+						for (i in reqData.loanCustomerRelations) {
+							if (reqData.loanCustomerRelations[i].customerId == participantId) {
+								reqData.loanCustomerRelations[i].psychometricCompleted = 'YES';
+							}
+							if (reqData.loanCustomerRelations[i].psychometricRequired == 'YES' && reqData.loanCustomerRelations[i].psychometricCompleted != 'YES') {
+								allTestCompleted = false;
+							}
+						}
+					}
+					if (allTestCompleted) {
+						reqData.psychometricCompleted = 'Completed';
+					}
 					IndividualLoan.update({
 						loanProcessAction: 'SAVE',
 						loanAccount: reqData
