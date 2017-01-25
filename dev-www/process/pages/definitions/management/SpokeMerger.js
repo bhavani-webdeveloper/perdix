@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                     "type": "box",
                     "title": "Spoke Merger",
                     "items": [{
-                            key: "branchId",
+                            key: "branchId1",
                             title: "Hub Name",
                             type: "select",
                             enumCode: "branch_id"
@@ -34,15 +34,20 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             type: "select",
                             enumCode: "centre",
                             parentEnumCode: "branch_id",
-                            parentValueExpr: "model.branchId",
+                            parentValueExpr: "model.branchId1",
                             screenFilter: true
+                        },{
+                            key: "branchId2",
+                            title: "Hub Name",
+                            type: "select",
+                            enumCode: "branch_id"
                         }, {
                             key: "customer.toCentreId",
                             title: "To Spoke Name",
                             type: "select",
                             enumCode: "centre",
                             parentEnumCode: "branch_id",
-                            parentValueExpr: "model.branchId",
+                            parentValueExpr: "model.branchId2",
                             screenFilter: true
                         }, {
                             key: "customer.allMembers",
