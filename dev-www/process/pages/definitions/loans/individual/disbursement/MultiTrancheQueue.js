@@ -9,6 +9,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
             model.stage = 'MTDisbursementDataCapture';
+            model.branchId = SessionStore.getCurrentBranch().branchId;
         },
         definition: {
             title: "SEARCH",
@@ -48,16 +49,10 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                             "type": "date"
                         }
                     },
-                    "branch_name": {
-                        "title": "Branch Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "centre_name": {
-                        "title": "Centre Name",
-                        "type": "string",
+                    "branchId": {
+                        "title": "BRANCH",
+                        "type": "integer",
+                        "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
                         }
@@ -74,7 +69,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'scheduledDisbursementDate': null,
                     'page': 1,
                     'per_page': 100,
-                    'sortBy':null
+                    'sortBy':null,
+                    'branchId': searchOptions.branchId
                 }).$promise;
 
                 return promise;

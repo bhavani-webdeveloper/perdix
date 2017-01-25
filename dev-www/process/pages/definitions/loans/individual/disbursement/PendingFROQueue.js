@@ -10,6 +10,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
             // model.branch = SessionStore.getBranch();
             model.branch = SessionStore.getCurrentBranch().branchName;
             model.stage = 'FROApproval';
+            model.branchId = SessionStore.getCurrentBranch().branchId;
         },
         definition: {
             title: "SEARCH_CONDITION",
@@ -49,9 +50,10 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                             "type": "date"
                         }
                     },
-                    "branch_name": {
-                        "title": "Branch Name",
-                        "type": "string",
+                    "branchId": {
+                        "title": "BRANCH",
+                        "type": "integer",
+                        "enumCode": "branch_id",
                         "x-schema-form": {
                             "type": "select"
                         }
@@ -75,7 +77,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'scheduledDisbursementDate': null,
                     'page': 1,
                     'per_page': 100,
-                    'sortBy':null
+                    'sortBy':null,
+                    'branchId': searchOptions.branchId
                 }).$promise;
 
                 return promise;

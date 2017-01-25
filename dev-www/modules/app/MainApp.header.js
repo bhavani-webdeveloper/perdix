@@ -83,7 +83,7 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 	if (indexForHome == -1){
 		var homeBranch = {
 			branchCode: SessionStore.getBranchCode(),
-			branchId : SessionStore.getBranchId,
+			branchId : SessionStore.getBranchId(),
 			branchName: SessionStore.getBranch()
 		};
 		branches.push(homeBranch);

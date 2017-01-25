@@ -207,6 +207,14 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         "chargeFee": {
             "method": "POST",
             "url": endpoint + "/chargefee"
+        },
+        getTransactionForReversalInLoms: {
+            method: "GET",
+            url: endpoint + "/findTransactionToReverseInLoMS"
+        },
+        reverseFromLOMS: {
+            method: "POST",
+            url: endpoint + "/reversalInLoMS"
         }
     });
 });

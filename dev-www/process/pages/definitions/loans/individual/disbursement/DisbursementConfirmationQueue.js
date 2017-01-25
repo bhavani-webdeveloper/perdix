@@ -60,8 +60,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage,
-                            'sortBy':searchOptions.sortBy
-
+                            'sortBy':searchOptions.sortBy,
+                            'branchId': SessionStore.getCurrentBranch().branchId
                         }).$promise;
 
                     },

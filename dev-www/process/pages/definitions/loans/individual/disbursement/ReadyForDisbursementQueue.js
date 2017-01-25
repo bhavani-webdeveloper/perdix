@@ -9,6 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
 
                     model.branchName = SessionStore.getBranch();
                     model.stage = 'ReadyForDisbursement';
+                    model.branchId = SessionStore.getCurrentBranch().branchId;
                     console.log(model);
                 },
                 offline: false,
@@ -59,8 +60,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage,
-                            'sortBy':searchOptions.sortBy
-
+                            'sortBy':searchOptions.sortBy,
+                            'branchId': SessionStore.getCurrentBranch().branchId
                         }).$promise;
 
                     },

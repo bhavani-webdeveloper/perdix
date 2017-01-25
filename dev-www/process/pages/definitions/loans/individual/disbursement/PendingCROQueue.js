@@ -9,6 +9,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getBranch();
             model.stage = 'CROApproval';
+            
         },
         definition: {
             title: "SEARCH_CONDITION",
@@ -47,20 +48,6 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                         "x-schema-form": {
                             "type": "date"
                         }
-                    },
-                    "branch_name": {
-                        "title": "Branch Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
-                    },
-                    "centre_name": {
-                        "title": "Centre Name",
-                        "type": "string",
-                        "x-schema-form": {
-                            "type": "select"
-                        }
                     }
                 }
             },
@@ -74,7 +61,8 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'scheduledDisbursementDate': null,
                     'page': 1,
                     'per_page': 100,
-                    'sortBy':null
+                    'sortBy':null,
+                    'branchId': SessionStore.getCurrentBranch().branchId
                 }).$promise;
 
                 return promise;
