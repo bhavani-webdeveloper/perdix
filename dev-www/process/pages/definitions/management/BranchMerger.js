@@ -74,8 +74,20 @@ irf.pageCollection.factory(irf.page("management.BranchMerger"), ["$log", "Mainte
                 submit: function(model, form, formName) {
                     $log.info('on submit action ....');
                     $log.info(model.model.customer);
+                    var reqData = _.cloneDeep(model.model.customer);
                     
-                    Maintenance.updateBranch(model.model.customer).$promise.then(
+                    // Maintenance.updateBranch(model.model.customer).$promise.then(
+                    //     function(response) {
+                    //         PageHelper.hideLoader();
+                    //         PageHelper.showProgress("Hub updated", "Done.", 2000);
+                    //     },
+                    //     function(errorResponse) {
+                    //         PageHelper.hideLoader();
+                    //         PageHelper.showErrors(errorResponse);
+                    //     }
+                    // );
+
+                     Maintenance.updateBranch({fromBranchId :reqData.fromBranchId,toBranchId:reqData.toBranchId},{}).$promise.then(
                         function(response) {
                             PageHelper.hideLoader();
                             PageHelper.showProgress("Hub updated", "Done.", 2000);
