@@ -37,25 +37,23 @@
             </div>
           </div>
           <div class="box-body instructions" ng-show="stage==STAGES.INSTRUCTIONS">
-            <h3>
-              Instructions
-            </h3>
+            <h3 ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].title || INSTRUCTIONS_TEXT['en'].title"></h3>
             <div class="instruction-container">
-              <p class="instruction-1">{{ 'Current question by total questions' | translate }}</p>
-              <p class="instruction-2">{{ 'Press here for break' | translate }}</p>
-              <p class="instruction-3">{{ 'View countdown of test duration' | translate }}</p>
-              <p class="instruction-4">{{ 'Choose an option' | translate }}</p>
-              <p class="instruction-5">{{ 'Press next' | translate }}</p>
-              <img class="bg" src="" ng-src="{{instructionImage}}">
+              <p class="instruction-1" ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].instruction_1 || INSTRUCTIONS_TEXT['en'].instruction_1"></p>
+              <p class="instruction-2" ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].instruction_2 || INSTRUCTIONS_TEXT['en'].instruction_2"></p>
+              <p class="instruction-3" ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].instruction_3 || INSTRUCTIONS_TEXT['en'].instruction_3"></p>
+              <p class="instruction-4" ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].instruction_4 || INSTRUCTIONS_TEXT['en'].instruction_4"></p>
+              <p class="instruction-5" ng-bind="INSTRUCTIONS_TEXT[chosenLanguage].instruction_5 || INSTRUCTIONS_TEXT['en'].instruction_5"></p>
+              <img class="bg" src="" ng-src="{{INSTRUCTIONS_TEXT.instructionImage}}">
             </div>
             <div class="instruction-agreement-container">
-              <p ng-repeat="_a in (AGREEMENT[chosenLanguage] || AGREEMENT['en']).text">
+              <p ng-repeat="_a in (INSTRUCTIONS_TEXT[chosenLanguage].text || INSTRUCTIONS_TEXT['en'].text)">
                 <i class="fa fa-hand-o-right">&nbsp;</i>
                 <span ng-bind-html="_a"></span>
               </p>
             </div>
             <div>
-              <button class="btn btn-lg btn-{{test?'theme':(testStatus == 'Failed'?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?(AGREEMENT[chosenLanguage] || AGREEMENT['en']).agree:(testStatus == 'Failed'?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
+              <button class="btn btn-lg btn-{{test?'theme':(testStatus == 'Failed'?'danger':'default')}} pull-right" ng-disabled="!test" ng-click="moveStage('TEST')">{{test?(INSTRUCTIONS_TEXT[chosenLanguage].agree || INSTRUCTIONS_TEXT['en'].agree):(testStatus == 'Failed'?'Question Preparation Failed':'Preparing Questionnaire..')}}</button>
               <button ng-show="testStatus == 'Failed'" class="btn btn-lg btn-default pull-right gap-10" ng-click="moveStage(STAGES.INSTRUCTIONS)">Retry</button>
             </div>
           </div>
