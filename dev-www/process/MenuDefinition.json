@@ -26,6 +26,7 @@
             "items": [
                 "Page/LoansDashboard",
                 "Page/Engine/loans.individual.Queue",
+                "Page/Engine/loans.individual.screening.LoanOriginationQueue",
                 "Page/LoansBookingDashboard",
                 "Page/LoansDisbursementDashboard",
                 "Page/LoansACHPDCDashboard",
