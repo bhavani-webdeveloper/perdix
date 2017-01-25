@@ -110,10 +110,6 @@ irf.pages.config([
 	},{
 		name: "Page.Reports",
 		url: "/Reports/:pageId",
-		params: {
-			pageId: null,
-			pageData: null
-		},
 		templateUrl: "process/pages/templates/Reports.html",
 		controller: "ReportsCtrl"
 	},{

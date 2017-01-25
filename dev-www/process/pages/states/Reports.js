@@ -1,12 +1,10 @@
 irf.pages.controller("ReportsCtrl",
-["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper",
-	function($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper){
+["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper", "$timeout",
+	function($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper, $timeout){
 	$log.info("ReportsCtrl loaded");
 
-	var pageData = $stateParams.pageData;
-	if (pageData && pageData.user && pageData.user.name) {
-		$scope.filterUsername = pageData.user.name;
-	}
+	var pageData = {};
+	var tabData = {"menu_name":$stateParams.pageId};
 
 	var userName = SessionStore.getLoginname();
 
@@ -31,22 +29,39 @@ irf.pages.controller("ReportsCtrl",
 
 	$scope.listNextAccessLevelItems($scope.filterAccessLevels[0], '', 0);
 
+	var initialize = function() {
+		if (_.isObject(pageData)) {
+			if (pageData.filter) {
+				tabData.filter = pageData.filter;
+			}
+			if (pageData.user && pageData.user.name) {
+				$scope.filterUsername = pageData.user.name;
+			}
+		}
+		$scope.ResultDataSet = [];
+		BIReports.reportTabList(tabData).$promise.then(function(response) {
+			$scope.TabDefinition = response;
+			$timeout(function() {
+				$scope.active = 0;
+			});
+		}).finally(function() {
+			PageHelper.hideLoader();
+		});
+	};
+
 	$scope.applyFilter = function() {
 		var user = $scope.fSelect[$scope.filterAccessLevels.length - 1];
 		var _f = [];
 		for (var i = 0; i < $scope.fSelect.length; i++) {
 			_f.push($scope.fSelect[i].id);
 		}
-		$state.go("Page.Reports", {
-			pageId: $stateParams.pageId,
-			pageData: {
-				filter: _f.join(':'),
-				user: user
-			}
-		});
-	}
 
-	$scope.ResultDataSet = [];
+		pageData = {
+			filter: _f.join(':'),
+			user: user
+		};
+		initialize();
+	}
 
 	$scope.onTabLoad = function(tabIndex, activeindex) {
 		if(!$scope.ResultDataSet[activeindex]) {
@@ -78,15 +93,6 @@ irf.pages.controller("ReportsCtrl",
 		};
 	};
 
-	var tabData = {"menu_name":$stateParams.pageId};
-	if (pageData && pageData.filter) {
-		tabData.filter = pageData.filter;
-	}
-	BIReports.reportTabList(tabData).$promise.then(function(response) {
-		console.log(response);
-		$scope.TabDefinition = response;
-	}).finally(function() {
-		PageHelper.hideLoader();
-	});
+	initialize();
 
 }]);
