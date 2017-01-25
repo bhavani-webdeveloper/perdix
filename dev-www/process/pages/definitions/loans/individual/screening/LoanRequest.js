@@ -61,7 +61,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     if (_.isArray(enterpriseCustomerRelations)) {
                         var psychometricRequiredUpdated = false;
                         for (j in enterpriseCustomerRelations) {
-                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && enterpriseCustomerRelations[j].businessInvolvement == 'Full time') {
+                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
                                 loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
                                 psychometricRequiredUpdated = true;
                             }
