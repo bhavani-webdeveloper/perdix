@@ -34,7 +34,8 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             function(res) {
                                 $log.info(res);
                                 _.assign(model.loanMonitoringDetails, res);
-                                model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
+                                //model.loanMonitoringDetails.lucRescheduledDate = moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD");
+                                model.loanMonitoringDetails.lucRescheduledDate = (model.loanMonitoringDetails.lucRescheduledDate!=null)?moment(model.loanMonitoringDetails.lucRescheduledDate).format("YYYY-MM-DD"):null;
                                 var loanId = res.loanId;
 
                                 var loanresponse = IndividualLoan.get({
