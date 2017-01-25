@@ -18,7 +18,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             }
         }
         return true;
-    } 
+    }
 
     return {
         "type": "schema-form",
@@ -2818,6 +2818,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if (!(validateRequest(reqData))){
                     return;
                 }
+                if (model.currentStage == 'ApplicationReview') {
+                    PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
+                }
 
                 PageHelper.showProgress('enrolment','Saving..');
                 EnrollmentHelper.saveData(reqData).then(function(resp){
@@ -2852,11 +2855,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         console.error(err);
                     }
                 }
-                if(model.currentStage=='Application'){
+                if (model.currentStage == 'Application') {
                     if (model.customer.verifications.length<2){
                         PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
                         return false;
                     }
+                }
+                if (model.currentStage == 'ApplicationReview') {
+                    PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
                 }
                 if(model.currentStage=='ScreeningReview'){
                     var commercialCheckFailed = false;
