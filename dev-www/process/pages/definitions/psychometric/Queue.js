@@ -29,6 +29,8 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					}
 					if (allTestCompleted) {
 						reqData.psychometricCompleted = 'Completed';
+					} else {
+						reqData.psychometricCompleted = 'N';
 					}
 					IndividualLoan.update({
 						loanProcessAction: 'SAVE',
