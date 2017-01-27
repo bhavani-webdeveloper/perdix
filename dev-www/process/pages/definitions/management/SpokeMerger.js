@@ -93,19 +93,19 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                         "id": "customer.customerid[arrayIndex].id",
                                     },
                                     "searchHelper": formHelper,
-                                    "search": function(inputModel, form) {
+                                        "search": function(inputModel, form) {
                                         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                         var branches = formHelper.enum('branch_id').data;
                                         var branchId;
+                                        $log.info(inputModel.kgfsName);
                                         for (var i = 0; i < branches.length; i++) {
-                                            if (branches[i].id == inputModel.firstName)
-                                                branchId = branches[i].id;
+                                            if (branches[i].code == inputModel.kgfsName)
+                                                branchId = branches[i].name;  
                                         }
                                         var promise = Enrollment.search({
                                             'branchName': branchId || SessionStore.getBranch(),
                                             'firstName': inputModel.firstName,
-                                            'centreId': inputModel.centreId,
-                                            'customerType': ""
+                                            'centreId': inputModel.centreId
                                         }).$promise;
                                         return promise;
                                     },
