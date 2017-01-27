@@ -22,7 +22,12 @@ irf.pages.controller("ReportsCtrl",
 
 	$scope.listNextAccessLevelItems = function(accessLevel, selectedValue, index) {
 		for (i = index; i < $scope.filterAccessLevels.length; i++) $scope.fSelect[i] = [];
-		BIReports.reportFilterList({ "accessLevel": accessLevel, "selectedValue": selectedValue }).$promise.then(function(response) {
+		BIReports.reportFilterList({
+			"accessLevel": accessLevel,
+			"selectedValue": selectedValue,
+			"userId": userName,
+			"userAccessLevel": $scope.currentUserAccessLevel
+		}).$promise.then(function(response) {
 			$scope.fNodes[index] = response.items;
 		});
 	}
