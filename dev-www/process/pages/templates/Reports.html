@@ -41,6 +41,7 @@
           ng-model="fSelect[$index]"
           ng-change="listNextAccessLevelItems(filterAccessLevels[$index + 1], fSelect[$index].id, $index + 1)"></select>
         <button ng-click="applyFilter()" class="btn btn-default btn-xs"><i class="fa fa-filter">&nbsp;</i>Apply Filter</button>
+        <button ng-click="resetFilter()" class="btn btn-default btn-xs"><i class="fa fa-rotate-left">&nbsp;</i>Reset</button>
       </div>
     </h1>
   </section>

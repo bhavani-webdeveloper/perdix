@@ -68,6 +68,13 @@ irf.pages.controller("ReportsCtrl",
 		initialize();
 	}
 
+	$scope.resetFilter = function() {
+		for (i = 0; i < $scope.filterAccessLevels.length; i++) $scope.fSelect[i] = [];
+
+		pageData = {};
+		initialize();
+	}
+
 	$scope.onTabLoad = function(menuId, activeindex) {
 		if(!$scope.ResultDataSet[activeindex]) {
 			PageHelper.showLoader();
@@ -109,10 +116,15 @@ irf.pages.controller("ReportsCtrl",
 			report: report,
 			$showLoader: true
 		};
-		BIReports.reportDrilldown({
+		var drilldownRequest = {
+			user: userName,
 			reportId: report.unique_id,
 			record: record
-		}).$promise.then(function(response) {
+		};
+		if (pageData && pageData.filter) {
+			drilldownRequest.filter = pageData.filter;
+		}
+		BIReports.reportDrilldown(drilldownRequest).$promise.then(function(response) {
 			drilldownModel.drilldownReport = response.drilldownReport;
 		}, function(error) {
 			drilldownModel.error = error;
