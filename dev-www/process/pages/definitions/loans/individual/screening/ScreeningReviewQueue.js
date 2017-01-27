@@ -71,8 +71,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'centreCode':centreId[0],
-	                    'branchName':branch,
+						'centreCode':null,
+	                    'branchName':null,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
