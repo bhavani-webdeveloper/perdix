@@ -47,7 +47,7 @@
 
   <div class="bundle-page">
     <uib-tabset active="active" class="bundle-tabset">
-      <uib-tab class="tab-theme uib-tab nav-item" select="onTabLoad(TabNames.menu_id, $index)" ng-repeat="TabNames in TabDefinition.ReportData" heading="{{ TabNames.menu_name }}">
+      <uib-tab class="tab-theme uib-tab nav-item" select="onTabLoad(TabNames.menu_id, $index)" ng-repeat="TabNames in TabDefinition.ReportData" heading="{{ TabNames.menu_display_name }}">
         <section class="content">
           <div class="row">
             <div class="col-sm-12">
@@ -68,12 +68,12 @@
                       </div>
                     </div>
                     <div class="box-body table-responsive" commented-ng-if="SingleReport.ReportType == 'SimpleTable'">
-                      <table class="table table-striped" ng-repeat="RepeatTables in SingleReport.records">
+                      <table class="table table-striped table-hover" ng-repeat="RepeatTables in SingleReport.records">
                         <tr commented-ng-if="SingleReport.DrillDownReq == '0'">
-                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left">{{ key }}</th>
+                          <th ng-repeat="(key, value) in RepeatTables[0]" align="left" ng-hide="key.startsWith('__')">{{ key | translate }}</th>
                         </tr>
                         <tr ng-repeat="row in RepeatTables">
-                          <td ng-repeat="col in row" align="right">{{ col }}</td>
+                          <td ng-repeat="(key, value) in row" align="right" ng-hide="key.startsWith('__')" ng-click="reportDrilldown(SingleReport, row)">{{ value }}</td>
                         </tr>
                       </table>
                     </div>

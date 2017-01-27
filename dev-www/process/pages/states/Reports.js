@@ -1,6 +1,6 @@
 irf.pages.controller("ReportsCtrl",
-["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper", "$timeout",
-	function($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper, $timeout){
+["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper", "$timeout", "irfSimpleModal",
+	function($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper, $timeout, irfSimpleModal){
 	$log.info("ReportsCtrl loaded");
 
 	var pageData = {};
@@ -63,34 +63,58 @@ irf.pages.controller("ReportsCtrl",
 		initialize();
 	}
 
-	$scope.onTabLoad = function(tabIndex, activeindex) {
+	$scope.onTabLoad = function(menuId, activeindex) {
 		if(!$scope.ResultDataSet[activeindex]) {
 			PageHelper.showLoader();
-			var reportData = {"report_id":tabIndex, "user_id": userName};
+			var reportData = {"menu_id":menuId, "user_id": userName};
 			if (pageData && pageData.filter) {
-				tabData.filter = pageData.filter;
+				reportData.filter = pageData.filter;
 			}
 			BIReports.reportDataList(reportData).$promise.then(function(response) {
-				$scope.dataset = [];
+				var dataset = [];
 				
 				angular.forEach(response.ReportData, function(value, key) {
-					$scope.dataset[key] = value;
+					dataset[key] = value;
 					/*if(value.ReportType == 'CHART') {
-						$scope.dataset[key] = value;
+						dataset[key] = value;
 					} else {
-						$scope.dataset[key] = value;
+						dataset[key] = value;
 					}*/
 				});
-				$scope.ResultDataSet[activeindex] = $scope.dataset;
+				$scope.ResultDataSet[activeindex] = dataset;
 				PageHelper.hideLoader();
 			});
 		}
-		
-		$scope.onHeaderClick = function(key, report_id) {
-			var drillDownUrl = irf.REPORT_BASE_URL + '/ReportDrilldown.php?report_id='+report_id+'&key='+key;
-			$log.info(drillDownUrl);
-			window.open(drillDownUrl);
+	};
+
+	var drilldownBodyHtml =
+		'<div ng-show="model.$showLoader" class="text-center">Loading...</div>'+
+		'<table ng-hide="model.$showLoader || model.error" class="table table-striped table-responsive">'+
+			'<tr>'+
+				'<th ng-repeat="(key, value) in model.drilldownReport[0]" ng-hide="key.startsWith(\'__\')">{{key|translate}}</th>'+
+			'</tr>'+
+			'<tr ng-repeat="row in model.drilldownReport">'+
+				'<td ng-repeat="(key, value) in row" ng-hide="key.startsWith(\'__\')">{{value}}</td>'+
+			'</tr>'+
+		'</table>'+
+		'<div ng-show="model.error">Error: {{model.error.error}}</div>';
+
+	$scope.reportDrilldown = function(report, record) {
+		var drilldownModel = {
+			report: report,
+			$showLoader: true
 		};
+		BIReports.reportDrilldown({
+			reportId: report.unique_id,
+			record: record
+		}).$promise.then(function(response) {
+			drilldownModel.drilldownReport = response.drilldownReport;
+		}, function(error) {
+			drilldownModel.error = error;
+		}).finally(function() {
+			drilldownModel.$showLoader = false;
+		});
+		irfSimpleModal('{{model.report.TableTitle}}', drilldownBodyHtml, drilldownModel, {size: 'lg'});
 	};
 
 	initialize();

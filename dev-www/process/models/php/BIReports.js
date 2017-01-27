@@ -12,9 +12,13 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
             method: 'GET',
             url: endpoint + '/biportal/api/MenuDefinition.php'
         },*/
-		reportDataList: {
+        reportDataList: {
             method: 'GET',
             url: endpoint + '/biportal/api/ReportDefinition.php'
+        },
+		reportDrilldown: {
+            method: 'PUT',
+            url: endpoint + '/biportal/api/ReportDrilldown.php'
         },
 		reportFilterList: {
             method: 'GET',
