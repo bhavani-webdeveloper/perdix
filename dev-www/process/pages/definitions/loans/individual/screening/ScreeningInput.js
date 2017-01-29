@@ -103,6 +103,13 @@ function (
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1
+                        },
+                        {
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1
                         }
                     ]);
                 },
@@ -194,6 +201,13 @@ function (
 
                                     $this.bundlePages.push({
                                         pageClass: 'cb-check',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
                                         }
