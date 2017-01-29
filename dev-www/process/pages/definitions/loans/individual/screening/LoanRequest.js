@@ -1244,6 +1244,249 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                          ]
                      }
                 ]
+            },
+            {
+                "type": "box",
+                "title": "NOMINEE_DETAILS",
+                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                "items": [
+                    {
+                        "key":"loanAccount.nominees",
+                        "type":"array",
+                        notitle:"true",
+                        "view":"fixed",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                key:"loanAccount.nominees[].nomineeFirstName",
+                                "title":"NAME",
+                                "type":"lov",
+                                "lovonly": false,
+                                "inputMap": {
+                                },
+                                "outputMap": {
+                                    "nomineeFirstName": "loanAccount.nominees[arrayIndex].nomineeFirstName",
+                                    "nomineeGender":"loanAccount.nominees[arrayIndex].nomineeGender",
+                                    "nomineeDOB":"loanAccount.nominees[arrayIndex].nomineeDOB"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form, model, context) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Queries.getFamilyRelations({'loanId':model.loanAccount.id}).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.nomineeFirstName,
+                                        data.nomineeGender,
+                                        data.nomineeDOB
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeGender",
+                                type:"select",
+                                "title":"GENDER"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDOB",
+                                type:"date",
+                                "title":"DATE_OF_BIRTH"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDoorNo",
+                                "title":"DOOR_NO"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeLocality",
+                                "title":"LOCALITY"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeStreet",
+                                "title":"STREET"
+                            },
+                            {
+                                key: "loanAccount.nominees[].nomineePincode",
+                                type: "lov",
+                                "title":"PIN_CODE",
+                                fieldType: "number",
+                                autolov: true,
+                                inputMap: {
+                                    "pincode": {
+                                        key:"loanAccount.nominees[].nomineePincode"
+                                    },
+                                    "district": {
+                                        key: "loanAccount.nominees[].nomineeDistrict"
+                                    },
+                                    "state": {
+                                        key: "loanAccount.nominees[].nomineeState"
+                                    }
+                                },
+                                outputMap: {
+                                    "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
+                                    "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                                    "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                                    "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                                },
+                                searchHelper: formHelper,
+                                initialize: function(inputModel, form, model, context) {
+                                    inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                },
+                                search: function(inputModel, form, model, context) {
+                                    return Queries.searchPincodes(
+                                        inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
+                                        inputModel.district,
+                                        inputModel.state
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDistrict",
+                                type:"text",
+                                "title":"DISTRICT"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeState",
+                                "title":"STATE"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeRelationship",
+                                type:"select",
+                                "title":"RELATIONSHIP"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "NOMINEE_DETAILS",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'",
+                readonly:true,
+                "items": [
+                    {
+                        "key":"loanAccount.nominees",
+                        "type":"array",
+                        notitle:"true",
+                        "view":"fixed",
+                        "add":null,
+                        "remove":null,
+                        "items":[
+                            {
+                                key:"loanAccount.nominees[].nomineeFirstName",
+                                "title":"NAME",
+                                "type":"lov",
+                                "lovonly": false,
+                                "inputMap": {
+                                },
+                                "outputMap": {
+                                    "nomineeFirstName": "loanAccount.nominees[arrayIndex].nomineeFirstName",
+                                    "nomineeGender":"loanAccount.nominees[arrayIndex].nomineeGender",
+                                    "nomineeDOB":"loanAccount.nominees[arrayIndex].nomineeDOB"
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form, model, context) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Queries.getFamilyRelations({'loanId':model.loanAccount.id}).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        data.nomineeFirstName,
+                                        data.nomineeGender,
+                                        data.nomineeDOB
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeGender",
+                                type:"select",
+                                "title":"GENDER"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDOB",
+                                type:"date",
+                                "title":"DATE_OF_BIRTH"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDoorNo",
+                                "title":"DOOR_NO"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeLocality",
+                                "title":"LOCALITY"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeStreet",
+                                "title":"STREET"
+                            },
+                            {
+                                key: "loanAccount.nominees[].nomineePincode",
+                                type: "lov",
+                                "title":"PIN_CODE",
+                                fieldType: "number",
+                                autolov: true,
+                                inputMap: {
+                                    "pincode": {
+                                        key:"loanAccount.nominees[].nomineePincode"
+                                    },
+                                    "district": {
+                                        key: "loanAccount.nominees[].nomineeDistrict"
+                                    },
+                                    "state": {
+                                        key: "loanAccount.nominees[].nomineeState"
+                                    }
+                                },
+                                outputMap: {
+                                    "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
+                                    "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                                    "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                                    "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                                },
+                                searchHelper: formHelper,
+                                initialize: function(inputModel, form, model, context) {
+                                    inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                                },
+                                search: function(inputModel, form, model, context) {
+                                    return Queries.searchPincodes(
+                                        inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
+                                        inputModel.district,
+                                        inputModel.state
+                                    );
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.division + ', ' + item.region,
+                                        item.pincode,
+                                        item.district + ', ' + item.state
+                                    ];
+                                }
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeDistrict",
+                                type:"text",
+                                "title":"DISTRICT"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeState",
+                                "title":"STATE"
+                            },
+                            {
+                                key:"loanAccount.nominees[].nomineeRelationship",
+                                type:"select",
+                                "title":"RELATIONSHIP"
+                            }
+                        ]
+                    }
+                ]
             }
             /*,
             {
