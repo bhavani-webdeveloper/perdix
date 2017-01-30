@@ -445,143 +445,146 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     var objectifiedBureaus = {};
 
     var refreshCB = function(model) {
+        var deferred = $q.defer();
         model.ScoreDetails = [];
         model.customer = {};
         model.applicant = {};
         model.coapplicants = [];
         model.guarantors = [];
-        if (_.hasIn(model, 'loanAccount')) {
-            if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length) {
-                PageHelper.showLoader();
-                var bureauPromises = [];
-                for (i in model.loanAccount.loanCustomerRelations) {
-                    var lcRelation = model.loanAccount.loanCustomerRelations[i];
-                    if (lcRelation.relation == 'Applicant' || lcRelation.relation == 'Co-Applicant' || lcRelation.relation == 'Guarantor'){
-                        var bureauPromise = CreditBureau.getCBDetails({customerId: lcRelation.customerId, requestType: null, type: null}).$promise;
-                        bureauPromises.push(bureauPromise);
+        if (model.loanAccount && model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length) {
+            PageHelper.showLoader();
+            var bureauPromises = [];
+            for (i in model.loanAccount.loanCustomerRelations) {
+                var lcRelation = model.loanAccount.loanCustomerRelations[i];
+                if (lcRelation.relation == 'Applicant' || lcRelation.relation == 'Co-Applicant' || lcRelation.relation == 'Guarantor'){
+                    var bureauPromise = CreditBureau.getCBDetails({customerId: lcRelation.customerId, requestType: null, type: null}).$promise;
+                    bureauPromises.push(bureauPromise);
 
-                        bureauPromise.then(function(httpres) {
-                            // Data processing for UI - starts
-                            // CIBIL
-                            if (httpres && httpres.cibil && httpres.cibil.cibilLoanDetails && httpres.cibil.cibilLoanDetails.length) {
-                                for (i in httpres.cibil.cibilLoanDetails) {
-                                    var cld = httpres.cibil.cibilLoanDetails[i];
-                                    cld.accountTypeText = CIBILAppendix.getAccountType(cld.accountType);
-                                    cld.ownershipIndicatorText = CIBILAppendix.getOwnershipIndicator(cld.ownershipIndicator);
-                                    $log.info(cld.accountType + ": " + cld.accountTypeText);
-                                    if (cld.paymentHistory1) {
-                                        cld.paymentHistory1List = cld.paymentHistory1.match(/.{1,3}/g);
-                                        var reqLen = 18 - cld.paymentHistory1List.length;
-                                        for(j=0;j<reqLen;j++) cld.paymentHistory1List.push('\u00A0\u00A0\u00A0');
+                    bureauPromise.then(function(httpres) {
+                        // Data processing for UI - starts
+                        // CIBIL
+                        if (httpres && httpres.cibil && httpres.cibil.cibilLoanDetails && httpres.cibil.cibilLoanDetails.length) {
+                            for (i in httpres.cibil.cibilLoanDetails) {
+                                var cld = httpres.cibil.cibilLoanDetails[i];
+                                cld.accountTypeText = CIBILAppendix.getAccountType(cld.accountType);
+                                cld.ownershipIndicatorText = CIBILAppendix.getOwnershipIndicator(cld.ownershipIndicator);
+                                $log.info(cld.accountType + ": " + cld.accountTypeText);
+                                if (cld.paymentHistory1) {
+                                    cld.paymentHistory1List = cld.paymentHistory1.match(/.{1,3}/g);
+                                    var reqLen = 18 - cld.paymentHistory1List.length;
+                                    for(j=0;j<reqLen;j++) cld.paymentHistory1List.push('\u00A0\u00A0\u00A0');
+                                }
+                                if (cld.paymentHistory2) {
+                                    cld.paymentHistory2List = cld.paymentHistory2.match(/.{1,3}/g);
+                                    var reqLen = 18 - cld.paymentHistory2List.length;
+                                    for(j=0;j<reqLen;j++) cld.paymentHistory2List.push('\u00A0\u00A0\u00A0');
+                                }
+                                if (cld.paymentHistoryStartDate && cld.paymentHistory1List) {
+                                    var dt = moment(cld.paymentHistoryStartDate, SessionStore.getSystemDateFormat());
+                                    cld.paymentHistory1Months = new Array(18);
+                                    for(j in cld.paymentHistory1List) {
+                                        if (cld.paymentHistory1List[j] != '\u00A0\u00A0\u00A0') {
+                                            cld.paymentHistory1Months[j] = dt.format('MM-YY');
+                                            dt = dt.subtract(1, 'months');
+                                        }
                                     }
-                                    if (cld.paymentHistory2) {
-                                        cld.paymentHistory2List = cld.paymentHistory2.match(/.{1,3}/g);
-                                        var reqLen = 18 - cld.paymentHistory2List.length;
-                                        for(j=0;j<reqLen;j++) cld.paymentHistory2List.push('\u00A0\u00A0\u00A0');
-                                    }
-                                    if (cld.paymentHistoryStartDate && cld.paymentHistory1List) {
-                                        var dt = moment(cld.paymentHistoryStartDate, SessionStore.getSystemDateFormat());
-                                        cld.paymentHistory1Months = new Array(18);
-                                        for(j in cld.paymentHistory1List) {
-                                            if (cld.paymentHistory1List[j] != '\u00A0\u00A0\u00A0') {
-                                                cld.paymentHistory1Months[j] = dt.format('MM-YY');
+                                    if (cld.paymentHistory2List) {
+                                        cld.paymentHistory2Months = new Array(18);
+                                        for(j in cld.paymentHistory2List) {
+                                            if (cld.paymentHistory2List[j] != '\u00A0\u00A0\u00A0') {
+                                                cld.paymentHistory2Months[j] = dt.format('MM-YY');
                                                 dt = dt.subtract(1, 'months');
                                             }
                                         }
-                                        if (cld.paymentHistory2List) {
-                                            cld.paymentHistory2Months = new Array(18);
-                                            for(j in cld.paymentHistory2List) {
-                                                if (cld.paymentHistory2List[j] != '\u00A0\u00A0\u00A0') {
-                                                    cld.paymentHistory2Months[j] = dt.format('MM-YY');
-                                                    dt = dt.subtract(1, 'months');
-                                                }
-                                            }
-                                        }
                                     }
                                 }
-                            } else
-                            // HIGHMARK
-                            if (httpres && httpres.highMark && httpres.highMark.highmarkloanDetails && httpres.highMark.highmarkloanDetails.length) {
-                                for (i in httpres.highMark.highmarkloanDetails) {
-                                    var hmld = httpres.highMark.highmarkloanDetails[i];
-                                    if (hmld.combinedPaymentHistory) {
-                                        hmld.combinedPaymentHistoryList = hmld.combinedPaymentHistory.split('|');
-                                        for (var j = 0; j < hmld.combinedPaymentHistoryList.length; j++) {
-                                            hmld.combinedPaymentHistoryList[j] = hmld.combinedPaymentHistoryList[j].split(',');
-                                            hmld.combinedPaymentHistoryList[j][0] = hmld.combinedPaymentHistoryList[j][0].replace(':', '-');
-                                        }
-                                        if (hmld.combinedPaymentHistoryList.length > 12) {
-                                            var ln = hmld.combinedPaymentHistoryList.length;
-                                            var a1 = hmld.combinedPaymentHistoryList.slice(0, 12);
-                                            var a2 = hmld.combinedPaymentHistoryList.slice(12, ln);
-                                            hmld.combinedPaymentHistoryList2 = a2;
-                                            hmld.combinedPaymentHistoryList = a1;
-                                            ln = ln - 12;
-                                            if (ln > 12) {
-                                                a1 = hmld.combinedPaymentHistoryList2.slice(0, 12);
-                                                a2 = hmld.combinedPaymentHistoryList2.slice(12, ln);
-                                                hmld.combinedPaymentHistoryList2 = a1;
-                                                hmld.combinedPaymentHistoryList3 = a2;
-                                            }
+                            }
+                        } else
+                        // HIGHMARK
+                        if (httpres && httpres.highMark && httpres.highMark.highmarkloanDetails && httpres.highMark.highmarkloanDetails.length) {
+                            for (i in httpres.highMark.highmarkloanDetails) {
+                                var hmld = httpres.highMark.highmarkloanDetails[i];
+                                if (hmld.combinedPaymentHistory) {
+                                    hmld.combinedPaymentHistoryList = hmld.combinedPaymentHistory.split('|');
+                                    for (var j = 0; j < hmld.combinedPaymentHistoryList.length; j++) {
+                                        hmld.combinedPaymentHistoryList[j] = hmld.combinedPaymentHistoryList[j].split(',');
+                                        hmld.combinedPaymentHistoryList[j][0] = hmld.combinedPaymentHistoryList[j][0].replace(':', '-');
+                                    }
+                                    if (hmld.combinedPaymentHistoryList.length > 12) {
+                                        var ln = hmld.combinedPaymentHistoryList.length;
+                                        var a1 = hmld.combinedPaymentHistoryList.slice(0, 12);
+                                        var a2 = hmld.combinedPaymentHistoryList.slice(12, ln);
+                                        hmld.combinedPaymentHistoryList2 = a2;
+                                        hmld.combinedPaymentHistoryList = a1;
+                                        ln = ln - 12;
+                                        if (ln > 12) {
+                                            a1 = hmld.combinedPaymentHistoryList2.slice(0, 12);
+                                            a2 = hmld.combinedPaymentHistoryList2.slice(12, ln);
+                                            hmld.combinedPaymentHistoryList2 = a1;
+                                            hmld.combinedPaymentHistoryList3 = a2;
                                         }
                                     }
                                 }
                             }
-                            if (httpres && httpres.cibil && httpres.cibil.enquirySegment && httpres.cibil.enquirySegment.length) {
-                                for (i in httpres.cibil.enquirySegment) {
-                                    var ces = httpres.cibil.enquirySegment[i];
-                                    ces.enquiryPurposeText = CIBILAppendix.getEnquiryPurpose(ces.enquiryPurpose);
-                                }
+                        }
+                        if (httpres && httpres.cibil && httpres.cibil.enquirySegment && httpres.cibil.enquirySegment.length) {
+                            for (i in httpres.cibil.enquirySegment) {
+                                var ces = httpres.cibil.enquirySegment[i];
+                                ces.enquiryPurposeText = CIBILAppendix.getEnquiryPurpose(ces.enquiryPurpose);
                             }
-                            // Data processing for UI - ends
+                        }
+                        // Data processing for UI - ends
 
-                            for (j in model.loanAccount.loanCustomerRelations) {
-                                var relationGuy = model.loanAccount.loanCustomerRelations[j];
-                                if (relationGuy.customerId == httpres.customerId) {
-                                    if (relationGuy.relation == 'Applicant') {
-                                        model.applicant = httpres;
-                                    } else if (relationGuy.relation == 'Co-Applicant') {
-                                        model.coapplicants.push(httpres);
-                                    } else if (relationGuy.relation == 'Guarantor') {
-                                        model.guarantors.push(httpres);
-                                    }
+                        for (j in model.loanAccount.loanCustomerRelations) {
+                            var relationGuy = model.loanAccount.loanCustomerRelations[j];
+                            if (relationGuy.customerId == httpres.customerId) {
+                                if (relationGuy.relation == 'Applicant') {
+                                    model.applicant = httpres;
+                                } else if (relationGuy.relation == 'Co-Applicant') {
+                                    model.coapplicants.push(httpres);
+                                } else if (relationGuy.relation == 'Guarantor') {
+                                    model.guarantors.push(httpres);
                                 }
                             }
-                        },function (errResp){
-                            $log.info("error while processing CB get request");
-                            //PageHelper.showErrors(errResp);
-                            PageHelper.showProgress('load-loan', "CB Details not available", 2000);
-                        })
-                        .finally(function(){
-                            PageHelper.hideLoader();
-                        });
-                    }
-                }
-                $q.all(bureauPromises).finally(function() {
-                    objectifiedBureaus = {};
-                    objectifiedBureaus[model.applicant.customerId] = model.applicant;
-                    var customerIds = [model.applicant.customerId];
-                    for (k in model.coapplicants) {
-                        objectifiedBureaus[model.coapplicants[k].customerId] = model.coapplicants[k];
-                        customerIds.push(model.coapplicants[k].customerId);
-                    }
-                    for (k in model.guarantors) {
-                        objectifiedBureaus[model.guarantors[k].customerId] = model.guarantors[k];
-                        customerIds.push(model.guarantors[k].customerId);
-                    }
-
-                    Queries.getCustomerBasicDetails({ids: customerIds}).then(function (res) {
-                        _.forOwn(res.ids, function(v, k) {
-                            objectifiedBureaus[k].customer = v;
-                        });
+                        }
+                    },function (errResp){
+                        $log.info("error while processing CB get request");
+                        //PageHelper.showErrors(errResp);
+                        PageHelper.showProgress('load-loan', "CB Details not available", 2000);
+                    })
+                    .finally(function(){
+                        PageHelper.hideLoader();
                     });
-
-                    for (i in customerIds) {
-                        objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
-                    }
-                });
+                }
             }
+            $q.all(bureauPromises).finally(function() {
+                objectifiedBureaus = {};
+                objectifiedBureaus[model.applicant.customerId] = model.applicant;
+                var customerIds = [model.applicant.customerId];
+                for (k in model.coapplicants) {
+                    objectifiedBureaus[model.coapplicants[k].customerId] = model.coapplicants[k];
+                    customerIds.push(model.coapplicants[k].customerId);
+                }
+                for (k in model.guarantors) {
+                    objectifiedBureaus[model.guarantors[k].customerId] = model.guarantors[k];
+                    customerIds.push(model.guarantors[k].customerId);
+                }
+
+                Queries.getCustomerBasicDetails({ids: customerIds}).then(function (res) {
+                    _.forOwn(res.ids, function(v, k) {
+                        objectifiedBureaus[k].customer = v;
+                    });
+                });
+
+                for (i in customerIds) {
+                    objectifiedBureaus[customerIds[i]]._highmarkId = 'highmark_' + customerIds[i];
+                }
+                deferred.resolve();
+            });
+        } else {
+            deferred.reject();
         }
+        return deferred.promise;
     };
 
     var refreshUI = function() {
@@ -598,7 +601,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
-            refreshCB(model);
+            return refreshCB(model);
         },
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             refreshUI();
@@ -616,9 +619,13 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
                 type: "button",
                 title: "REFRESH",
                 notitle: true,
-                onClick: function(model) {
-                    refreshCB(model);
-                    refreshUI();
+                onClick: function(model, formCtrl) {
+                    refreshCB(model).then(function() {
+                        formCtrl.redraw();
+                        $timeout(function() {
+                            refreshUI();
+                        });
+                    });
                 }
             },
             {
