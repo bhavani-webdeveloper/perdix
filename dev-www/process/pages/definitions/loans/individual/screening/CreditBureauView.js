@@ -450,9 +450,9 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
         model.applicant = {};
         model.coapplicants = [];
         model.guarantors = [];
-        PageHelper.showLoader();
         if (_.hasIn(model, 'loanAccount')) {
             if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length) {
+                PageHelper.showLoader();
                 var bureauPromises = [];
                 for (i in model.loanAccount.loanCustomerRelations) {
                     var lcRelation = model.loanAccount.loanCustomerRelations[i];
