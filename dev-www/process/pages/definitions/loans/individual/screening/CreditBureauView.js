@@ -604,6 +604,12 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
             refreshUI();
         },
         eventListeners: {
+            "new-loan": function(bundleModel, model, params) {
+                model.loanAccount = params.loanAccount;
+            },
+            "loan-account-loaded": function(bundleModel, model, params) {
+                model.loanAccount = params.loanAccount;
+            }
         },
         form: [
             {
