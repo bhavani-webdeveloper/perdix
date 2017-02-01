@@ -243,7 +243,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 enumCode: "loan_purpose_1"
                             }, {
                                 key: "loanMonitoringDetails.loanPurpose",
-                                title: "LOAN_PURPOSE_2",
+                                title: "LOAN_SUB_PURPOSE",
                                 "readonly": true
                             }, {
                                 key: "loanMonitoringDetails.loanAmount",
