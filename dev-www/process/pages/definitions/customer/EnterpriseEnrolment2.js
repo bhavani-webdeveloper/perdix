@@ -78,9 +78,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
                 var centres = SessionStore.getCentres();
                 var centreName = [];
-                for (var i = 0; i < centres.length; i++) {
-                    centreName.push(centres[i].id);
+              
+                if (centres && centres.length) {
+                    for (var i = 0; i < centres.length; i++) {
+                        centreName.push(centres[i].id);
+                    }
                 }
+                
                 model.customer.centreId = centreName[0];
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
             }
@@ -227,7 +231,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         },
                         "outputMap": {
-                            "urnNo": "customer.urnNo",
+                            "urnNo": "customer.urnNo", 
                             "firstName":"customer.firstName"
                         },
                         "searchHelper": formHelper,
@@ -2505,6 +2509,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].paymentTerms",
                                     type:"select",
+                                    "title":"payment_tarms",
                                     enumCode: "payment_terms"
                                 },
                                 {
@@ -2614,6 +2619,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key:"customer.verifications[].paymentTerms",
                                     type:"select",
+                                    "title":"payment_tarms",
                                     enumCode: "payment_terms"
                                 },
                                 {
