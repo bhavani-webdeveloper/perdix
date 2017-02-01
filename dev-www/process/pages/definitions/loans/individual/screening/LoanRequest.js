@@ -498,6 +498,10 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
+                        key:"loanAccount.oldAccountNO",
+                        title:"EXISTING_ACCOUNT_NUMBER"
+                    },
+                    {
                         key: "loanAccount.loanPurpose1",
                         type: "lov",
                         autolov: true,
