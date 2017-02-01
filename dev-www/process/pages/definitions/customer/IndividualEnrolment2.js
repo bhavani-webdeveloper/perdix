@@ -2010,7 +2010,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                                     type: "amount",
-                                                    title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
+                                                    title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -2123,7 +2123,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                                     type: "amount",
-                                                    title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
+                                                    title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",

@@ -1204,7 +1204,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
-                                        title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
+                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -1328,7 +1328,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
-                                        title: "BALANCE_AS_ON_REQUESTED_EMI_DATE"
+                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
