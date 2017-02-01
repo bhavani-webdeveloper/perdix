@@ -1,5 +1,5 @@
 
-irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
+irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"), 
 ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
@@ -244,7 +244,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                         {
                             key: "customer.mailingPincode",
                             type: "lov",
-                            fieldType: "number",
+                            fieldType: "string",
                             autolov: true,
                             inputMap: {
                                 "mailingPincode": "customer.mailingPincode",
@@ -284,7 +284,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 ];
                             },
                             onSelect: function(result, model, context) {
-                                model.customer.mailingPincode = result.pincode;
+                                model.customer.mailingPincode = (new Number(result.pincode)).toString();
                                 model.customer.mailingLocality = result.division;
                                 model.customer.mailingState = result.state;
                                 model.customer.mailingDistrict = result.district;
