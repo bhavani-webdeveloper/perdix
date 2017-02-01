@@ -46,8 +46,12 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"), ["$log
 				var branch = SessionStore.getCurrentBranch();
 		        var centres = SessionStore.getCentres();
 		        var centreId=[];
-		        for (var i = 0; i < centres.length; i++) {
+		         if(centres && centres.length)
+		        {
+		        	for (var i = 0; i < centres.length; i++) {
 			        centreId.push(centres[i].centreId);
+		        }
+
 		        }
 
 					var promise = LUC.search({

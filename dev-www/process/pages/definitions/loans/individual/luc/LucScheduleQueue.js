@@ -1,14 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
 	function($log, formHelper, LUC, $state, SessionStore, Utils) {
-	
+
 		return {
 			"type": "search-list",
 			"title": "LUC_SCHEDULED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				
+
 				$log.info("luc Schedule Queue got initialized");
-				
+
 			},
 			definition: {
 				title: "SEARCH LUC",
@@ -64,17 +64,18 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucScheduleQueue"), ["
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) { 
-				var branch = SessionStore.getCurrentBranch();
-		        var centres = SessionStore.getCentres();
-		        var centreId=[];
-		        for (var i = 0; i < centres.length; i++) {
-			        centreId.push(centres[i].centreId);
-		        }
-
+				getResultsPromise: function(searchOptions, pageOpts) {
+					var branch = SessionStore.getCurrentBranch();
+					var centres = SessionStore.getCentres();
+					var centreId = [];
+					if (centres && centres.length) {
+						for (var i = 0; i < centres.length; i++) {
+							centreId.push(centres[i].centreId);
+						}
+					}
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
-						'currentStage':"LUCSchedule",
+						'currentStage': "LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
 						'centreId': centreId[0],
 						'branchName': branch.branchName,

@@ -48,9 +48,11 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucLegalRecoveryQueue"
 				var branch = SessionStore.getCurrentBranch();
 		        var centres = SessionStore.getCentres();
 		        var centreId=[];
-		        for (var i = 0; i < centres.length; i++) {
-			        centreId.push(centres[i].centreId);
-		        }
+		        if (centres && centres.length) {
+						for (var i = 0; i < centres.length; i++) {
+							centreId.push(centres[i].centreId);
+						}
+				}
 
 					var promise = LUC.search({
 						'accountNumber': searchOptions.accountNumber,
