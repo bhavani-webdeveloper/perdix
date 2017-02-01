@@ -4,8 +4,11 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 		var centres = SessionStore.getCentres();
 		var centreName = [];
 
+		if(centres && centres.length)
+		{
 		for (var i = 0; i < centres.length; i++) {
 			centreName.push(centres[i].centreName);
+		}
 		}
 
 		/*var branches = formHelper.enum('branch_id').data;

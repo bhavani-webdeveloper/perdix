@@ -1,28 +1,6 @@
 irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
 	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
-		var centreName=[];
-
-		for (var i = 0; i < centres.length; i++) {
-			centreName.push(centres[i].centreName);
-		}
-
-		/*var branches = formHelper.enum('branch_id').data;
-					var centres = formHelper.enum('centre').data;
-					var branchCode;
-					var centreName =[];
-					for (var i = 0; i < branches.length; i++) {
-						if (branches[i].name== branch)
-							branchCode = branches[i].code;
-						    $log.info(branchCode);
-					}
-					for (var i = 0; i < centres.length; i++) {
-						if ((centres[i].parentCode) == branchCode) {
-							centreName.push(centres[i].name);
-						}
-					}
-*/
 		return {
 			"type": "search-list",
 			"title": "LEAD_FOLLOW_UP",
@@ -81,6 +59,15 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 						if (branches[i].code == searchOptions.branch_id)
 							branchName = branches[i].name;
 					}
+				    var centres = SessionStore.getCentres();
+				    var centreName = [];
+
+				    if (centres && centres.length) {
+					    for (var i = 0; i < centres.length; i++) {
+						    centreName.push(centres[i].centreName);
+					    }
+				    }
+				    
 					var promise = Lead.search({
 						'branchName': branchName,
 						'centreName': centreName[0],
