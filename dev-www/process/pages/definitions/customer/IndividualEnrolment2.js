@@ -58,8 +58,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             }
                              var centres = SessionStore.getCentres();
                              var centreName = [];
-                             for (var i = 0; i < centres.length; i++) {
+                             if(centres && centres.length)
+                             {
+                               for (var i = 0; i < centres.length; i++) {
                                  centreName.push(centres[i].id);
+                             } 
                              }
                              model.customer.centreId = centreName[0];
                             //model.branchId = SessionStore.getBranchId() + '';
