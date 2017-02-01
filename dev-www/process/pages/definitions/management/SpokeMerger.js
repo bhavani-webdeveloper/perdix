@@ -13,6 +13,8 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                 model.customer = model.customer || {};
                 model = Utils.removeNulls(model, true);
                 $log.info("Spoke Merger page ");
+                var branches = formHelper.enum('branch_id').data;
+                $log.info(branches);
             },
 
             offline: false,
