@@ -1553,7 +1553,7 @@
                             },
                             "customerBankBranchName": {
                                 "type": ["string","null"],
-                                "title": "BRANCH_NAME"
+                                "title": "BANK_BRANCH_NAME"
                             },
                             "customerName": {
                                 "type": ["string","null"],

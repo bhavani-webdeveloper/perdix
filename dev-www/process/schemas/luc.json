@@ -17,6 +17,8 @@
 				"lucRescheduleReason",
 				"lucRescheduledDate",
 				"lucEscalated",
+				"loanAmountUsed",
+				"loanAmount",
 				"lucEscalatedReason",
 				"socialImpactDetailsId",
 				"monitoringType"
