@@ -4,11 +4,13 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 		var centres = SessionStore.getCentres();
 		$log.info(centres);
 		var centreName=[];
-		
+		if(centres && centres.length)
+		{
 		for (var i = 0; i < centres.length; i++) {
 			centreName.push(centres[i].centreName);
 		}
-
+		}
+		
 		/*var branches = formHelper.enum('branch_id').data;
 					var centres = formHelper.enum('centre').data;
 					var branchCode;
