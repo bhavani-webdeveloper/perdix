@@ -54,6 +54,9 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
+
+
+
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -75,12 +78,54 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             type: "select",
                             readonly: true
                         }, {
+                            key: "lead.centreName",
+                            type: "lov",
+                            autolov: true,
+                            bindMap: {},
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model, context) {
+                                var centres = SessionStore.getCentres();
+                                $log.info("hi");
+                                $log.info(centres);
+
+                                var centreCode = formHelper.enum('centre').data;
+                                var out = [];
+                                if (centres && centres.length) {
+                                    for (var i = 0; i < centreCode.length; i++) {
+                                        for (var j = 0; j < centres.length; j++) {
+                                            if (centreCode[i].value == centres[j].id) {
+                                                out.push({
+                                                    name: centreCode[i].name,
+                                                    id:centreCode[i].value
+                                                })
+                                            }
+                                        }
+                                    }
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                model.lead.centreName = valueObj.name;
+                                model.lead.centreId = valueObj.id;
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.name
+                                ];
+                            }
+                        }, /*{
                             key: "lead.centreId",
                             type: "select",
                             parentEnumCode: "branch_id",
                             parentValueExpr: "model.lead.branchId",
                             screenFilter: true
-                        }, {
+                        },*/ 
+                        {
                             key: "lead.id",
                             condition: "model.lead.id",
                             readonly: true

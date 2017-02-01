@@ -130,7 +130,7 @@
             "enumCode": "branch_id" 
          },
          "centreName": {
-            "type": "number",
+            "type": "string",
             "title": "SPOKE_NAME",
             "enumCode": "centre"
          },

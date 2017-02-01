@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         function(res) {
                             _.assign(model.lead, res);
 
-                            model.lead.branchId=res.branchId;
+                            model.lead.branchId = res.branchId;
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -82,7 +82,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         "parentEnumCode": "branch_id",
                         "parentValueExpr": "model.lead.branchId",
                         required: true
-                    }, ]
+                    }]
                 },
 
                 {

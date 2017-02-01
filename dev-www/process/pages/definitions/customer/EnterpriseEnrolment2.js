@@ -128,6 +128,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             model.customer.maritalStatus=obj.maritalStatus;
                             model.customer.customerBranchId=obj.branchId;
                             model.customer.centreId=obj.centreId;
+                            model.customer.centreName=obj.centreName;
                             model.customer.street=obj.addressLine2;
                             model.customer.doorNo=obj.addressLine1;
                             model.customer.pincode=obj.pincode;
@@ -271,6 +272,49 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         readonly:true,
                         type: "select"
                     },
+                    /*{
+                        key: "customer.centreName",
+                        type: "lov",
+                        "title":"SPOKE_NAME",
+                        autolov: true,
+                        bindMap: {},
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var centres = SessionStore.getCentres();
+                            $log.info("hi");
+                            $log.info(centres);
+
+                            var centreCode = formHelper.enum('centre').data;
+                            var out = [];
+                            if (centres && centres.length) {
+                                for (var i = 0; i < centreCode.length; i++) {
+                                    for (var j = 0; j < centres.length; j++) {
+                                        if (centreCode[i].value == centres[j].id) {
+                                            out.push({
+                                                name: centreCode[i].name,
+                                                id: centreCode[i].value
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.customer.centreName = valueObj.name;
+                            model.customer.centreId = valueObj.id;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+                    },*/
                     {
                         key: "customer.id",
                         condition: "model.customer.id",
@@ -287,9 +331,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key:"customer.centreId",
                         type:"select",
                         title:"CENTRE_NAME",
-                        /*filter: {
+                        filter: {
                             "parentCode": "model.branch_id"
-                        },*/
+                        },
                         parentValueExpr:"model.customer.customerBranchId",
                         parentEnumCode:"branch_id",
                     },

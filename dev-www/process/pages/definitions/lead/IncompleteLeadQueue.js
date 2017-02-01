@@ -10,22 +10,7 @@ irf.pageCollection.factory(irf.page("lead.IncompleteLeadQueue"), ["$log", "formH
 			centreName.push(centres[i].centreName);
 		}
 		}
-		
-		/*var branches = formHelper.enum('branch_id').data;
-					var centres = formHelper.enum('centre').data;
-					var branchCode;
-					var centreName =[];
-					for (var i = 0; i < branches.length; i++) {
-						if (branches[i].name== branch)
-							branchCode = branches[i].code;
-						    $log.info(branchCode);
-					}
-					for (var i = 0; i < centres.length; i++) {
-						if ((centres[i].parentCode) == branchCode) {
-							centreName.push(centres[i].name);
-						}
-					}
-*/
+
 		return {
 			"type": "search-list",
 			"title": "INCOMPLETE_LEAD",
