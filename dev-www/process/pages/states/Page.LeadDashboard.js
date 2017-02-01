@@ -22,8 +22,11 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
         var centreName=[];
+        if(centres && centres.length)
+        {
         for (var i = 0; i < centres.length; i++) {
             centreName.push(centres[i].centreName);
+        }
         }
 
         var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.leadAssignmentPendingQueue"];
