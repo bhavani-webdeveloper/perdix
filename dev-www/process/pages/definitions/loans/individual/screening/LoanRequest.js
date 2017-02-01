@@ -904,7 +904,6 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     "view": "fixed",
                     "startEmpty": true,
                     "title": "LOAN_DOCUMENT",
-                    "remove": null,
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
                     "items": [
                         {

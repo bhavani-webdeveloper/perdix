@@ -4,9 +4,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
-		for (var i = 0; i < centres.length; i++) {
-			centreId.push(centres[i].centreId);
-		}
+	    if (centres && centres.length) {
+		    for (var i = 0; i < centres.length; i++) {
+			    centreId.push(centres[i].centreId);
+		    }
+	    }
 		return {
 			"type": "search-list",
 			"title": "SCREENING_REVIEW_QUEUE",
