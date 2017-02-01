@@ -228,7 +228,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "centreId": {
                                 "key": "customer.centreId",
                                 "type": "select",
-                                "screenFilter": true
+                                "screenFilter": true,
+                                "parentEnumCode": "branch",
                             }
                         },
                         "outputMap": {
