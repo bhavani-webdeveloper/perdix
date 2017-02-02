@@ -42,6 +42,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                             }
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
+                            model.transaction = null;
                             LoanAccount.getTransactionForReversalInLoms(model.input)
                                 .$promise
                                 .then(function(transaction){
@@ -81,7 +82,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                          "title": "VALUE_DATE"
                      },
                      {
-                         "key": "transaction.part5",
+                         "key": "transaction.amount1",
                          "type": "string",
                          "readonly": true,
                          "title": "AMOUNT"
@@ -119,6 +120,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                 Utils.confirm("Are you sure?").then(function(){
                     PageHelper.showLoader();
                     PageHelper.showProgress("payment-reversal","Processing Reversal",3000);
+                    model.transaction.transactionNameToBeReversed = model.input.transactionName;
                     LoanAccount.reverseFromLOMS(model.transaction).$promise.then(function(resp) {
                         PageHelper.showProgress("payment-reversal","Transaction reversed successfully",3000);
                         model.transaction.$$reversalDone = true;
