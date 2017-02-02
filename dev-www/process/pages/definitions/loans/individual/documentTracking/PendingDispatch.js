@@ -1,20 +1,61 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDispatch"), 
-    ["$log", "$state", "document",  "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils","PagesDefinition", "Queries",
+    ["$log", "$state", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils","PagesDefinition", "DocumentTracking",
 
 
-    function($log, $state, document, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils,PagesDefinition, Queries) {
+    function($log, $state, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils,PagesDefinition, DocumentTracking) {
 
         var branch = SessionStore.getBranch();
+
+        var LOAN_ACCOUNTS_HTML =
+'<div>'+
+    '<table style="width:100%" ng-show="model.accountDocumentTracker.length">'+
+        '<tr>'+
+            '<th>ACCOUNT NUMBER</th>'+
+            '<th>APPLICANT NAME</th>'+
+            '<th>ENTITY NAME</th>'+
+            '<th>DISBURSEMENT DATE</th>'+
+        '</tr>'+
+        '<tr class="bg-tint-theme" ng-repeat-start="lsi in model.accountDocumentTracker">'+
+            '<td>{{lsi.accountNumber}}</td>'+
+            '<td>{{lsi.applicantName}}</td>'+
+            '<td>{{lsi.customerName}}</td>'+
+            '<td>{{lsi.scheduledDisbursementDate}}</td>'+
+        '</tr>'+
+        '<tr ng-repeat-end>'+
+            '<td colspan="5"><hr style="margin-bottom:0;border-top-color:#999"></td>'+
+        '</tr>'+
+    '</table>'+
+'</div>';
+
 
         return {
             "type": "schema-form",
             "title": "DISPATCH_PENDING_DOCUMENTS",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.doc = model.doc || {};
                 $log.info("Dispatch pending documents is initiated ");
+
+                /*if (!model._Accounts) {
+                    $log.info("Screen directly launched hence redirecting to queue screen");
+                    $state.go('Page.Engine', {
+                        pageName: 'loans.individual.disbursement.MultiDocVerificationQueue',
+                        pageId: null
+                    });
+                    return;
+                }*/
+                if (model._Accounts) {
+                    model.accountDocumentTracker = model.accountDocumentTracker || [];
+                    model.accountDocumentTracker = _.cloneDeep(model._Accounts);
+                    if(model.accountDocumentTracker && model.accountDocumentTracker.length >0){
+                        model._Accounts.CourierSentDate = model.accountDocumentTracker[0].courierDate;
+                        model._Accounts.CourierCompanyName = model.accountDocumentTracker[0].courierName;
+                        model._Accounts.PodNumber = model.accountDocumentTracker[0].courierNumber;
+                        model._Accounts.BatchNumber = model.accountDocumentTracker[0].batchNumber;
+                        model._Accounts.Remarks = model.accountDocumentTracker[0].remarks;
+                    }
+                }
             },
 
             modelPromise: function(pageId, _model) {
@@ -28,30 +69,39 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
 
             form: [{
                     "type": "box",
+                    "colClass": "col-sm-12",
+                    title:"LOAN_ACCOUNTS",
+                    condition:"model.accountDocumentTracker.length>0",
+                    readonly:true,
+                    "items": [
+                        {
+                            type: "section",
+                            html: LOAN_ACCOUNTS_HTML
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
                     "title": "DISPATCH_DETAILS",
                     "items": [{
-                        key: "doc.Dispatch[].CourierSentDate",
+                        key: "_Accounts.CourierSentDate",
                         title: "COURIER_SENT_DATE",
                         type: "date"
                     }, {
-                        key: "doc.Dispatch[].CourierCompanyName",
-                        title: "CourierCompanyName",
+                        key: "_Accounts.CourierCompanyName",
+                        title: "CourierCompanyName"
                     }, {
-                        key: "doc.Dispatch[].PodNumber",
-                        title: "POD_NUMBER",
+                        key: "_Accounts.PodNumber",
+                        title: "POD_NUMBER"
                     }, {
-                        key: "doc.Dispatch[].BatchNumber",
+                        key: "_Accounts.BatchNumber",
                         title: "BATCHNUMBER",
                         readonly: true
                     }, {
-                        key: "doc.Dispatch[].Remarks",
-                        title: "REMARKS",
+                        key: "_Accounts.Remarks",
+                        title: "REMARKS"
                     }]
-
-
                 },
-
-
                 {
                     "type": "actionbox",
                     "items": [{
@@ -60,70 +110,9 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     }]
                 },
             ],
-
-            /*schema: function() {
-                return document.getSchema().$promise;
-            },*/
-
-             schema: {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": {
-                    "address": {
-                        "type": "object",
-                        "title":"Address",
-                        "properties": {
-                            "streetAddress": {
-                                "type": "string",
-                                "title":"Street Address"
-                            },
-                            "city": {
-                                "type": "string",
-                                "title":"City"
-                            }
-                        },
-                        "required": [
-                            "streetAddress",
-                            "city"
-                        ]
-                    },
-                    "phoneNumber": {
-                        "type": "array",
-                        "title":"Phone Numbers",
-                        "items": {
-                            "type": "object",
-                            "title":"Phone#",
-                            "properties": {
-                                "location": {
-                                    "type": "string",
-                                    "title":"Location"
-                                },
-                                "code": {
-                                    "type": "integer",
-                                    "title":"Code"
-                                },
-                                "number":{
-                                    "type":"integer",
-                                    "title":"Number"
-                                },
-                                "boo": {
-                                    "type": "boolean",
-                                    "title": "Check Done?"
-                                }
-                            },
-                            "required": [
-                                "code",
-                                "number"
-                            ]
-                        }
-                    }
-                },
-                "required": [
-                    "address",
-                    "phoneNumber"
-                ]
+            schema: function() {
+                return DocumentTracking.getSchema().$promise;
             },
-
             actions: {
                 preSave: function(model, form, formName) {
                     $log.info("Inside save()");
@@ -139,8 +128,30 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
 
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    irfProgressMessage.pop('LeadGeneration-save', 'Lead is successfully created', 3000);
-                    $log.warn(model);
+                    for(i=0;i<model.accountDocumentTracker.length;i++){
+                        model.accountDocumentTracker[i].courierDate = model._Accounts.CourierSentDate;
+                        model.accountDocumentTracker[i].courierName = model._Accounts.CourierCompanyName;
+                        model.accountDocumentTracker[i].courierNumber = model._Accounts.PodNumber;
+                        model.accountDocumentTracker[i].remarks = model._Accounts.Remarks;
+                    }
+                    var reqData = {accountDocumentTracker: model.accountDocumentTracker};
+                    reqData.accountDocumentTrackingAction = "PROCEED";
+                    $log.info(reqData);
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("proceed-batch", "Working...");
+                    DocumentTracking.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-batch", "Done.", 3000);
+                            irfProgressMessage.pop('pending-dispatch-save', 'Dispatch details captured successfully', 3000);
+                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatchQueue",pageId: null});
+                        }, function(httpRes){
+                            PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
                 }
             }
         };

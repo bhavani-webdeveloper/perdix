@@ -178,7 +178,7 @@
 <script src="process/models/v1/loans/Luc.js"></script>
 <script src="process/models/v1/loans/LoanProducts.js"></script>
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
-<script src="process/models/v1/loans/document.js"></script>
+<script src="process/models/v1/loans/DocumentTracking.js"></script>
 <script src="process/models/v1/management/ReferenceCode.js"></script>
 <script src="process/models/v1/management/Maintenance.js"></script>
 <script src="process/models/v1/lead/Lead.js"></script>
@@ -205,6 +205,7 @@
 <script src="process/pages/states/Page.LoansDashboard.js"></script>
 <script src="process/pages/states/Page.LeadDashboard.js"></script>
 <script src="process/pages/states/Page.LUCDashboard.js"></script>
+<!--script src="process/pages/states/Page.LoansDocumentTrackingDashboard.js"></script-->
 <script src="process/pages/states/Page.InventoryDashboard.js"></script>
 <script src="process/pages/states/Page.LoanOriginationDashboard.js"></script>
 <script src="process/pages/states/Page.UserDashboard.js"></script>
@@ -419,16 +420,18 @@
 <script src="process/pages/definitions/loans/individual/achpdc/DemandDownloads.js"></script>
 <script src="process/pages/definitions/loans/individual/achpdc/ACHClose.js"></script>
 
-<script src="process/pages/definitions/loans/individual/documentTracking/BatchInTransist.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/BatchInTransitQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/DocumentFiling.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/DocumentVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/IncompleteDispatch.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/IncompleteDocuments.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/PendingDispatch.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/PendingForFiling.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingForVerification.js"></script>
-<script src="process/pages/definitions/loans/individual/documentTracking/PendingForDispatch.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingVerificationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingDispatchQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/PendingDispatchConfirmationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/documentTracking/SuccessfullyFiled.js"></script>
+<script src="process/pages/definitions/loans/individual/documentTracking/ViewAccountDetails.js"></script>
 
 <script src="process/pages/definitions/loans/individual/InventoryTracking/CaptureInventory.js"></script>
 <script src="process/pages/definitions/loans/individual/InventoryTracking/InventoryHelper.js"></script>

@@ -2,128 +2,87 @@
    "$schema":"http://json-schema.org/draft-04/schema#",
    "type":"object",
    "properties":{  
-      "doc":{  
+      "accountDocumentTracker":{  
          "type":"object",
-         "required":[  
-
+         "required":[
          ],
-         "properties":{  
-            "Dispatch":{  
-               "type":"array",
-               "title":"DISPATCH_DETAILS",
-               "items":{  
-                  "type":"object",
-                  "required":[  
-                     "CourierSentDate",
-                     "CourierCompanyName",
-                     "PodNumber",
-                     "BatchNumber",
-                     "Remarks"
-                  ],
-                  "properties":{  
-                     "CourierSentDate":{  
-                        "type":"string",
-                        "title":"COURIER_SENT_DATE"
-                     },
-                     "CourierCompanyName":{  
-                        "type":"string",
-                        "title":"COURIER_COMPANY_NAME"
-                     },
-                     "PodNumber":{  
-                        "type":"string",
-                        "title":"number"
-                     },
-                     "BatchNumber":{  
-                        "type":"number",
-                        "title":"BATCH_NUMBER"
-                     },
-                     "Remarks":{  
-                        "type":"string",
-                        "title":"REMARKS"
-                     }
+         "properties":{
+            "accountNumber": {
+               "type": "string"
+            },
+            "courierNumber": {
+               "type": "string"
+            },
+            "courierName": {
+               "type": "number"
+            },
+            "courierDate": {
+               "type": "string"
+            },
+            "scheduledDisbursementDate": {
+               "type": "string"
+            },
+            "receiveDate": {
+               "type": "string"
+            },
+            "hardCopyVerificationDate": {
+               "type": "string"
+            },
+            "acceptDate": {
+               "type": "string"
+            },
+            "rejectDate": {
+               "type": "string"
+            },
+            "filingDate": {
+               "type": "string"
+            },
+            "action": {
+               "type": "string"
+            },
+            "remarks": {
+               "type": "number"
+            },
+            "udf1": {
+               "type": "string"
+            },
+            "udf2": {
+               "type": "string"
+            },
+            "udf3": {
+               "type": "string"
+            },
+            "udf4": {
+               "type": "string"
+            },
+            "udf5": {
+               "type": "string"
+            },
+            "udfDate1": {
+               "type": "date"
+            },
+            "udfDate2": {
+               "type": "date"
+            },
+            "udfDate3": {
+               "type": "date"
+            },
+            "udfDate4": {
+               "type": "date"
+            },
+            "udfDate5": {
+               "type": "date"
+            },
+            "accountDocTrackerDetails":{
+               "type": "object",
+               "properties":{
+                  "document": {
+                     "type": "string"
+                  },
+                  "status": {
+                     "type": "string"
                   }
                }
-            },
-            "hubName":{  
-               "title":"HUB_NAME",
-               "type":"string",
-               "enumCode":"branch",
-               "x-schema-form":{  
-                  "type":"select",
-                  "screenFilter":true
-               }
-            },
-            "spokeName":{  
-               "title":"SPOKE_NAME",
-               "type":"number",
-               "enumCode":"centre",
-               "x-schema-form":{  
-                  "type":"select",
-                  "filter":{  
-                     "parentCode as branch":"model.branch"
-                  },
-                  "screenFilter":true
-               }
-            },
-            "LoanOfficer":{  
-               "title":"LOAN_OFFICER",
-               "type":"string"
-            },
-            "currentDate":{  
-               "type":"string",
-               "title":"DATE"
-            },
-            "CustomerName":{  
-               "type":"string",
-               "title":"CUSTOMER_NAME"
-            },
-            "BusinessName":{  
-               "type":"string",
-               "title":"BusinessName"
-            },
-            "LoanId":{  
-               "type":"number",
-               "title":"LOAN_ID"
-            },
-            "DocumentName":{
-               "type":"string",
-               "title":"DOCUMENT_NAME"
-            },
-            "BatchNo":{  
-               "type":"number",
-               "title":"BATCH_NUMBER"
-            },
-            "Disbursementdate":{  
-               "type":"string",
-               "title":"DISBURSEMENTDATE"
-            },
-            "PodNumber":{  
-               "type":"number",
-               "title":"POD_NUMBER"
-            },
-            "DispatchDate":{  
-               "type":"string",
-               "title":"DISPATCH_DATE"
-            },
-            "ReceivedDate":{  
-               "type":"string",
-               "title":"RECEIVED_DATE"
-            },
-            "VerificationDate":{  
-               "type":"string",
-               "title":"VERIFICATION_DATE"
-            },
-            "FilingId":{  
-               "type":"string",
-               "title":"FILING_ID"
-            },
-            "FilingDate":{  
-               "type":"string",
-               "title":"FILING_DATE"
-            },
-            "Remarks":{  
-               "type":"string",
-               "title":"REMARKS"
             }
          }
       }
