@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var useref = require('gulp-useref');
 var del = require('del');
 var gulpLoadPlugins = require('gulp-load-plugins');
+var argv = require('yargs').argv;
 var $ = gulpLoadPlugins();
 
 /*
@@ -73,6 +74,38 @@ gulp.task('html', function(){
         .pipe($.revReplace())
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
+})
+
+gulp.task('androidManifestUpgrade', function(){
+    var version = argv.version;
+    var bundleId = argv.bundleId;
+    var appName = argv.appName;
+
+    return gulp.src(['./config.xml'])
+        .pipe($.print())
+        .pipe($.cheerio(function($, file){
+            console.log("Updating version to " + version);
+            console.log("Updating bundleId to " + bundleId);
+            console.log("Updating name to " + appName);
+            $("widget").attr("version", version);
+            $("widget").attr("id", bundleId);
+            $("widget>name").text(appName);
+        }))
+        .pipe(gulp.dest("./"));
+})
+
+gulp.task('appManifestUpdate', function(){
+    var versionPostfix = argv.versionPostFix || 'perdix';
+    var version = argv.version;
+    var versionString = "v" + version + "-" + versionPostfix;
+    var sql = "update `global_settings` set `value` = '" + versionString + "' where `name` = 'cordova.latest_apk_version';";
+    console.log("SQL to update version is ::: " + sql);
+    return gulp.src(['./dev-www/app_manifest.json'])
+        .pipe($.jsonModify({
+            key: "version",
+            value: versionString
+        }))
+        .pipe(gulp.dest('./dev-www/'));
 })
 
 gulp.task('build', ['html', 'assets', 'fonts']);

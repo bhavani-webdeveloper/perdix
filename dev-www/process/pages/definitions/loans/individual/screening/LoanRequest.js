@@ -45,6 +45,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             _.forEach(loanAccount.collateral, function(collateral){
                 if (!_.hasIn(collateral, "id") || _.isNull(collateral.id)){
                     /* ITS A NEW COLLATERAL ADDED */
+                    collateral.quantity = collateral.quantity || 1;
                     collateral.loanToValue = collateral.collateralValue;
                     collateral.totalValue = collateral.loanToValue * collateral.quantity;
                 }
@@ -545,20 +546,20 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             ];
                         }
                     },
-                    {
-                        key: "loanAccount.assetAvailableForHypothecation",
-                        type: "select",
-                        required:true,
-                        enumCode: "decisionmaker",
-                        title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
-                    },
-                    {
-                        key: "loanAccount.estimatedValueOfAssets",
-                        type: "amount",
-                        required:true,
-                        condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
-                        title: "ESTIMATED_VALUE_OF_ASSETS"
-                    },
+                    // {
+                    //     key: "loanAccount.assetAvailableForHypothecation",
+                    //     type: "select",
+                    //     required:true,
+                    //     enumCode: "decisionmaker",
+                    //     title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
+                    // },
+                    // {
+                    //     key: "loanAccount.estimatedValueOfAssets",
+                    //     type: "amount",
+                    //     required:true,
+                    //     condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
+                    //     title: "ESTIMATED_VALUE_OF_ASSETS"
+                    // },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
@@ -679,17 +680,17 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             ];
                         }
                     },
-                    {
-                        key: "loanAccount.assetAvailableForHypothecation",
-                        type: "string",
-                        title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
-                    },
-                    {
-                        key: "loanAccount.estimatedValueOfAssets",
-                        type: "amount",
-                        condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
-                        title: "ESTIMATED_VALUE_OF_ASSETS"
-                    },
+                    // {
+                    //     key: "loanAccount.assetAvailableForHypothecation",
+                    //     type: "string",
+                    //     title: "ASSET_AVAILABLE_FOR_HYPOTHECATION"
+                    // },
+                    // {
+                    //     key: "loanAccount.estimatedValueOfAssets",
+                    //     type: "amount",
+                    //     condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
+                    //     title: "ESTIMATED_VALUE_OF_ASSETS"
+                    // },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
@@ -1083,12 +1084,13 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                 required:true,
                                 type: "number",
                             },
-                            {
-                                key: "loanAccount.collateral[].quantity",
-                                title:"QUANTITY",
-                                required:true,
-                                type: "number",
-                            },
+                            // {
+                            //     key: "loanAccount.collateral[].quantity",
+                            //     title:"QUANTITY",
+                            //     required:true,
+                            //     readonly: true,
+                            //     type: "number",
+                            // },
                             {
                                 key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",
@@ -1183,11 +1185,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                                 title:"PURCHASE_PRICE",
                                 type: "number",
                             },
-                            {
-                                key: "loanAccount.collateral[].quantity",
-                                title:"QUANTITY",
-                                type: "number",
-                            },
+                            // {
+                            //     key: "loanAccount.collateral[].quantity",
+                            //     title:"QUANTITY",
+                            //     type: "number",
+                            // },
                             {
                                 key: "loanAccount.collateral[].expectedIncome",
                                 title:"EXPECTED_INCOME",

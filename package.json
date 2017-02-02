@@ -11,6 +11,8 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "gulp": "^3.9.0",
+    "gulp-cheerio": "^0.6.2",
+    "gulp-json-modify": "^1.0.2",
     "npm-git-install": "^0.2.0",
     "wiredep": "^3.0.0"
   },
@@ -30,6 +32,7 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",
     "karma-jasmine": "^0.3.8",
-    "main-bower-files": "^2.13.1"
+    "main-bower-files": "^2.13.1",
+    "yargs": "^6.6.0"
   }
 }

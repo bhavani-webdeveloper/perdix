@@ -331,12 +331,55 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key:"customer.centreId",
                         type:"select",
+                        readonly: true,
                         title:"CENTRE_NAME",
                         filter: {
-                            "parentCode": "model.branch_id"
-                        },
-                        parentValueExpr:"model.customer.customerBranchId",
+                         "parentCode": "branch_id"
+                         },
                         parentEnumCode:"branch_id",
+                        parentValueExpr:"model.customer.customerBranchId",
+                    },
+                    {
+                        key: "customer.centreId",
+                        type: "lov",
+                        autolov: true,
+                        lovonly: true,
+                        bindMap: {},
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var centres = SessionStore.getCentres();
+                            // $log.info("hi");
+                            // $log.info(centres);
+
+                            var centreCode = formHelper.enum('centre').data;
+                            var out = [];
+                            if (centres && centres.length) {
+                                for (var i = 0; i < centreCode.length; i++) {
+                                    for (var j = 0; j < centres.length; j++) {
+                                        if (centreCode[i].value == centres[j].id) {
+                                            out.push({
+                                                name: centreCode[i].name,
+                                                id:centreCode[i].value
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.customer.centreId = valueObj.id;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
                     },
                     {
                         key: "customer.oldCustomerId",
@@ -1788,6 +1831,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         type: "lov",
                                         autolov: true,
                                         required: true,
+                                        lovonly: true,
                                         title:"BUYER_NAME",
                                         bindMap: {
                                         },
@@ -1883,8 +1927,44 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 items:[
                                     {
                                         key: "customer.rawMaterialExpenses[].vendorName",
-                                        title: "VENDOR_NAME",
-                                        type: "string"
+                                        type: "lov",
+                                        autolov: true,
+                                        required: true,
+                                        lovonly: true,
+                                        title:"VENDOR_NAME",
+                                        bindMap: {
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var out = [];
+                                            if (!model.customer.supplierDetails){
+                                                return out;
+                                            }
+                                            for (var i=0; i<model.customer.supplierDetails.length; i++){
+                                                out.push({
+                                                    name: model.customer.supplierDetails[i].supplierName,
+                                                    value: model.customer.supplierDetails[i].supplierName
+                                                })
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            if (_.isUndefined(model.customer.rawMaterialExpenses[context.arrayIndex])) {
+                                                model.customer.rawMaterialExpenses[context.arrayIndex] = {};
+                                            }
+
+                                            model.customer.rawMaterialExpenses[context.arrayIndex].vendorName = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
                                     },
                                     {
                                         key: "customer.rawMaterialExpenses[].rawMaterialType",

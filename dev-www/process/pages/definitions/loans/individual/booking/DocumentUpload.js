@@ -611,6 +611,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
 
                 },
                 proceed: function(model, form, formName) {
+                    if (PageHelper.isFormInvalid(form)){
+                        return false;
+                    }
                     $log.info("Redirecting");
 
                     if (model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length) {

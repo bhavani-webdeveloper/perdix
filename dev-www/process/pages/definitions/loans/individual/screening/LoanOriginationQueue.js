@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							}
 						}
 					},
-					"required": ["stage"]
+					"required": []
 				},
 
 				getSearchFormHelper: function() {

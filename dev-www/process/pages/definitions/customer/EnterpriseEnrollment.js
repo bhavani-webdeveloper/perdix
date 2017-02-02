@@ -295,12 +295,24 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     "customer.district",
                     "customer.state",
                     {
-                       key: "customer.udf.userDefinedFieldValues.udf31", // customer.enterprise.businessInPresentAreaSince
-                       type: "select"
+                       key: "customer.distanceFromBranch",
+                       type: "select",
+                       enumCode: "distance_from_branch",
+                       title: "DISTANCE_FROM_BRANCH"
                     },
                     {
-                        key: "customer.udf.userDefinedFieldValues.udf32", // customer.enterprise.businessInCurrentAddressSince
-                        type: "select"
+                       key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
+                       type: "select",
+                       required:true,
+                       enumCode: "business_in_present_area_since",
+                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
+                    },
+                    {
+                        key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
+                        type: "select",
+                        required:true,
+                        enumCode: "bsns_in_current_addrss_since",
+                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     }
                 ]
             },

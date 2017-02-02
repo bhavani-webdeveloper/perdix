@@ -15,22 +15,22 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
-                        minimum: 1,
-                        maximum: 1
+                        minimum: 0,
+                        maximum: 0
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 0,
-                        maximum: 4
+                        maximum: 0
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 0,
-                        maximum: 3
+                        maximum: 0
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',

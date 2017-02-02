@@ -7,7 +7,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 		"title": "CUSTOMER_SEARCH",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
-			model.branch = branch;
+			model.branch = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 			formCtrl.submit();
 		},
@@ -38,8 +38,8 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					},
 					"branch": {
 						"title": "BRANCH_NAME",
-						"type": "string",
-						"enumCode": "branch",
+						"type": "integer",
+						"enumCode": "branch_id",
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true
@@ -47,13 +47,12 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					},
 					"centre": {
 						"title": "CENTRE",
-						"type": "string",
+						"type": "integer",
 						"enumCode": "centre",
 						"x-schema-form": {
 							"type": "select",
-							"filter": {
-								"parentCode as branch": "model.branch"
-							},
+							"parentEnumCode": "branch_id",
+							"parentValueExpr": "model.branch",
 							"screenFilter": true
 						}
 					}
@@ -66,10 +65,20 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
+				/* GET BRANCH NAME */
+				var branches = formHelper.enum('branch').data;
+				var branchName = null;
+				for (var i=0;i<branches.length; i++){
+					var branch = branches[i];
+					 if (branch.code == searchOptions.branch){
+					 	branchName = branch.name;
+					 }
+				}
+
 				var promise = Enrollment.search({
-					'branchName': searchOptions.branch,
+					'branchName': branchName,
 					'firstName': searchOptions.first_name,
-					'centreCode': searchOptions.centre,
+					'centreId': searchOptions.centre,
 					'page': pageOpts.pageNo,
 					'per_page': pageOpts.itemsPerPage,
 					'kycNumber': searchOptions.kyc_no,

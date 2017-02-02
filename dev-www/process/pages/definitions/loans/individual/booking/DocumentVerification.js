@@ -451,6 +451,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
 
                 },
                 proceed: function(model, form, formName) {
+
+                    if (PageHelper.isFormInvalid(form)){
+                        return false;
+                    }
+
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED'

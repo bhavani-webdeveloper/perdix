@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -26,6 +26,64 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             return true;
         };
 
+        var preLoanSaveOrProceed = function(model){
+            var loanAccount = model.loanAccount;
+
+            if (_.hasIn(loanAccount, 'guarantors') && _.isArray(loanAccount.guarantors)){
+                for (var i=0;i<loanAccount.guarantors.length; i++){
+                    var guarantor = loanAccount.guarantors[i];
+                    if (!_.hasIn(guarantor, 'guaUrnNo') || _.isNull(guarantor, 'guaUrnNo')){
+                        PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                        return false;
+                    }
+
+                }
+            }
+
+            if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)){
+                _.forEach(loanAccount.collateral, function(collateral){
+                    if (!_.hasIn(collateral, "id") || _.isNull(collateral.id)){
+                        /* ITS A NEW COLLATERAL ADDED */
+                        collateral.quantity = collateral.quantity || 1;
+                        collateral.loanToValue = collateral.collateralValue;
+                        collateral.totalValue = collateral.loanToValue * collateral.quantity;
+                    }
+                })
+            }
+
+            // Psychometric Required for applicants & co-applicants
+            if (_.isArray(loanAccount.loanCustomerRelations)) {
+                var enterpriseCustomerRelations = model._bundleModel.business.enterpriseCustomerRelations;
+                for (i in loanAccount.loanCustomerRelations) {
+                    if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                    } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                        if (_.isArray(enterpriseCustomerRelations)) {
+                            var psychometricRequiredUpdated = false;
+                            for (j in enterpriseCustomerRelations) {
+                                if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
+                                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                                    psychometricRequiredUpdated = true;
+                                }
+                            }
+                            if (!psychometricRequiredUpdated) {
+                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                            }
+                        } else {
+                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                        }
+                    } else {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                    }
+                    if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
+                        loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
+                    }
+                }
+            }
+            
+            return true;
+        }
+
         var navigateToQueue = function(model){
             if(model.currentStage=='LoanInitiation')
                 $state.go('Page.Engine', {pageName: 'loans.individual.booking.InitiationQueue', pageId:null});
@@ -46,6 +104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (coB.urn || coB.customerId) {
                         coB.relation = 'Co-Applicant';
                         coB.urn = coB.coBorrowerUrnNo;
+                        coB.customerId = coB.customerId;
                         model.loanAccount.loanCustomerRelations.push(coB);
                     }
                 }
@@ -56,6 +115,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (gua.urn || gua.customerId) {
                         gua.relation = 'Guarantor';
                         gua.urn = gua.guaUrnNo;
+                        gua.customerId = gua.customerId;
                         model.loanAccount.loanCustomerRelations.push(gua);
                     }
                 }
@@ -105,8 +165,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.additional.product.interestBracket = res.minInterestRate + '% - ' + res.maxInterestRate + '%';
                         model.additional.product.amountBracket = model.additional.product.amountFrom + ' - ' + model.additional.product.amountTo;
                         $log.info(model.additional.product.interestBracket);
-                        if (model.additional.product.frequency == 'M')
-                            model.loanAccount.frequency = 'Monthly';
+                        model.loanAccount.frequency = model.additional.product.frequency;
+                        // if (model.additional.product.frequency == 'M')
+                        //     model.loanAccount.frequency = 'Monthly';
                         if(model.loanAccount.loanPurpose1!=null){
                             var purpose1_found = false;
                             Queries.getLoanPurpose1(model.loanAccount.productCode).then(function(resp1){
@@ -371,7 +432,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key": "loanAccount.frequency",
-                                "type":"select",
+                                "type":"string",
                                 "readonly":true
                             }
                         ]
@@ -742,7 +803,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "key":"loanAccount.collateral[].quantity",
                                 "onChange": function(value ,form ,model, event){
                                     calculateTotalValue(value, form, model);
-                                }
+                            }
                             },
                             {
                                 "key":"loanAccount.collateral[].modelNo"
@@ -1304,7 +1365,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         ]
                     }
                 ]
-            }/*,
+            },
             {
                 "type": "actionbox",
                 //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
@@ -1317,7 +1378,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "onClick": "actions.save(model, formCtrl, form, $event)"
                     }
                 ]
-            },
+            } /*,
             {
                 "type": "actionbox",
                 "items": [\*{
@@ -1428,6 +1489,46 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             })
                     })
 
+                },
+                save: function(model, formCtrl, form, $event){
+                    $log.info("Inside save()");
+                    PageHelper.clearErrors();
+
+                    /* TODO Call save service for the loan */
+
+                    Utils.confirm("Are You Sure?")
+                        .then(
+                            function(){
+                                populateLoanCustomerRelations(model);
+                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                                reqData.loanAccount.status = '';
+                                reqData.loanProcessAction = "SAVE";
+                                //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                                // reqData.remarks = model.review.remarks;
+                                reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
+                                reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
+                                
+                                
+                                
+                                PageHelper.showLoader();
+
+                                var completeLead = false;
+                                if (!_.hasIn(reqData.loanAccount, "id")){
+                                    completeLead = true;
+                                }
+                                IndividualLoan.create(reqData)
+                                    .$promise
+                                    .then(function(res){
+                                        model.loanAccount = res.loanAccount;
+                                        $state.go("Page.Engine",{pageName:"loans.individual.booking.LoanInput", pageId: model.loanAccount.id}, {reload:true});
+                                    }, function(httpRes){
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                    .finally(function(httpRes){
+                                        PageHelper.hideLoader();
+                                    })
+                            }
+                        );
                 },
                 proceed: function(model, form, formName) {
                     $log.info(model);
@@ -1564,11 +1665,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     var reqData = _.cloneDeep(model);
-                    if(reqData.loanAccount.frequency)
-                        reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
+                    // if(reqData.loanAccount.frequency)
+                    //     reqData.loanAccount.frequency = reqData.loanAccount.frequency[0];
                     Utils.confirm("Are You Sure?").then(function(){
                         PageHelper.showLoader();
-                        if (!$stateParams.pageId) {
+                        if (!$stateParams.pageId && !model.loanAccount.id) {
                             reqData.loanProcessAction="SAVE";
                             IndividualLoan.create(reqData,function(resp,headers){
                                 delete resp.$promise;
