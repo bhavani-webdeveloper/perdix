@@ -170,7 +170,24 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedQueue"),
 						}]
 					},
 					getActions: function() {
-						return [];
+						return [{
+							name: "REVERT REJECT",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								entityManager.setModel('loans.individual.screening.Rejected', {
+									_request: item
+								});
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.Rejected",
+									pageId: item.loanId
+								});
+							},
+							isApplicable: function(item, index) {
+
+								return true;
+							}
+						}];
 					}
 					
 				}

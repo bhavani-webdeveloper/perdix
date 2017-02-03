@@ -229,6 +229,8 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.CentralRiskReviewQueue', pageId:null});
         if (model.currentStage == 'Sanction')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.LoanSanctionQueue', pageId:null});
+        if (model.currentStage == 'Rejected')
+            $state.go('Page.Engine', {pageName: 'loans.individual.screening.RejectedQueue', pageId:null});
     }
 
     var populateDisbursementSchedule=function (value,form,model){
@@ -252,6 +254,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
+            model.review = model.review|| {};
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);   
@@ -292,6 +295,33 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 })
             }
             /* End of Deviations and Mitigations grouping */
+
+            if (_.hasIn(model, 'loanAccount')){
+                $log.info('Printing Loan Account');
+                IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                .$promise
+                .then(function (resp){
+                    model.loanSummary = resp;
+                    if(model.loanSummary && model.loanSummary.length)
+                    {
+                        for(i=0;i<model.loanSummary.length;i++)
+                        {
+                            if(model.loanSummary[i].postStage=="Rejected")
+                            {
+                                if(model.currentStage=='Rejected')
+                                {
+                                    model.review.targetStage = model.loanSummary[i].preStage;
+                                }
+                            }
+                        }
+
+                    }
+                },function (errResp){
+
+                });
+            }
+
+
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
         offline: false,
@@ -499,7 +529,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
                     {
-                        key:"loanAccount.oldAccountNO",
+                        key:"loanAccount.linkedAccountNumber",
                         title:"EXISTING_ACCOUNT_NUMBER"
                     },
                     {
@@ -633,9 +663,13 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
               {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'",
                 readonly:true,
                 "items": [
+                    {
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"EXISTING_ACCOUNT_NUMBER"
+                    },
                     {
                         key: "loanAccount.loanPurpose1",
                         type: "lov",
@@ -767,7 +801,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "DEDUCTIONS_FROM_LOANAMOUNT",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'",
                 readonly:true,
                 "items": [
                     {
@@ -985,7 +1019,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 readonly:true,
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'",
                 "items": [
                     {
                         key: "loanAccount.estimatedDateOfCompletion",
@@ -1166,7 +1200,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
                 "readonly": true,
-                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected')",
                 "items": [
                     {
                       key:"loanAccount.collateral",
@@ -1374,7 +1408,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "NOMINEE_DETAILS",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'",
                 readonly:true,
                 "items": [
                     {
@@ -1575,7 +1609,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 },
                 {
                     "key": "loanAccount.securityEmiRequired",
-                    "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                    "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'",
                     'enumCode': "decisionmaker",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
@@ -1797,7 +1831,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "POST_REVIEW",
-                "condition": "model.loanAccount.id",
+                "condition": "model.loanAccount.id && model.currentStage !== 'Rejected' ",
                 "items": [
                     {
                         key: "review.action",
@@ -2051,6 +2085,44 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 ]
             },
             {
+                "type": "box",
+                "title": "REVERT_REJECT",
+                "condition": "model.currentStage=='Rejected'", 
+                "items": [
+                {
+                type: "section",
+                items: [{
+                    title: "REMARKS",
+                    key: "review.remarks",
+                    type: "textarea",
+                    required: true
+                }, {
+                    key: "review.targetStage",
+                    title: "SEND_BACK_TO_STAGE",
+                    type: "select",
+                    readonly:true,
+                    required: true,
+                    titleMap: {
+                        "Screening": "Screening",
+                        "ScreeningReview": "ScreeningReview",
+                        "Application": "Application",
+                        "ApplicationReview": "ApplicationReview",
+                        "FieldAppraisal": "FieldAppraisal",
+                        "FieldAppraisalReview": "FieldAppraisalReview",
+                        "CentralRiskReview": "CentralRiskReview",
+                        "CreditCommitteeReview": "CreditCommitteeReview",
+                    },
+                }, {
+                    key: "review.sendBackButton",
+                    type: "button",
+                    title: "SEND_BACK",
+                    onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                }]
+            },
+
+            ]
+            },
+            {
                 "type": "actionbox",
                 //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
                 "condition": "model.loanAccount.customerId ",
@@ -2209,10 +2281,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             sendBack: function(model, formCtrl, form, $event){
                 $log.info("Inside sendBack()");
                 PageHelper.clearErrors();
-                // if (!validateForm(formCtrl)){
-                //     return;
-                // }
-
+                
                 if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
                     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
                     return false;
