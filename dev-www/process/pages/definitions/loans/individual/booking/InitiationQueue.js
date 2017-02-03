@@ -52,7 +52,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				return formHelper;
 			},
 
-			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+			getResultsPromise: function(searchOptions, pageOpts){     
 				var promise = IndividualLoan.search({
 					'stage': 'LoanInitiation',
 					'branchName': searchOptions.branchName,
