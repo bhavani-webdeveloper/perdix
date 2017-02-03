@@ -488,7 +488,36 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                             "key": "pdc.pdcChequeDetails[].pdcNum",
                             "title": "EMI_SEQUENCE_NUMBER",
                             "readonly": true
-                        }]
+                        }, {
+                            "key": "pdc.pdcChequeDetails[].pdcDeleteBtn",
+                            "title": "DELETE_PDC",
+                            "type": "button",
+                            "onClick": function(model, formCtrl, form, event){
+                                var pdcAccountsToDelete = [model.pdc.pdcChequeDetails[event.arrayIndex]];
+                                _.forEach(pdcAccountsToDelete, function(obj){
+                                    obj.status  = 'CANCELLED';
+                                });
+                                Utils.confirm("Are you sure?")
+                                    .then(function(){
+                                        PageHelper.clearErrors();
+                                        PageHelper.showProgress("delete-pdc", "Deleting PDC Cheque");
+                                        PDC.deletePDC(pdcAccountsToDelete)
+                                            .$promise
+                                            .then(function(response){
+                                                if (_.isBoolean(response.successResponse)){
+                                                    PageHelper.showProgress("delete-pdc", 'Deleted.', 5000);
+                                                } else {
+                                                    PageHelper.showProgress("delete-pdc", "Error : " + response.response, 5000);
+                                                }
+                                            }, function(httpRes){
+                                                PageHelper.showErrors(httpRes);
+                                                PageHelper.showProgress("delete-pdc", "Error.", 5000);
+                                            })        
+                                    })
+                                
+                            }
+                        }
+                        ]
                     }]
                 }]
             }],
