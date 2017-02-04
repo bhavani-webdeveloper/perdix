@@ -489,14 +489,25 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                             "title": "EMI_SEQUENCE_NUMBER",
                             "readonly": true
                         }, {
+                            "type": "fieldset",
+                            "title": "PDC_UPDATE"
+                        }, {
+                            "key": "pdc.pdcChequeDetails[].status",
+                            "type": "select",
+                            "title": "STATUS",
+                            "titleMap": {
+                                "CANCELLED": "CANCELLED",
+                                "LOST": "LOST"
+                            }
+                        }, {
                             "key": "pdc.pdcChequeDetails[].pdcDeleteBtn",
                             "title": "DELETE_PDC",
                             "type": "button",
                             "onClick": function(model, formCtrl, form, event){
                                 var pdcAccountsToDelete = [model.pdc.pdcChequeDetails[event.arrayIndex]];
-                                _.forEach(pdcAccountsToDelete, function(obj){
-                                    obj.status  = 'CANCELLED';
-                                });
+                                // _.forEach(pdcAccountsToDelete, function(obj){
+                                //     obj.status  = 'CANCELLED';
+                                // });
                                 Utils.confirm("Are you sure?")
                                     .then(function(){
                                         PageHelper.clearErrors();
@@ -506,6 +517,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                             .then(function(response){
                                                 if (_.isBoolean(response.successResponse)){
                                                     PageHelper.showProgress("delete-pdc", 'Deleted.', 5000);
+                                                    $state.reload();
                                                 } else {
                                                     PageHelper.showProgress("delete-pdc", "Error : " + response.response, 5000);
                                                 }
