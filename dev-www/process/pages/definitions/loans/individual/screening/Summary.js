@@ -812,7 +812,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         },
         eventListeners: {
             "business-loaded": function(bundleModel, pageModel, eventModel) {
-                pageModel.business = eventModel.customer;
+                pageModel.business = eventModel;
             },
             "loan-account-loaded": function(bundleModel, pageModel, eventModel) {
                 pageModel.loanAccount = eventModel.loanAccount;

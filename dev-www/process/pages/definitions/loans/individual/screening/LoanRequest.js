@@ -54,7 +54,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
 
         // Psychometric Required for applicants & co-applicants
         if (_.isArray(loanAccount.loanCustomerRelations)) {
-            var enterpriseCustomerRelations = model._bundleModel.business.enterpriseCustomerRelations;
+            var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
             for (i in loanAccount.loanCustomerRelations) {
                 if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
                     loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
@@ -271,7 +271,6 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-            model._bundleModel = bundleModel;
 
             /* Deviations and Mitigations grouping */
             if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
@@ -387,10 +386,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                 model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                 model.loanAccount.loanCentre.centreId = params.customer.centreId;
+                model.enterprise = params.customer;
             },
-            "enterprise-updated": function(bundleModel, model, param){
-                $log.info("INside updated Enterprise of LoanRequest");
-                model.enterprise = param;
+            "business-loaded": function(bundleModel, model, params){
+                $log.info("Inside updated Enterprise of LoanRequest");
+                model.enterprise = params;
             },
             "applicant-updated": function(bundleModel, model, param){
                 $log.info("INside updated Applicant of LoanRequest");

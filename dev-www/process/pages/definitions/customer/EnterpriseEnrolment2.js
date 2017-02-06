@@ -55,7 +55,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             });
                         }
-                        BundleManager.pushEvent('business-loaded', model._bundlePageObj, {customer: model.customer})
+                        BundleManager.broadcastEvent('business-loaded', model.customer);
                     }, function(httpRes){
                         PageHelper.showErrors(httpRes);
                     })
