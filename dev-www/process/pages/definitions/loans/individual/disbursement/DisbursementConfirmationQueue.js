@@ -61,7 +61,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             'page': pageOpts.pageNo,
                             'per_page': pageOpts.itemsPerPage,
                             'sortBy':searchOptions.sortBy,
-                            'branchId': SessionStore.getCurrentBranch().branchId
+                            
                         }).$promise;
 
                     },

@@ -19,7 +19,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 IndividualLoan.get({ id: $stateParams.pageId }).$promise.then(function(res) {
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
-                    model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
+                    if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length)
+                    {
+                        model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
+                    }
+                    
                     var loanDocuments = model.loanAccount.loanDocuments;
                     var availableDocCodes = [];
                     LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {

@@ -22,6 +22,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'POST',
             url:endpoint+'/:action',
         },
+        UnmarkNPA:{
+            method:'POST',
+            url:endpoint+'/unmarkNPA',
+        },
         save:{
             method:'POST',
             url:endpoint+'/:action',

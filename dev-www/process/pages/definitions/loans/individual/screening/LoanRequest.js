@@ -2096,7 +2096,14 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     key: "review.remarks",
                     type: "textarea",
                     required: true
-                }, {
+                },
+                {
+                    title: "Reject Reason",
+                    key: "loanAccount.rejectReason",
+                    readonly:true,
+                    type: "textarea",
+                },
+                 {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
                     type: "select",
