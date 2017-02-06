@@ -111,6 +111,19 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         return true;
                                     }
                                 },
+                                 {
+                                    name: "Unmark NPA",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.UnmarkNPA',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
+                                },
                             ];
                         }
                     }
