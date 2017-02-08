@@ -10,7 +10,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     pageId: urnNo
                 });
             } catch (err) {
-                console.log(err);
+                console.log(err); 
             }
         }
 

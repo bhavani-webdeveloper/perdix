@@ -103,6 +103,9 @@
                 "applicationStatusUpdatedBy": {
                     "type": "string"
                 },
+                "npa": {
+                "type": "boolean"
+                },
                 "applicationStatusUpdatedOn": {
                     "type": "string"
                 },

@@ -68,6 +68,7 @@
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
                 "Page/Engine/management.SpokeMerger",
+                "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
 				"Page/UserDashboard"
             ]
