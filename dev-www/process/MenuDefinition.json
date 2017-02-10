@@ -40,6 +40,7 @@
             ]
         },
         "Page/LUCDashboard",
+        "Page/InventoryDashboard",
         {
             "title": "GROUP_LOANS",
             "iconClass": "fa fa-users",
