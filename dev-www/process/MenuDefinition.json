@@ -32,6 +32,7 @@
                 "Page/LoansACHPDCDashboard",
                 "Page/LoansCollectionsDashboard",
                 "Page/Engine/loans.individual.reversal.Search",
+                "Page/Engine/loans.LOMSReversal",
                 "Page/Engine/loans.PaymentReversal",
                 "Page/Engine/loans.individual.writeoff.WriteOffQueue",
                 "Page/Engine/loans.individual.booking.LoanBookingQueue",
@@ -71,7 +72,7 @@
                 "Page/Engine/management.SpokeMerger",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
-				"Page/UserDashboard"
+                "Page/UserDashboard"
             ]
         },
         {
