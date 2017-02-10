@@ -9,6 +9,15 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
         var branch = SessionStore.getBranch();
         var localModel;
 
+        var documentsHTML = 
+        '<div>'+
+            '<h3 ng-show="LOANDOCTRACKER" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+            '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
+            '<div ng-hide="CBDATA.highMark.reportHtml">'+
+                '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
+            '</div>'+
+        '</div>';
+
         return {
             "type": "schema-form",
             "title": "VIEW_ACCOUNT_DETAILS",
@@ -44,7 +53,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                     "readonly":true,
                     "items": [
                         {
-                            key: "accountDocumentTracker[0].branchId",
+                            key: "accountDocumentTracker[0].branchName",
                             title: "BRANCH_NAME"
                         },
                         {
@@ -92,7 +101,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                             {
                                 "title": "Rejection Remarks",
                                 "readonly": true,
-                                "key": "$tempAccountDocumentTrackingHistory[].remarks"
+                                "key": "$tempAccountDocumentTrackingHistory[].rejectRemarks"
                             }
                         ]
                         }
@@ -114,7 +123,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                             getColumns: function(){
                                 return [{
                                     title: 'SPOKE_NAME',
-                                    data: 'centreId'
+                                    data: 'centreName'
                                 }, {
                                     title: 'APPLICANT_NAME',
                                     data: 'applicantName'
@@ -129,7 +138,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                                     data: 'scheduledDisbursementDate'
                                 }, {
                                     title: 'STATUS',
-                                    data: 'udf1'
+                                    data: 'status'
                                 }]
                             },
                             getActions: function(item) {
@@ -141,7 +150,8 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                                     fn: function(item){
                                         $timeout(function() {
                                             localModel.$tempAccountDocTracker = item;
-                                            localModel.$tempAccountDocTrackerDetails = item.accountDocTrackerDetails;
+                                            if(item.currentStage!="PendingVerification")
+                                                localModel.$tempAccountDocTrackerDetails = item.accountDocTrackerDetails;
                                             localModel.$tempAccountDocumentTrackingHistory = item.accountDocumentTrackingHistory;
                                         });
                                     },
@@ -164,13 +174,17 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                                         key:"btnAcceptButton",
                                         title: 'Accept',
                                         "onClick": function(model, formCtrl, form, event) {
+                                            var selectOne=false;
                                             for(i=0;i<model.accountDocumentTracker.length;i++){
                                                 if(model.accountDocumentTracker[i].$selected){
-                                                    model.accountDocumentTracker[i].udf1 = "Accept";
+                                                    model.accountDocumentTracker[i].status = "Accept";
+                                                    selectOne = true;
                                                 }
                                                 model.accountDocumentTracker[i].$selected = false;
                                             }
                                             formCtrl.redraw();
+                                            if(!selectOne)
+                                                PageHelper.showProgress("view-account","Please select atleast one row",3000);
                                         }
                                     }
                                 ]
@@ -184,13 +198,17 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                                         key:"btnRejectButton",
                                         title: 'Reject',
                                         "onClick": function(model, formCtrl, form, event) {
+                                            var selectOne=false;
                                             for(i=0;i<model.accountDocumentTracker.length;i++){
                                                 if(model.accountDocumentTracker[i].$selected){
-                                                    model.accountDocumentTracker[i].udf1 = "Reject";
+                                                    model.accountDocumentTracker[i].status = "Reject";
+                                                    selectOne = true;
                                                 }
                                                 model.accountDocumentTracker[i].$selected = false;
                                             }
                                             formCtrl.redraw();
+                                            if(!selectOne)
+                                                PageHelper.showProgress("view-account","Please select atleast one row",3000);
                                         }
                                     }
                                 ]
@@ -235,7 +253,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                         {
                             "title": "Remarks",
                             "type":"textarea",
-                            "key": "$tempAccountDocTracker.remarks"
+                            "key": "$tempAccountDocTracker.rejectRemarks"
                         }
                     ]
                 },
@@ -245,6 +263,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                         "type": "button",
                         "title": "Back",
                         "onClick":"actions.goBack()"
+                    },
+                    {
+                        "type": "submit",
+                        "title": "SUBMIT"
                     }]
                 },
             ],
@@ -267,6 +289,41 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                 goBack: function(model, form, formName) {
                     $log.info("Inside goBack()");
                     $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingVerificationQueue",pageId: null});
+                },
+                submit: function(model, form, formName) {
+                    for(i=0;i<model.accountDocumentTracker.length;i++){
+                        if(model.accountDocumentTracker[i].status !="Reject" && model.accountDocumentTracker[i].status!= "Accept"){
+                            PageHelper.showProgress("view-account","Status should be updated for all the Loan Accounts",3000);
+                            return false;
+                        }
+                        else{
+                            model.accountDocumentTracker[i].hardCopyVerificationDate = moment().format(SessionStore.getSystemDateFormat());
+                            if(model.accountDocumentTracker[i].status=="Accept"){
+                                model.accountDocumentTracker[i].acceptDate = moment().format(SessionStore.getSystemDateFormat());
+                            }
+                            if(model.accountDocumentTracker[i].status=="Reject"){
+                                model.accountDocumentTracker[i].rejectDate = moment().format(SessionStore.getSystemDateFormat());
+                                model.accountDocumentTracker[i].nextStage = "RejectedDocuments";
+                            }
+                        }
+                    }
+                    var reqData = {accountDocumentTracker: _.cloneDeep(model.accountDocumentTracker)};
+                    reqData.accountDocumentTrackingAction = "PROCEED";
+                    $log.info(reqData);
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("update-batch", "Working...");
+                    DocumentTracking.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-batch", "Batch Updated.", 3000);
+                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingVerificationQueue",pageId: null});
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-batch", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
                 }
             }
         };

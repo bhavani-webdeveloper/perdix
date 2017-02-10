@@ -114,10 +114,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             data: 'accountNumber'
                         }, {
                             title: 'BRANCH',
-                            data: 'branchId'
+                            data: 'branchName'
                         }, {
                             title: 'CENTRE_NAME',
-                            data: 'centreId'
+                            data: 'centreName'
                         }, {
                             title: 'DISBURSEMENT_DATE',
                             data: 'scheduledDisbursementDate'
@@ -129,8 +129,8 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             desc: "",
                             icon: "fa fa-eye-slash",
                             fn: function(item, index) {
-                                entityManager.setModel('loans.individual.documentTracking.ViewAccountDetails',{"_Account":item});
-                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.ViewAccountDetails",pageId: item.id});
+                                entityManager.setModel('loans.individual.documentTracking.ViewSingleAccountDetails',{"_Account":item});
+                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.ViewSingleAccountDetails",pageId: item.id});
                             },
                             isApplicable: function(item, index) {
                                 return true;

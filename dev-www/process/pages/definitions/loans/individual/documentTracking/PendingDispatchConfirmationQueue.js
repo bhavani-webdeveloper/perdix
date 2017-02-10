@@ -114,10 +114,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             data: 'accountNumber'
                         }, {
                             title: 'BRANCH',
-                            data: 'branchId'
+                            data: 'branchName'
                         }, {
                             title: 'CENTRE_NAME',
-                            data: 'centreId'
+                            data: 'centreName'
                         }, {
                             title: 'DISBURSEMENT_DATE',
                             data: 'scheduledDisbursementDate'

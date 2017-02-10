@@ -33,6 +33,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             method:'GET',
             url:endpoint+'/getBatch/:batchNumber',
             isArray:true
+        },
+        getbyAccountNumber:{
+            method:'GET',
+            url:endpoint+'/getbyAccountNumber'
         }
     });
     return resource;

@@ -95,7 +95,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                     getColumns: function() {
                         return [{
                             title: 'BRANCH_NAME',
-                            data: 'branchId'
+                            data: 'branchName'
                         }, {
                             title: 'BATCH_NUMBER',
                             data: 'batchNumber'
