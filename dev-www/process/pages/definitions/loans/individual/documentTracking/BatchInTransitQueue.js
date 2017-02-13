@@ -3,6 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
     function($log,formHelper,DocumentTracking,$state,SessionStore,Utils,PageHelper,entityManager) {
         var branch = SessionStore.getBranch();
         var branchId = SessionStore.getCurrentBranch().branchId;
+        var localFormCtrl;
         return {
             "type": "search-list",
             "title": "BATCH_IN_TRANSIT",
@@ -10,6 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
                 $log.info("Batch in Transit page got initiated");
+                localFormCtrl = formCtrl;
             },
             definition: {
                 title: "Search Customers",
@@ -147,7 +149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                                         	.$promise
                                         	.then(function(res){
                                         		PageHelper.showProgress("process-batch", "Batch marked as Received", 3000);
-                                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.BatchInTransitQueue",pageId: null});
+                                                localFormCtrl.submit();
                                             }, function(httpRes){
                                                 PageHelper.showProgress("process-batch", "Oops. Some error occured.", 3000);
                                                 PageHelper.showErrors(httpRes);

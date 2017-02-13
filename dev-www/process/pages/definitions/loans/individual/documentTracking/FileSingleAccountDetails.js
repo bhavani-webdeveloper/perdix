@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingleAccountDetails"), 
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingleAccountDetails"), 
     ["$log", "$state", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils","PagesDefinition", "DocumentTracking","$stateParams","$timeout","Files",
 
@@ -8,32 +8,34 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
 
         var branch = SessionStore.getBranch();
 
-        var documentsHTML = 
-        '<div>'+
-            '<h3 ng-show="LOANDOCTRACKER" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
-            '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
-            '<div ng-hide="CBDATA.highMark.reportHtml">'+
-                '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
-            '</div>'+
-        '</div>';
+        var updateRemarksApplicable = function(model){
+            var pending=false;
+            if(model.accountDocumentTracker.accountDocTrackerDetails){
+                for(i=0;i<model.accountDocumentTracker.accountDocTrackerDetails.length;i++){
+                    if(model.accountDocumentTracker.accountDocTrackerDetails[i].status == 'PENDING'){
+                       pending = true;
+                    }
+                }
+            }
+            model._Account.isRejected = pending;
+        };
 
         return {
             "type": "schema-form",
-            "title": "VIEW_ACCOUNT_DETAILS",
+            "title": "FILING_ACCOUNT_DETAILS",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.accountDocumentTracker = model.accountDocumentTracker || {};
-                $log.info("View account details is initiated ");
+                $log.info("File account details is initiated ");
 
                 if (model._Account) {
                     PageHelper.showLoader();
-                    DocumentTracking.getbyAccountNumber({
-                            accountNumber:model._Account.accountNumber,
-                            trancheNumber:model._Account.trancheNumber,
-                            })
+                    DocumentTracking.get({id: model._Account.id})
                     .$promise
                     .then(function (resp){
                         model.accountDocumentTracker = resp;
+                        model._Account.isRejected = false;
+                        updateRemarksApplicable(model);
                     }, function(errResp){
                         PageHelper.showProgress("view-batch", "Error while reading the account", 3000);
                     }).finally(function(){
@@ -41,7 +43,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                     })
                 }
                 else{
-                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatchQueue",pageId: null});
+                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
                 }
             },
             modelPromise: function(pageId, _model) {
@@ -141,11 +143,25 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                             {
                                 "title": "STATUS",
                                 "key": "accountDocumentTracker.accountDocTrackerDetails[].status",
-                                //"type":"select",
-                                readonly:true,
-                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
+                                "type":"select",
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    updateRemarksApplicable(model);
+                                }
                             }
                         ]
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "title":"REJECT_DETAILS",
+                    "condition":"model._Account.isRejected",
+                    "items": [
+                        {
+                            "title": "Remarks",
+                            "type":"textarea",
+                            "key": "accountDocumentTracker.rejectRemarks"
                         }
                     ]
                 },
@@ -155,6 +171,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                         "type": "button",
                         "title": "Back",
                         "onClick":"actions.goBack()"
+                    },
+                    {
+                        "type": "submit",
+                        "title": "SUBMIT"
                     }]
                 },
             ],
@@ -164,7 +184,49 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
             actions: {
                 goBack: function(model, form, formName) {
                     $log.info("Inside goBack()");
-                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatchQueue",pageId: null});
+                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
+                },
+                submit: function(model, form, formName) {
+                    var isFilingDoneForAllDocs = true;
+                    for(i=0;i<model.accountDocumentTracker.accountDocTrackerDetails.length;i++){
+                        if(model.accountDocumentTracker.accountDocTrackerDetails[i].status == '' || model.accountDocumentTracker.accountDocTrackerDetails[i].status == null){
+                            PageHelper.showProgress("view-account","Status should be updated for all the Documents",3000);
+                            return false;
+                        }
+                        else{
+                            if(model.accountDocumentTracker.accountDocTrackerDetails[i].status == 'PENDING'){
+                               isFilingDoneForAllDocs = false; 
+                            }
+                        }
+                    }
+                    if(isFilingDoneForAllDocs){
+                        model.accountDocumentTracker.filingDate = moment().format(SessionStore.getSystemDateFormat());
+                        model.accountDocumentTracker.rejectDate = null;
+                        model.accountDocumentTracker.nextStage = "Filed";
+                    }
+                    else{
+                        model.accountDocumentTracker.nextStage = "RejectedDocuments";
+                        model.accountDocumentTracker.rejectDate = moment().format(SessionStore.getSystemDateFormat());
+                    }
+                    if(!model._Account.isRejected)
+                        model.accountDocumentTracker.rejectRemarks = null;
+                    var reqData = {accountDocumentTracker:[ _.cloneDeep(model.accountDocumentTracker)]};
+                    reqData.accountDocumentTrackingAction = "PROCEED";
+                    $log.info(reqData);
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("update-batch", "Working...");
+                    DocumentTracking.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-batch", "Batch Updated.", 3000);
+                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
+                        }, function(httpRes){
+                            PageHelper.showProgress("update-batch", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
                 }
             }
         };

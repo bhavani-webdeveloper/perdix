@@ -12,7 +12,8 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                 "Page/Engine/loans.individual.documentTracking.PendingDispatchQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue",
                 "Page/Engine/loans.individual.documentTracking.BatchInTransitQueue",
-                "Page/Engine/loans.individual.documentTracking.PendingVerificationQueue"
+                "Page/Engine/loans.individual.documentTracking.PendingVerificationQueue",
+                "Page/Engine/loans.individual.documentTracking.PendingFilingQueue"
             ]
         };
 
@@ -78,6 +79,21 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                     pvMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     pvMenu.data = '-';
+                });
+            }
+
+            var pfMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingFilingQueue"];
+            if (pfMenu) {
+                DocumentTracking.search({
+                    'stage': 'PendingFiling',
+                    'branchId': null,
+                    'centerId': null,
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    pfMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    pfMenu.data = '-';
                 });
             }
 

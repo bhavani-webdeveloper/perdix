@@ -1,15 +1,15 @@
-irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDispatchQueue"), 
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFilingQueue"), 
     ["$log", "formHelper", "DocumentTracking", "$state", "SessionStore", "Utils","PageHelper","entityManager",
     function($log,formHelper,DocumentTracking,$state,SessionStore,Utils,PageHelper,entityManager) {
         var branch = SessionStore.getBranch();
         var branchId = SessionStore.getCurrentBranch().branchId;
         return {
             "type": "search-list",
-            "title": "PENDING_FOR_DISPATCH",
+            "title": "PENDING_FOR_FILING",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                $log.info("Perding for Dispatch page got initiated");
+                $log.info("Perding for Filing page got initiated");
             },
             definition: {
                 title: "Search Customers",
@@ -64,8 +64,8 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                 getResultsPromise: function(searchOptions, pageOpts) { 
 
                     var promise = DocumentTracking.search({
-                        'stage': 'BatchInitiation',
-                        'branchId': branchId,
+                        'stage': 'PendingFiling',
+                        'branchId': null,
                         'centerId': searchOptions.spoke_name,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
@@ -125,12 +125,12 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     },
                     getActions: function() {
                         return [{
-                            name: "View Details",
+                            name: "File Account",
                             desc: "",
                             icon: "fa fa-eye-slash",
                             fn: function(item, index) {
-                                entityManager.setModel('loans.individual.documentTracking.ViewSingleAccountDetails',{"_Account":item});
-                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.ViewSingleAccountDetails",pageId: item.id});
+                                entityManager.setModel('loans.individual.documentTracking.FileSingleAccountDetails',{"_Account":item});
+                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.FileSingleAccountDetails",pageId: item.id});
                             },
                             isApplicable: function(item, index) {
                                 return true;
@@ -138,48 +138,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         }];
                     },
                     getBulkActions: function() {
-                        return [{
-                                name: "Create Batch",
-                                desc: "",
-                                icon: "fa fa-plus",
-                                fn: function(items) {
-                                    if(items.length==0){
-                                        PageHelper.showProgress("bulk-create","Atleast one loan should be selected for Batch creation",5000);
-                                        return false;
-                                    }
-                                    Utils.confirm(items.length + " Loan selected. Do you wish to create a new Batch?").then(function(){
-                                        var accountDocumentTracker=[];
-                                        for (i=0; i<items.length; i++){
-                                            accountDocumentTracker[i] = items[i];
-                                        }
-                                        var reqData = {accountDocumentTracker: accountDocumentTracker};
-                                        reqData.accountDocumentTrackingAction = "PROCEED";
-                                        $log.info(reqData);
-                                        PageHelper.showLoader();
-                                        PageHelper.showProgress("create-batch", "Working...");
-                                        DocumentTracking.create(reqData)
-                                            .$promise
-                                            .then(function(res){
-                                                PageHelper.showProgress("create-batch", "Done.", 3000);
-                                                $log.info(res);
-                                                $log.info(items);
-
-                                                entityManager.setModel('loans.individual.documentTracking.PendingDispatch',{"_Accounts":res.accountDocumentTracker});
-                                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatch",pageId: null});
-                                            }, function(httpRes){
-                                                PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
-                                                PageHelper.showErrors(httpRes);
-                                            })
-                                            .finally(function(){
-                                                PageHelper.hideLoader();
-                                            })
-                                    })
-                                },
-                                isApplicable: function(items) {
-                                    return true;
-                                }
-                            }
-                        ];
+                        return [];
                     }
                 }
             }

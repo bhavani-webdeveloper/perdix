@@ -74,14 +74,20 @@
                "type": "date"
             },
             "accountDocTrackerDetails":{
-               "type": "object",
-               "properties":{
-                  "document": {
-                     "type": "string"
+               "type": "array",
+               "items":{
+                  "type": "object",
+                  "properties":{
+                     "document": {
+                        "type": "string"
+                     },
+                     "status": {
+                        "type": ["string", "null"],
+                        "enumCode":"document_status"
+                     }
                   },
-                  "status": {
-                     "type": "string"
-                  }
+                  "required": [
+                  ]
                }
             }
          }

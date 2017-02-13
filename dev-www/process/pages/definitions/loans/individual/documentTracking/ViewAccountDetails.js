@@ -9,15 +9,6 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
         var branch = SessionStore.getBranch();
         var localModel;
 
-        var documentsHTML = 
-        '<div>'+
-            '<h3 ng-show="LOANDOCTRACKER" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
-            '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
-            '<div ng-hide="CBDATA.highMark.reportHtml">'+
-                '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
-            '</div>'+
-        '</div>';
-
         return {
             "type": "schema-form",
             "title": "VIEW_ACCOUNT_DETAILS",
