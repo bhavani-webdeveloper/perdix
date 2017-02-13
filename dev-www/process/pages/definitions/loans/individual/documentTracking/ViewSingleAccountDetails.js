@@ -32,7 +32,12 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                     .$promise
                     .then(function (resp){
                         model.accountDocumentTracker = resp;
-                        Queries.getLoanProductDocuments(model._Account.productCode, "LoanBooking", "DocumentUpload")
+                        var process;
+                        if(model._Account.trancheNumber!="1")
+                            process = "MultiTranche";
+                        else
+                            process = "LoanBooking";
+                        Queries.getLoanProductDocuments(model._Account.productCode, process, "DocumentUpload")
                         .then(function (productDocs){
                             if(productDocs 
                                     && productDocs.length 
