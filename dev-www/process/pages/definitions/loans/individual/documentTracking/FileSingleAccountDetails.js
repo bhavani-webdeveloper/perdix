@@ -85,7 +85,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
                 },
                 {
                     "type": "box",
-                    "title":"LOAN_HISTORY",
+                    "title":"DOC_TRACKING_HISTORY",
                     "condition":"model.accountDocumentTracker.accountDocumentTrackingHistory",
                     "items": [
                         {

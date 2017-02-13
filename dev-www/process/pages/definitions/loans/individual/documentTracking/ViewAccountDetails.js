@@ -67,7 +67,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                 },
                 {
                     "type": "box",
-                    "title":"LOAN_HISTORY",
+                    "title":"DOC_TRACKING_HISTORY",
                     "condition":"model.$tempAccountDocumentTrackingHistory",
                     "items": [
                         {

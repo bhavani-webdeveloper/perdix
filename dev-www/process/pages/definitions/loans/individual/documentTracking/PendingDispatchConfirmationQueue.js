@@ -9,6 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
+                model.branchId = branchId;
                 $log.info("Perding for Dispatch page got initiated");
             },
             definition: {
@@ -33,17 +34,14 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             "title": "LOAN_ID",
                             "type": "string"
                         },
-
                         "spoke_name": {
                             "title": "SPOKE_NAME",
-                            "type": "string",
+                            "type": ["integer", "null"],
                             "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
-                                "filter": {
-                                    "parentCode as branch": "model.branch"
-                                },
-                                "screenFilter": true
+                                "parentValueExpr": "model.branchId"
                             }
                         },
                         "disbursement_date": {
@@ -66,7 +64,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     var promise = DocumentTracking.search({
                         'stage': 'BatchConfirmation',
                         'branchId': branchId,
-                        'centerId': searchOptions.spoke_name,
+                        'centreId': searchOptions.spoke_name,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;

@@ -9,10 +9,11 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
+                model.branchId = branchId;
                 $log.info("Perding for Dispatch page got initiated");
             },
             definition: {
-                title: "Search Customers",
+                title: "SEARCH_LOAN",
                 searchForm: [
                     "*"
                 ], 
@@ -26,24 +27,22 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             "type": "string"
                         },
                         "Business_name": {
-                            "title": "Business_NAME",
+                            "title": "BUSINESS_NAME",
                             "type": "string"
                         },
-                        "Loan_id": {
-                            "title": "LOAN_ID",
+                        "account_number": {
+                            "title": "ACCOUNT_NUMBER",
                             "type": "string"
                         },
 
                         "spoke_name": {
                             "title": "SPOKE_NAME",
-                            "type": "string",
+                            "type": ["integer", "null"],
                             "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
-                                "filter": {
-                                    "parentCode as branch": "model.branch"
-                                },
-                                "screenFilter": true
+                                "parentValueExpr": "model.branchId"
                             }
                         },
                         "disbursement_date": {
@@ -66,7 +65,9 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     var promise = DocumentTracking.search({
                         'stage': 'BatchInitiation',
                         'branchId': branchId,
-                        'centerId': searchOptions.spoke_name,
+                        'centreId': searchOptions.spoke_name,
+                        'accountNumber': searchOptions.account_number,
+                        'scheduledDispatchDate':searchOptions.disbursement_date,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;
@@ -125,7 +126,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     },
                     getActions: function() {
                         return [{
-                            name: "View Details",
+                            name: "VIEW_DETAILS",
                             desc: "",
                             icon: "fa fa-eye-slash",
                             fn: function(item, index) {
@@ -139,7 +140,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     },
                     getBulkActions: function() {
                         return [{
-                                name: "Create Batch",
+                                name: "CREATE_BATCH",
                                 desc: "",
                                 icon: "fa fa-plus",
                                 fn: function(items) {

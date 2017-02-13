@@ -1,21 +1,22 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingleAccountDetails"), 
     ["$log", "$state", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils","PagesDefinition", "DocumentTracking","$stateParams","$timeout","Files",
+    "PageHelper", "Utils","PagesDefinition", "DocumentTracking","$stateParams","$timeout","Files","Queries",
 
 
     function($log, $state, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils,PagesDefinition, DocumentTracking,$stateParams,$timeout,Files) {
+        PageHelper, Utils,PagesDefinition, DocumentTracking,$stateParams,$timeout,Files, Queries) {
 
         var branch = SessionStore.getBranch();
 
-        var documentsHTML = 
-        '<div>'+
-            '<h3 ng-show="LOANDOCTRACKER" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
-            '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
-            '<div ng-hide="CBDATA.highMark.reportHtml">'+
-                '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
-            '</div>'+
-        '</div>';
+        var getDocument = function(docsArr, docCode) {
+            var i = 0;
+            for (i = 0; i < docsArr.length; i++) {
+                if (docsArr[i].docCode == docCode) {
+                    return docsArr[i];
+                }
+            }
+            return null;
+        }
 
         return {
             "type": "schema-form",
@@ -27,13 +28,34 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
 
                 if (model._Account) {
                     PageHelper.showLoader();
-                    DocumentTracking.getbyAccountNumber({
-                            accountNumber:model._Account.accountNumber,
-                            trancheNumber:model._Account.trancheNumber,
-                            })
+                    DocumentTracking.get({id: model._Account.id})
                     .$promise
                     .then(function (resp){
                         model.accountDocumentTracker = resp;
+                        Queries.getLoanProductDocuments(model._Account.productCode, "LoanBooking", "DocumentUpload")
+                        .then(function (productDocs){
+                            if(productDocs 
+                                    && productDocs.length 
+                                    && model.accountDocumentTracker.accountDocTrackerDetails 
+                                    && model.accountDocumentTracker.accountDocTrackerDetails.length){
+                                var docsFromProduct = [];
+                                for (var i = 0; i < productDocs.length; i++) {
+                                    var doc = productDocs[i];
+                                    docsFromProduct.push({
+                                        docTitle: doc.document_name,
+                                        docCode: doc.document_code
+                                    });
+                                }
+                                for(i=0;i<model.accountDocumentTracker.accountDocTrackerDetails.length;i++){
+                                    var documentObj = getDocument(docsFromProduct, model.accountDocumentTracker.accountDocTrackerDetails[i].document);
+                                    if(documentObj!=null)
+                                        model.accountDocumentTracker.accountDocTrackerDetails[i].documentTitle = documentObj.docTitle;
+                                    else
+                                        model.accountDocumentTracker.accountDocTrackerDetails[i].documentTitle = model.accountDocumentTracker.accountDocTrackerDetails[i].document;
+                                }
+
+                            }
+                        }, function (err){});
                     }, function(errResp){
                         PageHelper.showProgress("view-batch", "Error while reading the account", 3000);
                     }).finally(function(){
@@ -46,13 +68,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
             },
             modelPromise: function(pageId, _model) {
             }, 
-            offline: true,
+            offline: false,
             getOfflineDisplayItem: function(item, index) {
                 return []
             },
             form: [{
                     "type": "box",
-                    "title": "ACCOUNT_DETAILS",
+                    "title": "LOAN_DETAILS",
                     "readonly":true,
                     "items": [
                         {
@@ -83,7 +105,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                 },
                 {
                     "type": "box",
-                    "title":"LOAN_HISTORY",
+                    "title":"DOC_TRACKING_HISTORY",
                     "condition":"model.accountDocumentTracker.accountDocumentTrackingHistory",
                     "items": [
                         {
@@ -96,17 +118,17 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                             "remove":null,
                             "items":[
                             {
-                                "title": "Rejected From Batch No",
+                                "title": "REJECTED_FROM_BATCH_NO",
                                 "readonly": true,
                                 "key": "accountDocumentTracker.accountDocumentTrackingHistory[].batchNumber"
                             },
                             {
-                                "title": "Hard Copy Verification Date",
+                                "title": "HARD_COPY_VERIFICATION_DATE",
                                 "readonly": true,
                                 "key": "accountDocumentTracker.accountDocumentTrackingHistory[].hardCopyVerificationDate"
                             },
                             {
-                                "title": "Rejection Remarks",
+                                "title": "REJECTION_REMARKS",
                                 "readonly": true,
                                 "key": "accountDocumentTracker.accountDocumentTrackingHistory[].rejectRemarks"
                             }
@@ -122,13 +144,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                         {
                             "type":"array",
                             "key":"accountDocumentTracker.accountDocTrackerDetails",
-                            notitle: true,
+                            "titleExpr": "model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentTitle",
                             "view":"fixed",
                             "add":null,
                             "remove":null,
                             "items":[
                             {
-                                "titleExpr": "model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].document",
+                                "title": "DOWNLOAD",
                                 "type": "anchor",
                                 "readonly": true,
                                 "key": "accountDocumentTracker.accountDocTrackerDetails[].documentId",

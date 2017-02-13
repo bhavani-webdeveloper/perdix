@@ -9,10 +9,11 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
+                model.branchId = branchId;
                 $log.info("Perding for Filing page got initiated");
             },
             definition: {
-                title: "Search Customers",
+                title: "SEARCH_LOAN",
                 searchForm: [
                     "*"
                 ], 
@@ -36,14 +37,12 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
 
                         "spoke_name": {
                             "title": "SPOKE_NAME",
-                            "type": "string",
+                            "type": ["integer", "null"],
                             "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
-                                "filter": {
-                                    "parentCode as branch": "model.branch"
-                                },
-                                "screenFilter": true
+                                "parentValueExpr": "model.branchId"
                             }
                         },
                         "disbursement_date": {
@@ -66,7 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                     var promise = DocumentTracking.search({
                         'stage': 'PendingFiling',
                         'branchId': null,
-                        'centerId': searchOptions.spoke_name,
+                        'centreId': searchOptions.spoke_name,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;
