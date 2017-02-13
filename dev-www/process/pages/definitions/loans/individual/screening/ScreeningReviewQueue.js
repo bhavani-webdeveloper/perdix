@@ -14,8 +14,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 			"title": "SCREENING_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				// model.branch = branch;
 				$log.info("search-list sample got initialized");
+
 			},
 			definition: {
 				title: "SEARCH",
@@ -34,6 +35,15 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    "businessName": {
 	                        "title": "BUSINESS_NAME",
 	                        "type": "string"
+	                    },
+	                    'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true
+							}
 	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
@@ -59,7 +69,17 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        }
+                        },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"screenFilter": true
+							}
+						}
 
 
 					},
@@ -73,8 +93,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'centreCode':null,
-	                    'branchName':null,
+	                    'branchName':searchOptions.branch,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
@@ -84,6 +103,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
+	                    'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {

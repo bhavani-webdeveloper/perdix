@@ -35,13 +35,18 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
+				model.branchName = SessionStore.getCurrentBranch().branchName;
+				var centres = SessionStore.getCentres();
+				if (_.isArray(centres) && centres.length > 0){
+					model.centre = centres[0].centreName;
+				}
 			},
 			definition: {
 				title: "SEARCH_LEAD",
 				searchForm: [
 					 "*"
 				],
-				autoSearch: true,
+				// autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
@@ -69,6 +74,49 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								"type": "date",
 								"screenFilter": true
 							}
+						},
+						"centre": {
+							"title": "CENTRE",
+							"type": "string",
+							"required": true,
+							"x-schema-form": {
+								type: "lov",
+	                            autolov: true,
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            lovonly: true,
+	                            search: function(inputModel, form, model, context) {
+	                                var centres = SessionStore.getCentres();
+	                                var centreCode = formHelper.enum('centre').data;
+	                                var out = [];
+	                                if (centres && centres.length) {
+	                                    for (var i = 0; i < centreCode.length; i++) {
+	                                        for (var j = 0; j < centres.length; j++) {
+	                                            if (centreCode[i].value == centres[j].id) {
+	                                                out.push({
+	                                                    name: centreCode[i].name,
+	                                                    id:centreCode[i].value
+	                                                })
+	                                            }
+	                                        }
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.centre = valueObj.name;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
+							}
 						}
 					},
 					"required": []
@@ -78,16 +126,15 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
 					var promise = Lead.search({
-						'branchName': searchOptions.branch,
+						'branchName': searchOptions.branchName,
 						'currentStage': "ReadyForScreening",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
-						'centreName': centreName[0],
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
-						
+						'centreName': searchOptions.centre
 					}).$promise;
 					return promise;
 				},

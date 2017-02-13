@@ -110,7 +110,14 @@ function (
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1
-                        }
+                        },
+                        {
+                            pageName: 'loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1
+                        }   
                     ]);
                 },
         		"bundlePages": [],
@@ -213,6 +220,13 @@ function (
                                         }
                                     });
 
+                                    $this.bundlePages.push({
+                                        pageClass: 'loan-review',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+
                                     deferred.resolve();
                                 }, function(httpRes){
                                     deferred.reject();
@@ -247,6 +261,11 @@ function (
                                 PageHelper.hideLoader();
                             })
                     }
+
+                    Queries.getCibilHighmarkMandatorySettings()
+                        .then(function(settings){
+                            BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
+                        })
                     
                 },
         		eventListeners: {

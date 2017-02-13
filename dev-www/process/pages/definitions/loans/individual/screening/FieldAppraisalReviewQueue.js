@@ -7,6 +7,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 			"title": "FIELD_APPRAISAL_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
+				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -51,7 +53,18 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        }
+                        },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branchId",
+								"screenFilter": true
+							}
+						}
 
 
 					},
@@ -74,8 +87,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisalReview',
-	                    'centreCode':centreId[0],
-	                    'branchName':branch.branchName,
+	                    'centreCode':  searchOptions.centre,
+	                    'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

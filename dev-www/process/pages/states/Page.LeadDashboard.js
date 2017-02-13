@@ -30,6 +30,80 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         }
 
         var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.leadAssignmentPendingQueue"];
+        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadFollowUpQueue"];
+        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.IncompleteLeadQueue"];
+        var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
+        lapqMenu.data = 0;
+        lfuqMenu.data = 0;
+        ilqMenu.data = 0;
+        rfqMenu.data = 0;
+
+        _.forEach(centres, function(centre){
+            
+            Lead.search({
+                'branchName': branchName,
+                'centreName': centreName[0],
+                'currentStage': "ReadyForScreening",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1,
+                'centreName': centre.centreName
+            }).$promise.then(function(response, headerGetter){
+                if (!_.isNumber(rfqMenu.data)){
+                    rfqMenu.data = 0;
+                } 
+                rfqMenu.data = rfqMenu.data +  Number(response.headers['x-total-count']);
+            }, function() {
+                rfqMenu.data = '-';
+            });
+
+            Lead.search({
+                'branchName': branchName,
+                'currentStage': "Inprocess",
+                'centreName': centreName[0],
+                'leadStatus': "FollowUp",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1,
+                'centreName': centre.centreName
+            }).$promise.then(function(response,headerGetter){
+                if (!_.isNumber(lfuqMenu.data)){
+                    lfuqMenu.data = 0;
+                } 
+                lfuqMenu.data = lfuqMenu.data +  Number(response.headers['x-total-count']);
+            }, function() {
+                lfuqMenu.data = '-';
+            });
+
+            Lead.search({
+                'branchName': branchName,
+                'centreName': centreName[0],
+                'currentStage': "Incomplete",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1,
+                'centreName': centre.centreName
+            }).$promise.then(function(response,headerGetter){
+                if (!_.isNumber(ilqMenu.data)){
+                    ilqMenu.data = 0;
+                } 
+                ilqMenu.data = ilqMenu.data +  Number(response.headers['x-total-count']);
+            }, function() {
+                ilqMenu.data = '-';
+            });
+
+        })
+
+        
         if (lapqMenu) {
             Lead.search({
                 'branchName': branchName,
@@ -45,64 +119,6 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }, function() {
                 lapqMenu.data = '-';
             });
-        }
-
-        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadFollowUpQueue"];
-        if (lfuqMenu) {
-            Lead.search({
-                'branchName': branchName,
-                'currentStage': "Inprocess",
-                'centreName': centreName[0],
-                'leadStatus': "FollowUp",
-                'leadName': '',
-                'area': '',
-                'cityTownVillage': '',
-                'businessName': '',
-                'page': 1,
-                'per_page': 1,
-            }).$promise.then(function(response,headerGetter){
-                lfuqMenu.data = Number(response.headers['x-total-count']);
-            }, function() {
-                lfuqMenu.data = '-';
-            });
-        }
-
-        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.IncompleteLeadQueue"];
-        if (ilqMenu) {
-            Lead.search({
-                'branchName': branchName,
-                'centreName': centreName[0],
-                'currentStage': "Incomplete",
-                'leadName': '',
-                'area': '',
-                'cityTownVillage': '',
-                'businessName': '',
-                'page': 1,
-                'per_page': 1,
-            }).$promise.then(function(response,headerGetter){
-                ilqMenu.data = Number(response.headers['x-total-count']);
-            }, function() {
-                ilqMenu.data = '-';
-            });
-        }
-
-        var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
-        if (rfqMenu){
-            Lead.search({
-                'branchName': branchName,
-                'centreName': centreName[0],
-                'currentStage': "ReadyForScreening",
-                'leadName': '',
-                'area': '',
-                'cityTownVillage': '',
-                'businessName': '',
-                'page': 1,
-                'per_page': 1
-            }).$promise.then(function(response, headerGetter){
-                rfqMenu.data = Number(response.headers['x-total-count']);
-            }, function() {
-                rfqMenu.data = '-';
-            })
         }
     });
 

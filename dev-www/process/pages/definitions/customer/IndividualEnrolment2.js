@@ -345,12 +345,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ImagePath",
                                             type:"file",
-                                            fileType:"image/*"
-                                        },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                                             type:"file",
-                                            fileType:"image/*"
+                                            required: true,
+                                            fileType:"application/pdf",
+                                            using: "scanner"
                                         },
                                         {
                                             key:"customer.additionalKYCs[].kyc1ProofNumber",
@@ -367,8 +364,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
                                             type:"date"
-                                        }
-                                        
+                                        }   
                                     ]
                                 },
                             /*    {
@@ -532,13 +528,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key:"customer.additionalKYCs[].kyc1ImagePath",
                                             type:"file",
-                                            fileType:"image/*"
+                                            fileType:"application/pdf",
+                                            using: "scanner"
                                         },
-                                        {
-                                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
-                                             type:"file",
-                                            fileType:"image/*"
-                                        },
+                                        // {
+                                        //     key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                                        //      type:"file",
+                                        //     fileType:"image/*"
+                                        // },
                                         {
                                             key:"customer.additionalKYCs[].kyc1ProofNumber",
                                             type:"barcode",

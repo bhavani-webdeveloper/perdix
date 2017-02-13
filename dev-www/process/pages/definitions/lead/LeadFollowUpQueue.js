@@ -10,13 +10,17 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
+				var centres = SessionStore.getCentres();
+				if (_.isArray(centres) && centres.length > 0){
+					model.centre = centres[0].centreName;
+				}
 			},
 			definition: {
 				title: "SEARCH_LEAD",
 				searchForm: [
 					"*"
 				],
-				autoSearch: true,
+				autoSearch: false,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
@@ -44,6 +48,49 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 								"type": "date",
 								"screenFilter": true
 							}
+						},
+						"centre": {
+							"title": "CENTRE",
+							"type": "string",
+							"required": true,
+							"x-schema-form": {
+								type: "lov",
+	                            autolov: true,
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            lovonly: true,
+	                            search: function(inputModel, form, model, context) {
+	                                var centres = SessionStore.getCentres();
+	                                var centreCode = formHelper.enum('centre').data;
+	                                var out = [];
+	                                if (centres && centres.length) {
+	                                    for (var i = 0; i < centreCode.length; i++) {
+	                                        for (var j = 0; j < centres.length; j++) {
+	                                            if (centreCode[i].value == centres[j].id) {
+	                                                out.push({
+	                                                    name: centreCode[i].name,
+	                                                    id:centreCode[i].value
+	                                                })
+	                                            }
+	                                        }
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.centre = valueObj.name;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
+							}
 						}
 
 					},
@@ -69,7 +116,7 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 				    }
 				    
 					var promise = Lead.search({
-						'branchName': branchName,
+						'branchName': searchOptions.branchName,
 						'centreName': centreName[0],
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
@@ -80,6 +127,7 @@ irf.pageCollection.factory(irf.page("lead.LeadFollowUpQueue"), ["$log", "formHel
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
+						'centreName': searchOptions.centre
 					}).$promise;
 					return promise;
 				},

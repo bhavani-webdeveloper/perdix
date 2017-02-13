@@ -27,6 +27,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         $log.info("Inside submit()");
         PageHelper.showLoader();
         loanPurpose = 'Business Loan - General';
+        PageHelper.clearErrors();
         CreditBureau.postcreditBureauCheck({
             customerId: customerId,
             type: CBType,
@@ -80,6 +81,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             PageHelper.hideLoader();
         }, function(errorResponse){
             PageHelper.hideLoader();
+            PageHelper.showErrors(errorResponse);
             if(errorResponse && errorResponse.data && errorResponse.data.error)
                 PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
             else
@@ -105,6 +107,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 
         $log.info("Inside submit()");
         PageHelper.showLoader();
+        PageHelper.clearErrors();
         CreditBureau.reinitiateCBCheck({inqUnqRefNo:inqUnqRefNo}, function(response){
             var retryStatus = response.status;
             if (customerType == 'APP'){
@@ -126,6 +129,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             PageHelper.hideLoader();
         }, function(errorResponse){
             PageHelper.hideLoader();
+            PageHelper.showErrors(errorResponse);
             if(errorResponse && errorResponse.data && errorResponse.data.error)
                 PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
             else

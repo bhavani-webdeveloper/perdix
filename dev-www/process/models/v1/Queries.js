@@ -574,5 +574,22 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
+    resource.getCibilHighmarkMandatorySettings = function(){
+        var deferred = $q.defer();
+        resource.getResult("globalSettingsIn.list",{"names": ["highmarkMandatory", "cibilMandatory"]})
+            .then(function(records){
+                if (records && records.results){
+                    var out = {};
+                    _.forEach(records.results, function(row){
+                        out[row.name] = row.value;
+                    })
+                    out.highmarkMandatory = out.highmarkMandatory || 'Y';
+                    out.cibilMandatory = out.cibilMandatory || 'Y';
+                    deferred.resolve(out);
+                }
+            }, deferred.reject)
+        return deferred.promise;
+    }
+
 	return resource;
 }]);

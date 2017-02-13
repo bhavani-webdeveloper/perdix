@@ -84,26 +84,24 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     return [];
                 },
                 getListItem: function(item){
+                    if (_.hasIn(item, 'amount1') && _.isString(item['amount1'])){
+                        item.amount1 = parseFloat(item['amount1']);
+                    }
+                    if (_.hasIn(item, 'amount3') && _.isString(item['amount3'])){
+                        item.amount3 = parseFloat(item['amount3']);
+                    }
+                    if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
+                        item.amount2 = parseFloat(item['amount2']);
+                    }
                     return [
-                       /*item.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + (item.accountNumber||'-'),
-                        "{{'AMOUNT_DUE'|translate}}: " + (Utils.ceil(item.amount1) ||'-'), 
-                        "{{'PRINCIPAL'|translate}} : " + item.part1,
-                        "{{'INTEREST'|translate}} : " + item.part2,
-                        "{{'PENAL_INTEREST'|translate}} : " + item.part3,
-                        "{{'CHARGES'|translate}} : " + item.part4,
-                        "{{'FEES'|translate}} : " + item.amount2,
-                        "{{'NUMBER_OF_DUES'|translate}} : " + item.numberOfDues*/
-
                         item.customerName,
-                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId, /*Service is missing*/
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1), /*amount1 is TotalDemandDue*/
-                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,          /*Service is missing*/
-                        "{{'INTEREST_DUE'|translate}}: " + item.part2,              /*Service is missing*/
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,   /*Service is missing*/
-                        "{{'CHARGES'|translate}}: " + (item.part4||'-'),                /*Service is missing*/
-                        "{{'FEES'|translate}}: " + item.amount2,                 /*amountt2 is TotalFeeDue*/
-                        "{{'AMOUNT_PAID'|translate}}: " + item.repaidAmountSum
+                        "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3),
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,         
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,             
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,  
+                        "{{'FEES_DUE'|translate}}: " + item.amount2,
+                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
                     ]
                 },
                 getActions: function(){

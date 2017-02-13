@@ -82,6 +82,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             type: "lov",
                             autolov: true,
                             bindMap: {},
+                            required: true,
                             searchHelper: formHelper,
                             search: function(inputModel, form, model, context) {
                                 var centres = SessionStore.getCentres();

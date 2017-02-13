@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 			"title": "CREDIT_COMMITTEE_REVIEW",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -20,26 +20,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch": 
-						{
-	                        "title": "HUB_NAME",
-	                        "type": "integer",
-	                        "enumCode": "branch_id",
-	                        "x-schema-form": {
-	                            "type": "select"
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true
 							}
 	                    },
-						"centre": 
-						{
-	                        "title": "CENTRE",
-	                        "type": ["null", "number"],
-	                        "enumCode": "centre",
-	                        "screenFilter": true,
-	                        "x-schema-form": {
-	                            "type": "select",
-	                        	"parentEnumCode":"branch_id"
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"screenFilter": true
 							}
-	                    },
+						},
 	                    "applicantName":
 						{
 	                        "title": "APPLICANT_NAME",
@@ -83,19 +82,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					var branches = formHelper.enum('branch_id').data;
-					var branchName;
-					for (var i=0; i<branches.length;i++){
-	                    if(branches[i].code==searchOptions.branch)
-	                        branchName = branches[i].name;
-	                }
+					
 					return IndividualLoan.search({
 	                    'stage': 'CreditCommitteeReview',
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': branchName,
+	                    'branchName': searchOptions.branch,
 	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,

@@ -22,6 +22,7 @@
         <allow-intent href="market:*" />
         <preference name="android-minSdkVersion" value="17" />
         <preference name="android-targetSdkVersion" value="23" />
+        <preference name="AndroidLaunchMode" value="singleTask" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

@@ -27,24 +27,31 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             $scope.dashboardDefinition = resp;
             var branchId = SessionStore.getBranchId();
             var branchName = SessionStore.getBranch();
+            var centres = SessionStore.getCentres();
 
             var sqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningQueue"];
-            if (sqMenu) {
-                IndividualLoan.search({
-                    'stage': 'Screening',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    sqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    sqMenu.data = '-';
-                });
-            }
+            sqMenu.data = 0;
+
+            _.forEach(centres, function(centre){
+                if (sqMenu) {
+                    IndividualLoan.search({
+                        'stage': 'Screening',
+                        'enterprisePincode': '',
+                        'applicantName': '',
+                        'area': '',
+                        'villageName': '',
+                        'customerName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'branchName': currentBranch.branchName,
+                        'centreCode': centre.centreCode
+                    }).$promise.then(function(response, headerGetter) {
+                        sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        sqMenu.data = '-';
+                    });    
+                }
+            })
 
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
@@ -82,23 +89,29 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 });
             }
 */
-            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ApplicationQueue"];
-            if (aqMenu) {
-                IndividualLoan.search({
-                    'stage': 'Application',
-                    'enterprisePincode': '',
-                    'applicantName': '',
-                    'area': '',
-                    'villageName': '',
-                    'customerName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    aqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    aqMenu.data = '-';
-                });
-            }
+            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ApplicationQueue"];            
+            aqMenu.data = 0;
+
+            _.forEach(centres, function(centre){
+                if (aqMenu) {
+                    IndividualLoan.search({
+                        'stage': 'Application',
+                        'enterprisePincode': '',
+                        'applicantName': '',
+                        'area': '',
+                        'villageName': '',
+                        'customerName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'branchName': currentBranch.branchName,
+                        'centreCode': centre.centreCode
+                    }).$promise.then(function(response, headerGetter) {
+                        aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        aqMenu.data = '-';
+                    });    
+                }
+            })
 
             var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ApplicationReviewQueue"];
             if (arqMenu) {
@@ -111,6 +124,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     arqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -148,6 +162,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'customerName': '',
                     'page': 1,
                     'per_page': 1,
+                    'branchName': currentBranch.branchName
                 }).$promise.then(function(response, headerGetter) {
                     farqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -184,7 +199,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     ccrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {

@@ -63,6 +63,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                             if (documentObj != null) {
                                                 loanDocuments[i].$title = documentObj.docTitle;
                                                 loanDocuments[i].$key = documentObj.formsKey;
+                                                loanDocuments[i].$formsKey = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                             } else {
                                                 loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";

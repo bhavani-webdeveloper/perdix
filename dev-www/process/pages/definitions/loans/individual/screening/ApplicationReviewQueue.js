@@ -14,7 +14,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 			"title": "APPLICATION_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -59,7 +60,18 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        }
+                        },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branchId",
+								"screenFilter": true
+							}
+						}
 
 					},
 					"required": []
@@ -73,8 +85,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'centreCode':centreId[0],
-	                    'branchName':branch,
+	                    'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -83,6 +94,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
+	                    'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {

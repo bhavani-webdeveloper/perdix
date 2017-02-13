@@ -107,12 +107,22 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
     }
 
     var validateCibilHighmark = function(model){
+        var cibilMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "cibilMandatory") && _.isString(model.cibilHighmarkMandatorySettings.cibilMandatory) && model.cibilHighmarkMandatorySettings.cibilMandatory=='N')?"N":"Y";
+        var highmarkMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "highmarkMandatory") && _.isString(model.cibilHighmarkMandatorySettings.highmarkMandatory) && model.cibilHighmarkMandatorySettings.highmarkMandatory=='N')?"N":"Y";
+
         if (model.loanAccount && model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length>0){
             for (i=0; i<model.loanAccount.loanCustomerRelations.length; i++){
-                if(!model.loanAccount.loanCustomerRelations[i].cibilCompleted || !model.loanAccount.loanCustomerRelations[i].highmarkCompleted){
-                    PageHelper.showProgress("pre-save-validation", "CIBIL and Highmark is not completed",5000);
+
+                if((highmarkMandatory=='Y' && !model.loanAccount.loanCustomerRelations[i].highmarkCompleted)) {
+                    PageHelper.showProgress("pre-save-validation", "Highmark not completed.",5000);
                     return false;
                 }
+
+                if( (cibilMandatory=='Y' && !model.loanAccount.loanCustomerRelations[i].cibilCompleted)) {
+                    PageHelper.showProgress("pre-save-validation", "CIBIL not completed",5000);
+                    return false;
+                }
+
             }
         }
         return true;
@@ -436,6 +446,10 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 }
 
                 
+            },
+            "cibil-highmark-mandatory-settings": function(bundleModel, model, settings){
+                $log.info("Inside cibil-highmark-mandatory-settings");
+                model.cibilHighmarkMandatorySettings = settings;
             },
             "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
                 $log.info("Inside enrolment-removed");
