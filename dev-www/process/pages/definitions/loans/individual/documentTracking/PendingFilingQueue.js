@@ -22,19 +22,14 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        "customer_name": {
-                            "title": "CUSTOMER_NAME",
-                            "type": "string"
+                        "branchId": {
+                            "title": "BRANCH_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
-                        "Business_name": {
-                            "title": "Business_NAME",
-                            "type": "string"
-                        },
-                        "Loan_id": {
-                            "title": "LOAN_ID",
-                            "type": "string"
-                        },
-
                         "spoke_name": {
                             "title": "SPOKE_NAME",
                             "type": ["integer", "null"],
@@ -44,6 +39,18 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                                 "type": "select",
                                 "parentValueExpr": "model.branchId"
                             }
+                        },
+                        "customer_name": {
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
+                        },
+                        "business_name": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
+                        "account_number": {
+                            "title": "ACCOUNT_NUMBER",
+                            "type": "string"
                         },
                         "disbursement_date": {
                             "title": "DISBURSEMENT_DATE",
@@ -61,11 +68,15 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) { 
+                    console.log("searchOptions");
 
                     var promise = DocumentTracking.search({
                         'stage': 'PendingFiling',
-                        'branchId': null,
+                        'branchId': searchOptions.branchId,
                         'centreId': searchOptions.spoke_name,
+                        'customerName':searchOptions.business_name,
+                        'accountNumber':searchOptions.account_number,
+                        'scheduledDispatchDate':searchOptions.disbursement_date,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;

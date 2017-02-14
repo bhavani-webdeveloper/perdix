@@ -14,7 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                 localFormCtrl = formCtrl;
             },
             definition: {
-                title: "Search Customers",
+                title: "SEARCH_BATCH",
                 searchForm: [
                     "*"
                 ], 
@@ -24,8 +24,12 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                     "title": 'SearchOptions',
                     "properties": {
                         "branchId": {
-                            "title": "BRANCH_ID",
-                            "type": "string"
+                            "title": "BRANCH_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "branch_id",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
                         },
                         "batchNumber": {
                             "title": "BATCH_NUMBER",
@@ -55,7 +59,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.BatchInTr
                 getResultsPromise: function(searchOptions, pageOpts) { 
                     var promise = DocumentTracking.findBatches({
                         'stage': 'BatchInTransit',
-                        'branchId': null,
+                        'branchId': searchOptions.branchId,
                         'batchNumber': searchOptions.batchNumber,
                         'courierName': searchOptions.courierName,
                         'courierNumber': searchOptions.courierNumber,
