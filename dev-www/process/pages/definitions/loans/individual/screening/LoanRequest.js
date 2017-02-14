@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
-["$log", "$q","LoanAccount", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
 "BundleManager", "PsychometricTestService", "LeadHelper",
-function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
+function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
     BundleManager, PsychometricTestService, LeadHelper){
 
@@ -401,6 +401,11 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             "business-loaded": function(bundleModel, model, params){
                 $log.info("Inside updated Enterprise of LoanRequest");
                 model.enterprise = params;
+                if(model.enterprise.urnNo)
+                {
+                 $log.info("printing loan urn of the customer");
+                 $log.info(model.enterprise.urnNo);
+                }
             },
             "applicant-updated": function(bundleModel, model, param){
                 $log.info("INside updated Applicant of LoanRequest");
@@ -542,51 +547,38 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "title": "PRELIMINARY_INFORMATION",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
-                    /*{
+                    {
                         key:"loanAccount.linkedAccountNumber",
-                        title:"EXISTING_ACCOUNT_NUMBER",
+                        title:"LINKED_ACCOUNT_NUMBER",
                         type:"lov",
                         autolov: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
-                            var out = [];
-                            var a = LoanAccount.get({
-                                accountId: model.loanAccount.linkedAccountNumber
+                            var promise = LoanProcess.viewLoanaccount(
+                            {
+                                urn: model.enterprise.urnNo
                             }).$promise;
-                            a.then(function(data) {
-                                out.push({
-                                    name: data.npa,
-                                });
-                            });
-                            $log.info(out);
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-
+                            return promise;
                         },
                         getListDisplayItem: function(item, index) {
                             $log.info(item);
                             return [
-                                item.name,
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.loanAccount.npa = valueObj.name;
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
                         }
                         
-                    },*/
-                    {
-                        key:"loanAccount.linkedAccountNumber",
-                        title:"EXISTING_ACCOUNT_NUMBER"
                     },
-
-                    /*{
+                    {
                         key: "loanAccount.npa",
                         title: "IS_NPA",
-                    },*/
+                    },
                     {
                         key: "loanAccount.loanPurpose1",
                         type: "lov",
@@ -723,7 +715,35 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        title:"EXISTING_ACCOUNT_NUMBER"
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        type:"lov",
+                        autolov: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var promise = LoanProcess.viewLoanaccount(
+                            {
+                                urn: model.enterprise.urnNo
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            $log.info(item);
+                            return [
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                        }
+                        
+                    },
+                    {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
                     },
                     {
                         key: "loanAccount.loanPurpose1",

@@ -26,6 +26,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'POST',
             url:endpoint+'/unmarkNPA',
         },
+        viewLoanaccount: searchResource({ 
+            method: 'GET',
+            url: BASE_URL + '/api/loanaccounts/urn/:urn'
+        }),
         save:{
             method:'POST',
             url:endpoint+'/:action',

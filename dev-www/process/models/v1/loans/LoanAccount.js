@@ -155,7 +155,7 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
             }
 
         },
-        viewLoans: searchResource({
+        viewLoans: searchResource({ 
             method: 'GET',
             url: BASE_URL + '/api/loanaccounts/viewloans/:urn'
         }),
