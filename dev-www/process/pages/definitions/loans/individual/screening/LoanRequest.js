@@ -542,10 +542,51 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "title": "PRELIMINARY_INFORMATION",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items": [
+                    /*{
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"EXISTING_ACCOUNT_NUMBER",
+                        type:"lov",
+                        autolov: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var out = [];
+                            var a = LoanAccount.get({
+                                accountId: model.loanAccount.linkedAccountNumber
+                            }).$promise;
+                            a.then(function(data) {
+                                out.push({
+                                    name: data.npa,
+                                });
+                            });
+                            $log.info(out);
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+
+                        },
+                        getListDisplayItem: function(item, index) {
+                            $log.info(item);
+                            return [
+                                item.name,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.name;
+                        }
+                        
+                    },*/
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"EXISTING_ACCOUNT_NUMBER"
                     },
+
+                    /*{
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
+                    },*/
                     {
                         key: "loanAccount.loanPurpose1",
                         type: "lov",
@@ -677,8 +718,8 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
               {
                 "type": "box",
                 "title": "PRELIMINARY_INFORMATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'",
-                readonly:true,
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
@@ -687,6 +728,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     {
                         key: "loanAccount.loanPurpose1",
                         type: "lov",
+                        readonly:true,
                         autolov: true,
                         title:"LOAN_PURPOSE_1",
                         bindMap: {
@@ -711,6 +753,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     {
                         key: "loanAccount.loanPurpose2",
                         type: "lov",
+                        readonly:true,
                         autolov: true,
                         title:"LOAN_PURPOSE_2",
                         bindMap: {
@@ -742,22 +785,26 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
+                        readonly:true,
                         title: "REQUESTED_LOAN_AMOUNT"
                     },
                     {
                         key: "loanAccount.frequencyRequested",
                         type: "select",
+                        readonly:true,
                         title: "FREQUENCY_REQUESTED",
                         enumCode: "frequency"
                     },
                     {
                         key: "loanAccount.tenureRequested",
                         type: "number",
+                        readonly:true,
                         title: "TENURE_REQUESETED"
                     },
                     {
                         key: "loanAccount.expectedInterestRate",
                         type: "number",
+                        readonly:true,
                         title: "EXPECTED_INTEREST_RATE"
                     },
                     {
@@ -769,11 +816,13 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     {
                         key: "loanAccount.emiRequested",
                         type: "string",
+                        readonly:true,
                         title: "EMI_REQUESTED"
                     },
                     {
                         key: "loanAccount.emiPaymentDateRequested",
                         type: "string",
+                        readonly:true,
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
@@ -815,7 +864,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "DEDUCTIONS_FROM_LOANAMOUNT",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 readonly:true,
                 "items": [
                     {
@@ -946,6 +995,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
         {
             "type": "box",
             "title": "LOAN_DOCUMENTS",
+            "condition":"model.currentStage !== 'loanView'" ,
             "items": [
                 {
                     "type": "array",
@@ -1033,7 +1083,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 readonly:true,
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 "items": [
                     {
                         key: "loanAccount.estimatedDateOfCompletion",
@@ -1214,7 +1264,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 "type": "box",
                 "title": "NEW_ASSET_DETAILS",
                 "readonly": true,
-                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected')",
+                "condition": "model.loanAccount.loanPurpose1=='Asset Purchase' && (model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
                 "items": [
                     {
                       key:"loanAccount.collateral",
@@ -1422,7 +1472,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "NOMINEE_DETAILS",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 readonly:true,
                 "items": [
                     {
@@ -1623,7 +1673,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                 },
                 {
                     "key": "loanAccount.securityEmiRequired",
-                    "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'",
+                    "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                     'enumCode': "decisionmaker",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
@@ -1845,7 +1895,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "box",
                 "title": "POST_REVIEW",
-                "condition": "model.loanAccount.id && model.currentStage !== 'Rejected' ",
+                "condition": "model.loanAccount.id && model.currentStage !== 'Rejected'&& model.currentStage !== 'loanView'",
                 "items": [
                     {
                         key: "review.action",
@@ -1950,6 +2000,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                             }
                         ]
                     },
+
             {
                 type: "section",
                 condition: "model.review.action=='SEND_BACK'",
@@ -1958,119 +2009,43 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                     key: "review.remarks",
                     type: "textarea",
                     required: true
-                }, {
+                    }, 
+                    { 
                     key: "review.targetStage",
+                    type: "lov",
+                    autolov: true,
                     title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'ScreeningReview'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-
+                    bindMap: {},
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var stage1 = model.currentStage;
+                        var targetstage = formHelper.enum('targetstage').data;
+                        var out = [];
+                        for (var i = 0; i < targetstage.length; i++) {
+                            var t = targetstage[i];
+                            if (t.field1 == stage1) {
+                                out.push({
+                                    name: t.name,
+                                })
+                            }
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
                     },
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'Application'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                    }
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'Psychometric'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                    }
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'ApplicationReview'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                    }
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'FieldAppraisal'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                    }
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'FieldAppraisalReview'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                        "FieldAppraisal": "FieldAppraisal",
-                    }
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'CentralRiskReview'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                        "FieldAppraisal": "FieldAppraisal",
-                        "FieldAppraisalReview": "FieldAppraisalReview",
+                    onSelect: function(valueObj, model, context) {
+                        model.review.targetStage = valueObj.name;
                     },
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'CreditCommitteeReview'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                        "FieldAppraisal": "FieldAppraisal",
-                        "FieldAppraisalReview": "FieldAppraisalReview",
-                        "CentralRiskReview": "CentralRiskReview"
-                    },
-                }, {
-                    key: "review.targetStage",
-                    title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    condition: "model.currentStage == 'Sanction'",
-                    required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                        "FieldAppraisal": "FieldAppraisal",
-                        "FieldAppraisalReview": "FieldAppraisalReview",
-                        "CentralRiskReview": "CentralRiskReview",
-                        "CreditCommitteeReview": "CreditCommitteeReview",
-                    },
-                }, {
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
+                },
+                {
                     key: "review.sendBackButton",
                     type: "button",
                     title: "SEND_BACK",
@@ -2098,6 +2073,22 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
 
                 ]
             },
+
+        {
+            "type": "box",
+            "title": "REJECT_REASON",
+            "condition": "model.currentStage=='loanView'",
+            "items": [{
+                type: "section",
+                items: [{
+                    title: "Reject Reason",
+                    key: "loanAccount.rejectReason",
+                    readonly: true,
+                    type: "textarea",
+                }]
+            }]
+        },
+
             {
                 "type": "box",
                 "title": "REVERT_REJECT",
@@ -2120,19 +2111,37 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
                  {
                     key: "review.targetStage",
                     title: "SEND_BACK_TO_STAGE",
-                    type: "select",
-                    readonly:true,
+                    type: "lov",
+                    autolov: true,
                     required: true,
-                    titleMap: {
-                        "Screening": "Screening",
-                        "ScreeningReview": "ScreeningReview",
-                        "Application": "Application",
-                        "ApplicationReview": "ApplicationReview",
-                        "FieldAppraisal": "FieldAppraisal",
-                        "FieldAppraisalReview": "FieldAppraisalReview",
-                        "CentralRiskReview": "CentralRiskReview",
-                        "CreditCommitteeReview": "CreditCommitteeReview",
+                    searchHelper: formHelper,
+                    search: function(inputModel, form, model, context) {
+                        var stage1 = model.review.targetStage;
+                        var targetstage = formHelper.enum('targetstage').data;
+                        var out = [];
+                        for (var i = 0; i < targetstage.length; i++) {
+                            var t = targetstage[i];
+                            if (t.field1 == stage1) {
+                                out.push({
+                                    name: t.name,
+                                })
+                            }
+                        }
+                        return $q.resolve({
+                            headers: {
+                                "x-total-count": out.length
+                            },
+                            body: out
+                        });
                     },
+                    onSelect: function(valueObj, model, context) {
+                        model.review.targetStage = valueObj.name;
+                    },
+                    getListDisplayItem: function(item, index) {
+                        return [
+                            item.name
+                        ];
+                    }
                 }, {
                     key: "review.sendBackButton",
                     type: "button",
@@ -2146,7 +2155,7 @@ function($log, $q, LoanAccount, Scoring, Enrollment, AuthTokenHelper, SchemaReso
             {
                 "type": "actionbox",
                 //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
-                "condition": "model.loanAccount.customerId ",
+                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView'",
                 "items": [
                     {
                         "type": "button",

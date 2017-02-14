@@ -119,13 +119,13 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 						}]
 					},
 					getActions: function() {
-					/*	return [{
+						return [{
 							name: "Update Inventory",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Engine", {
-									pageName: "loans.individual.InventoryTracking.InventoryReceived",
+									pageName: "loans.individual.InventoryTracking.InventoryUpdate",
 									pageId: item.id
 								});
 							},
@@ -133,7 +133,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 
 								return true;
 							}
-						}];*/
+						}];
 					}
 				}
 			}

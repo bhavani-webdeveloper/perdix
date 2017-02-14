@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureInventory"), ["$log", "$state", "Inventory", "InventoryHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureInventory"), ["$log", "$state", "$stateParams","Inventory", "InventoryHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "PagesDefinition", "Queries",
 
 
-    function($log, $state, Inventory, InventoryHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    function($log, $state,$stateParams, Inventory, InventoryHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();
@@ -14,7 +14,25 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
             initialize: function(model, form, formCtrl) {
                 model.inventory = model.inventory || {};
                 model.inventory.branchId = SessionStore.getBranchId();
-              
+
+
+                var promise = Inventory.searchInventory({
+                        'branchId': model.inventory.branchId,
+                    }).$promise;
+
+                promise.then(function(response)
+                {
+                    $log.info(response.body.inventryTrackingDetails);
+                    if (response.body.inventryTrackingDetails && response.body.inventryTrackingDetails.length)
+                    {
+                        model.inventory.inventryTrackingDetails= response.body.inventryTrackingDetails;
+                    }
+
+                },function(error){
+                    PageHelper.showErrors(error);
+
+                });
+
                 //model.inventory.branchId = SessionStore.getBranchId();
                 $log.info("Capture Inventory page  is initiated ");
             },
@@ -50,12 +68,11 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                             }, {
                                 key: "inventory.inventryTrackingDetails[].numberOfInventories",
                             }]
-                        }
+                        },
                     ]
                 },
 
-
-
+        
                 {
                     "type": "actionbox",
                     "items": [{
@@ -99,10 +116,34 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.CaptureI
                                         "numberOfInventories": {
                                             "title": "NO_OF_DOCUMENTS",
                                             "type": "number"
+                                        },
+                                         "inventoryReceived": {
+                                            "title": "RECEIVED_DOCUMENTS",
+                                            "type": "number"
                                         }
                                     }
                                 }
-                            }
+                            },
+                            "consumableInventoryDetailsDTOs": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "required": [
+                                                "inventoryName",
+                                                "numberOfInventories"
+                                            ],
+                                            "properties": {
+                                                "inventoryName": {
+                                                    "title": "DOCUMENT_NAME",
+                                                    "type": "string"
+                                                },
+                                                "numberOfInventories": {
+                                                    "title": "NO_OF_DOCUMENTS",
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    }
                         }
                     }
                 }

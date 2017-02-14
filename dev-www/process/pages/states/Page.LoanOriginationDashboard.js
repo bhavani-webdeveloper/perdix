@@ -19,7 +19,8 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                 "Page/Engine/loans.individual.screening.CentralRiskReviewQueue",
                 "Page/Engine/loans.individual.screening.CreditCommitteeReviewQueue",
                 "Page/Engine/loans.individual.screening.LoanSanctionQueue",
-                "Page/Engine/loans.individual.screening.RejectedQueue"
+                "Page/Engine/loans.individual.screening.RejectedQueue",
+                "Page/Engine/loans.individual.screening.RejectedAdminQueue"
             ]
         };
 
@@ -240,6 +241,24 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     lrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     lrqMenu.data = '-';
+                });
+            }
+
+            var lrq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedAdminQueue"];
+            if (lrq1Menu) {
+                IndividualLoan.search({
+                    'stage':  'Rejected',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lrq1Menu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lrq1Menu.data = '-';
                 });
             }
 
