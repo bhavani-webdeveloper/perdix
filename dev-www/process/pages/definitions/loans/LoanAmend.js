@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
     function($log, $q, $timeout, SessionStore, $state, LoanProcess, formHelper, $stateParams, LoanAccount, irfProgressMessage, PageHelper, StorageService, $filter, Files, elementsUtils, Queries, Utils, AuthTokenHelper ) {
 
         function backToLoansList() {
-            try {
+            try { 
                 var urnNo = ($stateParams.pageId.split("."))[1];
                 $state.go("Page.Engine", {
                     pageName: "customer360.loans.View",
