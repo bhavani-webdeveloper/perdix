@@ -2,7 +2,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
     "PageHelper", "irfStorageService", "$filter", "Files", "elementsUtils", "Queries", "Utils", "AuthTokenHelper",
     function($log, $q, $timeout, SessionStore, $state, LoanProcess, formHelper, $stateParams, LoanAccount, irfProgressMessage, PageHelper, StorageService, $filter, Files, elementsUtils, Queries, Utils, AuthTokenHelper ) {
 
-        function backToLoansList() {
+        function backToLoansList() {   
             try { 
                 var urnNo = ($stateParams.pageId.split("."))[1];
                 $state.go("Page.Engine", {
@@ -12,6 +12,45 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
             } catch (err) {
                 console.log(err); 
             }
+        };
+
+    var computeEMI = function(model) {
+        if (model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+            return;
+
+        var principal = model.loanAccount.loanAmount;
+        var interest = model.loanAccount.interestRate / 100 / 12;
+        var payments;
+        if (model.loanAccount.frequencyRequested == 'Yearly')
+            payments = model.loanAccount.tenure * 12;
+        else if (model.loanAccount.frequencyRequested == 'Monthly')
+            payments = model.loanAccount.tenure;
+
+        // Now compute the monthly payment figure, using esoteric math.
+        var x = Math.pow(1 + interest, payments);
+        var monthly = (principal * x * interest) / (x - 1);
+
+        // Check that the result is a finite number. If so, display the results.
+        if (!isNaN(monthly) &&
+            (monthly != Number.POSITIVE_INFINITY) &&
+            (monthly != Number.NEGATIVE_INFINITY)) {
+
+            model.loanAccount.estimatedEmi = round(monthly);
+            //document.loandata.total.value = round(monthly * payments);
+            //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+        }
+        // Otherwise, the user's input was probably invalid, so don't
+        // display anything.
+        else {
+            model.loanAccount.estimatedEmi = "";
+            //document.loandata.total.value = "";
+            //document.loandata.totalinterest.value = "";
+        }
+
+    };
+        // This simple method rounds a number to two decimal places.
+        function round(x) {
+          return Math.ceil(x);
         }
 
         return {
@@ -33,8 +72,9 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     model.amand.accountId = data.accountId;
                     model.amand.frequency = data.tenureUnit;
                     model.amand.currentTenure = data.tenureMagnitude;
-
-
+                    model.amand.emi = data.equatedInstallment;
+                    model.amand.accountBalance = data.accountBalance;
+                    model.amand.normalInterestRate = data.normalInterestRate;
 
                     irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                 }, function(resData) {
@@ -53,6 +93,10 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     key: "amand.accountId",
                     readonly: true,
                     title: "ACCOUNT_ID",
+                },{
+                    key: "amand.accountBalance",
+                    readonly: true,
+                    title: "Account Balance",
                 }, {
                     key: "amand.currentTenure",
                     readonly: true,
@@ -61,12 +105,24 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     key: "amand.frequency",
                     readonly: true,
                     title: "Frequency",
-                }, {
+                },{
+                    key: "amand.normalInterestRate",
+                    readonly: true,
+                    title: "NORMAL_INTEREST_RATE",
+                },{
+                    key: "amand.emi",
+                    title: "Current EMI",
+                    readonly: true,
+                },{
                     type: "fieldset",
                     title: "New_TENURE",
                     items: [{
                         key: "amand.tenure",
                         title: "TENURE",
+                    },{
+                        key: "amand.newemi",
+                        readonly:true,
+                        title: "Estimated EMI",
                     }]
                 }, {
                     key: "amand.submit",
@@ -89,7 +145,16 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                                             PageHelper.showProgress("tenure-amendment-load-schedule", "Schedule updated", 4000);
                                             Queries.getLoanAccountByAccountNumber(model.amand.accountId)
                                                 .then(function(res){
+                                                    $log.info(res);
                                                     model.amand.loanId = res.id;
+                                                     var promise = LoanAccount.get({
+                                                         accountId: res.account_number
+                                                     }).$promise;
+                                                     promise.then(function(data)
+                                                     {
+                                                        model.amand.newemi=data.equatedInstallment;
+                                                     });
+
                                                 }, function(httpRes){
                                                     PageHelper.showProgress("tenure-amendment-load-schedule", "Failed to Load Loan Details", 4000);
                                                 })
