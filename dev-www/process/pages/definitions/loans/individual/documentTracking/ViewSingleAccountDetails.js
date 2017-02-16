@@ -171,6 +171,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                                 //"type":"select",
                                 readonly:true,
                                 "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
+                            },
+                            {
+                                "title": "REMARKS",
+                                "key": "accountDocumentTracker.accountDocTrackerDetails[].remarks",
+                                "type":"textarea",
+                                readonly:true,
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
                             }
                         ]
                         }

@@ -41,7 +41,7 @@
                "type": "string"
             },
             "remarks": {
-               "type": "number"
+               "type": "string"
             },
             "udf1": {
                "type": "string"
@@ -84,6 +84,9 @@
                      "status": {
                         "type": ["string", "null"],
                         "enumCode":"document_status"
+                     },
+                     "remarks": {
+                        "type": ["string", "null"]
                      }
                   },
                   "required": [

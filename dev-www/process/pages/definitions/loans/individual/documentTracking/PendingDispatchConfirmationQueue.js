@@ -155,7 +155,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                                             accountDocumentTracker[i] = items[i];
                                         }
                                         var reqData = {accountDocumentTracker: accountDocumentTracker};
-                                        reqData.accountDocumentTrackingAction = "PROCEED";
+                                        reqData.accountDocumentTrackingAction = "SAVE";
                                         $log.info(reqData);
                                         PageHelper.showLoader();
                                         PageHelper.showProgress("create-batch", "Working...");

@@ -231,6 +231,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                                     var fileId = localModel.$tempAccountDocTrackerDetails[schemaForm.arrayIndex].documentId;
                                     Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                 }
+                            },
+                            {
+                                "title": "REMARKS",
+                                "key": "$tempAccountDocTrackerDetails[].remarks",
+                                "readonly": true,
+                                "type":"textarea",
+                                "condition":"model.$tempAccountDocTrackerDetails[arrayIndex].documentId",
                             }
                         ]
                         }

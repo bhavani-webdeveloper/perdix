@@ -148,6 +148,12 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
                                 onChange: function(modelValue, form, model, formCtrl, event) {
                                     updateRemarksApplicable(model);
                                 }
+                            },
+                            {
+                                "title": "REMARKS",
+                                "key": "accountDocumentTracker.accountDocTrackerDetails[].remarks",
+                                "type":"textarea",
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
                             }
                         ]
                         }
