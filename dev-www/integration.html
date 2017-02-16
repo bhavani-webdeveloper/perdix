@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Perdix Mobility | 8.7</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=100%, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=100, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
     <link rel="icon" sizes="256x256" href="img/logo.ico" type="image/x-icon">
     <link rel="icon" sizes="192x192" href="img/logo.jpg" type="image/jpeg">
 
-    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js" integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" crossorigin="anonymous"></script>
 
 <style type="text/css">
     html, body {
@@ -24,82 +24,178 @@
         margin: 0;
         padding: 0;
     }
-    #i8, #i7 {
-        height: 100%;
+    #marker {
+        height: 1px;
         width: 100%;
-        float: left;
+    }
+    #i8, #i7 {
+        position: fixed;
+        top:1px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    #i8 > iframe, #i7 > iframe {
+        width: 100%;
+        height: 100%;
         border: none;
         margin: 0;
         padding: 0;
     }
-    #switchI {
-        position: absolute;
-        top: 20px;
-        right: 200px;
-    }
 </style>
+<script type="text/javascript">
 
+    function CookieManager(doc) {
+        var _doc = doc;
+        this.createCookie = function(name,value,days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            _doc.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        this.readCookie = function(name) {
+            var nameEQ = name + "=";
+            var ca = _doc.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        this.eraseCookie = function(name) {
+            createCookie(name,"",-1);
+        }
+    }
+
+</script>
 </head>
 <body>
+    <div id="marker">&nbsp;</div>
+    <div id="i8">
+        <iframe id="i8iframe" src="index.html"></iframe>
+    </div>
+    <div id="i7">
+        <iframe id="i7iframe" src="http://uatperdix.kgfs.co.in/perdix7/"></iframe>
+    </div>
 
-    <iframe id="i8" src="http://uatperdix.kgfs.co.in/static/perdix-v8-dev/www"></iframe>
-    <iframe id="i7" src="http://uatperdix.kgfs.co.in/kgfs"></iframe>
-
-<script type="text/html" id="i8Html">
-    <li class="dropdown notifications-menu" id="i7Link">
-        <a href="" class="dropdown-toggle" onclick="parent.switchApp()">
-            <strong>7</strong>
-        </a>
-    </li>
-</script>
 <script type="text/html" id="i7Html">
-    <a id="i8Link" href="#" class="mnu1" onClick="parent.switchApp()">Perdix 8</a>
+    <a id="linkOn7" href="#" class="mnu1" onClick="integrationApi.switchApp()">Perdix 8</a>
 </script>
+
 <script type="text/javascript">
     var i7 = document.getElementById('i7');
     var i8 = document.getElementById('i8');
-    i7.style.display = 'none';
+    var i7iframe = document.getElementById('i7iframe');
+    var i8iframe = document.getElementById('i8iframe');
+    var marker = document.getElementById('marker');
 
+    var linkOn8Visible = false;
+    var linkOn7 = null;
     var showI7 = false;
+
+    var show7 = function() {
+        i7.style.display = 'block';
+        i8.style.display = 'none';
+        showI7 = true;
+        marker.style.backgroundColor = "cyan";
+    };
+
+    var show8 = function() {
+        i8.style.display = 'block';
+        i7.style.display = 'none';
+        showI7 = false;
+        marker.style.backgroundColor = "tomato";
+    };
+
     var switchApp = function () {
         if (showI7) {
+            if (!linkOn8Visible) {
+                injectTokenStorage();
+                if (typeof (integrationApi) != 'undefined') {
+                    integrationApi.switchApp();
+                    return;
+                }
+            }
+
             i8.style.display = 'block';
             i7.style.display = 'none';
             showI7 = false;
+            marker.style.backgroundColor = "tomato";
         } else {
-            i8.contentWindow.location.href;
+            if (!linkOn7) {
+                injectTokenCookie();
+            }
+
             i7.style.display = 'block';
             i8.style.display = 'none';
             showI7 = true;
+            marker.style.backgroundColor = "cyan";
         }
     };
 
-    var injectButtonI8 = function() {
-        var i7Link = i8.contentDocument.getElementById('i7Link');
-        if (!i7Link) {
-            // console.warn('i7Link not avilable on perdix8');
-            $($('#i8Html').html()).prependTo($(i8.contentDocument).find('header ul.navbar-nav'));
-            setTimeout(injectButtonI8, 1000);
+    var parentApi = {
+        switchApp: switchApp
+    };
+
+    var showButtonI8 = function() {
+        linkOn8Visible = $(i8iframe.contentDocument).find('#connect_perdix7').is(':visible');
+        if (!linkOn8Visible) {
+            // console.warn('linkOn8Visible not avilable on perdix8');
+            $(i8iframe.contentDocument).find('#connect_perdix7').show();
+            setTimeout(showButtonI8, 1000);
         } else {
-            // console.warn('i7Link avilable on perdix8');
-            setTimeout(injectButtonI8, 60000);
+            // console.warn('linkOn8Visible avilable on perdix8');
+            setTimeout(showButtonI8, 60000);
         }
-        
+
+        if (!i8iframe.contentWindow.integrationApi) {
+            i8iframe.contentWindow.integrationApi = parentApi;
+        }
     };
 
     var injectButtonI7 = function() {
-        var i8Link = i7.contentDocument.getElementById('i8Link');
-        if (!i8Link) {
-            // console.warn('i8Link not avilable on perdix7');
-            $($('#i7Html').html()).prependTo($(i7.contentDocument).find('.top-sec td[align="right"]'));
+        linkOn7 = i7iframe.contentDocument.getElementById('linkOn7');
+        if (!linkOn7) {
+            // console.warn('linkOn7 not avilable on perdix7');
+            $($('#i7Html').html()).prependTo($(i7iframe.contentDocument).find('.top-sec td[align="right"]'));
             setTimeout(injectButtonI7, 1000);
         } else {
-            // console.warn('i8Link avilable on perdix7');
+            // console.warn('linkOn7 avilable on perdix7');
             setTimeout(injectButtonI7, 60000);
+        }
+
+        if (!i7iframe.contentWindow.integrationApi) {
+            i7iframe.contentWindow.integrationApi = parentApi;
         }
     };
 
-    injectButtonI8();
+    var injectTokenCookie = function() {
+        var authData = null;
+        try { authData = JSON.parse(localStorage.getItem('AuthData')); } catch (e) {}
+        new CookieManager(i7iframe.contentDocument).createCookie('oauth_token', authData.access_token);
+        i7iframe.contentWindow.location.reload();
+    };
+
+    var injectTokenStorage = function() {
+        var access_token = new CookieManager(i7iframe.contentDocument).readCookie('oauth_token');
+        var authData = null;
+        try { authData = JSON.parse(localStorage.getItem('AuthData')); } catch (e) {}
+        if (!authData) {
+            authData = {};
+        }
+        authData.access_token = access_token;
+        localStorage.setItem('AuthData', JSON.stringify(authData));
+        i8iframe.contentWindow.location.hash = '#/' + i8iframe.contentWindow.irf.HOME_PAGE.url;
+    };
+
+    show7(); // STARTING POINT
+    showButtonI8();
     injectButtonI7();
 </script>
 </body>

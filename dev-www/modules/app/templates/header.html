@@ -29,9 +29,9 @@
                         <i class="fa fa-cloud-download"></i>
                     </a>
                 </li>
-                <!-- TODO to be removed. for perdix 7 compatibility -->
-                <li ng-show="$parent.connect_perdix7" class="dropdown notifications-menu">
-                    <a href="" class="dropdown-toggle" onclick="parent.switchApp()">
+                <!-- For perdix 7 compatibility -->
+                <li id="connect_perdix7" ng-show="$parent.connect_perdix7" class="dropdown notifications-menu">
+                    <a href="" class="dropdown-toggle" onclick="integrationApi.switchApp()">
                         <strong>7</strong>
                     </a>
                 </li>
