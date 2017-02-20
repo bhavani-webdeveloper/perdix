@@ -135,8 +135,20 @@ label {
     }
 }
 
-.navbar-custom-menu>.navbar-nav>li>.dropdown-menu {
-    box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+.navbar-custom-menu {
+    >.navbar-nav {
+        >li{
+            &.user-menu {
+                >ul>li.user-header {
+                    height: auto;
+                    min-height: 175px;
+                }
+            }
+            >.dropdown-menu {
+                box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            }
+        }
+    }
 }
 
 .btn-go-top {

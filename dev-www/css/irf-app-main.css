@@ -131,6 +131,10 @@ label {
   border: none !important;
   border-radius: 0 !important;
 }
+.navbar-custom-menu > .navbar-nav > li.user-menu > ul > li.user-header {
+  height: auto;
+  min-height: 175px;
+}
 .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
   box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -724,7 +728,7 @@ tr.top-bar.with-bold {
   display: block;
 }
 .bg-a-yellow {
-  background: #FFFF50;
+  background: #ffbf00;
 }
 .bg-a-green {
   background: #50D050;
@@ -733,7 +737,7 @@ tr.top-bar.with-bold {
   background: #FF5050;
 }
 .text-a-yellow {
-  color: #FFFF50;
+  color: #ffbf00;
 }
 .text-a-green {
   color: #50D050;
