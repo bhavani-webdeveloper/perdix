@@ -11,6 +11,7 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             "Page/Engine/lead.IncompleteLeadQueue",
             "Page/Engine/lead.LeadFollowUpQueue",
             "Page/Engine/lead.ReadyForScreeningQueue",
+            "Page/Engine/lead.LeadRejectedQueue",
             "Page/Engine/lead.LeadBulkUpload",
             "Page/Engine/lead.leadAssignmentPendingQueue"  
         ]
@@ -33,10 +34,12 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadFollowUpQueue"];
         var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.IncompleteLeadQueue"];
         var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
+        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadRejectedQueue"];
         lapqMenu.data = 0;
         lfuqMenu.data = 0;
         ilqMenu.data = 0;
         rfqMenu.data = 0;
+        rMenu.data = 0;
 
         _.forEach(centres, function(centre){
             
@@ -80,6 +83,28 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
             }, function() {
                 lfuqMenu.data = '-';
             });
+
+            Lead.search({
+                'branchName': branchName,
+                'currentStage': "Inprocess",
+                'centreName': centreName[0],
+                'leadStatus': "Reject",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1,
+                'centreName': centre.centreName
+            }).$promise.then(function(response,headerGetter){
+                if (!_.isNumber(rMenu.data)){
+                    rMenu.data = 0;
+                } 
+                rMenu.data = rMenu.data +  Number(response.headers['x-total-count']);
+            }, function() {
+                rMenu.data = '-';
+            });
+
 
             Lead.search({
                 'branchName': branchName,
