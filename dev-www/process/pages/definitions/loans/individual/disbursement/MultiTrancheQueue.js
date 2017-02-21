@@ -53,6 +53,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                         "title": "BRANCH",
                         "type": "integer",
                         "enumCode": "branch_id",
+                        "readonly": true,
                         "x-schema-form": {
                             "type": "select"
                         }

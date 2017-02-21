@@ -49,6 +49,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                             "branchId": {
                                 "title": "BRANCH",
                                 "type": "integer",
+                                "readonly": true,
                                 "enumCode": "branch_id",
                                 "x-schema-form": {
                                     "type": "select"
