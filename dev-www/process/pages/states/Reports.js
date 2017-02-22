@@ -104,10 +104,10 @@ irf.pages.controller("ReportsCtrl",
 		'<div ng-hide="model.$showLoader || model.error" style="overflow:auto">'+
 			'<table class="table table-striped table-responsive">'+
 				'<tr>'+
-					'<th ng-repeat="(key, value) in model.drilldownReport[0]" ng-hide="key.startsWith(\'__\')" style="text-align:right">{{key|translate}}</th>'+
+					'<th ng-repeat="(key, value) in model.drilldownReport[0]" ng-hide="key.startsWith(\'__\')">{{key|translate}}</th>'+
 				'</tr>'+
 				'<tr ng-repeat="row in model.drilldownReport">'+
-					'<td ng-repeat="(key, value) in row" ng-hide="key.startsWith(\'__\')" style="text-align:right">{{value}}</td>'+
+					'<td ng-repeat="(key, value) in row" ng-hide="key.startsWith(\'__\')">{{value}}</td>'+
 				'</tr>'+
 			'</table>'+
 		'</div>'+
