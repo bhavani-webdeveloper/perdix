@@ -62,54 +62,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
-        if (_.hasIn(model.customer, 'additionalKYCs') && model.customer.additionalKYCs[0]
-            && (model.customer.additionalKYCs[0].kyc1ProofNumber
-            || model.customer.additionalKYCs[0].kyc1ProofType
-            || model.customer.additionalKYCs[0].kyc1ImagePath
-            || model.customer.additionalKYCs[0].kyc1IssueDate
-            || model.customer.additionalKYCs[0].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[0].kyc1ProofNumber
-                && model.customer.additionalKYCs[0].kyc1ProofType
-                && model.customer.additionalKYCs[0].kyc1ImagePath
-                && model.customer.additionalKYCs[0].kyc1IssueDate
-                && model.customer.additionalKYCs[0].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[0].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 1'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[0].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 1'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 1'});
-                return false;
-            }
-        }
-        if (_.hasIn(model.customer, 'additionalKYCs')  && model.customer.additionalKYCs[1]
-            && (model.customer.additionalKYCs[1].kyc1ProofNumber
-            || model.customer.additionalKYCs[1].kyc1ProofType
-            || model.customer.additionalKYCs[1].kyc1ImagePath
-            || model.customer.additionalKYCs[1].kyc1IssueDate
-            || model.customer.additionalKYCs[1].kyc1ValidUptoDate)) {
-            if (model.customer.additionalKYCs[1].kyc1ProofNumber
-                && model.customer.additionalKYCs[1].kyc1ProofType
-                && model.customer.additionalKYCs[1].kyc1ImagePath
-                && model.customer.additionalKYCs[1].kyc1IssueDate
-                && model.customer.additionalKYCs[1].kyc1ValidUptoDate) {
-                if (moment(model.customer.additionalKYCs[1].kyc1IssueDate).isAfter(moment())) {
-                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 2'});
-                    return false;
-                }
-                if (moment(model.customer.additionalKYCs[1].kyc1ValidUptoDate).isBefore(moment())) {
-                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 2'});
-                    return false;
-                }
-            } else {
-                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 2'});
-                return false;
-            }
-        }
+        
         if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
             PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
             return false;

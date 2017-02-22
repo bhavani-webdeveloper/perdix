@@ -6,8 +6,8 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 			"title": "CENTRAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				var currBranch = SessionStore.getCurrentBranch();
-				model.branch = currBranch.branchName;
+				// var currBranch = SessionStore.getCurrentBranch();
+				// model.branch = currBranch.branchName;
 
 				$log.info("search-list sample got initialized");
 			},
@@ -21,26 +21,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch": 
-						{
-	                        "title": "HUB_NAME",
-	                        "type": "string",
-	                        "enumCode": "branch",
-	                        "x-schema-form": {
-	                            "type": "select"
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true
 							}
 	                    },
-						"centre": 
-						{
-	                        "title": "CENTRE",
-	                        "type": ["null", "number"],
-	                        "enumCode": "centre",
-	                        "screenFilter": true,
-	                        "x-schema-form": {
-	                            "type": "select",
-	                        	"parentEnumCode":"branch_id"
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"screenFilter": true
 							}
-	                    },
+						},
 	                    "applicantName":
 						{
 	                        "title": "APPLICANT_NAME",

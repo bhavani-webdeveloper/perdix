@@ -786,8 +786,7 @@
                 },
                 "identityProofNo": {
                     "type": ["string","null"],
-                    "title": "IDENTITY_PROOFNO",
-                    "pattern":"^[A-Z0-9]{10}$"
+                    "title": "IDENTITY_PROOFNO"
                 },
                 "centreCode": {
                     "type": ["null", "number"],

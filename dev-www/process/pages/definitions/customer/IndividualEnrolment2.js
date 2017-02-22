@@ -282,7 +282,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     items:[
                                         {
                                             key:"customer.identityProof",
-                                            readonly:true,
+                                            type: "select"
                                         },
                                         {
                                             key:"customer.identityProofImageId",
@@ -1310,7 +1310,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "items": [
                                         {
                                             "key": "customer.familyMembers[].relationShip",
-                                            "type": "select"
+                                            "type": "select",
+                                            "readonly": true
                                         },
                                         {
                                             "key": "customer.familyMembers[].educationStatus",

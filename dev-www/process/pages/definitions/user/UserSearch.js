@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
 			definition: {
 				title: "SEARCH_LOAN",
 				searchForm: [
-					
+					"*"
 				],
 				autoSearch: true,
 				searchSchema: {
@@ -19,9 +19,21 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                     "title": "VIEW_TRANSACTIONS",
                     "required":[],
                     "properties": {
-                        "accountNumber": {
-                            "title": "ACCOUNT_NUMBER",
+                        "userName": {
+                            "title": "USER_NAME",
                             "type": "string"
+                        },
+                        "login": {
+                        	"title": "LOGIN",
+                        	"type": "string"
+                        },
+                        "branchName": {
+                        	"title": "BRANCH_NAME",
+                        	"type": "string",
+                        	"x-schema-form": {
+                        		"type": "select",
+                        		"enumCode": "branch"
+                        	}
                         }
                     }
                 },
@@ -32,7 +44,10 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                     return User.query(
                         {
                             page: pageOpts.pageNo,
-                            per_page: pageOpts.itemsPerPage
+                            per_page: pageOpts.itemsPerPage,
+                            userName: searchOptions.userName,
+                            login: searchOptions.login,
+                            branchName: searchOptions.branchName
                         }
                     ).$promise;
 				},

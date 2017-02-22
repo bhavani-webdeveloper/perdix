@@ -28,6 +28,17 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branchId",
+								"screenFilter": true
+							}
+						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -60,19 +71,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        },
-                        "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
-								"screenFilter": true
-							}
-						}
-
+                        }
 					},
 					"required": []
 				},

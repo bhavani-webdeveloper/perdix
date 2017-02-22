@@ -21,7 +21,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 					model.centre = centres[0].centreName;
 					model.centreCode = centres[0].centreCode;
 				}
-
 			},
 			definition: {
 				title: "SEARCH",
@@ -33,40 +32,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"applicantName": {
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
-	                    "customerId": {
-	                        "title": "CUSTOMER_ID",
-	                        "type": "string"
-	                    },
-	                    "area": {
-	                        "title": "AREA",
-	                        "type": "string"
-	                    },
-	                    "cityTownVillage": {
-	                        "title": "CITY_TOWN_VILLAGE",
-	                        "type": "string"
-	                    },
-	                    "pincode": {
-	                        "title": "PIN_CODE",
-	                        "type": "string"
-	                    },
-	                    "status": 
-	                    {
-                            "type":"string",
-                            "title":"STATUS",
-                            "enumCode": "origination_status",
-                            "x-schema-form": {
-                            	"type": "select"
-                            }
-                        },
-                        "centre": {
+						"centre": {
 							"title": "CENTRE",
 							"type": "string",
 							"required": true,
@@ -109,8 +75,40 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
 	                                ];
 	                            }
 							}
-						}
-
+						},
+						"applicantName": {
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
+	                    "customerId": {
+	                        "title": "CUSTOMER_ID",
+	                        "type": "string"
+	                    },
+	                    "area": {
+	                        "title": "AREA",
+	                        "type": "string"
+	                    },
+	                    "cityTownVillage": {
+	                        "title": "CITY_TOWN_VILLAGE",
+	                        "type": "string"
+	                    },
+	                    "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
+	                    },
+	                    "status": 
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
 					},
 					"required": []
 				},

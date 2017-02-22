@@ -45,6 +45,16 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 								"screenFilter": true
 							}
 	                    },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"screenFilter": true
+							}
+						},
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -69,19 +79,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        },
-                        "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"screenFilter": true
-							}
-						}
-
-
+                        }
 					},
 					"required": []
 				},
