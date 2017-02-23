@@ -2,7 +2,7 @@
   <section class="content-header">
     <h1>
       <span><a href ng-click="expandCollapseView()" style="color:#333"> {{ bundlePage.title | translate }}</a></span>
-      <span ng-show="bundlePage.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
+      <span ng-show="bundlePage.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'Offline Saved Records'|translate}}</a></small></span>
       <span class="button-holder pull-right">
         <button ng-show="bundlePage.offline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ (bundleModel.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
       </span>
