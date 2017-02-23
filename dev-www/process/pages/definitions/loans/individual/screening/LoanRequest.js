@@ -1073,7 +1073,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                        title:"PRODUCT_TYPE",
                        required:true,
                        type:"select",
-                       enumCode:"loan_purpose_1",
+                       enumCode:"loan_product_category",
                        condition:"model.currentStage=='Application'"
                     },
                     {
@@ -1121,7 +1121,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                        title:"PRODUCT_TYPE",
                        required:true,
                        type:"select",
-                       enumCode:"loan_purpose_1",
+                       enumCode:"loan_product_category",
                        condition:"model.currentStage=='Application'"
                     },
                     {
@@ -2475,7 +2475,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                                 serialNo: machine.serialNumber,
                                                 collateralValue: machine.purchasePrice,
                                                 loanToValue: machine.presentValue,
-                                                machineOld: !_.isNull(machine.isTheMachineNew)?!machine.isTheMachineNew:null,
+                                                machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
                                                 quantity: machine.quantity || 1
                                             }; 
                                             c.totalValue = c.quantity * c.loanToValue;
