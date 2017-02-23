@@ -88,7 +88,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 "colClass": "col-sm-12",
                 "title": "DOCUMENT_VERIFICATION",
                 "htmlClass": "text-danger",
-                "items": [{
+                "items": [
+                     {
+                            "type": "fieldset",
+                            "title": "View Loan Details",
+                            "condition":"model.loanAccount.id",
+                            "items": [{
+                                key: "loanAccount.ViewLoan",
+                                type: "button",
+                                title: "View Loan",
+                                required: true,
+                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
+                            }]
+                    },
+                    {
                         "key": "_queue.centreName",
                         "title": "CENTRE",
                         "readonly": true
@@ -425,6 +438,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                     })
                             }
                         );
+                },
+                viewLoan: function(model, formCtrl, form, $event){
+                    $log.info("Inside ViewLoan()");
+                    /*if (!validateForm(formCtrl)){
+                        return;
+                    }*/
+                    $state.go("Page.Bundle", {
+                    pageName: "loans.individual.screening.LoanView",
+                    pageId: model.loanAccount.id
+                    });   
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");

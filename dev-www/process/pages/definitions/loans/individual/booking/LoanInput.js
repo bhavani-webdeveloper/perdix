@@ -380,6 +380,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                 "items":[
                     {
+                            "type": "fieldset",
+                            "title": "View Loan Details",
+                            "condition":"model.loanAccount.id",
+                            "items": [{
+                                key: "loanAccount.ViewLoan",
+                                type: "button",
+                                title: "View Loan",
+                                required: true,
+                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
+                            }]
+                    },
+                    {
                     "type":"fieldset",
                     "title":"BRANCH_DETAILS",
                     "items":[
@@ -1433,6 +1445,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 PageHelper.hideLoader();
                             })
                     })
+                },
+                viewLoan: function(model, formCtrl, form, $event){
+                    $log.info("Inside ViewLoan()");
+                    /*if (!validateForm(formCtrl)){
+                        return;
+                    }*/
+                    $state.go("Page.Bundle", {
+                    pageName: "loans.individual.screening.LoanView",
+                    pageId: model.loanAccount.id
+                    });   
                 },
                 holdButton: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
