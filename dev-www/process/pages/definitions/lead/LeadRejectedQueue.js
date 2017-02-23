@@ -117,7 +117,6 @@ irf.pageCollection.factory(irf.page("lead.LeadRejectedQueue"), ["$log", "formHel
 				    
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
-						'centreName': centreName[0],
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
 						'businessName': searchOptions.businessName,
