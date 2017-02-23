@@ -1,5 +1,16 @@
 var irf = irf || {};
 
+irf.HOME_PAGE = {
+	"url": "Page/Landing",
+	"to": "Page.Landing",
+	"params": {
+
+	},
+	"options": {
+
+	}
+};
+
 irf.page = function(path) {
 	return "Pages__" + path.replace(/\./g, '$');
 };
@@ -204,11 +215,8 @@ irf.pages.config([
 	angular.forEach(statesDefinition, function(value, key){
 		$stateProvider.state(value);
 	});
-	$urlRouterProvider.otherwise("/Login");
-}]);
 
-irf.HOME_PAGE = {
-	"to": "Login",
-	"params": {},
-	"options": {}
-};
+	$urlRouterProvider.otherwise(function($injector) {
+		$injector.get('$state').go(irf.HOME_PAGE.to);
+	});
+}]);
