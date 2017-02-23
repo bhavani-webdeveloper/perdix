@@ -228,11 +228,11 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('lead.LeadGeneration', {
+								entityManager.setModel('lead.LeadReject', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "lead.LeadGeneration",
+									pageName: "lead.LeadReject",
 									pageId: item.id
 								});
 							},
