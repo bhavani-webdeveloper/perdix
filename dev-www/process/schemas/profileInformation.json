@@ -437,6 +437,26 @@
                         ]
                     }
                 },
+                "enterpriseAssets": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "assetType": {
+                                "type": "string",
+                                "title": "ASSET_TYPE"
+                            },
+                            "valueOfAsset": {
+                                "type": "number",
+                                "title": "VALUE_OF_THE_ASSET"
+                            },
+                            "vehicleMakeModel": {
+                                "type": "string",
+                                "title": "VEHICLE_MAKE_MODEL"
+                            }
+                        }
+                    }
+                },
                 "expenditures": {
                     "type": "array",
                     "title": "EXPENDITURES",

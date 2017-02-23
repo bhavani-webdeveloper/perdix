@@ -2028,7 +2028,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         key: "customer.enterpriseAssets[].assetType",
                                         title: "ASSET_TYPE",
                                         type: "select",
-                                        enumCode: "enterprice_asset_types"
+                                        enumCode: "enterprice_asset_types",
+                                        required: true
                                     },
                                     {
                                         key: "customer.enterpriseAssets[].vehicleMakeModel",
