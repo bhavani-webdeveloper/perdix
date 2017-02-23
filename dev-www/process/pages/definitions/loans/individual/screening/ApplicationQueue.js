@@ -122,7 +122,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationQueue
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Application',
-	                    'centreCode':searchOptions.centre,
+	                    'centreCode':searchOptions.centreCode,
 	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

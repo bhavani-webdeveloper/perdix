@@ -35,17 +35,18 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
         var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.IncompleteLeadQueue"];
         var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
         var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadRejectedQueue"];
-        lapqMenu.data = 0;
-        lfuqMenu.data = 0;
-        ilqMenu.data = 0;
-        rfqMenu.data = 0;
-        rMenu.data = 0;
+
+        if (rMenu) rMenu.data = 0;
+        if (lapqMenu) lapqMenu.data = 0;
+        if (lfuqMenu) lfuqMenu.data = 0;
+        if (ilqMenu) ilqMenu.data = 0;
+        if (rfqMenu) rfqMenu.data = 0;
 
         _.forEach(centres, function(centre){
             
+            if (rfqMenu){
             Lead.search({
                 'branchName': branchName,
-                'centreName': centreName[0],
                 'currentStage': "ReadyForScreening",
                 'leadName': '',
                 'area': '',
@@ -61,12 +62,13 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 rfqMenu.data = rfqMenu.data +  Number(response.headers['x-total-count']);
             }, function() {
                 rfqMenu.data = '-';
-            });
+                });    
+            }
 
+            if (lfuqMenu){
             Lead.search({
                 'branchName': branchName,
                 'currentStage': "Inprocess",
-                'centreName': centreName[0],
                 'leadStatus': "FollowUp",
                 'leadName': '',
                 'area': '',
@@ -82,8 +84,10 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 lfuqMenu.data = lfuqMenu.data +  Number(response.headers['x-total-count']);
             }, function() {
                 lfuqMenu.data = '-';
-            });
+                });    
+            }
 
+            if (ilqMenu){
             Lead.search({
                 'branchName': branchName,
                 'currentStage': "Inprocess",
@@ -124,8 +128,9 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 ilqMenu.data = ilqMenu.data +  Number(response.headers['x-total-count']);
             }, function() {
                 ilqMenu.data = '-';
-            });
-
+                    });    
+            }
+            
         })
 
         
@@ -145,6 +150,28 @@ function($log, $scope, PagesDefinition, SessionStore, Lead) {
                 lapqMenu.data = '-';
             });
         }
+
+        if (rMenu){
+            Lead.search({
+                'branchName': branchName,
+                'currentStage': "Inprocess",
+                'leadStatus': "Reject",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                if (!_.isNumber(rMenu.data)){
+                    rMenu.data = 0;
+                } 
+                rMenu.data = rMenu.data +  Number(response.headers['x-total-count']);
+            }, function() {
+                rMenu.data = '-';
+    });
+        }
+
     });
 
 }]);

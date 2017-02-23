@@ -2934,6 +2934,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
 
                                 EnrollmentHelper.fixData(reqData);
+                                if (reqData.customer.addressProof == 'Aadhar Card' && 
+                                    !_.isNull(reqData.customer.addressProofNo)){
+                                    reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                                }
                                 EnrollmentHelper.saveData(reqData)
                                         .then(
                                                 function(res){
