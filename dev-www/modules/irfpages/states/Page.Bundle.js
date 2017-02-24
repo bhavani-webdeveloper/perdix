@@ -254,8 +254,8 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     };
 
     /** OFFLINE */
-
-    $scope.saveOffline = function(){
+    BundleManager.saveOffline = $scope.saveOffline = function(){
+        var deferred = $q.defer();
         var offlineData = {
             pageId: $scope.pageId,
             bundleModel: $scope.bundleModel,
@@ -277,15 +277,34 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         if (prePromise && _.isFunction(prePromise.then)) {
             prePromise.then(function() {
                 $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-                PageHelper.showProgress("offline-save", "Record saved offline.", 5000);
-                BundleManager.broadcastEvent('bundle-offline-saved', {bundlePageName: $scope.pageName, offlineKey: $scope.bundleModel.$$STORAGE_KEY$$});
+                PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
+                deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
             });
         } else {
             $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-            PageHelper.showProgress("offline-save", "Record saved offline.", 5000);
-            BundleManager.broadcastEvent('bundle-offline-saved', {bundlePageName: $scope.pageName, offlineKey: $scope.bundleModel.$$STORAGE_KEY$$});
+            PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
+            deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
         }
-    }
+        return deferred.promise;
+    };
+
+    BundleManager.updateOffline = function() {
+        if ($scope.bundleModel.$$STORAGE_KEY$$) {
+            return BundleManager.saveOffline();
+        } else {
+            return $q.reject();
+        }
+    };
+
+    BundleManager.deleteOffline = function() {
+        if ($scope.bundleModel.$$STORAGE_KEY$$) {
+            OfflineManager.removeItem($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$);
+            delete $scope.bundleModel.$$STORAGE_KEY$$;
+            return $q.resolve();
+        } else {
+            return $q.reject();
+        }
+    };
 
     $scope.loadOfflinePage = function(event) {
         event.preventDefault();
@@ -344,7 +363,6 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 $scope.bundleModel = offlineData.bundleModel;
                 $scope.bundlePage.bundlePages = offlineData.bundlePages;
                 $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
-                BundleManager.broadcastEvent('bundle-offline-restored', {bundlePageName: $scope.pageName});
                 initPromise = $q.resolve();
             } else { // Loading online data
                 initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));

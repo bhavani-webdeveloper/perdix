@@ -222,12 +222,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
 
     var navigateToQueue = function(model){
         // Considering this as the success callback
-        if (collectionName && offlineKey) {
-            OfflineManager.removeItem(collectionName, offlineKey); // Deleting offline record on success submission
-            collectionName = null;
-            offlineKey = null;
+        // Deleting offline record on success submission
+        BundleManager.deleteOffline().then(function(){
             PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
-        }
+        });
 
         if(model.currentStage=='Screening')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
@@ -265,9 +263,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
         }
 
     }
-
-    var collectionName = null;
-    var offlineKey = null;
 
     return {
         "type": "schema-form",
@@ -344,11 +339,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
 
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
         },
-        initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                collectionName = bundlePageObj.bundlePageName;
-                offlineKey = bundleModel.$$STORAGE_KEY$$;
-                irf.windowConsole.log('BUNDLE_PAGE:%c'+collectionName+' %cofflineKey:%c'+offlineKey, 'background: #222; color: #bada55; font-size: 18px', '', 'background: #222; color: #bada55; font-size: 18px');
-        },
         offline: false,
         getOfflineDisplayItem: function(item, index){
             return [
@@ -358,11 +348,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             ]
         },
         eventListeners: {
-            "bundle-offline-saved": function(bundleModel, model, params) {
-                collectionName = params.bundlePageName;
-                offlineKey = params.offlineKey;
-                irf.windowConsole.log('BUNDLE_PAGE:%c'+collectionName+' %cofflineKey:%c'+offlineKey, 'background: #222; color: #bada55; font-size: 18px', '', 'background: #222; color: #bada55; font-size: 18px');
-            },
             "new-applicant": function(bundleModel, model, params){
                 $log.info("Inside new-applicant of LoanRequest");
                 var addToRelation = true;
@@ -2287,6 +2272,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 })
                                 .finally(function(httpRes){
                                     PageHelper.hideLoader();
+                                    // Updating offline record on success submission
+                                    BundleManager.updateOffline();
                                 })
                         }
                     );
