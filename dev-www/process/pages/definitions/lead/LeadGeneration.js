@@ -338,15 +338,22 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                                 ];
                                             }
                                         },
-                                        "lead.area",
-                                        "lead.cityTownVillage",
-                                        "lead.district",
-                                        "lead.state", {
-                                            "key": "lead.location",
-                                            "type": "geotag",
-                                            "latitude": "latitude",
-                                            "longitude": "longitude",
+                                        {
+                                            "key": "lead.area",
+                                            "readonly": true
                                         },
+                                        {
+                                            "key": "lead.cityTownVillage",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "lead.area",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "lead.state",
+                                            "readonly": true
+                                        }
                                     ]
                                 },
                             ]

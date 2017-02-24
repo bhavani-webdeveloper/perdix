@@ -8,6 +8,27 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     readonly: true
                 }
 
+                var preSaveOrProceed = function(reqData){
+                    if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)){
+                        var selfExist = false
+                        for (var i=0;i<reqData.customer.familyMembers.length; i++){
+                            var f = reqData.customer.familyMembers[i];
+                            if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF'){
+                                selfExist = true;
+                                break;
+                            }
+                        }
+                        if (selfExist == false){
+                            PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory",5000);
+                            return false;        
+                        }
+                    } else {
+                        PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory",5000);
+                        return false;
+                    }
+                    return true;
+                }
+
                 return {
                     "type": "schema-form",
                     // "subType": "sub-navigation",
@@ -1077,10 +1098,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 $log.info(result);
                                             }
                                         },
-                                        "customer.locality",
-                                        "customer.villageName",
-                                        "customer.district",
-                                        "customer.state",
+                                        {
+                                            key: "customer.locality",
+                                            readonly: true
+                                        },
+                                        {
+                                            key: "customer.district",
+                                            readonly: true
+                                        },
+                                        {
+                                            key: "customer.villageName",
+                                            readonly: true
+                                        },
+                                        {
+                                            key: "customer.state",
+                                            readonly: true,
+                                        },
                                         "customer.mailSameAsResidence"
                                     ]
                                 },
@@ -1141,9 +1174,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 model.customer.mailingDistrict = result.district;
                                             }
                                         },
-                                        "customer.mailingLocality",
-                                        "customer.mailingDistrict",
-                                        "customer.mailingState"
+                                        {
+                                            key: "customer.mailingLocality",
+                                            readonly: true
+                                        },
+                                        {
+                                            key: "customer.mailingDistrict",
+                                            readonly: true
+                                        },
+                                        {
+                                            key: "customer.mailingState",
+                                            readonly: true
+                                        }
                                     ]
                                 }
                             ]
@@ -2914,20 +2956,22 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 try{
                                     for(var i=0;i<reqData.customer.familyMembers.length;i++){
                                         var incomes = reqData.customer.familyMembers[i].incomes;
-
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
+                                        if (incomes){
+                                            for(var j=0;j<incomes.length;j++){
+                                                switch(incomes[i].frequency){
+                                                    case 'M': incomes[i].monthsPerYear=12; break;
+                                                    case 'Monthly': incomes[i].monthsPerYear=12; break;
+                                                    case 'D': incomes[i].monthsPerYear=365; break;
+                                                    case 'Daily': incomes[i].monthsPerYear=365; break;
+                                                    case 'W': incomes[i].monthsPerYear=52; break;
+                                                    case 'Weekly': incomes[i].monthsPerYear=52; break;
+                                                    case 'F': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fortnightly': incomes[i].monthsPerYear=26; break;
+                                                }
+                                            }    
                                         }
+                                        
                                     }
                                 }catch(err){
                                     console.error(err);
@@ -2937,6 +2981,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 if (reqData.customer.addressProof == 'Aadhar Card' && 
                                     !_.isNull(reqData.customer.addressProofNo)){
                                     reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                                }
+
+                                if (preSaveOrProceed(reqData) == false){
+                                    return;
                                 }
                                 EnrollmentHelper.saveData(reqData)
                                         .then(
@@ -3025,25 +3073,29 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 try{
                                     for(var i=0;i<reqData.customer.familyMembers.length;i++){
                                         var incomes = reqData.customer.familyMembers[i].incomes;
-
-                                        for(var j=0;j<incomes.length;j++){
-                                            switch(incomes[i].frequency){
-                                                case 'M': incomes[i].monthsPerYear=12; break;
-                                                case 'Monthly': incomes[i].monthsPerYear=12; break;
-                                                case 'D': incomes[i].monthsPerYear=365; break;
-                                                case 'Daily': incomes[i].monthsPerYear=365; break;
-                                                case 'W': incomes[i].monthsPerYear=52; break;
-                                                case 'Weekly': incomes[i].monthsPerYear=52; break;
-                                                case 'F': incomes[i].monthsPerYear=26; break;
-                                                case 'Fornightly': incomes[i].monthsPerYear=26; break;
-                                                case 'Fortnightly': incomes[i].monthsPerYear=26; break;
-                                            }
+                                        if (incomes){
+                                            for(var j=0;j<incomes.length;j++){
+                                                switch(incomes[i].frequency){
+                                                    case 'M': incomes[i].monthsPerYear=12; break;
+                                                    case 'Monthly': incomes[i].monthsPerYear=12; break;
+                                                    case 'D': incomes[i].monthsPerYear=365; break;
+                                                    case 'Daily': incomes[i].monthsPerYear=365; break;
+                                                    case 'W': incomes[i].monthsPerYear=52; break;
+                                                    case 'Weekly': incomes[i].monthsPerYear=52; break;
+                                                    case 'F': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fornightly': incomes[i].monthsPerYear=26; break;
+                                                    case 'Fortnightly': incomes[i].monthsPerYear=26; break;
+                                                }
+                                            }    
                                         }
+                                        
                                     }
                                 }catch(err){
                                     console.error(err);
                                 }
-
+                                if (preSaveOrProceed(reqData) == false){
+                                    return;
+                                }
                                 EnrollmentHelper.fixData(reqData);
                                 PageHelper.showProgress('enrolment', 'Updating Customer');
                                 EnrollmentHelper.proceedData(reqData).then(function(resp){
