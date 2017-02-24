@@ -69,8 +69,9 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          * @param bundleModel
          * @return pageObj
          */
-        createPageObject: function(definition, model, bundleModel, shouldInitialize) {
+        createPageObject: function(definition, model, bundleModel, shouldInitialize, bundlePageName) {
             var pageObj = {};
+            definition.bundlePageName = bundlePageName;
             pageObj.singlePageDefinition = _.cloneDeep(definition);
             pageObj.definition = definition;
             pageObj.pageName = definition.pageName;
@@ -226,7 +227,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.addTab = function(index, e) {
         e && e.preventDefault();
         var definition = $scope.addTabMenu[index];
-        var openPage = BundleManager.createPageObject(definition, null, $scope.bundleModel, true);
+        var openPage = BundleManager.createPageObject(definition, null, $scope.bundleModel, true, $scope.pageName);
         var insertIndex = -1;
         for (var i = 0; i < $scope.pages.length; i++) {
             if ($scope.pages[i].definition == definition) {
@@ -277,10 +278,12 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             prePromise.then(function() {
                 $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
                 PageHelper.showProgress("offline-save", "Record saved offline.", 5000);
+                BundleManager.broadcastEvent('bundle-offline-saved', {bundlePageName: $scope.pageName, offlineKey: $scope.bundleModel.$$STORAGE_KEY$$});
             });
         } else {
             $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
             PageHelper.showProgress("offline-save", "Record saved offline.", 5000);
+            BundleManager.broadcastEvent('bundle-offline-saved', {bundlePageName: $scope.pageName, offlineKey: $scope.bundleModel.$$STORAGE_KEY$$});
         }
     }
 
@@ -341,6 +344,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 $scope.bundleModel = offlineData.bundleModel;
                 $scope.bundlePage.bundlePages = offlineData.bundlePages;
                 $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
+                BundleManager.broadcastEvent('bundle-offline-restored', {bundlePageName: $scope.pageName});
                 initPromise = $q.resolve();
             } else { // Loading online data
                 initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
@@ -357,7 +361,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                     for (i in initialData) {
                         var iData = _.cloneDeep(initialData[i]);
                         var bDef = bundleDefinitionMap[iData.pageClass];
-                        var openPage = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$);
+                        var openPage = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName);
                         $scope.pages.push(openPage);
                         if (!openPage.error && openPage.$initPromise) {
                             initPromises.push(openPage.$initPromise);
@@ -381,7 +385,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                         }
                         if (bDef.minimum > 0) {
                             for (var i = 0; i < bDef.minimum; i++) {
-                                var openPage = BundleManager.createPageObject(bDef, null, $scope.bundleModel, true);
+                                var openPage = BundleManager.createPageObject(bDef, null, $scope.bundleModel, true, $scope.pageName);
                                 $scope.pages.push(openPage);
                                 if (!openPage.error && openPage.$initPromise) {
                                     initPromises.push(openPage.$initPromise);

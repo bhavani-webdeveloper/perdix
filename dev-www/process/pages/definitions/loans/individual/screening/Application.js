@@ -15,8 +15,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
-                        minimum: 0,
-                        maximum: 0
+                        minimum: 1,
+                        maximum: 1
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',

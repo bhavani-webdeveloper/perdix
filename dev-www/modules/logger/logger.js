@@ -1,3 +1,4 @@
+var irf = irf || {};
 /*
 ----Under Dev----
 @TODO:
@@ -65,6 +66,7 @@ angular.module('IRFLogger', [])
 	};
 
 	var windowConsole = window.console;
+	irf.windowConsole = windowConsole;
 	window.console = {};
 
 	window.console.log = function (msg) {
