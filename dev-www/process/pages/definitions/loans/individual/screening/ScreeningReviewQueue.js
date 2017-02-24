@@ -128,9 +128,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 							item.screeningDate,
 							item.applicantName,
 							item.customerName,
-							item.area,
+							/*item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode*/
+							item.branchName,
+							item.centreName
 						]
 					},
 					getTableConfig: function() {
@@ -150,7 +152,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
-						}, {
+						}, /*{
 							title: 'AREA',
 							data: 'area'
 						}, {
@@ -159,6 +161,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningReviewQ
 						}, {
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
+						}*/{
+							title: 'BRANCH_NAME',
+							data: 'branchName'
+						}, {
+							title: 'CENTRE_NAME',
+							data: 'centreName'
 						}]
 					},
 					getActions: function() {
