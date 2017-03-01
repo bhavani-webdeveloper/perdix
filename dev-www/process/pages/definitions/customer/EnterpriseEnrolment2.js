@@ -1040,10 +1040,22 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             ];
                         }
                     },
-                    "customer.locality",
-                    "customer.villageName",
-                    "customer.district",
-                    "customer.state",
+                    {
+                        key: "customer.locality",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.villageName",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.district",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.state",
+                        readonly: true,
+                    },
                     {
                        key: "customer.distanceFromBranch",
                        type: "select",
@@ -2833,7 +2845,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                 "type": "box",
                 "title": "COMMERCIAL_CB_CHECK",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 readonly:true,
                 "items": [
                     {
@@ -2845,7 +2857,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.enterpriseBureauDetails[].bureau",
                                 title:"BUREAU",
                                 type:"select",
-                                required:"true",
                                 titleMap: {
                                       "CIBIL": "CIBIL",
                                       "Highmark": "Highmark"

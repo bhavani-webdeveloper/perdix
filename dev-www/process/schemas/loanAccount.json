@@ -799,107 +799,107 @@
                         "type": "object",
                         "properties": {
                             "accountNumber": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "familyMemberName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianAddressSameAsCustomer": {
-                                "type": "boolean"
+                                "type": ["boolean", "null"]
                             },
                             "guardianDOB": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianDistrict": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianDoorNo": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianFirstName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianGender": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianLastName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianLocality": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianMiddleName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianPincode": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianRelationWithMinor": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianState": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianStreet": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "guardianTitle": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "id": {
-                                "type": "integer"
+                                "type": ["integer", "null"]
                             },
                             "loanId": {
-                                "type": "integer"
+                                "type": ["integer", "null"]
                             },
                             "nomineeAddressSameAsCustomer": {
-                                "type": "boolean"
+                                "type": ["boolean", "null"]
                             },
                             "nomineeDOB": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeDistrict": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "enumCode":"district"
                             },
                             "nomineeDoorNo": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeFirstName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeGender": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "enumCode":"gender"
                             },
                             "nomineeLastName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeLocality": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeMiddleName": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "nomineeMinor": {
-                                "type": "boolean"
+                                "type": ["boolean", "null"]
                             },
                             "nomineePincode": {
-                                "type": "number"
+                                "type": ["number", "null"]
                             },
                             "nomineeRelationship": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "enumCode":"relation"
                             },
                             "nomineeState": {
-                                "type": "string"
+                                "type": ["string", "null"]
 
                             },
                             "nomineeStreet": {
-                                "type": "string"
+                                "type": ["string", "null"]
                             },
                             "version": {
-                                "type": "integer"
+                                "type": ["integer", "null"]
                             }
                         },
                         "required": [
@@ -921,13 +921,6 @@
                             "guardianTitle",
                             "id",
                             "loanId",
-                            "nomineeDOB",
-                            "nomineeDistrict",
-                            "nomineeFirstName",
-                            "nomineeGender",
-                            "nomineePincode",
-                            "nomineeRelationship",
-                            "nomineeState",
                             "version"
                         ]
                     }
@@ -1148,7 +1141,6 @@
                 "loanPurpose1",
                 "loanPurpose2",
                 "loanPurpose3",
-                "nominees",
                 "numberOfDisbursed",
                 "numberOfDisbursements",
                 "ornamentsAppraisals",

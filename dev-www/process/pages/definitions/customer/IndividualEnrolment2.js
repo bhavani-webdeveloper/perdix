@@ -1103,11 +1103,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             readonly: true
                                         },
                                         {
-                                            key: "customer.district",
+                                            key: "customer.villageName",
                                             readonly: true
                                         },
                                         {
-                                            key: "customer.villageName",
+                                            key: "customer.district",
                                             readonly: true
                                         },
                                         {
