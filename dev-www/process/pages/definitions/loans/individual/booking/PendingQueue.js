@@ -117,6 +117,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                     return [
                         item.customerName ,
                         "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
+                     
                     ]
                 },
                 getActions: function(){

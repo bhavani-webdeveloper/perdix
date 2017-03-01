@@ -1211,6 +1211,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 ]
             },
             {
+                "type":"box",
+                "title":"Partner Remarks",
+                "condition":"model.loanAccount.partnerApprovalStatus",
+                "items":[
+                    {
+                        key:"loanAccount.partnerApprovalStatus",
+                        title:"PARTNER_APPROVAL_STATUS"
+                    },
+                    {
+                        key:"loanAccount.partnerRemarks",
+                        title:"PARTNER_REMARKS"
+                    },
+                ]
+            },
+            {
                 "type": "box",
                 "title": "POST_REVIEW",
                 "condition": "model.loanAccount.id",
@@ -1702,6 +1717,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 resp.loanProcessAction="PROCEED";
                                 if(resp.loanAccount.currentStage == 'LoanInitiation' && resp.loanAccount.partnerCode == 'Kinara')
                                     resp.stage = 'LoanBooking';
+
+                                if(resp.loanAccount.currentStage == 'PendingForPartner' && resp.loanAccount.partnerCode !== 'DO Partner1-IC')
+                                {
+                                    resp.stage = 'LoanBooking';
+                                     $log.info("printing in if ");
+                                    $log.info(model.loanAccount.partnerCode);
+                                }
                                 //reqData.loanProcessAction="PROCEED";
                                 PageHelper.showLoader();
                                 IndividualLoan.update(resp,function(resp,headers){
@@ -1731,6 +1753,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             reqData.loanProcessAction="PROCEED";
                             if(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara')
                                 reqData.stage = 'LoanBooking';
+                            
+                            if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.partnerCode !=='DO Partner1-IC')
+                                {
+                                    $log.info("printing in else ");
+                                    $log.info(model.loanAccount.partnerCode);
+                                    reqData.stage = 'LoanBooking';
+                                }
                             IndividualLoan.update(reqData,function(resp,headers){
                                 model.loanAccount.id = resp.loanAccount.id;
                                 $log.info("Loan ID Returned on Proceed:" + model.loanAccount.id);

@@ -99,6 +99,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						"{{'LOAN_TYPE'|translate}} : " + item.loanType,
 						"{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
 						"{{'PROCESS_TYPE'|translate}} : " + item.processType
+						
 					]
 				},
 				getActions: function(){
