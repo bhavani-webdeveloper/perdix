@@ -10,6 +10,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.booking.LoanInput",
             "Page/Engine/loans.individual.booking.InitiationQueue",
             "Page/Engine/loans.individual.booking.PendingForPartnerQueue",
+            "Page/Engine/loans.individual.booking.IFMRDOQueue",
             "Page/Engine/loans.individual.booking.PendingQueue",
             "Page/Engine/loans.individual.booking.DocumentUploadQueue",
             "Page/Engine/loans.individual.booking.PendingVerificationQueue"
@@ -32,6 +33,20 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 pfpqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 pfpqMenu.data = '-';
+            });
+        }
+
+        var ifmrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.booking.IFMRDOQueue"];
+        if (ifmrMenu) {
+            IndividualLoan.search({
+                'stage': 'IfmrDO',
+                'branchName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                ifmeMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ifmrMenu.data = '-';
             });
         }
 
