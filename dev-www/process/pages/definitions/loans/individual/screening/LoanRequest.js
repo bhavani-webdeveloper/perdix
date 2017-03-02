@@ -1071,8 +1071,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                     {
                        key: "loanAccount.productCategory",
                        title:"PRODUCT_TYPE",
-                       readonly:true,
-                       condition:"model.currentStage!='Application'"
+                        readonly:true,
+                       condition:"model.currentStage!='Application' && model.currentStage!='FieldAppraisal'"
                     },
                     {
                        key: "loanAccount.productCategory",
@@ -1080,7 +1080,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                        required:true,
                        type:"select",
                        enumCode:"loan_product_category",
-                       condition:"model.currentStage=='Application'"
+                       condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
                     },
                     {
                         key: "loanAccount.customerSignDateExpected",
@@ -1651,7 +1651,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             {
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
-                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'",
+                "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview'||model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='FieldAppraisal'",
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",

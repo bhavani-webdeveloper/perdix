@@ -27,14 +27,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.SanctionInput'),
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
-                        minimum: 0,
+                        minimum: 5,
                         maximum: 3
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
-                        minimum: 0,
+                        minimum: 5,
                         maximum: 3
                     },
                     {

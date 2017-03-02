@@ -281,6 +281,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             "items": [{
                                 "type": "section",
                                 "htmlClass": "row",
+                                "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
                                 "items": [{
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
