@@ -542,6 +542,17 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
         return deferred.promise;
     };
 
+    resource.getEnterpriseRelations = function(customerId) {
+        var deferred = $q.defer();
+        var request = {"customerId": customerId};
+        resource.getResult("enterpriseRelations.list", request).then(function(records){
+            if (records && records.results && records.results.length > 0) {
+                deferred.resolve(records.results);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
     resource.getloanMitigants = function(mitigant) {
         var deferred = $q.defer();
         resource.getResult("loanMitigants.list", {"mitigant":mitigant}).then(function(records){

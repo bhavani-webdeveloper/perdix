@@ -88,6 +88,15 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                             "type": "select",
                                             "enumCode": "centre",
                                             "parentEnumCode": "branch_id"
+                                        },
+                                        "customerType": {
+                                            "key": "customer.customerType",
+                                            "type": "select",
+                                            "titleMap":{
+                                                "enterprise":"enterprise",
+                                                "individual":"individual"
+                                            }
+                                            
                                         }
                                     },
                                     "outputMap": {
@@ -107,7 +116,8 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                         var promise = Enrollment.search({
                                             'branchName': branchId || SessionStore.getBranch(),
                                             'firstName': inputModel.firstName,
-                                            'centreId': inputModel.centreId
+                                            'centreId': inputModel.centreId,
+                                            'customerType':inputModel.customerType||"",
                                         }).$promise;
                                         return promise;
                                     },
@@ -118,8 +128,29 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                             data.urnNo
                                         ];
                                     },
-                                    onSelect: function(valueObj, model, context) {}
-                                }, {
+                                    onSelect: function(valueObj, model, context) {
+
+                                       $log.info(valueObj);
+
+                                        if(valueObj.customerType=="Enterprise")
+                                        {
+                                            $log.info(valueObj.id);
+                                            Queries.getEnterpriseRelations(valueObj.id)
+                                                .then(function(result){
+                                                    $log.info("Result Came");
+                                                    $log.info(result);
+                                                    for(i in result)
+                                                    {
+                                                        model.customer.customerid.push(result[i]);
+                                                    }
+
+                                                }
+                                            );
+                                        }
+                                    }
+                                }, 
+
+                                {
                                     key: "customer.customerid[].firstName",
                                 }]
                             }]
@@ -181,6 +212,10 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             "centreId": {
                                 "type": ["number", "null"],
                                 "title": "SPOKE_NAME"
+                            },
+                            "customerType": {
+                                "type": ["string", "null"],
+                                "title": "Customer Type"
                             },
                             "customerid": {
                                 "type": "array",

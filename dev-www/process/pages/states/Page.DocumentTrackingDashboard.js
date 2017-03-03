@@ -7,7 +7,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
         var fullDefinition = {
             "title": "Document Tracking Dashboard",
-            "iconClass": "fa fa-users",
+            "iconClass": "fa fa-file",
             "items": [
                 "Page/Engine/loans.individual.documentTracking.PendingDispatchQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue",
