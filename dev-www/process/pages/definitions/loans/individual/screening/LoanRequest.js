@@ -246,7 +246,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
         if (model.currentStage == 'Sanction')
             $state.go('Page.Engine', {pageName: 'loans.individual.screening.LoanSanctionQueue', pageId:null});
         if (model.currentStage == 'Rejected')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.RejectedQueue', pageId:null});
+            $state.go( 'Page.LoanOriginationDashboard',null);
     }
 
     var populateDisbursementSchedule=function (value,form,model){
@@ -329,7 +329,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 }
                             }
                         }
-
                     }
                 },function (errResp){
 
@@ -1498,7 +1497,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             {
                 "type": "box",
                 "title": "NOMINEE_DETAILS",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+                "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='Sanction'  || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'loanView'",
                 readonly:true,
                 "items": [
                     {
