@@ -81,6 +81,11 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
 				$log.info("psychometric.Queue got initialized");
+				var centres = SessionStore.getCentres();
+				if (_.isArray(centres) && centres.length > 0){
+					model.centre = centres[0].centreName;
+					model.centreCode = centres[0].centreCode;
+				}
 			},
 			definition: {
 				title: "SEARCH",
@@ -92,6 +97,50 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						"centre": {
+							"title": "CENTRE",
+							"type": "string",
+							"required": true,
+							"x-schema-form": {
+								type: "lov",
+	                            autolov: true,
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            lovonly: true,
+	                            search: function(inputModel, form, model, context) {
+	                                var centres = SessionStore.getCentres();
+	                                var centreCode = formHelper.enum('centre').data;
+	                                var out = [];
+	                                if (centres && centres.length) {
+	                                    for (var i = 0; i < centreCode.length; i++) {
+	                                        for (var j = 0; j < centres.length; j++) {
+	                                            if (centreCode[i].value == centres[j].id) {
+	                                                out.push({
+	                                                    name: centreCode[i].name,
+	                                                    value:centreCode[i].code
+	                                                })
+	                                            }
+	                                        }
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.centre = valueObj.name;
+	                                model.centreCode = valueObj.value;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
+							}
+						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -138,7 +187,7 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'Application',
-	                    'centreCode':centreId[0],
+	                    'centreCode':searchOptions.centreCode,
 	                    'branchName':branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

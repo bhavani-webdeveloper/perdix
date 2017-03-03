@@ -46,6 +46,11 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 	var setProfilePreferences = function(userData) {
 		$log.info('set ProfilePreferences');
 		SessionStore.setSession(userData);
+		SessionStore.setCurrentBranch({
+                			branchCode: SessionStore.getBranchCode(),
+                			branchId : SessionStore.getBranchId(),
+                			branchName: SessionStore.getBranch()
+                			});
 		irfStorageService.storeJSON('UserData', userData);
 		var m = irfStorageService.getMasterJSON(irf.form("UserProfile"));
 		var km = _.keys(m);

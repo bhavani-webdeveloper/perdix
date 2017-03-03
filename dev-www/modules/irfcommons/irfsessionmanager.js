@@ -30,7 +30,8 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 			branchCode: "",
 			branchNamme: "",
 			branchId: ""
-		}
+		},
+		activeBranch: null
 	};
 	var session = self.session;
 
@@ -87,7 +88,9 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	};
 
 	self.getBranch = function() {
-		return session.branchName;
+		//return session.branchName;
+		//The getBranch method is made to return the current branch which is selected in SERVER
+		return self.getActiveBranch();
 	};
 
 	self.getBranchCode = function() {
@@ -168,6 +171,14 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		}
 		return false;
 	}
+
+	self.getActiveBranch = function() {
+		return (angular.isUndefined(session.activeBranch) || session.activeBranch == null) ? session.branchName : session.activeBranch;
+	};
+
+	self.getHomeBranchName = function() {
+		return session.branchName;
+	};
 
 	return self;
 }]);

@@ -113,6 +113,8 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 			if (typeof cordova === 'undefined') {
 				if (window.confirm(message))
 					deferred.resolve();
+				else 
+					deferred.reject();
 			} else {
 				navigator.notification.confirm(
 					message,

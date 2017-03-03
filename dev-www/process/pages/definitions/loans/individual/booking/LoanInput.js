@@ -142,7 +142,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 });
             }
             if (value ==1){
-                model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmountRequested;
+                model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
             }
 
         }
@@ -682,9 +682,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "title": "LOAN_DETAILS",
                         "items": [
                             {
-                                "key": "loanAccount.loanAmountRequested",
+                                "key": "loanAccount.loanAmount",
                                 "type":"amount",
-                                "title":"LOAN_AMOUNT_REQUESTED",
+                                "title":"LOAN_AMOUNT",
                                 "placeholderExpr":"model.additional.product.amountBracket"
                             },
                             {
@@ -1622,7 +1622,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
 
                     var trancheTotalAmount=0;
-                    model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                         model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
                         model.loanAccount.disbursementSchedules[0].ifscCode = model.loanAccount.customerBankIfscCode;
@@ -1655,11 +1654,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 return false;
                         }
                         if (!_.isNaN(model.additional.product.amountFrom) && model.additional.product.amountFrom > 0){
-                            if (model.loanAccount.loanAmountRequested < model.additional.product.amountFrom){
+                            if (model.loanAccount.loanAmount < model.additional.product.amountFrom){
                                 PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
                                 return false;
                             }
-                            if (model.loanAccount.loanAmountRequested > model.additional.product.amountTo){
+                            if (model.loanAccount.loanAmount > model.additional.product.amountTo){
                                 PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
                                 return false;
                             }

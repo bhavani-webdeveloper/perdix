@@ -23,7 +23,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 for (var i=0;i<res.body.length;i++){
                     (function(i){
                         loanIds.push(res.body[i].loanId);
-                        var promise = Scoring.financialSummary({loan_id: res.body[i].loanId, score_name: "ConsolidatedScore"}).$promise;
+                        var promise = Scoring.financialSummarySnapshot({loan_id: res.body[i].loanId, score_name: "ConsolidatedScore"}).$promise;
                         promise.then(function(resp){
                             var bpl = resp[8];
                             bpl.title = "Profit & Loss - " + res.body[i].accountNumber;

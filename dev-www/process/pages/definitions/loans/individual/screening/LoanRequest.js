@@ -259,7 +259,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             });
         }
         if (value ==1){
-            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmountRequested;
+            model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
         }
 
     }
