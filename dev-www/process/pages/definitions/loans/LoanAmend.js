@@ -22,10 +22,12 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
             var interest = parseInt(model.amand.normalInterestRate) / 100 / 12;
             var payments;
 
+            model.amand.newtenure = model.amand.tenure - model.amand.totalSatisfiedDemands;
+
             if (model.amand.frequency == 'Yearly')
-                payments = model.amand.tenure * 12;
+                payments = model.amand.newtenure * 12;
             else if (model.amand.frequency == 'Month')
-                payments = model.amand.tenure;
+                payments = model.amand.newtenure;
 
             // Now compute the monthly payment figure, using esoteric math.
             var x = Math.pow(1 + interest, payments);
@@ -97,6 +99,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     model.amand.emi = data.equatedInstallment;
                     model.amand.accountBalance = data.accountBalance;
                     model.amand.normalInterestRate = data.normalInterestRate;
+                    model.amand.totalDemandDue = data.totalDemandDue;
 
                     irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                 }, function(resData) {
@@ -168,6 +171,7 @@ irf.pageCollection.factory(irf.page('loans.LoanAmend'), ["$log", "$q", "$timeout
                     }]
                 }, {
                     key: "amand.submit",
+                    condition:"!model.amand.totalDemandDue",
                     title: "SUBMIT",
                     type: "button",
                     onClick: function(model) {
