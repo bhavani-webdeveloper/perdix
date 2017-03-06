@@ -24,7 +24,7 @@ var buildDirectory = "www";
 gulp.task('bower', function () {
     var bowerJson = require('./bower.json');
     process.chdir('dev-www/');
-    gulp.src(['./index.html', './view.html', './customer-search.html'])
+    gulp.src(['./index.html'])
         .pipe(wiredep({
             bowerJson: bowerJson,
             directory: 'bower_components',
@@ -67,6 +67,7 @@ gulp.task('cordovaAssets', function(){
 })
 
 gulp.task('html', function(){
+    gulp.src(['!dev-www/index.html', 'dev-www/*.+(json|js|html)']).pipe(gulp.dest('www/'));
     return gulp.src('dev-www/index.html')
         .pipe($.useref())
         .pipe($.if('*.js', $.rev()))
