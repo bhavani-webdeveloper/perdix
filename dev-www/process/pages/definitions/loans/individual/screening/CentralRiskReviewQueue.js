@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		return {
 			"type": "search-list",
-			"title": "CENTRAL_RISK_REVIEW_QUEUE",
+			"title": "RISK_REVIEW2",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// var currBranch = SessionStore.getCurrentBranch();
@@ -175,7 +175,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					},
 					getActions: function() {
 						return [{
-							name: "CENTRAL_RISK_REVIEW",
+							name: "RISK_REVIEW2",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

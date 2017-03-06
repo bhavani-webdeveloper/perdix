@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 		
 		return {
 			"type": "search-list",
-			"title": "FIELD_APPRAISAL_REVIEW_QUEUE",
+			"title": "RISK_REVIEW1",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;
@@ -158,7 +158,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getActions: function() {
 						return [{
-							name: "FIELD_APPRAISAL_REVIEW",
+							name: "RISK_REVIEW1",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

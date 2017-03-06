@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-04/schema#", 
     "type": "object",
     "properties": {
         "customer":{
@@ -56,6 +56,18 @@
                 "accountNumber": {
                     "title": "ACCOUNT_NUMBER",
                     "type": "string"
+                },
+                "percentageIncreasedIncome": {
+                    "title": "PERCENTAGE_INCREASED_INCOME",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
+                },
+                "percentageInterestSaved": {
+                    "title": "PERCENTAGE_INTEREST_SAVED",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
                 },
                 "accountUserDefinedFields": {
                     "type": "object",

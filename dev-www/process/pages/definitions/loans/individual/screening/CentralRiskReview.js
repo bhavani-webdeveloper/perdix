@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
 
         	return {
         		"type": "page-bundle",
-        		"title": "CENTRAL_RISK_REVIEW",
+        		"title": "RISK_REVIEW2",
         		"subTitle": "",
                 "readonly": true,
                 "bundleDefinition": [

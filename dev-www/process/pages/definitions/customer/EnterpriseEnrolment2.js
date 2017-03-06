@@ -535,6 +535,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.businessActivity",
+                        required:true,
                         title: "BUSINESS_ACTIVITY",
                         type: "select",
                         enumCode: "businessActivity",
@@ -543,6 +544,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.businessSector",
+                        required:true,
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
@@ -554,6 +556,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
+                        required:true,
                         title: "BUSINESS_SUBSECTOR",
                         type: "lov",
                         autolov: true,

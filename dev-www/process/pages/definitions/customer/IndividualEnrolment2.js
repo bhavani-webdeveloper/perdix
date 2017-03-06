@@ -1403,6 +1403,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 items: [
                                     {
                                         key:"customer.familyMembers[].relationShip",
+                                        readonly:true,
                                         type:"select",
                                         onChange: function(modelValue, form, model, formCtrl, event) {
                                             if (modelValue && modelValue.toLowerCase() === 'self') {

@@ -1952,6 +1952,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                             key: "loanAccount.rejectReason",
                             type: "lov",
                             autolov: true,
+                            required:true,
                             title: "REJECT_REASON",
                             bindMap: {},
                             searchHelper: formHelper,
