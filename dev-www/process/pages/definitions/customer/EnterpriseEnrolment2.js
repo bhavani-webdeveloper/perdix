@@ -559,6 +559,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         required:true,
                         title: "BUSINESS_SUBSECTOR",
                         type: "lov",
+                        "lovonly": true,
                         autolov: true,
                         bindMap: {
                         },

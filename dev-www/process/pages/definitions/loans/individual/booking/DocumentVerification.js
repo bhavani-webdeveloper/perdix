@@ -141,7 +141,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                                         "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
-                                        "icon": "fa fa-download",
+                                        "icon": "fa fa-download", 
                                         "type": "button",
                                         "readonly": false,
                                         "key": "loanAccount.loanDocs[].documentId",
@@ -440,14 +440,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         );
                 },
                 viewLoan: function(model, formCtrl, form, $event){
+                    Utils.confirm("Save the data before proceed").then(function(){
                     $log.info("Inside ViewLoan()");
-                    /*if (!validateForm(formCtrl)){
-                        return;
-                    }*/
                     $state.go("Page.Bundle", {
                     pageName: "loans.individual.screening.LoanView",
                     pageId: model.loanAccount.id
                     });   
+                    })
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");

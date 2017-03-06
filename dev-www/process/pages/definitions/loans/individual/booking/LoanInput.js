@@ -607,6 +607,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "readonly": true
                             },
                             {
+                                "key":"loanAccount.applicantId",
+                                "title":"APPLICANT_ID",
+                                "readonly": true
+                            },
+                            {
                                 "type": "fieldset",
                                 "title": "COAPPLICANTS",
                                 "items": [
@@ -1462,14 +1467,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     })
                 },
                 viewLoan: function(model, formCtrl, form, $event){
+                    Utils.confirm("Save the data before proceed").then(function(){
                     $log.info("Inside ViewLoan()");
-                    /*if (!validateForm(formCtrl)){
-                        return;
-                    }*/
                     $state.go("Page.Bundle", {
                     pageName: "loans.individual.screening.LoanView",
                     pageId: model.loanAccount.id
                     });   
+                    })
                 },
                 holdButton: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
@@ -1552,6 +1556,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 var completeLead = false;
                                 if (!_.hasIn(reqData.loanAccount, "id")){
                                     completeLead = true;
+                                }
+                                if(!$stateParams.pageId)
+                                {
+                                    reqData.stage='LoanInitiation';
                                 }
                                 IndividualLoan.create(reqData)
                                     .$promise

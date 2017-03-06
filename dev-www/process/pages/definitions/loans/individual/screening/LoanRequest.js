@@ -2157,7 +2157,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         onClick: "actions.sendBack(model, formCtrl, form, $event)"
                     }]
                 },
-
             ]
         },
             {
@@ -2170,6 +2169,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         "icon": "fa fa-circle-o",
                         "title": "SAVE",
                         "onClick": "actions.save(model, formCtrl, form, $event)"
+                    }
+                ]
+            },
+
+            {
+                "type": "actionbox",
+                //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+                "condition": "model.loanAccount.customerId && model.currentStage == 'loanView'",
+                "items": [
+                    {
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                        "title": "Back",
+                        "onClick":"actions.goBack(model, formCtrl, form, $event)"
+
                     }
                 ]
             },
@@ -2354,6 +2368,22 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         })
                 })
 
+            },
+            goBack: function(model, formCtrl, form, $event) {
+                if(model.loanAccount.currentStage =="LoanInitiation")
+                {
+                    $state.go("Page.Engine", {
+                        pageName: 'loans.individual.booking.LoanInput',
+                        pageId: model.loanAccount.id
+                    });
+                } 
+                if(model.loanAccount.currentStage =="DocumentVerification")
+                {
+                    $state.go("Page.Engine", {
+                        pageName: 'loans.individual.booking.DocumentVerification',
+                        pageId: model.loanAccount.id
+                    });
+                }         
             },
             proceed: function(model, formCtrl, form, $event){
                 $log.info("Inside submit()");

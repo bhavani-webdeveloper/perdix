@@ -39,8 +39,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         function(res) {
                             PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                             model.loanAccount = res;
-                            model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
-
+                            if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length)
+                            {
+                                 model.loanAccount.disbursementSchedules[0].party = model.loanAccount.disbursementSchedules[0].party || 'CUSTOMER';
+                            }
+                            
                             Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
                                 .then(
                                     function(docs) {
