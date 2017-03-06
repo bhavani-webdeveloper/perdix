@@ -3,7 +3,7 @@
         <h1>
             <span><a href ng-click="expandCollapseView()" style="color:#333"><i ng-if="showCollapsedViewButton" class="fa {{collapsedView?'fa-plus-square-o':'fa-minus-square-o'}}">&nbsp;</i>
             {{ page.title | translate }}</a></span> <small>{{ page.subTitle | translate }}</small>
-            <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'SAVED_RECORDS'|translate}}</a></small></span>
+            <span ng-if="page.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'OFFLINE_SAVED_RECORDS'|translate}}</a></small></span>
         </h1>
 <!--         <ol ng-if="breadcrumb" class="breadcrumb">
             <li ng-repeat="bc in breadcrumb" ng-class="{active:$last}">
