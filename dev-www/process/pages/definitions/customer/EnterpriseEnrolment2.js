@@ -2803,7 +2803,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.enterpriseBureauDetails[].bureau",
                                 title:"BUREAU",
                                 type:"select",
-                                required:"true",
+                                required:true,
                                 titleMap: {
                                       "CIBIL": "CIBIL",
                                       "Highmark": "Highmark"
