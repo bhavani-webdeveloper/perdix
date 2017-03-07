@@ -9,7 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;
 				model.branchId = SessionStore.getCurrentBranch().branchId;
-				$log.info("search-list sample got initialized");
+				$log.info("search-list sample got initialized"); 
 			},
 			definition: {
 				title: "SEARCH_LOAN",
@@ -145,6 +145,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
+						},{
+							title: 'Loan Amount',
+							data: 'loanAmount'
 						}, {
 							title: 'AREA',
 							data: 'area'

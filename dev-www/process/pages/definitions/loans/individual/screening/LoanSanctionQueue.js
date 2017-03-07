@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "SANCTION_QUEUE",
+			"title": "SANCTION_QUEUE", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
@@ -148,6 +148,10 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 						{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
+						},
+						{
+							title: 'Loan Amount',
+							data: 'loanAmount'
 						}, 
 						{
 							title: 'AREA',

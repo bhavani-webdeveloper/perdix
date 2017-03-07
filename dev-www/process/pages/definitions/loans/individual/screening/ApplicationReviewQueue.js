@@ -2,7 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
+		var centres = SessionStore.getCentres(); 
 		var centreId=[];
 	    if (centres && centres.length) {
 		    for (var i = 0; i < centres.length; i++) {
@@ -143,6 +143,9 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 						},{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
+						},{
+							title: 'Loan Amount',
+							data: 'loanAmount'
 						}, {
 							title: 'AREA',
 							data: 'area'

@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "CREDIT_COMMITTEE_REVIEW",
+			"title": "CREDIT_COMMITTEE_REVIEW", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				
@@ -159,6 +159,10 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CreditCommitteeR
 						{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
+						},
+						{
+							title: 'Loan Amount',
+							data: 'loanAmount'
 						}, 
 						{
 							title: 'AREA',

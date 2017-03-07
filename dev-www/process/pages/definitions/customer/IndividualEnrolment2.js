@@ -1396,7 +1396,29 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "type": "box",
                             "title": "FAMILY_SELF_DETAILS",
                             "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                            "items": [{
+                            "items": [
+                            {
+                                    "key": "customer.familyMembers",
+                                    "condition":"customer.familyMembers.relationShip=='SELF'",
+                                    "type": "array",
+                                    "add": null,
+                                    "remove": null,
+                                    "startEmpty": true,
+                                    "view":"fixed",
+                                    "items": [
+                                        {
+                                            "key": "customer.familyMembers[].relationShip",
+                                            "type": "select",
+                                            "readonly": true
+                                        },
+                                        {
+                                            "key": "customer.familyMembers[].educationStatus",
+                                            "title": "EDUCATION_LEVEL",
+                                            "type": "select"
+                                        }
+                                    ]
+                            },
+                            {
                                 key:"customer.familyMembers",
                                 type:"array",
                                 startEmpty: true,
