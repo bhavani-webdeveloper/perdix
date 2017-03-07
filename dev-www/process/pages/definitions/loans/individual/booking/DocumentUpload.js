@@ -281,11 +281,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             "key": "loanAccount.loanDocuments",
                             "add": null,
                             "remove": null,
-                            "items": [{
+                            "items": [
+                            {
                                 "type": "section",
                                 "htmlClass": "row",
-                                "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
-                                "items": [{
+                                //"condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
+                                "items": [
+                                {
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
                                     "items": [{
@@ -302,12 +304,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                         }
                                     },{
                                         "key": "loanAccount.loanDocuments[].$title",
+
                                         "notitle": true,
                                         "title": " ",
                                         "condition": "!model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
                                         "readonly": true
                                     }]
-                                }, {
+                                }, 
+
+                                {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
                                     "key": "loanAccount.loanDocuments[].documentStatus",
@@ -363,6 +368,23 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'"
                                 }, {
                                     "type": "section",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        title: "Upload",
+                                        key: "loanAccount.loanDocuments[].documentId",
+                                        "required": true,
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        category: "Loan",
+                                        subCategory: "DOC1",
+                                        "notitle": true,
+                                        using: "scanner"
+                                    }]
+                                },{
+                                    "type": "section",
+                                     "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus == 'APPROVED'",
+                                     readonly:true,
                                     "htmlClass": "col-sm-3",
                                     "items": [{
                                         title: "Upload",
