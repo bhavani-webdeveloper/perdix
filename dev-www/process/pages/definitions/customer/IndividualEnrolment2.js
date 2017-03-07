@@ -1397,9 +1397,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "title": "FAMILY_SELF_DETAILS",
                             "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [
-                            {
+                            /*{
                                     "key": "customer.familyMembers",
-                                    "condition":"customer.familyMembers.relationShip=='SELF'",
+                                    "condition":"customer.familyMembers[arrayIndex].relationShip =='Self'",
                                     "type": "array",
                                     "add": null,
                                     "remove": null,
@@ -1417,7 +1417,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "type": "select"
                                         }
                                     ]
-                            },
+                            },*/
                             {
                                 key:"customer.familyMembers",
                                 type:"array",
@@ -1425,7 +1425,43 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 items: [
                                     {
                                         key:"customer.familyMembers[].relationShip",
+                                        readonly:true,
+                                        condition:"model.customer.familyMembers[arrayIndex].relationShip =='Self'",
                                         type:"select",
+                                        onChange: function(modelValue, form, model, formCtrl, event) {
+                                            if (modelValue && modelValue.toLowerCase() === 'self') {
+                                                if (model.customer.id)
+                                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                                if (model.customer.firstName)
+                                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                                if (model.customer.gender)
+                                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                                if (model.customer.dateOfBirth)
+                                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                                if (model.customer.maritalStatus)
+                                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                                if (model.customer.mobilePhone)
+                                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                                if (model.customer.spouseFirstName)
+                                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                                if (model.customer.gender)
+                                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                                            (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                                if (model.customer.spouseDateOfBirth)
+                                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                                if (model.customer.maritalStatus)
+                                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                            }
+                                        },
+                                        title: "T_RELATIONSHIP"
+                                    },
+                                    {
+                                        key:"customer.familyMembers[].relationShip",
+                                        type:"select",
+                                        condition:"model.customer.familyMembers[arrayIndex].relationShip !=='Self'",
                                         onChange: function(modelValue, form, model, formCtrl, event) {
                                             if (modelValue && modelValue.toLowerCase() === 'self') {
                                                 if (model.customer.id)
