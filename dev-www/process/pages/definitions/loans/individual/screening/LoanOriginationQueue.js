@@ -1,7 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQueue"), ["$log", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils",
 	function($log, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
 
-		var branch = SessionStore.getBranch();
 
 		return {
 			"type": "search-list",
@@ -9,7 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 			"subTitle": "",
 
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				
 			},
 
 			definition: {
@@ -27,6 +26,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
+								"screenFilter": true
+							}
+						},
+						"branch": {
+	                    	"title": "BRANCH",
+	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
+							"x-schema-form": {
+								"type": "select",
+								"screenFilter": true
+							}
+	                    },
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
 								"screenFilter": true
 							}
 						},
@@ -71,21 +89,11 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 				},
 
 				getResultsPromise: function(searchOptions, pageOpts) {
-					var branch = SessionStore.getCurrentBranch();
-		            var centres = SessionStore.getCentres();
-		            var centreId=[];
-				    if (centres && centres.length) {
-					    for (var i = 0; i < centres.length; i++) {
-						    centreId.push(centres[i].centreId);
-					    }
-				    }
-					if (_.hasIn(searchOptions, 'centreCode')){
-	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
-	                }
+
 					return IndividualLoan.search({
 	                    'stage': searchOptions.stage,
-	                    'centreCode':centreId[0],
-	                    'branchName':branch.branchName,
+	                    'branchName': searchOptions.branch,
+	                    'centreCode': searchOptions.centre,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -134,7 +142,15 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						};
 					},
 					getColumns: function() {
-						return [{
+						return [
+						{
+							title: 'HUB_NAME',
+							data: 'branchName'
+						},
+						{
+							title: 'SPOKE_NAME',
+							data: 'centreName'
+						},{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
@@ -149,7 +165,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						}, {
 							title: 'CITY_TOWN_VILLAGE',
 							data: 'villageName'
-						},{
+						},	{
 							title: 'CURRENT_STAGE',
 							data: 'stage'
 						}]
