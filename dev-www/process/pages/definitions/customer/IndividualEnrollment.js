@@ -7,7 +7,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
 
     return {
         "type": "schema-form",
-        "title": "INDIVIDUAL_ENROLLMENT",
+        "title": "INDIVIDUAL_ENROLLMENT", 
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             model.customer = model.customer || {};

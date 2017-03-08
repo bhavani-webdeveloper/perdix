@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrollment"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch){
 
-    var branch = SessionStore.getBranch();
+    var branch = SessionStore.getBranch(); 
 
     return {
         "type": "schema-form",

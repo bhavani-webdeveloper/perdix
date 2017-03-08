@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
 
-    var branch = SessionStore.getBranch();   
+    var branch = SessionStore.getBranch();    
 
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
@@ -33,6 +33,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
+
+                        if (model.customer.stockMaterialManagement) {
+                        model.proxyIndicatorsHasValue = true;
+                        $log.debug('PROXY_INDICATORS already has value');
+                        }
+                        
                         bundleModel.business = model.customer;
 
                         if(model.customer.enterpriseCustomerRelations)
