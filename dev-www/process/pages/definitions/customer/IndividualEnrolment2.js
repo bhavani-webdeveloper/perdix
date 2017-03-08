@@ -2531,7 +2531,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 }
                             ]
                         },
-                        {
+                        /*{
                             type: "box",
                             title: "PROXY_INDICATORS",
                             condition: "model._bundlePageObj.pageClass=='applicant' && model.currentStage=='FieldAppraisal' && !model.proxyIndicatorsHasValue",
@@ -2851,7 +2851,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 
                             ]
                         },
-                        
+                        */
 
                         {
                             "type": "actionbox",
