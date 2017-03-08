@@ -240,94 +240,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
             initialize: function (model, form, formCtrl) {
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
-                var init = function(model, form, formCtrl) {
-                    model.loanAccount = model.loanAccount || {branchId :branchId};
-                    model.additional = model.additional || {};
-                    model.additional.branchName = branchName;
-                    model.loanAccount.bankId = bankId;
-                    model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
-                    model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
-                    model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
 
-                    model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
-                    model.loanAccount.coBorrowers = [];
-                    model.loanAccount.guarantors = [];
-                    //model.loanAccount.guarantors = [];
-                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
-                        if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' || 
-                            model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
-                            model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
-                        }
-                        else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' || 
-                            model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            model.loanAccount.coBorrowers.push({
-                                coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
-                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
-                            });
-                        }
-                        else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' || 
-                                model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                            model.loanAccount.guarantors.push({
-                                guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
-                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
-                            });
-                        }
-                    }
-                    /*for (var i in model.loanAccount.loanCustomerRelations) {
-                        var lcR = model.loanAccount.loanCustomerRelations[i];
-                        if (lcR.relation === 'Co-Applicant') {
-                            lcR.coBorrowerUrnNo = lcR.urn;
-                            model.loanAccount.coBorrowers.push(lcR);
-                        } else if (lcR.relation === 'Guarantor' && model.loanAccount.guarantors.length == 0) {
-                            lcR.guaUrnNo = lcR.urn;
-                            delete lcR.id;
-                            model.loanAccount.guarantors.push(lcR);
-                        }
-                    }*/
-                    /*
-{
-    customerId: null,
-    id: 9914,
-    loanId: 6140,
-    relation: 'Applicant',
-    relationShipWithApplicant: null,
-    urn: null,
-    version: 0
-}
-                    */
-
-                    model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
-                    if (model.loanAccount.nominees.length == 0)
-                        model.loanAccount.nominees = [{nomineeFirstName:"",nomineeDoorNo:""}];
-                    if(model.loanAccount.nominees){
-                        model.loanAccount.nominees[0].nomineeFirstName = model.loanAccount.nominees[0].nomineeFirstName || '';
-                        model.loanAccount.nominees[0].nomineeDoorNo = model.loanAccount.nominees[0].nomineeDoorNo || '';
-                        model.loanAccount.nominees[0].nomineeLocality = model.loanAccount.nominees[0].nomineeLocality || '';
-                        model.loanAccount.nominees[0].nomineeStreet = model.loanAccount.nominees[0].nomineeStreet || '';
-                        model.loanAccount.nominees[0].nomineePincode = model.loanAccount.nominees[0].nomineePincode || '';
-                        model.loanAccount.nominees[0].nomineeDistrict = model.loanAccount.nominees[0].nomineeDistrict || '';
-                        model.loanAccount.nominees[0].nomineeState = model.loanAccount.nominees[0].nomineeState || '';
-                        model.loanAccount.nominees[0].nomineeRelationship = model.loanAccount.nominees[0].nomineeRelationship || '';
-                    }
-                    model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
-                    // model.loanAccount.commercialCibilCharge = 750; //Hard coded. This value to be changed to pickup from global_settings table
-                    model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
-                    model.loanAccount.isRestructure = false;
-                    getSanctionedAmount(model);
-                    $log.info(model);
-
-                    // model.additional.minAmountForSecurityEMI = 0;
-                    // Queries.getGlobalSettings("loan.individual.booking.minAmountForSecurityEMI").then(function(value){
-                    //     model.additional.minAmountForSecurityEMI = Number(value);
-                    //     $log.info("minAmountForSecurityEMI:" + model.additional.minAmountForSecurityEMI);
-                    // },function(err){
-                    //     $log.info("Max Security EMI is not available");
-                    // });
-                    if(model.loanAccount.productCode)
-                        getProductDetails(model.loanAccount.productCode,model);
-
-                    LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
-                };
                 // code for existing loan
                 $log.info("Loan Number:::" + $stateParams.pageId);
                 if ($stateParams.pageId) {
@@ -338,8 +251,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue', pageId: null});
                             return;
                         }
-                        $log.info("resp");
+                        
                         model.loanAccount = resp;
+
+                        $log.info(model.loanAccount);
                         model.currentStage = resp.currentStage;
 
                         model.additional = model.additional || {};
@@ -356,7 +271,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
 
-                        init(model, form, formCtrl); // init call
+                        //init(model, form, formCtrl); // init call
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
                     }).finally(function(){
@@ -377,14 +292,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
             },
             form: [{
                 "type": "box",
-                "readonly":true,
+                // "readonly":true,
                 "title": "LOAN_INPUT",
                 "colClass": "col-sm-6",
-                
 
                 "items":[
                     {
+                            "type": "fieldset",
+                            "title": "View Loan Details",
+                            "condition":"model.loanAccount.id",
+                            "items": [{
+                                key: "loanAccount.ViewLoan1",
+                                type: "button",
+                                title: "View Loan",
+                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
+                            }]
+                    },
+                    {
                     "type":"fieldset",
+                    "readonly":true,
                     "title":"BRANCH_DETAILS",
                     "items":[
                         /*{
@@ -411,6 +337,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type": "fieldset",
+                        "readonly":true,
                         "title": "PRODUCT_DETAILS",
                         "items": [
                             {
@@ -443,6 +370,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type": "fieldset",
+                        "readonly":true,
                         "title": "ENTITY_DETAILS",
                         "items": [
                             {
@@ -600,6 +528,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             },
                             {
                                 "type": "fieldset",
+                                "readonly":true,
                                 "title": "COAPPLICANTS",
                                 "items": [
                                     {
@@ -671,6 +600,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type": "fieldset",
+                        "readonly":true,
                         "title": "LOAN_DETAILS",
                         "items": [
                             {
@@ -935,6 +865,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type":"fieldset",
+                        "readonly":true,
                         "title":"INSURANCE_POLICY",
                         "items":[
                             {
@@ -987,6 +918,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type":"fieldset",
+                        "readonly":true,
                         "title":"NOMINEE_DETAILS",
                         "items":[
                             {
@@ -1085,6 +1017,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         "type": "fieldset",
+                        "readonly":true,
                         "title": "DISBURSEMENT_DETAILS",
                         "items": [
                             {
@@ -1214,14 +1147,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                         condition: "model.currentStage == 'IfmrDO'",
                         type: "radios",
                         titleMap: {
-                            "REJECT": "REJECT",
-                            "APPROVED": "APPROVED",
+                            "DECLINE": "DECLINE",
+                            "ACCEPT": "ACCEPT",
                             "HOLD": "HOLD"
                         }
                     },
                     {
                         type: "section",
-                        condition: "model.loanAccount.partnerApprovalStatus=='REJECT'",
+                        condition: "model.loanAccount.partnerApprovalStatus=='DECLINE'",
                         items: [
                             {
                                 title: "REMARKS",
@@ -1289,7 +1222,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     },
                     {
                         type: "section",
-                        condition: "model.loanAccount.partnerApprovalStatus=='APPROVED'",
+                        condition: "model.loanAccount.partnerApprovalStatus=='ACCEPT'",
                         items: [
                             {
                                 title: "REMARKS",
@@ -1350,7 +1283,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                         return;
                     }*/
                     Utils.confirm("Are You Sure?").then(function(){
-                        populateLoanCustomerRelations(model);
+
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
@@ -1376,9 +1309,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                 },
                 viewLoan: function(model, formCtrl, form, $event){
                     $log.info("Inside ViewLoan()");
-                    /*if (!validateForm(formCtrl)){
-                        return;
-                    }*/
                     $state.go("Page.Bundle", {
                     pageName: "loans.individual.screening.LoanView",
                     pageId: model.loanAccount.id
@@ -1389,7 +1319,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
-                                populateLoanCustomerRelations(model);
                                 var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                                 reqData.loanAccount.status = 'HOLD';
                                 reqData.loanProcessAction = "SAVE";
@@ -1412,8 +1341,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    
-                    populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
@@ -1480,127 +1407,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             }
                         );
                 },
+                viewLoan: function(model, formCtrl, form, $event){
+                    Utils.confirm("Save the data before proceed").then(function(){
+                    $log.info("Inside ViewLoan()");
+                    $state.go("Page.Bundle", {
+                    pageName: "loans.individual.screening.LoanView",
+                    pageId: model.loanAccount.id
+                    });   
+                    })
+                },
                 proceed: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
-
-                    /*if (!validateForm(form)){
-                        return;
-                    }*/
-
-                    model.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted || "N";
-
-                    if (model.additional.product && !_.isNull(model.additional.product.numberOfGuarantors) && model.additional.product.numberOfGuarantors>0 ){
-                        if (!_.isArray(model.loanAccount.guarantors) || model.loanAccount.guarantors.length == 0){
-                            PageHelper.showProgress('loan-product-guarantor-required', 'Guarantor is mandatory for the selected product', 5000);
-                            return;    
-                        }
-                    }
-
-                    model.loanAccount.loanPurpose3 = model.loanAccount.loanPurpose2;
-                    if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length && model.loanAccount.applicant === model.loanAccount.coBorrowers[0].coBorrowerUrnNo) {
-                        PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
-                        return false;
-                    }
-
-                    if (model.loanAccount.guarantors && model.loanAccount.guarantors.length > 0){
-                        for (i=0;i<model.loanAccount.guarantors.length;i++){
-                            if(!model.loanAccount.guarantors[i].guaUrnNo){
-                                PageHelper.showProgress("loan-create","Guarantor Urn is not selected",5000);
-                                return false;
-                            }
-                            if (model.loanAccount.applicant === model.loanAccount.guarantors[i].guaUrnNo) {
-                                PageHelper.showProgress("loan-create","Applicant & Guarantor cannot be same",5000);
-                                return false;
-                            }
-                            if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length && model.loanAccount.coBorrowers[0].coBorrowerUrnNo === model.loanAccount.guarantors[i].guaUrnNo) {
-                                PageHelper.showProgress("loan-create","Co-Applicant & Guarantor cannot be same",5000);
-                                return false;
-                            }
-                        }
-                    }
-
-                    /*if (model.additional.product && model.additional.product.productType != 'OD' && model.additional.minAmountForSecurityEMI > 0){
-                        //if (model.additional.minAmountForSecurityEMI>model.loanAccount.loanAmount && model.loanAccount.securityEmiRequired == 'Yes'){
-                        //    PageHelper.showProgress("loan-create","Securty EMI is required for loan amount greater than " + model.additional.minAmountForSecurityEMI,5000);
-                        //    return false;
-                        //}
-                        if (model.loanAccount.securityEmiRequired && model.loanAccount.loanAmount>=model.additional.minAmountForSecurityEMI && model.loanAccount.securityEmiRequired == 'No'){
-                            PageHelper.showProgress("loan-create","Securty EMI is mandatory",5000);
-                            return false;
-                        }
-                    }
-                    else
-                        model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';*/
-                    model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
-
-                    var trancheTotalAmount=0;
-                    model.loanAccount.loanAmount = model.loanAccount.loanAmountRequested;
-                    if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
-                        model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;
-                        model.loanAccount.disbursementSchedules[0].ifscCode = model.loanAccount.customerBankIfscCode;
-                        model.loanAccount.disbursementSchedules[0].customerBankName = model.loanAccount.customerBank;
-                        model.loanAccount.disbursementSchedules[0].customerBankBranchName = model.loanAccount.customerBranch;
-                        model.loanAccount.disbursementSchedules[0].party = 'CUSTOMER';
-                        model.loanAccount.disbursementSchedules[0].customerNameInBank = model.loanAccount.customerNameAsInBank;
-                        for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
-                            model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
-                            trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
-                        }
-                    }
-                    if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount){
-                        PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
-                        return false;
-                    }
-                    if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount < model.loanAccount.loanAmount){
-                        PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
-                        return false;
-                    }
-                    if (model.additional.product && model.additional.product.productType == 'OD' && model.loanAccount.numberOfDisbursements > 1){
-                        PageHelper.showProgress("loan-create","For LOC type product, number of disbursement cannot be more than one during loan booking",5000);
-                        return false;
-                    }
-
-                    //Product specific validations
-                    if(model.additional.product){
-                        if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
-                                PageHelper.showProgress("loan-create","Collateral details are mandatory",5000);
-                                return false;
-                        }
-                        if (!_.isNaN(model.additional.product.amountFrom) && model.additional.product.amountFrom > 0){
-                            if (model.loanAccount.loanAmountRequested < model.additional.product.amountFrom){
-                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
-                                return false;
-                            }
-                            if (model.loanAccount.loanAmountRequested > model.additional.product.amountTo){
-                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]",5000);
-                                return false;
-                            }
-                        }
-                        if (!_.isNaN(model.additional.product.tenureFrom) && model.additional.product.tenureFrom > 0){
-                            if (model.loanAccount.tenure < model.additional.product.tenureFrom){
-                                PageHelper.showProgress("loan-create","Loan Tenure requested should be in the range [" + model.additional.product.tenureFrom + " - " + model.additional.product.tenureTo + "]",5000);
-                                return false;
-                            }
-                            if (model.loanAccount.tenure > model.additional.product.tenureTo){
-                                PageHelper.showProgress("loan-create","Loan Tenure requested should be in the range [" + model.additional.product.tenureFrom + " - " + model.additional.product.tenureTo + "]",5000);
-                                return false;
-                            }
-                        }
-                        if (!_.isNaN(model.additional.product.minInterestRate) && model.additional.product.minInterestRate > 0){
-                            if (model.loanAccount.interestRate < model.additional.product.minInterestRate){
-                                PageHelper.showProgress("loan-create","Interest Rate should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
-                                return false;
-                            }
-                            if (model.loanAccount.interestRate > model.additional.product.maxInterestRate){
-                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
-                                return false;
-                            }
-                        }
-                    }
-
-                    // BUG FIX DO-customer id going null
-                    populateLoanCustomerRelations(model);
 
                     if(model.loanAccount.portfolioInsuranceUrn != ''){
                         model.loanAccount.portfolioInsurancePremiumCalculated = "Yes";

@@ -1534,33 +1534,34 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
-
-                    /* TODO Call save service for the loan */
-
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
                                 populateLoanCustomerRelations(model);
+
                                 var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                                 if(!$stateParams.pageId)
+                                {
+                                    $log.info("hi i am in the if and else no bad");
+                                    reqData.loanAccount.currentStage ='LoanInitiation';
+                                    reqData.loanAccount.loanAmountRequested =reqData.loanAccount.loanAmount;
+                                    $log.info(reqData.loanAccount.currentStage);
+                                }
                                 reqData.loanAccount.status = '';
                                 reqData.loanProcessAction = "SAVE";
                                 //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                                 // reqData.remarks = model.review.remarks;
                                 reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
                                 reqData.loanAccount.psychometricCompleted = reqData.loanAccount.psychometricCompleted || "N";
-                                
-                                
-                                
+
                                 PageHelper.showLoader();
 
                                 var completeLead = false;
+
                                 if (!_.hasIn(reqData.loanAccount, "id")){
                                     completeLead = true;
                                 }
-                                if(!$stateParams.pageId)
-                                {
-                                    reqData.stage='LoanInitiation';
-                                }
+                                
                                 IndividualLoan.create(reqData)
                                     .$promise
                                     .then(function(res){

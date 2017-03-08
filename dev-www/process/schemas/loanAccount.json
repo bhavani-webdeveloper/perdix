@@ -69,6 +69,12 @@
                     "minimum":0,
                     "maximum":100
                 },
+                "proposedHires":{
+                    "type":"string",
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "title":"PROPOSED_HIRES"
+                },
                 "accountUserDefinedFields": {
                     "type": "object",
                     "properties": {

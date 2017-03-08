@@ -44,7 +44,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
-                ifmeMenu.data = Number(response.headers['x-total-count']);
+                ifmrMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 ifmrMenu.data = '-';
             });

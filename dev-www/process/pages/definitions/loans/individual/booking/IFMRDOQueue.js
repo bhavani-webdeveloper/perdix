@@ -111,7 +111,22 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						isApplicable: function(item, index){
 							return true;
 						}
-					}];
+					},
+					{
+							name: "VIEW LOAN",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								$state.go("Page.Bundle", {
+									pageName: "loans.individual.screening.LoanView",
+									pageId: item.loanId
+								});
+							},
+							isApplicable: function(item, index) {
+
+								return true;
+							}
+						}];
 				}
 			}
 		}

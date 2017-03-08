@@ -1397,27 +1397,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "title": "FAMILY_SELF_DETAILS",
                             "condition": "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [
-                            /*{
-                                    "key": "customer.familyMembers",
-                                    "condition":"customer.familyMembers[arrayIndex].relationShip =='Self'",
-                                    "type": "array",
-                                    "add": null,
-                                    "remove": null,
-                                    "startEmpty": true,
-                                    "view":"fixed",
-                                    "items": [
-                                        {
-                                            "key": "customer.familyMembers[].relationShip",
-                                            "type": "select",
-                                            "readonly": true
-                                        },
-                                        {
-                                            "key": "customer.familyMembers[].educationStatus",
-                                            "title": "EDUCATION_LEVEL",
-                                            "type": "select"
-                                        }
-                                    ]
-                            },*/
                             {
                                 key:"customer.familyMembers",
                                 type:"array",
@@ -1426,7 +1405,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     {
                                         key:"customer.familyMembers[].relationShip",
                                         readonly:true,
-                                        condition:"model.customer.familyMembers[arrayIndex].relationShip =='Self'",
+                                        condition:"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
                                         type:"select",
                                         onChange: function(modelValue, form, model, formCtrl, event) {
                                             if (modelValue && modelValue.toLowerCase() === 'self') {
@@ -1461,7 +1440,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     {
                                         key:"customer.familyMembers[].relationShip",
                                         type:"select",
-                                        condition:"model.customer.familyMembers[arrayIndex].relationShip !=='Self'",
+                                        condition:"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='Self'",
                                         onChange: function(modelValue, form, model, formCtrl, event) {
                                             if (modelValue && modelValue.toLowerCase() === 'self') {
                                                 if (model.customer.id)

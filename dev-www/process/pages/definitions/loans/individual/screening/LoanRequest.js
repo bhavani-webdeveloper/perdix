@@ -2551,6 +2551,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                     PageHelper.showProgress("update-loan", "Remarks is mandatory");
                     return false;
                 }
+                if (model.loanAccount.rejectReason==null || model.loanAccount.rejectReason ==""){
+                    PageHelper.showProgress("update-loan", "Reject Reason is mandatory");
+                    return false;
+                }
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
