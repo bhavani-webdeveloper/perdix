@@ -2383,7 +2383,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         pageName: 'loans.individual.booking.DocumentVerification',
                         pageId: model.loanAccount.id
                     });
-                }         
+                }
+                if(model.loanAccount.currentStage =="IfmrDO")
+                {
+                    $state.go("Page.Engine", {
+                        pageName: 'loans.individual.booking.IFMRDO',
+                        pageId: model.loanAccount.id
+                    });
+                } 
+                if(model.loanAccount.currentStage =="DocumentUpload")
+                {
+                    $state.go("Page.Engine", {
+                        pageName: 'loans.individual.booking.DocumentUpload',
+                        pageId: model.loanAccount.id
+                    });
+                }          
             },
             proceed: function(model, formCtrl, form, $event){
                 $log.info("Inside submit()");
