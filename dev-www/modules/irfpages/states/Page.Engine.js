@@ -3,200 +3,61 @@ irf.pages.controller("PageEngineCtrl",
 function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout) {
 	var self = this;
 
-	var allCards = true;
-	var showAllCards = function() {
-		var h = window.innerHeight;
-		$('.content-wrapper').css({'height':h+'px', 'overflow':'auto'});
+	$scope.boxHeads = [];
 
-		/*** close any opened cards ***/
-		var opened = $('.page-row>.page-form .box-col.opened');
-		// opened.css('top', opened.attr('boxtop'));
-		// opened.css({'position':'absolute', 'top':opened.attr('boxtop')});
-		opened.find('.box-body').collapse("hide");
-		opened.find('.box-header').css('height', '60px');
-		opened.addClass('closed').removeClass('opened');
-
-		/*** arrange closed cards ***/
-		var closed = $('.page-row>.page-form .box-col.closed');
-		var closedTop = 0;
-		closed.each(function(){
-			var t = $(this);
-			t.css({'position': 'absolute', 'top': closedTop + 'px', 'z-index':''});
-			closedTop += 60;
-			t.removeClass('minimized');
-		});
-		// closed.show();
-		var bcs = $('#bottom-card-selector');
-		bcs.find('span.title').html('');
-		bcs.hide();
-
-		closedTop += 20;
-		var actioncols = $('.page-row>.page-form .action-box-col');
-		actioncols.each(function(){
-			$(this).css({'position':'absolute', 'top': closedTop + 'px', 'margin-bottom':'30px'});
-			closedTop += 60;
-		});
-		// $('.page-row>.page-form .action-box-col').css({'position': 'absolute', 'top': (closedTop+20) + 'px'});
-		allCards = closed.length * 60 + actioncols.length * 80 + 50;
-	};
-
-	var openOneCard = function(box) {
-		$('.content-wrapper').css({'height':'', 'overflow':''});
-
-		box.css({'position':'static', 'top':'0'});
-		box.find('.box-header').css('height', 'auto');
-		box.find('.box-body').collapse("show");
-		box.addClass('opened').removeClass('closed');
-		var closed = $('.page-row>.page-form .box-col.closed');
-		var closedTitles = [];
-		if (closed.length) {
-			var bottom = -33, cl = closed.length;
-			var bottomdy = 10/(cl-1?cl-1:cl);
-			closed.each(function(){
-				var t = $(this);
-				t.css({'position': 'fixed', 'top':'', 'bottom':bottom+'px', 'z-index':'50'});
-				t.addClass('minimized');
-				// closedTitles.push(t.find('h3.box-title').text());
-				bottom -= bottomdy;
-			});
-			closedTitles = closedTitles.join(', ');
-			var bcs = $('#bottom-card-selector');
-			bcs.find('span.title').html(closedTitles);
-			bcs.show();
-		}
-		// closed.hide();
-
-		$('.page-row>.page-form .action-box-col').css('position', 'static');
-		allCards = false;
-	};
-
-	var showBoxLayout = function() {
-		var boxcols = $('.page-row>.page-form .box-col');
-		console.log('>> on showBoxLayout:' + boxcols.length);
-		if (!boxcols || boxcols.length < 2) {
-			console.log('>> returning');
-			allCards = false;
-			return false;
-		}
-		var actionboxcols = $('.page-row>.page-form .action-box-col');
-		// boxcols.find('.btn-box-tool').attr('data-widget', '').hide();
-		boxcols.addClass('closed');
-		boxcols.find('.box-body').collapse("hide");
-		boxcols.find('.box-header').css('height', '60px').removeAttr('data-toggle');
-		/*var top = 0;
-		boxcols.each(function(item){
-			$(this).css({'position':'absolute', 'top': top + 'px'});
-			// $(this).attr('boxtop', top + 'px');
-			top += 60;
-		});
-		top += 20;
-		actionboxcols.each(function(item){
-			$(this).css({'position':'absolute', 'top': top + 'px', 'margin-bottom':'30px'});
-			top += 60;
-		});*/
-
-		showAllCards();
-
-		$('section.content').css('min-height', (top+20)+'px');
-
-		if (!$('#bottom-card-selector').length) {
-			$('<div id="bottom-card-selector"><span class="title"></span></div>').appendTo('.page-row>.page-form');
-		}
-
-		boxcols.find('.box-header').off('click').on('click', function(event){
+	$scope.openHead = function(head, $event) {
+		$event.preventDefault();
+		$scope.showHeads = false;
+		$(head.box).show().find('.box-header').css('cursor', 'pointer').one('click', function(event) {
 			event.preventDefault();
 			event.stopPropagation();
-			var tt = $(this);
-			var pp = tt.parent().parent();
-			if (pp.is('.closed:not(.minimized)')) {
-				openOneCard(pp);
-			} else if (pp.is('.opened')) {
-				showAllCards();
-			}
-		});
-		$('#bottom-card-selector').off('click').on('click', showAllCards);
-		return true;
+			$(this).css('cursor', 'initial').find('h3 > .goback-icon').remove();
+			$timeout(showHeads);
+		}).find('h3').prepend('<i class="goback-icon fa fa-arrow-left color-theme">&nbsp;</i>');
+		forceShowHeads = true;
 	};
 
-	var removeBoxLayout = function() {
-		console.log('on removeBoxLayout');
-		var boxcols = $('.page-row>.page-form .box-col');
-		var actionboxcols = $('.page-row>.page-form .action-box-col');
-		boxcols.removeClass('opened closed minimized').css({'position':'static', 'top':'', 'bottom':'', 'z-index':''});
-		boxcols.find('.box-body:not(.in)').collapse("show");
-		boxcols.find('.box-header').attr('data-toggle', 'collapse').css('height', 'auto').off('click');
-		boxcols.show();
-
-		actionboxcols.css({'position':'static', 'top':'0', 'margin-bottom':'0'});
-
-		$('#bottom-card-selector').remove();
-		$('section.content').css('min-height', '250px');
-
-		$timeout(function(){$scope.collapsedView = false;});
-	};
-
-	var isBoxLayout = false;
-	var isBoxLayoutShown = false;
-	var renderBoxLayout = function() {
+	var forceShowHeads = true;
+	var showHeads = function() {
 		var w = window.innerWidth;
 		if (w <= 768) {
-			if (allCards) {
-				var h = window.innerHeight;
-				$('.content-wrapper').css({'height':h+'px', 'overflow':'auto'});
-			}
-			if (!isBoxLayout) {
-				isBoxLayoutShown = showBoxLayout();
-				if (!isBoxLayoutShown) {
-					allCards = false;
-					$('.content-wrapper').css({'height':'', 'overflow':''});
-				}
-				isBoxLayout = true;
+			if (forceShowHeads || !$scope.showHeads) {
+				$scope.boxHeads = [];
+
+				$log.info('selecting: form[name="'+$scope.formName+'"] .box-col');
+				$('form[name="'+$scope.formName+'"] .box-col').each(function(i) {
+					$(this).hide().find('.box-header > h3 > .goback-icon').remove();
+					$scope.boxHeads.push({
+						title: $(this).find('.box > .box-header > h3').html(),
+						error: $(this).find('.box').is('.box-danger'),
+						box: this
+					});
+				});
+				$scope.showHeads = true;
+				forceShowHeads = false;
 			}
 		} else {
-			$('.content-wrapper').css({'height':'', 'overflow':''});
-			if (isBoxLayout) {
-				removeBoxLayout();
-				isBoxLayout = false;
+			if (forceShowHeads || $scope.showHeads) {
+				$('form[name="'+$scope.formName+'"] .box-col').show().find('.box-header > h3 > .goback-icon').remove();
+				$scope.showHeads = false;
+				forceShowHeads = false;
 			}
 		}
-		$timeout(function(){$scope.showCollapsedViewButton = !isBoxLayout;});
 	};
-
-	$scope.showCollapsedViewButton = true;
-	$scope.collapsedView = false;
 
 	var renderLayout = function() {
-		renderBoxLayout();
-		$(window).resize(renderBoxLayout);
-		var rerender = function(){
-			/*if (isBoxLayout && isBoxLayoutShown) {
-				showAllCards();
-			}*/
-			removeBoxLayout();
-			isBoxLayout = false;
-			renderBoxLayout();
-		};
-		$scope.$on('box-init', rerender);
-		$scope.$on('box-destroy', function(){
-			setTimeout(function() {
-				rerender();
-			});
-		});
+		$timeout(showHeads);
 	};
 
-	$scope.$watch('collapsedView', function(n, o){
-		if (n) {
-			$('.page-row>.page-form .box-col').find('.box-body').collapse("hide");
-		} else {
-			$('.page-row>.page-form .box-col .box-body').collapse("show");
-		}
+	$scope.$on('box-init', function() {
+		forceShowHeads = true;
+		$timeout(showHeads);
 	});
 
-	$scope.expandCollapseView = function() {
-		if (!$scope.showCollapsedViewButton)
-			return;
-		$scope.collapsedView = !$scope.collapsedView;
-	};
+	$scope.$on('box-destroy', function() {
+		forceShowHeads = true;
+		$timeout(showHeads);
+	});
 
 	/* =================================================================================== */
 	$log.info("Page.Engine.html loaded");
@@ -234,7 +95,9 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			});
 			$scope.$on('sf-render-finished', function(event){
 				$log.warn("on sf-render-finished on page, rendering layout");
-				setTimeout(renderLayout);
+				//setTimeout(renderLayout);
+				renderLayout();
+				$(window).resize(renderLayout);
 			});
 		} else if ($scope.page.type == 'search-list') {
 			$scope.model = entityManager.getModel($scope.pageName);
