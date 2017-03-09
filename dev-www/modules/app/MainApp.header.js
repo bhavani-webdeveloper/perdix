@@ -85,7 +85,7 @@ function($scope, $log, $http, irfConfig, SessionStore, $translate, languages, $s
 		return b.branchCode == homebranchCode;
 	})
 
-	if (indexForHome == -1){
+	if (branches && indexForHome == -1){
 		branches.push(homeBranch);
 	}
 

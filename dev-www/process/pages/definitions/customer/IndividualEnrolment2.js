@@ -1440,7 +1440,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     {
                                         key:"customer.familyMembers[].relationShip",
                                         type:"select",
-                                        condition:"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='Self'",
+                                        condition:"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
                                         onChange: function(modelValue, form, model, formCtrl, event) {
                                             if (modelValue && modelValue.toLowerCase() === 'self') {
                                                 if (model.customer.id)

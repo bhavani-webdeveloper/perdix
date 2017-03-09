@@ -347,7 +347,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             "readonly": true
                                         },
                                         {
-                                            "key": "lead.area",
+                                            "key": "lead.district",
                                             "readonly": true
                                         },
                                         {
