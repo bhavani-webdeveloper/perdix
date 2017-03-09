@@ -84,13 +84,18 @@ gulp.task('androidManifestUpgrade', function(){
 
     return gulp.src(['./config.xml'])
         .pipe($.print())
-        .pipe($.cheerio(function($, file){
-            console.log("Updating version to " + version);
-            console.log("Updating bundleId to " + bundleId);
-            console.log("Updating name to " + appName);
-            $("widget").attr("version", version);
-            $("widget").attr("id", bundleId);
-            $("widget>name").text(appName);
+        .pipe($.cheerio({
+            run: function($, file){
+                console.log("Updating version to " + version);
+                console.log("Updating bundleId to " + bundleId);
+                console.log("Updating name to " + appName);
+                $("widget").attr("version", version);
+                $("widget").attr("id", bundleId);
+                $("widget>name").text(appName);
+            },
+            parserOptions: {
+                xmlMode: true
+            }
         }))
         .pipe(gulp.dest("./"));
 })

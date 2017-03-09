@@ -199,7 +199,7 @@ function($resource, SysQueries,$httpParamSerializer,BASE_URL, $q, $log){
     resource.getBankAccounts = function(){
         var deferred = $q.defer();
 		var request = {};
-		resource.getResult("bankAccounts.list", request, 10).then(function(records){
+		resource.getResult("bankAccounts.list", request, 50).then(function(records){
 			if (records && records.results) {
 				var result = {
 					headers: {

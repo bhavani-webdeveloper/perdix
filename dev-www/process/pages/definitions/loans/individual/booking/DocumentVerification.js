@@ -34,7 +34,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             if (documentObj != null) {
                                 loanDocuments[i].$title = documentObj.document_name;
                             } else {
-                                loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
+                                if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
+                                    loanDocuments[i].$title = loanDocuments[i].document;
+                                } else {
+                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
+                                }
                             }
                         }
                         PageHelper.hideLoader();
