@@ -37,10 +37,9 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 				forceShowHeads = false;
 			}
 		} else {
-			if (forceShowHeads || $scope.showHeads) {
+			if ($scope.showHeads) {
 				$('form[name="'+$scope.formName+'"] .box-col').show().find('.box-header > h3 > .goback-icon').remove();
 				$scope.showHeads = false;
-				forceShowHeads = false;
 			}
 		}
 	};
@@ -50,13 +49,17 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 	};
 
 	$scope.$on('box-init', function() {
-		forceShowHeads = true;
-		$timeout(showHeads);
+		if ($scope.showHeads) {
+			forceShowHeads = true;
+			$timeout(showHeads);
+		}
 	});
 
 	$scope.$on('box-destroy', function() {
-		forceShowHeads = true;
-		$timeout(showHeads);
+		if ($scope.showHeads) {
+			forceShowHeads = true;
+			$timeout(showHeads);
+		}
 	});
 
 	/* =================================================================================== */
