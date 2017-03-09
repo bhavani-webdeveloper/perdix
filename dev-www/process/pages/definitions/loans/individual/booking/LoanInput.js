@@ -1534,6 +1534,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
+                    if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
+                        model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
+                    }
+
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
@@ -1707,6 +1711,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if(model.loanAccount.currentStage == 'PendingForPartner' && model.loanAccount.productCode == null){
                         PageHelper.showProgress("loan-create","Product Code is mandatory",5000);
                         return false;
+                    }
+
+                    if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
+                        model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
 
                     var reqData = _.cloneDeep(model);
