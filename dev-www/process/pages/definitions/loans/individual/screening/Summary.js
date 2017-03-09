@@ -12,6 +12,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
 
+
         var managementScore = model.scoreDetails[0];
         if (_.isArray(managementScore.sections)) {
             var count = managementScore.sections.length;
@@ -236,7 +237,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             };
 
             if (key == "FRO Remarks"){
-                item.type = "textarea";    
+                item.type = "section";
+                item.htmlClass = "row";
+                item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
             }
             if (bsCounter++ % 2 ==0){
                 bsLeft.push(item)
