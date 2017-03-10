@@ -210,14 +210,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             '<col width="30%"> <col width="40%"> <col width="30%">'+
         '</colgroup>'+
         '<tbody>'+
-            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income}}</th> </tr>'+
-            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes}}</td> </tr>'+
-            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses}}</th> </tr>'+
-            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities}}</td> </tr>'+
-            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome}}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | currency : "" : 2 }}</th> </tr>'+
+            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | currency : "" : 2 }}</td> </tr>'+
+            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | currency : "" : 2 }}</td> </tr>'+
+            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | currency : "" : 2 }}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | currency : "" : 2 }}</th> </tr>'+
+            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | currency : "" : 2 }}</td> </tr>'+
+            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | currency : "" : 2 }}</td> </tr>'+
+            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | currency : "" : 2 }}</td> </tr>'+
         '</tbody>'+
     '</table>';
 
@@ -602,20 +602,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '</colgroup>'+
     '<tbody>'+
         '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
-        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice}}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue}}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome}}</td> <td>{{model.pl.business.scrapIncomePCT}}</td> </tr>'+
-        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome}}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases}}</td> <td>{{model.pl.business.purchasesPCT}}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome}}</th> <th></th> </tr>'+
-        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.pl.business.EBITDA}}</td> <td>{{model.pl.business.EBITDA_PCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | currency : "" : 2 }}</td> <td>{{model.pl.business.invoicePCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | currency : "" : 2 }}</td> <td>{{model.pl.business.cashRevenuePCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.scrapIncomePCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | currency : "" : 2 }}</td> <td>{{model.pl.business.purchasesPCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | currency : "" : 2 }}</th> <th></th> </tr>'+
+        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.pl.business.EBITDA | currency : "" : 2 }}</td> <td>{{model.pl.business.EBITDA_PCT | currency : "" : 2 }}</td> </tr>'+
         '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
-        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome}}</td> <td>{{model.pl.business.netBusinessIncomePCT}}</td> </tr>'+
-        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.kinaraEmi}}</td> <td>{{model.pl.business.kinaraEmiPCT}}</td> </tr>'+
-        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.pl.business.netIncome}}</td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi}}</td> <td>{{model.pl.business.finalKinaraEmiPCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.netBusinessIncomePCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.kinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.kinaraEmiPCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.pl.business.netIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.finalKinaraEmiPCT | currency : "" : 2 }}</td> </tr>'+
     '</tbody>'+
 '</table>'
                 }
@@ -642,18 +642,18 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '</thead>'+
     '<tbody>'+
         '<tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr>'+
-        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables}}</td></tr>'+
-        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts}}</td></tr>'+
-        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb}}</td></tr>'+
-        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities}}</td></tr>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt}}</td></tr>'+
-        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities}}</td></tr><tr></tr>'+
-        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities}}</th></tr>'+
+        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | currency : "" : 2 }}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables | currency : "" : 2 }}</td></tr>'+
+        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | currency : "" : 2 }}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts | currency : "" : 2 }}</td></tr>'+
+        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | currency : "" : 2 }}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | currency : "" : 2 }}</td></tr>'+
+        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | currency : "" : 2 }}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | currency : "" : 2 }}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | currency : "" : 2 }}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities | currency : "" : 2 }}</td></tr>'+
+        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | currency : "" : 2 }}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | currency : "" : 2 }}</td></tr>'+
+        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | currency : "" : 2 }}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | currency : "" : 2 }}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | currency : "" : 2 }}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | currency : "" : 2 }}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | currency : "" : 2 }}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | currency : "" : 2 }}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | currency : "" : 2 }}</td></tr><tr></tr>'+
+        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | currency : "" : 2 }}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | currency : "" : 2 }}</th></tr>'+
     '</tbody>'+
 '</table>'
                 }
