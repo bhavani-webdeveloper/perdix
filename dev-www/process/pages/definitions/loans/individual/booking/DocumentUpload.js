@@ -63,15 +63,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                         for (var i = 0; i < loanDocuments.length; i++) {
                                             availableDocCodes.push(loanDocuments[i].document);
                                             var documentObj = getDocument(docsForProduct, loanDocuments[i].document);
+                                            /* To add flag whether to show or not */
+                                            loanDocuments[i].isHidden = false;
+                                            if (loanDocuments[i].documentStatus == 'APPROVED'){
+                                                loanDocuments[i].isHidden = true;
+                                            }
+
                                             if (documentObj != null) {
                                                 loanDocuments[i].$title = documentObj.docTitle;
                                                 loanDocuments[i].$key = documentObj.formsKey;
                                                 loanDocuments[i].$formsKey = documentObj.formsKey;
                                                 loanDocuments[i].$downloadRequired = documentObj.downloadRequired;
                                             } else {
-                                                loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
+                                                if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
+                                                    loanDocuments[i].$title = loanDocuments[i].document;
+                                                } else {
+                                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
+                                                }
                                             }
-
                                         }
                                         for (var i = 0; i < docsForProduct.length; i++) {
                                             if (_.indexOf(availableDocCodes, docsForProduct[i].docCode) == -1) {
@@ -80,7 +89,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                     $downloadRequired: docsForProduct[i].downloadRequired,
                                                     $title: docsForProduct[i].docTitle,
                                                     $formsKey: docsForProduct[i].formsKey,
-                                                    disbursementId: model.loanAccount.disbursementSchedules[0].id
+                                                    disbursementId: model.loanAccount.disbursementSchedules[0].id,
+                                                    isHidden: false
                                                 })
                                             }
                                         }
@@ -285,7 +295,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             {
                                 "type": "section",
                                 "htmlClass": "row",
-                                //"condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'APPROVED'",
+                                "condition": "model.loanAccount.loanDocuments[arrayIndex].isHidden === false",
                                 "items": [
                                 {
                                     "type": "section",
