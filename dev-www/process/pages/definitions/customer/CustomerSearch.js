@@ -177,22 +177,6 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 							}
 						},
 						{
-							name: "Do House Verification",
-							desc: "",
-							icon: "fa fa-building",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"AssetsLiabilitiesAndHealth",
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
-									return true;
-								return false;
-							}
-						},
-						{
 							name: "CUSTOMER_360",
 							desc: "",
 							icon: "fa fa-user",

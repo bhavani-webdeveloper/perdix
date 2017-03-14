@@ -102,19 +102,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '<tbody>'+
         '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
         '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.businessPLs[arrayIndex].invoice}}</td> <td>{{model.businessPLs[arrayIndex].invoicePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.businessPLs[arrayIndex].cashRevenue}}</td> <td>{{model.businessPLs[arrayIndex].cashRevenuePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.businessPLs[arrayIndex].scrapIncome}}</td> <td>{{model.businessPLs[arrayIndex].scrapIncomePCT}}</td> </tr>'+
-        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].totalBusinessIncome}}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].purchases}}</td> <td>{{model.businessPLs[arrayIndex].purchasesPCT}}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.businessPLs[arrayIndex].grossIncome}}</th> <th></th> </tr>'+
-        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].Opex}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].EBITDA}}</td> <td>{{model.businessPLs[arrayIndex].EBITDA_PCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.businessPLs[arrayIndex].cashRevenue | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].cashRevenuePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.businessPLs[arrayIndex].scrapIncome | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].scrapIncomePCT}}</td> </tr>'+
+        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].totalBusinessIncome  | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].purchases | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].purchasesPCT}}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.businessPLs[arrayIndex].grossIncome | currency : "" : 2 }}</th> <th></th> </tr>'+
+        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].Opex | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].EBITDA | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].EBITDA_PCT}}</td> </tr>'+
         '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
-        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.businessPLs[arrayIndex].businessLiabilities}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].netBusinessIncome}}</td> <td>{{model.businessPLs[arrayIndex].netBusinessIncomePCT}}</td> </tr>'+
-        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].kinaraEmi}}</td> <td>{{model.businessPLs[arrayIndex].kinaraEmiPCT}}</td> </tr>'+
-        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.businessPLs[arrayIndex].netIncome}}</td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.businessPLs[arrayIndex].finalKinaraEmi}}</td> <td>{{model.businessPLs[arrayIndex].finalKinaraEmiPCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.businessPLs[arrayIndex].businessLiabilities | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].netBusinessIncome | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].netBusinessIncomePCT}}</td> </tr>'+
+        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.businessPLs[arrayIndex].kinaraEmi | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].kinaraEmiPCT}}</td> </tr>'+
+        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.businessPLs[arrayIndex].netIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.businessPLs[arrayIndex].finalKinaraEmi | currency : "" : 2 }}</td> <td>{{model.businessPLs[arrayIndex].finalKinaraEmiPCT}}</td> </tr>'+
     '</tbody>'+
 '</table>'
                             }

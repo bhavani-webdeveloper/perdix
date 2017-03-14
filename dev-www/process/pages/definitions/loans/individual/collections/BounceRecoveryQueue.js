@@ -112,7 +112,15 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                             fn: function(item, index){
                                 $log.info("Redirecting");
                                 entityManager.setModel('loans.individual.collections.CollectPayment', {_bounce:item,_screen:"BounceRecoveryQueue"});
-                                $state.go('Page.Engine', {pageName: 'loans.LoanRepay', pageId: item.accountId});
+                                $state.go('Page.Engine', 
+                                    {
+                                        pageName: 'loans.LoanRepay', 
+                                        pageId: item.accountId,
+                                        pageData: 
+                                        {
+                                            'onlyDemandAllowed': true
+                                        }
+                                    });
                             },
                             isApplicable: function(item, index){
                                 return true;

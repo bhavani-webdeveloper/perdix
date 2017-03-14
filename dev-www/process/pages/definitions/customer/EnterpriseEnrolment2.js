@@ -2953,6 +2953,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     key:"customer.verifications[].customerResponse",
                                     title:"CUSTOMER_RESPONSE",
                                     type:"select",
+                                    required:true,
                                     titleMap: [{
                                                     value: "positive",
                                                     name: "positive"
