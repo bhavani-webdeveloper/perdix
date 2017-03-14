@@ -242,6 +242,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
             },
             actions: {
                 submit: function(model, form, formName) {
+                    Utils.confirm("Are You Sure").then(function(){
                     $log.info('on submit action ....');
 
 
@@ -276,6 +277,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             PageHelper.showErrors(errorResponse);
                         }
                     );
+                    })
                 },
             }
         };

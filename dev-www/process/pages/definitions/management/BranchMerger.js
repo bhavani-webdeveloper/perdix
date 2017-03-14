@@ -72,6 +72,7 @@ irf.pageCollection.factory(irf.page("management.BranchMerger"), ["$log", "Mainte
             },
             actions: {
                 submit: function(model, form, formName) {
+                    Utils.confirm("Are You Sure").then(function(){
                     $log.info('on submit action ....');
                     $log.info(model.model.customer);
                     var reqData = _.cloneDeep(model.model.customer);
@@ -97,6 +98,7 @@ irf.pageCollection.factory(irf.page("management.BranchMerger"), ["$log", "Mainte
                             PageHelper.showErrors(errorResponse);
                         }
                     );
+                    })
                 },
             }
         };
