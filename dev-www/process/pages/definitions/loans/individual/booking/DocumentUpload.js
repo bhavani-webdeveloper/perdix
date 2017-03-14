@@ -139,7 +139,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                 "type": "box",
                 "title": "DISBURSEMENT_DETAILS",
                 "colClass": "col-sm-12",
-                "items": [{
+                "items": [
+                   {
+                            "type": "fieldset",
+                            "title": "View Loan Details",
+                            "condition":"model.loanAccount.id",
+                            "items": [{
+                                key: "loanAccount.ViewLoan",
+                                type: "button",
+                                title: "View Loan",
+                                required: true,
+                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
+                            }]
+                    },{
                     "type": "fieldset",
                     "title": "DISBURSEMENT_ACCOUNT_DETAILS",
                     "items": [{
@@ -619,6 +631,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             }
                         );
                 },
+                viewLoan: function(model, formCtrl, form, $event){
+                    Utils.confirm("Save the data before proceed").then(function(){
+                    $log.info("Inside ViewLoan()");
+                    $state.go("Page.Bundle", {
+                    pageName: "loans.individual.screening.LoanView",
+                    pageId: model.loanAccount.id
+                    });  
+                    }) 
+                },
+                
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
                     Utils.confirm("Are You Sure?").then(function(){
