@@ -393,7 +393,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             }, {
                                 type: "fieldset",
                                 title: "",
-                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'",
+                                condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Working Capital'||model.loanMonitoringDetails.loanPurposeCategory == 'Business Development'||model.loanMonitoringDetails.loanPurposeCategory == 'Line of credit'",
                                 items: [{
                                     key: "loanMonitoringDetails.loanAmountUsed",
                                     type: "amount",
