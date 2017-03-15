@@ -1,25 +1,25 @@
 <style type="text/css">
-  .participant-menu {
+  .menu-toggle {
     display: none;
   }
-  .direct-chat-contacts-open .participant-menu {
+  .direct-chat-contacts-open .menu-toggle {
     display: block !important;
     margin-right: 10px;
   }
-  .btn-participant > span + span {
+  .btn-participant > .fa-times {
     display: none;
   }
-  .direct-chat-contacts-open .btn-participant > span:first-child {
+  .direct-chat-contacts-open .btn-participant > .fa-bars {
     display: none;
   }
-  .direct-chat-contacts-open .btn-participant > span + span {
+  .direct-chat-contacts-open .btn-participant > .fa-times {
     display: inline;
   }
-  input.participant-menu.form-control {
+  input.menu-toggle.form-control {
     margin-right: 0;
     width: 200px;
   }
-  input.participant-menu.form-control + a {
+  input.menu-toggle.form-control + a {
     position: absolute;
     top: 0;
     left: 180px;
@@ -35,12 +35,16 @@
 <!-- DIRECT CHAT DANGER -->
 <div class="direct-chat direct-chat-danger">
 <div class="box-header" style="padding-top: 0">
-  <button class="btn btn-danger btn-flat pull-right btn-participant" data-toggle="tooltip" title="Participants" data-widget="chat-pane-toggle"><span>Participants</span><span>Close</span></button>
-  <input ng-model="model.newParticipant.login" class="form-control participant-menu pull-left" placeholder="Enter Participant" readonly />
-  <a irf-lov irf-form="model.newParticipantForm" irf-schema="model.newParticipantSchema" irf-model="model" class="participant-menu" href="">
+  <button class="btn btn-danger btn-flat pull-right btn-participant" data-toggle="tooltip" title="Menu" data-widget="chat-pane-toggle">
+    <span class="fa fa-bars"></span>
+    <i class="fa fa-times"></i>
+  </button>
+  <input ng-model="model.newParticipant.login" class="form-control menu-toggle pull-left" placeholder="Enter Participant" readonly />
+  <a irf-lov irf-form="model.newParticipantForm" irf-schema="model.newParticipantSchema" irf-model="model" class="menu-toggle" href="">
     <i class="fa fa-bars color-theme"></i>
   </a>
-  <button ng-click="model.addMessageParticipant(model)" class="btn btn-danger btn-flat participant-menu pull-left">Add Participant</button>
+  <button ng-click="model.addMessageParticipant(model)" class="btn btn-danger btn-flat menu-toggle pull-left">Add Participant</button>
+  <button ng-click="model.closeConversation(model)" class="btn btn-default btn-flat menu-toggle pull-left">Close Conversation</button>
 </div>
 <!-- /.box-header -->
 <div class="box-body">

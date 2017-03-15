@@ -331,6 +331,10 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		});
 	};
 
+	var closeConversation = function(conversationData) {
+		return Message.closeMessage({thread_id: conversationData.thread_id, user_id: conversationData.user_id});
+	};
+
 	getUnreadMessageCount();
 	getMessageThreadList();
 
@@ -356,9 +360,17 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		getMessageList(conversationData);
 		getMessageThreadParticipants(conversationData);
 		$http.get('modules/app/templates/conversation.html', {cache: $templateCache}).then(function(response) {
-			irfSimpleModal(chat.title, response.data, conversationData).opened.then(function() {
+			var conversationWindow = irfSimpleModal(chat.title, response.data, conversationData);
+			conversationWindow.opened.then(function() {
 				Message.messageRead({thread_id: chat.id, user_id: $scope.ss.session.login});
 			});
+			conversationData.closeConversation = function(model) {
+				Utils.confirm("Are you Sure? The conversation will be closed & won't be visible to any participants").then(function() {
+					closeConversation(model).$promise.finally(function() {
+						conversationWindow.close();
+					});
+				});
+			};
 		});
 	};
 
