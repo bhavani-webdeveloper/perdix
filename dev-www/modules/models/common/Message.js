@@ -49,5 +49,20 @@ function($resource, $httpParamSerializer, SessionStore) {
 		}
 	});
 
+	// resource.createConversation = function(initModel) {} // this function is be available to use in here. no need to uncomment. this is for reference
+	/*
+	initModel = {
+		messageThreads: {
+			title: '',
+			reference_no: 0,
+			messageParticipants: [{
+				participant: '',
+				participant_name: ''
+			}],
+			message: ''
+		}
+	};
+	*/
+
 	return resource;
 }]);

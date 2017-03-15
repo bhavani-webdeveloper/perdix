@@ -374,14 +374,13 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		});
 	};
 
-	$scope.createConversation = function($event) {
-		$event.preventDefault();
+	$scope.createConversation = function(initModel) {
 		var createConversationModel = {
 			formName: "createConversationForm",
 			formHelper: formHelper,
 			schema: newParticipantSchema,
 			form: createConversationForm,
-			model: {},
+			model: initModel || {},
 			actions: {}
 		};
 		var createConversationWindow = irfSimpleModal('Create new conversation', simpleSchemaFormHtml, createConversationModel);
@@ -423,6 +422,8 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 			}
 		};
 	};
+
+	Message.createConversation = $scope.createConversation;
 
 	// Future Use
 	$scope.updateStatusMessage = function($event) {

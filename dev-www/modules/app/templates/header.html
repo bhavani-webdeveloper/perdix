@@ -98,7 +98,7 @@
                   <span ng-if="unreadMessageCount" class="label label-danger" ng-bind="unreadMessageCount"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header"><a href="" ng-click="createConversation($event)"><i class="fa fa-plus">&nbsp;</i>Create new conversation</a></li>
+                  <li class="header"><a href="" ng-click="$event.preventDefault();createConversation()"><i class="fa fa-plus">&nbsp;</i>Create new conversation</a></li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">

@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper",
+"BundleManager", "PsychometricTestService", "LeadHelper", "Message",
 function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper){
+    BundleManager, PsychometricTestService, LeadHelper, Message){
 
     var branch = SessionStore.getBranch();
 
@@ -2161,8 +2161,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
         },
             {
                 "type": "actionbox",
-                //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView'",
+                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView' && model.loanAccount.id",
+                "items": [
+                    {
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                        "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"
+                    },
+                    {
+                        "type": "button",
+                        "icon": "fa fa-comment",
+                        "title": "Create Conversation",
+                        "onClick": "actions.createConversation(model, formCtrl, form, $event)"
+                    }
+                ]
+            },
+            {
+                "type": "actionbox",
+                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView' && !model.loanAccount.id",
                 "items": [
                     {
                         "type": "button",
@@ -2171,22 +2188,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         "onClick": "actions.save(model, formCtrl, form, $event)"
                     }
                 ]
-            },
-
-            // {
-            //     "type": "actionbox",
-            //     //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
-            //     "condition": "model.loanAccount.customerId && model.currentStage == 'loanView'",
-            //     "items": [
-            //         {
-            //             "type": "button",
-            //             "icon": "fa fa-circle-o",
-            //             "title": "Back",
-            //             "onClick":"actions.goBack(model, formCtrl, form, $event)"
-
-            //         }
-            //     ]
-            // },
+            }
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;
@@ -2652,6 +2654,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 })
                         }
                     )
+            },
+            createConversation: function(model, formCtrl, form, $event) {
+                Message.createConversation({
+                    "messageThreads": {
+                        "title": "For Loan: " + model.loanAccount.id,
+                        "reference_no": model.loanAccount.id
+                    }
+                });
             }
         }
     };
