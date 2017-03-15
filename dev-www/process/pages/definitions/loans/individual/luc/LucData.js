@@ -238,9 +238,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             }, {
                                 key: "loanMonitoringDetails.loanPurposeCategory",
                                 "readonly": true,
-                                type: "select",
                                 title: "LOAN_PURPOSE_1",
-                                enumCode: "loan_purpose_1"
                             }, {
                                 key: "loanMonitoringDetails.loanPurpose",
                                 title: "LOAN_SUB_PURPOSE",
@@ -310,6 +308,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         }
                                     }
                                 }, {
+                                    key: "loanMonitoringDetails.udf2",
+                                    type: "select",
+                                    title:"RESCHEDULED_REMARKS",
+                                    titleMap: {
+                                        "Partially utilized ": "Partially utilized ",
+                                        "Not utilized ": "Not utilized ",
+                                        "Customer not available": "Customer not available",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
+                                },{
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
                                     condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
@@ -333,8 +341,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Non delivery of Machine": "Non delivery of Machine",
                                     },
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
-
-
+                                },{
+                                    key: "loanMonitoringDetails.udf3",
+                                    title:"ESCALATED_REMARKS",
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
                             }, {
                                 key: "loanMonitoringDetails.machineDetails",
@@ -475,6 +485,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             model.loanMonitoringDetails.lucEscalated = "No";
                                         }
                                     }
+                                },{
+                                    key: "loanMonitoringDetails.udf2",
+                                    type: "select",
+                                    title:"RESCHEDULED_REMARKS",
+                                    titleMap: {
+                                        "Partially utilized ": "Partially utilized ",
+                                        "Not utilized ": "Not utilized ",
+                                        "Customer not available": "Customer not available",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
@@ -496,6 +516,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Not utilized": "Not utilized",
                                         "Partially utilized": "Partially utilized",
                                     },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                },{
+                                    key: "loanMonitoringDetails.udf3",
+                                    title:"ESCALATED_REMARKS",
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
                             }, {
@@ -577,6 +601,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                             model.loanMonitoringDetails.lucEscalated = "No";
                                         }
                                     }
+                                },{
+                                    key: "loanMonitoringDetails.udf2",
+                                    type: "select",
+                                    title:"RESCHEDULED_REMARKS",
+                                    titleMap: {
+                                        "Partially utilized ": "Partially utilized ",
+                                        "Not utilized ": "Not utilized ",
+                                        "Customer not available": "Customer not available",
+                                    },
+                                    condition: "model.loanMonitoringDetails.lucRescheduled=='Yes' && (model.loanMonitoringDetails.currentStage =='LUCSchedule'||model.loanMonitoringDetails.currentStage =='LUCReschedule')",
                                 }, {
                                     key: "loanMonitoringDetails.lucRescheduleReason",
                                     type: "string",
@@ -598,6 +632,10 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                         "Not utilized": "Not utilized",
                                         "Partially utilized": "Partially utilized",
                                     },
+                                    condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
+                                },{
+                                    key: "loanMonitoringDetails.udf3",
+                                    title:"ESCALATED_REMARKS",
                                     condition: "model.loanMonitoringDetails.lucEscalated=='Yes' && model.loanMonitoringDetails.currentStage !=='LUCLegalRecovery'",
                                 }]
                             },
