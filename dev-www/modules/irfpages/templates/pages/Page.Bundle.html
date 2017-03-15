@@ -6,6 +6,9 @@
       <span class="button-holder pull-right">
         <button ng-show="bundlePage.offline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ (bundleModel.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
       </span>
+      <span class="button-holder pull-right">
+        <button ng-show="bundlePage.back" ng-click="bundlePage.back()" class="btn btn-theme btn-xs"><i class="fa fa-step-backward">&nbsp;</i>{{ "Back" | translate }}</button>
+      </span>
     </h1>
   </section>
   <uib-tabset active="activeIndex" class="bundle-tabset">

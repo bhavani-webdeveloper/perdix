@@ -26,6 +26,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
+
 								"screenFilter": true
 							}
 						},
@@ -58,6 +59,10 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						},
 						"customerId": {
 							"title": "CUSTOMER_ID",
+							"type": "string"
+						},
+						"accountNumber": {
+							"title": "ACCOUNT_NUMBER",
 							"type": "string"
 						},
 						"area": {
@@ -96,6 +101,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 	                    'centreCode': searchOptions.centre,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
+	                    'accountNumber':searchOptions.accountNumber,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,	                    
@@ -171,24 +177,23 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						}]
 					},
 					getActions: function() {
-						return [/*{
-							name: "FIELD_APPRAISAL_REVIEW",
+						return [
+							{
+							name: "VIEW LOAN",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.FieldAppraisalReview', {
-									_request: item
-								});
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.FieldAppraisalReview",
-									pageId: item.loanId
+									pageName: "loans.individual.screening.LoanViewList",
+									pageId: item.loanId,
+
 								});
 							},
 							isApplicable: function(item, index) {
 
 								return true;
 							}
-						}*/];
+						}];
 					}
 				}
 			}

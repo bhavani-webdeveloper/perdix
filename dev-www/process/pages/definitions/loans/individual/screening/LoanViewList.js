@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager",
     function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
         $log.info("Inside LoanBookingBundle");
@@ -64,45 +64,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$l
             }],
             "bundlePages": [],
             "offline": false,
-            "back": true,
-
-            "back": function(value, index, bundleModel) {
-                $log.info("back button pressed");
-                $log.info($stateParams.pageId);
-                if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
-                    var loanId = $stateParams.pageId;
-                    IndividualLoan.get({
-                        id: loanId
-                    }).$promise.then(
-                        function(res) {
-                            $log.info(res);
-                            if (res.currentStage == "LoanInitiation") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.LoanInput',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "DocumentVerification") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.DocumentVerification',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "IfmrDO") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.IFMRDO',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "DocumentUpload") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.DocumentUpload',
-                                    pageId: loanId
-                                });
-                            }
-                        })
-                }
-            },
 
             "getOfflineDisplayItem": function(value, index) {
                 var out = new Array(2);

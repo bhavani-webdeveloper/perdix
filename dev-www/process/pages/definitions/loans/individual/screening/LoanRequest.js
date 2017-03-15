@@ -2173,20 +2173,20 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                 ]
             },
 
-            {
-                "type": "actionbox",
-                //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
-                "condition": "model.loanAccount.customerId && model.currentStage == 'loanView'",
-                "items": [
-                    {
-                        "type": "button",
-                        "icon": "fa fa-circle-o",
-                        "title": "Back",
-                        "onClick":"actions.goBack(model, formCtrl, form, $event)"
+            // {
+            //     "type": "actionbox",
+            //     //"condition": "model.loanAccount.customerId  && !(model.currentStage=='ScreeningReview')",
+            //     "condition": "model.loanAccount.customerId && model.currentStage == 'loanView'",
+            //     "items": [
+            //         {
+            //             "type": "button",
+            //             "icon": "fa fa-circle-o",
+            //             "title": "Back",
+            //             "onClick":"actions.goBack(model, formCtrl, form, $event)"
 
-                    }
-                ]
-            },
+            //         }
+            //     ]
+            // },
         ],
         schema: function() {
             return SchemaResource.getLoanAccountSchema().$promise;

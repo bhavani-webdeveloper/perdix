@@ -118,7 +118,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.LoanView",
+									pageName: "loans.individual.screening.LoanViewList",
 									pageId: item.loanId
 								});
 							},
