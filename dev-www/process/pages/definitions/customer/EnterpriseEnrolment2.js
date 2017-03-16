@@ -798,8 +798,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     {
                         key: "customer.enterprise.ownership",
                         title: "OWNERSHIP",
-                        type: "select",
-                        enumCode: "ownership"
+                        /*type: "select",
+                        enumCode: "ownership"*/
                     },
                     {
                         key: "customer.enterprise.businessConstitution",
