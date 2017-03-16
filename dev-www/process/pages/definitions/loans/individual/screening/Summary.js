@@ -35,6 +35,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
         model.psychometricScores = res[14].sections;
+        model.cashFlowDetails = res[15];
+        model.businessBankStmtSummary = res[16];
+        model.personalBankStmtSummary = res[17];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -656,6 +659,99 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | currency : "" : 2 }}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | currency : "" : 2 }}</th></tr>'+
     '</tbody>'+
 '</table>'
+                }
+            ]
+        });
+
+        var cashFlowDetailsTable = "<div class='table-responsive'>" +
+        "<table class = 'table table-striped table-condensed'>" + 
+        "<thead>" +
+        "<tr>" +
+        "<th ng-repeat='column in model.cashFlowDetails.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr ng-repeat='record in model.cashFlowDetails.data'>" +
+        "<td ng-repeat='column in model.cashFlowDetails.columns' >" + 
+        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
+        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
+        "</td>" +
+        "</tr>" + 
+        "</tbody>" +
+        "</table>" +
+        "</div>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.cashFlowDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: cashFlowDetailsTable
+                }
+            ]
+        });
+
+        var businessBankStmtSummaryTable = "<div class='table-responsive'>" +
+        "<table class = 'table table-striped table-condensed'>" + 
+        "<thead>" +
+        "<tr>" +
+        "<th ng-repeat='column in model.businessBankStmtSummary.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr ng-repeat='record in model.businessBankStmtSummary.data'>" +
+        "<td ng-repeat='column in model.businessBankStmtSummary.columns' >" + 
+        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
+        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
+        "</td>" +
+        "</tr>" + 
+        "</tbody>" +
+        "</table>" +
+        "</div>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.businessBankStmtSummary.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: businessBankStmtSummaryTable
+                }
+            ]
+        });
+
+        var personalBankStmtSummaryTable = "<div class='table-responsive'>" +
+        "<table class = 'table table-striped table-condensed'>" + 
+        "<thead>" +
+        "<tr>" +
+        "<th ng-repeat='column in model.personalBankStmtSummary.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr ng-repeat='record in model.personalBankStmtSummary.data'>" +
+        "<td ng-repeat='column in model.personalBankStmtSummary.columns' >" + 
+        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
+        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
+        "</td>" +
+        "</tr>" + 
+        "</tbody>" +
+        "</table>" +
+        "</div>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.personalBankStmtSummary.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: personalBankStmtSummaryTable
                 }
             ]
         });
