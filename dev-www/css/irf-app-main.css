@@ -14,6 +14,15 @@ label {
 .btn-xs {
   font-size: 14px;
 }
+.form-group {
+  margin-bottom: 0;
+}
+@media (max-width: 767px) {
+  label {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+}
 .log-div {
   font-family: "Courier New";
   font-size: 12px;
