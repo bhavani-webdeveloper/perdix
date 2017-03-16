@@ -172,7 +172,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 },
                 searchHelper: formHelper,
                 search: function(inputModel, form, model) {
-                    return Queries.getBankAccountsByPartner("Kinara");
+                    return Queries.getBankAccountsByPartnerForLoanRepay();
                 },
                 getListDisplayItem: function(item, index) {
                     return [

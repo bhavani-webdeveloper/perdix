@@ -66,6 +66,49 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         readonly:true,
                         type: "select"
                     },
+                    /*{
+                        key: "customer.centreName",
+                        type: "lov",
+                        "title":"SPOKE_NAME",
+                        autolov: true,
+                        bindMap: {},
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var centres = SessionStore.getCentres();
+                            $log.info("hi");
+                            $log.info(centres);
+
+                            var centreCode = formHelper.enum('centre').data;
+                            var out = [];
+                            if (centres && centres.length) {
+                                for (var i = 0; i < centreCode.length; i++) {
+                                    for (var j = 0; j < centres.length; j++) {
+                                        if (centreCode[i].value == centres[j].id) {
+                                            out.push({
+                                                name: centreCode[i].name,
+                                                id: centreCode[i].value
+                                            })
+                                        }
+                                    }
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.customer.centreName = valueObj.name;
+                            model.customer.centreId = valueObj.id;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+                    },*/
                     {
                         key: "customer.id",
                         condition: "model.customer.id",
@@ -82,11 +125,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         key:"customer.centreId",
                         type:"select",
                         title:"CENTRE_NAME",
-                        /*filter: {
-                            "parentCode": "model.branch_id"
-                        },*/
-                        parentValueExpr:"model.customer.customerBranchId",
+                        filter: {
+                         "parentCode": "branch_id"
+                         },
                         parentEnumCode:"branch_id",
+                        parentValueExpr:"model.customer.customerBranchId",
+                    },
+                    {
+                        key: "customer.centreId",
+                        condition: "model.customer.id",
+                        readonly: true
                     },
                     {
                         key: "customer.oldCustomerId",
@@ -118,6 +166,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     { /*TODO Not working when this is enabled */
                        key: "customer.enterprise.companyOperatingSince",
                        title:"OPERATING_SINCE",
+                       required:true,
                        type: "date"
                     },
                     {
@@ -214,25 +263,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 using: "scanner"
                             }
                         ]
-                    },/*,
-                    {
-                        key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_TYPE",
-                        type: "select",
-                        enumCode: "business_registration_type"
                     },
-                    {
-                        key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "customer.enterprise.registrationDate",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        type: "date",
-                        title: "REGISTRATION_DATE"
-                    }*/
                     {
                         key: "customer.enterprise.businessType",
                         title: "BUSINESS_TYPE",
@@ -241,6 +272,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                         key: "customer.enterprise.businessActivity",
+                        required:true,
                         title: "BUSINESS_ACTIVITY",
                         type: "select",
                         enumCode: "businessActivity",
@@ -249,6 +281,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                         key: "customer.enterprise.businessSector",
+                        required:true,
                         title: "BUSINESS_SECTOR",
                         type: "select",
                         enumCode: "businessSector",
@@ -260,8 +293,10 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     },
                     {
                         key: "customer.enterprise.businessSubsector",
+                        required:true,
                         title: "BUSINESS_SUBSECTOR",
                         type: "lov",
+                        "lovonly": true,
                         autolov: true,
                         bindMap: {
                         },
@@ -310,7 +345,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type: "select",
                         enumCode: "decisionmaker"
                     },
-                    {
+                    /*{
                         key: "customer.enterprise.electricityAvailable",
                         title: "ELECTRICITY_AVAIALBLE",
                         type: "select",
@@ -323,7 +358,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type: "select",
                         enumCode: "decisionmaker",
                         required: true
-                    },
+                    },*/
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -334,7 +369,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.enterpriseCustomerRelations[].relationshipType",
                                 title: "RELATIONSHIP_TYPE",
                                 type: "select",
-                                enumCode: "relationship_type"
+                                enumCode: "relationship_type",
+                                required: true
                             },
                             {
                                 key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
@@ -386,12 +422,20 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title: "CUSTOMER_NAME"
                             },
                             {
+                                key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
+                                title: "EXPERIENCE_IN_BUSINESS",
+                                type:"select",
+                                "enumCode": "years_in_current_area",
+                                required:true,
+                            },
+                            {
                                 key: "customer.enterpriseCustomerRelations[].businessInvolvement",
                                 title: "BUSINESS_INVOLVEMENT",
                                 required:true,
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
+                            
                             {
                                 key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                                 title: "PARTNER_OF_ANY_OTHER_COMPANY",
@@ -460,10 +504,22 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             ];
                         }
                     },
-                    "customer.locality",
-                    "customer.villageName",
-                    "customer.district",
-                    "customer.state",
+                    {
+                        key: "customer.locality",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.villageName",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.district",
+                        readonly: true
+                    },
+                    {
+                        key: "customer.state",
+                        readonly: true,
+                    },
                     {
                        key: "customer.distanceFromBranch",
                        type: "select",
@@ -474,14 +530,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                        key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
                        type: "select",
                        required:true,
-                       enumCode: "years_in_present_area",
+                       enumCode: "business_in_present_area_since",
                        title: "YEARS_OF_BUSINESS_PRESENT_AREA"
                     },
                     {
                         key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
                         type: "select",
                         required:true,
-                        enumCode: "years_in_current_address",
+                        enumCode: "bsns_in_current_addrss_since",
                         title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                     }
                 ]
@@ -495,11 +551,24 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         type: "array",
                         title: "BANK_ACCOUNTS",
                         startEmpty: true,
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            modelValue.bankStatements = [];
+                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                            var noOfMonthsToDisplay = 6;
+                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                                modelValue.bankStatements.push({
+                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                                });
+                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                            }
+                        },
                         items: [
                             {
                                 key: "customer.customerBankAccounts[].ifscCode",
                                 type: "lov",
                                 lovonly: true,
+                                required: true,
                                 inputMap: {
                                     "ifscCode": {
                                         "key": "customer.customerBankAccounts[].ifscCode"
@@ -536,10 +605,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankName",
+                                required: true,
                                 readonly: true
                             },
                             {
                                 key: "customer.customerBankAccounts[].customerBankBranchName",
+                                required: true,
                                 readonly: true
                             },
                             {
@@ -572,16 +643,27 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
                                 type: "amount",
                                 required:true,
-                                title: "SANCTIONED_AMOUNT"
+                                title: "OUTSTANDING_BALANCE"
                             },
                             {
                                 key: "customer.customerBankAccounts[].limit",
                                 type: "amount"
                             },
                             {
+                                key:"customer.customerBankAccounts[].bankStatementDocId",
+                                type:"file",
+                                required: true,
+                                title:"BANK_STATEMENT_UPLOAD",
+                                fileType:"application/pdf",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "IDENTITYPROOF",
+                                using: "scanner"
+                            },
+                            {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
+                                startEmpty: true,
                                 items: [
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].startMonth",
@@ -601,7 +683,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
                                         type: "amount",
-                                        title: "BALANCE_AS_ON_15TH"
+                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
@@ -635,8 +717,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 ]
             },
             {
-                type:"box",
-                title:"COMPANY_LIABILITIES",
+               type:"box",
+               title:"BUSINESS_LIABILITIES",
                 items:[
                     {
                        key:"customer.liabilities",
@@ -654,7 +736,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 type:"select",
                                 enumCode:"loan_source"
                            },
-                           "customer.liabilities[].instituteName",
                            {
                                key: "customer.liabilities[].loanAmountInPaisa",
                                type: "amount"
@@ -696,6 +777,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                title:"INTEREST_ONLY",
                                enumCode:"decisionmaker"
                            },
+                           {
+                               key:"customer.liabilities[].interestRate",
+                               type:"number",
+                               title:"RATE_OF_INTEREST"
+                           },
+                           
                            /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
@@ -726,8 +813,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
-                                type: "select",
-                                enumCode: "customer_since"
+                                type:"number"
+                                /*type: "select",
+                                enumCode: "customer_since"*/
                             },
                             {
                                 key: "customer.buyerDetails[].paymentDate",
@@ -810,8 +898,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 ] 
             },
             {
-                type:"box",
-                title:"T_BUSINESS_FINANCIALS",
+               type:"box",
+               title:"T_BUSINESS_FINANCIALS",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -832,7 +920,6 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         type:"section",
                         title:"INCOME_EXPENSE_INFORMATION",
-                        condition: "model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
                         items: [
                             {
                                 key:"customer.otherBusinessIncomes",
@@ -871,6 +958,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         type: "lov",
                                         autolov: true,
                                         required: true,
+                                        lovonly: true,
                                         title:"BUYER_NAME",
                                         bindMap: {
                                         },
@@ -940,15 +1028,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title:"BUSINESS_EXPENSE",
                                 items:[
                                     {
-                                        key: "customer.expenditures[].annualExpenses",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
                                         key: "customer.expenditures[].expenditureSource",
                                         title: "EXPENDITURE_SOURCE",
                                         type: "select",
                                         enumCode: "business_expense"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].annualExpenses",
+                                        title: "AMOUNT",
+                                        type: "amount"
                                     },
                                     {
                                         key: "customer.expenditures[].frequency",
@@ -966,8 +1054,44 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 items:[
                                     {
                                         key: "customer.rawMaterialExpenses[].vendorName",
-                                        title: "VENDOR_NAME",
-                                        type: "string"
+                                        type: "lov",
+                                        autolov: true,
+                                        required: true,
+                                        lovonly: true,
+                                        title:"VENDOR_NAME",
+                                        bindMap: {
+                                        },
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var out = [];
+                                            if (!model.customer.supplierDetails){
+                                                return out;
+                                            }
+                                            for (var i=0; i<model.customer.supplierDetails.length; i++){
+                                                out.push({
+                                                    name: model.customer.supplierDetails[i].supplierName,
+                                                    value: model.customer.supplierDetails[i].supplierName
+                                                })
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function(valueObj, model, context){
+                                            if (_.isUndefined(model.customer.rawMaterialExpenses[context.arrayIndex])) {
+                                                model.customer.rawMaterialExpenses[context.arrayIndex] = {};
+                                            }
+
+                                            model.customer.rawMaterialExpenses[context.arrayIndex].vendorName = valueObj.value;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
                                     },
                                     {
                                         key: "customer.rawMaterialExpenses[].rawMaterialType",
@@ -998,25 +1122,28 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title:"ASSETS",
                                 items:[]
                             },
-                            {
-                                key: "customer.enterprise.cashAtBank",
-                                title: "CASH_AT_BANK",
-                                type: "amount"
-                            },
+                            // {
+                            //     key: "customer.enterprise.cashAtBank",
+                            //     title: "CASH_AT_BANK",
+                            //     type: "amount"
+                            // },
                             {
                                 key: "customer.enterprise.rawMaterial",
                                 title: "RAW_MATERIAL",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.enterprise.workInProgress",
                                 title: "WIP",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.enterprise.finishedGoods",
                                 title: "FINISHED_GOODS",
-                                type: "amount"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: 'customer.enterpriseAssets',
@@ -1028,7 +1155,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         key: "customer.enterpriseAssets[].assetType",
                                         title: "ASSET_TYPE",
                                         type: "select",
-                                        enumCode: "enterprice_asset_types"
+                                        enumCode: "enterprice_asset_types",
+                                        required: true
                                     },
                                     {
                                         key: "customer.enterpriseAssets[].vehicleMakeModel",
@@ -1047,24 +1175,25 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 ]
             },
             {
-                type:"box",
-                title:"EMPLOYEE_DETAILS",
+               type:"box",
+               title:"EMPLOYEE_DETAILS",
                 items:[
                     {
                         key: "customer.enterprise.noOfFemaleEmployees",
                         title: "NO_OF_MALE_EMPLOYEES",
-                        required:true,
+                        //required:true,
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.noOfMaleEmployees",
-                        required:true,
+                        //required:true,
                         title: "NO_OF_FEMALE_EMPLOYEES",
                         type: "number"
                     },
                     {
                         key: "customer.enterprise.avgMonthlySalary",
-                        required:true,
+                        condition:"model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 ",
+                        //required:true,
                         title: "AVERAGE_MONTHLY_SALARY",
                         type: "amount"
                     }
@@ -1072,12 +1201,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 ]
             },
             {
-                type:"box",
-                title:"MACHINERY",
-                readonly:true,
+               type:"box",
+               title:"MACHINERY",
                 items:[
                     {
-                       key:"customer.fixedAssetsMachinaries",
+                      key:"customer.fixedAssetsMachinaries",
                        type:"array",
                        startEmpty: true,
                        title:"MACHINERY_SECTION",
@@ -1085,6 +1213,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
+                                required: true,
                                 type: "string"
                             },
                             {
@@ -1095,7 +1224,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineType",
                                 title:"MACHINE_TYPE",
-                                type: "string"
+                                required: true,
+                                type: "select",
+                                enumCode: "collateral_type"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machineModel",
@@ -1110,7 +1241,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.fixedAssetsMachinaries[].purchasePrice",
                                 title:"PURCHASE_PRICE",
-                                type: "number"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
@@ -1120,38 +1252,45 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key: "customer.fixedAssetsMachinaries[].presentValue",
                                 title:"PRESSENT_VALUE",
-                                type: "number"
+                                type: "amount",
+                                required: true
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW? ",
-                                type: "radios",
+                                title:"IS_THE_MACHINE_NEW",
+                                type: "select",
                                 enumCode: "decisionmaker"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].fundingSource",
                                 title:"FUNDING_SOURCE",
-                                type: "string",
+                                type: "select",
+                                enumCode: "machinery_funding_source"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
                                 title:"IS_THE_MACHINE_HYPOTHECATED",
                                 type: "radios",
-                                enumCode: "decisionmaker"
+                                enumCode: "decisionmaker",
+                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                    if (modelValue && modelValue.toLowerCase() === 'no')
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedTo = null;
+                                    else if(modelValue && modelValue.toLowerCase() === 'yes')
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedToUs = null;
+                                }
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
                                 title:"HYPOTHECATED_TO",
                                 type: "string",
-                                //enumCode: "decisionmaker",
                                 condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
-                                title:"HYPOTHECATED_TO_US",
+                                title:"CAN_BE_HYPOTHECATED_TO_US",
                                 type: "radios",
                                 enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].hypothecatedTo=='NO'"
+                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
@@ -1195,117 +1334,76 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             },
                             {
                                 key:"customer.verifications[].referenceFirstName",
-                                title:"FULL_NAME_OF_POC",
+                                title:"CONTACT_PERSON_NAME",
                                 type:"string"
                             },
                             {
                                 key:"customer.verifications[].mobileNo",
-                                title:"MOBILE_NO",
+                                title:"CONTACT_NUMBER",
                                 type:"string",
                                 
                             },
                             {
-                                key:"customer.verifications[].businessSector",
-                                title:"BUSINESS_SECTOR",
-                                type:"select",
-                                enumCode: "businessSector"
+                                key:"customer.verifications[].address",
+                                type:"textarea"
                             },
                             {
-                                key:"customer.verifications[].businessSubSector",
-                                title:"BUSINESS_SUBSECTOR",
-                                type:"select",
-                                enumCode: "businessSubSector",
-                                parentEnumCode: "businessSector"
-                            },
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
-                            },
-
+                            type: "fieldset",
+                            title: "REFERENCE_CHECK",
+                            items: [
+                                /*,
+                                {
+                                    key:"customer.verifications[].remarks",
+                                    title:"REMARKS",
+                                },*/
+                                {
+                                    key:"customer.verifications[].knownSince",
+                                    required:true
+                                },
+                                {
+                                    key:"customer.verifications[].goodsSold",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].goodsBought",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].paymentTerms",
+                                    type:"select",
+                                    "title":"payment_tarms",
+                                    enumCode: "payment_terms"
+                                },
+                                {
+                                    key:"customer.verifications[].modeOfPayment",
+                                    type:"select",
+                                    enumCode: "payment_mode"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingPayable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                },
+                                {
+                                    key:"customer.verifications[].outstandingReceivable",
+                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                },
+                                {
+                                    key:"customer.verifications[].customerResponse",
+                                    title:"CUSTOMER_RESPONSE",
+                                    type:"select",
+                                    required:true,
+                                    titleMap: [{
+                                                    value: "positive",
+                                                    name: "positive"
+                                                },{
+                                                    value: "Negative",
+                                                    name: "Negative"
+                                                }]
+                                }
+                            ]
+                            }
                          ] 
                     },
-                ]
-            },
-            {
-                type: "box",
-                title: "CUSTOMER_BANK_ACCOUNTS",
-                items: [
-                    {
-                        key: "customer.customerBankAccounts",
-                        type: "array",
-                        title: "BANK_ACCOUNTS",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key: "customer.customerBankAccounts[].ifscCode",
-                                type: "lov",
-                                lovonly: true,
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "customer.customerBankAccounts[].ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "customer.customerBankAccounts[].customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
-                                    }
-                                },
-                                outputMap: {
-                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
-                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
-                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
-                                },
-                                searchHelper: formHelper,
-                                search: function(inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
-                                },
-                                getListDisplayItem: function(data, index) {
-                                    return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
-                                    ];
-                                }
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankName",
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankBranchName",
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerNameAsInBank"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountNumber"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountType",
-                                type: "select"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "radios",
-                                titleMap: [{
-                                    value: true,
-                                    name: "Yes"
-                                },{
-                                    value: false,
-                                    name: "No"
-                                }]
-                            }
-                        ]
-                    }
                 ]
             },
             {

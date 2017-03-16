@@ -29,6 +29,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     return true;
                 }
 
+                var branch1 = formHelper.enum('branch_id').data;
+                var allowedBranch = [];
+                for (var i = 0; i < branch1.length; i++) {
+                    if ((branch1[i].name) == SessionStore.getBranch()) {
+                        allowedBranch.push(branch1[i]);
+                        break;
+                    }
+                }
+
+
                 return {
                     "type": "schema-form",
                     // "subType": "sub-navigation",
@@ -71,12 +81,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
                                 model.customer.enterprise = {};
                             }
-                            var branch1 = formHelper.enum('branch_id').data;
-                            for (var i = 0; i < branch1.length; i++) {
-                                if ((branch1[i].name) == SessionStore.getBranch()) {
-                                 model.customer.customerBranchId = branch1[i].value;
-                                }
-                            }
+
+                            model.customer.customerBranchId = allowedBranch[0].value;
+
                              var centres = SessionStore.getCentres();
                              var centreName = [];
                              if(centres && centres.length)
@@ -211,6 +218,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "title": "CUSTOMER_SEARCH",
                                     "type": "lov",
                                     "lovonly": true,
+                                    initialize: function(model, form, parentModel, context) {
+                                        model.customerBranchId = parentModel.customer.customerBranchId;
+                                        model.centreId = parentModel.customer.centreId;
+                                    },
                                     "inputMap": {
                                         "firstName": {
                                             "key": "customer.firstName",
@@ -219,13 +230,15 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         "customerBranchId": {
                                             "key": "customer.customerBranchId",
                                             "type": "select",
-                                            "screenFilter": true
+                                            "screenFilter": true,
+                                            "readonly": true
                                         },
                                         "centreId": {
                                             "key": "customer.centreId",
                                             "type": "select",
                                             "screenFilter": true,
                                             "parentEnumCode": "branch_id",
+                                            "parentValueExpr" :"model.customerBranchId",
                                         }
                                     },
                                     "outputMap": {
@@ -696,6 +709,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 {
                                     key: "customer.centreId",
                                     type: "lov",
+                                    condition: "!model.customer.id",
                                     autolov: true,
                                     lovonly: true,
                                     bindMap: {},
@@ -734,6 +748,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             item.name
                                         ];
                                     }
+                                },
+                                {
+                                    key: "customer.centreId",
+                                    condition: "model.customer.id",
+                                    readonly: true
                                 },
                                 {
                                     key: "customer.oldCustomerId",

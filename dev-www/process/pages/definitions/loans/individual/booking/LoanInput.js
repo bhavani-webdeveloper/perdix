@@ -246,6 +246,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                    model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
 
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];

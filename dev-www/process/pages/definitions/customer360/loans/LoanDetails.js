@@ -75,7 +75,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                                     var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
                                                     if (documentObj != null) {
                                                         loanDocuments[i].document = documentObj.document_name;
-                                                    } else {
+                                                    } else if(_.isNull(loanDocuments[i].document) || _.isUndefined(loanDocuments[i].document)) {
                                                         loanDocuments[i].document = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                                     }
                                                 }
