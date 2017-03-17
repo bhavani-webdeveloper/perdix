@@ -645,6 +645,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                     {
                         "type": "box",
+                        condition: "model.loanMonitoringDetails.lucDone== 'Yes'",
                         "title": "SOCIAL_IMPACT",
                         "items": [{
                             type: "fieldset",
