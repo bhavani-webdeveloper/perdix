@@ -23,6 +23,9 @@ label {
     margin-bottom: 0;
   }
 }
+.form-group.schema-form-submit {
+  margin-top: 6px;
+}
 .log-div {
   font-family: "Courier New";
   font-size: 12px;
