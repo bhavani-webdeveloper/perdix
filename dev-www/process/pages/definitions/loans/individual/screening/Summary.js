@@ -606,20 +606,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '</colgroup>'+
     '<tbody>'+
         '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
-        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | currency : "" : 2 }}</td> <td>{{model.pl.business.invoicePCT | currency : "" : 2 }}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | currency : "" : 2 }}</td> <td>{{model.pl.business.cashRevenuePCT | currency : "" : 2 }}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.scrapIncomePCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | currency : "" : 2 }}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | currency : "" : 2 }}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>'+
         '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | currency : "" : 2 }}</td> <td>{{model.pl.business.purchasesPCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | currency : "" : 2 }}</td> <td>{{model.pl.business.purchasesPCT }}</td> </tr>'+
         '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | currency : "" : 2 }}</th> <th></th> </tr>'+
         '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td>{{"EBITDA" | translate}}</td><td></td><td>{{model.pl.business.EBITDA | currency : "" : 2 }}</td> <td>{{model.pl.business.EBITDA_PCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | currency : "" : 2 }}</strong></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>'+
         '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
         '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.netBusinessIncomePCT | currency : "" : 2 }}</td> </tr>'+
-        '<tr> <td>{{"KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.kinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.kinaraEmiPCT | currency : "" : 2 }}</td> </tr>'+
-        '<tr> <td>{{"NET_INCOME" | translate}}</td> <td></td> <td>{{model.pl.business.netIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.finalKinaraEmiPCT | currency : "" : 2 }}</td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
+        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | currency : "" : 2 }}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
+        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | currency : "" : 2 }}</strong></td> <td></td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
     '</tbody>'+
 '</table>'
                 }
