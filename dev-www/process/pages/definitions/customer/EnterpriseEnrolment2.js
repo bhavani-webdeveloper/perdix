@@ -1893,11 +1893,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         title: "INCOME_TYPE",
                                         type: "radios",
                                         required: true,
-                                        titleMap: {
-                                        Cash:"Cash",
-                                        Invoice:"Invoice",
-                                        Scrap:"Scrap"
-                                        }
+                                        enumCode: "salesincome_income_type"
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].invoiceType",
+                                        title: "INVOICE_TYPE",
+                                        type: "select",
+                                        required: true,
+                                        enumCode: "salesincome_invoice_type",
+                                        parentValueExpr: "model.customer.enterprise.businessType"
                                     },
                                     {
                                         key: "customer.incomeThroughSales[].amount",
@@ -2151,12 +2155,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 {
                                     key: "customer.incomeThroughSales[].incomeType",
                                     title: "INCOME_TYPE",
-                                    type: "radios",
-                                    titleMap: {
-                                    Cash:"Cash",
-                                    Invoice:"Invoice",
-                                    Scrap:"Scrap"
-                                    }
+                                    type: "string"
+                                },
+                                {
+                                    key: "customer.incomeThroughSales[].invoiceType",
+                                    title: "INVOICE_TYPE",
+                                    type: "string"
                                 },
                                 {
                                     key: "customer.incomeThroughSales[].amount",
