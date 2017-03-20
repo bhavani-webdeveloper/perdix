@@ -38,6 +38,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.cashFlowDetails = res[15];
         model.businessBankStmtSummary = res[16];
         model.personalBankStmtSummary = res[17];
+        model.purchaseDetails = res[18];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -690,6 +691,37 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     type: "section",
                     colClass: "col-sm-12",
                     html: cashFlowDetailsTable
+                }
+            ]
+        });
+
+        var purchaseDetailsTable = "<div class='table-responsive'>" +
+        "<table class = 'table table-striped table-condensed'>" + 
+        "<thead>" +
+        "<tr>" +
+        "<th ng-repeat='column in model.purchaseDetails.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr ng-repeat='record in model.purchaseDetails.data'>" +
+        "<td ng-repeat='column in model.purchaseDetails.columns' >" + 
+        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
+        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
+        "</td>" +
+        "</tr>" + 
+        "</tbody>" +
+        "</table>" +
+        "</div>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.purchaseDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: purchaseDetailsTable
                 }
             ]
         });
