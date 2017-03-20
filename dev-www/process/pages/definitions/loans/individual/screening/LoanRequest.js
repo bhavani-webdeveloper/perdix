@@ -2030,6 +2030,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         key: "review.targetStage",
                         type: "lov",
                         autolov: true,
+                        lovonly:true,
                         title: "SEND_BACK_TO_STAGE",
                         bindMap: {},
                         searchHelper: formHelper,
