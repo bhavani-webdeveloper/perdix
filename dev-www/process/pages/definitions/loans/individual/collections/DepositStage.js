@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.DepositStage"),
-["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper",
-function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper){
+["$log", "SessionStore","$state", "$stateParams", "irfElementsConfig","Queries","formHelper","CustomerBankBranch","LoanCollection","PageHelper", "$filter", "$q",
+function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHelper,CustomerBankBranch,LoanCollection,PageHelper,$filter, $q){
 
     // var branch = SessionStore.getBranch();
     var branch = SessionStore.getCurrentBranch().branchName;
@@ -23,7 +23,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             model.loggedInUser = SessionStore.getLoginname();
             PageHelper.showLoader();
 
-            Queries.getDepositList(SessionStore.getLoginname())
+            var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
                 $log.info(res);
                 model.pendingCashDeposits = [];
@@ -45,9 +45,29 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 for ( i = 0; i < model.pendingCashDeposits.length; i++)
                             model.pendingCashDeposits[i].check = true;
                 computeTotal(model);
-                PageHelper.hideLoader();
-            },
-            function(httpRes){
+            });
+            var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+
+                var records = res.body;
+
+                if(records && _.isArray(records) && records.length > 0){
+
+                    var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
+                    model.bankDepositSummary = {};
+                    if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
+                    	model.bankDepositSummary.bankAccountNumber = defaultBank[0].account_number;
+                }
+
+            });
+
+            var promiseArray = [depositListPromise, accountDetailPromise];
+
+            $q.all(promiseArray).then(
+                function(){
+                    PageHelper.hideLoader();
+                }, 
+
+                function(httpRes){
                 PageHelper.showProgress('deposit-stage', 'Failed to load the deposit details. Try again.', 4000);
                 PageHelper.showErrors(httpRes);
                 PageHelper.hideLoader();

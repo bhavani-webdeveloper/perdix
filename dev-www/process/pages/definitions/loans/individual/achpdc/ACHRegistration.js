@@ -104,6 +104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 									// console.log(resQuery.urns[model.achIndividualLoanSearch.applicant].first_name);
 									model.ach.applicantName = resQuery.urns[model.achIndividualLoanSearch.applicant].first_name;
 									model.ach.entityName = resQuery.urns[model.achIndividualLoanSearch.urnNo].first_name;
+									model.ach.phoneNo = resQuery.urns[model.achIndividualLoanSearch.urnNo].mobile_phone;
 								},
 								function(errQuery) {}
 							);

@@ -80,6 +80,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 for (var i = 0; i < branch1.length; i++) {
                     if ((branch1[i].name) == SessionStore.getBranch()) {
                         model.customer.customerBranchId = branch1[i].value;
+                        model.customer.kgfsName = branch1[i].name;
                     }
                 }
                 var centres = SessionStore.getCentres();
@@ -221,21 +222,33 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "title": "LOAD_EXISTING_CUSTOMER",
                         "type": "lov",
                         "lovonly": true,
+                         initialize: function(model, form, parentModel, context) {
+                                        model.customerBranchId = parentModel.customer.customerBranchId;
+                                        model.centreId = parentModel.customer.centreId;
+                                    },
                         "inputMap": {
                             "firstName": {
                                 "key": "customer.firstName",
                                 "title": "CUSTOMER_NAME"
                             },
-                            "kgfsName": {
-                                "key": "customer.kgfsName",
+                            "urnNo": {
+                                "key": "customer.urnNo",
+                                "title": "URN_NO",
+                                "type": "string"
+                            },
+                            "customerBranchId": {
+                                "key": "customer.customerBranchId",
                                 "type": "select",
-                                "screenFilter": true
+                                "screenFilter": true,
+                                "readonly": true,
+                                "enumCode": "branch_id"
                             },
                             "centreId": {
                                 "key": "customer.centreId",
                                 "type": "select",
                                 "screenFilter": true,
                                 "parentEnumCode": "branch",
+                                "parentValueExpr" :"model.customerBranchId",
                             }
                         },
                         "outputMap": {
@@ -244,12 +257,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
+                            var branches = formHelper.enum('branch_id').data;
+                            var branchName;
+                            for (var i=0; i<branches.length;i++){
+                                if(branches[i].code==inputModel.customerBranchId)
+                                    branchName = branches[i].name;
+                            }
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var promise = Enrollment.search({
-                                'branchName': inputModel.kgfsName ||SessionStore.getBranch(),
+                                'branchName': branchName ||SessionStore.getBranch(),
                                 'firstName': inputModel.firstName,
                                 'centreId':inputModel.centreId,
-                                'customerType':"enterprise"
+                                'customerType':"enterprise",
+                                'urnNo': inputModel.urnNo
                             }).$promise;
                             return promise;
                         },
@@ -347,6 +367,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     },
                     {
                         key: "customer.centreId",
+                        condition: "!model.customer.id",
                         type: "lov",
                         autolov: true,
                         lovonly: true,
@@ -386,6 +407,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 item.name
                             ];
                         }
+                    },
+                    {
+                        key: "customer.centreId",
+                        condition: "model.customer.id",
+                        readonly: true
                     },
                     {
                         key: "customer.oldCustomerId",

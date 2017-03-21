@@ -82,7 +82,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 model.customer.enterprise = {};
                             }
 
-                            model.customer.customerBranchId = allowedBranch[0].value;
+                            model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
 
                              var centres = SessionStore.getCentres();
                              var centreName = [];
@@ -227,6 +227,11 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             "key": "customer.firstName",
                                             "title": "CUSTOMER_NAME"
                                         },
+                                        "urnNo": {
+                                            "key": "customer.urnNo",
+                                            "title": "URN_NO",
+                                            "type": "string"
+                                        },
                                         "customerBranchId": {
                                             "key": "customer.customerBranchId",
                                             "type": "select",
@@ -258,7 +263,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             'branchName': branchName ||SessionStore.getBranch(),
                                             'firstName': inputModel.firstName,
                                             'centreId':inputModel.centreId,
-                                            'customerType':"individual"
+                                            'customerType':"individual",
+                                            'urnNo': inputModel.urnNo
                                         }).$promise;
                                         return promise;
                                     },
@@ -1349,7 +1355,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             "key": "customer.expenditures[].annualExpenses",
                                             "type": "amount",
-                                            "title": "MONTHLY_EDUCATION_EXPENSE"
+                                            "title": "MONTHLY_HOUSEHOLD_EXPENSE"
                                         }
                                     ]
                                 }

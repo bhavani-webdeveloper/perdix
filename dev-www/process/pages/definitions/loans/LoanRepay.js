@@ -113,7 +113,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                     var p3 = LoanCollection.query({"currentStage":"Initiation","accountNumber":loanAccountNo}).$promise
                             .then(function (resp){
-                                model.repayment.id = resp.body[0].id;
+                                if(resp.body && resp.body.length > 0)
+                                    model.repayment.id = resp.body[0].id;
                             }, function(httperr){});
 
                     var p4 = Queries.getUnApprovedPaymentsForAccount(loanAccountNo)
@@ -130,9 +131,20 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             }
                         )
 
+                    var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+                        var records = res.body;
+
+                        if(records && _.isArray(records) && records.length > 0){
+
+                            var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
+                            if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
+                            model.repayment.bankAccountNumber = defaultBank[0].account_number;
+                        }
+                    });
 
 
-                    $q.all([promise, p3, p4])
+
+                    $q.all([promise, p3, p4, defaultAccountPromise])
                         .finally(
                             function(){
                                 PageHelper.hideLoader();
