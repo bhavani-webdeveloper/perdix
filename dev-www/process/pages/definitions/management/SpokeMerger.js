@@ -78,9 +78,15 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                             "key": "customer.firstName",
                                             "title": "CUSTOMER_NAME"
                                         },
+                                        "urnNo": {
+                                            "key": "customer.urnNo",
+                                            "title": "URN_NO",
+                                            "type": "string"
+                                        },
                                         "kgfsName": {
                                             "key": "customer.kgfsName",
                                             "type": "select",
+                                            "required": true,
                                             "enumCode": "branch_id"
                                         },
                                         "centreId": {
@@ -118,6 +124,7 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                             'firstName': inputModel.firstName,
                                             'centreId': inputModel.centreId,
                                             'customerType':inputModel.customerType||"",
+                                            'urnNo': inputModel.urnNo
                                         }).$promise;
                                         return promise;
                                     },
@@ -217,6 +224,11 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                                 "type": ["string", "null"],
                                 "title": "Customer Type"
                             },
+                            "urnNo": {
+                                "title": "URN_NO",
+                                "type": ["string", "null"]
+                            },
+
                             "customerid": {
                                 "type": "array",
                                 "title": "CUSTOMER_ID",
