@@ -10,9 +10,9 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	$scope.isCordova = typeof(cordova) !== 'undefined';
 
 	var checkLatestVersion = function() {
+		$scope.latest_apk_url = '';
+		$scope.latest_apk_force_upgrade = false;
 		if ($scope.isCordova) {
-			$scope.latest_apk_url = '';
-			$scope.latest_apk_force_upgrade = false;
 			Queries.getGlobalSettings('cordova.latest_apk_version').then(function(value){
 				$scope.latest_version = value;
 				if ($scope.app_manifest.version != $scope.latest_version) {

@@ -170,8 +170,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "Queries",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, Queries) {
     var self = this;
 
     $scope.pages = [];
@@ -295,6 +295,20 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             return $q.reject();
         }
     };
+
+    var autoSaveOffline = function(n) {
+        BundleManager.updateOffline();
+        $timeout(function() {
+            autoSaveOffline(n);
+        }, n);
+    };
+
+    Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
+        var n = Number(value);
+        $timeout(function() {
+            autoSaveOffline(n);
+        }, n);
+    });
 
     BundleManager.deleteOffline = function() {
         if ($scope.bundleModel.$$STORAGE_KEY$$) {

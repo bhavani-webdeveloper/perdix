@@ -48,19 +48,25 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 		$timeout(showHeads);
 	};
 
-	$scope.$on('box-init', function() {
-		if ($scope.showHeads) {
-			forceShowHeads = true;
-			$timeout(showHeads);
-		}
-	});
+	var initializeCardLayout = function() {
+		renderLayout();
+		$(window).resize(renderLayout);
 
-	$scope.$on('box-destroy', function() {
-		if ($scope.showHeads) {
-			forceShowHeads = true;
-			$timeout(showHeads);
-		}
-	});
+		$scope.$on('box-init', function() {
+			if ($scope.showHeads) {
+				forceShowHeads = true;
+				$timeout(showHeads);
+			}
+		});
+
+		$scope.$on('box-destroy', function() {
+			if ($scope.showHeads) {
+				forceShowHeads = true;
+				$timeout(showHeads);
+			}
+		});
+
+	};
 
 	/* =================================================================================== */
 	$log.info("Page.Engine.html loaded");
@@ -98,9 +104,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 			});
 			$scope.$on('sf-render-finished', function(event){
 				$log.warn("on sf-render-finished on page, rendering layout");
-				//setTimeout(renderLayout);
-				renderLayout();
-				$(window).resize(renderLayout);
+				//initializeCardLayout(); // Feature disabled
 			});
 		} else if ($scope.page.type == 'search-list') {
 			$scope.model = entityManager.getModel($scope.pageName);
