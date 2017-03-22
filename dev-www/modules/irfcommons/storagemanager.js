@@ -182,7 +182,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 			return masters[classifier];
 		},
 		setMaster: function(classifier, master) {
-			if (classifier && master && master.data && master.data.length) {
+			if (classifier && master) {
 				masters[classifier] = master;
 				factoryObj.storeJSON('irfMasters', masters);
 			}
