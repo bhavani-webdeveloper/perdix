@@ -1,3 +1,0 @@
-INSERT INTO `reference_code` (`id`, `version`, `classifier`, `name`, `code`, `parent_classifier`, `parent_reference_code`, `field1`, `field2`, `field3`, `field4`, `field5`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES (NULL, '1', 'decisionmaker1', 'Yes', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '2016-11-01 16:08:43', NULL, NULL);
-
-INSERT INTO `reference_code` (`id`, `version`, `classifier`, `name`, `code`, `parent_classifier`, `parent_reference_code`, `field1`, `field2`, `field3`, `field4`, `field5`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES (NULL, '1', 'decisionmaker1', 'No', '2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '2016-11-01 16:10:36', NULL, NULL);

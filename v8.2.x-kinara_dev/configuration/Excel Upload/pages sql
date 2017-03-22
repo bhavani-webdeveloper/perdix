@@ -1,6 +1,0 @@
-INSERT INTO `pages` (`id`, `uri`, `title`, `short_title`, `icon_class`, `direct_access`, `offline`, `state`, `page_name`, `page_id`, `addl_params`) VALUES 
-(NULL, 'Page/Engine/lead.LeadFollowUpQueue', 'Lead Follow Up', '', 'fa fa-calendar', '1', '0', 'Page.Engine', 'lead.LeadFollowUpQueue', '', ''),
-(NULL, 'Page/Engine/lead.LeadGeneration', 'Lead Generation', '', 'fa fa-user-plus', '1', '0', 'Page.Engine', 'lead.LeadGeneration', '', ''),
-(NULL, 'Page/Engine/lead.LeadBulkUpload', 'Lead Bulk Upload', '', 'fa fa-search', '1', '0', 'Page.Engine', 'lead.LeadBulkUpload', '', ''),
-(NULL, 'Page/Engine/lead.IncompleteLeadQueue', 'Incomplete Lead', '', 'fa fa-list-alt', '1', '0', 'Page.Engine', 'lead.IncompleteLeadQueue', '', ''),
-(NULL, 'Page/Engine/lead.leadAssignmentPendingQueue', 'Lead Assignment Pending', '', 'fa fa-tags', '1', '0', 'Page.Engine', 'lead.leadAssignmentPendingQueue', '', '');

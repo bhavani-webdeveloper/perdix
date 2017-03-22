@@ -1,1 +1,0 @@
-select * from reference_code where classifier in ('bank', 'branch', 'village', 'centre', 'collateral_type', 'partner', 'loan_product');

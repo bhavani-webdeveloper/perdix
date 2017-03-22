@@ -1,1 +1,0 @@
-UPDATE `reference_code` SET `created_at`=now(),`last_edited_at`= now() WHERE `created_at` = '0000-00-00 00:00:00' or `created_at` is null or `last_edited_at` =  '0000-00-00 00:00:00' or `last_edited_at` is null;
