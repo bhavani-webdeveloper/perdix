@@ -39,12 +39,14 @@
     <span class="fa fa-bars"></span>
     <i class="fa fa-times"></i>
   </button>
-  <input ng-model="model.newParticipant.login" class="form-control menu-toggle pull-left" placeholder="Enter Participant" readonly />
-  <a irf-lov irf-form="model.newParticipantForm" irf-schema="model.newParticipantSchema" irf-model="model" class="menu-toggle" href="">
-    <i class="fa fa-bars color-theme"></i>
-  </a>
-  <button ng-click="model.addMessageParticipant(model)" class="btn btn-danger btn-flat menu-toggle pull-left">Add Participant</button>
-  <!-- <button ng-click="model.closeConversation(model)" class="btn btn-default btn-flat menu-toggle pull-left">Close Conversation</button> -->
+  <span ng-show="model.participantsMap[model.user_id]">
+    <input ng-model="model.newParticipant.login" class="form-control menu-toggle pull-left" placeholder="Enter Participant" readonly />
+    <a irf-lov irf-form="model.newParticipantForm" irf-schema="model.newParticipantSchema" irf-model="model" class="menu-toggle" href="">
+      <i class="fa fa-bars color-theme"></i>
+    </a>
+    <button ng-click="model.addMessageParticipant(model)" class="btn btn-danger btn-flat menu-toggle pull-left">Add Participant</button>
+    <!-- <button ng-click="model.closeConversation(model)" class="btn btn-default btn-flat menu-toggle pull-left">Close Conversation</button> -->
+  </span>
 </div>
 <!-- /.box-header -->
 <div class="box-body">
@@ -90,7 +92,7 @@
   <!-- /.direct-chat-pane -->
 </div>
 <!-- /.box-body -->
-<div class="box-footer">
+<div class="box-footer" ng-show="model.participantsMap[model.user_id]">
   <form action="#" method="post">
     <div class="input-group">
       <input ng-model="model.newMessage" name="message" placeholder="Type Message ..." class="form-control" />
