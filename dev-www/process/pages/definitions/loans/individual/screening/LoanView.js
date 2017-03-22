@@ -114,25 +114,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$l
                 desc: "",
                 icon: "fa fa-comment",
                 fn: function(bundleModel) {
-                    var threadId = null, threadTitle = null;
-                    Message.getThreadForLoan({loanId: $stateParams.pageId}).$promise.then(function(response) {
-                        threadId = response.headers['thread-id'];
-                        threadTitle = response.headers['thread-title'];
-                    }).finally(function() {
-                        if (threadId) {
-                            Message.openConversation({
-                                id: threadId,
-                                title: threadTitle
-                            });
-                        } else {
-                            Message.createConversation({
-                                "messageThreads": {
-                                    "title": "For Loan: " + $stateParams.pageId,
-                                    "reference_no": Number($stateParams.pageId)
-                                }
-                            }, true);
-                        }
-                    });
+                    Message.openOrCreateConversation("Loan", $stateParams.pageId);
                 },
                 isApplicable: function(bundleModel) {
                     return true;

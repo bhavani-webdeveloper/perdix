@@ -204,7 +204,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		"title": "Participant",
 		"startEmpty": true,
 		"required": true,
-		"view": "fixed",
+		//"view": "fixed",
 		"type": "array",
 		"items": [{
 			"key": "messageThreads.messageParticipants[].participant",

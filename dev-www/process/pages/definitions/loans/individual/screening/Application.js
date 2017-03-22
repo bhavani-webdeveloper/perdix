@@ -1,11 +1,10 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
         	$log.info("Inside LoanBookingBundle");
 
-            
         	return {
         		"type": "page-bundle",
         		"title": "APPLICATION",
@@ -75,6 +74,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                     }
                     return out;
                 },
+
+                bundleActions: [{
+                    name: "Conversation",
+                    desc: "",
+                    icon: "fa fa-comment",
+                    fn: function(bundleModel) {
+                        Message.openOrCreateConversation("Loan", $stateParams.pageId);
+                    },
+                    isApplicable: function(bundleModel) {
+                        return true;
+                    }
+                }],
+
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     var deferred = $q.defer();

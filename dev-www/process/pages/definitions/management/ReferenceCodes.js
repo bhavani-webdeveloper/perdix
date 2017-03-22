@@ -124,13 +124,13 @@ irf.pageCollection.factory(irf.page("management.ReferenceCodes"), ["$log", "Sess
                         key: "reference.codes[].field5",
                         title: "Field5"
                     }]
-                }, {
-                    type: "actionbox",
-                    condition: "model.reference.codes.length",
-                    items: [{
-                        type: "submit",
-                        title: "Update"
-                    }]
+                }]
+            }, {
+                type: "actionbox",
+                condition: "model.reference.codes.length",
+                items: [{
+                    type: "submit",
+                    title: "Update"
                 }]
             }],
 

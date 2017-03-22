@@ -87,14 +87,27 @@ function($resource, $httpParamSerializer, SessionStore) {
 	};
 	*/
 
-	resource.openOrCreateConversation = function(referenceNumber, referenceType) {
+	resource.openOrCreateConversation = function(referenceType, referenceNumber) {
+		var threadId = null, threadTitle = null;
 		resource.getThreadForLoan({loanId: referenceNumber}).$promise.then(function(response) {
-			var threadId = response.headers['thread-id'];
+			threadId = response.headers['thread-id'];
+			threadTitle = response.headers['thread-title'];
+		}).finally(function() {
 			if (threadId) {
-
+				resource.openConversation({
+					id: threadId,
+					title: threadTitle
+				});
+			} else {
+				resource.createConversation({
+					"messageThreads": {
+						"title": "For " + referenceType + ": " + referenceNumber,
+						"reference_no": Number(referenceNumber)
+					}
+				}, true);
 			}
 		});
-	}
+	};
 
 	return resource;
 }]);

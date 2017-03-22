@@ -1,10 +1,9 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskReview'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
         	$log.info("Inside LoanBookingBundle");
-
 
         	return {
         		"type": "page-bundle",
@@ -90,6 +89,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                     }
                     return out;
                 },
+
+                bundleActions: [{
+                    name: "Conversation",
+                    desc: "",
+                    icon: "fa fa-comment",
+                    fn: function(bundleModel) {
+                        Message.openOrCreateConversation("Loan", $stateParams.pageId);
+                    },
+                    isApplicable: function(bundleModel) {
+                        return true;
+                    }
+                }],
+
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     bundleModel.currentStage = "CentralRiskReview";
