@@ -92,20 +92,32 @@
                     </ul>
                 </li>
               <!-- Messages: style can be found in dropdown.less-->
-              <li class="dropdown messages-menu" ng-click="openMessageThreadListMenu($event)">
+<style type="text/css">
+.conv-h4-span {
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+.conv-status-a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+              <li class="dropdown messages-menu" ng-click="openMessageThreadListMenu($event)" ng-show="unreadMessageCount">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-envelope-o"></i>
-                  <span ng-if="unreadMessageCount" class="label label-danger" ng-bind="unreadMessageCount"></span>
+                  <i class="fa fa-comment"></i>
+                  <span class="label label-danger">{{unreadMessageCount}}</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header"><a href="" ng-click="$event.preventDefault();createConversation()"><i class="fa fa-plus">&nbsp;</i>Create new conversation</a></li>
+                  <!-- <li class="header"><a href="" ng-click="$event.preventDefault();createConversation()"><i class="fa fa-comment">&nbsp;</i>Create Conversation</a></li> -->
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                       <li ng-repeat="chat in conv.conversations"><!-- start message -->
                         <a href="#" ng-click="openConversation(chat, $event)">
                           <h4 style="margin: 0">
-                            {{chat.title}}
+                            <span class="conv-h4-span">{{chat.title}}</span>
                             <small><i class="fa fa-clock-o">&nbsp;</i>{{chat.lastMessageSince}}</small>
                           </h4>
                           <p style="margin: 0">{{chat.message}}</p>
@@ -115,7 +127,7 @@
                     </ul>
                   </li>
                   <li class="footer" style="display: none">
-                      <a href="#" ng-click="updateStatusMessage($event)" style="overflow: hidden; text-overflow: ellipsis;"><i class="fa fa-circle text-success">&nbsp;</i>{{userStatus.message}}</a>
+                      <a href="#" ng-click="updateStatusMessage($event)" class="conv-status-a"><i class="fa fa-circle text-success">&nbsp;</i>{{userStatus.message}}</a>
                   </li>
                 </ul>
               </li>

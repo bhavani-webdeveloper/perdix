@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message) {
         $log.info("Inside LoanBookingBundle");
         return {
             "type": "page-bundle",
@@ -64,45 +64,80 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$l
             }],
             "bundlePages": [],
             "offline": false,
-            "back": true,
 
-            "back": function(value, index, bundleModel) {
-                $log.info("back button pressed");
-                $log.info($stateParams.pageId);
-                if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
-                    var loanId = $stateParams.pageId;
-                    IndividualLoan.get({
-                        id: loanId
-                    }).$promise.then(
-                        function(res) {
-                            $log.info(res);
-                            if (res.currentStage == "LoanInitiation") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.LoanInput',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "DocumentVerification") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.DocumentVerification',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "IfmrDO") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.IFMRDO',
-                                    pageId: loanId
-                                });
-                            }
-                            if (res.currentStage == "DocumentUpload") {
-                                $state.go("Page.Engine", {
-                                    pageName: 'loans.individual.booking.DocumentUpload',
-                                    pageId: loanId
-                                });
-                            }
-                        })
+            bundleActions: [{
+                name: "Go Back",
+                desc: "",
+                icon: "fa fa-angle-left",
+                fn: function(bundleModel) {
+                    $log.info("back button pressed");
+                    $log.info($stateParams.pageId);
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
+                        var loanId = $stateParams.pageId;
+                        IndividualLoan.get({
+                            id: loanId
+                        }).$promise.then(
+                            function(res) {
+                                $log.info(res);
+                                if (res.currentStage == "LoanInitiation") {
+                                    $state.go("Page.Engine", {
+                                        pageName: 'loans.individual.booking.LoanInput',
+                                        pageId: loanId
+                                    });
+                                }
+                                if (res.currentStage == "DocumentVerification") {
+                                    $state.go("Page.Engine", {
+                                        pageName: 'loans.individual.booking.DocumentVerification',
+                                        pageId: loanId
+                                    });
+                                }
+                                if (res.currentStage == "IfmrDO") {
+                                    $state.go("Page.Engine", {
+                                        pageName: 'loans.individual.booking.IFMRDO',
+                                        pageId: loanId
+                                    });
+                                }
+                                if (res.currentStage == "DocumentUpload") {
+                                    $state.go("Page.Engine", {
+                                        pageName: 'loans.individual.booking.DocumentUpload',
+                                        pageId: loanId
+                                    });
+                                }
+                            })
+                    }
+                },
+                isApplicable: function(bundleModel) {
+                    return true;
                 }
-            },
+            }, {
+                name: "Conversation",
+                desc: "",
+                icon: "fa fa-comment",
+                fn: function(bundleModel) {
+                    var threadId = null, threadTitle = null;
+                    Message.getThreadForLoan({loanId: $stateParams.pageId}).$promise.then(function(response) {
+                        threadId = response.headers['thread-id'];
+                        threadTitle = response.headers['thread-title'];
+                    }).finally(function() {
+                        if (threadId) {
+                            Message.openConversation({
+                                id: threadId,
+                                title: threadTitle
+                            });
+                        } else {
+                            Message.createConversation({
+                                "messageThreads": {
+                                    "title": "For Loan: " + $stateParams.pageId,
+                                    "reference_no": Number($stateParams.pageId)
+                                }
+                            }, true);
+                        }
+                    });
+                },
+                isApplicable: function(bundleModel) {
+                    return true;
+                }
+            }],
 
             "getOfflineDisplayItem": function(value, index) {
                 var out = new Array(2);

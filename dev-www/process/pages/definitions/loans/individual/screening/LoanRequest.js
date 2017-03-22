@@ -2163,25 +2163,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
         },
             {
                 "type": "actionbox",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView' && model.loanAccount.id",
-                "items": [
-                    {
-                        "type": "button",
-                        "icon": "fa fa-circle-o",
-                        "title": "SAVE",
-                        "onClick": "actions.save(model, formCtrl, form, $event)"
-                    },
-                    {
-                        "type": "button",
-                        "icon": "fa fa-comment",
-                        "title": "Create Conversation",
-                        "onClick": "actions.createConversation(model, formCtrl, form, $event)"
-                    }
-                ]
-            },
-            {
-                "type": "actionbox",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView' && !model.loanAccount.id",
+                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanView'",
                 "items": [
                     {
                         "type": "button",
@@ -2656,14 +2638,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 })
                         }
                     )
-            },
-            createConversation: function(model, formCtrl, form, $event) {
-                Message.createConversation({
-                    "messageThreads": {
-                        "title": "For Loan: " + model.loanAccount.id,
-                        "reference_no": model.loanAccount.id
-                    }
-                });
             }
         }
     };

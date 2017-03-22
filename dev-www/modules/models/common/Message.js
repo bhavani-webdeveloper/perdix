@@ -15,13 +15,17 @@ function($resource, $httpParamSerializer, SessionStore) {
 				return response;
 			}
 		},
-		createMessage: {
-			method: 'POST',
-			url: endpoint+'/createMessage.php'
+		unreadMessageThreadList: {
+			method: 'GET',
+			url: endpoint+'/unReadMessageThreadList.php'
 		},
 		messageThreadList: {
 			method: 'GET',
 			url: endpoint+'/messageThreadList.php'
+		},
+		createMessage: {
+			method: 'POST',
+			url: endpoint+'/createMessage.php'
 		},
 		messageList: {
 			method: 'GET',
@@ -43,11 +47,30 @@ function($resource, $httpParamSerializer, SessionStore) {
 			method: 'POST',
 			url: endpoint+'/addMessage.php'
 		},
+		getThreadForLoan: {
+			method: 'HEAD',
+			url: endpoint+'/getThreadForLoan.php',
+			transformResponse: function(data, headers){
+				response = {
+					data: data,
+					headers: headers()
+				};
+				return response;
+			}
+		}/*,
 		closeMessage: {
 			method: 'HEAD',
 			url: endpoint+'/closeMessage.php'
-		}
+		}*/
 	});
+
+	// resource.openConversation = function(chat) {} // this function is be available to use in here. no need to uncomment. this is for reference
+	/*
+	chat = {
+		id: 1,
+		title: ''
+	};
+	*/
 
 	// resource.createConversation = function(initModel) {} // this function is be available to use in here. no need to uncomment. this is for reference
 	/*
@@ -63,6 +86,15 @@ function($resource, $httpParamSerializer, SessionStore) {
 		}
 	};
 	*/
+
+	resource.openOrCreateConversation = function(referenceNumber, referenceType) {
+		resource.getThreadForLoan({loanId: referenceNumber}).$promise.then(function(response) {
+			var threadId = response.headers['thread-id'];
+			if (threadId) {
+
+			}
+		});
+	}
 
 	return resource;
 }]);

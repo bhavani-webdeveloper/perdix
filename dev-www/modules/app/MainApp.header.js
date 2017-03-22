@@ -16,9 +16,9 @@ MainApp.directive('irfHeader', function(){
 });
 
 MainApp.controller("irfHeaderController",
-["$scope", "$log", "$http", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "User", "Message",
+["$scope", "$log", "$http", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User", "Message",
 	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account", "formHelper",
-function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translate, languages, $state, User, Message,
+function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User, Message,
 	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account, formHelper) {
 
 	$scope.ss = SessionStore;
@@ -196,7 +196,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		"type": "text"
 	}, {
 		"key": "messageThreads.reference_no",
-		"title": "Reference ID",
+		"title": "Reference",
 		"required": true,
 		"type": "number"
 	}, {
@@ -274,8 +274,8 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		});
 	};
 
-	var getMessageThreadList = function() {
-		return Message.messageThreadList(userObj).$promise.then(function(response) {
+	var getUnreadMessageThreadList = function() {
+		return Message.unreadMessageThreadList(userObj).$promise.then(function(response) {
 			if (response && response.conversations && response.conversations.length) {
 				for (i in response.conversations) {
 					response.conversations[i].lastMessageSince = moment(response.conversations[i].created_at, 'YYYY-MM-DD HH:mm:ss').fromNow();
@@ -287,7 +287,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 
 	var getMessageList = function(conversationData) {
 		return Message.messageList({thread_id: conversationData.thread_id}).$promise.then(function(response) {
-			conversationData.conversations = response.conversations;
+			conversationData.conversations = response.conversations.reverse();
 		});
 	};
 
@@ -327,25 +327,30 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 			}
 		}).$promise.finally(function(response) {
 			conversationData.newMessage = "";
-			getMessageList(conversationData);
+			getMessageList(conversationData).finally(function() {
+				setTimeout(function() {
+					var chatBox = $(".direct-chat-messages")[0];
+					chatBox.scrollTop = chatBox.scrollHeight;
+				});
+			});
 		});
 	};
 
-	var closeConversation = function(conversationData) {
+	/*var closeConversation = function(conversationData) {
 		return Message.closeMessage({thread_id: conversationData.thread_id, user_id: conversationData.user_id});
-	};
+	};*/
 
 	getUnreadMessageCount();
-	getMessageThreadList();
+	getUnreadMessageThreadList();
 
 	$scope.openMessageThreadListMenu = function($event) {
 		if(!$($event.currentTarget).is('.open')) {
-			getMessageThreadList();
+			getUnreadMessageThreadList();
 		}
 	};
 
 	$scope.openConversation = function(chat, $event) {
-		$event.preventDefault();
+		$event && $event.preventDefault();
 		var conversationData = {
 			thread_id: chat.id,
 			user_id: $scope.ss.session.login,
@@ -357,24 +362,37 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 			conversations: [],
 			participants: []
 		};
-		getMessageList(conversationData);
+		var getMsgListPromise = getMessageList(conversationData);
 		getMessageThreadParticipants(conversationData);
 		$http.get('modules/app/templates/conversation.html', {cache: $templateCache}).then(function(response) {
 			var conversationWindow = irfSimpleModal(chat.title, response.data, conversationData);
 			conversationWindow.opened.then(function() {
-				Message.messageRead({thread_id: chat.id, user_id: $scope.ss.session.login});
+				Message.messageRead({thread_id: chat.id, user_id: $scope.ss.session.login}).$promise.then(function() {
+					getUnreadMessageCount();
+				});
 			});
-			conversationData.closeConversation = function(model) {
+			/*conversationData.closeConversation = function(model) {
 				Utils.confirm("Are you Sure? The conversation will be closed & won't be visible to any participants").then(function() {
 					closeConversation(model).$promise.finally(function() {
 						conversationWindow.close();
 					});
 				});
-			};
+			};*/
+			$q.all([getMsgListPromise, conversationWindow.opened]).finally(function() {
+				setTimeout(function() {
+					var chatBox = $(".direct-chat-messages")[0];
+					chatBox.scrollTop = chatBox.scrollHeight;
+				});
+			});
 		});
 	};
 
-	$scope.createConversation = function(initModel) {
+	$scope.createConversation = function(initModel, reducedAccess) {
+		if (reducedAccess) {
+			createConversationForm[2].readonly = true;
+		} else {
+			createConversationForm[2].readonly = false;
+		}
 		var createConversationModel = {
 			formName: "createConversationForm",
 			formHelper: formHelper,
@@ -423,6 +441,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		};
 	};
 
+	Message.openConversation = $scope.openConversation;
 	Message.createConversation = $scope.createConversation;
 
 	// Future Use

@@ -387,6 +387,12 @@ ul.nav-tabs > li.tab-danger.active > a:focus {
   color: #000 !important;
   border-top-color: #dd4b39 !important;
 }
+.actions-bar {
+  margin-top: 6px;
+}
+.actions-bar button + button {
+  margin-left: 10px;
+}
 /* Page Bundle starts */
 .bundle-page.readonly .bundle-tabset ul.nav-tabs > li:first-child {
   margin-left: 15px;

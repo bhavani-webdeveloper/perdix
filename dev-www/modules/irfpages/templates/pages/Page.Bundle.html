@@ -4,12 +4,14 @@
       <span><a href ng-click="expandCollapseView()" style="color:#333"> {{ bundlePage.title | translate }}</a></span>
       <span ng-show="bundlePage.offline">|&nbsp; <small><a href ng-click="loadOfflinePage($event)" style="color:#999"><i class="fa fa-save">&nbsp;</i>{{'Offline Saved Records'|translate}}</a></small></span>
       <span class="button-holder pull-right">
-        <button ng-show="bundlePage.offline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i>{{ (bundleModel.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
-      </span>
-      <span class="button-holder pull-right">
-        <button ng-show="bundlePage.back" ng-click="bundlePage.back()" class="btn btn-theme btn-xs"><i class="fa fa-step-backward">&nbsp;</i>{{ "Back" | translate }}</button>
+        <button ng-show="bundlePage.offline" ng-click="saveOffline()" class="btn btn-theme btn-xs"><i class="fa fa-save">&nbsp;</i> {{ (bundleModel.$$STORAGE_KEY$$ ? "Offline Update" : "Offline Save") | translate }}</button>
       </span>
     </h1>
+    <div class="actions-bar">
+      <button class="btn btn-theme btn-xs" ng-repeat="bAct in bundlePage.bundleActions" title="{{bAct.desc}}" ng-click="bAct.fn(bundleModel, pages)" ng-disable="!bAct.isApplicable(bundleModel)">
+        <i ng-show="bAct.icon" class="{{bAct.icon}}">&nbsp;</i>{{bAct.name}}
+      </button>
+    </div>
   </section>
   <uib-tabset active="activeIndex" class="bundle-tabset">
     <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}" select="onTabOpen($index, $event)">
