@@ -1,0 +1,315 @@
+{
+    "reinitiateDocTrackingStage":"RejectedDocuments",
+    "stages": [
+        {
+            "order": 1,
+            "code": "BatchInitiation",
+            "name": "CreateTracker",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 2,
+            "code": "BatchConfirmation",
+            "name": "ConfirmTracker",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 3,
+            "code": "BatchInTransit",
+            "name": "MapBatch",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 4,
+            "code": "PendingVerification",
+            "name": "SendDocument",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 5,
+            "code": "PendingFiling",
+            "name": "ReceiveCourier",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 6,
+            "code": "RejectedDocuments",
+            "name": "RejectedDocuments",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 7,
+            "code": "Filed",
+            "name": "Filed",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        }
+    ],
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Comment",
+        "required": [
+            "accountDocumentTracker",
+            "accountDocTrackerDetails"
+        ],
+        "properties": {
+            "accountDocumentTracker": {
+                "title": "Account Document Tracker",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "accountNumber"
+                    ],
+                    "properties": {
+                        "accountNumber": {
+                            "title": "Account Number",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "status": {
+                            "title": "status",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "PendingVerification"
+                            ]
+                        },
+                        "courierNumber": {
+                            "title": "courierNumber",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchConfirmation"
+                            ]
+                        },
+                        "courierName": {
+                            "title": "courierName",
+                            "type": "number",
+                            "minimum": 10,
+                            "maximum": 90,
+                            "captureStages": [
+                                "BatchConfirmation"
+                            ]
+                        },
+                        "courierDate": {
+                            "title": "courierDate",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchConfirmation"
+                            ]
+                        },
+                        "scheduledDisbursementDate": {
+                            "title": "scheduledDisbursementDate",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "receiveDate": {
+                            "title": "receiveDate",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchInTransit"
+                            ]
+                        },
+                        "hardCopyVerificationDate": {
+                            "title": "hardCopyVerificationDate",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingVerification"
+                            ]
+                        },
+                        "acceptDate": {
+                            "title": "acceptDate",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingVerification"
+                            ]
+                        },
+                        "rejectDate": {
+                            "title": "rejectDate",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingVerification","PendingFiling"
+                            ]
+                        },
+                        "rejectRemarks": {
+                            "title": "rejectRemarks",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 200,
+                            "captureStages": [
+                                "PendingVerification","PendingFiling"
+                            ]
+                        },
+                        "filingDate": {
+                            "title": "filingDate",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingFiling"
+                            ]
+                        },
+                        "remarks": {
+                            "title": "remarks",
+                            "type": "number",
+                            "minimum": 10,
+                            "maximum": 90,
+                            "captureStages": [
+                                "BatchInitiation","BatchConfirmation"
+                            ]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udf2": {
+                            "title": "udf2",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udf3": {
+                            "title": "udf3",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udf4": {
+                            "title": "udf4",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udf5": {
+                            "title": "udf5",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udfDate1": {
+                            "title": "udfDate1",
+                            "type": "date",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udfDate2": {
+                            "title": "udfDate2",
+                            "type": "date",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udfDate3": {
+                            "title": "udfDate3",
+                            "type": "date",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udfDate4": {
+                            "title": "udfDate4",
+                            "type": "date",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "udfDate5": {
+                            "title": "udfDate5",
+                            "type": "date",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        }
+                    }
+                }
+            },
+            "accountDocTrackerDetails": {
+                "title": "Account Doc Tracker Details",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "document"
+                    ],
+                    "properties": {
+                        "document": {
+                            "title": "document",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "documentId": {
+                            "title": "documentId",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchInitiation"
+                            ]
+                        },
+                        "status": {
+                            "title": "status",
+                            "type": "string",
+                            "captureStages": [
+                                "BatchInitiation","BatchInTransit","PendingVerification","PendingFiling"
+                            ]
+                        },
+                        "remarks": {
+                            "title": "remarks",
+                            "type": "number",
+                            "captureStages": [
+                                "PendingFiling"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

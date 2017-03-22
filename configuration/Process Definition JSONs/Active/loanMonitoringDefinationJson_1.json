@@ -1,0 +1,976 @@
+{
+    "stages": [{
+        "order": 1,
+        "code": "LUCSchedule",
+        "name": "LUC Schedule",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 2,
+        "code": "LUCReschedule",
+        "name": "LUC Reschedule",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 3,
+        "code": "LUCEscalate",
+        "name": "LUC Escalate",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 4,
+        "code": "LUCLegalRecovery",
+        "name": "LUC Legal and Recovery",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    }],
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Comment",
+        "required": [
+            "loanMonitoringDetails"
+        ],
+        "properties": {
+            "loanMonitoringDetails": {
+                "title": "Loan Monitoring Details",
+                "type": "object",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "loanAmount"
+                    ],
+                    "properties": {
+                        "loanSeries": {
+                            "title": "Loan Series",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                         "centreId": {
+                           "title": "Centre Id",
+                           "type": "number",
+                           "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                         },
+                         "branchName": {
+                            "title": "Branch Name",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                          },
+
+                        "loanProductCode": {
+                            "title": "Loan Product Code",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanProductName": {
+                            "title": "loanProductName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanPurposeCategory": {
+                            "title": "loanPurposeCategory",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanPurpose": {
+                            "title": "Loan Purpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "currentStage": {
+                            "title": "current Stage",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanAmount": {
+                            "title": "loanAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "disbursementDate": {
+                            "title": "Disbursement Date",
+                            "type": "date",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "numberOfAssetsDelivered": {
+                            "title": "numberOfAssetsDelivered",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "amountUtilizedForAssetsPurchase": {
+                            "title": "amountUtilizedForAssetsPurchase",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "percentage": {
+                            "title": "percentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "totalCreationAssetValue": {
+                            "title": "totalCreationAssetValue",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "isAssetsOrdered": {
+                            "title": "isAssetsOrdered",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "reasonForNotOrderingAssets": {
+                            "title": "reasonForNotOrderingAssets",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucDone": {
+                            "title": "Luc Done",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucRescheduled": {
+                            "title": "lucRescheduled",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucRescheduleReason": {
+                            "title": "lucRescheduleReason",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucRescheduledDate": {
+                            "title": "lucRescheduledDate",
+                            "type": "date",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucEscalated": {
+                            "title": "lucEscalated",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucEscalatedReason": {
+                            "title": "lucEscalatedReason",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanId": {
+                            "title": "loanId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "accountNumber": {
+                            "title": "accountNumber",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "customerId": {
+                            "title": "customerId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "customerName": {
+                            "title": "customerName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "urn": {
+                            "title": "urn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "socialImpactDetailsId": {
+                            "title": "socialImpactDetailsId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "proprietoryName": {
+                            "title": "proprietoryName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "proprietoryUrn": {
+                            "title": "proprietoryUrn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "address": {
+                            "title": "address",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 350,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "assignedToUser": {
+                            "title": "assignedToUser",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "lucDate": {
+                            "title": "lucDate",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "bussinessName": {
+                            "title": "bussinessName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanAmountUsed": {
+                            "title": "loanAmountUsed",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "loanAmountPurpose": {
+                            "title": "loanAmountPurpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "verifiedBy": {
+                            "title": "verifiedBy",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+
+                        "amountUsedPercentage": {
+                            "title": "amountUsedPercentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+
+                        "intendedPurposeAmount": {
+                            "title": "intendedPurposeAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+
+                        "intendedPurposePercentage": {
+                            "title": "intendedPurposePercentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+
+                        "nonIntendedPurposeAmount": {
+                            "title": "nonIntendedPurposeAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+
+                        "nonIntendedPurposePercentage": {
+                            "title": "nonIntendedPurposePercentage",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "nonIntendedPurposeAmountSpentOn": {
+                            "title": "nonIntendedPurposeAmountSpentOn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "repayedDebitAmount": {
+                            "title": "repayedDebitAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "monthlyInterestForDebit": {
+                            "title": "monthlyInterestForDebit",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "remainingAmountPurpose": {
+                            "title": "remainingAmountPurpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "remainingAmountUtilizedOn": {
+                            "title": "remainingAmountUtilizedOn",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "branchName": {
+                            "title": "branchName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "udf2": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "udf3": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "centreId": {
+                            "title": "centreId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        }
+                    }
+                }
+            },
+            "socialImpactDetails": {
+                "title": "Social Impact Details",
+                "type": "object",
+                "items": {
+                    "type": "object",
+                    "required": [
+                  
+                    ],
+                    "properties": {
+                        "totalNumberOfMen": {
+                            "title": "totalNumberOfMen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "averageSalaryOfMen": {
+                            "title": "averageSalaryOfMen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "menPartTimeEmployee": {
+                            "title": "menPartTimeEmployee",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "menFullTimeEmployee": {
+                            "title": "menFullTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "avgSkillLevelOfMen": {
+                            "title": "avgSkillLevelOfMen",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "noOfFirstJobsMen": {
+                            "title": "noOfFirstJobsMen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "totalNumberOfWomen": {
+                            "title": "totalNumberOfWomen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "averageSalaryOfWomen": {
+                            "title": "averageSalaryOfWomen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "womenPartTimeEmployee": {
+                            "title": "womenPartTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "womenFullTimeEmployee": {
+                            "title": "womenFullTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "avgSkillLevelOfWomen": {
+                            "title": "avgSkillLevelOfWomens",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "noOfFirstJobsWomen": {
+                            "title": "noOfFirstJobsWomen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "preLoanMonthlyRevenue": {
+                            "title": "preLoanMonthlyRevenue",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "preLoanMonthlyNetIncome": {
+                            "title": "preLoanMonthlyNetIncome",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "preLoanProprietorSalary": {
+                            "title": "preLoanProprietorSalary",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "preLoanNumberOfCustomersOrBuyers": {
+                            "title": "preLoanNumberOfCustomersOrBuyers",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "postLoanMonthlyRevenue": {
+                            "title": "postLoanMonthlyRevenue",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "postLoanMonthlyNetIncome": {
+                            "title": "postLoanMonthlyNetIncome",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "postLoanProprietorSalary": {
+                            "title": "postLoanProprietorSalary",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "postLoanNumberOfCustomersOrBuyers": {
+                            "title": "postLoanNumberOfCustomersOrBuyers",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        }
+                    }
+                }
+            },
+            "machineDetails": {
+                "title": "Machine Details",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                     ],
+                    "properties": {
+                        "make": {
+                            "title": "make",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "type": {
+                            "title": "type",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "year": {
+                            "title": "year",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "model": {
+                            "title": "model",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "serialNumber": {
+                            "title": "serialNumber",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "assetType": {
+                            "title": "assetType",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "hypothecationLabelBeenApplied": {
+                            "title": "hypothecationLabelBeenApplied",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "companyNameInOriginalInvoice": {
+                            "title": "companyNameInOriginalInvoice",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "udf2": {
+                            "title": "udf2",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "hypothecatedTo": {
+                            "title": "hypothecatedTo",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,268 @@
+
+INSERT INTO `state_master` (`state_name`, `state_code`, `fino_state_code`, `customer_feed_state_code`, `bc_state_code`, `tcl_state_code`) VALUES
+('Uttarakhand', 'UC', '05', 'UA', 'UT', NULL),
+('Madhya Pradesh', 'MP', '23', 'MP', NULL, NULL),
+('Goa', 'GO', '30', 'GA', NULL, NULL),
+('Uttar Pradesh', 'UP', '09', 'UP', NULL, NULL),
+('Andhra Pradesh', 'AP', '28', 'AP', NULL, NULL),
+('Telangana', 'TE', '28', 'AP', NULL, NULL),
+('Tamilnadu', 'TN', '33', 'TN', 'TN', '38'),
+('Sikkim', 'SI', '11', 'SK', NULL, NULL),
+('Assam', 'AS', '18', 'AS', NULL, NULL),
+('West Bengal', 'WB', '19', 'WB', NULL, NULL),
+('Gujarat', 'GU', '24', 'GJ', NULL, NULL),
+('Maharashtra', 'MA', '27', 'MH', NULL, NULL),
+('Himachal Pradesh', 'HP', '02', 'HP', NULL, NULL),
+('Manipur', 'MN', '14', 'MN', NULL, NULL),
+('Odisha', 'OR', '21', 'OR', 'OR', NULL),
+('Puducherry', 'PO', '34', 'PY', NULL, NULL),
+('Meghalaya', 'ME', '17', 'ML', NULL, NULL),
+('Rajasthan', 'RA', '08', 'RJ', NULL, NULL),
+('Punjab', 'PU', '03', 'PB', NULL, NULL),
+('Mizoram', 'MI', '15', 'MZ', NULL, NULL),
+('Andaman & Nicobar', 'AN', '35', 'AN', NULL, NULL),
+('Nagaland', 'NA', '13', 'NL', NULL, NULL),
+('Tripura', 'TR', '16', 'TP', NULL, NULL),
+('Arunachal Pradesh', 'AR', '21', 'AR', NULL, NULL),
+('Bihar', 'BH', '10', 'BR', NULL, NULL),
+('Chandigarh', 'CH', '04', 'CH', NULL, NULL),
+('Haryana', 'HA', '06', 'HR', NULL, NULL),
+('New Delhi', 'ND', '07', 'DL', NULL, NULL),
+('Chhattisgarh', 'CG', '22', 'CS', NULL, NULL),
+('Jharkhand', 'JK', '20', 'JH', NULL, NULL),
+('Karnataka', 'KA', '29', 'KA', NULL, NULL),
+('Kerala', 'KE', '32', 'KL', NULL, NULL),
+('Jammu & Kashmir', 'JM', '01', 'JK', NULL, NULL),
+('Other', 'ZZ', '0', 'ZZ', NULL, NULL);
+
+INSERT INTO `bank_master` (`version`, `bank_name`, `fino_user_name`, `fino_user_code`, `mfi_id`, `state_name`, `country_name`, `nps_nl_ao_code`, `financial_year_from_date`, `financial_year_to_date`, `ims_cd_reference_no`, `bc_code`, `bc_id`, `third_party_trxn_mode`, `report_language`, `shop_insurance_mail_id`, `pai_channel_id`, `pai_default_mail_id`, `is_pai_webservice`, `is_delta_enabled`, `help_line_no`, `is_group_repayment_allowed`, `customer_loan_enable`, `edf_biometric_authentication`, `pai_coi_code`, `mis_cash_checker`, `vendor_code`, `gps_mandatory`, `fp_capture_required`, `fwr_recommendation_enabled`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(15, 'Kinara', NULL, NULL, NULL, 'Karnataka', 'India', '800002', '2016-04-01', '2017-03-31', NULL, 'IR', 1, 'CASH', 'HINDI', NULL, NULL, NULL, 0, 0, NULL, 0, 0, 'DISABLE', NULL, 0, NULL, 0, 0, 1, NULL, NULL, NULL, NULL);
+
+ALTER TABLE `misc_cash_master` AUTO_INCREMENT = 1
+INSERT INTO `misc_cash_master` (`gl_account`, `gl_account_description`, `trxn_type`, `cash_gl`, `gl_branch`, `gl_agent`, `bank_id`, `gl_status`, `branch_level`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+('Cash Received from Bank', 'Cash Received from Bank', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash Received from other Branch(Inter Branch);', 'Cash Received from other Branch(Inter Branch);', 'IN', 0, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash uploaded in CMS', 'Cash uploaded in CMS', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('EOD Cash Balancing - Excess Cash in Hand', 'EOD Cash Balancing - Excess Cash in Hand', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Miscellaneous Credit-Suspense', 'Miscellaneous Credit-Suspense', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Repayment GL', 'Repayment GL', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Disbursment GL', 'Disbursment GL', 'OUT', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Branch Office Premises Rent', 'Branch Office Premises Rent', 'OUT', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash', 'Cash', 'OUT', 1, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash Transferred to Bank', 'Cash Transferred to Bank', 'OUT', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash Transferred to Other Branch (Inter Branch);', 'Cash Transferred to Other Branch (Inter Branch);', 'OUT', 0, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Processing Fee GL', 'Processing Fee GL', 'IN', 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL),
+('Cash', 'Cash', 'IN', 1, 0, 0, 1, 1, 1, '2016-06-20 18:59:36', 'SYSTEM', '2016-06-20 18:59:36', 'BACKEND');
+
+ALTER TABLE `hub_master` AUTO_INCREMENT = 1
+INSERT INTO `hub_master` (`hub_name`, `is_hq`, `bank_name`, `hub_mail_id`) VALUES
+('Kinara', 1, 'Kinara', 'kinara@gmail.com');
+
+ALTER TABLE `district_master` AUTO_INCREMENT = 1
+INSERT INTO `district_master` (`bank_id`, `district`, `fino_district_code`, `bc_district_code`, `tcl_district_code`) VALUES
+(1, 'Bangalore', '1', 'BLR', '123'),
+(1, 'Belgaum', '1', 'BEL', '124'),
+(1, 'Hubli', '1', 'HUB', '125'),
+(1, 'Mysore', '1', 'MYS', '126');
+
+ALTER TABLE `locality_master` AUTO_INCREMENT = 1;
+INSERT INTO `locality_master` (`bank_id`,`locality`) VALUES (1,'Indiranagar');
+
+ALTER TABLE `branch_master` AUTO_INCREMENT = 1;
+INSERT INTO `branch_master` (`version`, `branch_name`, `branch_code`, `ankur_branch_code`, `abg_branch_code`, `bank_id`, `fino_location_id`, `fino_location_name`, `fino_block_name`, `fino_sub_district`, `arm_id`, `rm_id`, `fino_user_name`, `fino_user_code`, `fino_user_host_code`, `hub_id`, `created_at`, `created_by`, `branch_open_date`, `branch_mail_id`, `cash_limit`, `nps_nl_cc_code`, `is_addr_dropdown_enbled`, `sol_id`, `bank_branch_name`, `state_id`, `district_id`, `tcl_branch_code`, `tcl_vendor_id`, `pincode`, `branch_contact_no`, `jewel_insurance_limit`, `last_edited_by`, `last_edited_at`, `edel_branch_code`, `finger_print_device_type`, `landt_branch_code`, `axis_branch_code`, `branch_latitude`, `branch_longitude`, `branch_altitude`, `branch_address1`, `branch_address2`, `wu_agent_code`, `xm_agent_code`, `branch_open_time`, `branch_close_time`, `buffer_time`, `eod_authentication_type`) VALUES
+(1, 'Bangalore',  '1001', '1001', '1001', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-08-20 14:50:38',  'adminkinara', '2012-11-02 20:18:27', 'kinara@gmail.com', 10000000, NULL, 0, NULL, NULL, 63, 1, NULL, NULL, 560038, NULL, 0, 'ifmradmin', '2015-11-03 20:30:19', '5675', 'SAGEM', '5677', '5676', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'PASSWORD');
+
+ALTER TABLE `role` AUTO_INCREMENT = 1;
+INSERT INTO `role` (`version`, `name`, `code`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(0, 'anonymous', 'anonymous', 'system', '2016-04-26 17:27:16', NULL, NULL),
+(0, 'administrator', 'admin', 'system', '2016-04-26 17:27:16', NULL, NULL),
+(0, 'user', 'user', 'system', '2016-04-26 17:27:16', NULL, NULL),
+(0, 'WealthManager', 'A', 'system', '2016-04-26 17:28:40', NULL, NULL),
+(0, 'AGENT', 'AGENT', 'system', '2016-04-30 12:51:15', NULL, NULL),
+(0, 'APPROVER', 'APPROVER', 'system', '2016-05-10 05:33:00', NULL, NULL),
+(0, 'head admin', 'M', 'system', '2016-08-17 04:12:31', NULL, NULL);
+
+
+ALTER TABLE `users` AUTO_INCREMENT = 1;
+INSERT INTO `users` (`version`, `user_id`, `user_name`, `bank_name`, `branch_name`, `machine_id`, `password`, `email_address`, `mobile_number`, `landline_number`, `user_type`, `valid_until`, `user_state`, `last_password_updated_on`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`, `access_type`, `agent_amt_limit`, `customer_id`, `imei_number`, `checkers_for`, `village_name`, `is_edit_checker_access`, `is_agent_all_village_access`, `urn_no`, `employee_id`, `role_code`, `first_name`, `last_name`, `activated`, `lang_key`, `activation_key`, `reset_key`, `reset_date`, `old_passwords`, `last_password_change_date`, `change_password_on_login`, `number_of_failed_logins`, `last_login_date`, `branch_set_code`) VALUES
+(1,'kinaraadmin','Admin Name','Kinara','Bangalore','123','$2a$10$8NawUitZaLlswX9MEeelxuh5/ADnynrMT8kqyP2jRvPbOzAwkZkpq','abc@gamil.com','9999999999','22222222','SA',NULL,'ACTIVE',NULL,'BACKEND','2016-08-20 22:58:40',NULL,NULL,'BRANCH',0,0,NULL,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL,b'1',NULL,NULL,NULL,NULL,NULL,NULL,b'0',NULL,NULL,NULL);
+
+update users set agent_amt_limit =0, customer_id=0, is_edit_checker_access=0, is_agent_all_village_access=0, activated=1, change_password_on_login=0, number_of_failed_logins=0, role_code=user_type where user_id='kinaraadmin' ;
+
+INSERT INTO `users` (`version`, `user_id`, `user_name`, `bank_name`, `branch_name`, `machine_id`, `password`, `email_address`, `mobile_number`, `landline_number`, `user_type`, `valid_until`, `user_state`, `last_password_updated_on`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`, `access_type`, `agent_amt_limit`, `customer_id`, `imei_number`, `checkers_for`, `village_name`, `is_edit_checker_access`, `is_agent_all_village_access`, `urn_no`, `employee_id`, `role_code`, `first_name`, `last_name`, `activated`, `lang_key`, `activation_key`, `reset_key`, `reset_date`, `old_passwords`, `last_password_change_date`, `change_password_on_login`, `number_of_failed_logins`, `last_login_date`, `branch_set_code`) VALUES
+(1,'adminkinara','Admin Name','Kinara','Bangalore','123','$2a$10$8NawUitZaLlswX9MEeelxuh5/ADnynrMT8kqyP2jRvPbOzAwkZkpq','abc@gamil.com','9999999999','22222222','SA',NULL,'ACTIVE',NULL,'BACKEND','2016-08-20 22:58:40',NULL,NULL,'BRANCH',0,0,NULL,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL,b'1',NULL,NULL,NULL,NULL,NULL,NULL,b'0',NULL,NULL,NULL);
+
+update users set agent_amt_limit =0, customer_id=0, is_edit_checker_access=0, is_agent_all_village_access=0, activated=1, change_password_on_login=0, number_of_failed_logins=0, role_code=user_type where user_id='adminkinara' ;
+
+
+INSERT INTO `users` (`version`, `user_id`, `user_name`, `bank_name`, `branch_name`, `machine_id`, `password`, `email_address`, `mobile_number`, `landline_number`, `user_type`, `valid_until`, `user_state`, `last_password_updated_on`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`, `access_type`, `agent_amt_limit`, `customer_id`, `imei_number`, `checkers_for`, `village_name`, `is_edit_checker_access`, `is_agent_all_village_access`, `urn_no`, `employee_id`, `role_code`, `first_name`, `last_name`, `activated`, `lang_key`, `activation_key`, `reset_key`, `reset_date`, `old_passwords`, `last_password_change_date`, `change_password_on_login`, `number_of_failed_logins`, `last_login_date`, `branch_set_code`) VALUES
+(1,'pm','Product Manager','Kinara','Bangalore','123','$2a$10$d1Y.7PqJKZUlw8YnV.KjzuOfWC48lYRlQ0dYfbmkFEi5.oaIKAAHS','abc@gamil.com','9999999999','22222222','PM',NULL,'ACTIVE',NULL,'BACKEND','2016-08-20 22:58:40',NULL,NULL,'BRANCH',0,0,NULL,NULL,NULL,0,0,NULL,NULL,NULL,NULL,NULL,b'1',NULL,NULL,NULL,NULL,NULL,NULL,b'0',NULL,NULL,NULL);
+
+/***Centre_master***/
+INSERT INTO `centre_master` (`version`, `centre_name`, `centre_code`, `centre_address`, `branch_id`, `status`, `employee`, `centre_leader_urn`, `weekly_meeting_day`, `weekly_meeting_time`, `monthly_meeting_date`, `monthly_meeting_day`, `monthly_meeting_time`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+( 0, 'Bommasandra 1', '1002-02', 'Bommasandra', 2, 'ACTIVE', 'br1', NULL, NULL, NULL, NULL, NULL, NULL, 'adminkinara', '2016-08-23 09:42:05', NULL, NULL),
+( 0, 'Bommasandra 1', '1002-03', 'Bommasandra', 2, 'ACTIVE', 'br1', NULL, NULL, NULL, NULL, NULL, NULL, 'adminkinara', '2016-08-23 09:42:05', NULL, NULL);
+
+
+
+ALTER TABLE `partner_master` AUTO_INCREMENT = 1;
+INSERT INTO `partner_master` (`version`, `partner_code`, `partner_name`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES (1, 'Kinara', 'Kinara', NULL, NULL, NULL, NULL);
+
+INSERT INTO `kgfs_sequences` (`sequence_name`, `currval`) VALUES 
+('Family_Id', 0), ('IR_CustId', 0), ('IR_BCId', 0),('Balance_Enq', 0),('Bank3Consignment', 0),('Bank6Consignment', 0),('Bank5Consignment', 0),
+('IR_BCJLGAPP', 0),('Bank4Consignment', 0),('Bank1Consignment', 0),
+('TransactionId', 0),('iso8583TrxnEnquiry', 0),('reversalTrxn', 0),
+('Bank7Consignment', 0),('SmsTransactionId', 0);
+
+ALTER TABLE `reference_code` AUTO_INCREMENT = 1;
+INSERT INTO `reference_code` ( `version`, `classifier`, `name`, `code`, `parent_classifier`, `parent_reference_code`, `field1`, `field2`, `field3`, `field4`, `field5`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 'bank', 'Kinara', '1', NULL, NULL, 'Kinara', NULL, NULL, NULL, NULL, 'adminkinara', '2016-08-20 05:18:53', NULL, NULL);
+
+
+INSERT INTO `reference_code`(`version`, `classifier`, `name`, `code`, `parent_classifier`, `parent_reference_code`, `field1`, `field2`, `field3`, `field4`, `field5`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 'branch', 'Bangalore', '1', 'bank', '1', '1001', NULL, NULL, NULL, NULL, 'adminkinara', '2016-08-20 20:23:37', NULL, NULL);
+
+ALTER TABLE `caste_master` AUTO_INCREMENT = 1;
+INSERT INTO `caste_master` (`id`, `caste`, `axis_code`) VALUES (1, 'SC', '0'), (2, 'ST', '0'), (3, 'OBC', '0'), (4, 'MINORITY', '0'), (5, 'OTHERS', '0');
+
+ALTER TABLE `language_master` AUTO_INCREMENT = 1;
+INSERT INTO `language_master` (`language`, `fino_language_code`) VALUES ('English', '0'),('Tamil', '0'),('Kanada', '0'),('Telugu', '0'),('Hindi', '0');
+
+ALTER TABLE `educationstatus_master` AUTO_INCREMENT = 1;
+INSERT INTO `educationstatus_master` (`educationStatus`) VALUES 
+('Below SSLC'),
+('SSLC'),
+('HSC'),
+('Graduate/Diploma/ITI'),
+('Professional Degree'),
+('Others');
+
+/**Loan Purpose**/
+ALTER TABLE `loan_purpose_mapping_master` AUTO_INCREMENT = 1;
+INSERT INTO `loan_purpose_mapping_master` (`version`, `loan_purpose_first_level`, `loan_purpose_second_level`, `loan_purpose`, `first_level_ref_code`, `second_level_ref_code`, `third_level_ref_code`, `first_level_sector_code`, `tcl_purpose_code`, `margin_percentage`, `lgd_percentage`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 'Machine Refinance', 'Machine Refinance', 'Machine Refinance', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '0.00', '0.00', NULL, NULL, NULL, NULL),
+(1, 'Asset Purchase', 'Asset Purchase', 'Asset Purchase', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '0.00', '0.00', NULL, NULL, NULL, NULL),
+(1, 'Debt Consolidation', 'Debt Consolidation', 'Debt Consolidation', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '0.00', '0.00', NULL, NULL, NULL, NULL),
+(1, 'Working Capital', 'Working Capital', 'Working Capital', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '0.00', '0.00', NULL, NULL, NULL, NULL),
+(1, 'Business Development', 'Business Development', 'Business Development', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '0.00', '0.00', NULL, NULL, NULL, NULL);
+
+
+/**Activity**/
+ALTER TABLE `occupation_type` AUTO_INCREMENT = 1;
+INSERT INTO `occupation_type` (`id`, `version`, `occupation_type`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, '1', 'Proprietor', NULL, NULL, NULL, NULL),
+(2, '1', 'Partner', NULL, NULL, NULL, NULL),
+(3, '1', 'Director', NULL, NULL, NULL, NULL),
+(4, '1', 'Business-Other', NULL, NULL, NULL, NULL);
+
+ALTER TABLE `occupation_master` AUTO_INCREMENT = 1;
+INSERT INTO `occupation_master` (`activity`, `activity_ref_code`, `tcl_occupation_code`, `occupation_type_id`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`, `enable_for`) VALUES
+('Proprietor', '1', '0', 1, 1, NULL, NULL, NULL, NULL, 'ALL'),
+('Partner', '2', '0', 2, 1, NULL, NULL, NULL, NULL, 'ALL'),
+('Director', '3', '0', 3, 1, NULL, NULL, NULL, NULL, 'ALL'),
+('Business-Other', '4', '0', 4, 1, NULL, NULL, NULL, NULL, 'ALL');
+
+/**Frequency**/
+ALTER TABLE `frequency_master` AUTO_INCREMENT = 1;
+INSERT INTO `frequency_master` (`frequency`, `enable_for`) VALUES
+('Monthly', 'ALL'),
+('Quarterly', 'ALL'),
+('Annually', 'ALL'),
+('Daily', 'ALL'),
+('Weekly', 'ALL'),
+('Fortnightly', 'ALL'),
+('Half yearly', 'ALL'),
+('Bullet', 'LIABILITY');
+
+/**Product enable**/
+
+ALTER TABLE `investor_master` AUTO_INCREMENT = 1;
+INSERT INTO `investor_master` (`version`, `investor_name`, `branch_code_column_name`, `jlg_group_sequence_name`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 'Kinara', 'branchCode', 'JlgGroup', 'adminkinara', now(), NULL, NULL);
+
+ALTER TABLE `lms_product_master` AUTO_INCREMENT = 1;
+INSERT INTO `lms_product_master` (`version`, `bank_id`, `product_code`, `cms_product`, `product_name`, `frequency`, `status`, `min_amount`, `max_amount`, `investor_id`, `new_product`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 0, 'T901', 'Kinara Test Product', 'T515', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now());
+
+INSERT INTO `lms_product_master` (`version`, `bank_id`, `product_code`, `cms_product`, `product_name`, `frequency`, `status`, `min_amount`, `max_amount`, `investor_id`, `new_product`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 0, 'TLBDU', 'Business Development- Unsecured', 'TLBDU', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now());
+
+INSERT INTO `lms_product_master` (`version`, `bank_id`, `product_code`, `cms_product`, `product_name`, `frequency`, `status`, `min_amount`, `max_amount`, `investor_id`, `new_product`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 0, 'LCRIU', 'LOC- RFID- Unsecured', 'LCRIU', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'LCRDU', 'LOC- RFD-Unsecured', 'LCRDU', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'TLAPS', 'Asset Purchase- Secured', 'TLAPS', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'TLWCS', 'Working Capital - Secured', 'TLWCS', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'TLWCU', 'Working Capital -Unsecured', 'TLWCU', 'Month', 'Active', 0, 0, 1, 'Y','adminkinara',now(),'adminkinara',now()),
+(1, 0, 'TLMFS', 'Machine Refinance- Secured', 'TLMFS', 'Month', 'Active', 0, 0, 1, 'Y','adminkinara',now(),'adminkinara',now()),
+(1, 0, 'TLBDS', 'Business Development- Secured', 'TLBDS', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'LCRDS', 'LOC- RFD-Secured', 'LCRDS', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now()),
+(1, 0, 'LCRIS', 'LOC RFID- Secured', 'LCRIS', 'Month', 'Active', 0, 0, 1, 'Y', 'adminkinara',now(),'adminkinara',now());
+
+
+
+
+ALTER TABLE `module_config_master` AUTO_INCREMENT = 1;
+
+INSERT INTO `module_config_master` (`version`, `bank_id`, `module_name`, `module_status`, `created_at`, `created_by`, `last_edited_by`, `last_edited_at`, `agent_module_status`, `sms_enabled`, `cms_product_name`) VALUES
+(1, 1, 'T901', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product');
+
+INSERT INTO `module_config_master` (`version`, `bank_id`, `module_name`, `module_status`, `created_at`, `created_by`, `last_edited_by`, `last_edited_at`, `agent_module_status`, `sms_enabled`, `cms_product_name`) VALUES
+(1, 1, 'TLBDU', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product');
+
+INSERT INTO `module_config_master` (`version`, `bank_id`, `module_name`, `module_status`, `created_at`, `created_by`, `last_edited_by`, `last_edited_at`, `agent_module_status`, `sms_enabled`, `cms_product_name`) VALUES
+(1, 1, 'LCRIU', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'LCRDU', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'TLAPS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'TLWCS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'TLWCU', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'TLMFS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'TLBDS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'LCRDS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product'),
+(1, 1, 'LCRIS', 1, now(), 'adminkinara','adminkinara',now(), 0, 1, 'Kinara Test Product');
+
+
+
+
+/****PROCEDURE*****/
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_kgfs_sequence_num`(IN i_seq_name char(250), IN i_action char(7))
+begin
+    declare v_lock tinyint unsigned;
+    declare v_currval INTEGER ;
+       select get_lock(i_seq_name, 10) into v_lock;
+       if i_action='nextval' then
+          update kgfs_sequences set currval=currval+1 where sequence_name = i_seq_name ;
+    end if;
+        select currval into v_currval from kgfs_sequences where sequence_name = i_seq_name;
+        select release_lock(i_seq_name) into v_lock;
+ select i_seq_name as sequence_name, v_currval as currval;
+END ;;
+DELIMITER ;
+
+/****Relation_Master*****/
+INSERT INTO `relation_master` (`id`, `relationship`, `fino_relationship_code`, `ims_relationship_code`, `axis_relationship_code`) VALUES
+(1, 'Brother', 'F', 'B', '08'),
+(2, 'Daughter', 'I', 'C', '06'),
+(3, 'Father', 'B', 'P', '01'),
+(4, 'Father-In-Law', 'L', 'O', '25'),
+(5, 'Husband', 'E', 'S', '03'),
+(6, 'Mother', 'C', 'P', '02'),
+(7, 'Mother-In-Law', 'M', 'O', '25'),
+(8, 'Sister', 'G', 'B', '09'),
+(9, 'Son', 'H', 'C', '05'),
+(10, 'Wife', 'D', 'S', '04'),
+(11, 'Others', NULL, 'O', '25'),
+(12, 'Brother-In-Law', 'P', 'K', '25'),
+(13, 'Sister-In-Law', 'Q', 'L', '25'),
+(14, 'son-in-law', 'R', 'O', '25'),
+(15, 'daughter-in-law', 'S', 'O', '25'),
+(16, 'Grand Father', '', 'G', '10'),
+(17, 'Grand Mother', '', 'G', '11'),
+(18, 'Grand Daughter', '', 'H', '18'),
+(19, 'Grand Son', '', 'H', '17'),
+(20, 'Uncle', NULL, 'O', '25'),
+(21, 'Aunty', NULL, 'O', '25'),
+(22, 'Niece', '', 'O', '25'),
+(23, 'Nephew', '', 'O', '25');
+
+

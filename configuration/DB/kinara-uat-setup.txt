@@ -1,0 +1,596 @@
+
+User
+kinarauser
+Kinara@blr
+
+DB
+root 
+Kinara@blr
+
+//Kinara-UAT
+CREATE USER 'financialForms'@'localhost' IDENTIFIED BY 'financialForms';
+GRANT ALL ON *.* TO 'financialForms'@'localhost';
+flush privileges
+
+tomcat
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-16-04
+sudo tar xvf apache-tomcat-8*tar.gz -C /opt/mount-point/tomcat --strip-components=1
+
+Upgrade java8
+http://stackoverflow.com/questions/30177455/moving-from-jdk-1-7-to-jdk-1-8-on-ubuntu
+sudo tar -zxf jdk-8u71-linux-x64.tar.gz -C /opt/mount-point/jdk/
+
+ Check DB configuration
+ add below lines in conf/context.xls at the end
+		<Parameter name="perdixjdbcProperties" value="test-jdbc.properties" override="false"/>
+        <Parameter name="perdixappProperties" value="test-app.properties" override="false"/>
+        <Parameter name="perdixiso8583AppProperties" value="test-iso8583App.properties" override="false"/>
+        <Parameter name="perdixproductParamAppProperties" value="test-productParamApp.properties" override="false"/>
+        <Parameter name="consolidatedLoanappProperties" value="test-consolidated-loan-app.properties" override="false"/> 
+
+**Read access in KINARA-UAT****
+
+CREATE USER 'sensei'@'localhost' IDENTIFIED BY '5en5ei@41';
+GRANT ALL ON financialForms.* TO 'sensei'@'localhost';
+
+
+************ENCORE SETUP***********
+
+Prerequest:
+ Tomcat8
+ java8
+ mysql
+ war file 
+ mysql dump with structure
+ 
+ - Take the encoresite from UAT and push it to KINARA-UAT
+ - Set the path to the encore directory in startup.sh or catalina.sh 
+ - Masters
+   Take the dump from UAT of the below tables and push one by one
+ tenants
+  ALTER TABLE `tenants` AUTO_INCREMENT = 1
+INSERT INTO `tenants` (`version`, `tenant_code`, `tenant_name`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'KGFS', '2012-10-30 18:33:23', 'admin', NULL, NULL);
+INSERT INTO `tenants` (`version`, `tenant_code`, `tenant_name`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'Kinara', 'Kinara', '2016-08-23 18:33:23', 'admin', NULL, NULL);
+
+---uat
+INSERT INTO `tenants` (`version`, `tenant_code`, `tenant_name`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'KGFS', '2012-10-30 18:33:23', 'admin', NULL, NULL),
+(0, 'HDFC', 'HDFC Bank', '2012-10-30 18:33:24', 'admin', NULL, NULL),
+(0, 'ICICI', 'ICICI Bank', '2012-10-30 18:33:24', 'admin', NULL, NULL),
+(0, 'MG', 'MG', '2014-04-11 11:33:08', 'admin', NULL, NULL);
+
+
+ countries
+ALTER TABLE `countries` AUTO_INCREMENT = 1
+INSERT INTO `countries` (`version`, `tenant_code`, `country_code`, `country_name`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES(0, 'KGFS', 'IN', 'India', '2012-03-15 10:22:12', 'admin', NULL, NULL);
+
+---uat
+INSERT INTO `countries` (`version`, `tenant_code`, `country_code`, `country_name`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'IN', 'India', '2012-03-15 10:22:12', 'admin', NULL, NULL),
+(0, 'MG', '1', 'India', '2014-04-11 11:40:32', 'admin', NULL, NULL),
+(0, 'MG', '2', 'Russia', '2014-04-11 11:40:32', 'admin', NULL, NULL),
+(0, 'KGFS', 'US', 'USA', '2015-01-09 18:40:05', 'admin', NULL, NULL);
+ALTER TABLE `countries`
+  ADD CONSTRAINT `countries_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+--
+
+
+
+states
+ALTER TABLE `states` AUTO_INCREMENT = 1
+INSERT INTO `states` (`version`, `tenant_code`, `state_code`, `state_name`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Tamilnadu', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL);
+
+--uat
+INSERT INTO `states` (`version`, `tenant_code`, `state_code`, `state_name`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Uttarakhand', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Madhya Pradesh', 'Madhya Pradesh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Goa', 'Goa', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Uttar Pradesh', 'Uttar Pradesh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Andhra Pradesh', 'Andhra Pradesh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tamilnadu', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Sikkim', 'Sikkim', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Assam', 'Assam', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'West Bengal', 'West Bengal', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Gujarat', 'Gujarat', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Maharashtra', 'Maharashtra', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Himachal Pradesh', 'Himachal Pradesh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Manipur', 'Manipur', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Odisha', 'Odisha', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Puducherry', 'Puducherry', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Meghalaya', 'Meghalaya', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Rajasthan', 'Rajasthan', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Punjab', 'Punjab', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Mizoram', 'Mizoram', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Andaman & Nicobar', 'Andaman & Nicobar', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Nagaland', 'Nagaland', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tripura', 'Tripura', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Arunachal Pradesh', 'Arunachal Pradesh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Bihar', 'Bihar', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chandigarh', 'Chandigarh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Haryana', 'Haryana', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'New Delhi', 'New Delhi', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chhattisgarh', 'Chhattisgarh', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Jharkhand', 'Jharkhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Karnataka', 'Karnataka', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Kerala', 'Kerala', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Jammu & Kashmir', 'Jammu & Kashmir', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Other', 'Other', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'MG', '1', 'Karnataka', '1', '2014-04-11 11:43:23', 'admin', NULL, NULL),
+(0, 'MG', '2', 'Tamilnadu', '1', '2014-04-11 11:43:23', 'admin', NULL, NULL),
+(0, 'MG', '3', 'Assam', '1', '2014-04-11 11:43:23', 'admin', NULL, NULL),
+(0, 'MG', '4', 'Jharkhand', '1', '2014-04-11 11:43:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'CA', 'California', 'US', '2015-01-09 18:43:42', 'admin', NULL, NULL);
+
+ALTER TABLE `states`
+  ADD CONSTRAINT `states_ibfk_1` FOREIGN KEY (`tenant_code`, `country_code`) REFERENCES `countries` (`tenant_code`, `country_code`);
+
+
+districts
+ALTER TABLE `districts` AUTO_INCREMENT = 1;
+INSERT INTO `districts` (`version`, `tenant_code`, `district_code`, `district_name`, `state_code`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Thanjavur', 'Thanjavur', 'Tamilnadu', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL);
+--uat
+INSERT INTO `districts` (`version`, `tenant_code`, `district_code`, `district_name`, `state_code`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Thanjavur', 'Thanjavur', 'Tamilnadu', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Thiruvarur', 'Thiruvarur', 'Tamilnadu', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'MAHESANA', 'MAHESANA', 'Gujarat', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ganjam', 'Ganjam', 'Odisha', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tehri Garhwal', 'Tehri Garhwal', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Pudukkottai', 'Pudukkottai', 'Tamilnadu', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Dehradun', 'Dehradun', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ghansali', 'Ghansali', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'Uttarkashi', 'Uttarkashi', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'KHURDA', 'KHURDA', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'KORAPUT', 'KORAPUT', 'Uttarakhand', 'IN', '2012-11-02 15:09:41', 'admin', NULL, NULL),
+(0, 'KGFS', 'PURI', 'PURI', 'Uttarakhand', 'IN', '2012-11-02 15:09:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'JAUNPUR', 'JAUNPUR', 'Uttarakhand', 'IN', '2012-11-02 15:09:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'JAJPUR', 'JAJPUR', 'Uttarakhand', 'IN', '2012-11-02 15:09:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ariyalur', 'Ariyalur', 'Tamilnadu', 'IN', '2012-11-02 15:09:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'Pudukottai', 'Pudukottai', 'Tamilnadu', 'IN', '2012-11-02 15:09:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'Rudraprayag', 'Rudraprayag', 'Uttarakhand', 'IN', '2013-08-06 12:03:33', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chamoli', 'Chamoli', 'Uttarakhand', 'IN', '2013-08-06 17:48:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'Krishnagiri', 'Krishnagiri', 'Tamilnadu', 'IN', '2013-12-12 18:00:05', 'admin', NULL, NULL),
+(0, 'KGFS', 'Gurgaon', 'Gurgaon', 'Haryana', 'IN', '2014-11-14 17:54:43', 'testuser', NULL, NULL),
+(0, 'KGFS', 'SFO', 'San Francisco', 'CA', 'US', '2015-01-09 18:45:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chennai', 'Chennai', 'Tamilnadu', 'IN', '2016-05-11 18:47:12', 'admin', NULL, NULL),
+(0, 'KGFS', 'Deoria', 'Deoria', 'Bihar', 'IN', '2016-06-11 15:12:01', 'admin', NULL, NULL),
+(0, 'KGFS', '274001', 'Deoria', 'Uttar Pradesh', 'IN', '2016-06-11 19:59:02', 'admin', NULL, NULL),
+(0, 'KGFS', 'Patna', 'Patna', 'Bihar', 'IN', '2016-06-12 16:55:57', 'admin', NULL, NULL),
+(0, 'KGFS', 'Deoria', 'Deoria', 'Uttar Pradesh', 'IN', '2016-06-17 18:00:46', 'admin', NULL, NULL),
+(0, 'KGFS', 'PURI', 'PURI', 'Tamilnadu', 'IN', '2016-07-26 20:55:42', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tehri Garhwal', 'Tehri Garhwal', 'Tamilnadu', 'IN', '2016-07-26 20:56:08', 'admin', NULL, NULL);
+
+ALTER TABLE `districts`
+  ADD CONSTRAINT `districts_ibfk_1` FOREIGN KEY (`tenant_code`, `country_code`, `state_code`) REFERENCES `states` (`tenant_code`, `country_code`, `state_code`);
+
+
+
+cities
+ALTER TABLE `cities` AUTO_INCREMENT = 1;
+INSERT INTO `cities` (`version`, `tenant_code`, `city_code`, `city_name`, `state_code`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 1, 'Thanjavur', 'Thanjavur', '1', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL);
+
+--UAT
+INSERT INTO `cities` (`version`, `tenant_code`, `city_code`, `city_name`, `state_code`, `country_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Thanjavur', 'Thanjavur', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Thiruvarur', 'Thiruvarur', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'MAHESANA', 'MAHESANA', 'Gujarat', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tehri Garhwal', 'Tehri Garhwal', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Pudukkottai', 'Pudukkottai', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Dehradun', 'Dehradun', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ghansali', 'Ghansali', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Uttarkashi', 'Uttarkashi', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'KHURDA', 'KHURDA', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'KORAPUT', 'KORAPUT', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'PURI', 'PURI', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'JAUNPUR', 'JAUNPUR', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'JAJPUR', 'JAJPUR', 'Uttarakhand', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ariyalur', 'Ariyalur', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Pudukottai', 'Pudukottai', 'Tamilnadu', 'IN', '2012-09-27 11:13:11', 'admin', NULL, NULL),
+(0, 'KGFS', 'Ganjam', 'Ganjam', 'Odisha', 'IN', '2013-04-01 14:12:03', 'SYSTEM', '2013-04-01 14:12:03', 'SYSTEM'),
+(0, 'KGFS', 'Rudraprayag', 'Rudraprayag', 'Uttarakhand', 'IN', '2013-08-06 12:03:50', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chamoli', 'Chamoli', 'Uttarakhand', 'IN', '2013-08-06 17:48:34', 'admin', NULL, NULL),
+(0, 'KGFS', 'Krishnagiri', 'Krishnagiri', 'Tamilnadu', 'IN', '2013-12-12 18:00:22', 'admin', NULL, NULL),
+(0, 'MG', '1', 'Bangalore', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '2', 'Hassan', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '3', 'Kamrup', '3', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '4', 'Margaon', '3', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '5', 'Deoghar', '4', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '6', 'Ranebennur', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '7', 'Hirekeruru', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '8', 'Siddapura', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '9', 'Mysore', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '10', 'Kollegal', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '11', 'Denkanikottai', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '12', 'Sirsi', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '13', 'Hubli', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '14', 'Bangalore South', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '15', 'Attibele', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '16', 'Siggoan', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '17', 'Hanagal', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '18', 'Yadagiri', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '19', 'Navalgunda', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '20', 'Naragunda', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '21', 'Shahapur', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '22', 'Koppal', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '23', 'Byadagi', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '24', 'Kundagola', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '25', 'Raychur', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '26', 'Bidar', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '27', 'Gadag', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '28', 'Bhagevadi', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '29', 'Kalaghatagi', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '30', 'Haveri', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '31', 'Thirthalli', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '32', 'Vedasandar Taluk', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '33', 'Kurur', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '34', 'Trichy', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '35', 'Manupparai', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '36', 'Madurai', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '37', 'Dindigul', '2', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '38', 'Bagalkot', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '39', 'Bijapur', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '40', 'Shivmogga', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '41', 'Uttar kannada', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '42', 'Dharwad', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '43', 'Gulbarga', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'MG', '44', 'Belgaum', '1', '1', '2014-04-11 11:40:13', 'admin', NULL, NULL),
+(0, 'KGFS', '0124', 'Gurgaon', 'Haryana', 'IN', '2014-11-14 16:32:55', 'testuser', NULL, NULL),
+(0, 'KGFS', 'SC', 'Santa Clara', 'CA', 'US', '2015-01-09 18:45:46', 'admin', NULL, NULL),
+(0, 'KGFS', 'Chennai', 'Chennai', 'Tamilnadu', 'IN', '2016-05-11 18:48:11', 'admin', NULL, NULL),
+(0, 'KGFS', '2740001', 'Deoria', 'Bihar', 'IN', '2016-06-11 15:13:00', 'admin', NULL, NULL),
+(0, 'KGFS', 'Deoria', 'Deoria', 'Uttar Pradesh', 'IN', '2016-06-11 19:56:22', 'admin', NULL, NULL),
+(0, 'KGFS', 'Patna', 'Patna', 'Bihar', 'IN', '2016-06-12 16:56:16', 'admin', NULL, NULL),
+(0, 'KGFS', 'Deoria', 'Deoria', 'Bihar', 'IN', '2016-06-12 18:22:03', 'admin', NULL, NULL),
+(0, 'KGFS', 'PURI', 'PURI', 'Tamilnadu', 'IN', '2016-07-26 20:56:30', 'admin', NULL, NULL),
+(0, 'KGFS', 'Tehri Garhwal', 'Tehri Garhwal', 'Tamilnadu', 'IN', '2016-07-26 20:56:49', 'admin', NULL, NULL);
+
+ALTER TABLE `cities`
+  ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`tenant_code`, `country_code`, `state_code`) REFERENCES `states` (`tenant_code`, `country_code`, `state_code`),
+  ADD CONSTRAINT `cities_ibfk_2` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+
+  
+
+ALTER TABLE `enumerations` AUTO_INCREMENT = 1;
+enumerations
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'LoanPurpose', 'JW', 'Jewel', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'LoanPurpose', 'OT', 'Others', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'LoanPurpose', 'WC', 'Working Capital', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Gender', 'F', 'Female', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Gender', 'M', 'Male', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Salutation', 'Mr', 'Mister', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Salutation', 'Mrs', 'Mrs', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Salutation', 'Ms', 'Miss', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'DomicileStatus', 'INDIAN', 'INDIAN', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'DomicileStatus', 'NRI', 'NRI', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLHead', 'Loans', 'Loans', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLHead', 'Deposits', 'Deposits', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLHead', 'Internal', 'Internal', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'RelationshipWithCustomer', 'Father', 'Father', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'RelationshipWithCustomer', 'Mother', 'Mother', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'RelationshipWithCustomer', 'Uncle', 'Uncle', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Collateral', 'Unsecured', 'Unsecured', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'Collateral', 'Secured', 'Secured', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLSubheadGroupCode', 'Asset', 'Asset', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLSubheadGroupCode', 'Liability', 'Liability', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLSubheadGroupCode', 'Income', 'Income', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLSubheadGroupCode', 'Expense', 'Expense', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'GLHead', 'Casa', 'Casa', NULL, '2014-03-14 18:47:19', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'IdentityProofType', 'PAN', 'PAN', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'IdentityProofType', 'Passport', 'Passport', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'IdentityProofType', 'Aadhaar', 'Aadhaar', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'IdentityProofType', 'RC', 'Ration Card', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'IdentityProofType', 'DL', 'Driving License', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AddressProofType', 'Passport', 'Passport', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AddressProofType', 'Aadhaar', 'Aadhaar', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AddressProofType', 'RC', 'Ration Card', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AddressProofType', 'DL', 'Driving License', NULL, '2015-02-27 06:17:04', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'FeeName', 'Processing Fee', 'Processing Fee', NULL, '2015-12-14 12:08:32', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'FeeName', 'AdHoc Fee', 'AdHoc Fee', NULL, '2015-12-14 12:08:43', 'admin', NULL, NULL);
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'FeeName', 'Portfolio Insurance Premium', 'Portfolio Insurance Premium', NULL, '2015-12-14 12:13:18', 'admin', NULL, NULL);
+
+---UAT
+INSERT INTO `enumerations` (`version`, `tenant_code`, `classifier`, `code`, `name`, `reference`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'LoanPurpose', 'JW', 'Jewel', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'LoanPurpose', 'OT', 'Others', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'LoanPurpose', 'WC', 'Working Capital', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Gender', 'F', 'Female', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Gender', 'M', 'Male', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Salutation', 'Mr', 'Mister', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Salutation', 'Mrs', 'Mrs', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Salutation', 'Ms', 'Miss', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'DomicileStatus', 'INDIAN', 'INDIAN', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'DomicileStatus', 'NRI', 'NRI', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLHead', 'Loans', 'Loans', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLHead', 'Deposits', 'Deposits', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLHead', 'Internal', 'Internal', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'RelationshipWithCustomer', 'Father', 'Father', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'RelationshipWithCustomer', 'Mother', 'Mother', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'RelationshipWithCustomer', 'Uncle', 'Uncle', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Collateral', 'Unsecured', 'Unsecured', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'Collateral', 'Secured', 'Secured', NULL, '2012-11-22 16:15:01', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLSubheadGroupCode', 'Asset', 'Asset', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLSubheadGroupCode', 'Liability', 'Liability', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLSubheadGroupCode', 'Income', 'Income', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLSubheadGroupCode', 'Expense', 'Expense', NULL, '2013-03-07 11:12:23', 'admin', NULL, NULL),
+(0, 'KGFS', 'GLHead', 'Casa', 'Casa', NULL, '2014-03-01 12:09:39', 'admin', NULL, NULL),
+(0, 'MG', 'LoanPurpose', 'JW', 'Jewel', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'LoanPurpose', 'OT', 'Others', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'LoanPurpose', 'WC', 'Working Capital', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Gender', 'F', 'Female', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Gender', 'M', 'Male', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Salutation', 'Mr', 'Mister', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Salutation', 'Mrs', 'Mrs', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Salutation', 'Ms', 'Miss', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'DomicileStatus', 'INDIAN', 'INDIAN', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'DomicileStatus', 'NRI', 'NRI', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLHead', 'Loans', 'Loans', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLHead', 'Deposits', 'Deposits', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLHead', 'Internal', 'Internal', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'RelationshipWithCustomer', 'Father', 'Father', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'RelationshipWithCustomer', 'Mother', 'Mother', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'RelationshipWithCustomer', 'Uncle', 'Uncle', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Collateral', 'Unsecured', 'Unsecured', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'Collateral', 'Secured', 'Secured', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLSubheadGroupCode', 'Asset', 'Asset', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLSubheadGroupCode', 'Liability', 'Liability', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLSubheadGroupCode', 'Income', 'Income', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLSubheadGroupCode', 'Expense', 'Expense', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'MG', 'GLHead', 'Casa', 'Casa', NULL, '2014-04-11 11:41:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'IdentityProofType', 'PAN', 'PAN', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'IdentityProofType', 'Passport', 'Passport', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'IdentityProofType', 'Aadhaar', 'Aadhaar', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'IdentityProofType', 'RC', 'Ration Card', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'IdentityProofType', 'DL', 'Driving License', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'AddressProofType', 'Passport', 'Passport', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'AddressProofType', 'Aadhaar', 'Aadhaar', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'AddressProofType', 'RC', 'Ration Card', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'AddressProofType', 'DL', 'Driving License', NULL, '2015-01-23 18:04:15', 'admin', NULL, NULL),
+(0, 'KGFS', 'FeeName', 'Processing Fee', 'Processing Fee', NULL, '2016-01-01 10:14:35', 'admin', NULL, NULL),
+(0, 'KGFS', 'FeeName', 'AdHoc Fee', 'AdHoc Fee', NULL, '2016-01-01 10:14:35', 'admin', NULL, NULL),
+(0, 'KGFS', 'FeeName', 'Portfolio Insurance Premium', 'Portfolio Insurance Premium', NULL, '2016-01-01 10:14:35', 'admin', NULL, NULL),
+(0, 'KGFS', 'FeeName', 'Operational Fee', 'Operational Fee', NULL, '2016-02-22 17:18:41', 'admin', NULL, NULL);
+
+ALTER TABLE `enumerations`
+  ADD CONSTRAINT `enumerations_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+
+
+
+configuration_properties
+
+ALTER TABLE `configuration_properties` AUTO_INCREMENT = 1;
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'MaturityAge', '18', 0, 'admin', '2012-10-30 18:33:25', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'ManualEod', 'false', 115, 'SYSTEM', '2013-07-24 22:02:04', 'vuser', '2016-08-07 17:45:41');
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'EodEmailId', 'srinit@sen-sei.in,madhu@sen-sei.in,sridhar@sen-sei.in', 0, 'SYSTEM', '2013-07-24 22:02:04', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'MaximumInactiveDaysForAccount', '60', 1, 'SYSTEM', '2013-07-24 22:02:07', 'admin', '2014-11-05 12:09:18');
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'Tag', '', 0, 'SYSTEM', '2014-02-12 21:28:32', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'TemplateLoanOdProduct', 'T401', 0, 'admin', '2014-03-14 18:47:19', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'TemplateCasaProduct', 'C100', 0, 'admin', '2014-03-14 18:47:19', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'PreEodDumpEnabled', 'false', 5, 'admin', '2014-07-04 18:15:25', 'vuser', '2016-07-07 17:27:19');
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'IdentityProofRequired', 'false', 0, 'admin', '2015-02-27 06:20:31', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'AddressProofRequired', 'false', 0, 'admin', '2015-02-27 06:20:31', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'PANRequired', 'false', 0, 'admin', '2015-02-27 06:20:31', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'PhotoRequired', 'false', 0, 'admin', '2015-02-27 06:20:31', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Customer', 'MaxCustomerIdLength', '16', 0, 'admin', '2016-03-14 10:19:06', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'DefaultCurrencyCode', 'INR', 0, 'admin', '2016-03-14 10:19:22', NULL, NULL);
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'UseDirectQuery', 'true', 3, 'vuser', '2016-07-21 20:08:19', 'vuser', '2016-07-22 21:14:19');
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'UseFutureProjectionDirect', 'true', 2, 'vuser', '2016-07-21 20:08:56', 'vuser', '2016-07-22 21:14:47');
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES ('KGFS', 'Base', 'ReportQueryFetchSize', '1000', 0, 'vuser', '2016-07-22 20:06:37', NULL, NULL);
+
+---UAT
+INSERT INTO `configuration_properties` (`tenant_code`, `module_code`, `property_name`, `property_value`, `version`, `created_by`, `created_at`, `last_edited_by`, `last_edited_at`) VALUES
+('KGFS', 'Loans', 'InterestBookingInterval', '1', 0, 'admin', '2012-10-30 18:33:25', NULL, NULL),
+('KGFS', 'Customer', 'MaturityAge', '18', 0, 'admin', '2012-10-30 18:33:25', NULL, NULL),
+('KGFS', 'Base', 'ManualEod', 'false', 111, 'SYSTEM', '2013-07-24 22:02:04', 'admin', '2016-06-17 15:34:05'),
+('KGFS', 'Base', 'EodEmailId', 'srinit@sen-sei.in,rimjhim@sen-sei.in', 3, 'SYSTEM', '2013-07-24 22:02:04', 'admin', '2013-09-15 20:51:56'),
+('KGFS', 'Base', 'MaximumInactiveDaysForAccount', '15', 0, 'SYSTEM', '2013-07-24 22:02:07', NULL, NULL),
+('KGFS', 'Base', 'Tag', 'Rahul', 3, 'SYSTEM', '2014-01-21 15:11:41', 'testuser', '2014-11-27 17:26:01'),
+('KGFS', 'Base', 'TemplateLoanOdProduct', 'T401', 0, 'admin', '2014-03-01 12:09:38', NULL, NULL),
+('KGFS', 'Base', 'TemplateCasaProduct', 'C100', 0, 'admin', '2014-03-01 12:09:39', NULL, NULL),
+('MG', 'Loans', 'InterestBookingInterval', '1', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Customer', 'MaturityAge', '18', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Base', 'ManualEod', 'false', 4, 'admin', '2014-04-11 11:40:26', 'admin', '2014-04-18 10:34:17'),
+('MG', 'Base', 'EodEmailId', 'rimjhim@sen-sei.in', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Base', 'MaximumInactiveDaysForAccount', '999', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Base', 'Tag', '', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Base', 'TemplateLoanOdProduct', 'T100', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('MG', 'Base', 'TemplateCasaProduct', 'C100', 0, 'admin', '2014-04-11 11:40:26', NULL, NULL),
+('KGFS', 'Base', 'PreEodDumpEnabled', 'false', 0, 'admin', '2014-06-24 13:31:40', NULL, NULL),
+('MG', 'Base', 'PreEodDumpEnabled', 'false', 0, 'admin', '2015-01-11 21:04:43', NULL, NULL),
+('KGFS', 'Customer', 'IdentityProofRequired', 'false', 0, 'admin', '2015-01-23 18:04:14', NULL, NULL),
+('KGFS', 'Customer', 'AddressProofRequired', 'false', 0, 'admin', '2015-01-23 18:04:14', NULL, NULL),
+('KGFS', 'Customer', 'PANRequired', 'false', 0, 'admin', '2015-01-23 18:04:14', NULL, NULL),
+('KGFS', 'Customer', 'PhotoRequired', 'false', 0, 'admin', '2015-01-23 18:04:14', NULL, NULL),
+('KGFS', 'Base', 'DefaultCurrencyCode', 'INR', 0, 'admin', '2016-03-18 17:16:55', NULL, NULL),
+('KGFS', 'Base', 'UseDirectQuery', 'true', 2, 'admin', '2016-07-21 15:30:57', 'admin', '2016-07-21 16:02:01');
+
+ALTER TABLE `configuration_properties`
+  ADD CONSTRAINT `configuration_properties_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+
+
+   
+  
+
+currencies
+ALTER TABLE `currencies` AUTO_INCREMENT = 1;
+INSERT INTO `currencies` (`version`, `tenant_code`, `currency_code`, `currency_name`, `integer_digits`, `fraction_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'INR', 'Indian Rupee', 8, 2, '2012-03-15 10:22:12', 'admin', NULL, NULL);
+--uat
+INSERT INTO `currencies` (`version`, `tenant_code`, `currency_code`, `currency_name`, `integer_digits`, `fraction_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'INR', 'Indian Rupee', 8, 2, '2012-03-15 10:22:12', 'admin', NULL, NULL),
+(0, 'MG', 'INR', 'Indian Rupee', 8, 2, '2014-04-11 11:40:36', 'admin', NULL, NULL);
+
+ALTER TABLE `currencies`
+  ADD CONSTRAINT `currencies_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+  
+
+ 
+
+
+roles
+ALTER TABLE `roles` AUTO_INCREMENT = 1;
+INSERT INTO `roles` (`version`, `tenant_code`, `role_code`, `role_name`, `description`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'WM', 'Wealth Manager', 'Wealth Manager', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Agent', 'Agent', 'Agent', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Manager', 'Regional Manager', 'Regional Manager', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Admin', 'Administrator', 'Administrator', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'BO', 'Batch Operator', 'Batch Operator', '2012-10-30 19:36:04', 'admin', NULL, NULL);
+
+--UAT
+INSERT INTO `roles` (`version`, `tenant_code`, `role_code`, `role_name`, `description`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'WM', 'Wealth Manager', 'Wealth Manager', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Agent', 'Agent', 'Agent', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Manager', 'Regional Manager', 'Regional Manager', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'Admin', 'Administrator', 'Administrator', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'KGFS', 'BO', 'Batch Operator', 'Batch Operator', '2012-10-30 19:36:04', 'admin', NULL, NULL),
+(0, 'MG', 'WM', 'Wealth Manager', 'Wealth Manager', '2014-04-11 11:34:11', 'admin', NULL, NULL),
+(0, 'MG', 'Agent', 'Agent', 'Agent', '2014-04-11 11:34:11', 'admin', NULL, NULL),
+(0, 'MG', 'Manager', 'Regional Manager', 'Regional Manager', '2014-04-11 11:34:11', 'admin', NULL, NULL),
+(0, 'MG', 'Admin', 'Administrator', 'Administrator', '2014-04-11 11:34:11', 'admin', NULL, NULL),
+(0, 'MG', 'BO', 'Batch Operator', 'Batch Operator', '2014-04-11 11:34:11', 'admin', NULL, NULL);
+
+ALTER TABLE `roles`
+  ADD CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+
+
+
+   
+authorities
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Basic', 'Agent', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'LO', 'Agent', 'LM', 'SA', 'SA', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Basic', 'Manager', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'LM', 'Manager', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Basic', 'WM', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'LO', 'WM', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Basic', 'Admin', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'SA', 'Admin', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'LM', 'Admin', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Batch', 'Admin', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Basic', 'BO', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+INSERT INTO `authorities` (`tenant_code`, `privilege_group_code`, `role_code`, `authoriser1_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser2_privilege_group_code`, `authoriser3_privilege_group_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'Batch', 'BO', '', '', '', '', '2012-10-30 18:33:25', 'admin', NULL, NULL);
+
+---UAT
+ALTER TABLE `authorities` AUTO_INCREMENT = 1
+INSERT INTO `authorities` (`version`, `tenant_code`, `authority_code`, `role_code`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'Basic', 'Agent', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'LO', 'Agent', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Basic', 'Manager', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'LM', 'Manager', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Basic', 'WM', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'LO', 'WM', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Basic', 'Admin', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'SA', 'Admin', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'LM', 'Admin', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Batch', 'Admin', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Basic', 'BO', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'KGFS', 'Batch', 'BO', '2012-10-30 18:33:25', 'admin', NULL, NULL),
+(0, 'MG', 'Basic', 'Agent', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'LO', 'Agent', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Basic', 'Manager', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'LM', 'Manager', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Basic', 'WM', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'LO', 'WM', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Basic', 'Admin', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'SA', 'Admin', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'LM', 'Admin', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Batch', 'Admin', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Basic', 'BO', '2014-04-11 11:39:18', 'admin', NULL, NULL),
+(0, 'MG', 'Batch', 'BO', '2014-04-11 11:39:18', 'admin', NULL, NULL);
+
+ALTER TABLE `authorities`
+  ADD CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`),
+  ADD CONSTRAINT `authorities_ibfk_6` FOREIGN KEY (`tenant_code`, `role_code`) REFERENCES `roles` (`tenant_code`, `role_code`);
+
+
+
+accountid_generation_rules
+
+INSERT INTO `accountid_generation_rules` (`version`, `tenant_code`, `rule_code`, `padding`, `name`, `part1_type`, `num_part1_digits`, `part2_type`, `num_part2_digits`, `part3_type`, `num_part3_digits`, `part4_type`, `num_part4_digits`, `part5_type`, `num_part5_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AR1', '1', 'Loan', 3, 4, 1, 3, 4, 5, 0, 0, 0, 0, '2012-10-30 18:33:28', 'admin', NULL, NULL);
+INSERT INTO `accountid_generation_rules` (`version`, `tenant_code`, `rule_code`, `padding`, `name`, `part1_type`, `num_part1_digits`, `part2_type`, `num_part2_digits`, `part3_type`, `num_part3_digits`, `part4_type`, `num_part4_digits`, `part5_type`, `num_part5_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AR2', '2', 'Internal', 2, 2, 4, 10, 0, 0, 0, 0, 0, 5, '2012-10-30 18:33:28', 'admin', NULL, NULL);
+INSERT INTO `accountid_generation_rules` (`version`, `tenant_code`, `rule_code`, `padding`, `name`, `part1_type`, `num_part1_digits`, `part2_type`, `num_part2_digits`, `part3_type`, `num_part3_digits`, `part4_type`, `num_part4_digits`, `part5_type`, `num_part5_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AR3', '3', 'Savings', 3, 4, 5, 3, 4, 5, 0, 0, 0, 0, '2012-10-30 18:33:28', 'admin', NULL, NULL);
+INSERT INTO `accountid_generation_rules` (`version`, `tenant_code`, `rule_code`, `padding`, `name`, `part1_type`, `num_part1_digits`, `part2_type`, `num_part2_digits`, `part3_type`, `num_part3_digits`, `part4_type`, `num_part4_digits`, `part5_type`, `num_part5_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 'KGFS', 'AR4', '0', 'Test', 3, 4, 1, 4, 4, 12, 0, 0, 0, 0, '2016-07-07 11:34:14', 'vuser', NULL, NULL);
+
+--UAT
+ALTER TABLE `accountid_generation_rules` AUTO_INCREMENT = 1
+INSERT INTO `accountid_generation_rules` (`version`, `tenant_code`, `rule_code`, `padding`, `name`, `part1_type`, `num_part1_digits`, `part2_type`, `num_part2_digits`, `part3_type`, `num_part3_digits`, `part4_type`, `num_part4_digits`, `part5_type`, `num_part5_digits`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(0, 'KGFS', 'AR1', '1', 'Loan', 3, 4, 1, 3, 4, 5, 0, 0, 0, 0, '2012-10-30 18:33:28', 'admin', NULL, NULL),
+(0, 'KGFS', 'AR2', '2', 'Internal', 2, 2, 4, 10, 0, 0, 0, 0, 0, 5, '2012-10-30 18:33:28', 'admin', NULL, NULL),
+(0, 'KGFS', 'AR3', '3', 'Savings', 3, 4, 5, 3, 4, 5, 0, 0, 0, 0, '2012-10-30 18:33:28', 'admin', NULL, NULL),
+(0, 'MG', 'AR1', '0', 'Loan', 3, 4, 1, 3, 4, 5, 0, 0, 0, 0, '2014-04-11 11:39:06', 'admin', NULL, NULL),
+(0, 'MG', 'AR2', '2', 'Internal', 2, 2, 4, 10, 0, 0, 0, 0, 0, 5, '2014-04-11 11:39:06', 'admin', NULL, NULL),
+(0, 'MG', 'AR3', '3', 'Savings', 3, 4, 5, 3, 4, 5, 0, 0, 0, 0, '2014-04-11 11:39:06', 'admin', NULL, NULL);
+
+ALTER TABLE `accountid_generation_rules`
+  ADD CONSTRAINT `accountid_generation_rules_ibfk_1` FOREIGN KEY (`tenant_code`) REFERENCES `tenants` (`tenant_code`);
+
+
+
+
+
+users*
+ALTER TABLE `users` AUTO_INCREMENT = 1
+INSERT INTO `users`
+(version, id, tenant_code, userid, name, password, emailid, active, created_at, created_by, last_edited_at, last_edited_by) VALUES (0, 1, 'KGFS','admin','admin','21232f297a57a5a743894a0e4a801fc3','admin@KGFS.com',1,NOW(),'admin',NULL,NULL),
+(0, 2,
+'KGFS','vuser','vuser','3ff947819088cfd065c9802eb8878625','admin@KGFS.com',1,NOW(),'admin',NULL,NULL);
+
+
+
+
+
+banks*
+ALTER TABLE `banks` AUTO_INCREMENT = 1
+
+
+
+
+branches*
+ALTER TABLE `branches` AUTO_INCREMENT = 1
+INSERT INTO `branches` (`version`, `id`, `tenant_code`, `branch_code`, `branch_name`, `micr_code`, `ifsc_code`, `account_id_code`, `branch_open_date`, `current_working_date`, `operational_status`, `address1`, `address2`, `address3`, `city_code`, `district_code`, `state_code`, `country_code`, `pin_code`, `weekend_day1`, `weekend_day2`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES
+(1298, 1, 'KGFS', '4001', 'Karambayam', '123456789', 'UTIB0166', '4001', '2012-01-01 00:00:17', '2016-08-24', 0, '511, 16th Main', '', 'Near Sarakki', 'Thanjavur', NULL, 'Tamilnadu', 'IN', 560186, 0, 0, '2012-09-26 15:28:22', 'admin', '2016-08-23 21:30:11', 'scheduler')
+(0, 2, 'KGFS', 'KGFS', 'KGFS', '125436789', 'UTIB0167', 'ALL', '2012-01-01 00:00:17', '2016-08-24', 0, '511, 16th Main', '', 'Near Sarakki', 'Thanjavur', NULL, 'Tamilnadu', 'IN', 560186, 0, 0, '2012-09-26 15:28:22', 'admin', '2016-08-23 21:30:11', 'scheduler');
+
+
+
+INSERT INTO `branches` (`version`, `id`, `tenant_code`, `branch_code`, `branch_name`, `micr_code`, `ifsc_code`, `account_id_code`, `branch_open_date`, `current_working_date`, `operational_status`, `address1`, `address2`, `address3`, `city_code`, `district_code`, `state_code`, `country_code`, `pin_code`, `weekend_day1`, `weekend_day2`, `created_at`, `created_by`, `last_edited_at`, `last_edited_by`) VALUES (0, 2, 'KGFS', 'HO', 'HO', '125436789', 'NBFC0166', 'ALL', '2012-01-01 00:00:17', '2016-08-24', 0, '511, 16th Main', '', 'Near Sarakki', 'Thanjavur', NULL, 'Tamilnadu', 'IN', 560186, 0, 0, '2012-09-26 15:28:22', 'admin', '2016-08-23 21:30:11', 'scheduler')
+
+
+
+branchsets*
+
+INSERT INTO `branchsets`
+(version, id, tenant_code, branchset_code, branchset_name, operational_mode, created_at, created_by, last_edited_at,
+last_edited_by) VALUES
+(0,1,'KGFS','All','All',1,NOW(),'admin',NULL, NULL), 
+(0,2,'KGFS','HO','HO', 1,NOW(),'admin',NULL, NULL),
+(0,3,'KGFS','4001','Karambayam', 1,NOW(),'admin',NULL, NULL);
+
+
+branchset_branches* 
+
+INSERT INTO `branchset_branches`
+(version, id, tenant_code, branchset_code, branch_code, created_at, created_by, last_edited_at, last_edited_by) VALUES (0,1,'KGFS','All','HO',NOW(),'admin',NULL,NULL);
+
+user_assignments*
+ALTER TABLE `user_assignments` AUTO_INCREMENT = 1
+INSERT INTO `user_assignments`
+(version, id, tenant_code, branch_code, role_code, userid, created_at, created_by, last_edited_at, last_edited_by) VALUES (0,1,'KGFS','HO','Admin','admin',NOW(),'admin',NULL,NULL),
+(0,2,'KGFS','HO','Admin','vuser',NOW(),'admin',NULL,NULL);
+
+
+
+
+
+
+   
+ 
+ 
+ 
+ 
+ 
+ 
+
+
