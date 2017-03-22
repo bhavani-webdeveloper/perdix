@@ -1,0 +1,107 @@
+<style type="text/css">
+  .menu-toggle {
+    display: none;
+  }
+  .direct-chat-contacts-open .menu-toggle {
+    display: block !important;
+    margin-right: 10px;
+  }
+  .btn-participant > .fa-times {
+    display: none;
+  }
+  .direct-chat-contacts-open .btn-participant > .fa-bars {
+    display: none;
+  }
+  .direct-chat-contacts-open .btn-participant > .fa-times {
+    display: inline;
+  }
+  input.menu-toggle.form-control {
+    margin-right: 0;
+    width: 200px;
+  }
+  input.menu-toggle.form-control + a {
+    position: absolute;
+    top: 0;
+    left: 180px;
+    padding: 7px 9px 6px;
+  }
+  .direct-chat-contacts {
+    overflow: hidden;
+  }
+  .contacts-list-msg {
+    white-space: nowrap;
+  }
+</style>
+<!-- DIRECT CHAT DANGER -->
+<div class="direct-chat direct-chat-danger">
+<div class="box-header" style="padding-top: 0">
+  <button class="btn btn-danger btn-flat pull-right btn-participant" data-toggle="tooltip" title="Menu" data-widget="chat-pane-toggle">
+    <span class="fa fa-bars"></span>
+    <i class="fa fa-times"></i>
+  </button>
+  <span ng-show="model.participantsMap[model.user_id]">
+    <input ng-model="model.newParticipant.login" class="form-control menu-toggle pull-left" placeholder="Enter Participant" readonly />
+    <a irf-lov irf-form="model.newParticipantForm" irf-schema="model.newParticipantSchema" irf-model="model" class="menu-toggle" href="">
+      <i class="fa fa-bars color-theme"></i>
+    </a>
+    <button ng-click="model.addMessageParticipant(model)" class="btn btn-danger btn-flat menu-toggle pull-left">Add Participant</button>
+    <!-- <button ng-click="model.closeConversation(model)" class="btn btn-default btn-flat menu-toggle pull-left">Close Conversation</button> -->
+  </span>
+</div>
+<!-- /.box-header -->
+<div class="box-body">
+  <!-- Conversations are loaded here -->
+  <div class="direct-chat-messages">
+    <div ng-hide="model.conversations.length" class="text-center text-gray">No messages</div>
+    <!-- Message. Default to the left -->
+    <div class="direct-chat-msg {{right?'right':'left'}}" ng-init="right=(conv.participant===model.user_id)" ng-repeat="conv in model.conversations">
+      <div class="direct-chat-info clearfix">
+        <span class="direct-chat-name pull-{{right?'right':'left'}}" ng-bind="model.participantsMap[conv.participant].participant_name"></span>
+        <span class="direct-chat-timestamp pull-{{right?'left':'right'}}" ng-bind="conv.created_at"></span>
+      </div>
+      <!-- /.direct-chat-info -->
+      <img class="direct-chat-img" src="img/unknownUser.jpg" alt="Message User Image"><!-- /.direct-chat-img -->
+      <div class="direct-chat-text" ng-bind="conv.message"></div>
+      <!-- /.direct-chat-text -->
+    </div>
+    <!-- /.direct-chat-msg -->
+  </div>
+  <!--/.direct-chat-messages-->
+
+  <!-- Contacts are loaded here -->
+  <div class="direct-chat-contacts" style="overflow: auto;">
+    <ul class="contacts-list">
+      <li ng-repeat="par in model.participants">
+        <a href="">
+          <img class="contacts-list-img" src="img/unknownUser.jpg">
+
+          <div class="contacts-list-info">
+                <span class="contacts-list-name">
+                  {{par.participant_name}}
+                  <small class="contacts-list-date pull-right">{{par.lastReadSince}}</small>
+                </span>
+            <span class="contacts-list-msg">{{par.participant}}<!-- status msg tag --></span>
+          </div>
+          <!-- /.contacts-list-info -->
+        </a>
+      </li>
+      <!-- End Contact Item -->
+    </ul>
+    <!-- /.contatcts-list -->
+  </div>
+  <!-- /.direct-chat-pane -->
+</div>
+<!-- /.box-body -->
+<div class="box-footer" ng-show="model.participantsMap[model.user_id]">
+  <form action="#" method="post">
+    <div class="input-group">
+      <input ng-model="model.newMessage" name="message" placeholder="Type Message ..." class="form-control" />
+      <span class="input-group-btn">
+        <button ng-click="$event.preventDefault();model.addMessage(model)" class="btn btn-danger btn-flat">Send</button>
+      </span>
+    </div>
+  </form>
+</div>
+<!-- /.box-footer-->
+</div>
+<!--/.direct-chat -->

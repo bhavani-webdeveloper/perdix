@@ -1,0 +1,221 @@
+{
+  "stages": [
+    {
+      "order": 1,
+      "code": "MTDisbursementDataCapture",
+      "name": "M.T Disbursement",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": [
+        "1"
+      ]
+    },
+    {
+      "order": 2,
+      "code": "FROApproval",
+      "name": "FRO APPROVAL",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": [
+        "1"
+      ]
+    },
+    {
+      "order": 3,
+      "code": "CROApproval",
+      "name": "CRO APPROVAL",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": [
+        "1"
+      ]
+    },
+    {
+      "order": 4,
+      "code": "DocumentUpload",
+      "name": "Doc Generation and Upload",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": [
+        "1"
+      ]
+    },
+    {
+      "order": 5,
+      "code": "DocumentVerification",
+      "name": "Doc Verification",
+      "stageType": "APPROVAL",
+      "allowedRoles": [
+        "APPROVER"
+      ],
+      "notRequiredForTranches": [
+        "1"
+      ]
+    },
+    {
+      "order": 6,
+      "code": "ReadyForDisbursement",
+      "name": "Ready For Disburse",
+      "stageType": "DISBURSE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": []
+    },
+    {
+      "order": 7,
+      "code": "DisbursementConfirmation",
+      "name": "Disbursement Confirmation",
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+        "WM"
+      ],
+      "notRequiredForTranches": []
+    }
+  ],
+  "schema": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Comment",
+    "required": [
+      "disbursementSchedule",
+      "loanDocument"
+    ],
+    "properties": {
+      "disbursementSchedule": {
+        "title": "LoanAccountDisbursementSchedule",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "required": [
+            "scheduledDisbursementDate",
+            "actualDisbursementDate",
+            "disbursementAmount",
+            "customerSignatureDate",
+            "disbursementFromBankAccountNo",
+            "customerAccountNumber",
+            "ifscCode"
+          ],
+          "properties": {
+            "scheduledDisbursementDate": {
+              "title": "Scheduled Disbursement Date",
+              "type": "date",
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "actualDisbursementDate": {
+              "title": "Actual Disbursement Date",
+              "type": "date",
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "disbursementAmount": {
+              "title": "Disbursement Amount",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000000,
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "disbursedAmount": {
+              "title": "Disbursed Amount",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000000,
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "customerSignatureDate": {
+              "title": "Customer Signature Date",
+              "type": "date",
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "disbursementFromBankAccountNo": {
+              "title": "DisbursementFromBankAccountNo",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "customerAccountNumber": {
+              "title": "Customer Account Number",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            },
+            "ifscCode": {
+              "title": "ifscCode",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "MTDisbursementDataCapture"
+              ]
+            }
+          },
+          "type": "object"
+        }
+      },
+      "loanDocument": {
+        "title": "Loan Document",
+        "type": "array",
+        "maxItems": null,
+        "items": {
+          "type": "object",
+          "required": [
+            "document",
+            "documentId"
+          ],
+          "properties": {
+            "documentId": {
+              "title": "Document Id",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "DocumentUpload"
+              ]
+            },
+            "document": {
+              "title": "Document",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "DocumentUpload"
+              ]
+            },
+            "remarks": {
+              "title": "Remarks",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "DocumentVerification"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

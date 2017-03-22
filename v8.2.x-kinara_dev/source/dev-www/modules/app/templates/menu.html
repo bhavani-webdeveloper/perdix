@@ -1,0 +1,72 @@
+<aside class="main-sidebar">
+</style>
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="" ng-src="{{ photo }}" class="img-circle" alt="User Image" onError="this.onerror=null;this.src='img/unknownUser.jpg'">
+            </div>
+            <div class="pull-left info" style="padding-top: 0">
+                <p style="margin-bottom: 0">{{ ss.getUsername() }}</p>
+                <a href="#"><i class="fa fa-building text-danger"></i> {{ currentBranch.branchName | translate }}<br><i class="fa fa-clock-o text-gray"></i> <b>{{ ss.getFormatedCBSDate() }}</b></a>
+            </div>
+        </div>
+        <!-- search form -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input ng-model="menuFilter" type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}...">
+          <span class="input-group-btn">
+            <a ng-click="menuFilter=''" class="btn btn-flat"><i ng-if="menuFilter" class="fa fa-close"></i>
+            </a>
+          </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">{{ definition.title | translate }}</li>
+            <li ng-repeat="menu in definition.items | filter:menuFilter" ng-class="{active:isActive(menu.id)}" class="treeview">
+                <a ng-click="loadPage($event, menu)" href="#" class="online-link">
+                    <i class="{{menu.iconClass || 'fa fa-bars'}}"></i> <span>{{ menu.title | translate }}</span>
+                    <i ng-if="menu.items" class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul ng-if="menu.items" class="treeview-menu">
+                    <li ng-repeat="subMenu in menu.items | filter:menuFilter" ng-class="{active:isActive(subMenu.id)}" style="position:relative">
+                        <a ng-click="loadPage($event, subMenu)" href="#">
+                            <i class="{{subMenu.iconClass || 'fa fa-circle-o'}}"></i>
+                            {{ subMenu.title | translate }}
+                            <i ng-if="subMenu.items" class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul ng-if="subMenu.items" class="treeview-menu">
+                            <li ng-repeat="subsubMenu in subMenu.items | filter:menuFilter" ng-class="{active:isActive(subsubMenu.id)}">
+                                <a ng-click="loadPage($event, subsubMenu)" href="#">
+                                    <i class="{{subsubMenu.iconClass || 'fa fa-circle'}}"></i>
+                                    {{ subsubMenu.title | translate }}
+                                </a>
+                                <a ng-if="subsubMenu.offline" ng-click="loadOfflinePage($event, subsubMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
+                            </li>
+                        </ul>
+                        <a ng-if="subMenu.offline" ng-click="loadOfflinePage($event, subMenu)" href="#" class="offline-link small-pad pull-right"><i class="fa fa-save"></i></a>
+                    </li>
+                </ul>
+                <a ng-if="menu.offline" ng-click="loadOfflinePage($event, menu)" href="#" class="offline-link pull-right"><i class="fa fa-save"></i></a>
+            </li>
+        </ul>
+    </section>
+<style type="text/css">
+.online-link span {
+    overflow: hidden;
+}
+.offline-link {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    padding: 12px 6px 12px 10px !important;
+    border-left: 1px solid #ccc !important;
+    border-bottom: none !important;
+}
+.offline-link.small-pad {
+    padding: 12px 10px 12px 14px !important;
+}
+</aside>

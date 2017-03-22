@@ -1,0 +1,803 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "customerHealth",
+    "family",
+    "familyHouseholdExpense",
+    "familyHouseholdIncome",
+    "financialAssets",
+    "financialLiabilities",
+    "personalProfile",
+    "bankdetails",
+    "kyc",
+    "physicalAssets",
+    "physicalVerification"
+  ],
+  "properties": {
+    "customerHealth": {
+      "title": "Health Details",
+      "type": "object",
+      "required": ["narcoticsConsumption"],
+      "properties": {
+        "heightInInch": {
+          "title": "Height (In)",
+          "type": "number",
+          "minimum": 10,
+          "maximum": 90
+        },
+        "weightInKg": {
+          "title": "Weight (Kg)",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "tobaccoConsumption": {
+          "title": "Tobacco Consumption",
+          "type": "boolean"
+        },
+        "alcoholConsumption": {
+          "title": "Alcohal Consumption",
+          "type": "boolean"
+        },
+        "narcoticsConsumption": {
+          "title": "Narcotics Consumption",
+          "type": "boolean"
+        }
+      }
+    },
+    "family": {
+      "title": "Family Details",
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "familyMemberFirstName",
+          "familyMemberLastName",
+          "relationShip",
+          "gender",
+          "dateOfBirth",
+          "educationStatus"
+        ],
+        "properties": {
+          "familyMemberFirstName": {
+            "title": "First Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "familyMemberMiddleName": {
+            "title": "Middle Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "familyMemberLastName": {
+            "title": "Last Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+
+          "relationship": {
+            "title": "Relationship",
+            "type": "string",
+            "enumCode": "relation"
+          },
+          "gender": {
+            "title": "Gender",
+            "type": "string",
+            "enumCode": "gender"
+          },
+          "dateOfBirth": {
+            "title": "Date Of Birth",
+            "type": "string",
+            "format": "date"
+          },
+          "educationStatus": {
+            "title": "Education Status",
+            "type": "string",
+            "enumCode": "education"
+          },
+          "mobilePhone": {
+            "title": "Mobile Phone",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10
+          },
+          "enrolledUrnNo": {
+            "title": "URN",
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 16
+          },
+          "deathCertificateUploaded": {
+            "title": "Death Certificate Uploaded?",
+            "type": "boolean"
+          },
+          "deceasedDetailsCaptured": {
+            "title": "Deceased details captured",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "familyHouseholdExpense": {
+      "title": "Household Expense Details",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["frequency"],
+        "properties": {
+          "familyHouseholdExpense": {
+            "title": "Expenditure Source",
+            "type": "string",
+            "enumCode": "expenditure"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10000000
+          },
+          "frequency": {
+            "title": "Frequency",
+            "type": "string",
+            "enumCode": "frequency"
+          }
+        }
+      }
+    },
+    "familyHouseholdIncome": {
+      "title": "Household Income Details",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["incomeSource", "incomeEarned", "frequency", "monthsPerYear"],
+        "properties": {
+          "incomeSource": {
+            "title": "Occupation",
+            "type": "string",
+            "enumCode": "occupation"
+          },
+          "incomeEarned": {
+            "title": "Income",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000000
+          },
+          "frequency": {
+            "title": "Frequency",
+            "type": "string",
+            "enumCode": "frequency"
+          },
+          "monthsPerYear": {
+            "title": "Per Year",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 366
+          }
+        }
+      }
+    },
+    "financialAssets": {
+      "title": "Financial Assets",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "instrumentType",
+          "nameOfInstitution",
+          "instituteType",
+          "amountInPaisa",
+          "frequencyOfDeposit",
+          "startDate",
+          "maturityDate"
+        ],
+        "properties": {
+          "instrumentType": {
+            "title": "Instrument Type",
+            "type": "string",
+            "enumCode": "financialAssetInstrumentType"
+          },
+          "nameOfInstitution": {
+            "title": "Institute Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "instituteType": {
+            "title": "Institution Type",
+            "type": "string",
+            "enumCode": "finanical_asset"
+          },
+          "amountInPaisa": {
+            "title": "Amount",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000000
+          },
+          "frequencyOfDeposit": {
+            "title": "Frequency Of Deposit",
+            "type": "string",
+            "enumCode": "frequency"
+          },
+          "startDate": {
+            "title": "Start Date",
+            "type": "string",
+            "format": "date"
+          },
+          "maturityDate": {
+            "title": "Maturity Date",
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    "financialLiabilities": {
+      "title": "Financial Liabilities",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "loanType",
+          "loanSource",
+          "instituteName",
+          "liabilityLoanPurpose",
+          "frequencyOfInstallment",
+          "loanAmountInPaisa",
+          "installmentAmountInPaisa",
+          "startDate",
+          "maturityDate"
+        ],
+        "properties": {
+          "loanType": {
+            "title": "Loan Type",
+            "type": "string",
+            "enumCode": "liability_loan_type"
+          },
+          "loanSource": {
+            "title": "Loan Source",
+            "type": "string",
+            "enumCode": "institution_type"
+          },
+          "instituteName": {
+            "title": "Institute Name",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "liabilityLoanPurpose": {
+            "title": "Loan Purpose",
+            "type": "string",
+            "enumCode": "liability_loan_purpose"
+          },
+          "frequencyOfInstallment": {
+            "title": "Frequency Of Installment",
+            "type": "string",
+            "enumCode": "frequency"
+          },
+          "loanAmountInPaisa": {
+            "title": "Loan Amount In Paisa",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000000
+          },
+          "installmentAmountInPaisa": {
+            "title": "Installment Amount In Paisa",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000000
+          },
+          "startDate": {
+            "title": "Start Date",
+            "type": "string",
+            "format": "date"
+          },
+          "maturityDate": {
+            "title": "Maturity Date",
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    "personalProfile": {
+      "title": "Personal Profile",
+      "type": "object",
+      "required": [
+        "doorNo",
+        "street",
+        "villageName",
+        "locality",
+        "postOffice",
+        "district",
+        "pincode",
+        "state",
+        "landLineNo",
+        "mobilePhone",
+        "firstName",
+        "lastName",
+        "fatherFirstName",
+        "fatherLastName",
+        "gender",
+        "dateOfBirth",
+        "religion",
+        "caste",
+        "language",
+        "maritalStatus"
+      ],
+      "properties": {
+        "customerImage":{
+          "title":"Customer Image",
+          "type":"string"
+
+        },
+        "urnNo": {
+          "title": "URN",
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 16
+        },
+        "doorNo": {
+          "title": "Door Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "street": {
+          "title": "Street",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "villageName": {
+          "title": "Village",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "locality": {
+          "title": "Locality",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "postOffice": {
+          "title": "Post Office",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "district": {
+          "title": "District",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "pincode": {
+          "title": "PIN",
+          "type": "string",
+          "minimum": 6,
+          "maximum": 6
+        },
+        "state": {
+          "title": "State",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailDoorNo": {
+          "title": "Door Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailStreet": {
+          "title": "Street",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailVillageName": {
+          "title": "Village",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailLocality": {
+          "title": "Locality",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailPostOffice": {
+          "title": "Post Office",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailDistrict": {
+          "title": "District",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mailPincode": {
+          "title": "PIN",
+          "type": "string",
+          "minimum": 6,
+          "maximum": 6
+        },
+        "mailState": {
+          "title": "State",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "landLineNo": {
+          "title": "LandLine Number",
+          "type": "number",
+          "minimum": 10,
+          "maximum": 15
+        },
+        "mobilePhone": {
+          "title": "Mobile Number",
+          "type": "number",
+          "minimum": 10,
+          "maximum": 15
+        },
+        "mailSameAsResidence": {
+          "title": "Mailing Address Same as Residential",
+          "type": "boolean"
+        },
+        "firstName": {
+          "title": "First Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "lastName": {
+          "title": "Last Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "middleName": {
+          "title": "Middle Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "fatherFirstName": {
+          "title": "Father's First Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "fatherLastName": {
+          "title": "Father's Last Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "fatherMiddleName": {
+          "title": "Father's Middle Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enumCode": "gender"
+        },
+        "dateOfBirth": {
+          "title": "Date Of Birth",
+          "type": "string",
+          "format": "date"
+        },
+        "religion": {
+          "title": "Religion",
+          "type": "string",
+          "enumCode": "religion"
+        },
+        "caste": {
+          "title": "Caste",
+          "type": "string",
+          "enumCode": "caste"
+        },
+        "language": {
+          "title": "Language",
+          "type": "string",
+          "enumCode": "language"
+        },
+        "maritalStatus": {
+          "title": "Marital Status",
+          "type": "string",
+          "enumCode": "marital_status"
+        },
+        "spouseFirstName": {
+          "title": "Spouse First Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "spouseMiddleName": {
+          "title": "Spouse Middle Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "spouseLastName": {
+          "title": "Spouse Last Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "spouseDateOfBirth": {
+          "title": "Spouse Date Of Birth",
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "bankdetails": {
+      "title": "Bank Details",
+      "type": "object",
+      "required": ["kgfsName", "enrolledAs"],
+      "properties": {
+        "kgfsName": {
+          "title": "Kgfs Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "enrolledAs": {
+          "title": "Enrolled as",
+          "type": "string",
+          "enumCode": "enrolled_as"
+        },
+        "inviteId": {
+          "title": "Invite Id",
+          "type": "string"
+        }
+      }
+    },
+    "kyc": {
+      "title": "KYC Details",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "kyc1ProofType": {
+          "title": "Kyc1 Proof Type",
+          "type": "string",
+          "enumCode": "kyc"
+        },
+        "kyc1ImagePath": {
+          "title": "Kyc1 Proof Document",
+          "type": "string"
+        },
+        "kyc1ProofNumber": {
+          "title": "Kyc1 Proof Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "kyc1IssueDate": {
+          "title": "Kyc1 Issue Date",
+          "type": "string",
+          "format": "date"
+        },
+        "kyc1ValidUptoDate": {
+          "title": "Kyc1 valid upto Date",
+          "type": "string",
+          "format": "date"
+        },
+        "kyc2ProofType": {
+          "title": "Kyc2 Proof Type",
+          "type": "string",
+          "enumCode": "kyc"
+        },
+        "kyc2ImagePath": {
+          "title": "Kyc2 Proof Document",
+          "type": "string"
+        },
+        "kyc2ProofNumber": {
+          "title": "Kyc2 Proof Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "kyc2IssueDate": {
+          "title": "Kyc2 Issue Date",
+          "type": "string",
+          "format": "date"
+        },
+        "kyc2ValidUptoDate": {
+          "title": "Kyc2 valid upto Date",
+          "type": "string",
+          "format": "date"
+        },
+        "panNo": {
+          "title": "Pan Number",
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "aadharNo": {
+          "title": "Aadhar Number",
+          "type": "string",
+          "minLength": 12,
+          "maxLength": 12
+        },
+        "referenceFirstName": {
+          "title": "Reference First Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "referenceMiddleName": {
+          "title": "Reference Middle Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "referenceLastName": {
+          "title": "Reference Last Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "relationship": {
+          "title": "Relationship",
+          "type": "string",
+          "enumCode": "relationship"
+        },
+        "addressProof": {
+          "title": "Address Proof",
+          "type": "string",
+          "enumCode": "address_proof"
+        },
+        "addressProofImageId": {
+          "title": "Address Proof Image Id",
+          "type": "string"
+        },
+        "addressProofNo": {
+          "title": "Address Proof Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 45
+        },
+        "addressProofIssueDate": {
+          "title": "Address Proof Issue Date",
+          "type": "string",
+          "format": "date"
+        },
+        "addressProofValidUptoDate": {
+          "title": "Address Proof Valid Upto Date",
+          "type": "string",
+          "format": "date"
+        },
+        "identityProof": {
+          "title": "Identity Proof",
+          "type": "string",
+          "enumCode": "identity_proof"
+        },
+        "identityProofImageId": {
+          "title": "Identity Proof Image",
+          "type": "string"
+        },
+        "identityProofNo": {
+          "title": "Identity Proof Number",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 45
+        },
+        "idProofValidUptoDate": {
+          "title": "Id Proof Valid Upto Date",
+          "type": "string",
+          "format": "date"
+        },
+        "idProofIssueDate": {
+          "title": "Id Proof Issue Date",
+          "type": "string",
+          "format": "date"
+        },
+        "panCardImageId": {
+          "title": "Pan Card Image",
+          "type": "string"
+        },
+        "ageProofSameAsIdProof":{
+          "title":"Age Proof Same as ID Proof",
+          "type":"boolean"
+        },
+        "ageProofImageId": {
+          "title": "Age Proof Image",
+          "type": "string"
+        }
+      }
+    },
+    "physicalAssets": {
+      "title": "Physical Assets",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "nameOfOwnedAsset": {
+            "title": "Name Of Owned Asset",
+            "type": "string",
+            "enumCode": "asset"
+          },
+          "numberOfOwnedAsset": {
+            "title": "Number Of Owned Asset",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "ownedAssetValue": {
+            "title": "Owned Asset Value",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1000000
+          },
+          "ownedAssetDetails": {
+            "title": "Owned Asset Details",
+            "type": "string",
+            "enumCode": "asset"
+          }
+        }
+      }
+    },
+    "physicalVerification": {
+      "title": "Physical Verification",
+      "type": "object",
+      "required": ["nameOfRo", "date", "place"],
+      "properties": {
+        "nameOfRo": {
+          "title": "Name Of Ro",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "date": {
+          "title": "Date",
+          "type": "string",
+          "format": "date"
+        },
+        "place": {
+          "title": "Place",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      }
+    },
+    "user_defined_fields": {
+      "title": "User Defined Details",
+      "type": "object",
+      "required": ["DistanceFromHighway", "AvailedService"],
+      "properties": {
+        "DistanceFromHighway": {
+          "title": "Distance From Highway (in KM)",
+          "type": "number",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "AvailedService": {
+          "title": "Availed Any MFI service?",
+          "type": "boolean"
+        }
+      }
+    },
+    "user_defined_date_fields": {
+      "title": "User Defined Date Details",
+      "type": "object",
+      "required": [],
+      "properties": {}
+    }
+  }
+}
