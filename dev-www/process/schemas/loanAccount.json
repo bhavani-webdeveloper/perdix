@@ -1,0 +1,1185 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#", 
+    "type": "object",
+    "properties": {
+        "customer":{
+            "type":"object",
+            "properties":{
+                "customerId":{
+                    "type":"integer"
+                },
+                "firstName":{
+                    "type":"string"
+                },
+                "branch":{
+                    "type":"string",
+                    "enumCode":"branch",
+                    "title":"BRANCH"
+                },
+                "centreId":{
+                    "type": ["null", "number"],
+                    "enumCode":"centre",
+                    "title":"CENTRE"
+                },
+                "applicantName":{
+                    "type":"string"
+                },
+                "customerType":{
+                    "type":"string"
+                }
+            }
+        },
+        
+        "additional":{
+            "type":"object",
+            "properties":{
+                "branchName":{
+                    "type":"string",
+                    "title":"BRANCH_NAME"
+                },
+
+
+                "processingFeeMultiplier":{
+                    "type":"number"
+
+                },
+                "portfolioUrnSelector":{
+                    "type":"string",
+                    "title":"INSURED"
+                }
+
+            }
+        },
+        "loanAccount": {
+            "type": "object",
+            "properties": {
+                "accountNumber": {
+                    "title": "ACCOUNT_NUMBER",
+                    "type": "string"
+                },
+                "percentageIncreasedIncome": {
+                    "title": "PERCENTAGE_INCREASED_INCOME",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
+                },
+                "percentageInterestSaved": {
+                    "title": "PERCENTAGE_INTEREST_SAVED",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
+                },
+                "proposedHires":{
+                    "type":"string",
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "title":"PROPOSED_HIRES"
+                },
+                "accountUserDefinedFields": {
+                    "type": "object",
+                    "properties": {
+                        "accountNumber": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "loanId": {
+                            "type": "integer"
+                        },
+                        "userDefinedDateFieldValues": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "userDefinedFieldValues": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "accountNumber",
+                        "id",
+                        "loanId",
+                        "userDefinedDateFieldValues",
+                        "userDefinedFieldValues",
+                        "version"
+                    ]
+                },
+                "applicant": {
+                    "type": "string"
+                },
+                "applicationFileName": {
+                    "type": "string"
+                },
+                "applicationStatus": {
+                    "title": "STATUS",
+                    "type": "string"
+                },
+                "applicationStatusUpdatedBy": {
+                    "type": "string"
+                },
+                "npa": {
+                "type": "boolean"
+                },
+                "linkedAccountNumber": {
+                    "type": "string"
+                },
+                "applicationStatusUpdatedOn": {
+                    "type": "string"
+                },
+                "bankId": {
+                    "type": "string",
+                    "enumCode":"bank",
+                    "title":"BANK"
+                },
+                "bcAccount": {
+                    "type": "object",
+                    "properties": {
+                        "accountNumber": {
+                            "type": "string"
+                        },
+                        "agreementFileId": {
+                            "type": "string"
+                        },
+                        "agreementFileName": {
+                            "type": "string"
+                        },
+                        "agreementStatus": {
+                            "type": "string"
+                        },
+                        "agreementStatusUpdatedBy": {
+                            "type": "string"
+                        },
+                        "agreementStatusUpdatedOn": {
+                            "type": "string"
+                        },
+                        "applicationNumber": {
+                            "type": "string"
+                        },
+                        "bcAccountNo": {
+                            "type": "string"
+                        },
+                        "bcProductCode": {
+                            "type": "string"
+                        },
+                        "cmsDisbursementDate": {
+                            "type": "string"
+                        },
+                        "custIdSentStatus": {
+                            "type": "boolean"
+                        },
+                        "fldgFlag": {
+                            "type": "boolean"
+                        },
+                        "fldgUpdatedAt": {
+                            "type": "string"
+                        },
+                        "fldgUpdatedBy": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "installmentAmountInPaisa": {
+                            "type": "integer"
+                        },
+                        "lastInstallmentAmountInPaisa": {
+                            "type": "integer"
+                        },
+                        "loanId": {
+                            "type": "integer"
+                        },
+                        "maritalStatus": {
+                            "type": "string"
+                        },
+                        "nomineeId": {
+                            "type": "integer"
+                        },
+                        "numberOfInstallments": {
+                            "type": "integer"
+                        },
+                        "outstandingLoanAmount": {
+                            "type": "string"
+                        },
+                        "writeOffAmount": {
+                            "type": "string"
+                        },
+                        "writeOffDate": {
+                            "type": "string"
+                        },
+                        "spouseDateOfBirth": {
+                            "type": "string"
+                        },
+                        "spouseFirstName": {
+                            "type": "string"
+                        },
+                        "spouseLastName": {
+                            "type": "string"
+                        },
+                        "spouseMiddleName": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "accountNumber",
+                        "agreementFileId",
+                        "agreementFileName",
+                        "agreementStatus",
+                        "agreementStatusUpdatedBy",
+                        "agreementStatusUpdatedOn",
+                        "applicationNumber",
+                        "bcAccountNo",
+                        "bcProductCode",
+                        "cmsDisbursementDate",
+                        "custIdSentStatus",
+                        "fldgFlag",
+                        "fldgUpdatedAt",
+                        "fldgUpdatedBy",
+                        "id",
+                        "installmentAmountInPaisa",
+                        "lastInstallmentAmountInPaisa",
+                        "loanId",
+                        "maritalStatus",
+                        "nomineeId",
+                        "numberOfInstallments",
+                        "outstandingLoanAmount",
+                        "spouseDateOfBirth",
+                        "spouseFirstName",
+                        "spouseLastName",
+                        "spouseMiddleName",
+                        "version"
+                    ]
+                },
+                "borrowerIlliterate": {
+                    "type": "boolean"
+                },
+                "branchId": {
+                    "type": "integer",
+                    "title":"BRANCH_ID"
+                },
+                "chk1UploadFilePath": {
+                    "type": "string"
+                },
+                "closed": {
+                    "type": "boolean"
+                },
+                "coApplicant": {
+                    "type": "string"
+                },
+                "coBorrowerUrnNo": {
+                    "type": ["null", "string"]
+                },
+                "collateral": {
+                    "type": "array",
+                    "items": {
+                        "type":"object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string"
+                            },
+                            "collateral1FilePath": {
+                                "type": ["null", "string"],
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL1"
+                            },
+                            "collateral2FilePath": {
+                                "type": ["null", "string"],
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL2"
+                            },
+                            "collateral3FilePath": {
+                                "type": ["null", "string"],
+                                "category":"Loan",
+                                "subCategory":"COLLATERAL3"
+                            },
+                            "collateralDescription": {
+                                "title": "COLLATERAL_DESCRIPTION",
+                                "type": "string"
+                            },
+                            "collateralType": {
+                                "title": "COLLATERAL_TYPE",
+                                "type": "string",
+                                "enumCode":"collateral_type"
+
+                            },
+                            "collateralValue": {
+                                "title": "COLLATERAL_VALUE",
+                                "type": "integer"
+                            },
+                            "totalValue": {
+                                "title": "TOTAL_VALUE",
+                                "type": "integer"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "loanToValue": {
+                                "type": "integer"
+                            },
+                            "manufacturer":{
+                                "type":["null", "string"],
+                                "title":"MANUFACTURER"
+                            },
+                            "marginValue": {
+                                "type": ["null", "integer"]
+                            },
+                            "photoFilePath": {
+                                "type": ["null", "string"],
+                                "category":"Loan",
+                                "subCategory":"COLLATERALPHOTO"
+                            },
+                            "quantity":{
+                                "type":"integer",
+                                "minimum":0,
+                                "title":"QUANTITY"
+
+                            },
+                            "modelNo":{
+                                "type":["null", "string"],
+                                "title":"MODEL_NO"
+
+                            },
+                            "machineOld":{
+                                "type":"boolean",
+                                "title":"IS_MACHINE_OLD"
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "loanToValue",
+                            "collateralValue",
+                            "collateralType",
+                            "collateralDescription",
+                            "quantity"
+
+                        ]
+                    }
+                },
+                "commercialCibilCharge":{
+                    "type":"integer",
+                    "title":"COMMERCIAL_CIBIL_CHARGE"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
+                "currentStage": {
+                    "type": "string"
+                },
+                "customerBank": {
+                    "type": "string"
+                },
+                "customerBankAccountNumber": {
+                    "type": "string"
+                },
+                "customerBankIfscCode": {
+                    "type": "string"
+                },
+                "customerBranch": {
+                    "title": "BRANCH_NAME",
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "disbursedAmountInPaisa": {
+                    "type": "integer"
+                },
+                "disbursementFromBankAccountNumber": {
+                    "type": "string",
+                    "title": "DISBURSEMENT_FROM_ACCOUNT_NUMBER"
+                },
+                "disbursementSchedules": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "actualDisbursementDate": {
+                                "type": "string"
+                            },
+                            "currentStage": {
+                                "type": "string"
+                            },
+                            "customerSignatureDate": {
+                                "title": "CUSTOMER_SIGN_DATE",
+                                "type": "string"
+                            },
+                            "disbursedAmount": {
+                                "type": "integer"
+                            },
+                            "disbursementAmount": {
+                                "type": "integer",
+                                "minimum":0
+                            },
+                            "disbursementFromBankAccountNumber": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "scheduledDisbursementDate": {
+                                "title": "DISBURSEMENT_DATE",
+                                "type": "string"
+                            },
+                            "trancheNumber": {
+                                "type": ["string", null]
+                            },
+                            "tranchCondition": {
+                                "type": ["string", "null"]
+                            }
+                        },
+                        "required": [
+                            "customerSignatureDate",
+                            "disbursementAmount",
+                            "disbursementFromBankAccountNumber",
+                            "scheduledDisbursementDate",
+                            "trancheNumber"
+                        ]
+                    }
+                },
+                "dob": {
+                    "type": "string"
+                },
+                "documentTracking": {
+                    "type": "string"
+                },
+                "dscIntegrationId": {
+                    "type": "integer"
+                },
+                "dscLoanAmount": {
+                    "type": "integer"
+                },
+                "dscOverride": {
+                    "type": "boolean"
+                },
+                "dscOverrideRemarks": {
+                    "type": "string"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "frequency": {
+                    "title": "FREQUENCY",
+                    "type": ["null", "string"],
+                    "enumCode":"frequency"
+                },
+                "guarantors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string"
+                            },
+                            "address": {
+                                "title": "ADDRESS",
+                                "type": "string"
+                            },
+                            "assetDetails": {
+                                "title": "ASSETS",
+                                "type": "string"
+                            },
+                            "dscIntegrationId": {
+                                "type": "integer"
+                            },
+                            "guaCustomerId": {
+                                "type": "integer"
+                            },
+                            "guaDob": {
+                                "title": "DATE_OF_BIRTH",
+                                "type": "string"
+                            },
+                            "guaDscOverride": {
+                                "type": "boolean"
+                            },
+                            "guaDscRemarks": {
+                                "type": "string"
+                            },
+                            "guaFirstName": {
+                                "title": "FIRST_NAME",
+                                "type": "string"
+                            },
+                            "guaLastName": {
+                                "type": "string"
+                            },
+                            "guaMiddleName": {
+                                "title": "MIDDLE_NAME",
+                                "type": "string"
+                            },
+                            "guaUrnNo": {
+                                "title": "GUARTANTOR_URN",
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "relationFirstName": {
+                                "type": "string"
+                            },
+                            "relationLastName": {
+                                "type": "string"
+                            },
+                            "relationMiddleName": {
+                                "type": "string"
+                            },
+                            "relationship": {
+                                "type": "string",
+                                "enumCode":"relation"
+                            },
+                            "totalLiabilities": {
+                                "title": "LIABILITIES",
+                                "type": "integer"
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+
+                        ]
+                    }
+                },
+                "husbandOrFatherFirstName": {
+                    "type": "string"
+                },
+                "husbandOrFatherLastName": {
+                    "type": "string"
+                },
+                "husbandOrFatherMiddleName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "insuranceFee":{
+                    "type":["null", "integer"],
+                    "title":"INSURANCE"
+
+                },
+                "interestRate": {
+                    "title": "INTEREST_RATE",
+                    "type": "number"
+                },
+                "isRestructure": {
+                    "type": "boolean"
+                },
+                "jewelLoanDetails": {
+                    "type": "object",
+                    "properties": {
+                        "accountNumber": {
+                            "type": "string"
+                        },
+                        "authenticationRegisterId": {
+                            "type": "integer"
+                        },
+                        "encoreClosed": {
+                            "type": "boolean"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "jewelLoanEligibleMarketRate": {
+                            "type": "integer"
+                        },
+                        "jewelPouchLocationId": {
+                            "type": "integer"
+                        },
+                        "jewelPouchLocationType": {
+                            "type": "string"
+                        },
+                        "jewelPouchMovementId": {
+                            "type": "integer"
+                        },
+                        "jewelPouchNo": {
+                            "type": "string"
+                        },
+                        "loanId": {
+                            "type": "integer"
+                        },
+                        "ratePerGram22CaratInPaisa": {
+                            "type": "integer"
+                        },
+                        "transitRequest": {
+                            "type": "boolean"
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "accountNumber",
+                        "authenticationRegisterId",
+                        "encoreClosed",
+                        "id",
+                        "jewelLoanEligibleMarketRate",
+                        "jewelPouchLocationId",
+                        "jewelPouchLocationType",
+                        "jewelPouchMovementId",
+                        "jewelPouchNo",
+                        "loanId",
+                        "ratePerGram22CaratInPaisa",
+                        "transitRequest",
+                        "version"
+                    ]
+                },
+                "lastEditedAt": {
+                    "type": "string"
+                },
+                "lastEditedBy": {
+                    "type": "string"
+                },
+                "literateWitnessFirstName": {
+                    "type": "string"
+                },
+                "literateWitnessLastName": {
+                    "type": "string"
+                },
+                "literateWitnessMiddleName": {
+                    "type": "string"
+                },
+                "loanAmount": {
+                    "type": "integer",
+                    "title": "LOAN_AMOUNT",
+                    "minimum":0
+                },
+                "loanAmountRequested": {
+                    "type": "integer",
+                    "minimum":0
+                },
+                "loanApplicationDate": {
+                    "type": "string"
+                },
+                "loanCentre": {
+                    "type": "object",
+                    "title": "CENTER_NAME",
+                    "properties": {
+                        "centreId": {
+                            "type": "integer",
+                            "enumCode":"centre"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "loanId": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "centreId",
+                        "id",
+                        "loanId"
+                    ]
+                },
+                "loanDisbursementDate": {
+                    "type": "string"
+                },
+                "loanDocuments": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "disbursementId": {
+                                "type": "integer"
+                            },
+                            "document": {
+                                "type": "string"
+                            },
+                            "documentId": {
+                                "type": "string"
+                            },
+                            "documentStatus": {
+                                "type": ["null","string"]
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "remarks": {
+                                "type": ["null","string"]
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "document",
+                            "documentId"
+                        ]
+                    }
+                },
+                "loanInsurance": {
+                    "type": "object",
+                    "properties": {
+                        "accountNumber": {
+                            "type": "string"
+                        },
+                        "applicationDate": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "insuranceCompany": {
+                            "type": "string"
+                        },
+                        "insuranceExpiryDate": {
+                            "type": "string"
+                        },
+                        "insuranceFrom": {
+                            "type": "string"
+                        },
+                        "insuranceHypothecation": {
+                            "type": "boolean"
+                        },
+                        "insuranceId": {
+                            "type": "integer"
+                        },
+                        "insuranceType": {
+                            "type": "string"
+                        },
+                        "insurerId": {
+                            "type": "integer"
+                        },
+                        "loanId": {
+                            "type": "integer"
+                        },
+                        "rfidTag": {
+                            "type": "string"
+                        },
+                        "sumInsured": {
+                            "type": "integer"
+                        },
+                        "version": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "accountNumber",
+                        "applicationDate",
+                        "id",
+                        "insuranceCompany",
+                        "insuranceExpiryDate",
+                        "insuranceFrom",
+                        "insuranceHypothecation",
+                        "insuranceId",
+                        "insuranceType",
+                        "insurerId",
+                        "loanId",
+                        "rfidTag",
+                        "sumInsured",
+                        "version"
+                    ]
+                },
+                "loanPurpose1": {
+                    "title": "LOAN_PURPOSE_LEVEL_1",
+                    "type": "string",
+                    "enumCode":"loan_purpose_1"
+                },
+                "loanPurpose2": {
+                    "title": "LOAN_PURPOSE_LEVEL_2",
+                    "type": "string",
+                    "enumCode":"loan_purpose_2"
+                },
+                "loanPurpose3": {
+                    "title": "LOAN_PURPOSE_LEVEL_3",
+                    "type": "string",
+                    "enumCode":"loan_purpose_3"
+                },
+                "loanType": {
+                    "title": "LOAN_TYPE",
+                    "type": ["string", "null"],
+                    "enumCode":"loan_type"
+                },
+                "nominees": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": ["string", "null"]
+                            },
+                            "familyMemberName": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianAddressSameAsCustomer": {
+                                "type": ["boolean", "null"]
+                            },
+                            "guardianDOB": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianDistrict": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianDoorNo": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianFirstName": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianGender": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianLastName": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianLocality": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianMiddleName": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianPincode": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianRelationWithMinor": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianState": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianStreet": {
+                                "type": ["string", "null"]
+                            },
+                            "guardianTitle": {
+                                "type": ["string", "null"]
+                            },
+                            "id": {
+                                "type": ["integer", "null"]
+                            },
+                            "loanId": {
+                                "type": ["integer", "null"]
+                            },
+                            "nomineeAddressSameAsCustomer": {
+                                "type": ["boolean", "null"]
+                            },
+                            "nomineeDOB": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeDistrict": {
+                                "type": ["string", "null"],
+                                "enumCode":"district"
+                            },
+                            "nomineeDoorNo": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeFirstName": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeGender": {
+                                "type": ["string", "null"],
+                                "enumCode":"gender"
+                            },
+                            "nomineeLastName": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeLocality": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeMiddleName": {
+                                "type": ["string", "null"]
+                            },
+                            "nomineeMinor": {
+                                "type": ["boolean", "null"]
+                            },
+                            "nomineePincode": {
+                                "type": ["number", "null"]
+                            },
+                            "nomineeRelationship": {
+                                "type": ["string", "null"],
+                                "enumCode":"relation"
+                            },
+                            "nomineeState": {
+                                "type": ["string", "null"]
+
+                            },
+                            "nomineeStreet": {
+                                "type": ["string", "null"]
+                            },
+                            "version": {
+                                "type": ["integer", "null"]
+                            }
+                        },
+                        "required": [
+                            "accountNumber",
+                            "familyMemberName",
+                            "guardianAddressSameAsCustomer",
+                            "guardianDOB",
+                            "guardianDistrict",
+                            "guardianDoorNo",
+                            "guardianFirstName",
+                            "guardianGender",
+                            "guardianLastName",
+                            "guardianLocality",
+                            "guardianMiddleName",
+                            "guardianPincode",
+                            "guardianRelationWithMinor",
+                            "guardianState",
+                            "guardianStreet",
+                            "guardianTitle",
+                            "id",
+                            "loanId",
+                            "version"
+                        ]
+                    }
+                },
+                "numberOfDisbursed": {
+                    "type": "integer"
+                },
+                "numberOfDisbursements": {
+                    "type": "integer",
+                    "minimum":0
+                },
+                "originalAccountNumber": {
+                    "type": "string"
+                },
+                "ornamentsAppraisals": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string"
+                            },
+                            "grossWeightInGrams": {
+                                "type": "integer"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "jewelDefects": {
+                                "type": "string"
+                            },
+                            "loanId": {
+                                "type": "integer"
+                            },
+                            "marketValueInPaisa": {
+                                "type": "integer"
+                            },
+                            "netWeightInGrams": {
+                                "type": "integer"
+                            },
+                            "noOfArticles": {
+                                "type": "integer"
+                            },
+                            "ornamentsDescription": {
+                                "type": "string"
+                            },
+                            "qualityInCarats": {
+                                "type": "integer"
+                            },
+                            "ratePerGram22CaratInPaisa": {
+                                "type": "integer"
+                            },
+                            "ratePerGramInPaisa": {
+                                "type": "integer"
+                            },
+                            "stoneDescription": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "accountNumber",
+                            "grossWeightInGrams",
+                            "id",
+                            "jewelDefects",
+                            "loanId",
+                            "marketValueInPaisa",
+                            "netWeightInGrams",
+                            "noOfArticles",
+                            "ornamentsDescription",
+                            "qualityInCarats",
+                            "ratePerGram22CaratInPaisa",
+                            "ratePerGramInPaisa",
+                            "stoneDescription",
+                            "version"
+                        ]
+                    }
+                },
+                "otherFee":{
+                    "type":["null", "integer"],
+                    "title":"OTHER_FEE"
+                },
+                "partnerCode": {
+                    "type": "string",
+                    "title": "PARTNER",
+                    "enumCode":"partner"
+                },
+                "pendingApproval": {
+                    "type": "string"
+                },
+                "portfolioInsuranceUrn":{
+                    "type":["null", "string"]
+
+                },
+                "portfolioInsurancePremiumCalculated":{
+                    "type":"string"
+                },
+                "portfolioInsurancePremium":{
+                    "type":"number"
+                },
+                "processType": {
+                    "type": "string"
+                },
+                "processingFeePercentage": {
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    "type": "number",
+                    "minimum":0,
+                    "maximum":100
+                },
+
+                "productCode": {
+                    "type": "string",
+                    "enumCode":"loan_product"
+                },
+                "productType": {
+                    "type": "string"
+                },
+                "relation": {
+                    "type": "string",
+                    "enumCode":"relationship"
+
+
+                },
+                "restructure": {
+                    "type": "boolean"
+                },
+                "sanctionDate": {
+                    "title": "SANCTION_DATE",
+                    "type": "string"
+                },
+                "sbAccountNo": {
+                    "type": "string"
+                },
+                "securityEmiRequired": {
+                    "type": ["null","string"],
+                    "title": "SECURITY_EMI",
+                    "enumCode": "decisionmaker"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "tenure": {
+                    "type": ["integer", "string"],
+                    "title":"TENURE",
+                    "minimum":0
+                },
+                "tenureInYears": {
+                    "type": "integer"
+                },
+                "urnNo": {
+                    "type": "string"
+                },
+                "witness": {
+                    "type": "string"
+                },
+                "witnessFirstName": {
+                    "type": "string"
+                },
+                "witnessLastName": {
+                    "type": "string"
+                },
+                "witnessMiddleName": {
+                    "type": "string"
+                },
+                "witnessRelationship": {
+                    "type": "string"
+                },
+                "wmName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "accountNumber",
+                "accountUserDefinedFields",
+                "applicant",
+                "applicationFileName",
+                "applicationStatus",
+                "applicationStatusUpdatedBy",
+                "applicationStatusUpdatedOn",
+                "bankId",
+                "bcAccount",
+                "borrowerIlliterate",
+                "branchId",
+                "chk1UploadFilePath",
+                "closed",
+                "coApplicant",
+                "collateral",
+                "createdAt",
+                "createdBy",
+                "currentStage",
+                "commercialCibilCharge",
+                "customerId",
+                "disbursedAmountInPaisa",
+                "disbursementSchedules",
+                "dob",
+                "dscIntegrationId",
+                "dscLoanAmount",
+                "dscOverride",
+                "dscOverrideRemarks",
+                "endTime",
+                "id",
+                "interestRate",
+                "jewelLoanDetails",
+                "lastEditedAt",
+                "lastEditedBy",
+                "literateWitnessFirstName",
+                "literateWitnessLastName",
+                "literateWitnessMiddleName",
+                "loanAmount",
+                "loanAmountRequested",
+                "loanApplicationDate",
+                "loanCentre",
+                "loanDisbursementDate",
+                "loanDocuments",
+                "loanInsurance",
+                "loanPurpose1",
+                "loanPurpose2",
+                "loanPurpose3",
+                "numberOfDisbursed",
+                "numberOfDisbursements",
+                "ornamentsAppraisals",
+                "partnerCode",
+                "pendingApproval",
+                "processType",
+                "productType",
+                "restructure",
+                "sanctionDate",
+                "sbAccountNo",
+                "startTime",
+                "tenure",
+                "tenureInYears",
+                "urnNo",
+                "witness",
+                "witnessFirstName",
+                "witnessLastName",
+                "witnessMiddleName",
+                "witnessRelationship",
+                "wmName"
+            ]
+        }
+    }
+}

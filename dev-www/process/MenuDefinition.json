@@ -1,0 +1,93 @@
+{
+    "title": "Main navigation",
+    "items": [
+        "Page/Landing",
+        {
+            "title": "CUSTOMER",
+            "iconClass": "fa fa-user",
+            "items": [
+                "Page/Engine/CustomerSearch",
+                "Page/Engine/ProfileInformation",
+                "Page/Engine/customer.IndividualEnrollment",
+                "Page/Engine/customer.EnterpriseEnrollment",
+                "Page/Engine/CBCheck",
+                "Page/Engine/CBCheckStatusQueue",
+                "Page/Engine/EnrollmentHouseVerificationQueue",
+                "Page/EngineOffline/AssetsLiabilitiesAndHealth",
+                "Page/Engine/CustomerFormDownloads",
+                "Page/Engine/customer360.RecaptureQueue"
+            ]
+        },
+        "Page/LeadDashboard",
+        "Page/LoanOriginationDashboard",
+        "Page/DocumentTrackingDashboard",
+        {
+            "title": "INDIVIDUAL_LOANS",
+            "iconClass": "fa fa-female",
+            "items": [
+                "Page/LoansDashboard",
+                "Page/Engine/loans.individual.Queue",
+                "Page/Engine/loans.individual.screening.LoanOriginationQueue",
+                "Page/LoansBookingDashboard",
+                "Page/LoansDisbursementDashboard",
+                "Page/LoansACHPDCDashboard",
+                "Page/LoansCollectionsDashboard",
+                "Page/Engine/loans.individual.reversal.Search",
+                "Page/Engine/loans.LOMSReversal",
+                "Page/Engine/loans.PaymentReversal",
+                "Page/Engine/loans.individual.writeoff.WriteOffQueue",
+                "Page/Engine/loans.individual.booking.LoanBookingQueue",
+                "Page/Engine/loans.individual.PendingCashQueue",
+                "Page/Engine/loans.individual.PendingClearingQueue"
+            ]
+        },
+        "Page/LUCDashboard",
+        "Page/InventoryDashboard",
+        {
+            "title": "GROUP_LOANS",
+            "iconClass": "fa fa-users",
+            "items": [
+                "Page/GroupDashboard",
+                "Page/Engine/GroupCRUD",
+                "Page/Engine/DscQueue",
+                "Page/Engine/Cgt1Queue",
+                "Page/Engine/Cgt2Queue",
+                "Page/Engine/Cgt3Queue",
+                "Page/Engine/GrtQueue",
+                "Page/Engine/DscOverrideQueue",
+                "Page/Engine/ApplicationPendingQueue",
+                "Page/Engine/JLGDisbursementQueue",
+                "Page/Engine/CloseGroup",
+                "Page/Engine/loans.groups.GroupLoanRepaymentQueue"
+            ]
+        },
+        "Page/Engine/CentrePaymentCollection",
+        {
+            "title": "MANAGEMENT",
+            "iconClass": "fa fa-cubes",
+            "items": [
+                "Page/Engine/management.Roles",
+                "Page/Engine/management.Pages",
+                "Page/Engine/management.UserRoles",
+                "Page/Engine/management.RolesPages",
+                "Page/Engine/management.SpokeMerger",
+                "Page/Engine/management.BranchMerger",
+                "Page/Engine/management.MasterDataMaintenance",
+                "Page/UserDashboard"
+            ]
+        },
+        {
+            "title": "PSYCHOMETRIC",
+            "iconClass": "fa fa-puzzle-piece",
+            "items": [
+                "Page/Engine/psychometric.Config",
+                "Page/Engine/psychometric.Language",
+                "Page/Engine/psychometric.Category",
+                "Page/Engine/psychometric.QuestionMaintenance",
+                "Page/Engine/psychometric.Queue"
+            ]
+        },
+        "Page/ReportsDashboard",
+        "Page/ScoreDashboard"
+    ]
+}

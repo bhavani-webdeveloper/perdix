@@ -1,0 +1,99 @@
+{  
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "type":"object",
+   "properties":{  
+      "accountDocumentTracker":{  
+         "type":"object",
+         "required":[
+         ],
+         "properties":{
+            "accountNumber": {
+               "type": "string"
+            },
+            "courierNumber": {
+               "type": "string"
+            },
+            "courierName": {
+               "type": "number"
+            },
+            "courierDate": {
+               "type": "string"
+            },
+            "scheduledDisbursementDate": {
+               "type": "string"
+            },
+            "receiveDate": {
+               "type": "string"
+            },
+            "hardCopyVerificationDate": {
+               "type": "string"
+            },
+            "acceptDate": {
+               "type": "string"
+            },
+            "rejectDate": {
+               "type": "string"
+            },
+            "filingDate": {
+               "type": "string"
+            },
+            "action": {
+               "type": "string"
+            },
+            "remarks": {
+               "type": "string"
+            },
+            "udf1": {
+               "type": "string"
+            },
+            "udf2": {
+               "type": "string"
+            },
+            "udf3": {
+               "type": "string"
+            },
+            "udf4": {
+               "type": "string"
+            },
+            "udf5": {
+               "type": "string"
+            },
+            "udfDate1": {
+               "type": "date"
+            },
+            "udfDate2": {
+               "type": "date"
+            },
+            "udfDate3": {
+               "type": "date"
+            },
+            "udfDate4": {
+               "type": "date"
+            },
+            "udfDate5": {
+               "type": "date"
+            },
+            "accountDocTrackerDetails":{
+               "type": "array",
+               "items":{
+                  "type": "object",
+                  "properties":{
+                     "document": {
+                        "type": "string"
+                     },
+                     "status": {
+                        "type": ["string", "null"],
+                        "enumCode":"document_status"
+                     },
+                     "remarks": {
+                        "type": ["string", "null"]
+                     }
+                  },
+                  "required": [
+                  ]
+               }
+            }
+         }
+      }
+   }
+}

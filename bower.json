@@ -1,0 +1,100 @@
+{
+  "name": "irf-perdix-view",
+  "version": "0.0.1",
+  "authors": [
+    "Shahal Tharique <shahalpk@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "propreitary",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.4",
+    "components-font-awesome": "~4.4.0",
+    "ionicons": "~2.0.1",
+    "admin-lte": "2.3.2",
+    "angular": "~1.5.0",
+    "ng-file-upload": "~12.0.1",
+    "ng-jsonpath": "~0.1.3",
+    "angular-ui-router": "~0.2.18",
+    "angular-bootstrap": "^1.2.5",
+    "angular-schema-form": "^0.8.13",
+    "angular-nvd3": "~1.0.6",
+    "angular-translate": "~2.11.0",
+    "angular-resource": "~1.5.0",
+    "angular-translate-loader-static-files": "2.11.0",
+    "angular-translate-handler-log": "2.11.0",
+    "lodash": "^4.11.2",
+    "angular-animate": "~1.5.5",
+    "pikaday": "~1.4.0",
+    "Swipe": "swipe#~2.0.0",
+    "angular-ladda": "~0.3.4",
+    "moment": "^2.13.0",
+    "angular-ui-select": "~0.19.4",
+    "datatables.net": "^1.10.12",
+    "jquery": "~3.1.1",
+    "datatables.net-responsive": "~2.1.0",
+    "selectize": "~0.12.3",
+    "select2": "~4.0.3",
+    "datatables.net-bs": "^1.10.12",
+    "irf-elements": "svn+http://svn.perdix.co/svn/perdix/irf-common-elements#trunk",
+    "mathjs": "^3.8.1",
+    "angular-sanitize": "1.6.1"
+  },
+  "overrides": {
+    "admin-lte": {
+      "main": [
+        "dist/css/skins/_all-skins.min.css",
+        "plugins/slimScroll/jquery.slimscroll.min.js",
+        "plugins/fastclick/fastclick.min.js",
+        "dist/js/app.min.js",
+        "bootstrap/css/bootstrap.min.css",
+        "plugins/datatables/dataTables.bootstrap.css"
+      ]
+    },
+    "irf-elements": {
+      "main": []
+    },
+    "datatables": {
+      "main": [
+        "media/js/jquery.dataTables.js",
+        "media/js/dataTables.bootstrap.min.js",
+        "media/css/dataTables.bootstrap.min.css",
+        "media/images/sort_asc.png",
+        "media/images/sort_asc_disabled.png",
+        "media/images/sort_both.png",
+        "media/images/sort_desc.png",
+        "media/images/sort_desc_disabled.png"
+      ]
+    },
+    "pikaday": {
+      "dependencies": {
+        "moment": "~2.13.0"
+      }
+    },
+    "selectize": {
+      "main": [
+        "dist/css/selectize.bootstrap3.css"
+      ]
+    },
+    "select2": {
+      "main": [
+        "dist/css/select2.min.css"
+      ]
+    }
+  },
+  "resolutions": {
+    "angular": "~1.5.0",
+    "angular-translate": "~2.11.0",
+    "jquery": "^2.2.3"
+  }
+}
