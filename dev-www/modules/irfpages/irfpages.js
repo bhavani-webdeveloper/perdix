@@ -25,13 +25,30 @@ var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageColl
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
 
-irf.pages.factory("config", function(){
+irf.pages.factory("irfNavigator", ["$log", "$q", "$http", "$state", function($log, $q, $http, $state) {
+	var callStack = [];
 	return {
-		something: function(){
-			return "sumthn";
-		}
+		go: function(goParam, backParam) {
+			callStack.push(backParam);
+			$state.go(goParam.state, {
+				pageName: goParam.pageName,
+				pageId: goParam.pageId,
+				pageData: goParam.pageData
+			});
+		},
+		isBack: function() {
+			return !!callStack.length;
+		},
+		goBack: function() {
+			var goParam = callStack.pop();
+			$state.go(goParam.state, {
+				pageName: goParam.pageName,
+				pageId: goParam.pageId,
+				pageData: goParam.pageData
+			});
+		},	
 	};
-});
+}]);
 
 irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 
