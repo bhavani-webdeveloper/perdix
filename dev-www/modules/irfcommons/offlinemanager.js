@@ -42,6 +42,10 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
         return 'Offline__' + name;
     };
 
+    var isSQLlite = function() {
+        return false;// TODO: implement
+    };
+
     return {
         /**
          * Add a new item under a name.
@@ -74,6 +78,48 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
          */
         removeItem: function(collectionName, offlineKey){
             irfStorageService.deleteJSON(getMasterKey(collectionName), offlineKey);
+        },
+
+        /**
+         * Insert data into SQL lite table or localStorage based on availability
+         * @param {string} table table name to be used.
+         * @param {object} keys key columns. eg: {id:12, centre_code:123}
+         * @param {array|object} data data to be stored.
+         * @param {function} callback function to be called once the operation is completed.
+        */
+        insert: function(table, keys, data, callback) {
+            if (isSQLlite()) {
+
+            } else {
+                irfStorageService.storeJSON(table, {
+                    keys: keys,
+                    data: data
+                });
+                callback(true);
+            }
+        },
+
+        /**
+         * Insert data into SQL lite table or localStorage based on availability
+         * @param {string} table table name to be used.
+         * @param {object} keys key columns. eg: {id:12, centre_code:123}
+         * @param {function} callback function to be called once the operation is completed.
+         * @return {array|object} data data to be stored.
+        */
+        select: function(table, keys, callback) {
+            if (isSQLlite()) {
+
+            } else {
+                var tableData = irfStorageService.retrieveJSON(table);
+                var returnData = null;
+                for (i in tableData) {
+                    if (tableData[i].keys = keys) { // TODO: check validity
+                        returnData = tableData[i].data;
+                        break;
+                    }
+                }
+                callback(returnData);
+            }
         }
     }
 }])
