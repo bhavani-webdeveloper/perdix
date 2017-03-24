@@ -36,7 +36,7 @@ class MessageThreads extends \Illuminate\Database\Eloquent\Model{
 
     public static function archiveMessageThread($messageThreadId){
 
-        $sql = 'insert into `mstb_threads_snapshot`(thread_id, title, reference_no, is_closed, closed_at, created_by, created_at) select id as thread_id, title, reference_no, is_closed, closed_at, created_by, created_at from mstb_threads where id = :threadId';
+        $sql = 'insert into `mstb_threads_snapshot`(thread_id, title, reference_no, reference_type, is_closed, closed_at, created_by, created_at) select id as thread_id, title, reference_no, reference_type, is_closed, closed_at, created_by, created_at from mstb_threads where id = :threadId';
         $insertAffected = DB::update($sql, [$messageThreadId]);
 
         if($insertAffected >0){

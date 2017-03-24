@@ -36,7 +36,7 @@ parse_str($queryString, $query);
 
 try{
 	$result =DB::select("select id, title from mstb_threads mt
-		where mt.reference_no = ?",array($query['loanId']));
+		where mt.reference_no = ? and reference_type = ?",array($query['referenceNo'], $query['referenceType']));
 
 
 	header("Access-Control-Expose-Headers: thread-id, thread-title");

@@ -39,6 +39,10 @@ class Messages extends \Illuminate\Database\Eloquent\Model{
         $sql = 'UPDATE `mstb_participants` MessageParticipants set is_read = false where message_thread_id = :threadId and participant != :participant';
         $affected = DB::update($sql, [$messageThreadId, $username]);
 
+        /* To update the branchId */
+        $sql = 'UPDATE `mstb_participants` MessageParticipants set is_read = true where message_thread_id = :threadId and participant = :participant';
+        $affected = DB::update($sql, [$messageThreadId, $username]);
+
         return $repData->toArray();
     }
 
