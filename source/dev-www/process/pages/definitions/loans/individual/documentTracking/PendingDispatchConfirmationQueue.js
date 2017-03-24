@@ -24,34 +24,17 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        "customer_name": {
-                            "title": "CUSTOMER_NAME",
-                            "type": "string"
-                        },
-                        "Business_name": {
-                            "title": "Business_NAME",
-                            "type": "string"
-                        },
-                        "account_number": {
-                            "title": "ACCOUNT_NUMBER",
-                            "type": "string"
-                        },
-                        "spoke_name": {
-                            "title": "SPOKE_NAME",
+                        "branchId": {
+                            "title": "BRANCH_NAME",
                             "type": ["integer", "null"],
-                            "enumCode": "centre",
-                            "parentEnumCode": "branch_id",
+                            "enumCode": "branch_id",
                             "x-schema-form": {
-                                "type": "select",
-                                "parentValueExpr": "model.branchId"
+                                "type": "select"
                             }
                         },
-                        "disbursement_date": {
-                            "title": "DISBURSEMENT_DATE",
-                            "type": "string",
-                            "x-schema-form": {
-                                "type": "date"
-                            }
+                        "batchNumber": {
+                            "title": "BATCH_NUMBER",
+                            "type": "string"
                         }
 
                     },
@@ -63,16 +46,16 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                 },
                 getResultsPromise: function(searchOptions, pageOpts) { 
 
-                    var promise = DocumentTracking.search({
+                    var promise = DocumentTracking.findBatches({
                         'stage': 'BatchConfirmation',
-                        'branchId': branchId,
-                        'centreId': searchOptions.spoke_name,
-                        'accountNumber': searchOptions.account_number,
-                        'scheduledDispatchDate':searchOptions.disbursement_date,
+                        'branchId': searchOptions.branchId,
+                        'batchNumber': searchOptions.batchNumber,
+                        'courierName': null,
+                        'courierNumber': null,
+                        'courierDate': null,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;
-
                     return promise;
                 },
                 paginationOptions: {
@@ -106,33 +89,20 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     },
                     getColumns: function() {
                         return [{
-                            title: 'APPLICANT_NAME',
-                            data: 'applicantName'
-                        }, {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
-                        }, {
-                            title: 'ACCOUNT_NUMBER',
-                            data: 'accountNumber'
-                        }, {
-                            title: 'BRANCH',
+                            title: 'BRANCH_NAME',
                             data: 'branchName'
                         }, {
-                            title: 'CENTRE_NAME',
-                            data: 'centreName'
-                        }, {
-                            title: 'DISBURSEMENT_DATE',
-                            data: 'scheduledDisbursementDate'
+                            title: 'BATCH_NUMBER',
+                            data: 'batchNumber'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "View Details",
+                            name: "Update",
                             desc: "",
                             icon: "fa fa-eye-slash",
                             fn: function(item, index) {
-                                entityManager.setModel('loans.individual.documentTracking.ViewAccountDetails',{"_Account":item});
-                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.ViewAccountDetails",pageId: item.id});
+                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatch",pageId: item.batchNumber});
                             },
                             isApplicable: function(item, index) {
                                 return true;
@@ -140,83 +110,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         }];
                     },
                     getBulkActions: function() {
-                        return [{
-                                name: "Create Batch",
-                                desc: "",
-                                icon: "fa fa-plus",
-                                fn: function(items) {
-                                    if(items.length==0){
-                                        PageHelper.showProgress("bulk-create","Atleast one loan should be selected for Batch creation",5000);
-                                        return false;
-                                    }
-                                    Utils.confirm(items.length + " Loan selected. Do you wish to create a new Batch?").then(function(){
-                                        var accountDocumentTracker=[];
-                                        for (i=0; i<items.length; i++){
-                                            accountDocumentTracker[i] = items[i];
-                                        }
-                                        var reqData = {accountDocumentTracker: accountDocumentTracker};
-                                        reqData.accountDocumentTrackingAction = "SAVE";
-                                        $log.info(reqData);
-                                        PageHelper.showLoader();
-                                        PageHelper.showProgress("create-batch", "Working...");
-                                        DocumentTracking.create(reqData)
-                                            .$promise
-                                            .then(function(res){
-                                                PageHelper.showProgress("create-batch", "Done.", 3000);
-                                                entityManager.setModel('loans.individual.documentTracking.PendingDispatch',{"_Accounts":items});
-                                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatch",pageId: null});
-                                            }, function(httpRes){
-                                                PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
-                                                PageHelper.showErrors(httpRes);
-                                            })
-                                            .finally(function(){
-                                                PageHelper.hideLoader();
-                                            })
-                                    })
-                                },
-                                isApplicable: function(items) {
-                                    return true;
-                                }
-                            },
-                            {
-                                name: "Send Back to Dispatch Queue",
-                                desc: "",
-                                icon: "fa fa-plus",
-                                fn: function(items) {
-                                    if(items.length==0){
-                                        PageHelper.showProgress("bulk-create","Atleast one loan should be selected to send back",5000);
-                                        return false;
-                                    }
-                                    Utils.confirm(items.length + " Loan selected. Do you wish to send back to Dispatch Queue?").then(function(){
-                                        var accountDocumentTracker=[];
-                                        for (i=0; i<items.length; i++){
-                                            accountDocumentTracker[i] = items[i];
-                                        }
-                                        var reqData = {accountDocumentTracker: accountDocumentTracker};
-                                        reqData.accountDocumentTrackingAction = "PROCEED";
-                                        reqData.nextStage = "BatchInitiation";
-                                        $log.info(reqData);
-                                        PageHelper.showLoader();
-                                        PageHelper.showProgress("create-batch", "Working...");
-                                        DocumentTracking.create(reqData)
-                                            .$promise
-                                            .then(function(res){
-                                                PageHelper.showProgress("create-batch", "Loan Accounts moved back to Dispatch Queue.", 3000);
-                                                localFormCtrl.submit();
-                                            }, function(httpRes){
-                                                PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
-                                                PageHelper.showErrors(httpRes);
-                                            })
-                                            .finally(function(){
-                                                PageHelper.hideLoader();
-                                            })
-                                    })
-                                },
-                                isApplicable: function(items) {
-                                    return true;
-                                }
-                            }
-                        ];
+                        return [];
                     }
                 }
             }

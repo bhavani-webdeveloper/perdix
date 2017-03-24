@@ -1,12 +1,19 @@
 irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDispatch"), 
     ["$log", "$state", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils","PagesDefinition", "DocumentTracking",
+    "PageHelper", "Utils","PagesDefinition", "DocumentTracking", "$stateParams",
 
 
     function($log, $state, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils,PagesDefinition, DocumentTracking) {
+        PageHelper, Utils,PagesDefinition, DocumentTracking, $stateParams) {
 
         var branch = SessionStore.getBranch();
+
+        var backToQueue = function(){
+            $state.go("Page.Engine",{
+                pageName:"loans.individual.documentTracking.PendingDispatchConfirmationQueue",
+                pageId:null
+            });
+        };
 
         var LOAN_ACCOUNTS_HTML =
 '<div>'+
@@ -45,7 +52,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                     });
                     return;
                 }*/
-                if (model._Accounts) {
+                /*if (model._Accounts) {
                     model.accountDocumentTracker = model.accountDocumentTracker || [];
                     model.accountDocumentTracker = _.cloneDeep(model._Accounts);
                     if(model.accountDocumentTracker && model.accountDocumentTracker.length >0){
@@ -55,6 +62,23 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         model._Accounts.BatchNumber = model.accountDocumentTracker[0].batchNumber;
                         model._Accounts.Remarks = model.accountDocumentTracker[0].remarks;
                     }
+                }*/
+
+                if ($stateParams.pageId) {
+                    PageHelper.showLoader();
+                    model.accountDocumentTracker = [];
+                    DocumentTracking.getBatch({batchNumber:$stateParams.pageId})
+                    .$promise
+                    .then(function (resp){
+                        model.accountDocumentTracker = resp;
+                        model._Accounts = {};
+                        if(model.accountDocumentTracker && model.accountDocumentTracker.length)
+                            model._Accounts.batchNumber = model.accountDocumentTracker[0].batchNumber;
+                    }, function(errResp){
+                        PageHelper.showProgress("view-batch", "Error while reading the Batch", 3000);
+                    }).finally(function(){
+                        PageHelper.hideLoader();
+                    })
                 }
             },
 
@@ -94,7 +118,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         key: "_Accounts.PodNumber",
                         title: "POD_NUMBER"
                     }, {
-                        key: "_Accounts.BatchNumber",
+                        key: "_Accounts.batchNumber",
                         title: "BATCHNUMBER",
                         readonly: true
                     }, {
@@ -104,9 +128,20 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                 },
                 {
                     "type": "actionbox",
-                    "items": [{
+                    "items": [
+                    {
+                        "type": "button",
+                        "title": "Back",
+                        "onClick": "actions.goBack(model, formCtrl, form, $event)"
+                    },
+                    {
                         "type": "submit",
                         "title": "Submit"
+                    },
+                    {
+                        "type": "button",
+                        "title": "Send Back to Dispatch Queue",
+                        "onClick": "actions.sendBackToDispatchQ(model, formCtrl, form, $event)"
                     }]
                 },
             ],
@@ -124,6 +159,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         deferred.reject();
                     }
                     return deferred.promise;
+                },
+
+                goBack: function (model, formCtrl, form, $event) {
+                    backToQueue();
                 },
 
                 submit: function(model, form, formName) {
@@ -144,7 +183,30 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         .then(function(res){
                             PageHelper.showProgress("update-batch", "Done.", 3000);
                             irfProgressMessage.pop('pending-dispatch-save', 'Dispatch details captured successfully', 3000);
-                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatchQueue",pageId: null});
+                            backToQueue();
+                        }, function(httpRes){
+                            PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
+                            PageHelper.showErrors(httpRes);
+                        })
+                        .finally(function(){
+                            PageHelper.hideLoader();
+                        })
+                },
+
+                sendBackToDispatchQ: function(model, form, formName) {
+                    $log.info("Inside sendBackToDispatchQ()");
+                    var reqData = {accountDocumentTracker: model.accountDocumentTracker};
+                    reqData.accountDocumentTrackingAction = "PROCEED";
+                    reqData.nextStage = "BatchInitiation";
+                    $log.info(reqData);
+                    PageHelper.showLoader();
+                    PageHelper.showProgress("proceed-batch", "Working...");
+                    DocumentTracking.update(reqData)
+                        .$promise
+                        .then(function(res){
+                            PageHelper.showProgress("update-batch", "Done.", 3000);
+                            irfProgressMessage.pop('pending-dispatch-save', 'Record sent back to successfully', 3000);
+                            backToQueue();
                         }, function(httpRes){
                             PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);

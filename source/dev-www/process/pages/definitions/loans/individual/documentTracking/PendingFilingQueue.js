@@ -5,7 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
         var branchId = SessionStore.getCurrentBranch().branchId;
         return {
             "type": "search-list",
-            "title": "PENDING_FOR_FILING",
+            "title": "QUALITY_CHECK_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;

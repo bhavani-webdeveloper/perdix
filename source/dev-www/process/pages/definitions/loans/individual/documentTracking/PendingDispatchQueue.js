@@ -3,6 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
     function($log,formHelper,DocumentTracking,$state,SessionStore,Utils,PageHelper,entityManager) {
         var branch = SessionStore.getBranch();
         var branchId = SessionStore.getCurrentBranch().branchId;
+        var localFormCtrl;
         return {
             "type": "search-list",
             "title": "PENDING_FOR_DISPATCH",
@@ -10,6 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
                 model.branchId = branchId;
+                localFormCtrl = formCtrl;
                 $log.info("Perding for Dispatch page got initiated");
             },
             definition: {
@@ -51,6 +53,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                             "x-schema-form": {
                                 "type": "date"
                             }
+                        },
+                        "rejectedAccount": {
+                            "title": "REJECTED_ONLY",
+                            "type": "boolean",
+                            "x-schema-form": {
+                                "type": "checkbox"
+                            }
                         }
 
                     },
@@ -68,6 +77,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                         'centreId': searchOptions.spoke_name,
                         'accountNumber': searchOptions.account_number,
                         'scheduledDispatchDate':searchOptions.disbursement_date,
+                        'rejectedAccount':searchOptions.rejectedAccount,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;
@@ -165,8 +175,9 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingDi
                                                 $log.info(res);
                                                 $log.info(items);
 
-                                                entityManager.setModel('loans.individual.documentTracking.PendingDispatch',{"_Accounts":res.accountDocumentTracker});
-                                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatch",pageId: null});
+                                                /*entityManager.setModel('loans.individual.documentTracking.PendingDispatch',{"_Accounts":res.accountDocumentTracker});
+                                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingDispatch",pageId: null});*/
+                                                localFormCtrl.submit();
                                             }, function(httpRes){
                                                 PageHelper.showProgress("create-batch", "Oops. Some error occured.", 3000);
                                                 PageHelper.showErrors(httpRes);
