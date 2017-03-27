@@ -38,7 +38,16 @@
             ]
         },
         {
-            "order": 5,
+            "order": 6,
+            "code": "QualityCheck",
+            "name": "QualityCheck",
+            "stageType": "CAPTURE",
+            "allowedRoles": [
+                "WM"
+            ]
+        },
+        {
+            "order": 7,
             "code": "PendingFiling",
             "name": "ReceiveCourier",
             "stageType": "CAPTURE",
@@ -47,7 +56,7 @@
             ]
         },
         {
-            "order": 6,
+            "order": 8,
             "code": "RejectedDocuments",
             "name": "RejectedDocuments",
             "stageType": "CAPTURE",
@@ -56,7 +65,7 @@
             ]
         },
         {
-            "order": 7,
+            "order": 9,
             "code": "Filed",
             "name": "Filed",
             "stageType": "CAPTURE",
@@ -265,6 +274,20 @@
                             "type": "date",
                             "captureStages": [
                                 "BatchInitiation"
+                            ]
+                        },
+                        "cartonNumber": {
+                            "title": "cartonNumber",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingFiling"
+                            ]
+                        },
+                        "barcodeNumber": {
+                            "title": "barcodeNumber",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingFiling"
                             ]
                         }
                     }
