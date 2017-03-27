@@ -436,8 +436,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     getProductDetails(value,model);
                                 },
                                 "parentEnumCode": "partner",
-                                "parentValueExpr":"model.loanAccount.partnerCode",
-                                "condition":"(model.loanAccount.currentStage == 'LoanInitiation' && model.loanAccount.partnerCode == 'Kinara') || model.loanAccount.currentStage != 'LoanInitiation'"
+                                "parentValueExpr":"model.loanAccount.partnerCode"
                             },
                             {
                                 "key": "loanAccount.tenure",
