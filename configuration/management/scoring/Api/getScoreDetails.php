@@ -91,7 +91,7 @@ if(isset($_GET))
 			FROM customer
 			WHERE id = :customerId
 		");
-        $nonNegotiableProxyIndicatorStatement -> bindParam("customerId", $CustomerId);
+        $nonNegotiableProxyIndicatorStatement -> bindParam("customerId", $EnterpriseCustId);
 		$nonNegotiableProxyIndicatorStatement -> execute();
 		if ($nonNegotiableProxyIndicatorRecord = $nonNegotiableProxyIndicatorStatement -> fetch(PDO::FETCH_ASSOC)) {
 			$non_negotiable += $nonNegotiableProxyIndicatorRecord['non_negotiable'];

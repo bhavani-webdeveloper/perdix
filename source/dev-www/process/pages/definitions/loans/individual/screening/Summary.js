@@ -1,3 +1,23 @@
+irf.pageCollection.directive("irfSimpleSummaryTable", function(){
+
+    return {
+
+        restrict: 'E',
+        scope: {  tableData : '=irfTableDef'},
+        templateUrl: 'process/pages/templates/simple-summary-table.html',
+        controller: 'irfSimpleSummaryTableController'
+    }
+}).controller("irfSimpleSummaryTableController", ["$scope", function($scope){
+
+            for(var i = 0; i < $scope.tableData.columns.length; i++){
+
+                if($scope.tableData.columns[i].format){
+                    $scope.tableData.columns[i].style = {'text-align' : 'right'};
+                }
+            }
+
+        }]);
+
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager",
@@ -39,6 +59,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.businessBankStmtSummary = res[16];
         model.personalBankStmtSummary = res[17];
         model.purchaseDetails = res[18];
+        model.liabilitiesSummary = res[19];
+        model.machineryDetails = res[20];
+        model.opexDetails = res[21];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -214,14 +237,14 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             '<col width="30%"> <col width="40%"> <col width="30%">'+
         '</colgroup>'+
         '<tbody>'+
-            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | currency : "" : 2 }}</th> </tr>'+
-            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | currency : "" : 2 }}</td> </tr>'+
-            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | currency : "" : 2 }}</td> </tr>'+
-            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | currency : "" : 2 }}</td> </tr>'+
-            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | currency : "" : 2 }}</th> </tr>'+
-            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | currency : "" : 2 }}</td> </tr>'+
-            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | currency : "" : 2 }}</td> </tr>'+
-            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | currency : "" : 2 }}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>'+
+            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>'+
+            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>'+
+            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>'+
+            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>'+
         '</tbody>'+
     '</table>';
 
@@ -606,20 +629,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '</colgroup>'+
     '<tbody>'+
         '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
-        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | currency : "" : 2 }}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | currency : "" : 2 }}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | currency : "" : 2 }}</td> <td>{{model.pl.business.purchasesPCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | currency : "" : 2 }}</th> <th></th> </tr>'+
-        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | currency : "" : 2 }}</strong></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>'+
+        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | irfCurrency}}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | irfCurrency}}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
+        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | irfCurrency}}</td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>'+
+        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>'+
+        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | irfCurrency}}</td> <td>{{model.pl.business.purchasesPCT }}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | irfCurrency}}</th> <th></th> </tr>'+
+        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | irfCurrency}}</td> <td></td> </tr>'+
+        '<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | irfCurrency}}</strong></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>'+
         '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
-        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | currency : "" : 2 }}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | currency : "" : 2 }}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
-        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | currency : "" : 2 }}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
-        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | currency : "" : 2 }}</strong></td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | currency : "" : 2 }}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
+        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> <td></td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
+        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
+        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td> <td></td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
     '</tbody>'+
 '</table>'
                 }
@@ -646,41 +669,25 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     '</thead>'+
     '<tbody>'+
         '<tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr>'+
-        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | currency : "" : 2 }}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables | currency : "" : 2 }}</td></tr>'+
-        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | currency : "" : 2 }}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts | currency : "" : 2 }}</td></tr>'+
-        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | currency : "" : 2 }}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | currency : "" : 2 }}</td></tr>'+
-        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | currency : "" : 2 }}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | currency : "" : 2 }}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | currency : "" : 2 }}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities | currency : "" : 2 }}</td></tr>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | currency : "" : 2 }}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | currency : "" : 2 }}</td></tr>'+
-        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | currency : "" : 2 }}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | currency : "" : 2 }}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | currency : "" : 2 }}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | currency : "" : 2 }}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | currency : "" : 2 }}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | currency : "" : 2 }}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | currency : "" : 2 }}</td></tr><tr></tr>'+
-        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | currency : "" : 2 }}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | currency : "" : 2 }}</th></tr>'+
+        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | irfCurrency}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables | irfCurrency}}</td></tr>'+
+        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | irfCurrency}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts | irfCurrency}}</td></tr>'+
+        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | irfCurrency}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | irfCurrency}}</td></tr>'+
+        '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities | irfCurrency}}</td></tr>'+
+        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>'+
+        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
+        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
     '</tbody>'+
 '</table>'
                 }
             ]
         });
 
-        var cashFlowDetailsTable = "<div class='table-responsive'>" +
-        "<table class = 'table table-striped table-condensed'>" + 
-        "<thead>" +
-        "<tr>" +
-        "<th ng-repeat='column in model.cashFlowDetails.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
-        "</tr>" +
-        "</thead>" +
-        "<tbody>" +
-        "<tr ng-repeat='record in model.cashFlowDetails.data'>" +
-        "<td ng-repeat='column in model.cashFlowDetails.columns' >" + 
-        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
-        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
-        "</td>" +
-        "</tr>" + 
-        "</tbody>" +
-        "</table>" +
-        "</div>";
+        var cashFlowDetailsTable = "<irf-simple-summary-table irf-table-def='model.cashFlowDetails'></irf-simple-summary-table>";
 
         form.push({
              type: "box",
@@ -695,23 +702,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var purchaseDetailsTable = "<div class='table-responsive'>" +
-        "<table class = 'table table-striped table-condensed'>" + 
-        "<thead>" +
-        "<tr>" +
-        "<th ng-repeat='column in model.purchaseDetails.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
-        "</tr>" +
-        "</thead>" +
-        "<tbody>" +
-        "<tr ng-repeat='record in model.purchaseDetails.data'>" +
-        "<td ng-repeat='column in model.purchaseDetails.columns' >" + 
-        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
-        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
-        "</td>" +
-        "</tr>" + 
-        "</tbody>" +
-        "</table>" +
-        "</div>";
+        var purchaseDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.purchaseDetails'></irf-simple-summary-table>";
 
         form.push({
              type: "box",
@@ -726,23 +717,63 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var businessBankStmtSummaryTable = "<div class='table-responsive'>" +
-        "<table class = 'table table-striped table-condensed'>" + 
-        "<thead>" +
-        "<tr>" +
-        "<th ng-repeat='column in model.businessBankStmtSummary.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
-        "</tr>" +
-        "</thead>" +
-        "<tbody>" +
-        "<tr ng-repeat='record in model.businessBankStmtSummary.data'>" +
-        "<td ng-repeat='column in model.businessBankStmtSummary.columns' >" + 
-        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
-        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
-        "</td>" +
-        "</tr>" + 
-        "</tbody>" +
-        "</table>" +
-        "</div>";
+        var liabilitiesSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.liabilitiesSummary'></irf-simple-summary-table>";
+        var liabilitiesSummaryTable = "";
+
+        var items = [];
+        if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
+            for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
+                items.push({
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.liabilitiesSummary.subgroups[' + i +'].summary["Name"]}} - {{model.liabilitiesSummary.subgroups[' + i +'].summary["Relation"]}}</h3> \
+                        <irf-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-simple-summary-table>\
+                        <strong>Total EMI </strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Monthly Installment"] | irfCurrency}} <br />\
+                        <strong>Total Outstanding Loan Amount</strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Outstanding Loan Amount"] | irfCurrency}}\
+                        <hr>\
+                        '
+                });
+            }    
+        }
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.liabilitiesSummary.title,
+            items: items
+        });
+
+        var opexDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.opexDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.opexDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: opexDetailsTable
+                }
+            ]
+        });
+
+        var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.machineryDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: machineryDetailsTable
+                }
+            ]
+        });        
+
+        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
         form.push({
              type: "box",
@@ -757,24 +788,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var personalBankStmtSummaryTable = "<div class='table-responsive'>" +
-        "<table class = 'table table-striped table-condensed'>" + 
-        "<thead>" +
-        "<tr>" +
-        "<th ng-repeat='column in model.personalBankStmtSummary.columns' style = 'vertical-align : top; min-width: 100px;'>{{column.title}}</th>" +
-        "</tr>" +
-        "</thead>" +
-        "<tbody>" +
-        "<tr ng-repeat='record in model.personalBankStmtSummary.data'>" +
-        "<td ng-repeat='column in model.personalBankStmtSummary.columns' >" + 
-        "<dummy ng-if = 'column.format'>{{record[column.data] | currency : '' : 2}}</dummy> " + 
-        "<dummy ng-if = '!column.format'>{{record[column.data]}}</dummy>" + 
-        "</td>" +
-        "</tr>" + 
-        "</tbody>" +
-        "</table>" +
-        "</div>";
-
+        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
@@ -796,7 +810,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | currency : "" : 2 }}</td><td>{{ bankStatement["Deposits"] | currency : "" : 2 }}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | currency : "" : 2 }}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | currency : "" : 2 }}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
+                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
                 }
             ]
         });
