@@ -411,3 +411,24 @@ irf.commons.factory("BiometricService", ['$log', '$q', function($log, $q){
 		}
 	}
 }])
+
+irf.commons.factory("irfLazyLoader", ["$state", "$log", "$timeout", function($state, $log, $timeout){
+	return {
+		loadPage: function(toState, toParams, options){
+			var pageDefPath = "pages/" + toParams.pageName.replace(/\./g, "/");
+        	require([pageDefPath], function(pageDefObj){
+        		/* Page is loaded, now bind it to pages */
+        		$log.info("[REQUIRE] Done loading page(" + toParams.pageName + ")");
+        		irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+        		options.reload = true;
+
+        		$timeout(function(){
+        			$state.go(toState.name, toParams, options);	
+        		}, 10)
+        	}, function(err){
+        		$log.info("[REQUIRE] Error loading page(" + toParams.pageName + ")");
+        		$log.error(err);
+        	})
+		} 
+	}
+}])

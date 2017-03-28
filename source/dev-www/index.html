@@ -222,7 +222,7 @@
 <!-- endbuild -->
 
 <!-- build:js js/process/pages/definitions.js -->
-<script src="process/pages/definitions/demo/Demo.js"></script>
+<!-- <script src="process/pages/definitions/demo/Demo.js"></script> -->
 <script src="process/pages/definitions/demo/Demo2.js"></script>
 <script src="process/pages/definitions/UserProfile.js"></script>
 <script src="process/pages/definitions/bi/BIReports.js"></script>
@@ -465,5 +465,15 @@
 <!-- endbuild -->
 <!--Cordova-->
 <script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/require.js"></script>
+<script>
+  require.config({
+    baseUrl: "./",
+    paths: {
+        "pages": "process/pages/definitions/"
+    },
+    waitSeconds: 0
+  });
+</script>
 </body>
 </html>

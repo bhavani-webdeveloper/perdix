@@ -1,15 +1,14 @@
-irf.pageCollection.factory(irf.page("demo.Demo"),
-["$log", "Enrollment", "SessionStore","Files",
-    function($log, Enrollment, SessionStore,Files){
-
-        var branch = SessionStore.getBranch();
-
+define({
+    pageUID: "demo.Demo",
+    pageType: "Engine",
+    dependencies: ["$log", "Enrollment", "SessionStore", "Files"],
+    $pageFn: function($log, Enrollment, SessionStore, Files){
         return {
             "type": "schema-form",
-            "title": "Demo Page",
-            "subTitle": "Demo Page secondary title",
+            "title": "Demo Page2",
+            "subTitle": "Demo Page2 secondary title",
             initialize: function (model, form, formCtrl) {
-                $log.info("Demo Customer Page got initialized");
+                $log.info("Demo Customer Page2 got initialized");
 
                 model.address = model.address || {};
                 model.address.streetAddress = "Stt";
@@ -23,16 +22,13 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
 
                 });
             },
+            
             form: [
                 {
                     "type":"box",
-                    "title":"Details",
-                   // colClass: "col-sm-12",
+                    "title":"Detailsssss",
                     "items":[
-                        {
-                            key: "address.streetAddress",
-                            type: "date"
-                        },
+                        "address.streetAddress",
                         {
                             key:"address.city",
                             type:"select",
@@ -40,29 +36,16 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                                 "city_A":"City A",
                                 "city_B":"City B"
                             }
+
                         },
-                        {
-                            key: "phoneNumber",
-                            type: "table",
-                            items: [
-                                "phoneNumber[].location",
-                                "phoneNumber[].code",
-                                "phoneNumber[].number"
-                            ]
-                        },
+                        "phoneNumber",
                         {
                             type: "section",
                             html: "<i>asdf</i>{{model.address.streetAddress}}"
                         }
                     ]
-                },
-                {
-                    type: "actionbox",
-                    items: [{
-                        type: "submit",
-                        title: "Download Dump"
-                    }]
                 }
+
             ],
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -99,15 +82,14 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
                                 },
                                 "code": {
                                     "type": "integer",
-                                    "title":"Code"
+                                    "title":"Code",
+                                    "x-schema-form": {
+                                        "type": "text"
+                                    }
                                 },
                                 "number":{
                                     "type":"integer",
                                     "title":"Number"
-                                },
-                                "boo": {
-                                    "type": "boolean",
-                                    "title": "Check Done?"
                                 }
                             },
                             "required": [
@@ -124,9 +106,8 @@ irf.pageCollection.factory(irf.page("demo.Demo"),
             },
             actions: {
                 submit: function(model, form, formName){
-                    $log.info('on submit action ....');
                 }
             }
         };
     }
-]);
+})

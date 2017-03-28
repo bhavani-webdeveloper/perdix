@@ -21,6 +21,15 @@ irf.form = function(path) {
 
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
+irf.pageCollection.config(["$provide", function($provide){
+	irf.pageCollection.loadPage = function(name, dependencies, getFn){
+		var componentArgs = _.clone(dependencies);
+		componentArgs.push(getFn);
+		// irf.pageCollection.factory(irf.page(pageDefObj.pageUID), componentArgs);
+		$provide.factory(irf.page(name), componentArgs);
+	}
+}])
+
 var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","ngAnimate", "ngSanitize","ui.bootstrap"], function ($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
@@ -55,10 +64,10 @@ irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 irf.pages.run(
 ["$rootScope", "$log", "$timeout", "$q", "$state", "authService", "$location", "ALLOWED_STATES",
 "irfStorageService", "entityManager", "SessionStore", "irfElementsConfig", "irfOfflineFileRegistry",
-"PageHelper", "$translate",
+"PageHelper", "$translate", "$injector", "irfLazyLoader",
 function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED_STATES,
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
-	PageHelper, $translate){
+	PageHelper, $translate, $injector, irfLazyLoader){
 
 	var setProfilePreferences = function(userData) {
 		$log.info('set ProfilePreferences');
@@ -99,6 +108,18 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 
         /* Hiding Loader */
         PageHelper.hideLoader();
+
+        if (toState.name === 'Page.Engine' || toState.name === 'Page.Bundle'){
+        	/* Checking Existence of the page */
+	        var pageAvailable = $injector.has(irf.page(toParams.pageName));
+	        $log.info("Destination page (" + toParams.pageName + ") is already loaded? " + pageAvailable);
+
+	        /* If Page is not available. Load it using the RequireJS */
+	        if (false == pageAvailable){
+	        	event.preventDefault();
+	        	return irfLazyLoader.loadPage(toState, toParams, options);
+	        }	
+        }
 
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
@@ -188,7 +209,13 @@ irf.pages.config([
 		name: "Page",
 		url: "/Page",
 		templateUrl: "modules/irfpages/templates/Page.html",
-		controller: "PageCtrl"
+		controller: "PageCtrl",
+		params: {
+			options: {
+				skipPageAccessCheck: false,
+				skipPageLazyLoad: false
+			}
+		}
 	},{
 		name: "Page.Engine",
 		url: "/Engine/:pageName/:pageId",
