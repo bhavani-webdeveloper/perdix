@@ -19,7 +19,7 @@ class MessageThreads extends \Illuminate\Database\Eloquent\Model{
     ];
 
     protected $fillable = [
-        'title','reference_no'
+        'title','reference_no', 'reference_type'
     ];
 
 
