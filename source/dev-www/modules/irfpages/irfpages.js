@@ -266,6 +266,6 @@ irf.pages.config([
 	});
 
 	$urlRouterProvider.otherwise(function($injector) {
-		$injector.get('$state').go(irf.HOME_PAGE.to);
+		$injector.get('$state').go(irf.HOME_PAGE.to, irf.HOME_PAGE.params);
 	});
 }]);
