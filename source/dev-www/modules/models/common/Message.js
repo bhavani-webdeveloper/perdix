@@ -47,9 +47,9 @@ function($resource, $httpParamSerializer, SessionStore) {
 			method: 'POST',
 			url: endpoint+'/addMessage.php'
 		},
-		getThreadForLoan: {
+		getThreadForReference: {
 			method: 'HEAD',
-			url: endpoint+'/getThreadForLoan.php',
+			url: endpoint+'/getThreadForReference.php',
 			transformResponse: function(data, headers){
 				response = {
 					data: data,
@@ -89,7 +89,7 @@ function($resource, $httpParamSerializer, SessionStore) {
 
 	resource.openOrCreateConversation = function(referenceType, referenceNumber) {
 		var threadId = null, threadTitle = null;
-		resource.getThreadForLoan({loanId: referenceNumber}).$promise.then(function(response) {
+		resource.getThreadForReference({"referenceNo": referenceNumber, "referenceType": referenceType}).$promise.then(function(response) {
 			threadId = response.headers['thread-id'];
 			threadTitle = response.headers['thread-title'];
 		}).finally(function() {
