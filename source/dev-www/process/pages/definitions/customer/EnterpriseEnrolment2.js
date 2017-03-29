@@ -1,11 +1,20 @@
 
 irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter){
 
-    var branch = SessionStore.getBranch();    
+    var branch = SessionStore.getBranch();
+    var centres = SessionStore.getCentres();
+    var centreName = [];
+    var allowedCentres = [];
+    if (centres && centres.length) {
+        for (var i = 0; i < centres.length; i++) {
+            centreName.push(centres[i].id);
+            allowedCentres.push(centres[i]);
+        }
+    }
 
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
@@ -61,6 +70,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 }
                             });
                         }
+                        var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
+                        model.customer.centerName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centerName;
                         BundleManager.broadcastEvent('business-loaded', model.customer);
                     }, function(httpRes){
                         PageHelper.showErrors(httpRes);
@@ -83,16 +94,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         model.customer.kgfsName = branch1[i].name;
                     }
                 }
-                var centres = SessionStore.getCentres();
-                var centreName = [];
-              
-                if (centres && centres.length) {
-                    for (var i = 0; i < centres.length; i++) {
-                        centreName.push(centres[i].id);
-                    }
-                }
                 
                 model.customer.centreId = centreName[0];
+                model.customer.centerName = allowedCentres[0].name;
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
             }
             if (bundlePageObj){
@@ -225,6 +229,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                          initialize: function(model, form, parentModel, context) {
                                         model.customerBranchId = parentModel.customer.customerBranchId;
                                         model.centreId = parentModel.customer.centreId;
+                                        model.centreName = allowedCentres.length > 0 ? allowedCentres[0].centreName : "";
                                     },
                         "inputMap": {
                             "firstName": {
@@ -243,13 +248,60 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "readonly": true,
                                 "enumCode": "branch_id"
                             },
-                            "centreId": {
-                                "key": "customer.centreId",
-                                "type": "select",
-                                "screenFilter": true,
-                                "parentEnumCode": "branch",
-                                "parentValueExpr" :"model.customerBranchId",
-                            }
+                            "centreName": {
+                                "key": "customer.place",
+                                "title":"CENTRE_NAME",
+                                "type": "string",
+                                "readonly": true,
+                                
+                            },
+                            "centreId":{
+                                key: "customer.centreId",
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+
+                                    var centreCode = formHelper.enum('centre').data;
+                                    var out = [];
+                                    if (centres && centres.length) {
+                                        for (var i = 0; i < centreCode.length; i++) {
+                                            for (var j = 0; j < centres.length; j++) {
+                                                if (centreCode[i].value == centres[j].id) {
+
+                                                    // if( out.length == 0){
+                                                    //     model.customer.centreId = centreCode[i].value;
+                                                    // }
+                                                    out.push({
+                                                        name: centreCode[i].name,
+                                                        id:centreCode[i].value
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.centreId = valueObj.id;
+                                    model.centreName = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
                         },
                         "outputMap": {
                             "urnNo": "customer.urnNo", 
