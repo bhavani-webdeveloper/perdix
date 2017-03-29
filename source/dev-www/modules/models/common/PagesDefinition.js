@@ -144,9 +144,9 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
-    pDef.isStateAllowed = function(state) {
+    pDef.isStateAllowed = function(state, pageName) {
         _.forEach(userAllowedPages, function(v, k){
-            if (v.state === state)
+            if ((!pageName && v.state === state) || (pageName && v.state === state && pageName === v.stateParams.pageName))
                 return true;
         });
         return false;
