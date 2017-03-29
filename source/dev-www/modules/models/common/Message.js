@@ -102,6 +102,7 @@ function($resource, $httpParamSerializer, SessionStore) {
 				resource.createConversation({
 					"messageThreads": {
 						"title": "For " + referenceType + ": " + referenceNumber,
+						"reference_type": referenceType,
 						"reference_no": Number(referenceNumber)
 					}
 				}, true);

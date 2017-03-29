@@ -195,9 +195,23 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		"required": true,
 		"type": "text"
 	}, {
-		"key": "messageThreads.reference_no",
-		"title": "Reference",
+		"key": "messageThreads.reference_type",
+		"condition": "!model.reducedAccess",
+		"title": "Reference Type",
 		"required": true,
+		"type": "text"
+	}, {
+		"key": "messageThreads.reference_no",
+		"condition": "!model.reducedAccess",
+		"title": "Reference ID",
+		"required": true,
+		"type": "number"
+	}, {
+		"key": "messageThreads.reference_no",
+		"condition": "model.reducedAccess",
+		"title": "Reference",
+		"titleExpr": "model.messageThreads.reference_type + ' Reference ID'",
+		"readonly": true,
 		"type": "number"
 	}, {
 		"key": "messageThreads.messageParticipants",
@@ -388,18 +402,15 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 	};
 
 	$scope.createConversation = function(initModel, reducedAccess) {
-		if (reducedAccess) {
-			createConversationForm[2].readonly = true;
-		} else {
-			createConversationForm[2].readonly = false;
-		}
+		var model = initModel || {};
+		model.reducedAccess = !!reducedAccess;
 		var createConversationModel = {
-			formName: "createConversationForm",
-			formHelper: formHelper,
-			schema: newParticipantSchema,
-			form: createConversationForm,
-			model: initModel || {},
-			actions: {}
+			"formName": "createConversationForm",
+			"formHelper": formHelper,
+			"schema": newParticipantSchema,
+			"form": createConversationForm,
+			"model": model,
+			"actions": {}
 		};
 		var createConversationWindow = irfSimpleModal('Create new conversation', simpleSchemaFormHtml, createConversationModel);
 
