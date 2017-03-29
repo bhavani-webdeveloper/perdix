@@ -143,6 +143,10 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
+            if (bundlePageObj){
+                model._bundlePageObj = _.cloneDeep(bundlePageObj);
+            }
+
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
@@ -157,6 +161,19 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             .$promise
                             .then(function(res){
                                 model.customer.applicantname = res.firstName;
+                                if(res && res.cbCheckList && res.cbCheckList.length >0){
+                                    for(x=0;x<res.cbCheckList.length;x++){
+                                        if(res.cbCheckList[x].cbCheckValid){
+                                            BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
+                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                                || res.cbCheckList[x].reportType=='AOR'
+                                                || res.cbCheckList[x].reportType=='INDIVIDUAL')
+                                                model.customer.highmarkStatus = 'PROCESSED';
+                                            else if(res.cbCheckList[x].reportType=='CIBIL')
+                                                model.customer.cibilStatus = 'PROCESSED';
+                                        }
+                                    }
+                                }
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
                             })
@@ -172,11 +189,31 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             Enrollment.getCustomerById({id:model.loanAccount.loanCustomerRelations[i].customerId})
                             .$promise
                             .then(function(res){
+                                var highmarkStatus;
+                                var cibilStatus;
+                                if(res && res.cbCheckList && res.cbCheckList.length >0){
+                                    for(x=0;x<res.cbCheckList.length;x++){
+                                        if(res.cbCheckList[x].cbCheckValid){
+                                            BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
+                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                                    || res.cbCheckList[x].reportType=='AOR'
+                                                    || res.cbCheckList[x].reportType=='INDIVIDUAL')
+                                            {
+                                                    highmarkStatus = 'PROCESSED';
+                                            }
+                                            else if(res.cbCheckList[x].reportType=='CIBIL'){
+                                                cibilStatus = 'PROCESSED';
+                                            }
+                                        }
+                                    }
+                                }
                                 model.customer.coapplicants.push({
                                 "coapplicantid":res.id,
                                 "coapplicantname":res.firstName,
                                 "loanAmount":model.loanAccount.loanAmountRequested,
-                                "loanPurpose1":model.loanAccount.loanPurpose1});
+                                "loanPurpose1":model.loanAccount.loanPurpose1,
+                                "highmarkStatus":highmarkStatus,
+                                "cibilStatus":cibilStatus});
                                 model.customer.loanSaved = true;
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -189,11 +226,31 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             Enrollment.getCustomerById({id:model.loanAccount.loanCustomerRelations[i].customerId})
                             .$promise
                             .then(function(res){
+                                var highmarkStatus;
+                                var cibilStatus;
+                                if(res && res.cbCheckList && res.cbCheckList.length >0){
+                                    for(x=0;x<res.cbCheckList.length;x++){
+                                        if(res.cbCheckList[x].cbCheckValid){
+                                            BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: res.cbCheckList[x].customerId, cbType:res.cbCheckList[x].reportType});
+                                            if(res.cbCheckList[x].reportType=='BASE' 
+                                                    || res.cbCheckList[x].reportType=='AOR'
+                                                    || res.cbCheckList[x].reportType=='INDIVIDUAL')
+                                            {
+                                                    highmarkStatus = 'PROCESSED';
+                                            }
+                                            else if(res.cbCheckList[x].reportType=='CIBIL'){
+                                                cibilStatus = 'PROCESSED';
+                                            }
+                                        }
+                                    }
+                                }
                                 model.customer.guarantors.push({
                                 "guarantorid":res.id,
                                 "guarantorname":res.firstName,
                                 "loanAmount":model.loanAccount.loanAmountRequested,
-                                "loanPurpose1":model.loanAccount.loanPurpose1});
+                                "loanPurpose1":model.loanAccount.loanPurpose1,
+                                "highmarkStatus":highmarkStatus,
+                                "cibilStatus":cibilStatus});
                                 model.customer.loanSaved = true;
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -205,9 +262,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     }
 
                 }
-            }
-            if (bundlePageObj){
-                model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
         },
         eventListeners: {
