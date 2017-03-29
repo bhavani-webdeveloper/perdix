@@ -289,6 +289,13 @@
                             "captureStages": [
                                 "PendingFiling"
                             ]
+                        },
+                        "fileLocation": {
+                            "title": "fileLocation",
+                            "type": "string",
+                            "captureStages": [
+                                "PendingFiling"
+                            ]
                         }
                     }
                 }
