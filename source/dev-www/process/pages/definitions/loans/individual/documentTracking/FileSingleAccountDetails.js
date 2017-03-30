@@ -67,7 +67,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
 
                 {
                     "type": "box",
-                    "title": "PENDING_FILING",
+                    "title": "FILING_DETAILS",
                     "items": [
                         {
                             "title": "FILE_LOCATION",
