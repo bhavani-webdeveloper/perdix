@@ -1,22 +1,21 @@
-irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFilingQueue"), 
-    ["$log", "formHelper", "DocumentTracking", "$state", "SessionStore", "Utils","PageHelper","entityManager",
-    function($log,formHelper,DocumentTracking,$state,SessionStore,Utils,PageHelper,entityManager) {
+irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFilingQueue"), ["$log", "formHelper", "DocumentTracking", "$state", "SessionStore", "Utils", "PageHelper", "entityManager",
+    function($log, formHelper, DocumentTracking, $state, SessionStore, Utils, PageHelper, entityManager) {
         var branch = SessionStore.getBranch();
         var branchId = SessionStore.getCurrentBranch().branchId;
         return {
             "type": "search-list",
-            "title": "QUALITY_CHECK_QUEUE",
+            "title": "PENDING_FOR_FILING",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                model.branchId = branchId;
+                //model.branchId = branchId;
                 $log.info("Perding for Filing page got initiated");
             },
             definition: {
                 title: "SEARCH_LOAN",
                 searchForm: [
                     "*"
-                ], 
+                ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
@@ -67,16 +66,16 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { 
+                getResultsPromise: function(searchOptions, pageOpts) {
                     console.log("searchOptions");
 
                     var promise = DocumentTracking.search({
                         'stage': 'PendingFiling',
                         'branchId': searchOptions.branchId,
                         'centreId': searchOptions.spoke_name,
-                        'customerName':searchOptions.business_name,
-                        'accountNumber':searchOptions.account_number,
-                        'scheduledDispatchDate':searchOptions.disbursement_date,
+                        'customerName': searchOptions.business_name,
+                        'accountNumber': searchOptions.account_number,
+                        'scheduledDispatchDate': searchOptions.disbursement_date,
                         'page': pageOpts.pageNo,
                         'itemsPerPage': pageOpts.itemsPerPage
                     }).$promise;
@@ -139,8 +138,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                             desc: "",
                             icon: "fa fa-eye-slash",
                             fn: function(item, index) {
-                                entityManager.setModel('loans.individual.documentTracking.FileSingleAccountDetails',{"_Account":item});
-                                $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.FileSingleAccountDetails",pageId: item.id});
+                                entityManager.setModel('loans.individual.documentTracking.FileSingleAccountDetails', {
+                                    "_Account": item
+                                });
+                                $state.go("Page.Engine", {
+                                    pageName: "loans.individual.documentTracking.FileSingleAccountDetails",
+                                    pageId: item.id
+                                });
                             },
                             isApplicable: function(item, index) {
                                 return true;

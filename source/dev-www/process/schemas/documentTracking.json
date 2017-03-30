@@ -73,6 +73,16 @@
             "udfDate5": {
                "type": "date"
             },
+            "fileLocation": {
+               "type": ["string", "null"],
+               "enumCode":"file_location"
+            },
+            "cartonNumber": {
+               "type": "string"
+            },
+            "barcodeNumber": {
+               "type": "string"
+            },
             "accountDocTrackerDetails":{
                "type": "array",
                "items":{

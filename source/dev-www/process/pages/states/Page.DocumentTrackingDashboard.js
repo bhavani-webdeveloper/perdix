@@ -13,6 +13,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                 "Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue",
                 "Page/Engine/loans.individual.documentTracking.BatchInTransitQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingVerificationQueue",
+                "Page/Engine/loans.individual.documentTracking.QualityCheckQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingFilingQueue"
             ]
         };
@@ -39,15 +40,12 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pdcMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue"];
             if (pdcMenu) {
-                DocumentTracking.findBatches({
+                DocumentTracking.search({
                     'stage': 'BatchConfirmation',
                     'branchId': branchId,
-                    'batchNumber': null,
-                    'courierName': null,
-                    'courierNumber': null,
-                    'courierDate': null,
+                    'centerId': null,
                     'page': 1,
-                    'itemsPerPage': 1
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     pdcMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -57,15 +55,12 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var bitMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.BatchInTransitQueue"];
             if (bitMenu) {
-                DocumentTracking.findBatches({
+                DocumentTracking.search({
                     'stage': 'BatchInTransit',
-                    'branchId': branchId,
-                    'batchNumber': null,
-                    'courierName': null,
-                    'courierNumber': null,
-                    'courierDate': null,
+                    'branchId': null,
+                    'centerId': null,
                     'page': 1,
-                    'itemsPerPage': 1
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     bitMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -75,19 +70,29 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pvMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingVerificationQueue"];
             if (pvMenu) {
-                DocumentTracking.findBatches({
+                DocumentTracking.search({
                     'stage': 'PendingVerification',
                     'branchId': null,
-                    'batchNumber': null,
-                    'courierName': null,
-                    'courierNumber': null,
-                    'courierDate': null,
+                    'centerId': null,
                     'page': 1,
-                    'itemsPerPage': 1
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     pvMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     pvMenu.data = '-';
+                });
+}        var qcMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.QualityCheckQueue"];
+            if (qcMenu) {
+                DocumentTracking.search({
+                    'stage': 'QualityCheck',
+                    'branchId': null,
+                    'centerId': null,
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    qcMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    qcMenu.data = '-';
                 });
             }
 
