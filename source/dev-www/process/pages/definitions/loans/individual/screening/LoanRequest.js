@@ -2410,7 +2410,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                 }
 
                 if (model.currentStage == 'FieldAppraisal'){
-                    if (!_.hasIn(model.applicant, 'stockMaterialManagement') || _.isNull(model.applicant.stockMaterialManagement)) {
+                    if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
                         return;
                     }
