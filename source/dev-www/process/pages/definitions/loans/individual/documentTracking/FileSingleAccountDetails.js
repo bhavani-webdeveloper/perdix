@@ -73,6 +73,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
                             "title": "FILE_LOCATION",
                             "key": "accountDocumentTracker.fileLocation",
                             "type":"select",
+                            required: "true",
                             "onChange":function(value,form,model){
                                 if (model.accountDocumentTracker.fileLocation =='On-Site'){
                                     model.accountDocumentTracker.barcodeNumber = '';
@@ -83,11 +84,13 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
                         {
                             "title": "CARTON_NUMBER",
                             "key": "accountDocumentTracker.cartonNumber",
+                            required: "true",
                             "condition":"model.accountDocumentTracker.fileLocation=='Off-Site'"
                         }, 
                         {
                             "title": "BARCODE_NUMBER",
                             "key": "accountDocumentTracker.barcodeNumber",
+                            required: "true",
                             "condition":"model.accountDocumentTracker.fileLocation=='Off-Site'"
                         }]
                 },
@@ -124,6 +127,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.FileSingl
                         PageHelper.showProgress("view-account", "Barcode Number and Carton Number are mandatory for Off-Site Location", 3000);
                         return false;
                     }
+                    model.accountDocumentTracker.nextStage = "Filed";
                     var reqData = {
                         accountDocumentTracker: [_.cloneDeep(model.accountDocumentTracker)]
                     };

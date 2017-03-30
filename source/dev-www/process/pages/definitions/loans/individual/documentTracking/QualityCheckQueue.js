@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                     "subTitle": "",
                     initialize: function(model, form, formCtrl) {
                         model.branch = branch;
-                        model.branchId = branchId;
+                        //model.branchId = branchId;
                         $log.info("Perding for Filing page got initiated");
                     },
                     definition: {
