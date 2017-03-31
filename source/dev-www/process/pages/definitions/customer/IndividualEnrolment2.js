@@ -29,26 +29,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                     return true;
                 }
 
-                var branch1 = formHelper.enum('branch_id').data;
-                var allowedBranch = [];
-                for (var i = 0; i < branch1.length; i++) {
-                    if ((branch1[i].name) == SessionStore.getBranch()) {
-                        allowedBranch.push(branch1[i]);
-                        break;
-                    }
-                }
-                var allowedCentres = [];
-                var centres = SessionStore.getCentres();
-                var centreName = [];
-                 
-                if(centres && centres.length)
-                {
-                    for (var i = 0; i < centres.length; i++) {
-                     centreName.push(centres[i].id);
-                     allowedCentres.push(centres[i]);
-                    } 
-                }
-
                 return {
                     "type": "schema-form",
                     // "subType": "sub-navigation",
@@ -59,6 +39,26 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
 
                         if (bundlePageObj){
                             model._bundlePageObj = _.cloneDeep(bundlePageObj);
+                        }
+
+                        var branch1 = formHelper.enum('branch_id').data;
+                        var allowedBranch = [];
+                        for (var i = 0; i < branch1.length; i++) {
+                            if ((branch1[i].name) == SessionStore.getBranch()) {
+                                allowedBranch.push(branch1[i]);
+                                break;
+                            }
+                        }
+                        var allowedCentres = [];
+                        var centres = SessionStore.getCentres();
+                        var centreName = [];
+                         
+                        if(centres && centres.length)
+                        {
+                            for (var i = 0; i < centres.length; i++) {
+                             centreName.push(centres[i].id);
+                             allowedCentres.push(centres[i]);
+                            } 
                         }
        
                         model.currentStage = bundleModel.currentStage;
@@ -72,7 +72,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         .then(function(res){
                                             model.customer = res;
                                             var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
-                                            model.customer.centerName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centerName;
+                                            model.customer.centreName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centreName;
                                             BundleManager.pushEvent('customer-loaded', model._bundlePageObj, {customer: res})
                                             if (model.customer.stockMaterialManagement) {
                                                 model.proxyIndicatorsHasValue = true;
@@ -97,7 +97,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             model.customer.customerBranchId = model.customer.customerBranchId || allowedBranch[0].value;
 
                             model.customer.centreId = centreName[0];
-                            model.customer.centerName = allowedCentres[0].name;
+                            model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
 
                             //model.branchId = SessionStore.getBranchId() + '';
                             model.customer.date = model.customer.date || Utils.getCurrentDate();
@@ -227,7 +227,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     initialize: function(model, form, parentModel, context) {
                                         model.customerBranchId = parentModel.customer.customerBranchId;
                                         model.centreId = parentModel.customer.centreId;
-                                        model.centreName = parentModel.customer.centerName;
+                                        model.centreName = parentModel.customer.centreName;
                                     },
                                     "inputMap": {
                                         "firstName": {
@@ -271,9 +271,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                         for (var j = 0; j < centres.length; j++) {
                                                             if (centreCode[i].value == centres[j].id) {
 
-                                                                // if( out.length == 0){
-                                                                //     model.customer.centreId = centreCode[i].value;
-                                                                // }
                                                                 out.push({
                                                                     name: centreCode[i].name,
                                                                     id:centreCode[i].value

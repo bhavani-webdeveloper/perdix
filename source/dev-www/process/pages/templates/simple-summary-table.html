@@ -8,7 +8,8 @@
         <tbody>
             <tr ng-repeat='record in tableData.data'>
                 <td ng-repeat='column in tableData.columns' ng-style = 'column.style'>
-                    <dummy  ng-if='column.format'>{{record[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-if='column.format === "currency"'>{{record[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-if='column.format === "pct"'>{{(record[column.data] | number : 2) + '%'}}</dummy>
                     <dummy ng-if='!column.format'>{{record[column.data]}}</dummy>
                 </td>
             </tr>

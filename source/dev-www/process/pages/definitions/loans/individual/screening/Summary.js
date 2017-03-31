@@ -11,7 +11,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
             for(var i = 0; i < $scope.tableData.columns.length; i++){
 
-                if($scope.tableData.columns[i].format){
+                if($scope.tableData.columns[i].format === "currency"){
                     $scope.tableData.columns[i].style = {'text-align' : 'right'};
                 }
             }
@@ -716,9 +716,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
-
-        var liabilitiesSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.liabilitiesSummary'></irf-simple-summary-table>";
-        var liabilitiesSummaryTable = "";
 
         var items = [];
         if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){

@@ -5,17 +5,6 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter){
 
-    var branch = SessionStore.getBranch();
-    var centres = SessionStore.getCentres();
-    var centreName = [];
-    var allowedCentres = [];
-    if (centres && centres.length) {
-        for (var i = 0; i < centres.length; i++) {
-            centreName.push(centres[i].id);
-            allowedCentres.push(centres[i]);
-        }
-    }
-
     var validateRequest = function(req){
         if (req.customer && req.customer.customerBankAccounts) {
             for (var i=0; i<req.customer.customerBankAccounts.length; i++){
@@ -35,6 +24,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             model.currentStage = bundleModel.currentStage;
+
+            var branch = SessionStore.getBranch();
+            var centres = SessionStore.getCentres();
+            var centreName = [];
+            var allowedCentres = [];
+            if (centres && centres.length) {
+                for (var i = 0; i < centres.length; i++) {
+                    centreName.push(centres[i].id);
+                    allowedCentres.push(centres[i]);
+                }
+            }
+
             if (_.hasIn(model, 'loanRelation')){
                 console.log(model.loanRelation);
                 var custId = model.loanRelation.customerId;
@@ -71,7 +72,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             });
                         }
                         var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
-                        model.customer.centerName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centerName;
+                        model.customer.centreName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centreName;
                         BundleManager.broadcastEvent('business-loaded', model.customer);
                     }, function(httpRes){
                         PageHelper.showErrors(httpRes);
@@ -96,7 +97,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
                 
                 model.customer.centreId = centreName[0];
-                model.customer.centerName = allowedCentres[0].name;
+                model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
                 model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
             }
             if (bundlePageObj){
@@ -229,7 +230,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                          initialize: function(model, form, parentModel, context) {
                                         model.customerBranchId = parentModel.customer.customerBranchId;
                                         model.centreId = parentModel.customer.centreId;
-                                        model.centreName = allowedCentres.length > 0 ? allowedCentres[0].centreName : "";
+                                        model.centreName = parentModel.customer.centreName;
                                     },
                         "inputMap": {
                             "firstName": {
