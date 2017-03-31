@@ -296,19 +296,15 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
+    var isAutoSaveOffline = true;
     var autoSaveOffline = function(n) {
-        BundleManager.updateOffline();
-        $timeout(function() {
-            autoSaveOffline(n);
-        }, n);
+        if (isAutoSaveOffline) {
+            BundleManager.saveOffline();
+            $timeout(function() {
+                autoSaveOffline(n);
+            }, n);
+        }
     };
-
-    Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
-        var n = Number(value);
-        $timeout(function() {
-            autoSaveOffline(n);
-        }, n);
-    });
 
     BundleManager.deleteOffline = function() {
         if ($scope.bundleModel.$$STORAGE_KEY$$) {
@@ -450,6 +446,17 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         if ($scope.pages && $scope.pages.length) {
             BundleManager.initializePageUI($scope.pages[0]);
         }
+        Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
+            var n = Number(value);
+            $timeout(function() {
+                isAutoSaveOffline = true;
+                autoSaveOffline(n);
+            }, n);
+        });
+    });
+
+    $scope.$on('$destroy', function() {
+        isAutoSaveOffline = false;
     });
 
 }]);
