@@ -145,6 +145,10 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 	var newParticipantSchema = {
 		"type": "object",
 		"properties": {
+			"newParticipant": {
+				"title": "Search for participant",
+				"type": "string"
+			},
 			"userName": {
 				"title": "User Name",
 				"type": "string"
@@ -319,6 +323,10 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 	};
 
 	var addMessageParticipant = function(conversationData) {
+		if (!conversationData || !conversationData.newParticipant || !conversationData.newParticipant.login || !conversationData.newParticipant.userName) {
+			Utils.alert("No user selected");
+			return;
+		}
 		Message.addMessageParticipant({
 			"messageThreads": {
 				"thread_id": conversationData.thread_id,
