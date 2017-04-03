@@ -13,15 +13,22 @@
         </thead>
         <tbody>
             <tr ng-repeat='record in tableData.data'>
-                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="!record.data">
-                    <dummy  ng-if='column.format === "currency"'>{{record[column.data] | irfCurrency}}</dummy>
-                    <dummy  ng-if='column.format === "pct"'>{{(record[column.data] | number : 2) + '%'}}</dummy>
-                    <dummy ng-if='!column.format'>{{record[column.data]}}</dummy>
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="!record.data" 
+                ng-switch = 'column.format'>
+                    <dummy  ng-switch-when="currency">{{record[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-switch-when="pct">
+                    {{(record[column.data] !== null && record[column.data] !== undefined) ? ((record[column.data] | 
+                    number : 2) + '%') : record[column.data]}}
+                    </dummy>
+                    <dummy ng-switch-default>{{record[column.data]}}</dummy>
                 </td>
-                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data">
-                    <dummy  ng-if='column.format === "currency"'>{{record.data[column.data] | irfCurrency}}</dummy>
-                    <dummy  ng-if='column.format === "pct"'>{{(record.data[column.data] | number : 2) + '%'}}</dummy>
-                    <dummy ng-if='!column.format'>{{record.data[column.data]}}</dummy>
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data" 
+                ng-switch = "getDisplayFormat(column, record)">
+                    <dummy  ng-switch-when="currency">{{record.data[column.data] | irfCurrency}}</dummy>
+                    <dummy  ng-switch-when="pct">
+                    {{(record.data[column.data] !== null && record.data[column.data] !== undefined) ? ((record.data[column.data] | number : 2) + '%') : record.data[column.data]}}
+                    </dummy>
+                    <dummy ng-switch-default>{{record.data[column.data]}}</dummy>
                 </td>
             </tr>
         </tbody>

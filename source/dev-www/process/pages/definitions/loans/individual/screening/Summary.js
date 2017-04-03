@@ -21,7 +21,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
                 }
 
-                if(column.format === "currency"){
+                if($scope.getDisplayFormat(column, record) === "currency"){
                     styleClass.push('currency');
                 }
 
@@ -30,7 +30,20 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
                 }
 
                 return styleClass;
+            }
 
+            $scope.getDisplayFormat = function(column, record){
+
+                var displayFormat = column.format;
+
+                if(record && record.data && angular.isObject(record.data)){
+
+                    return (record.overrides && record.overrides.format && angular.isObject(record.overrides.format)) ? 
+                    (record.overrides.format[column.data] ? record.overrides.format[column.data] : displayFormat) : displayFormat;
+
+                }
+
+                return displayFormat;
             }
 
 }]);
