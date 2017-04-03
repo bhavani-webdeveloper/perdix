@@ -9,14 +9,31 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
     }
 }).controller("irfSimpleSummaryTableController", ["$scope", function($scope){
 
-            for(var i = 0; i < $scope.tableData.columns.length; i++){
+            $scope.getStyleClass = function(column, record){
 
-                if($scope.tableData.columns[i].format === "currency"){
-                    $scope.tableData.columns[i].style = {'text-align' : 'right'};
+                var styleClass = [];
+
+                if(record && record.data && angular.isObject(record.data)){
+
+                    if(record.weight === "bold"){
+                        styleClass.push('bold');
+                    }
+
                 }
+
+                if(column.format === "currency"){
+                    styleClass.push('currency');
+                }
+
+                if(column.weight === "bold" && styleClass.indexOf('bold') === -1){
+                    styleClass.push('bold');
+                }
+
+                return styleClass;
+
             }
 
-        }]);
+}]);
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
