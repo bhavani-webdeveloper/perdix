@@ -141,7 +141,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 							// type: 'html',
 						},
 						{
-							title:'CURRENT_STAGE',
+							title:'CURRENT_STAGE',	
 							data: 'currentStage'
 						},
 						{

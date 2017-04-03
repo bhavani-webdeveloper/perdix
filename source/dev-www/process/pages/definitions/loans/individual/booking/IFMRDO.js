@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager){
+["$log","SessionStore","$state", "$stateParams","irfNavigator", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager",
+    function($log, SessionStore,$state,$stateParams,irfNavigator, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -1307,12 +1307,26 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             })
                     })
                 },
-                viewLoan: function(model, formCtrl, form, $event){
-                    $log.info("Inside ViewLoan()");
-                    $state.go("Page.Bundle", {
-                    pageName: "loans.individual.screening.LoanView",
-                    pageId: model.loanAccount.id
-                    });   
+                // viewLoan: function(model, formCtrl, form, $event){
+                //     $log.info("Inside ViewLoan()");
+                //     $state.go("Page.Bundle", {
+                //     pageName: "loans.individual.screening.LoanView",
+                //     pageId: model.loanAccount.id
+                //     });   
+                // },
+                 viewLoan: function(model, formCtrl, form, $event) {
+                    Utils.confirm("Save the data before proceed").then(function() {
+                        $log.info("Inside ViewLoan()");
+                        irfNavigator.go({
+                            state: "Page.Bundle",
+                            pageName: "loans.individual.screening.LoanView",
+                            pageId: model.loanAccount.id
+                        }, {
+                             state: "Page.Engine",
+                            pageName: "loans.individual.booking.IFMRDO",
+                            pageId: model.loanAccount.id
+                        });
+                    });
                 },
                 holdButton: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
@@ -1407,14 +1421,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             }
                         );
                 },
-                viewLoan: function(model, formCtrl, form, $event){
-                    Utils.confirm("Save the data before proceed").then(function(){
-                    $log.info("Inside ViewLoan()");
-                    $state.go("Page.Bundle", {
-                    pageName: "loans.individual.screening.LoanView",
-                    pageId: model.loanAccount.id
-                    });   
-                    })
+                // viewLoan: function(model, formCtrl, form, $event){
+                //     Utils.confirm("Save the data before proceed").then(function(){
+                //     $log.info("Inside ViewLoan()");
+                //     $state.go("Page.Bundle", {
+                //     pageName: "loans.individual.screening.LoanView",
+                //     pageId: model.loanAccount.id
+                //     });   
+                //     })
+                // },
+                 viewLoan: function(model, formCtrl, form, $event) {
+                    Utils.confirm("Save the data before proceed").then(function() {
+                        $log.info("Inside ViewLoan()");
+                        irfNavigator.go({
+                            state: "Page.Bundle",
+                            pageName: "loans.individual.screening.LoanView",
+                            pageId: model.loanAccount.id
+                        }, {
+                             state: "Page.Engine",
+                            pageName: "loans.individual.booking.IFMRDO",
+                            pageId: model.loanAccount.id
+                        });
+                    });
                 },
                 proceed: function(model, form, formName) {
                     $log.info(model);

@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                 var branchId = SessionStore.getCurrentBranch().branchId;
                 return {
                     "type": "search-list",
-                    "title": "QUALITY_CHECK_QUEUE",
+                    "title": "QULAITY_FOR_CHECK",
                     "subTitle": "",
                     initialize: function(model, form, formCtrl) {
                         model.branch = branch;
@@ -15,10 +15,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                         title: "SEARCH_LOAN",
                         searchForm: [
                             "*"
-                            ], 
+                            // ], 
                             autoSearch: true,
                             searchSchema: {
-                                "type": 'object', 
+                                "type": 'object',
                                 "title": 'SearchOptions',
                                 "properties": {
                                     "branchId": {
@@ -70,7 +70,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                                 console.log("searchOptions");
 
                                 var promise = DocumentTracking.search({
-                                    'stage': 'QualityCheck',
+                                    'stage': 'PendingFiling',
                                     'branchId': searchOptions.branchId,
                                     'centreId': searchOptions.spoke_name,
                                     'customerName': searchOptions.business_name,
@@ -138,11 +138,11 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                                         desc: "",
                                         icon: "fa fa-eye-slash",
                                         fn: function(item, index) {
-                                            entityManager.setModel('loans.individual.documentTracking.QualityCheckAccountDetails', {
+                                            entityManager.setModel('loans.individual.documentTracking.FileSingleAccountDetails', {
                                                 "_Account": item
                                             });
                                             $state.go("Page.Engine", {
-                                                pageName: "loans.individual.documentTracking.QualityCheckAccountDetails",
+                                                pageName: "loans.individual.documentTracking.FileSingleAccountDetails",
                                                 pageId: item.id
                                             });
                                         },

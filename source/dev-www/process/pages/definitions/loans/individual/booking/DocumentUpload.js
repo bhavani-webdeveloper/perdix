@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment","irfNavigator", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount",
+    function($log, Enrollment,irfNavigator, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount) {
 
 
         var getDocument = function(docsArr, docCode) {
@@ -631,16 +631,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             }
                         );
                 },
-                viewLoan: function(model, formCtrl, form, $event){
-                    Utils.confirm("Save the data before proceed").then(function(){
-                    $log.info("Inside ViewLoan()");
-                    $state.go("Page.Bundle", {
-                    pageName: "loans.individual.screening.LoanView",
-                    pageId: model.loanAccount.id
-                    });  
-                    }) 
+                // viewLoan: function(model, formCtrl, form, $event){
+                //     Utils.confirm("Save the data before proceed").then(function(){
+                //     $log.info("Inside ViewLoan()");
+                //     $state.go("Page.Bundle", {
+                //     pageName: "loans.individual.screening.LoanView",
+                //     pageId: model.loanAccount.id
+                //     });  
+                //     }) 
+                // },
+                 viewLoan: function(model, formCtrl, form, $event) {
+                    Utils.confirm("Save the data before proceed").then(function() {
+                        $log.info("Inside ViewLoan()");
+                        irfNavigator.go({
+                            state: "Page.Bundle",
+                            pageName: "loans.individual.screening.LoanView",
+                            pageId: model.loanAccount.id
+                        }, {
+                             state: "Page.Engine",
+                            pageName: "loans.individual.booking.DocumentUpload",
+                            pageId: model.loanAccount.id
+                        });
+                    });
                 },
-                
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
                     Utils.confirm("Are You Sure?").then(function(){

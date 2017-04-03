@@ -43,7 +43,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                     })
                 }
                 else{
-                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.QualityCheckQueue",pageId: null});
+                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
                 }
             },
             modelPromise: function(pageId, _model) {
@@ -190,7 +190,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
             actions: {
                 goBack: function(model, form, formName) {
                     $log.info("Inside goBack()");
-                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.QualityCheckQueue",pageId: null});
+                    $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
                 },
                 submit: function(model, form, formName) {
                     var isFilingDoneForAllDocs = true;
@@ -225,7 +225,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.QualityCh
                         .$promise
                         .then(function(res){
                             PageHelper.showProgress("update-batch", "Batch Updated.", 3000);
-                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.QualityCheckQueue",pageId: null});
+                            $state.go("Page.Engine", {pageName: "loans.individual.documentTracking.PendingFilingQueue",pageId: null});
                         }, function(httpRes){
                             PageHelper.showProgress("update-batch", "Oops. Some error occured.", 3000);
                             PageHelper.showErrors(httpRes);

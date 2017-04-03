@@ -4,7 +4,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection",
         function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection) {
 
-
             function backToLoansList(){
                 try {
                     var urnNo = ($stateParams.pageId.split("."))[1];

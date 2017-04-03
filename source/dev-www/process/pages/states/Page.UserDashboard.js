@@ -10,7 +10,10 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
         "iconClass": "fa fa-reply",
         "items": [
             "Page/Engine/user.UserSearch",
-            "Page/Engine/user.UserMaintanence"
+            "Page/Engine/user.UserMaintanence",
+            "Page/Engine/user.LogoutUser",
+            "Page/Engine/user.MultipleUserLogout"
+
         ]
     };
 
