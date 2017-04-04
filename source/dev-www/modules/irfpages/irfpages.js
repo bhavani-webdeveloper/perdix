@@ -49,6 +49,13 @@ irf.pages.factory("irfNavigator", ["$log", "$q", "$http", "$state", function($lo
 			return !!callStack.length;
 		},
 		goBack: function() {
+
+			if(callStack.length == 0){
+				//failsafe case, if callStack is empty by some rare case
+				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+				return;
+			}
+
 			var goParam = callStack.pop();
 			$state.go(goParam.state, {
 				pageName: goParam.pageName,

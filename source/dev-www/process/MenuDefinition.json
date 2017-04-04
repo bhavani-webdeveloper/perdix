@@ -70,7 +70,8 @@
                 "Page/Engine/management.Pages",
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
-                "Page/Engine/management.SpokeMerger",
+                "Page/Engine/management.SpokeMerger/interbranch",
+                "Page/Engine/management.SpokeMerger/intrabranch",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
                 "Page/UserDashboard"

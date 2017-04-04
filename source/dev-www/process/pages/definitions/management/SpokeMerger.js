@@ -11,6 +11,8 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
 
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.customer = model.customer || {};
+                model.interbranchMerge = ($stateParams.pageId === "interbranch") ? true : false;
+                form[0].title = ($stateParams.pageId === "interbranch") ? 'SPOKE_MERGER' : 'INTRA_HUB_SPOKE_MERGER',
                 model = Utils.removeNulls(model, true);
                 $log.info("Spoke Merger page ");
                 var branches = formHelper.enum('branch_id').data;
@@ -41,11 +43,22 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                         },{
                             key: "branchId2",
                             title: "Hub Name",
+                            condition: "model.interbranchMerge",
                             type: "select",
                             enumCode: "branch_id"
                         }, {
                             key: "customer.toCentreId",
                             title: "To Spoke Name",
+                            condition: "!model.interbranchMerge",
+                            type: "select",
+                            enumCode: "centre",
+                            parentEnumCode: "branch_id",
+                            parentValueExpr: "model.branchId1",
+                            screenFilter: true
+                        },{
+                            key: "customer.toCentreId",
+                            title: "To Spoke Name",
+                            condition: "model.interbranchMerge",
                             type: "select",
                             enumCode: "centre",
                             parentEnumCode: "branch_id",

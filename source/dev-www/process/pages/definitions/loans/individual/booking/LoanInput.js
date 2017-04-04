@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -239,6 +239,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
                 var init = function(model, form, formCtrl) {
+                    model.loanAccount = $stateParams.pageData;
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
                     model.additional.branchName = branchName;
@@ -1469,10 +1470,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                     $log.info("Inside ViewLoan()");
-                    $state.go("Page.Bundle", {
-                    pageName: "loans.individual.screening.LoanView",
-                    pageId: model.loanAccount.id
-                    });   
+                    irfNavigator.go({
+                            state: "Page.Bundle",
+                            pageName: "loans.individual.screening.LoanView",
+                            pageId: model.loanAccount.id,
+                            pageData: null
+                        },
+                        {
+                            state: "Page.Engine",
+                            pageName: $stateParams.pageName,
+                            pageId: $stateParams.pageId,
+                            pageData: $stateParams.pageData
+                        });
                     })
                 },
                 holdButton: function(model, formCtrl, form, $event){

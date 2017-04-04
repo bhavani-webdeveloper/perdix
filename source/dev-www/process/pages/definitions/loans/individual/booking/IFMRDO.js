@@ -1307,13 +1307,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             })
                     })
                 },
-                // viewLoan: function(model, formCtrl, form, $event){
-                //     $log.info("Inside ViewLoan()");
-                //     $state.go("Page.Bundle", {
-                //     pageName: "loans.individual.screening.LoanView",
-                //     pageId: model.loanAccount.id
-                //     });   
-                // },
                  viewLoan: function(model, formCtrl, form, $event) {
                     Utils.confirm("Save the data before proceed").then(function() {
                         $log.info("Inside ViewLoan()");
@@ -1322,7 +1315,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDO"),
                             pageName: "loans.individual.screening.LoanView",
                             pageId: model.loanAccount.id
                         }, {
-                             state: "Page.Engine",
+                            state: "Page.Engine",
                             pageName: "loans.individual.booking.IFMRDO",
                             pageId: model.loanAccount.id
                         });

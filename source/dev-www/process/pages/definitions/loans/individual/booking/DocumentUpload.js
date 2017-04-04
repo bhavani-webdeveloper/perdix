@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment","irfNavigator", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount",
-    function($log, Enrollment,irfNavigator, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "irfNavigator",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount, irfNavigator) {
 
 
         var getDocument = function(docsArr, docCode) {
@@ -18,7 +18,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
-
+                model._queue = $stateParams.pageData;
                 if (!model._queue) {
                     $log.info("Screen directly launched hence redirecting to queue screen");
                     $state.go('Page.Engine', {
@@ -631,29 +631,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             }
                         );
                 },
-                // viewLoan: function(model, formCtrl, form, $event){
-                //     Utils.confirm("Save the data before proceed").then(function(){
-                //     $log.info("Inside ViewLoan()");
-                //     $state.go("Page.Bundle", {
-                //     pageName: "loans.individual.screening.LoanView",
-                //     pageId: model.loanAccount.id
-                //     });  
-                //     }) 
-                // },
-                 viewLoan: function(model, formCtrl, form, $event) {
-                    Utils.confirm("Save the data before proceed").then(function() {
+                viewLoan: function(model, formCtrl, form, $event){
+                    Utils.confirm("Save the data before proceed").then(function(){
                         $log.info("Inside ViewLoan()");
                         irfNavigator.go({
                             state: "Page.Bundle",
                             pageName: "loans.individual.screening.LoanView",
-                            pageId: model.loanAccount.id
-                        }, {
-                             state: "Page.Engine",
-                            pageName: "loans.individual.booking.DocumentUpload",
-                            pageId: model.loanAccount.id
-                        });
-                    });
+                            pageId: model.loanAccount.id,
+                            pageData: null
+                        },
+                        {
+                            state : 'Page.Engine',
+                            pageName: $stateParams.pageName,
+                            pageId: $stateParams.pageId,
+                            pageData: $stateParams.pageData
+                        });  
+                    }); 
                 },
+
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
                     Utils.confirm("Are You Sure?").then(function(){
@@ -726,9 +721,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         //$state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue', pageId: ''});
                 },
                 goBack: function(model, formCtrl, form, $event) {
-                    $state.go("Page.Engine", {
+                    $state.go({
+                        state : "Page.Engine", 
                         pageName: 'loans.individual.booking.DocumentUploadQueue',
-                        pageId: null
+                        pageId: null,
+                        pageData: undefined
                     });
                 }
             }

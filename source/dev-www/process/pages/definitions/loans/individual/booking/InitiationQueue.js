@@ -108,10 +108,10 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						desc: "",
 						icon: "fa fa-book",
 						fn: function(item, index){
-							EntityManager.setModel("loans.individual.booking.LoanInput",{_loan:item});
 							$state.go("Page.Engine",{
 								pageName:"loans.individual.booking.LoanInput",
-								pageId:item.loanId
+								pageId:item.loanId,
+								pageData: item
 							});
 						},
 						isApplicable: function(item, index){

@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$log", "$q", "$timeout", "SessionStore", "$state","irfNavigator", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
-    function($log, $q, $timeout, SessionStore, $state,irfNavigator, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message) {
+irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
         $log.info("Inside LoanBookingBundle");
         return {
             "type": "page-bundle",
@@ -72,40 +72,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanView'), ["$l
                 fn: function(bundleModel) {
                     $log.info("back button pressed");
                     $log.info($stateParams.pageId);
-                    irfNavigator.goBack();
-                    // if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
-                    //     var loanId = $stateParams.pageId;
-                    //     IndividualLoan.get({
-                    //         id: loanId
-                    //     }).$promise.then(
-                    //         function(res) {
-                    //             $log.info(res);
-                    //             if (res.currentStage == "LoanInitiation") {
-                    //                 $state.go("Page.Engine", {
-                    //                     pageName: 'loans.individual.booking.LoanInput',
-                    //                     pageId: loanId
-                    //                 });
-                    //             }
-                    //             if (res.currentStage == "DocumentVerification") {
-                    //                 $state.go("Page.Engine", {
-                    //                     pageName: 'loans.individual.booking.DocumentVerification',
-                    //                     pageId: loanId
-                    //                 });
-                    //             }
-                    //             if (res.currentStage == "IfmrDO") {
-                    //                 $state.go("Page.Engine", {
-                    //                     pageName: 'loans.individual.booking.IFMRDO',
-                    //                     pageId: loanId
-                    //                 });
-                    //             }
-                    //             if (res.currentStage == "DocumentUpload") {
-                    //                 $state.go("Page.Engine", {
-                    //                     pageName: 'loans.individual.booking.DocumentUpload',
-                    //                     pageId: loanId
-                    //                 });
-                    //             }
-                    //         })
-                    // }
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
+                        var loanId = $stateParams.pageId;
+                        irfNavigator.goBack();
+                    }
                 },
                 isApplicable: function(bundleModel) {
                     return true;

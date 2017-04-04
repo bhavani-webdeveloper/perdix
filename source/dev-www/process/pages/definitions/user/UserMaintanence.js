@@ -12,6 +12,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                     $log.info("User Maintanance loaded");
                     
                     if(!$stateParams.pageId) {
+                        model.create = true;
                         model.user = {
                             "roleCode": "A",
                             "activated": true,
@@ -115,9 +116,37 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                     },
                     {
                         "type": "actionbox",
+                        condition: "!model.create",
                         "items": [{
                             "type": "submit",
                             "title": "SAVE"
+                        }]
+                    },
+                    {
+                        "type": "actionbox",
+                        condition: "model.create",
+                        "items": [{
+                            "type": "submit",
+                            "title": "SAVE"
+                        },
+                        {
+                            type: "button",
+                            icon: "fa fa-refresh",
+                            style: "btn-default",
+                            title: "Reset",
+                            onClick: function(model) {
+                                model.user = {
+                                    "roleCode": "A",
+                                    "activated": true,
+                                    "bankName": "Kinara",
+                                    "userState": "ACTIVE",
+                                    "userType": "A",
+                                    "validUntil": "2010-05-26",
+                                    "accessType": "BRANCH",
+                                    "userRoles": [],
+                                    "userBranches": []
+                                };
+                            }
                         }]
                     }
                 ],
@@ -170,6 +199,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                             PageHelper.showErrors(httpResponse);
                                         })
                                         .finally(function(){
+                                            $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
                                             PageHelper.hideLoader();
                                         })
 

@@ -138,8 +138,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                             name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.booking.DocumentUpload', {_queue:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageId: item.loanId});
+                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentUpload', pageData: item, pageId: item.loanId});
                             },
                             isApplicable: function(item, index){
                                 return true;
