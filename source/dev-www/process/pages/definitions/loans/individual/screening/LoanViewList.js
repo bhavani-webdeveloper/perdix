@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager) {
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
         $log.info("Inside LoanBookingBundle");
         return {
             "type": "page-bundle",
@@ -64,6 +64,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
             }],
             "bundlePages": [],
             "offline": false,
+
+            "bundleActions": [
+            {
+                name: "Go Back",
+                desc: "",
+                icon: "fa fa-angle-left",
+                fn: function(bundleModel) {
+
+                    irfNavigator.goBack();
+                },
+                isApplicable: function(bundleModel) {
+                    return true;
+                }
+            }
+            ],
 
             "getOfflineDisplayItem": function(value, index) {
                 var out = new Array(2);

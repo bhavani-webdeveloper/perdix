@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.IFMRDOQueue"),
-["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
-function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils","irfNavigator",
+function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils, irfNavigator){
 
 	var branch = SessionStore.getBranch();
 
@@ -117,9 +117,14 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.LoanViewList",
 									pageId: item.loanId
+								},
+								{
+									state: "Page.Engine",
+									pageName: "loans.individual.booking.IFMRDOQueue"
 								});
 							},
 							isApplicable: function(item, index) {

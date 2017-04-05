@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQueue"), ["$log", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils",
-	function($log, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQueue"), ["$log", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
+	function($log, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
 
 
 		return {
@@ -22,7 +22,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 					"properties": {
 						"stage": {
 							"title": "STAGE",
-							"type": "string",
+							"type": ["string", "null"],
 							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
@@ -183,10 +183,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.LoanViewList",
-									pageId: item.loanId,
-
+									pageId: item.loanId
+								},
+								{
+									state: "Page.Engine",
+									pageName: "loans.individual.screening.LoanOriginationQueue"
 								});
 							},
 							isApplicable: function(item, index) {

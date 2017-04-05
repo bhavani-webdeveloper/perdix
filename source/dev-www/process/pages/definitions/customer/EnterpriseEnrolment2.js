@@ -230,7 +230,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                          initialize: function(model, form, parentModel, context) {
                                         model.customerBranchId = parentModel.customer.customerBranchId;
                                         model.centreId = parentModel.customer.centreId;
-                                        model.centreName = parentModel.customer.centreName;
+                                        var centreCode = formHelper.enum('centre').data;
+                                        var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                                        if(centreName && centreName.length > 0) {
+                                            model.centreName = centreName[0].name;
+                                        }
                                     },
                         "inputMap": {
                             "firstName": {

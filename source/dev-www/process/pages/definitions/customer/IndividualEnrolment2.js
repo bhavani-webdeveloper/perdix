@@ -227,7 +227,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     initialize: function(model, form, parentModel, context) {
                                         model.customerBranchId = parentModel.customer.customerBranchId;
                                         model.centreId = parentModel.customer.centreId;
-                                        model.centreName = parentModel.customer.centreName;
+                                        var centreCode = formHelper.enum('centre').data;
+
+                                        var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                                        if(centreName && centreName.length > 0) {
+                                            model.centreName = centreName[0].name;
+                                        }
+
                                     },
                                     "inputMap": {
                                         "firstName": {
@@ -1933,13 +1939,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             title: "IN_CURRENT_AREA_SINCE"
                                         }
                                     ]
-                                },
-                                {
-                                    "key": "customer.latitude",
-                                    "title": "HOUSE_LOCATION",
-                                    "type": "geotag",
-                                    "latitude": "customer.latitude",
-                                    "longitude": "customer.longitude"
                                 }
                             ]
                         },
@@ -1968,13 +1967,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             title: "IN_CURRENT_AREA_SINCE"
                                         }
                                     ]
-                                },
-                                {
-                                    "key": "customer.latitude",
-                                    "title": "HOUSE_LOCATION",
-                                    "type": "geotag",
-                                    "latitude": "customer.latitude",
-                                    "longitude": "customer.longitude"
                                 }
                             ]
                         },

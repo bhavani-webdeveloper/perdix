@@ -112,12 +112,25 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             var retryStatus = response.status;
             if (customerType == 'APP'){
                 model.customer.highmarkStatus = response.status;
+                if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    model.customer.applicantHighmarkFailed = true;
+                else
+                    model.customer.applicantHighmarkFailed = false;
+
             }
             else if(customerType == 'CO-APP'){
                 model.customer.coapplicants[index].highmarkStatus = response.status;
+                if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    model.customer.coapplicants[index].applicantHighmarkFailed = true;
+                else
+                    model.customer.coapplicants[index].applicantHighmarkFailed = false;
             }
             else if(customerType == 'GUARANTOR'){
                 model.customer.guarantors[index].highmarkStatus = response.status;
+                if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
+                    model.customer.guarantors[index].applicantHighmarkFailed = true;
+                else
+                    model.customer.guarantors[index].applicantHighmarkFailed = false;
             }
             if(retryStatus == 'SUCCESS' || retryStatus == 'PROCESSED'){
                 PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
