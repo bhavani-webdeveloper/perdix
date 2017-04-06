@@ -2,5 +2,6 @@
 	"name": "Perdix Mobility",
 	"title": "Perdix",
 	"version": "v8.2.2-production",
-	"connect_perdix7": false
+	"connect_perdix7": false,
+	"multi_colors": false
 }

@@ -35,8 +35,8 @@
                         <strong>7</strong>
                     </a>
                 </li>
-                <!-- Colors: style cannot ;) be found in dropdown.less - TODO commented for kinara, also check themeswitch.js ->
-                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true">
+                <!-- Colors: style cannot ;) be found in dropdown.less - TODO check themeswitch.js -->
+                <li class="dropdown notifications-menu" ng-if="ss.session.offline!==true && $parent.app_manifest.multi_colors">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-paint-brush"></i>
                     </a>
@@ -51,7 +51,7 @@
                         </li>
                     </ul>
                 </li>
-                <!- Language Selection ->
+                <!-- Language Selection ->
                 <li class="dropdown notifications-menu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ languages[ss.session.language].codeLanguage }}</a><ul class="dropdown-menu"><li><ul class="menu">
                     <li ng-repeat="lang in languages">
                         <a href="#" ng-click="changeLanguage(lang)">

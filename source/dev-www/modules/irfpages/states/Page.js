@@ -1,8 +1,8 @@
 irf.pages.controller("PageCtrl",
 ["$log", "$scope", "$stateParams", "$q", "$http", "$uibModal", "authService", "AuthPopup", "PageHelper",
-"SessionStore", "$window", "$rootScope",
+"SessionStore", "$window", "$rootScope", "irfNavigator", "PagesDefinition",
 function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPopup, PageHelper,
-    SessionStore, $window, $rootScope) {
+    SessionStore, $window, $rootScope, irfNavigator, PagesDefinition) {
         $log.info("Page.html loaded $uibModal");
         var self = this;
 
@@ -60,6 +60,13 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                 });
             }
         });
+
+        $scope.breadcrumb = {
+            callstack: irfNavigator.$callstack(),
+            goTo: irfNavigator.$goTo,
+            convertToUri: PagesDefinition.convertToUri,
+            getPageDefinition: PagesDefinition.getPageDefinition
+        };
 
         self.loginSuccess = false;
         self.launchRelogin = function () {

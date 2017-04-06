@@ -35,10 +35,10 @@ var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageColl
 });
 
 irf.pages.factory("irfNavigator", ["$log", "$q", "$http", "$state", function($log, $q, $http, $state) {
-	var callStack = [];
+	var callstack = [];
 	return {
 		go: function(goParam, backParam) {
-			callStack.push(backParam);
+			callstack.push(backParam);
 			$state.go(goParam.state, {
 				pageName: goParam.pageName,
 				pageId: goParam.pageId,
@@ -46,23 +46,35 @@ irf.pages.factory("irfNavigator", ["$log", "$q", "$http", "$state", function($lo
 			});
 		},
 		isBack: function() {
-			return !!callStack.length;
+			return !!callstack.length;
 		},
 		goBack: function() {
-
-			if(callStack.length == 0){
-				//failsafe case, if callStack is empty by some rare case
+			if (!callstack.length) {
+				// Failsafe case, if callstack is empty by some rare case
 				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
 				return;
 			}
-
-			var goParam = callStack.pop();
+			var goParam = callstack.pop();
 			$state.go(goParam.state, {
 				pageName: goParam.pageName,
 				pageId: goParam.pageId,
 				pageData: goParam.pageData
 			});
-		},	
+		},
+		$callstack: function() {
+			return callstack;
+		},
+		$goTo: function(index) {
+			if (index < 0 || index >= callstack.length)
+				return;
+			var goParam = callstack[index];
+			$state.go(goParam.state, {
+				pageName: goParam.pageName,
+				pageId: goParam.pageId,
+				pageData: goParam.pageData
+			});
+			callstack.length = index;
+		}
 	};
 }]);
 

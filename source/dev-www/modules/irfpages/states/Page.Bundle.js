@@ -446,13 +446,15 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         if ($scope.pages && $scope.pages.length) {
             BundleManager.initializePageUI($scope.pages[0]);
         }
-        Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
-            var n = Number(value);
-            $timeout(function() {
-                isAutoSaveOffline = true;
-                autoSaveOffline(n);
-            }, n);
-        });
+        if ($scope.bundlePage.offline) {
+            Queries.getGlobalSettings('bundle.offline.autosave.timeout').then(function(value) {
+                var n = Number(value);
+                $timeout(function() {
+                    isAutoSaveOffline = true;
+                    autoSaveOffline(n);
+                }, n);
+            });
+        }
     });
 
     $scope.$on('$destroy', function() {

@@ -3,6 +3,15 @@
     <irf-main-menu></irf-main-menu>
 
     <div class="content-wrapper bg-tint-theme">
+        <ol class="breadcrumb" ng-show="breadcrumb.callstack.length">
+            <li ng-repeat="callstack in breadcrumb.callstack" ng-init="$definition = breadcrumb.getPageDefinition(breadcrumb.convertToUri(callstack.state, callstack.pageName))">
+                <a href="#" ng-click="breadcrumb.goTo($index)" class="color-theme" ng-class="{active: $last}">
+                    <i ng-show="$definition.iconClass" class="{{$definition.iconClass}}">&nbsp;</i>
+                    <span ng-bind="$definition.title|translate"></span>
+                </a>
+            </li>
+        </ol>
+
         <div id="errors-wrapper">
             <div class="errors-container" ng-show="errors.length>0" style="padding: 0">
                 <div class="alert alert-danger alert-dismissible" style="border-radius: 0; margin-bottom: 0; background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%);">

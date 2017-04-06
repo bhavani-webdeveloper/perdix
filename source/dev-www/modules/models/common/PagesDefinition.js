@@ -120,16 +120,15 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
         return deferred.promise;
     };
 
+    pDef.convertToUri = function(state, pageName) {
+        return (state && state.replace(/\./g, "/")) + (pageName && "/" + pageName);
+    }
+
     pDef.getPageDefinition = function(pageUri) {
-        var deferred = $q.defer();
-        if (userAllowedPages) {
-            var p = userAllowedPages[pageUri];
-            if (p) {
-                deferred.resolve(p);
-            } else {
-                deferred.reject("PAGE_ACCESS_RESTRICTED");
-            }
+        if (userAllowedPages && userAllowedPages[pageUri]) {
+            return userAllowedPages[pageUri];
         } else {
+            var deferred = $q.defer();
             pDef.getRoleAllowedPageList().then(function(response){
                 var p = userAllowedPages[pageUri];
                 if (p) {
@@ -140,8 +139,8 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
             }, function(errorResponse){
                 deferred.reject(errorResponse);
             });
+            return deferred.promise;
         }
-        return deferred.promise;
     };
 
     pDef.isStateAllowed = function(state, pageName) {

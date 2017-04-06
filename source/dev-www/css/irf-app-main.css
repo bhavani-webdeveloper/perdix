@@ -14,6 +14,26 @@ label {
 .btn-xs {
   font-size: 14px;
 }
+.breadcrumb {
+  margin-bottom: 0 !important;
+}
+.breadcrumb:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\0f104";
+}
+.cantina-loader {
+  border-top-color: #7B7D7D;
+}
+.cantina-loader:before {
+  border-top-color: #979A9A;
+}
+.cantina-loader:after {
+  border-top-color: #E13237;
+}
 .form-group {
   margin-bottom: 0;
 }
