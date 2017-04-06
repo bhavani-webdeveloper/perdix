@@ -239,7 +239,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
                 var init = function(model, form, formCtrl) {
-                    model.loanAccount = $stateParams.pageData;
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
                     model.additional.branchName = branchName;

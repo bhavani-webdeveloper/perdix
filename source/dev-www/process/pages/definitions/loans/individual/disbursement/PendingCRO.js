@@ -26,8 +26,32 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
         },
         form: [{
             "type": "box",
-            "titleExpr":"('TRANCHE'|translate)+' ' + model._MTQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.customerName",
+            "titleExpr":"('TRANCHE'|translate)+' ' + model._CROQueue.trancheNumber + ' | '+('DISBURSEMENT_DETAILS'|translate)+' | '+ model.loanAccountDisbursementSchedule.customerName",
             "items": [
+                {
+                    "key": "loanAccountDisbursementSchedule.loanId",
+                    "title": "LOAN_ID",
+                    "type": "string",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.customerName",
+                    "title": "BUSINESS_NAME",
+                    "type": "string",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.branchName",
+                    title: "BRANCH",
+                    "type": "string",
+                    "readonly":true
+                },
+                {
+                    "key": "loanAccountDisbursementSchedule.centreName",
+                    title: "CENTRE",
+                    "type": "string",
+                    "readonly":true
+                },
                 {
                     "key": "loanAccountDisbursementSchedule.trancheNumber",
                     "title": "TRANCHE_NUMBER"

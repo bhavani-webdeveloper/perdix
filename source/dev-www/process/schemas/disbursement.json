@@ -125,7 +125,7 @@
           "type": "string"
         },
         "tranchCondition": {
-          "type": "string"
+          "type": ["string", "null"]
         },
         "udf1": {
           "title":"DISBURSEMENT_STATUS",
