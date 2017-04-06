@@ -970,6 +970,54 @@
                         }
                     }
                 }
+            },
+			"loanMonitoringDocuments": {
+                "title": "Loan Monitoring Documents",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                     ],
+                    "properties": {
+                        "documentName": {
+                            "title": "documentName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "documentSl": {
+                            "title": "Document Serial Number",
+                            "type": "number",
+                            "minLength": 1,
+                            "maxLength": 4,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "documentId": {
+                            "title": "Document File Id",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        }
+                    }
+                }
             }
         }
     }
