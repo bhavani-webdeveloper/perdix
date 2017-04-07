@@ -220,6 +220,21 @@
 							"title": "UFD1",
 							"type": "string"
 						},
+				"loanMonitoringDocuments": {
+                    "type": "array",
+                    "title": "LUC_DOCUMENTS",
+                    "items": {
+                        "type":"object",
+                        "properties": {
+                            "documentId": {
+                                "type": ["string","null"],
+                                "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "KYC1"
+                            }
+                        }
+                    }
+                },
 				"socialImpactDetails": {
 					"title": "SOCIAL_IMPACT_DETAILS",
 					"type": "object",

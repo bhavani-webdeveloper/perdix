@@ -20,6 +20,16 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 return true;
             }
 
+            var orderLUCDocuments = function(model){
+
+                var lucDocuments = model.loanMonitoringDetails.loanMonitoringDocuments || [];
+
+                for(var i = 0; i < lucDocuments.length; i++){
+
+                    lucDocuments[i]["documentSl"] = (i + 1);
+                }
+            }
+
 
             return {
                 "type": "schema-form",
@@ -642,6 +652,34 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
 
                         ]
                     },
+                    {
+                        "type": "box",
+                        "title": "LUC_DOCUMENTS",
+                        "items": [{
+                            "key": "loanMonitoringDetails.loanMonitoringDocuments",
+                            "type": "array",
+                            "title": "LUC_DOCUMENTS",
+                            startEmpty: true,
+                            "items": [
+                                {
+                                    
+                                    key:"loanMonitoringDetails.loanMonitoringDocuments[].documentName",
+                                    title: "DOCUMENT_NAME",
+                                    required:true,
+                                    "type": ["string","null"],
+                                },
+                                {
+                                    key:"loanMonitoringDetails.loanMonitoringDocuments[].documentId",
+                                    title: "UPLOAD",
+                                    type:"file",
+                                    required: true,
+                                    fileType:"application/pdf",
+                                    using: "scanner",
+                                }  
+                            ]
+                        }]
+
+                    },
 
                     {
                         "type": "box",
@@ -758,6 +796,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     return out;
                                 };
                                 formHelper.validate(formCtrl).then(function() {
+                                    orderLUCDocuments(model);
                                     var reqData = _.cloneDeep(model);
 
                                         if (!(validateDate(reqData))) {
@@ -794,6 +833,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                 };
 
                                 formHelper.validate(formCtrl).then(function() {
+                                    orderLUCDocuments(model);
                                     var reqData = _.cloneDeep(model);
                                     if (reqData.loanMonitoringDetails.id) {
                                         LucHelper.escalate(reqData).then(function(resp) {
@@ -836,6 +876,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                                     return out;
                                 };
                                 formHelper.validate(formCtrl).then(function() {
+                                    orderLUCDocuments(model);
                                     var reqData = _.cloneDeep(model);
                                     if (reqData.loanMonitoringDetails.id) {
                                         LucHelper.goBack(reqData).then(function(resp) {
@@ -874,6 +915,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                             });
                             return out;
                         };
+                        orderLUCDocuments(model);
                         var reqData = _.cloneDeep(model);
 
                         reqData.loanMonitoringDetails.currentStage = "LUCSchedule";
