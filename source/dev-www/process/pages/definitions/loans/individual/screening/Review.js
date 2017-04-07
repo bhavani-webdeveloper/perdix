@@ -103,8 +103,8 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: 'TO_STAGE',
                                 data: 'postStage'
                             }, {
-                                title: 'CREATED_BY',
-                                data: 'createdBy'
+                                title: 'USERNAME',
+                                data: 'userId'
                             }, {
                                 title: 'CREATED_DATE',
                                 data: 'createdDate',
