@@ -27,15 +27,19 @@ define({
                         },
                         "businessName": {
                             "title": "BUSINESS_NAME",
-                            "type": "number"
+                            "type": "string"
                         },
                         "accountNumber": {
                             "title": "LOAN_ACCOUNT_NUMBER",
-                            "type": "number"
+                            "type": "string",
+
                         },
                         "lucCompletedDate": {
                             "title": "LUC_COMPLETED_DATE",
-                            "type": "number"
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
                         },
 
                     },
@@ -66,6 +70,7 @@ define({
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
                         'businessName': searchOptions.businessName,
+                        'lucDate': searchOptions.lucCompletedDate
                     }).$promise;
 
                     return promise;
