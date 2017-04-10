@@ -9,7 +9,8 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				"Page/Engine/loans.individual.luc.LucScheduleQueue",
 				"Page/Engine/loans.individual.luc.LucRescheduledQueue",
 				"Page/Engine/loans.individual.luc.LucRiskQueue",
-				"Page/Engine/loans.individual.luc.LucLegalRecoveryQueue"
+				"Page/Engine/loans.individual.luc.LucLegalRecoveryQueue",
+				"Page/Engine/loans.individual.luc.LucCompletedQueue"
 			]
 		};
 
@@ -92,6 +93,24 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 					'businessName': '',
 				}).$promise.then(function(response, headerGetter) {
 					llrqMenu.data = response.headers['x-total-count'];
+				}, function() {
+					llrqMenu.data = '-';
+				});
+			}
+
+			var lcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucCompletedQueue"];
+			if (lcqMenu) {
+				LUC.search({
+					'accountNumber': '',
+					'currentStage':"Completed",
+					'centreId': centreId[0],
+					'branchName': branch.branchName,
+					'page': 1,
+					'per_page': 1,
+					'applicantName': '',
+					'businessName': '',
+				}).$promise.then(function(response, headerGetter) {
+					lcqMenu.data = response.headers['x-total-count'];
 				}, function() {
 					llrqMenu.data = '-';
 				});

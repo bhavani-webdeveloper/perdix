@@ -17,11 +17,15 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
             "title": "ACH / PDC Transactions",
             "iconClass": "fa fa-cc",
             "items": [
+                "Page/Engine/loans.individual.achpdc.ACHDemandRequest",
+                "Page/Engine/loans.individual.achpdc.PDCDemandRequest",
+                "Page/Engine/loans.individual.achpdc.DemandRequest",
                 "Page/Engine/loans.individual.achpdc.ACHDemandDownload",
                 "Page/Engine/loans.individual.achpdc.ACHClearingCollection",
                 "Page/Engine/loans.individual.achpdc.PDCDemandDownload",
                 "Page/Engine/loans.individual.achpdc.PDCCollections",
-                "Page/Engine/loans.individual.achpdc.DemandDownloads"
+                "Page/Engine/loans.individual.achpdc.DemandDownloads",
+                "Page/Engine/loans.individual.achpdc.BatchMonitoringQueue"
             ]
         };
 
