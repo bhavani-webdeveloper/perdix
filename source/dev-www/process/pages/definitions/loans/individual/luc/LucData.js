@@ -1,9 +1,10 @@
-irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
+define({
+    pageUID: "loans.individual.luc.LucData",
+    pageType: "Engine",
+    dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
 
-    ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator",
-
-        function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
             PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
             var branch = SessionStore.getBranch();
@@ -1473,4 +1474,4 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucData"),
                 }
             };
         }
-    ]);
+})
