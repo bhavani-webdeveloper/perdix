@@ -292,7 +292,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {
                             IndividualLoan.downloadAllDocuments({loanId: model.loanAccount.id}).$promise.then(function(responseData){
-                                console.log(responseData);
                                 Utils.downloadFile(responseData);
                             });
                         }
