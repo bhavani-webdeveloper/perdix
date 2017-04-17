@@ -63,7 +63,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
         getDocuments:{
             method:'GET',
             url:endpoint+'/getIndividualLoanDocuments'
-        },  
+        },
+        downloadAllDocuments: {
+            method: 'GET',
+            url: endpoint + "/documents/loanId"
+        }, 
         documentsHead:{
             method:'HEAD',
             url:endpoint+'/getIndividualLoanDocuments',

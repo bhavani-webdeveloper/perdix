@@ -291,7 +291,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+                            IndividualLoan.downloadAllDocuments({loanId: model.loanAccount.id}).$promise.then(function(responseData){
+                                console.log(responseData);
+                                Utils.downloadFile(responseData);
+                            });
                         }
                     }, {
                         "type": "fieldset",

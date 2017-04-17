@@ -114,6 +114,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         "title": "ENTITY_NAME",
                         "readonly": true
                     }, {
+                        "type": "button",
+                        "title": "DOWNLOAD_ALL_FORMS",
+                        "onClick": function(model, form, schemaForm, event) {
+                            IndividualLoan.downloadAllDocuments({loanId: model.loanAccount.id}).$promise.then(function(responseData){
+                                Utils.downloadFile(responseData);
+                            });
+                        }
+                    }, {
                         "type": "fieldset",
                         "title": "DOCUMENT_VERIFICATION",
                         "items": [{
