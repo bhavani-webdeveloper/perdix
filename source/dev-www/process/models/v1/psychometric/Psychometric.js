@@ -67,11 +67,13 @@ irf.models.factory('Psychometric',
         },
         getLinkedQuestion: {
             method: 'GET',
-            url: endpoint + '/question/linked/:id'
+            url: endpoint + '/question/linked/:id',
+            isArray: true
         },
         postLinkedQuestion: {
             method: 'POST',
-            url: endpoint + '/question/linked'
+            url: endpoint + '/question/linked',
+            isArray: true
         }
     });
 
