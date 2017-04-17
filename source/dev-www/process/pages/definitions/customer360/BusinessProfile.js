@@ -673,11 +673,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                         type: "amount",
+                                        calculator: true,
                                         title: "TOTAL_DEPOSITS"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                         type: "amount",
+                                        calculator: true,
                                         title: "TOTAL_WITHDRAWALS"
                                     },
                                     {
@@ -1008,7 +1010,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                         key: "customer.incomeThroughSales[].amount",
                                         title: "AMOUNT",
-                                        type: "amount"   
+                                        type: "amount",
+                                        calculator: true,  
                                     },
                                     {
                                         key: "customer.incomeThroughSales[].incomeSalesDate",

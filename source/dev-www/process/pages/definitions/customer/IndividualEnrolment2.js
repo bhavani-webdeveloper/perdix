@@ -2187,12 +2187,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                                     type: "amount",
+                                                    calculator: true,
                                                     required:true,
                                                     title: "TOTAL_DEPOSITS"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                                     type: "amount",
+                                                    calculator: true,
                                                     title: "TOTAL_WITHDRAWALS"
                                                 },
                                                 {
