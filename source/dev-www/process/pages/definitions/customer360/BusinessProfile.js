@@ -463,8 +463,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                 "type": "box",
                 "title": "CONTACT_INFORMATION",
                 "items":[
-                    "customer.mobilePhone",
-                    "customer.landLineNo",
+                    {
+                        "key": "customer.mobilePhone",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    {
+                        "key": "customer.landLineNo",
+                        "inputmode": "number",
+                        "numberType": "tel"  
+                    },
                     "customer.doorNo",
                     "customer.street",
                     "customer.enterprise.landmark",

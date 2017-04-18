@@ -347,7 +347,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             },
                             {
                                 key: "repayment.repaymentDate",
-                                type: "date"
+                                type: "date",
+                                dateDisplayFormat: "MMM, YYYY"
                             },
                             "repayment.cashCollectionRemark",
                             {

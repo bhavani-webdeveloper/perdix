@@ -1092,8 +1092,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 "title": "CONTACT_INFORMATION",
                 "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                 "items":[
-                    "customer.mobilePhone",
-                    "customer.landLineNo",
+                    {
+                        "key": "customer.mobilePhone",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    {
+                        "key": "customer.landLineNo",
+                        "inputmode": "number",
+                        "numberType": "tel"  
+                    },
                     "customer.doorNo",
                     "customer.street",
                     "customer.enterprise.landmark",
@@ -1332,6 +1340,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
+                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                                titleExprLocals: {moment: window.moment},
                                 startEmpty: true,
                                 items: [
                                     {
@@ -1457,6 +1467,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
+                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                                titleExprLocals: {moment: window.moment},
                                 startEmpty: true,
                                 items: [
                                     {

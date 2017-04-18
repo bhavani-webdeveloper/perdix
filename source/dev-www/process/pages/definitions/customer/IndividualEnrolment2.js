@@ -1084,8 +1084,18 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                             "title": "CONTACT_INFORMATION",
                             "condition": "model.currentStage=='Screening' || model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
                             "items": [
-                                "customer.mobilePhone",
-                                "customer.landLineNo",
+                                {
+                                    key: "customer.mobilePhone",
+                                    type: "text",
+                                    inputmode: "number",
+                                    numberType: "tel"
+                                },
+                                {
+                                    key: "customer.landLineNo",
+                                    type:"string",
+                                    inputmode: "number",
+                                    numberType: "tel"
+                                },
                                 {
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNoOption",
@@ -1115,6 +1125,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNo",
                                     "title": "WHATSAPP_MOBILE_NO",
+                                    "inputmode": "number",
+                                    "numberType": "tel"
+
                                 },
                                 {
                                     "type": "string",
@@ -2178,11 +2191,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",
                                             title: "STATEMENT_DETAILS",
+                                            titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                                            titleExprLocals: {moment: window.moment},
                                             items: [
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].startMonth",
                                                     type: "date",
-                                                    title: "START_MONTH"
+                                                    title: "START_MONTH",
+                                                    dateDisplayFormat: "MMM, YYYY"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
@@ -2293,12 +2309,14 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements",
                                             type: "array",
-                                            title: "STATEMENT_DETAILS",
+                                            titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                                            titleExprLocals: {moment: window.moment},
                                             items: [
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].startMonth",
                                                     type: "date",
-                                                    title: "START_MONTH"
+                                                    title: "START_MONTH",
+                                                    dateDisplayFormat: "MMM, YYYY"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",

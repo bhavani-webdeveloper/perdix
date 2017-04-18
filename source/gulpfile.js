@@ -52,9 +52,11 @@ gulp.task('assets', function(){
         'dev-www/img/**/*',
         'dev-www/modules/**/*.' + '+(json|html)',
         'dev-www/process/**/*.' + '+(json|html|css)',
+        'dev-www/process/pages/definitions/**/*',
         'dev-www/css/fonts/**/*',
         'dev-www/js/vendor/renderjson.js',
         'dev-www/js/themeswitch.js',
+        'dev-www/js/require.js',
         'dev-www/js/index.js',
         'dev-www/app_manifest.json'
         ], {base: 'dev-www/'})
@@ -112,6 +114,19 @@ gulp.task('appManifestUpdate', function(){
             value: versionString
         }))
         .pipe(gulp.dest('./dev-www/'));
+})
+
+gulp.task('generateBuildMetaFile', function(){
+    var versionPostfix = argv.versionPostfix;
+    var version = argv.version;
+    var environment = argv.environment;
+    var svnRevision = argv.svnRevision;
+    var svnURL = argv.svnURL;
+    var appName = argv.appName;
+    var bundleId = argv.bundleId;
+    var currTime = new Date();
+    var str = version + "\t" + appName + "\t" + bundleId + "\t" + currTime.toISOString() + "\t" + svnURL + "\t" + svnRevision;
+    return gulp.file('VERSION', str, {src: true})
 })
 
 gulp.task('build', ['html', 'assets', 'fonts']);

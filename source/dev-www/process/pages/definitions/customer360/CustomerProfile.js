@@ -337,8 +337,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             "type": "box",
                             "title": "CONTACT_INFORMATION",
                             "items": [
-                                "customer.mobilePhone",
-                                "customer.landLineNo",
+                                {
+                                    "key": "customer.mobilePhone",
+                                    "inputmode": "number",
+                                    "numberType": "tel"
+                                },
+                                {
+                                    "key": "customer.landLineNo",
+                                    "inputmode": "number",
+                                    "numberType": "tel"
+                                },
                                 {
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNoOption",
@@ -366,6 +374,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 {
                                     "type": "string",
                                     "key": "customer.whatsAppMobileNo",
+                                    "inputmode": "number",
+                                    "numberType": "tel",
                                     "title": "WHATSAPP_MOBILE_NO",
                                 },
                                 {
