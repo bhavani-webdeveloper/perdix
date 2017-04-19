@@ -1,4 +1,4 @@
-<div class="bundle-page" ng-class="{readonly:bundlePage.readonly}">
+<div class="bundle-page" ng-class="{readonly:bundlePage.readonly}" style="padding-top:50px">
   <section class="content-header">
     <h1>
       <span><a href ng-click="expandCollapseView()" style="color:#333"> {{ bundlePage.title | translate }}</a></span>
@@ -13,7 +13,7 @@
       </button>
     </div>
   </section>
-  <uib-tabset active="activeIndex" class="bundle-tabset">
+  <uib-tabset active="activeIndex" class="bundle-tabset" type="pills"> 
     <uib-tab index="pageObj.formName" ng-repeat="pageObj in pages" class="{{(pageObj.formCtrl.$dirty && pageObj.formCtrl.$invalid) ? 'tab-danger': 'tab-theme'}}" select="onTabOpen($index, $event)">
       <uib-tab-heading>
         {{ pageObj.title | translate }}
