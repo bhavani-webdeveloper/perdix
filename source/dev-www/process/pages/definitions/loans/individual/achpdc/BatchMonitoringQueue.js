@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueue"), ["$log", "formHelper", "ACH", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "PageHelper", "Queries", "$q",
-	function($log, formHelper, ACH, EntityManager, IndividualLoan, $state, SessionStore, Utils, PageHelper, Queries, $q) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueue"), ["$log", "formHelper", "ACHPDCBatchProcess", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "PageHelper", "Queries", "$q",
+	function($log, formHelper, ACHPDCBatchProcess, EntityManager, IndividualLoan, $state, SessionStore, Utils, PageHelper, Queries, $q) {
 
 		var branchId = SessionStore.getBranchId();
 		var achSearchResult = [];
@@ -23,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueu
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"batchDate": {
+					"demandDate": {
 						"title": "Batch date",
 						"type": "string",
 						"x-schema-form": {
@@ -37,8 +37,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueu
 						"x-schema-form": {
 							"type": "select",
 							"titleMap": {
-								"Demand" : "Demand Batch",
-								"Repayment" : "Repayment Batch",
+								"demand" : "Demand Batch",
+								"repayment" : "Repayment Batch",
 							},
 							"screenFilter": true
 						}
@@ -86,10 +86,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueu
 					 }
 				}
 
-				var promise = $q.defer();
+				var promise = ACHPDCBatchProcess.getBatchMonitoringTasks(searchOptions);
 
-                promise.resolve([]);
-				return promise.promise;
+				return promise;
 			},
 			paginationOptions: {
 				"getItemsPerPage": function(response, headers){
@@ -132,32 +131,28 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueu
 				getColumns: function(){
 					return [
 						{
-							title:'NAME',
-							data: 'firstName',
-							render: function(data, type, full, meta) {
-								return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
-							}
+							title:'Batch Date',
+							data: 'triggeredAt',
+							type: 'date',
 						},
-						{
-							title:'URN_NO',
-							data: 'urnNo'
-							// type: 'html',
+												{
+							title:'Demand Date',
+							data: 'demandDate'
 						},
-						{
-							title:'CURRENT_STAGE',	
-							data: 'currentStage'
-						},
-						{
+												{
 							title:'BRANCH',
-							data: 'kgfsName'
+							data: 'branchId'
 						},
 						{
-							title:'CENTRE_CODE',
-							data: 'centreCode'
+							title:'NAME',
+							data: 'userId',
+							// render: function(data, type, full, meta) {
+							// 	return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
+							// }
 						},
 						{
-							title:'FATHERS_NAME',
-							data: 'fatherFirstName'
+							title:'STATUS',	
+							data: 'status'
 						}
 					]
 				},
