@@ -15,8 +15,8 @@ irf.goHome = function($state) {
 };
 
 irf.pages.config([
-	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC",
-	function($stateProvider, elemConfig, Model_ELEM_FC) {
+	"$stateProvider", "irfElementsConfigProvider", "Model_ELEM_FC", "irfNavigatorProvider",
+	function($stateProvider, elemConfig, Model_ELEM_FC, irfNavigatorProvider) {
 	var statesDefinition = [{
 		name: "Page.Landing", // Favorites
 		url: "/Landing",
@@ -136,4 +136,6 @@ irf.pages.config([
 		yearRange: [1801, 2040],
 		format: 'YYYY-MM-DD'
 	});
+
+	elemConfig.configNavigator(irfNavigatorProvider.factory);
 }]);

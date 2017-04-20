@@ -19,6 +19,14 @@ irf.form = function(path) {
 	return "Form__" + path.replace(/\./g, '_');
 };
 
+irf.controller = function(path) {
+	return "Controller__" + path.replace(/\./g, '$');
+};
+
+irf.templateUrl = function(path) {
+	return "process/pages/templates/" + path.replace(/\./g, '/') + ".html";
+};
+
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
 irf.pageCollection.config(["$provide", function($provide){
@@ -34,49 +42,146 @@ var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageColl
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
 
-irf.pages.factory("irfNavigator", ["$log", "$q", "$http", "$state", function($log, $q, $http, $state) {
+irf.pages.provider("irfNavigator", function() {
 	var callstack = [];
-	return {
-		go: function(goParam, backParam) {
+	var $this = this;
+	$this.current = null;
+	$this.$state = null;
+	$this.getDefinition = null;
+
+	$this.move = function(goParam, backParam) {
+		if (!goParam) {
+			return;
+		}
+		if (!goParam.$definition) {
+			goParam.$definition = $this.getDefinition(goParam.state, goParam.pageName);
+		}
+		if (backParam) {
+			if (!backParam.$definition) {
+				backParam.$definition = $this.getDefinition(backParam.state, backParam.pageName);
+			}
 			callstack.push(backParam);
-			$state.go(goParam.state, {
-				pageName: goParam.pageName,
-				pageId: goParam.pageId,
-				pageData: goParam.pageData
+		} else if ($this.current) {
+			callstack.push($this.current);
+		}
+		$this.current = goParam;
+	};
+
+	$this.factory = {
+		go: function(goParam, backParam, reset) {
+			if (reset) {
+				callstack.length = 0;
+				$this.current = null;
+			}
+			$this.move(goParam, backParam);
+			$this.navigatorMode = "go";
+			$this.$state.go(goParam.state, {
+				"pageName": goParam.pageName,
+				"pageId": goParam.pageId,
+				"pageData": goParam.pageData
 			});
 		},
 		isBack: function() {
 			return !!callstack.length;
 		},
 		goBack: function() {
-			if (!callstack.length) {
-				// Failsafe case, if callstack is empty by some rare case
-				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+			if (callstack.length < 1) {
+				$this.factory.goHome();
 				return;
 			}
-			var goParam = callstack.pop();
-			$state.go(goParam.state, {
-				pageName: goParam.pageName,
-				pageId: goParam.pageId,
-				pageData: goParam.pageData
+			var backParam = callstack.pop();
+			$this.current = backParam;
+			$this.navigatorMode = "goBack";
+			$this.$state.go(backParam.state, {
+				"pageName": backParam.pageName,
+				"pageId": backParam.pageId,
+				"pageData": backParam.pageData
 			});
+		},
+		goHome: function() {
+			callstack.length = 0;
+			$this.current = null;
+			$this.navigatorMode = "goHome";
+			irf.goHome($this.$state);
 		},
 		$callstack: function() {
 			return callstack;
 		},
-		$goTo: function(index) {
-			if (index < 0 || index >= callstack.length)
+		$this: $this,
+		$current: function() {
+			return $this.current;
+		},
+		$goBackTo: function(index) {
+			if (index < 0 || index >= callstack.length) {
+				$this.factory.goHome();
 				return;
-			var goParam = callstack[index];
-			$state.go(goParam.state, {
-				pageName: goParam.pageName,
-				pageId: goParam.pageId,
-				pageData: goParam.pageData
+			}
+			var backParam = callstack[index];
+			$this.navigatorMode = "goBackTo";
+			$this.$state.go(backParam.state, {
+				"pageName": backParam.pageName,
+				"pageId": backParam.pageId,
+				"pageData": backParam.pageData
 			});
-			callstack.length = index;
 		}
 	};
-}]);
+
+	this.$get = ["$log", "$q", "$http", "$state", "PagesDefinition", "$rootScope",
+	function($log, $q, $http, $state, PagesDefinition, $rootScope) {
+		$this.$state = $state;
+		$this.getDefinition = function(stateName, pageName) {
+			var definition = PagesDefinition.getPageDefinition(PagesDefinition.convertToUri(stateName, pageName));
+			if (!definition) {
+				definition = {};
+			}
+			if (!definition.title) {
+				if (definition.pageName) {
+					definition.title = definition.pageName.replace(/^.*\./, '');
+				} else if (pageName) {
+					definition.title = pageName.replace(/^.*\./, '');
+				} else {
+					definition.title = stateName.replace(/^.*\./, '').replace(/([A-Z]|\d+)/g, " $1");
+				}
+			}
+			if (!definition.iconClass) {
+				definition.iconClass = "fa fa-file-o";
+			}
+			return definition;
+		};
+
+		$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams, options) {
+			var uri = PagesDefinition.convertToUri(toState.name, toParams && toParams.pageName);
+			// goBackTo OR browser back
+			for (var i = callstack.length - 1; i >= 0; i--) {
+				if (uri == PagesDefinition.convertToUri(callstack[i].state, callstack[i].pageName)) {
+					$log.debug(uri+' available');
+					$this.current = callstack[i];
+					callstack.length = i;
+					$this.navigatorMode = false;
+					return;
+				}
+			}
+			if ($this.navigatorMode && $this.navigatorMode != "goHome") {
+				$this.navigatorMode = false;
+			} else {
+				$this.move({
+					"state": toState.name,
+					"pageName": toParams && toParams.pageName,
+					"pageId": toParams && toParams.pageId,
+					"pageData": toParams && toParams.pageData
+				});
+			}
+		});
+/*
+		$rootScope.$on("$viewContentLoading", function() {
+			if (!$this.current) {
+				$this.current
+			}
+		});
+*/
+		return $this.factory;
+	}];
+});
 
 irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 
@@ -255,6 +360,16 @@ irf.pages.config([
 		},
 		templateUrl: "modules/irfpages/templates/pages/Page.Bundle.html",
 		controller: "PageBundleCtrl"
+	},{
+		name: "Page.Adhoc",
+		url: "/Adhoc/:pageName/:pageId",
+		params: {
+			pageName: {value: null},
+			pageId: {value: null, squash: true},
+			pageData: null
+		},
+		templateUrl: "modules/irfpages/templates/pages/Page.Adhoc.html",
+		controller: "PageAdhocCtrl"
 	},{
 		name: "Page.EngineError",
 		url: "/EngineError/:pageName",

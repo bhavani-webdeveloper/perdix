@@ -15,8 +15,8 @@ MainApp.directive('irfMainMenu', function(){
 });
 
 MainApp.controller("irfMainMenuController", [
-	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition",
-	function($scope, $log, $http, $state, SessionStore, PagesDefinition) {
+	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition", "irfNavigator",
+	function($scope, $log, $http, $state, SessionStore, PagesDefinition, irfNavigator) {
 
 	$scope.ss = SessionStore;
 
@@ -55,7 +55,12 @@ MainApp.controller("irfMainMenuController", [
 	$scope.loadPage = function(event, menu) {
 		event.preventDefault();
 		if (menu && menu.state) {
-			$state.go(menu.state, menu.stateParams);
+			irfNavigator.go({
+				"state": menu.state,
+				"pageName": menu.stateParams.pageName,
+				"pageId": menu.stateParams.pageId,
+				"pageData": menu.stateParams.pageData
+			}, null, true);
 			adminLteSidemenuFixOnSmallScreen();
 			updateAppTitle(menu.title);
 			window.scrollTo(0,0);

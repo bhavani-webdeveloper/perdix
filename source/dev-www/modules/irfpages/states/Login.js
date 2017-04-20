@@ -1,6 +1,6 @@
 irf.pages.controller('LoginCtrl',
-['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q', 'SysQueries',
-function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q, SysQueries){
+['$scope', 'authService', '$log', '$state', 'irfStorageService', 'SessionStore', 'Utils', 'irfTranslateLoader', '$q', 'SysQueries', 'irfNavigator',
+function($scope, authService, $log, $state, irfStorageService, SessionStore, Utils, irfTranslateLoader, $q, SysQueries, irfNavigator){
 
 	var loadUserBranches = function(username){
 		var deferred = $q.defer();
@@ -40,7 +40,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 				$log.info(msg);
                 SessionStore.session.offline = false;
                 themeswitch.changeTheme(themeswitch.getThemeColor(), true);
-				$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+				irfNavigator.goHome();
 				if (refresh) {
 					window.location.hash = '#/' + irf.HOME_PAGE.url;
 					window.location.reload();
@@ -114,7 +114,7 @@ function($scope, authService, $log, $state, irfStorageService, SessionStore, Uti
 			SessionStore.session.offline = true;
 			themeswitch.changeTheme('deepteal');
 			$log.debug("Offline login success");
-			$state.go(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+			irfNavigator.goHome();
 		} else {
 			$scope.errorMessage = "LOGIN_INVALID_PIN";
 			return false;

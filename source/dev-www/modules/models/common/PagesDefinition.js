@@ -121,7 +121,7 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "Q
     };
 
     pDef.convertToUri = function(state, pageName) {
-        return (state && state.replace(/\./g, "/")) + (pageName && "/" + pageName);
+        return (state && state.replace(/\./g, "/")) + (pageName ? "/" + pageName : "");
     }
 
     pDef.getPageDefinition = function(pageUri) {
