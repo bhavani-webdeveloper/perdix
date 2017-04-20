@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.BatchMonitoringQueu
 		var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "Batch Monitoring",
+		"title": "ACHPDC_BATCH_MONITORING",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
