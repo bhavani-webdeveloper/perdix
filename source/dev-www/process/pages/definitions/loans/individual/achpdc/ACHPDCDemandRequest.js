@@ -21,28 +21,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCDemandRequest
             form: [{
                 "type": "box",
                 "title": "ACH_PDC_DEMANDS_REQUEST",
-                "items": [
-                    {
-                        "type": "select",
-                        "key" : "achPdcCollections.repaymentType",
-                        "title": "REPAYMENT_TYPE",
-                        "titleMap": {
-                            "ACH" : "ACH",
-                            "PDC" : "PDC",
-                            }
-                    }, {
+                "items": [ {
                         "type": "fieldset",
-                        "title": "ACH_REQUEST_INPUT",
-                        condition: "model.achPdcCollections.repaymentType === 'ACH'",
-                        "items": [{
-                            "key": "achPdcCollections.demandDate",
-                            "title": "INSTALLMENT_DATE",
-                            "type": "date"
-                        }]
-                    }, {
-                        "type": "fieldset",
-                        "title": "PDC_REQUEST_INPUT",
-                        condition: "model.achPdcCollections.repaymentType === 'PDC'",
+                        "title": "ACH_PDC_REQUEST_INPUT",
                         "items": [{
                             "key": "achPdcCollections.demandDate",
                             "title": "INSTALLMENT_DATE",
