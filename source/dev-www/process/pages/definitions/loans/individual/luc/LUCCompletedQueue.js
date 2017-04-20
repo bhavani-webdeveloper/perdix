@@ -119,22 +119,22 @@ define({
                         },
                          {
                             title: 'CENTRE',
-                            data: 'centreId'
+                            data: 'centreName'
                         },
                         {
-                            title: 'Applicant Name',
+                            title: 'APPLICANT_NAME',
                             data: 'customerName'
                         }, {
-                            title: 'Business Name',
+                            title: 'BUSINESS_NAME',
                             data: 'bussinessName'
                         }, {
-                            title: 'Account Number',
+                            title: 'LOAN_ACCOUNT_NUMBER',
                             data: 'accountNumber'
                         }, {
-                            title: 'Loan Id',
+                            title: 'LOAN_ID',
                             data: 'loanId'
                         },{
-                            title: 'LUC Completion Date',
+                            title: 'LUC_COMPLETED_DATE',
                             data: 'lucDate'
                         }]
                     },
