@@ -12,6 +12,10 @@
 					"type": "string",
 					"title": "LOAN_ACCOUNT_NUMBER"
 				},
+				"accountNumber": {
+					"type": "string",
+					"title": "LOAN_ACCOUNT_NUMBER"
+				},
 				"reference": {
 					"type": "string",
 					"title": "INSTRUMENT_REFERENCE"

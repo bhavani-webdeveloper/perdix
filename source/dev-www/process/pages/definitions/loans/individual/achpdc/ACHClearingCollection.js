@@ -18,8 +18,8 @@ ACH.getDemandList : To get all the demands for the entered date. And all the bra
 ACH.achDemandListUpload : To upload the selected file.
 ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state', 'Queries',
-    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state, Queries) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollection"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', '$state', 'Queries', 'ACHPDCBatchProcess',
+    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, $state, Queries, ACHPDCBatchProcess) {
 
         var allUpdateDemands = [];
         var branchIDArray = [];
@@ -53,75 +53,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                 "type": "box",
                 "title": "UPDATE_ACH_DEMANDS",
                 "items": [{
-                    "key": "ach.achDemandListDate",
-                    "title": "INSTALLMENT_DATE",
-                    "type": "date"
-                },
-                    {
-                        key: "ach.branchSetCode",
-                        type: "lov",
-                        autolov: true,
-                        title:"COLLECTIONS_BRANCH_SET",
-                        bindMap: {
-                        },
-                        outputMap: {
-                            "branchSetCode": "ach.branchSetCode"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            return Queries.getCollectionBranchSets();
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.branch_set_name
-                            ];
-                        },
-                        onSelect: function(result, model, context) {
-                            console.log(result);
-                            console.log(model);
-                            model.ach.branchSetCode = result.branch_set_code;
-                            model.ach.branchSetName = result.branch_set_name;
-                            model.ach.branchIdArray = JSON.parse(result.branch_ids);
-                            model.chosenRecordCountText = "";
-
-                            var branches = formHelper.enum('branch_id').data;
-
-                            model.ach.branchNames = "";
-
-                            var branchIdObj = {};
-
-                            for (var i=0; i<branches.length;i++){
-                                branchIdObj[branches[i].code] = branches[i];
-                                //model.ach.branchNames = model.ach.branchNames + branches[i].name + ( (i+1)==branches.length?"":", ") ;
-                            }
-
-                            for (var i=0; i< model.ach.branchIdArray.length;i++){
-                                model.ach.branchNames = model.ach.branchNames + branchIdObj[model.ach.branchIdArray[i]].name+ ( (i+1)==model.ach.branchIdArray.length?"":", ");
-                            }
-                        }
-                    },
-                    {
-                        "title": "BRANCHSET_DETAILS",
-                        "type": "section",
-                        "condition": "model.ach.branchSetCode",
-                        "items": [
-                            {
-                                "key": "ach.branchSetName",
-                                "title": "COLLECTIONS_BRANCHSET_NAME",
-                                "type": "string"
-                            },
-                            {
-                                "type": "fieldset",
-                                "title": "BRANCHES",
-                            },
-                            {
-                                "key": "ach.branchList",
-                                "type": "section",
-                                "html": '<div class="row"> <div class="col-xs-12">' +
-                                "<div ng-bind-html='model.ach.branchNames'></div>" +
-                                '</div></div>'
-                            }
-                        ]
+                        "key": "ach.achDemandListDate",
+                        "title": "INSTALLMENT_DATE",
+                        "type": "date"
                     },
                     {
                         "title": "",
@@ -141,15 +75,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         }
                         model.showUpdateSection = false;
                         PageHelper.showLoader();
-                        ACH.getDemandList({
+                        ACHPDCBatchProcess.fetchDemandDetails({
                             demandDate: model.ach.achDemandListDate,
-                            branchId: model.ach.branchIdArray.join(',')
+                            repaymentType: 'ACH'
                         }).$promise.then(function(res) {
                                 PageHelper.hideLoader();
                                 model.achSearch = res;
-                                if (model.achSearch.body.length) {
+                                model.achSearch = $filter('filter')(model.achSearch, {submitStatus : 'PENDING'}, true);
+                                if (model.achSearch.length) {
                                     model.showUpdateSection = true;
-                                    model.chosenRecordCountText = model.achSearch.body.length + ' Record(s) found.';
+                                    model.chosenRecordCountText = model.achSearch.length + ' Record(s) found.';
                                 } else {
                                     model.showUpdateSection = false;
                                     model.chosenRecordCountText = 'No Records found..!';
@@ -157,13 +92,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                                 // Clear the existing array whenever the user clicks on download,
                                 // to prevent the value getting appended to the existing
                                 allUpdateDemands = [];
-                                for (var i = 0; i < model.achSearch.body.length; i++) {
-                                    model.achSearch.body[i].repaymentType = "ACH";
-                                    // model.achSearch.body[i].accountId = model.achSearch.body[i].accountId;
-                                    model.achSearch.body[i].amount = parseInt(model.achSearch.body[i].amount3);
-                                    model.achSearch.body[i].repaymentDate = moment.utc(model.achSearch.body[i].valueDate).utcOffset(330).format("YYYY-MM-DD");
-                                    model.achSearch.body[i].check = true;
-                                    allUpdateDemands.push(model.achSearch.body[i]);
+                                for (var i = 0; i < model.achSearch.length; i++) {
+                                    allUpdateDemands.push(model.achSearch[i]);
+                                    allUpdateDemands[i].check = true;
                                 }
                             },
                             function(httpRes) {
@@ -182,17 +113,17 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                 "condition": "model.showUpdateSection",
                 "title": "SEARCH_DEMANDS_TO_DEMARK",
                 "items": [{
-                    "key": "achDemand.chosenToMark.accountId",
+                    "key": "achDemand.chosenToMark.accountNumber",
                     "title": "ACCOUNT_NUMBER",
                     "type": "lov",
                     "lovonly": true,
                     "inputMap": {
-                        "loanAccountNumber": "ach.loanAccountNumber"
+                        "accountNumber": "ach.accountNumber"
                     },
                     "searchHelper": formHelper,
                     "search": function(model, formCtrl, form) {
                         var filteredDemandList = $filter('filter')(allUpdateDemands, {
-                                    accountId: model.loanAccountNumber
+                                    accountNumber: model.loanAccountNumber
                                 });
                                 return $q.resolve({
                                     "header": {
@@ -203,8 +134,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     },
                     "getListDisplayItem": function(item, index) {
                         return [
-                            '{{"ACCOUNT_NUMBER"|translate}}: ' + item.accountId,
-                            '<i class="fa fa-rupee"></i> ' + item.amount,
+                            '{{"ACCOUNT_NUMBER"|translate}}: ' + item.accountNumber,
+                            '<i class="fa fa-rupee"></i> ' + item.demandAmount,
                             '{{"ENTITY_NAME"|translate}}: ' + item.customerName
                         ];
                     },
@@ -215,7 +146,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         }
                         for(var i = 0; i < model.achDemand.demarkList.length; i++)
                         {
-                            if(result.accountId == model.achDemand.demarkList[i].accountId)
+                            if(result.accountNumber == model.achDemand.demarkList[i].accountNumber)
                             {
                                 model.searchAccountId = true;
                                 PageHelper.showProgress("page-init", "ACCOUNT ID exist in Demarked Demand", 5000);
@@ -236,14 +167,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                 //     "type": "date"
                 // },
                 {
-                    "key": "achDemand.chosenToMark.amount",
+                    "key": "achDemand.chosenToMark.demandAmount",
                     "title": "LOAN_AMOUNT",
                     "type": "number",
                     "readonly": true
                 }, {
                     "key": "achDemand.chosenToMark.demark",
                     "title": "MARK_AS_UNPAID",
-                    "condition": "model.achDemand.chosenToMark.accountId",
+                    "condition": "model.achDemand.chosenToMark.accountNumber",
                     "type": "button",
                     "schema": {
                         "default": false
@@ -253,7 +184,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         if(modelValue.achDemand.demarkList)
                         {
                             for (var i = 0; i < modelValue.achDemand.demarkList.length; i++) {
-                                    if(modelValue.achDemand.chosenToMark.accountId == modelValue.achDemand.demarkList[i].accountId)
+                                    if(modelValue.achDemand.chosenToMark.accountNumber == modelValue.achDemand.demarkList[i].accountNumber)
                                     {
                                         modelValue.searchDemarkAccountId = true;
                                     }
@@ -303,9 +234,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "startEmpty": true,
                     "remove": null,
                     "title": "CHEQUE_DETAILS",
-                    "titleExpr": "(model.achDemand.demarkList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demarkList[arrayIndex].accountId + ' - ' + model.achDemand.demarkList[arrayIndex].amount",
+                    "titleExpr": "(model.achDemand.demarkList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demarkList[arrayIndex].accountNumber + ' - ' + model.achDemand.demarkList[arrayIndex].demandAmount",
                     "items": [{
-                        "key": "achDemand.demarkList[].accountId",
+                        "key": "achDemand.demarkList[].accountNumber",
                         //"condition": "!model.achDemand.demarkList[arrayIndex].check",
                         "title": "ACCOUNT_NUMBER",
                         "readonly": true
@@ -322,7 +253,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     //     "type": "date"
                     // },
                     {
-                        "key": "achDemand.demarkList[].amount",
+                        "key": "achDemand.demarkList[].demandAmount",
                         //"condition": "!model.achDemand.demarkList[arrayIndex].check",
                         "title": "LOAN_AMOUNT",
                         "type": "number",
@@ -359,35 +290,35 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
             actions: {
                 submit: function(model, form, formName) {
                     PageHelper.clearErrors();
-                    model.achDemand.updateDemand = [];
+                    model.achDemand.updateDemand = {'achPdcDemandlistDetails' : []};
                     for (var i = 0; i < allUpdateDemands.length; i++) {
                         var transName = "Scheduled Demand";
                         if (allUpdateDemands[i].check == true) {
                             transName = "Scheduled Demand";
-                            model.achDemand.updateDemand.push({
-                                repaymentDate: allUpdateDemands[i].repaymentDate,
-                                accountNumber: allUpdateDemands[i].accountId,
-                                amount: allUpdateDemands[i].amount,
-                                transactionName: transName,
-                                productCode: allUpdateDemands[i].param1,
-                                instrument: "ACH",
-                                valueDate: allUpdateDemands[i].repaymentDate,
-                                urnNo: allUpdateDemands[i].customerName
-                            });
+                            model.achDemand.updateDemand['achPdcDemandlistDetails'].push(allUpdateDemands[i]);
                         }
                     }
-                    if(model.achDemand.updateDemand.length > 0)
+                    if(model.achDemand.updateDemand['achPdcDemandlistDetails'].length > 0)
                     {
+                        for(var i = 0; i < model.achDemand.updateDemand['achPdcDemandlistDetails'].length; i++){
+                            model.achDemand.updateDemand['achPdcDemandlistDetails'][i].submitStatus = 'TO_BE_PROCESSED';
+                        }
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
-                        ACH.bulkRepay(model.achDemand.updateDemand).$promise.then(function(response) {
-                            PageHelper.showProgress("page-init", "Done.", 2000);
-                            $state.reload();
-                            // allUpdateDemands = [];
-                            // model.showUpdateSection = false;
+                        ACHPDCBatchProcess.submitDemandForRepayment(model.achDemand.updateDemand).$promise.then(function(response) {
+                            
+                            ACHPDCBatchProcess.submitDemandForLoanRepay({type : 'ACH', bankAccountNumber : ''}, model.achDemand.updateDemand['achPdcDemandlistDetails']).$promise.then(
+                                function(resp){
+                                    PageHelper.showProgress("page-init", resp + "Check the status in Batch Monitoring screen", 2000);
+                                    $state.reload();
+                                },
+                                function(errResp){
+                                    PageHelper.showErrors(errResp);
+                                }).finally(function() {
+                                    PageHelper.hideLoader();
+                                })
                         }, function(errorResponse) {
                             PageHelper.showErrors(errorResponse);
-                        }).finally(function() {
                             PageHelper.hideLoader();
                         });
                     } else {

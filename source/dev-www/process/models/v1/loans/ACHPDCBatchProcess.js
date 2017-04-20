@@ -8,7 +8,8 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
 
 		fetchDemandListFromEncore: {
 			method: 'GET',
-			url: endpoint + '/fetchDemandListFromEncore'
+			url: endpoint + '/fetchDemandListFromEncore',
+			isArray: true
 		},
 		fetchDemandBatchList : searchResource({
 			method: 'GET',
@@ -16,7 +17,8 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
 		}),
 		fetchDemandDetails: {
 			method: 'GET',
-			url: endpoint + '/fetchDemandDetails'
+			url: endpoint + '/fetchDemandDetails',
+			isArray: true
 		},
 		submitDemandForRepayment: {
 			method: 'POST',
@@ -30,9 +32,9 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
 			method: 'GET',
 			url: endpoint + '/loanrepaybatchlist'
 		}),
-		fetchDemandStatus: {
+		submitDemandForLoanRepay: {
 			method: 'POST',
-			url: endpoint + '/fetchDemandStatus'
+			url: endpoint + '/loanrepay'
 		},
 		deleteAchPdcBatchRecords: {
 			method: 'DELETE',
