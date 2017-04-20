@@ -136,6 +136,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             isArray:true
         },
     });
+    resource.getAllDocumentsUrl = function(loanId){
+        return endpoint + '/documents/loanId?loanId='+loanId;
+
+    };
     resource.ConfirmationUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
