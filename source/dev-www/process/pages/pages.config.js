@@ -28,6 +28,16 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LeadDashboardCtrl"
 	},{
+		name: "Page.JournalMaintenanceDashboard",
+		url: "/JournalMaintenanceDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "JournalMaintenanceDashboardCtrl"
+	},{
+		name: "Page.JournalPostingDashboard",
+		url: "/JournalPostingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "JournalPostingDashboardCtrl"
+	},{
 		name: "Page.BIDashboard", // BI Dashboard
 		url: "/BIDashboard",
 		templateUrl: "process/pages/templates/Page.BIDashboard.html",

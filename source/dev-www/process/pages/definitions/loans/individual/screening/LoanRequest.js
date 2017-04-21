@@ -577,8 +577,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         onSelect: function(valueObj, model, context) {
                             model.loanAccount.npa = valueObj.npa;
                             model.loanAccount.linkedAccountNumber = valueObj.accountId;
-                        }
-                        
+                        } 
                     },
                     {
                         key: "loanAccount.npa",

@@ -63,6 +63,14 @@
         },
         "Page/Engine/CentrePaymentCollection",
         {
+            "title": "JOURNAL_ENTRY",
+            "iconClass": "fa fa-exchange",
+            "items": [
+                "Page/JournalMaintenanceDashboard",
+                "Page/JournalPostingDashboard"
+            ]
+        },
+        {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",
             "items": [
