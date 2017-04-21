@@ -50,7 +50,7 @@ irf.pages.provider("irfNavigator", function() {
 	$this.getDefinition = null;
 
 	$this.move = function(goParam, backParam) {
-		if (!goParam) {
+		if (!goParam || !goParam.state.startsWith("Page")) {
 			return;
 		}
 		if (!goParam.$definition) {

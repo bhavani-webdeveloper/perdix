@@ -4,7 +4,8 @@ irf.pages.controller("PageAdhocCtrl", ["$scope", "$stateParams", function($scope
 irf.pages.directive("irfPageAdhoc", ["$stateParams", "$templateRequest", "$compile", function($stateParams, $templateRequest, $compile) {
 	return {
 		link: function (scope, element, attrs) {
-			$templateRequest(irf.templateUrl($stateParams.pageName)).then(function(html) {
+			var templateUrl = scope.$templateUrl || irf.templateUrl($stateParams.pageName);
+			$templateRequest(templateUrl).then(function(html) {
 				element.html(html);
 				$compile(element.contents())(scope);
 			});
