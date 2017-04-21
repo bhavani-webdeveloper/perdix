@@ -29,6 +29,12 @@ define({
                     title: "BANK_ACCOUNTS",
                     items: [
                         {
+                            key: "customer.totalDeposits",
+                            type: "amount",
+                            calculator: true,
+                            title: "TOTAL_DEPOSITS"
+                        },
+                        {
                             key: "customer.customerBankAccounts",
                             type: "array",
                             title: "BANK_ACCOUNTS",
@@ -153,6 +159,7 @@ define({
                                         {
                                             key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                             type: "amount",
+                                            calculator: true,
                                             required:true,
                                             title: "TOTAL_DEPOSITS"
                                         },
