@@ -18,8 +18,8 @@ PDC.getDemandList : To get all the demands for the entered date. And all the bra
 PDC.pdcDemandListUpload : To upload the selected file.
 PDC.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload"), ["$log", "SessionStore", 'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$q', '$filter',
-    function($log, SessionStore, Utils, PDC, AuthTokenHelper, PageHelper, formHelper, $q, $filter) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload"), ["$log", "SessionStore", 'Utils', 'PDC', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$q', '$filter', 'ACHPDCBatchProcess',
+    function($log, SessionStore, Utils, PDC, AuthTokenHelper, PageHelper, formHelper, $q, $filter, ACHPDCBatchProcess) {
         var branchIDArray = [];
         return {
             "type": "schema-form",
@@ -62,16 +62,18 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload")
                             }
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
-                            PDC.demandDownloadStatus({
-                                "demandDate": model.pdcCollections.demandDate,
-                                "branchId": branchIDArray.join(",")
-                            }).$promise.then(
+                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDate: model.pdcCollections.demandDate, batchType: 'demand'}).then(
                                 function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=pdc_challan&date=" + model.pdcCollections.demandDate);
-                                    PageHelper.showProgress("page-init", "Success", 5000);
+                                    var records = $filter('filter')(response.body, {status: 'COMPLETED'}, true);
+                                    if(response.body.length > 0 && records.length === response.body.length){
+                                        window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=pdc_challan&date=" + model.pdcCollections.demandDate);
+                                        PageHelper.showProgress("page-init", "Success", 5000);
+                                    } else{
+                                        PageHelper.showErrors({data: {error: "Demand report for the selected date can be downloaded only when the Batch Request placed for Demand download is completed . If demand download request is not already available, please place a request from ACH / PDC Demand Request screen"}});
+                                    }
                                 },
                                 function(error) {
-                                    PageHelper.showProgress("page-init", error, 5000);
+                                    PageHelper.showErrors(error);
                                 }).finally(function() {
                                 PageHelper.hideLoader();
                             });

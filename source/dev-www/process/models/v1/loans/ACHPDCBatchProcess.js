@@ -1,6 +1,6 @@
 irf.models.factory('ACHPDCBatchProcess', 
-["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
-function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
+["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "$q", "PageHelper",
+function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelper) {
 
 	var endpoint = BASE_URL + '/api/batch';
 
@@ -65,7 +65,6 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
 
 		response.$promise.then(
 			function(resp){
-                PageHelper.showProgress("page-init", "Done.", 2000);
                 var result = {
                     headers: {
                         "x-total-count": resp.body.length

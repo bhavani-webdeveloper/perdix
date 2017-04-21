@@ -18,8 +18,8 @@ ACH.getDemandList : To get all the demands for the entered date. And all the bra
 ACH.achDemandListUpload : To upload the selected file.
 ACH.bulkRepay : To repay all the demands marked. The req. is send as JSON Array.
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q',
-    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', 'ACHPDCBatchProcess',
+    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, ACHPDCBatchProcess) {
         var branchIDArray = [];
         return {
             "type": "schema-form",
@@ -63,16 +63,18 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHDemandDownload")
                             }
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
-                            ACH.demandDownloadStatus({
-                                "demandDate": model.achCollections.demandDate,
-                                "branchId": branchIDArray.join(",")
-                            }).$promise.then(
+                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDate: model.achCollections.demandDate, batchType: 'demand'}).then(
                                 function(response) {
-                                    window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=ach_demands&date=" + model.achCollections.demandDate);
-                                    PageHelper.showProgress("page-init", "Success", 5000);
+                                    var records = $filter('filter')(response.body, {status: 'COMPLETED'}, true);
+                                    if(response.body.length > 0 && records.length === response.body.length){
+                                        window.open(irf.BI_BASE_URL + "/download.php?user_id=" + model.userLogin + "&auth_token=" + model.authToken + "&report_name=ach_demands&date=" + model.achCollections.demandDate);
+                                        PageHelper.showProgress("page-init", "Success", 5000);
+                                    } else{
+                                        PageHelper.showErrors({data: {error: "Demand report for the selected date can be downloaded only when the Batch Request placed for Demand download is completed . If demand download request is not already available, please place a request from ACH / PDC Demand Request screen"}});
+                                    }
                                 },
                                 function(error) {
-                                    PageHelper.showProgress("page-init", error, 5000);
+                                    PageHelper.showErrors(error);
                                 }).finally(function() {
                                 PageHelper.hideLoader();
                             });
