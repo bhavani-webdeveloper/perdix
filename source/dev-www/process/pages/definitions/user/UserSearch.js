@@ -34,6 +34,14 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                         		"type": "select",
                         		"enumCode": "branch"
                         	}
+                        },
+                        "partnerCode": {
+                            "title": "Partner_Code",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "partner"
+                            }
                         }
                     }
                 },
@@ -47,7 +55,9 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                             per_page: pageOpts.itemsPerPage,
                             userName: searchOptions.userName,
                             login: searchOptions.login,
-                            branchName: searchOptions.branchName
+                            branchName: searchOptions.branchName,
+                            partnerCode: searchOptions.partnerCode
+
                         }
                     ).$promise;
 				},

@@ -111,6 +111,19 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         required: true
                                     }
                                 ]
+                            },
+                            {
+                                key: "user.accessType",
+                                type: "select",
+                                title: "ACCESS_TYPE",
+                                enumCode: "access_type"
+                            },
+                            {
+                                key: "user.partnerCode",
+                                condition: "model.user.accessType=='partner'",
+                                type: "select",
+                                title: "PARTNER_CODE",
+                                enumCode: "partner"
                             }
                         ]
                     },

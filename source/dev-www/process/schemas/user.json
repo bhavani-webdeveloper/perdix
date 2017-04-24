@@ -29,6 +29,12 @@
     "branchName": {
       "type": "string"
     },
+    "accessType": {
+      "type": "string"
+    },
+    "partnerCode": {
+      "type": "string"
+    },
     "branchSetCode": {
       "type": "string"
     },

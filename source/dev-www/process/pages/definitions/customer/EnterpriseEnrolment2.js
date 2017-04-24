@@ -1295,10 +1295,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountNumber",
-                                type: "password"
+                                type: "password",
+                                inputmode: "number",
+                                numberType: "tel"
                             },
                             {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber"
+                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                inputmode: "number",
+                                numberType: "tel"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",
@@ -2986,6 +2990,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.verifications[].mobileNo",
                                 title:"CONTACT_NUMBER",
                                 type:"string",
+                                inputmode: "number",
+                                numberType: "tel"
                                 
                             }/*,
                             {

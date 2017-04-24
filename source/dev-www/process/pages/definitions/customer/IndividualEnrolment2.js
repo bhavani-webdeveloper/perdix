@@ -2390,7 +2390,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 key:"customer.verifications[].mobileNo",
                                 title:"CONTACT_NUMBER",
                                 type:"string",
-                                required:true
+                                required:true,
+                                inputmode: "number",
+                                numberType: "tel"
                             },
                             {
                                 key:"customer.verifications[].occupation",

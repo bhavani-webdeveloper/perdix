@@ -1055,8 +1055,47 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             ]
             
         },
-
-            {
+        {
+            "type": "box",
+            "title": "LOAN_DOCUMENTS",
+            "condition":"model.currentStage == 'loanView'" ,
+            readonly:true,
+            "items": [
+                {
+                    "type": "array",
+                    "key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "LOAN_DOCUMENT",
+                    "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
+                    "items": [
+                        {
+                            "key": "loanAccount.loanDocuments[].document",
+                            "title": "DOCUMENT_NAME",
+                            "type": "string",
+                            "required": true
+                        },
+                        {
+                            title: "Upload",
+                            key: "loanAccount.loanDocuments[].documentId",
+                            "required": true,
+                            type: "file",
+                            fileType: "application/pdf",
+                            category: "Loan",
+                            subCategory: "DOC1",
+                            using: "scanner"
+                        }
+                        // ,
+                        // {
+                        //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
+                        //     "type": "string"
+                        // }
+                    ]
+                }
+            ]
+            
+        },
+        {
                 "type": "box",
                 "title": "ADDITIONAL_LOAN_INFORMATION",
                 "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'",
