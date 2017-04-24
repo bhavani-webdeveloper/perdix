@@ -23,7 +23,8 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
                 "Page/Engine/loans.individual.achpdc.PDCDemandDownload",
                 "Page/Engine/loans.individual.achpdc.PDCCollections",
                 "Page/Engine/loans.individual.achpdc.DemandDownloads",
-                "Page/Engine/loans.individual.achpdc.BatchMonitoringQueue"
+                "Page/Engine/loans.individual.achpdc.BatchMonitoringQueue",
+                "Page/Engine/loans.individual.achpdc.RepaymentBatchMonitoringQueue"
             ]
         };
 
