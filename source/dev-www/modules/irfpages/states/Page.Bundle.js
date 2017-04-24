@@ -455,6 +455,17 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 }, n);
             });
         }
+        $timeout(function() {
+            $(".bundle-page .irf-tabset ul.nav-tabs").affix({
+                offset: {
+                    top: 50
+                }
+            }).on("affix.bs.affix", function() {
+                $(".bundle-page .irf-tabset ul.nav-tabs").addClass("bg-tint-theme");
+            }).on("affix-top.bs.affix", function() {
+                $(".bundle-page .irf-tabset ul.nav-tabs").removeClass("bg-tint-theme");
+            });
+        });
     });
 
     $scope.$on('$destroy', function() {
