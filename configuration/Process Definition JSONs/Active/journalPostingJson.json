@@ -8,6 +8,15 @@
          "allowedRoles": [
             "WM"
          ]
+      },{
+         "order": 2,
+         "code": "journalPosting",
+         "name": "journalPosting",
+         "stageType": "ACCOUNTINGPOSTING",
+         "isAccountPosting": true,
+         "allowedRoles": [
+            "WM"
+         ]
       }
    ],
    "schema": {
@@ -36,7 +45,8 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
                "relatedAccountNo": {
@@ -45,7 +55,8 @@
                   "minLength": 1,
                   "maxLength": 30,
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
 
@@ -55,7 +66,8 @@
                   "minLength": 1,
                   "maxLength": 20,
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
 
@@ -65,7 +77,8 @@
                   "minimum": 1,
                   "maximum": 99999999,
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
                "transactionDate": {
@@ -73,7 +86,8 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
                "valueDate": {
@@ -81,7 +95,8 @@
                   "type": "string",
                   "format": "date",
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                },
                "remarks": {
@@ -90,7 +105,8 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "journalEntry"
+                     "journalEntry",
+                     "journalPosting"
                   ]
                }
             }
