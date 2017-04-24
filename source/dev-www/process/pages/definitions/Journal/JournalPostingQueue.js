@@ -52,7 +52,7 @@ define({
                         'transactionDescription':searchOptions.transactionDescription,
                         'transactionDate': searchOptions.transactionDate,
                         'transactionType':"Entry",
-                        'currentStage': "journalEntry",
+                        //'currentStage': "journalEntry",
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;

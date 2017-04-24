@@ -8,7 +8,9 @@ irf.pages.controller("JournalPostingDashboardCtrl",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/Engine/Journal.JournalPosting",
-                "Page/Engine/Journal.JournalPostingQueue"
+                "Page/Engine/Journal.JournalPostingQueue",
+                "Page/Engine/Journal.JournalEntryUpload"
+
             ]
         };
 
