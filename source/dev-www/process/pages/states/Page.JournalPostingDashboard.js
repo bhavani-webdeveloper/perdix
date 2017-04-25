@@ -8,6 +8,7 @@ irf.pages.controller("JournalPostingDashboardCtrl",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/Engine/Journal.JournalPosting",
+                "Page/Engine/Journal.JournalEntryQueue",
                 "Page/Engine/Journal.JournalPostingQueue",
                 "Page/Engine/Journal.JournalEntryUpload"
 
@@ -26,11 +27,28 @@ irf.pages.controller("JournalPostingDashboardCtrl",
                         'page': 1,
                         'per_page': 1,
                         'transactionType':"Entry",
-                        'currentStage': "journalEntry"
+                        'currentStage': "journalPosting"
                     }).$promise.then(function(response, headerGetter) {
                     jqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     jqMenu.data = '-';
+                });
+            }
+
+            var jeMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/Journal.JournalEntryQueue"];
+
+            if (jeMenu) {
+                var promise = Journal.journalEntrySearch({
+                        'transactionName': '',
+                        'transactionDescription':'',
+                        'page': 1,
+                        'per_page': 1,
+                        'transactionType':"Entry",
+                        'currentStage': "journalEntry"
+                    }).$promise.then(function(response, headerGetter) {
+                    jeMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    jeMenu.data = '-';
                 });
             }
         });
