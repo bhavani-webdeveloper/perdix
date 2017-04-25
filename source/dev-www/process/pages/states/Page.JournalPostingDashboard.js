@@ -11,7 +11,6 @@ irf.pages.controller("JournalPostingDashboardCtrl",
                 "Page/Engine/Journal.JournalEntryQueue",
                 "Page/Engine/Journal.JournalPostingQueue",
                 "Page/Engine/Journal.JournalEntryUpload"
-
             ]
         };
 
