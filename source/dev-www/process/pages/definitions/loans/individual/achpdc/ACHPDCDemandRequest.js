@@ -1,5 +1,8 @@
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCDemandRequest"), ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', 'ACHPDCBatchProcess',
-    function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, ACHPDCBatchProcess) {
+define({
+    pageUID: "loans.individual.achpdc.ACHPDCDemandRequest",
+    pageType: "Engine",
+    dependencies: ["$log", "SessionStore", 'Utils', 'ACH', 'AuthTokenHelper', 'PageHelper', 'formHelper', '$filter', '$q', 'ACHPDCBatchProcess'],
+    $pageFn: function($log, SessionStore, Utils, ACH, AuthTokenHelper, PageHelper, formHelper, $filter, $q, ACHPDCBatchProcess) {
         var branchIDArray = [];
         return {
             "type": "schema-form",
@@ -61,4 +64,4 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHPDCDemandRequest
             }
         };
     }
-]);
+});

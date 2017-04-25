@@ -10,14 +10,14 @@ define({
 		var branch = SessionStore.getBranch();
 		return {
 		"type": "search-list",
-		"title": "ACHPDC_BATCH_MONITORING",
+		"title": "REPAYMENT_BATCH_MONITORING",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Repayment Batch Monitoring",
+			title: "REPAYMENT_BATCH_MONITORING",
 			searchForm: [
 				"*"
 			],
@@ -27,15 +27,15 @@ define({
 				"title": 'SearchOptions',
 				"properties": {
 					"demandDate": {
-						"title": "Batch date",
+						"title": "BATCH_DATE",
 						"type": "string",
 						"x-schema-form": {
 							"type": "date",
 							"screenFilter": true
 						}
 					},
-					"repayType": {
-						"title": "Repay Type",
+					"repaymentType": {
+						"title": "REPAYMENT_TYPE",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select",
@@ -47,7 +47,7 @@ define({
 						}
 					},
 					"status": {
-						"title": "Status",
+						"title": "STATUS",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select",
@@ -60,23 +60,14 @@ define({
 					}
 
 				},
-				"required":["branch"]
+				"required":["demandDate"]
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
 
-				/* GET BRANCH NAME */
-				var branches = formHelper.enum('branch').data;
-				var branchName = null;
-				for (var i=0;i<branches.length; i++){
-					var branch = branches[i];
-					 if (branch.code == searchOptions.branch){
-					 	branchName = branch.name;
-					 }
-				}
-
+				searchOptions.batchType = 'repayment';
 				var promise = ACHPDCBatchProcess.getBatchMonitoringTasks(searchOptions);
 
 				return promise;
@@ -122,12 +113,12 @@ define({
 				getColumns: function(){
 					return [
 						{
-							title:'Batch Date',
+							title:'BATCH_DATE',
 							data: 'triggeredAt',
 							type: 'date',
 						},
 												{
-							title:'Demand Date',
+							title:'DEMAND_DATE',
 							data: 'demandDate'
 						},
 												{
@@ -148,39 +139,7 @@ define({
 					]
 				},
 				getActions: function(){
-					return [
-						{
-							name: "Enroll Customer",
-							desc: "",
-							icon: "fa fa-user-plus",
-							fn: function(item, index){
-								$state.go("Page.Engine",{
-									pageName:"ProfileInformation",
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='BasicEnrolment')
-									return true;
-								return false;
-							}
-						},
-						{
-							name: "CUSTOMER_360",
-							desc: "",
-							icon: "fa fa-user",
-							fn: function(item, index){
-								$state.go("Page.Customer360",{
-									pageId:item.id
-								});
-							},
-							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
-									return true;
-								return false;
-							}
-						}
-					];
+					return [];
 				}
 			}
 		}
