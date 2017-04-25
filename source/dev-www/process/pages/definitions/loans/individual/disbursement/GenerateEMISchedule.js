@@ -261,13 +261,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                     "items": [{
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                         "title": "DISBURSEMENT_DATE",
-                        "type": "date",
-                        "readonly": true
+                        "type": "date"
                     }, {
                         "key": "loanAccountDisbursementSchedule.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "type": "date",
-                        "readonly": true
+                        "type": "date"
                     }, {
                         "key": "loanAccountDisbursementSchedule.remarks1",
                         "title": "FRO_REMARKS",
@@ -393,6 +391,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
             actions: {
                 submit: function(model, form, formName) {
                     if (window.confirm("Are you sure?")) {
+                        var customerSignatureDate = moment(model.loanAccountDisbursementSchedule.customerSignatureDate,SessionStore.getSystemDateFormat());
+                        var scheduledDisbursementDate = moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                        if (scheduledDisbursementDate.diff(customerSignatureDate, "days") <= 0) {
+                           PageHelper.showProgress("upd-disb", "Scheduled disbursement date should be greater than Customer sign date", 5000);
+                           return false;
+                        }
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
                         delete reqData.$promise;

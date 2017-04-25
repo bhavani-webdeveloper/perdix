@@ -85,7 +85,14 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
         actions: {
             submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
+                        var customerSignatureDate = moment(model.loanAccountDisbursementSchedule.customerSignatureDate,SessionStore.getSystemDateFormat());
+                        var scheduledDisbursementDate = moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                        if (scheduledDisbursementDate.diff(customerSignatureDate, "days") <= 0) {
+                           PageHelper.showProgress("upd-disb", "Scheduled disbursement date should be greater than Customer sign date", 5000);
+                           return false;
+                        }
                         PageHelper.showLoader();
+
                         model.loanAccountDisbursementSchedule.udfDate2 = Utils.getCurrentDateTime();
                         var reqData = _.cloneDeep(model);
                         delete reqData.$promise;
