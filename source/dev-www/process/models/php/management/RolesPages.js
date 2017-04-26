@@ -14,6 +14,10 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
             method: 'PUT',
             url: endpoint + '/updateRolePageAccess.php'
         },
+        updateRoleReportAccess: {
+            method: 'PUT',
+            url: endpoint + '/updateRoleReports.php'
+        },
         updateRole: {
             method: 'PUT',
             url: endpoint + '/updateRole.php'
@@ -22,6 +26,10 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
             method: 'GET',
             url: endpoint + '/getPage.php'
         },
+        getReportsByRole: searchResource({
+            method: 'GET',
+            url: endpoint + '/getReportsByRole.php'
+        }),
         searchUsers: searchResource({
             method: 'GET',
             url: endpoint + '/findUsers.php'
