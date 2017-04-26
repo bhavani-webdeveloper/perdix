@@ -17,7 +17,7 @@
  *
  * */
 
-irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", function($log, irfStorageService, Utils){
+irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils", function($log,$q,irfStorageService, Utils){
 
     function randomStringForCollection(collection){
         var key = Utils.randomString(10);
@@ -83,43 +83,96 @@ irf.commons.factory('OfflineManager', ["$log", "irfStorageService", "Utils", fun
         /**
          * Insert data into SQL lite table or localStorage based on availability
          * @param {string} table table name to be used.
-         * @param {object} keys key columns. eg: {id:12, centre_code:123}
+         * @param {object} key key columns. eg: 123
          * @param {array|object} data data to be stored.
          * @param {function} callback function to be called once the operation is completed.
         */
-        insert: function(table, keys, data, callback) {
+        insert: function(table, key, data) {
+            var deferred = $q.defer();
             if (isSQLlite()) {
 
             } else {
-                irfStorageService.storeJSON(table, {
-                    keys: keys,
-                    data: data
-                });
-                callback(true);
+                try {
+                    var tableData = irfStorageService.retrieveJSON(table);
+                    if (!tableData) {
+                        tableData = {};
+                    }
+                    tableData[key] = data;
+                    irfStorageService.storeJSON(table, tableData);
+                    deferred.resolve(true);
+                } catch(e) {
+                    deferred.reject();
+                }
             }
+            return deferred.promise;
         },
 
         /**
          * Insert data into SQL lite table or localStorage based on availability
          * @param {string} table table name to be used.
-         * @param {object} keys key columns. eg: {id:12, centre_code:123}
+         * @param {object} key key columns. eg: {id:12, centre_code:123}
          * @param {function} callback function to be called once the operation is completed.
          * @return {array|object} data data to be stored.
         */
-        select: function(table, keys, callback) {
+        select: function(table, key) {
+            var deferred = $q.defer();
             if (isSQLlite()) {
 
             } else {
                 var tableData = irfStorageService.retrieveJSON(table);
-                var returnData = null;
-                for (i in tableData) {
-                    if (tableData[i].keys = keys) { // TODO: check validity
-                        returnData = tableData[i].data;
-                        break;
+                if (tableData && tableData[key]) {
+                    var returnData = tableData[key];
+                    if (returnData) {
+                        deferred.resolve(returnData);
+                    } else {
+                        deferred.reject();
                     }
-                }
-                callback(returnData);
+                } else {
+                    deferred.reject();
+                } 
             }
+            return deferred.promise;
+        },
+
+        delete: function(table, key) {
+            var deferred = $q.defer();
+            if (isSQLlite()) {
+
+            } else {
+                try {
+                    var tableData = irfStorageService.retrieveJSON(table);
+                    if (tableData && tableData[key]) {
+                        delete tableData[key];
+                        irfStorageService.storeJSON(table, tableData);
+                    }
+                    deferred.resolve(true);
+                } catch(e) {
+                    deferred.reject();
+                }
+            }
+            return deferred.promise;
+        },
+
+        /**
+         * Insert data into SQL lite table or localStorage based on availability
+         * @param {string} table table name to be used.
+         * @param {object} key key columns. eg: {id:12, centre_code:123}
+         * @param {function} callback function to be called once the operation is completed.
+         * @return {array|object} data data to be stored.
+        */
+        selectAll: function(table) {
+            var deferred = $q.defer();
+            if (isSQLlite()) {
+
+            } else {
+                var tableData = irfStorageService.retrieveJSON(table);
+                if (tableData) {
+                    deferred.resolve(tableData);
+                } else {
+                    deferred.reject();
+                } 
+            }
+            return deferred.promise;
         }
     }
 }])
