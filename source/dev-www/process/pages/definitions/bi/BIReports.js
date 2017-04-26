@@ -32,8 +32,6 @@ irf.pageCollection.factory(irf.page("bi.BIReports"), ["$log", "RolesPages", "BIR
                         self.formSource[0].items[0].titleMap = object;
                         self.form = self.formSource;
                     });
-                    //self.formSource[0].items[0].titleMap = resp;
-                    //self.form = self.formSource;
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);
                 }).finally(function() {
