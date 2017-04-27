@@ -15,7 +15,7 @@ define({
 
         return {
             "type": "schema-form",
-            "title": "SUBSEQUENT_TRANCHE_DISBURSEMENT_DATE_CAPTURE",
+            "title": "MULTI_TRANCHE_BOOKING",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Multi Tranche Page got initialized");
