@@ -57,20 +57,6 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "condition": "model.loanAccountDisbursementSchedule.remarks2!=''"
                 },
                 {
-                    "key": "loanAccountDisbursementSchedule.customerSignatureDate",
-                    "title": "CUSTOMER_SIGNATURE_DATE",
-                    "type": "date",
-                    "onChange":function(modelValue,form,model){
-                        populateDisbursementDate(modelValue,form,model);
-                    }
-                },
-                {
-                    "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
-                    "title": "DISBURSEMENT_DATE",
-                    "type": "date"
-                },
-
-                {
                     "type": "actionbox",
                     "items": [{
                         "type": "submit",
@@ -85,12 +71,7 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
         actions: {
             submit: function(model, form, formName){
                     if(window.confirm("Are you sure?")){
-                        var customerSignatureDate = moment(model.loanAccountDisbursementSchedule.customerSignatureDate,SessionStore.getSystemDateFormat());
-                        var scheduledDisbursementDate = moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                        if (scheduledDisbursementDate.diff(customerSignatureDate, "days") <= 0) {
-                           PageHelper.showProgress("upd-disb", "Scheduled disbursement date should be greater than Customer sign date", 5000);
-                           return false;
-                        }
+
                         PageHelper.showLoader();
 
                         model.loanAccountDisbursementSchedule.udfDate2 = Utils.getCurrentDateTime();

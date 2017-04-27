@@ -261,11 +261,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                     "items": [{
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
                         "title": "DISBURSEMENT_DATE",
-                        "type": "date"
+                        "type": "date",
+                        "readonly": true
                     }, {
                         "key": "loanAccountDisbursementSchedule.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
-                        "type": "date"
+                        "type": "date",
+                        "readonly": true
                     }, {
                         "key": "loanAccountDisbursementSchedule.remarks1",
                         "title": "FRO_REMARKS",
@@ -382,6 +384,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                     "items": [{
                         "type": "submit",
                         "title": "Submit"
+                    },
+                    {
+                    "type": "button",
+                    "title": "SEND_BACK",
+                    "onClick": "actions.submit(model, formCtrl, form, $event, 1)"
                     }]
                 }
             ],
@@ -389,14 +396,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                 return SchemaResource.getDisbursementSchema().$promise;
             },
             actions: {
-                submit: function(model, form, formName) {
+                submit: function(model, form, formName, $event, isReject) {
                     if (window.confirm("Are you sure?")) {
-                        var customerSignatureDate = moment(model.loanAccountDisbursementSchedule.customerSignatureDate,SessionStore.getSystemDateFormat());
-                        var scheduledDisbursementDate = moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                        if (scheduledDisbursementDate.diff(customerSignatureDate, "days") <= 0) {
-                           PageHelper.showProgress("upd-disb", "Scheduled disbursement date should be greater than Customer sign date", 5000);
-                           return false;
-                        }
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
                         delete reqData.$promise;
@@ -404,6 +405,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                         delete reqData.loanAccount;
                         delete reqData._EMIScheduleGenQueue;
                         reqData.disbursementProcessAction = "PROCEED";
+                        if(isReject){
+                            reqData.stage = "MTBooking";
+                            delete reqData.individualLoanDocuments;
+                        }
                         IndividualLoan.updateDisbursement(reqData, function(resp, header) {
                             PageHelper.showProgress("upd-disb", "Done.", "5000");
                             PageHelper.hideLoader();

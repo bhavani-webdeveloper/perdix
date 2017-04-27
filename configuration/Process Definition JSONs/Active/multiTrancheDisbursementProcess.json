@@ -58,6 +58,20 @@
       },
       {
          "order":5,
+         "code":"MTBooking",
+         "name":"Multi Tranche Booking",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"Disbursed",
+         "allowedRoles":[
+            "WM"
+         ],
+         "notRequiredForTranches":[
+            "1"
+         ]
+      },
+      {
+         "order":6,
          "code":"DocumentUpload",
          "name":"Doc Generation and Upload",
          "stageType":"CAPTURE",
@@ -71,7 +85,7 @@
          ]
       },
       {
-         "order":6,
+         "order":7,
          "code":"DocumentVerification",
          "name":"Doc Verification",
          "stageType":"CAPTURE",
@@ -85,7 +99,7 @@
          ]
       },
       {
-         "order":7,
+         "order":8,
          "code":"ReadyForDisbursement",
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
@@ -99,7 +113,7 @@
          ]
       },      
       {
-         "order":8,
+         "order":9,
          "code":"RejectedDisbursement",
          "name":"Rejected Disbursement",
          "stageType":"CAPTURE",
@@ -113,7 +127,7 @@
          ]
       },
       {
-         "order":9,
+         "order":10,
          "code":"DisbursementConfirmation",
          "name":"Disbursement Confirmation",
          "stageType":"DISBURSEMENTCONFIRMATION",
@@ -156,7 +170,7 @@
                      "title":"Scheduled Disbursement Date",
                      "type":"string",
                      "captureStages":[
-                        "MTDisbursementDataCapture","LOCDisbursement"
+                        "MTBooking","LOCDisbursement"
                      ]
                   },
                   "actualDisbursementDate":{
@@ -188,7 +202,7 @@
                      "title":"Customer Signature Date",
                      "type":"string",
                      "captureStages":[
-                        "MTDisbursementDataCapture","LOCDisbursement"
+                        "MTBooking","LOCDisbursement"
                      ]
                   },
                   "disbursementFromBankAccountNumber":{

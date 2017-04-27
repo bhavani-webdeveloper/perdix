@@ -14,6 +14,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.disbursement.MultiTrancheQueue",
             "Page/Engine/loans.individual.disbursement.PendingFROQueue",
             "Page/Engine/loans.individual.disbursement.PendingCROQueue",
+            "Page/Engine/loans.individual.disbursement.MultiTrancheBookingQueue",
             "Page/Engine/loans.individual.disbursement.EMIScheduleGenQueue",
             "Page/Engine/loans.individual.disbursement.MultiDocVerificationQueue",
             "Page/Engine/loans.individual.disbursement.LOCDisbursement",
@@ -35,7 +36,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 rfdqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                rfdqMenu.data = '-';
             });
         }
 
@@ -48,7 +49,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 dcqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                dcqMenu.data = '-';
             });
         }
 
@@ -61,7 +62,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 rdqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                rdqMenu.data = '-';
             });
         }
 
@@ -74,7 +75,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 mtqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                mtqMenu.data = '-';
             });
         }
 
@@ -87,7 +88,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 pfroqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                pfroqMenu.data = '-';
             });
         }
 
@@ -100,7 +101,20 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 pcroqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                pcroqMenu.data = '-';
+            });
+        }
+
+        var mtbqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.disbursement.MultiTrancheBookingQueue"];
+        if (mtbqMenu) {
+            IndividualLoan.searchDisbursement({
+                'currentStage': 'MTBooking',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response,headerGetter){
+                mtbqMenu.data = response.headers['x-total-count'];
+            }, function() {
+                mtbqMenu.data = '-';
             });
         }
 
@@ -113,7 +127,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 emisgqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                emisgqMenu.data = '-';
             });
         }
 
@@ -126,7 +140,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             }).$promise.then(function(response,headerGetter){
                 mdvqMenu.data = response.headers['x-total-count'];
             }, function() {
-                cvqMenu.data = '-';
+                mdvqMenu.data = '-';
             });
         }
     });
