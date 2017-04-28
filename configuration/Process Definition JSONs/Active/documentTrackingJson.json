@@ -168,7 +168,7 @@
                             "title": "rejectDate",
                             "type": "string",
                             "captureStages": [
-                                "PendingVerification","PendingFiling"
+                                "PendingVerification","QualityCheck"
                             ]
                         },
                         "rejectRemarks": {
@@ -177,7 +177,7 @@
                             "minLength": 1,
                             "maxLength": 200,
                             "captureStages": [
-                                "PendingVerification","PendingFiling"
+                                "PendingVerification","QualityCheck"
                             ]
                         },
                         "filingDate": {
@@ -327,14 +327,14 @@
                             "title": "status",
                             "type": "string",
                             "captureStages": [
-                                "BatchInitiation","BatchInTransit","PendingVerification","PendingFiling"
+                                "BatchInitiation","BatchInTransit","PendingVerification","PendingFiling","QualityCheck"
                             ]
                         },
                         "remarks": {
                             "title": "remarks",
                             "type": "number",
                             "captureStages": [
-                                "PendingFiling"
+                                "PendingFiling","QualityCheck"
                             ]
                         }
                     }
