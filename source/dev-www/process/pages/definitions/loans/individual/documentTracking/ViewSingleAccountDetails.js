@@ -58,6 +58,15 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                                     else
                                         model.accountDocumentTracker.accountDocTrackerDetails[i].documentTitle = model.accountDocumentTracker.accountDocTrackerDetails[i].document;
                                 }
+                                model._accountDocumentTracker = {};
+                                model._accountDocumentTracker =_.cloneDeep(model.accountDocumentTracker);
+                                model.accountDocumentTracker.accountDocTrackerDetails = [];
+                                if(model._accountDocumentTracker.accountDocTrackerDetails && model._accountDocumentTracker.accountDocTrackerDetails.length>0){
+                                    for(i=0;i<model._accountDocumentTracker.accountDocTrackerDetails.length;i++){
+                                    if(model._accountDocumentTracker.accountDocTrackerDetails[i].status==null || model._accountDocumentTracker.accountDocTrackerDetails[i].status=='' || model._accountDocumentTracker.accountDocTrackerDetails[i].status == 'PENDING')
+                                        model.accountDocumentTracker.accountDocTrackerDetails.push(model._accountDocumentTracker.accountDocTrackerDetails[i]);
+                                    }
+                                }
 
                             }
                         }, function (err){});
@@ -159,7 +168,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                                 "type": "anchor",
                                 "readonly": true,
                                 "key": "accountDocumentTracker.accountDocTrackerDetails[].documentId",
-                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId",
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId && (model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='' || model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='PENDING')",
                                 "onClick": function(model, form, schemaForm, event) {
                                     var fileId = model.accountDocumentTracker.accountDocTrackerDetails[schemaForm.arrayIndex].documentId;
                                     Utils.downloadFile(Files.getFileDownloadURL(fileId));
@@ -168,16 +177,15 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewSingl
                             {
                                 "title": "STATUS",
                                 "key": "accountDocumentTracker.accountDocTrackerDetails[].status",
-                                //"type":"select",
                                 readonly:true,
-                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId && (model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='' || model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='PENDING')"
                             },
                             {
                                 "title": "REMARKS",
                                 "key": "accountDocumentTracker.accountDocTrackerDetails[].remarks",
                                 "type":"textarea",
                                 readonly:true,
-                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId"
+                                "condition":"model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].documentId && (model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='' || model.accountDocumentTracker.accountDocTrackerDetails[arrayIndex].status=='PENDING')"
                             }
                         ]
                         }
