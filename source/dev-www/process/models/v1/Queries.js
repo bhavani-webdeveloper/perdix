@@ -338,7 +338,7 @@ irf.models.factory('Queries', [
             var request = {
                 "deposit_user": depositUser
             };
-            resource.getResult("depositstage.list", request, 10).then(function(records) {
+            resource.getResult("depositstage.list", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
