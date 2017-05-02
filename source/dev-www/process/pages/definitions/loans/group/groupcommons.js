@@ -385,7 +385,6 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             });
                         });
                     }
-
                 });
                 retDefinition[0].items[6].items.push({
                     "type":"button",
@@ -434,7 +433,6 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                             }]
                         });
                         console.warn(chooseWin);
-
                     }
                 });
                 retDefinition.push({

@@ -1,54 +1,125 @@
-irf.pageCollection.factory("Pages__Cgt1Queue", ["$log", "formHelper", "Groups","$state","entityManager",
-    "SessionStore","groupCommons",
-    function($log, formHelper, Groups,$state,entityManager,SessionStore,groupCommons){
+define({
+	pageUID: "loans.group.Cgt1Queue",
+	pageType: "Engine",
+	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+	],
+	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-        var listOptions = {
-            itemCallback: function(item, index) {
-                // This will not be called in case of selectable = true in definition
-                $log.info(item);
-                entityManager.setModel('Cgt1', {_request:item});
-                $state.go("Page.Engine",{
-                    pageName:"Cgt1",
-                    pageId:null
-                });
-            },
-            getItems: function(response, headers){
-                if (response!=null && response.length && response.length!=0){
-                    return response;
-                }
-                return [];
-            },
-            getListItem: function(item){
-                return [
+		var branchId = SessionStore.getBranchId();
+		var branchName = SessionStore.getBranch();
 
-                    'Group ID : ' + item.id,
-                    'Group Name : '+item.groupName,
-                    null
-                ]
-            },
-            getActions: function(){
+		return {
+			"type": "search-list",
+			"title": "CGT1 Queue",
+			"subTitle": "",
+			initialize: function(model, form, formCtrl) {
+				$log.info("DSC Queue got initialized");
+			},
+			definition: {
+				title: "CGT1 QUEUE",
+				searchForm: [
+					"*"
+				],
+				//autoSearch: true,
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"partner": {
+							"type": "string",
+							"title": "PARTNER",
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "partner"
+							}
+						}
+					},
+					"required": []
+				},
 
-                return [
+				getSearchFormHelper: function() {
+					return formHelper;
+				},
+				getResultsPromise: function(searchOptions, pageOpts) {
 
-                ];
-            }
-        };
+					var params = {
+						'branchId': branchId,
+						'partner': searchOptions.partner,
+						'groupStatus': true,
+						'page': pageOpts.pageNo,
+						'stage': "Stage04",
+						'per_page': pageOpts.itemsPerPage
+					};
 
-        var definition = groupCommons.getSearchDefinition('Stage04',listOptions);
+					var promise = Groups.search(params).$promise;
+					return promise;
+				},
+				paginationOptions: {
+					"getItemsPerPage": function(response, headers) {
+						return 100;
+					},
+					"getTotalItemsCount": function(response, headers) {
+						return headers['x-total-count']
+					}
+				},
+				listOptions: {
+					selectable: false,
+					expandable: true,
+					listStyle: "table",
+					itemCallback: function(item, index) {},
+					getItems: function(response, headers) {
+						if (response != null && response.length && response.length != 0) {
+							return response;
+						}
+						return [];
+					},
+					getListItem: function(item) {
+						return []
+					},
+					getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+					},
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'groupName'
+						}]
+					},
+					getActions: function() {
+						return [{
+							name: "DSC",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "loans.group.Cgt1",
+									pageId:item.id
+								}, {
+									state: "Page.Engine",
+									pageName: "loans.group.Cgt1Queue",
+								});
+							},
+							isApplicable: function(item, index) {
 
-        return {
-        "id": "cgt1queue",
-        "type": "search-list",
-        "name": "Cgt1Queue",
-        "title": "CGT 1 Queue",
-        "subTitle": "",
-        "uri":"Groups/CGT 1 Queue",
-        offline: true,
-        getOfflineDisplayItem: groupCommons.getOfflineDisplayItem(),
-        getOfflinePromise: groupCommons.getOfflinePromise('Stage04'),
-        initialize: function (model, form, formCtrl) {
-            $log.info("CGT 1 Q got initialized");
-        },
-        definition: definition
-    };
-}]);
+								return true;
+							}
+						}];
+					}
+				}
+			}
+		};
+	}
+})

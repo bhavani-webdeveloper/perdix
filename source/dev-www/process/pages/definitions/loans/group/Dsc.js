@@ -1,0 +1,628 @@
+define({
+    pageUID: "loans.group.Dsc",
+    pageType: "Engine",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+    ],
+
+    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+
+
+        var nDays = 15;
+
+        function showDscData(dscId) {
+            PageHelper.showLoader();
+            Groups.getDSCData({
+                dscId: dscId
+            }, function(resp, headers) {
+                PageHelper.hideLoader();
+                var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
+                dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+                dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
+                dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+                dataHtml += "</table>"
+                irfSimpleModal('DSC Check Details', dataHtml);
+            }, function(res) {
+                PageHelper.showErrors(res);
+                PageHelper.hideLoader();
+            });
+        };
+
+        var fixData = function(model) {
+            model.group.tenure = parseInt(model.group.tenure);
+        };
+
+        var fillNames = function(model) {
+            var deferred = $q.defer();
+            angular.forEach(model.group.jlgGroupMembers, function(member, key) {
+                Enrollment.get({
+                    id: member.customerId
+                }, function(resp, headers) {
+                    model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    try {
+                        if (resp.middleName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
+                        if (resp.lastName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.lastName;
+                    } catch (err) {
+
+                    }
+                    if (key >= model.group.jlgGroupMembers.length - 1) {
+                        deferred.resolve(model);
+                    }
+                }, function(res) {
+                    deferred.reject(res);
+                });
+            });
+            return deferred.promise;
+        };
+
+        var saveData = function(reqData) {
+            PageHelper.showLoader();
+            irfProgressMessage.pop('group-save', 'Working...');
+            var deferred = $q.defer();
+            if (reqData.group.id) {
+                deferred.reject(true);
+                $log.info("Group id not null, skipping save");
+            } else {
+                reqData.enrollmentAction = 'SAVE';
+                reqData.group.groupFormationDate = Utils.getCurrentDate();
+                PageHelper.clearErrors();
+                Utils.removeNulls(reqData, true);
+                Groups.post(reqData, function(res) {
+                    irfProgressMessage.pop('group-save', 'Done.', 5000);
+                    deferred.resolve(res);
+                }, function(res) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(res);
+                    irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    deferred.reject(false);
+                });
+            }
+            return deferred.promise;
+        };
+
+        var proceedData = function(res) {
+            var deferred = $q.defer();
+            if (res.group.id === undefined || res.group.id === null) {
+                $log.info("Group id null, cannot proceed");
+                deferred.reject(null);
+            } else {
+                PageHelper.showLoader();
+                irfProgressMessage.pop('group-save', 'Working...');
+                res.enrollmentAction = "PROCEED";
+                Utils.removeNulls(res, true);
+                Groups.update(res, function(res, headers) {
+                    $log.info(res);
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('group-save', 'Done. Group ID: ' + res.group.id, 5000);
+                    deferred.resolve(res);
+                }, function(res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    PageHelper.showErrors(res);
+                    deferred.reject(null);
+                });
+            }
+            return deferred.promise;
+        };
+
+        return {
+            "type": "schema-form",
+            "title": "CREATE_GROUP",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                model.group = model.group || {};
+                model.group.branchName = SessionStore.getCurrentBranch().branchId;
+                $log.info(model.group.branchName);
+                if ($stateParams.pageId) {
+                    var groupId = $stateParams.pageId;
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop("group-init", "Loading, Please Wait...");
+                    Groups.getGroup({
+                        groupId: groupId
+                    }, function(response, headersGetter) {
+                        model.group = _.cloneDeep(response);
+                        var centreCode = formHelper.enum('centre').data;
+                        for (var i = 0; i < centreCode.length; i++) {
+                            if (centreCode[i].code == model.group.centreCode) {
+                                model.group.centreCode = centreCode[i].value;
+                            }
+                        }
+                        fixData(model);
+                        if (model.group.jlgGroupMembers.length > 0) {
+                            fillNames(model).then(function(m) {
+                                model = m;
+                                PageHelper.hideLoader();
+                            }, function(m) {
+                                PageHelper.showErrors(m);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                            });
+                        } else {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
+                            backToDashboard();
+                        }
+                    }, function(resp) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                        backToDashboard();
+                    });
+                }
+            },
+            offline: true,
+            getOfflineDisplayItem: function(item, index) {
+                return [
+                    item.journal.transactionName
+                ]
+            },
+
+            form: [{
+                    "type": "box",
+                    "readonly": true,
+                    "title": "GROUP_DETAILS",
+                    "items": [{
+                        "key": "group.groupName",
+                        "title": "GROUP_NAME",
+                    }, {
+                        "key": "group.partnerCode",
+                        "title": "PARTNER",
+                        "type": "select",
+                        "enumCode": "partner"
+                            //readonly: readonly
+                    }, {
+                        "key": "group.centreCode",
+                        "title": "CENTRE_CODE",
+                        "type": "select",
+                        "enumCode": "centre"
+                            //readonly: readonly
+                    }, {
+                        "key": "group.productCode",
+                        "title": "PRODUCT",
+                        "type": "select",
+                        "enumCode": "loan_product",
+                        "parentEnumCode": "partner",
+                        "parentValueExpr": "model.group.partnerCode"
+                            //readonly: readonly,
+                    }, {
+                        "key": "group.frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        //"enumCode": "frequency",
+                        /*"titleMap": [{
+                            "name": "Monthly",
+                            "value": "M"
+                        }, {
+                            "name": "Quarterly",
+                            "value": "Q"
+                        }],*/
+                        "titleMap": {
+                            "M": "Monthly",
+                            "Q": "Quarterly"
+                        }
+                        //readonly: readonly
+                    }, {
+                        "key": "group.tenure",
+                        "title": "TENURE",
+                        //readonly: readonly
+                    }]
+                }, {
+                    "type": "box",
+                    "title": "GROUP_MEMBERS",
+                    "items": [{
+                        "key": "group.jlgGroupMembers",
+                        "type": "array",
+                        "title": "GROUP_MEMBERS",
+                        //"condition": "model.group.jlgGroupMembers.length>0",
+                        "add": null,
+                        "remove": null,
+                        "items": [{
+                            "key": "group.jlgGroupMembers[].urnNo",
+                            "title": "URN_NO",
+                            //"readonly": true
+                            "type": "lov",
+                            initialize: function(model, form, parentModel, context) {
+                                model.branchName = parentModel.group.branchName;
+                            },
+                            "inputMap": {
+                                /*"status": {
+                                    "key": "group.status",
+                                    "title": "STATUS",
+                                    "type": "select",
+                                    "titleMap": [{
+                                        "name": "All",
+                                        "value": ""
+                                    }, {
+                                        "name": "Processed",
+                                        "value": "PROCESSED"
+                                    }, {
+                                        "name": "Pending",
+                                        "value": "PENDING"
+                                    }, {
+                                        "name": "Error",
+                                        "value": "ERROR"
+                                    }]
+                                },*/
+                                "branchName": {
+                                    "key": "group.branchName",
+                                    "title": "BRANCH_NAME",
+                                    "type": "select",
+                                    "enumCode": "branch_id"
+                                },
+                                "centreCode": {
+                                    "key": "group.centreCode",
+                                    "title": "CENTRE",
+                                    "enumCode": "centre",
+                                    "type": "select",
+                                    "parentEnumCode": "branch_id",
+                                    "parentValueExpr": "model.branchName",
+                                }
+                            },
+                            "outputMap": {
+                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
+                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
+                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form) {
+                                /*var today = moment(new Date());
+                                var nDaysBack = moment(new Date()).subtract(nDays, 'days');
+                                var promise = CreditBureau.listCreditBureauStatus({
+                                    'branchName': inputModel.branchName,
+                                    'status': inputModel.status,
+                                    'centreCode': inputModel.centreCode,
+                                    'fromDate': nDaysBack.format('YYYY-MM-DD'),
+                                    'toDate': today.format('YYYY-MM-DD')
+                                }).$promise;
+                                return promise;*/
+
+                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                var branches = formHelper.enum('branch_id').data;
+                                var branchId;
+                                $log.info(inputModel.branchName);
+                                for (var i = 0; i < branches.length; i++) {
+                                    if (branches[i].code == inputModel.branchName)
+                                        branchId = branches[i].name;
+                                }
+                                var promise = Enrollment.search({
+                                    'branchName': branchId || SessionStore.getBranch(),
+                                    'centreId': inputModel.centreId,
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    data.urnNo,
+                                    data.firstName
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context) {}
+                        }, {
+                            "key": "group.jlgGroupMembers[].firstName",
+                            "type": "string",
+                            //"readonly": true,
+                            "title": "GROUP_MEMBER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "title": "FATHER_NAME"
+                                //"readonly": readonly
+                        }, {
+                            "key": "group.jlgGroupMembers[].relation",
+                            "title": "RELATION",
+                            //"readonly": readonly,
+                            /*"type": "select",
+                            "titleMap": {
+                                "Father": "Father",
+                                "Husband": "Husband"
+                            }*/
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAmount",
+                            "title": "LOAN_AMOUNT",
+                            "type": "amount",
+
+                            //readonly: readonly
+
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "title": "LOAN_PURPOSE_1",
+                            "enumCode": "loan_purpose_1",
+                            "type": "select",
+                            //readonly: readonly
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "type": "string",
+                            "title": "LOAN_PURPOSE_2",
+                            //"enumCode": "loan_purpose_2",
+                            /*"parentEnumCode": "loan_purpose_1",
+                            "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"*/
+                            //readonly: readonly
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "type": "string",
+                            "title": "LOAN_PURPOSE3",
+                            //"enumCode": "loan_purpose_2",
+                            //"parentEnumCode": "loan_purpose_2",
+                            //"parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
+                            //readonly: readonly
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "title": "WitnessLastName",
+                            "type": "lov",
+                            initialize: function(model, form, parentModel, context) {
+                                model.branchName = parentModel.group.branchName;
+                            },
+                            "outputMap": {
+                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
+                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
+                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
+                            },
+                            "searchHelper": formHelper,
+                            "search": function(inputModel, form, model) {
+                                var branches = formHelper.enum('branch_id').data;
+                                var branchId;
+                                $log.info(inputModel.branchName);
+                                for (var i = 0; i < branches.length; i++) {
+                                    if (branches[i].code == inputModel.branchName)
+                                        branchId = branches[i].name;
+                                }
+                                var promise = Enrollment.search({
+                                    'urnNo': model.group.jlgGroupMembers.urnNo,
+                                    'branchName': branchId || SessionStore.getBranch()
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    data.urnNo,
+                                    data.firstName
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context) {}
+                                //"readonly": readonly
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "title": "RELATION",
+                            "type": "select",
+                            "enumCode": "relation"
+                                //"readonly": readonly
+                        }, {
+                            type: "fieldset",
+                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus",
+                            title: "DSC_STATUS",
+                            items: [{
+                                "key": "group.jlgGroupMembers[].dscStatus",
+                                "title": "DSC_STATUS",
+                                "readonly": true,
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus"
+                            }, {
+                                "key": "group.jlgGroupMembers[].requestDSCOverride",
+                                "type": "button",
+                                "title": "REQUEST_DSC_OVERRIDE",
+                                "icon": "fa fa-reply",
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                "onClick": function(model, formCtrl, form, event) {
+                                    console.log(form);
+                                    console.warn(event);
+                                    var i = event['arrayIndex'];
+                                    PageHelper.clearErrors();
+                                    var urnNo = model.group.jlgGroupMembers[i].urnNo;
+                                    PageHelper.showLoader();
+                                    $log.info("Requesting DSC override for ", urnNo);
+                                    irfProgressMessage.pop('group-dsc-override-req', 'Requesting DSC Override');
+                                    Groups.post({
+                                        service: "dscoverriderequest",
+                                        urnNo: urnNo,
+                                        groupCode: model.group.groupCode,
+                                        productCode: model.group.productCode
+                                    }, {}, function(resp, header) {
+                                        $log.warn(resp);
+                                        irfProgressMessage.pop('group-dsc-override-req', 'Almost Done...');
+                                        var screenMode = model.group.screenMode;
+                                        Groups.getGroup({
+                                            groupId: model.group.id
+                                        }, function(response, headersGetter) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('group-dsc-override-req', 'DSC Override Requested', 2000);
+                                            model.group = _.cloneDeep(response);
+                                            fixData(model);
+                                        }, function(resp) {
+                                            $log.error(resp);
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
+                                            PageHelper.showErrors(resp);
+                                            fixData(model);
+                                        });
+                                    }, function(resp, header) {
+                                        $log.error(resp);
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("group-dsc-override-req", "Oops. An error occurred", 2000);
+                                        PageHelper.showErrors(resp);
+                                    });
+                                },
+                            }, {
+                                "key": "group.jlgGroupMembers[].getDSCData",
+                                "type": "button",
+                                "title": "VIEW_DSC_RESPONSE",
+                                "icon": "fa fa-eye",
+                                "style": "btn-primary",
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                "onClick": function(model, formCtrl, form, event) {
+                                    console.log(form);
+                                    console.warn(event);
+                                    var i = event['arrayIndex'];
+                                    console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
+                                    var dscId = model.group.jlgGroupMembers[i].dscId;
+                                    showDscData(dscId);
+                                }
+                            }, {
+                                "key": "group.jlgGroupMembers[].removeMember",
+                                "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
+                                "type": "button",
+                                "title": "REMOVE_MEMBER",
+                                "icon": "fa fa-times",
+                                "onClick": function(model, formCtrl, form, event) {
+                                    console.log(form);
+                                    console.warn(event);
+                                    var i = event['arrayIndex'];
+                                    var urnNo = model.group.jlgGroupMembers[i].urnNo;
+                                    $log.warn("Remove member from grp ", urnNo);
+                                    if (window.confirm("Are you sure?")) {
+                                        PageHelper.showLoader();
+                                        PageHelper.clearErrors();
+                                        irfProgressMessage.pop('group-dsc-remove-req', 'Removing Group Member...');
+                                        Groups.get({
+                                                service: "process",
+                                                action: "removeMember",
+                                                groupCode: model.group.groupCode,
+                                                urnNo: urnNo
+                                            },
+                                            function(resp, headers) {
+                                                Groups.getGroup({
+                                                    groupId: model.group.id
+                                                }, function(response, headersGetter) {
+                                                    irfProgressMessage.pop('group-dsc-remove-req', 'Group Member Removed', 2000);
+                                                    model.group = _.cloneDeep(response);
+                                                    model.group.screenMode = screenMode;
+                                                    fixData(model);
+                                                    PageHelper.hideLoader();
+
+                                                }, function(resp) {
+                                                    $log.error(resp);
+                                                    PageHelper.hideLoader();
+                                                    irfProgressMessage.pop("group-dsc-remove-req", "Oops. An error occurred", 2000);
+                                                    fixData(model);
+                                                });
+                                            },
+                                            function(resp) {
+                                                $log.error(resp);
+                                                PageHelper.hideLoader();
+                                                irfProgressMessage.pop("group-dsc-remove-req", "Oops. An error occurred", 2000);
+                                                PageHelper.showErrors(resp);
+                                                fixData(model);
+                                            });
+                                    }
+                                },
+                            }]
+                        }]
+                    }]
+                },
+
+                {
+                    "type": "actionbox",
+                    "condition": "model.group.id",
+                    "items": [{
+                        //"style": "btn-primary",
+                        "title": "PERFORM_DSC_CHECK",
+                        "type": "button",
+                        "onClick": "actions.doDSCCheck(model,form)"
+                    }]
+                },
+            ],
+
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "object",
+                        "required": [],
+                        "properties": {
+                            "status": {
+                                "title": "STATUS",
+                                "type": "string"
+                            },
+                            "branchName": {
+                                "title": "BRANCH_NAME",
+                                "type": "integer"
+                            },
+                            "centreCode": {
+                                "title": "CENTRE_CODE",
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            },
+
+            actions: {
+                preSave: function(model, form, formName) {},
+                doDSCCheck: function(model, form) {
+                    PageHelper.clearErrors();
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop('group-dsc-check', 'Performing DSC Check');
+                    Groups.dscQuery({
+                            groupCode: model.group.groupCode,
+                            partnerCode: model.group.partnerCode
+                        }, {},
+                        function(resp) {
+                            $log.warn(resp);
+                            irfProgressMessage.pop('group-dsc-check', 'Almost Done...');
+                            Groups.getGroup({
+                                groupId: model.group.id
+                            }, function(response, headersGetter) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('group-dsc-check', 'DSC Check Complete', 2000);
+                                model.group = _.cloneDeep(response);
+                                fixData(model);
+                                fillNames(model).then(function(m) {
+                                    model = m;
+                                    PageHelper.hideLoader();
+                                }, function(m) {
+                                    PageHelper.hideLoader();
+                                    irfProgressMessage.pop("group-dsc-check", "Oops. An error occurred", 2000);
+                                });
+                                var dscFailedStatuses = ['DSC_OVERRIDE_REQUIRED', 'DSC_OVERRIDE_REQUESTED'];
+                                var allOk = true;
+                                var failedMsg = Array();
+                                angular.forEach(model.group.jlgGroupMembers, function(member) {
+                                    if (dscFailedStatuses.indexOf(member.dscStatus) >= 0) {
+                                        $log.warn("DSC Failed for", member);
+                                        allOk = false;
+                                        return;
+                                    }
+                                });
+                                $log.info("DSC Check Status :" + allOk);
+                                if (allOk === true) {
+                                    if (window.confirm("DSC Check Succeeded for the Group. Proceed to next stage?")) {
+                                        model.enrollmentAction = 'PROCEED';
+                                        PageHelper.showLoader();
+                                        irfProgressMessage.pop('dsc-proceed', 'Working...');
+                                        PageHelper.clearErrors();
+                                        var reqData = _.cloneDeep(model);
+                                        //reqData.group.frequency = reqData.group.frequency[0];
+                                        Groups.update(reqData, function(res) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('dsc-proceed', 'Operation Succeeded. Proceeded to CGT 1.', 5000);
+                                            //backToDashboard();
+                                        }, function(res) {
+                                            PageHelper.hideLoader();
+                                            irfProgressMessage.pop('dsc-proceed', 'Oops. Some error.', 2000);
+                                            PageHelper.showErrors(res);
+                                        });
+                                    }
+                                } else {
+                                    var errors = Array();
+                                    PageHelper.hideLoader();
+                                    errors.push({
+                                        message: "DSC Check Failed for some member(s). Please Take required action"
+                                    });
+                                    PageHelper.setErrors(errors);
+                                }
+                            }, function(resp) {
+                                $log.error(resp);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("group-dsc-check", "Oops. An error occurred", 2000);
+                            });
+                        },
+                        function(resp) {
+                            PageHelper.showErrors(resp);
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('group-dsc-check', 'Oops... An error occurred. Please try again', 2000);
+                        });
+                }
+            }
+        }
+    }
+})

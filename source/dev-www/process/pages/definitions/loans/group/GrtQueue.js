@@ -1,50 +1,125 @@
-irf.pageCollection.factory("Pages__GrtQueue", ["$log", "formHelper", "Groups","$state","entityManager",
-    "SessionStore","groupCommons",
-    function($log, formHelper, Groups,$state,entityManager,SessionStore,groupCommons){
-        var listOptions= {
-            itemCallback: function(item, index) {
-                // This will not be called in case of selectable = true in definition
-                $log.info(item);
-                entityManager.setModel('Grt', {_request:item});
-                $state.go("Page.Engine",{
-                    pageName:"Grt",
-                    pageId:null
-                });
-            },
-            getItems: function(response, headers){
-                if (response!=null && response.length && response.length!=0){
-                    return response;
-                }
-                return [];
-            },
-            getListItem: function(item){
-                return [
+define({
+	pageUID: "loans.group.GrtQueue",
+	pageType: "Engine",
+	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+	],
+	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-                    'Group ID : ' + item.id,
-                    'Group Name : '+item.groupName,
-                    null
-                ]
-            },
-            getActions: function(){
-                return [
+		var branchId = SessionStore.getBranchId();
+		var branchName = SessionStore.getBranch();
 
-                ];
-            }
-        };
-        var definition = groupCommons.getSearchDefinition('Stage07',listOptions);
-        return {
-            "id": "grtqueue",
-            "type": "search-list",
-            "name": "GrtQueue",
-            "title": "GRT Queue",
-            "subTitle": "",
-            "uri":"Groups/GRT Queue",
-            offline: true,
-            getOfflineDisplayItem: groupCommons.getOfflineDisplayItem(),
-            getOfflinePromise: groupCommons.getOfflinePromise('Stage07'),
-            initialize: function (model, form, formCtrl) {
-                $log.info("GRT Q got initialized");
-            },
-            definition: definition
-        };
-    }]);
+		return {
+			"type": "search-list",
+			"title": "GRT Queue",
+			"subTitle": "",
+			initialize: function(model, form, formCtrl) {
+				$log.info("GRT Queue got initialized");
+			},
+			definition: {
+				title: "GRT QUEUE",
+				searchForm: [
+					"*"
+				],
+				//autoSearch: true,
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"partner": {
+							"type": "string",
+							"title": "PARTNER",
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "partner"
+							}
+						}
+					},
+					"required": []
+				},
+
+				getSearchFormHelper: function() {
+					return formHelper;
+				},
+				getResultsPromise: function(searchOptions, pageOpts) {
+
+					var params = {
+						'branchId': branchId,
+						'partner': searchOptions.partner,
+						'groupStatus': true,
+						'page': pageOpts.pageNo,
+						'stage': "Stage07",
+						'per_page': pageOpts.itemsPerPage
+					};
+
+					var promise = Groups.search(params).$promise;
+					return promise;
+				},
+				paginationOptions: {
+					"getItemsPerPage": function(response, headers) {
+						return 100;
+					},
+					"getTotalItemsCount": function(response, headers) {
+						return headers['x-total-count']
+					}
+				},
+				listOptions: {
+					selectable: false,
+					expandable: true,
+					listStyle: "table",
+					itemCallback: function(item, index) {},
+					getItems: function(response, headers) {
+						if (response != null && response.length && response.length != 0) {
+							return response;
+						}
+						return [];
+					},
+					getListItem: function(item) {
+						return []
+					},
+					getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+					},
+					getColumns: function() {
+						return [{
+							title: 'GROUP_ID',
+							data: 'id'
+						}, {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+						}, {
+							title: 'GROUP_NAME',
+							data: 'groupName'
+						}]
+					},
+					getActions: function() {
+						return [{
+							name: "DSC",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "loans.group.Grt",
+									pageId:item.id
+								}, {
+									state: "Page.Engine",
+									pageName: "loans.group.GrtQueue",
+								});
+							},
+							isApplicable: function(item, index) {
+
+								return true;
+							}
+						}];
+					}
+				}
+			}
+		};
+	}
+})

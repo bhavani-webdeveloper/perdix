@@ -1,24 +1,21 @@
 define({
-	pageUID: "loans.group.Cgt3Queue",
+	pageUID: "loans.group.GroupSearch",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
-
-		var branchId = SessionStore.getBranchId();
-		var branchName = SessionStore.getBranch();
 
 		return {
 			"type": "search-list",
-			"title": "CGT3 Queue",
+			"title": "VIEW_OR_CLOSE_GROUP",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("CGT3 Queue got initialized");
+				$log.info("View / close group got initialized");
 			},
 			definition: {
-				title: "CGT3 QUEUE",
+				title: "VIEW_OR_CLOSE_GROUP",
 				searchForm: [
 					"*"
 				],
@@ -45,11 +42,10 @@ define({
 				getResultsPromise: function(searchOptions, pageOpts) {
 
 					var params = {
-						'branchId': branchId,
+						//'branchId': branchId,
 						'partner': searchOptions.partner,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
-						'stage': "Stage06",
 						'per_page': pageOpts.itemsPerPage
 					};
 
@@ -87,11 +83,14 @@ define({
 					},
 					getColumns: function() {
 						return [{
-							title: 'GROUP_ID',
+							title: 'ID',
 							data: 'id'
 						}, {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
+						}, {
+							title: 'GROUP_CODE',
+							data: 'productCode'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
@@ -99,17 +98,17 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "DSC",
+							name: "VIEW_GROUP",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.Cgt3",
-									pageId:item.id
+									pageName: "loans.group.CreateGroup",
+									pageId: item.id,
 								}, {
 									state: "Page.Engine",
-									pageName: "loans.group.Cgt3Queue",
+									pageName: "loans.group.GroupSearch",
 								});
 							},
 							isApplicable: function(item, index) {

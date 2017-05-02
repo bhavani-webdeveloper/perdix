@@ -371,7 +371,6 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                     },function(res){
                     });
                 }
-
             },
             downloadApplication:function(model,form){
                 PageHelper.showLoader();
