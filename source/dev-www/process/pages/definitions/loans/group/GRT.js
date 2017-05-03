@@ -155,7 +155,7 @@ define({
                     PageHelper.clearErrors();
                     var reqData = {
                         "grtDate": model.group.grtDate,
-                        "grtDoneBy": model.group.grtDoneBy,
+                        "grtDoneBy": SessionStore.getLoginname()+'-'+model.group.grtDoneBy,
                         "groupCode": model.group.groupCode,
                         "latitude": model.group.grtLatitude,
                         "longitude": model.group.grtLongitude,

@@ -126,7 +126,7 @@ define({
                     //var reqData = _.cloneDeep(model);
                     var reqData = {
                         "cgtDate": model.group.cgtDate2,
-                        "cgtDoneBy": model.group.cgt2DoneBy,
+                        "cgtDoneBy": SessionStore.getLoginname()+'-'+model.group.cgt2DoneBy,
                         "groupCode": model.group.groupCode,
                         "latitude": model.group.cgt2Latitude,
                         "longitude": model.group.cgt2Longitude,

@@ -99,7 +99,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "DSC",
+							name: "GRT",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

@@ -125,7 +125,7 @@ define({
                     PageHelper.clearErrors();
                     var reqData = {
                         "cgtDate": model.group.cgtDate1,
-                        "cgtDoneBy": model.group.cgt1DoneBy,
+                        "cgtDoneBy": SessionStore.getLoginname()+'-'+model.group.cgt1DoneBy,
                         "groupCode": model.group.groupCode,
                         "latitude": model.group.cgt1Latitude,
                         "longitude": model.group.cgt1Longitude,
