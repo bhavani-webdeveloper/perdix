@@ -112,7 +112,7 @@ define({
                         var centreCode = formHelper.enum('centre').data;
                         for (var i = 0; i < centreCode.length; i++) {
                             if (centreCode[i].code == model.group.centreCode) {
-                                model.group.centreCode=centreCode[i].value;
+                                model.group.centreCode = centreCode[i].value;
                             }
                         }
                         fixData(model);
@@ -177,13 +177,13 @@ define({
                         "type": "select",
                         //"enumCode": "frequency",
                         "titleMap": [{
-                            "name": "Monthly",
-                            "value": "M"
-                        }, {
-                            "name": "Quarterly",
-                            "value": "Q"
-                        }]
-                        //readonly: readonly
+                                "name": "Monthly",
+                                "value": "M"
+                            }, {
+                                "name": "Quarterly",
+                                "value": "Q"
+                            }]
+                            //readonly: readonly
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
@@ -241,6 +241,7 @@ define({
                                 "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                                 "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                                 "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
+                                "id": "group.jlgGroupMembers[arrayIndex].id",
                             },
                             "searchHelper": formHelper,
                             "search": function(inputModel, form) {
@@ -266,6 +267,7 @@ define({
                                 var promise = Enrollment.search({
                                     'branchName': branchId || SessionStore.getBranch(),
                                     'centreId': inputModel.centreId,
+                                    'customerType': "individual",
                                 }).$promise;
                                 return promise;
                             },
@@ -277,6 +279,7 @@ define({
                             },
                             onSelect: function(valueObj, model, context) {
                                 $log.info("Hi Selected");
+                                model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
                             }
                         }, {
                             "key": "group.jlgGroupMembers[].firstName",
@@ -320,7 +323,7 @@ define({
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose3",
                             "type": "select",
-                            "title": "LOAN_PURPOSE3",
+                            "title": "LoanPurpose3",
                             "enumCode": "loan_purpose_2",
                             //"parentEnumCode": "loan_purpose_2",
                             //"parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
@@ -333,13 +336,12 @@ define({
                                 model.branchName = parentModel.group.branchName;
                             },
                             "outputMap": {
-                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
-                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
+                                "name": "group.jlgGroupMembers[arrayIndex].witnessFirstName",
+                                "relationShip": "group.jlgGroupMembers[arrayIndex].witnessRelationship",
                             },
                             "searchHelper": formHelper,
-                            "search": function(inputModel, form, model) {
-                                var branches = formHelper.enum('branch_id').data;
+                            "search": function(inputModel, form, model, context) {
+                                /*var branches = formHelper.enum('branch_id').data;
                                 var branchId;
                                 $log.info(inputModel.branchName);
                                 for (var i = 0; i < branches.length; i++) {
@@ -347,15 +349,42 @@ define({
                                         branchId = branches[i].name;
                                 }
                                 var promise = Enrollment.search({
-                                    'urnNo': model.group.jlgGroupMembers.urnNo,
-                                    'branchName': branchId || SessionStore.getBranch()
+                                    'urnNo': model.group.jlgGroupMembers[context.arrayIndex].urnNo,
+                                    'branchName': branchId || SessionStore.getBranch(),
+                                    'customerType': "individual",
                                 }).$promise;
+                                return promise;*/
+
+                                var promise = Enrollment.getCustomerById({
+                                    id: model.group.jlgGroupMembers[context.arrayIndex].id,
+                                }).$promise.then(function(res) {
+                                    var familyMembers=[];
+                                    //var obj={};
+                                    for(i in res.familyMembers)
+                                    {
+                                        var obj={};
+                                        if(res.familyMembers[i].relationShip!='Self'||res.familyMembers[i].relationShip!='self')
+                                        {
+                                            obj.name=res.familyMembers[i].familyMemberFirstName;
+                                            obj.relationShip=res.familyMembers[i].relationShip;
+                                            familyMembers.push(obj);
+                                        }
+                                    }
+                                    $log.info(familyMembers);
+
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": familyMembers.length
+                                        },
+                                        body: familyMembers
+                                    });
+                                });
                                 return promise;
                             },
                             getListDisplayItem: function(data, index) {
                                 return [
-                                    data.urnNo,
-                                    data.firstName
+                                    data.name,
+                                    data.relationShip,
                                 ];
                             },
                             onSelect: function(valueObj, model, context) {}

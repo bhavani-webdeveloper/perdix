@@ -54,9 +54,11 @@ define({
                 "title": "GRT",
                 "items": [{
                     "key": "group.grtDoneBy",
+                    "title": "GRT_DONE_BY",
                     "readonly": true
                 }, {
                     "key": "group.grtDate",
+                    "title": "GRT_DATE",
                     "type": "text",
                     "readonly": true
                 }, {
@@ -68,26 +70,37 @@ define({
                 }, {
                     "key": "group.grtPhoto",
                     "type": "file",
+                    "title": "GRT_PHOTO",
+                    "category":"Group",
+                    "subCategory":"GRTPHOTO",
                     "fileType": "image/*",
                     "offline": true
                 }, {
                     "key": "group.grtRemarks",
+                    "title": "GRT_REMARKS",
                     "type": "textarea"
                 }, {
                     "key": "group.udfDate1",
+                    "title": "DISBURSEMENT_DATE",
                     "type": "date"
                 }, {
-                    "key": "group.udf1"
+                    "key": "group.udf1",
+                    "title": "QUESTION_1"
                 }, {
-                    "key": "group.udf2"
+                    "key": "group.udf2",
+                    "title": "QUESTION_2"
                 }, {
-                    "key": "group.udf3"
+                    "key": "group.udf3",
+                    "title": "QUESTION_3"
                 }, {
-                    "key": "group.udf4"
+                    "key": "group.udf4",
+                    "title": "QUESTION_4"
                 }, {
-                    "key": "group.udf5"
+                    "key": "group.udf5",
+                    "title": "QUESTION_5"
                 }, {
-                    "key": "group.udf6"
+                    "key": "group.udf6",
+                    "title": "QUESTION_6"
                 }]
             }, {
                 "type": "actionbox",
@@ -96,12 +109,12 @@ define({
                     "title": "SAVE_OFFLINE",
                 }, {
                     "type": "submit",
-                    "style": "btn-primary",
+                    //"style": "btn-primary",
                     "title": "SUBMIT_GRT"
                 }]
             }],
 
-            schema: {
+            /*schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
@@ -124,6 +137,9 @@ define({
                         }
                     }
                 }
+            },*/
+            schema: function () {
+                return Groups.getSchema().$promise;
             },
 
             actions: {
@@ -167,9 +183,9 @@ define({
                         }, function(resp, header) {
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('grt-submit', 'GRT Updated, Loan Account Activated. Proceed to Applications Pending screen.', 5000);
-                            $state.go('Page.GroupDashboard', {
+                            /*$state.go('Page.GroupDashboard', {
                                 pageName: "GroupDashboard"
-                            });
+                            });*/
                         }, function(res) {
                             PageHelper.hideLoader();
                             irfProgressMessage.pop('grt-submit', 'An error occurred while activating loan account. Please Try from Applications Pending Screen', 2000);
@@ -187,9 +203,9 @@ define({
                                 })
                                 PageHelper.setErrors(errors);
                             }
-                            $state.go('Page.GroupDashboard', {
+                           /* $state.go('Page.GroupDashboard', {
                                 pageName: "GroupDashboard"
-                            });
+                            });*/
                         });
                     }, function(res) {
                         PageHelper.hideLoader();

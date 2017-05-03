@@ -49,7 +49,7 @@ define({
 						'partner': searchOptions.partner,
 						'groupStatus': true,
 						'page': pageOpts.pageNo,
-						'stage': "Stage07",
+						'currentStage': "Stage07",
 						'per_page': pageOpts.itemsPerPage
 					};
 
@@ -105,7 +105,7 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.Grt",
+									pageName: "loans.group.GRT",
 									pageId:item.id
 								}, {
 									state: "Page.Engine",
