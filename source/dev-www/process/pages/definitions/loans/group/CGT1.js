@@ -1,5 +1,5 @@
 define({
-    pageUID: "loans.group.Cgt1",
+    pageUID: "loans.group.CGT1",
     pageType: "Engine",
     dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
      "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",

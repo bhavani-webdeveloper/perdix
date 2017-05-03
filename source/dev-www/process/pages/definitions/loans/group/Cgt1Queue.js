@@ -105,7 +105,7 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.Cgt1",
+									pageName: "loans.group.CGT1",
 									pageId:item.id
 								}, {
 									state: "Page.Engine",

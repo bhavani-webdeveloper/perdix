@@ -1,140 +1,122 @@
-irf.pageCollection.factory("Pages__Cgt2", ["$log","authService","Groups","$state","$stateParams","PageHelper",
-    "irfProgressMessage",'Utils',
-    function($log,authService,Groups,$state,$stateParams,PageHelper,irfProgressMessage,Utils) {
+define({
+    pageUID: "loans.group.CGT2",
+    pageType: "Engine",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+        "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+    ],
+
+    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+        Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+
         return {
-            "id": "cgt2",
             "type": "schema-form",
-            "name": "Cgt2",
-            "title": "CGT 2",
+            "title": "CGT_2",
             "subTitle": "",
-            "uri": "Groups/CGT 2",
-            "offline":true,
-            getOfflineDisplayItem: function(item, index){
+            initialize: function(model, form, formCtrl) {
+                $log.info(model);
+                if ($stateParams.pageId) {
+                    var groupId = $stateParams.pageId;
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop("cgt1-init", "Loading, Please Wait...");
+                    Groups.getGroup({
+                        groupId: groupId
+                    }, function(response, headersGetter) {
+                        model.group = _.cloneDeep(response);
+                        model.group.cgtDate2 = model.group.cgtDate2 || Utils.getCurrentDate();
+                        model.group.cgt2DoneBy = SessionStore.getUsername();
+                        PageHelper.hideLoader();
+                    }, function(resp) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                        //backToDashboard();
+                    });
+                } else {
+                    irfNavigator.goBack();
+                }
+            },
+            offline: true,
+            getOfflineDisplayItem: function(item, index) {
                 return [
-                    "Group ID : "+item.group.id,
-                    "Group Code : "+item.group.groupCode,
-                    "CGT Date : "+ item.group.cgtDate2
+                    "Group ID : " + item.group.id,
+                    "Group Code : " + item.group.groupCode,
+                    "CGT Date : " + item.group.cgtDate2
                 ]
             },
-            initialize: function (model, form, formCtrl) {
-                if(model._request==undefined || model._request==null){
-                    $state.go("Page.Engine", {pageName:"Cgt2Queue", pageId:null});
-                    return;
+
+            form: [{
+                "type": "box",
+                "title": "CGT_2",
+                "items": [{
+                    "key": "group.cgt2DoneBy",
+                    "title": "CGT_2_DONE_BY",
+                    "readonly": true
+                }, {
+                    "key": "group.cgtDate2",
+                    "type": "text",
+                    "title": "CGT_2_DATE",
+                    "readonly": true
+                }, {
+                    "key": "group.cgt2Latitude",
+                    "title": "CGT_2_LOCATION",
+                    "type": "geotag",
+                    "latitude": "group.cgt1Latitude",
+                    "longitude": "group.cgt1Longitude"
+                }, {
+                    "key": "group.cgt2Photo",
+                    "title": "CGT_2_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "fileType": "image/*",
+                    "offline": true
+                }, {
+                    "key": "group.cgt2Remarks",
+                    "title": "CGT_2_REMARKS",
+                    "type": "textarea"
+                }]
+            }, {
+                "type": "actionbox",
+                "items": [{
+                    "type": "save",
+                    "title": "SAVE_OFFLINE",
+                }, {
+                    "type": "submit",
+                    "title": "SUBMIT_CGT_2"
+                }]
+            }],
+
+            schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "group": {
+                        "type": "object",
+                        "required": [],
+                        "properties": {
+                            "status": {
+                                "title": "STATUS",
+                                "type": "string"
+                            },
+                            "branchName": {
+                                "title": "BRANCH_NAME",
+                                "type": "integer"
+                            },
+                            "centreCode": {
+                                "title": "CENTRE_CODE",
+                                "type": "integer"
+                            }
+                        }
+                    }
                 }
-                PageHelper.showLoader();
-                irfProgressMessage.pop("cgt2-init","Loading... Please Wait...");
-                model.group= model.group || {};
-
-
-                model.group.cgtDate2 = model.group.cgtDate2 || Utils.getCurrentDate();
-                model.group.id = model.group.id || model._request.id;
-                model.group.groupCode = model.group.groupCode || model._request.groupCode;
-                model.group.partnerCode = model.group.groupCode || model._request.partnerCode;
-                model.group.productCode = model.group.productCode|| model._request.productCode;
-
-                var prom = authService.getUser().then(function(data){
-                    model.group.cgt2DoneBy = data.login;
-                    PageHelper.hideLoader();
-                    $log.info("AfterLoad",model);
-                    irfProgressMessage.pop("cgt2-init","Load Complete",2000);
-                },function(resp){
-                    $log.error(resp);
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop("cgt2-init","Oops, an error occurred",2000);
-                });
-                /*var groupId = $stateParams.pageId;
-                Groups.getGroup({groupId:groupId},function(response,headersGetter){
-                    console.warn(response);
-                    /*model.group = {
-                     id:response.id,
-                     groupCode:response.groupCode,
-                     partnerCode:response.partnerCode,
-                     productCode:response.productCode
-
-                     };
-                    model.group = _.cloneDeep(response);
-                    var date = new Date();
-                    var y = date.getFullYear();
-                    var m = (date.getMonth()+2);
-                    var d = date.getDate();
-                    m = (m.toString().length<2)?("0"+m):m;
-                    d = (d.toString().length<2)?("0"+d):d;
-
-                    model.group.cgtDate2 = y+"-"+m+"-"+d;
-
-                    var prom = authService.getUser().then(function(data){
-                        PageHelper.hideLoader();
-                        model.group.cgt2DoneBy = data.login;
-                        irfProgressMessage.pop("cgt2-init","Load Completed.",2000);
-                    },function(resp){
-                        PageHelper.hideLoader();
-                        $log.error(resp);
-                        irfProgressMessage.pop("cgt2-init","Oops, an error occurred",2000);
-                    });
-
-
-                },function(resp){
-                    PageHelper.hideLoader();
-                    $log.error(resp);
-                    irfProgressMessage.pop("cgt2-init","Oops, an error occurred",2000);
-
-                });*/
             },
-            form: [
-                {
-                    "type":"box",
-                    "title":"CGT_2",
-                    "items":[
-                        {
-                            "key":"group.cgt2DoneBy",
-                            "readonly":true
-                        },
-                        {
-                            "key":"group.cgtDate2",
-                            "type":"text",
-                            "readonly":true
 
-                        },
-                        {
-                            "key":"group.cgt2Latitude",
-                            "title": "CGT_2_LOCATION",
-                            "type":"geotag",
-                            "latitude": "group.cgt2Latitude",
-                            "longitude": "group.cgt2Longitude"
-                        },
-                        {
-                            "key":"group.cgt2Photo",
-                            "type":"file",
-                            "fileType":"image/*",
-                            "offline":true
-
-                        },
-                        {
-                            "key":"group.cgt2Remarks",
-                            "type":"textarea"
-                        }
-
-                    ]
-                },{
-                    "type":"actionbox",
-                    "items":[
-                        {
-                            "type": "save",
-                            "title": "SAVE_OFFLINE",
-                        },
-                        {
-                            "type":"submit",
-                            "style":"btn-primary",
-                            "title":"SUBMIT_CGT_2"
-                        }
-                    ]
-                }
-            ],
             actions: {
-                submit: function (model, form, formName) {
-
+                preSave: function(model, form, formName) {},
+                submit: function(model, form, formName) {
                     model.enrollmentAction = 'PROCEED';
-                    if (form.$invalid){
+                    if (form.$invalid) {
                         irfProgressMessage.pop('cgt2-submit', 'Please fix your form', 5000);
                         return;
                     }
@@ -152,25 +134,24 @@ irf.pageCollection.factory("Pages__Cgt2", ["$log","authService","Groups","$state
                         "photoId": model.group.cgt2Photo,
                         "productCode": model.group.productCode,
                         "remarks": model.group.cgt2Remarks
-
                     };
-                    var promise = Groups.post({service:'process',action:'cgt'},reqData,function(res){
+                    var promise = Groups.post({
+                        service: 'process',
+                        action: 'cgt'
+                    }, reqData, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('cgt2-submit', 'CGT 2 Updated. Proceed to CGT 3.', 5000);
-                        $state.go('Page.GroupDashboard',{
-                            pageName:"GroupDashboard"
-                        });
-
-                    },function(res){
+                        /*$state.go('Page.GroupDashboard', {
+                            pageName: "GroupDashboard"
+                        });*/
+                    }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('cgt2-submit', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
 
                     });
                 }
-            },
-            schema: function () {
-                return Groups.getSchema().$promise;
             }
         }
-    }]);
+    }
+})

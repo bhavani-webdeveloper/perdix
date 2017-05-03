@@ -240,7 +240,7 @@ define({
                             "outputMap": {
                                 "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                                 "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
+                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
                             },
                             "searchHelper": formHelper,
                             "search": function(inputModel, form) {
@@ -275,7 +275,9 @@ define({
                                     data.firstName
                                 ];
                             },
-                            onSelect: function(valueObj, model, context) {}
+                            onSelect: function(valueObj, model, context) {
+                                $log.info("Hi Selected");
+                            }
                         }, {
                             "key": "group.jlgGroupMembers[].firstName",
                             "type": "string",
