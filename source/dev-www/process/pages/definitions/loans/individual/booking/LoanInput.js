@@ -50,36 +50,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                 })
             }
-
-            // Psychometric Required for applicants & co-applicants
-            if (_.isArray(loanAccount.loanCustomerRelations)) {
-                var enterpriseCustomerRelations = model._bundleModel.business.enterpriseCustomerRelations;
-                for (i in loanAccount.loanCustomerRelations) {
-                    if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
-                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                    } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
-                        if (_.isArray(enterpriseCustomerRelations)) {
-                            var psychometricRequiredUpdated = false;
-                            for (j in enterpriseCustomerRelations) {
-                                if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
-                                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                                    psychometricRequiredUpdated = true;
-                                }
-                            }
-                            if (!psychometricRequiredUpdated) {
-                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                            }
-                        } else {
-                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                        }
-                    } else {
-                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                    }
-                    if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
-                        loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
-                    }
-                }
-            }
             
             return true;
         }
@@ -96,7 +66,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             model.loanAccount.loanCustomerRelations.push({
                 customerId: model.loanAccount.applicantId,
                 urn: model.loanAccount.applicant,
-                relation: 'Applicant'
+                relation: 'Applicant',
+                psychometricCompleted: "NO"
             });
             if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length) {
                 for (var i in model.loanAccount.coBorrowers) {
@@ -1545,12 +1516,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
-
+                    if (!preLoanSaveOrProceed(model)){
+                        return;
+                    }
+                    populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?")
                         .then(
                             function(){
-                                populateLoanCustomerRelations(model);
-
                                 var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                                  if(!$stateParams.pageId)
                                 {
