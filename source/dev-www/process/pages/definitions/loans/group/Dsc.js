@@ -220,6 +220,7 @@ define({
                         "remove": null,
                         "items": [{
                             "key": "group.jlgGroupMembers[].urnNo",
+                            "readonly": true,
                             "title": "URN_NO",
                             //"readonly": true
                             "type": "lov",
@@ -301,15 +302,18 @@ define({
                             onSelect: function(valueObj, model, context) {}
                         }, {
                             "key": "group.jlgGroupMembers[].firstName",
+                            "readonly": true,
                             "type": "string",
                             //"readonly": true,
                             "title": "GROUP_MEMBER_NAME"
                         }, {
                             "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "readonly": true,
                             "title": "FATHER_NAME"
                                 //"readonly": readonly
                         }, {
                             "key": "group.jlgGroupMembers[].relation",
+                            "readonly": true,
                             "title": "RELATION",
                             //"readonly": readonly,
                             /*"type": "select",
@@ -319,6 +323,7 @@ define({
                             }*/
                         }, {
                             "key": "group.jlgGroupMembers[].loanAmount",
+                            "readonly": true,
                             "title": "LOAN_AMOUNT",
                             "type": "amount",
 
@@ -326,12 +331,14 @@ define({
 
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "readonly": true,
                             "title": "LOAN_PURPOSE_1",
                             "enumCode": "loan_purpose_1",
                             "type": "select",
                             //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE_2",
                             //"enumCode": "loan_purpose_2",
@@ -340,6 +347,7 @@ define({
                             //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "readonly": true,
                             "type": "string",
                             "title": "LOAN_PURPOSE3",
                             //"enumCode": "loan_purpose_2",
@@ -348,6 +356,7 @@ define({
                             //readonly: readonly
                         }, {
                             "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "readonly": true,
                             "title": "WitnessLastName",
                             "type": "lov",
                             initialize: function(model, form, parentModel, context) {
@@ -383,13 +392,14 @@ define({
                                 //"readonly": readonly
                         }, {
                             "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "readonly": true,
                             "title": "RELATION",
                             "type": "select",
                             "enumCode": "relation"
                                 //"readonly": readonly
                         }, {
                             type: "fieldset",
-                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus",
+                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus && model.group.currentStage == 'Stage03'",
                             title: "DSC_STATUS",
                             items: [{
                                 "key": "group.jlgGroupMembers[].dscStatus",
@@ -518,7 +528,7 @@ define({
                         "type": "button",
                         "onClick": "actions.doDSCCheck(model,form)"
                     }]
-                },
+                }
             ],
 
             schema: {

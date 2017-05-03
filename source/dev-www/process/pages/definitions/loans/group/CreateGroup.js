@@ -20,7 +20,10 @@ define({
                 Enrollment.get({
                     id: member.customerId
                 }, function(resp, headers) {
-                    model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    if (resp.firstName > 0) {
+                        model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    }
+                    //model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     try {
                         if (resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
@@ -49,8 +52,6 @@ define({
             } else {
                 reqData.enrollmentAction = 'SAVE';
                 reqData.group.groupFormationDate = Utils.getCurrentDate();
-                //delete reqData.group.screenMode;
-                //reqData.group.frequency = reqData.group.frequency[0];
                 PageHelper.clearErrors();
                 Utils.removeNulls(reqData, true);
                 Groups.post(reqData, function(res) {
@@ -75,7 +76,6 @@ define({
                 PageHelper.showLoader();
                 irfProgressMessage.pop('group-save', 'Working...');
                 res.enrollmentAction = "PROCEED";
-                //res.group.frequency = res.group.frequency[0];
                 Utils.removeNulls(res, true);
                 Groups.update(res, function(res, headers) {
                     $log.info(res);
@@ -145,288 +145,255 @@ define({
             },
 
             form: [{
-                    "type": "box",
-                    "title": "GROUP_DETAILS",
-                    "items": [{
-                        "key": "group.groupName",
-                        "title": "GROUP_NAME",
-                        //readonly: readonly
-                    }, {
-                        "key": "group.partnerCode",
-                        "title": "PARTNER",
-                        "type": "select",
-                        "enumCode": "partner"
-                            //readonly: readonly
-                    }, {
-                        "key": "group.centreCode",
-                        "title": "CENTRE_CODE",
-                        "type": "select",
-                        "enumCode": "centre"
-                            //readonly: readonly
-                    }, {
-                        "key": "group.productCode",
-                        "title": "PRODUCT",
-                        "type": "select",
-                        "enumCode": "loan_product",
-                        "parentEnumCode": "partner",
-                        "parentValueExpr": "model.group.partnerCode"
-                            //readonly: readonly,
-                    }, {
-                        "key": "group.frequency",
-                        "title": "FREQUENCY",
-                        "type": "select",
-                        //"enumCode": "frequency",
-                        "titleMap": [{
-                                "name": "Monthly",
-                                "value": "M"
-                            }, {
-                                "name": "Quarterly",
-                                "value": "Q"
-                            }]
-                            //readonly: readonly
-                    }, {
-                        "key": "group.tenure",
-                        "title": "TENURE",
-                        //readonly: readonly
-                    }, {
-                        "key": "group.jlgGroupMembers",
-                        "type": "array",
-                        "title": "GROUP_MEMBERS",
-                        //"condition": "model.group.jlgGroupMembers.length>0",
-                        //"add": null,
-                        //"remove": null,
-                        "items": [{
-                            "key": "group.jlgGroupMembers[].urnNo",
-                            "title": "URN_NO",
-                            //"readonly": true
-                            "type": "lov",
-                            initialize: function(model, form, parentModel, context) {
-                                model.branchName = parentModel.group.branchName;
-                            },
-                            "inputMap": {
-                                /*"status": {
-                                    "key": "group.status",
-                                    "title": "STATUS",
-                                    "type": "select",
-                                    "titleMap": [{
-                                        "name": "All",
-                                        "value": ""
-                                    }, {
-                                        "name": "Processed",
-                                        "value": "PROCESSED"
-                                    }, {
-                                        "name": "Pending",
-                                        "value": "PENDING"
-                                    }, {
-                                        "name": "Error",
-                                        "value": "ERROR"
-                                    }]
-                                },*/
-                                "branchName": {
-                                    "key": "group.branchName",
-                                    "title": "BRANCH_NAME",
-                                    "type": "select",
-                                    "enumCode": "branch_id"
-                                },
-                                "centreCode": {
-                                    "key": "group.centreCode",
-                                    "title": "CENTRE",
-                                    "enumCode": "centre",
-                                    "type": "select",
-                                    "parentEnumCode": "branch_id",
-                                    "parentValueExpr": "model.branchName",
-                                }
-                            },
-                            "outputMap": {
-                                "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
-                                "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                                "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
-                                "id": "group.jlgGroupMembers[arrayIndex].id",
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form) {
-                                /*var today = moment(new Date());
-                                var nDaysBack = moment(new Date()).subtract(nDays, 'days');
-                                var promise = CreditBureau.listCreditBureauStatus({
-                                    'branchName': inputModel.branchName,
-                                    'status': inputModel.status,
-                                    'centreCode': inputModel.centreCode,
-                                    'fromDate': nDaysBack.format('YYYY-MM-DD'),
-                                    'toDate': today.format('YYYY-MM-DD')
-                                }).$promise;
-                                return promise;*/
-
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var branches = formHelper.enum('branch_id').data;
-                                var branchId;
-                                $log.info(inputModel.branchName);
-                                for (var i = 0; i < branches.length; i++) {
-                                    if (branches[i].code == inputModel.branchName)
-                                        branchId = branches[i].name;
-                                }
-                                var promise = Enrollment.search({
-                                    'branchName': branchId || SessionStore.getBranch(),
-                                    'centreId': inputModel.centreId,
-                                    'customerType': "individual",
-                                }).$promise;
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    data.urnNo,
-                                    data.firstName
-                                ];
-                            },
-                            onSelect: function(valueObj, model, context) {
-                                $log.info("Hi Selected");
-                                model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
-                            }
+                "type": "box",
+                "title": "GROUP_DETAILS",
+                "items": [{
+                    "key": "group.groupName",
+                    "title": "GROUP_NAME",
+                }, {
+                    "key": "group.partnerCode",
+                    "title": "PARTNER",
+                    "type": "select",
+                    "enumCode": "partner"
+                }, {
+                    "key": "group.centreCode",
+                    "title": "CENTRE_CODE",
+                    "type": "select",
+                    "enumCode": "centre",
+                    "parentEnumCode": "branchId",
+                    "parentValueExpr": "model.group.branchName"
+                }, {
+                    "key": "group.productCode",
+                    "title": "PRODUCT",
+                    "type": "select",
+                    "enumCode": "loan_product",
+                    "parentEnumCode": "partner",
+                    "parentValueExpr": "model.group.partnerCode"
+                }, {
+                    "key": "group.frequency",
+                    "title": "FREQUENCY",
+                    "type": "select",
+                    "titleMap": [{
+                            "name": "Monthly",
+                            "value": "M"
                         }, {
-                            "key": "group.jlgGroupMembers[].firstName",
-                            "type": "string",
-                            //"readonly": true,
-                            "title": "GROUP_MEMBER_NAME"
-                        }, {
-                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                            "title": "FATHER_NAME"
-                                //"readonly": readonly
-                        }, {
-                            "key": "group.jlgGroupMembers[].relation",
-                            "title": "RELATION",
-                            //"readonly": readonly,
-                            /*"type": "select",
-                            "titleMap": {
-                                "Father": "Father",
-                                "Husband": "Husband"
-                            }*/
-                        }, {
-                            "key": "group.jlgGroupMembers[].loanAmount",
-                            "title": "LOAN_AMOUNT",
-                            "type": "amount",
-
-                            //readonly: readonly
-
-                        }, {
-                            "key": "group.jlgGroupMembers[].loanPurpose1",
-                            "title": "LOAN_PURPOSE_1",
-                            "enumCode": "loan_purpose_1",
-                            "type": "select",
-                            //readonly: readonly
-                        }, {
-                            "key": "group.jlgGroupMembers[].loanPurpose2",
-                            "type": "select",
-                            "title": "LOAN_PURPOSE_2",
-                            "enumCode": "loan_purpose_2",
-                            "parentEnumCode": "loan_purpose_1",
-                            "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"
-                                //readonly: readonly
-                        }, {
-                            "key": "group.jlgGroupMembers[].loanPurpose3",
-                            "type": "select",
-                            "title": "LoanPurpose3",
-                            "enumCode": "loan_purpose_2",
-                            //"parentEnumCode": "loan_purpose_2",
-                            //"parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose2"
-                            //readonly: readonly
-                        }, {
-                            "key": "group.jlgGroupMembers[].witnessFirstName",
-                            "title": "WitnessLastName",
-                            "type": "lov",
-                            initialize: function(model, form, parentModel, context) {
-                                model.branchName = parentModel.group.branchName;
-                            },
-                            "outputMap": {
-                                "name": "group.jlgGroupMembers[arrayIndex].witnessFirstName",
-                                "relationShip": "group.jlgGroupMembers[arrayIndex].witnessRelationship",
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form, model, context) {
-                                /*var branches = formHelper.enum('branch_id').data;
-                                var branchId;
-                                $log.info(inputModel.branchName);
-                                for (var i = 0; i < branches.length; i++) {
-                                    if (branches[i].code == inputModel.branchName)
-                                        branchId = branches[i].name;
-                                }
-                                var promise = Enrollment.search({
-                                    'urnNo': model.group.jlgGroupMembers[context.arrayIndex].urnNo,
-                                    'branchName': branchId || SessionStore.getBranch(),
-                                    'customerType': "individual",
-                                }).$promise;
-                                return promise;*/
-
-                                var promise = Enrollment.getCustomerById({
-                                    id: model.group.jlgGroupMembers[context.arrayIndex].id,
-                                }).$promise.then(function(res) {
-                                    var familyMembers=[];
-                                    //var obj={};
-                                    for(i in res.familyMembers)
-                                    {
-                                        var obj={};
-                                        if(res.familyMembers[i].relationShip!='Self'||res.familyMembers[i].relationShip!='self')
-                                        {
-                                            obj.name=res.familyMembers[i].familyMemberFirstName;
-                                            obj.relationShip=res.familyMembers[i].relationShip;
-                                            familyMembers.push(obj);
-                                        }
-                                    }
-                                    $log.info(familyMembers);
-
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": familyMembers.length
-                                        },
-                                        body: familyMembers
-                                    });
-                                });
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    data.name,
-                                    data.relationShip,
-                                ];
-                            },
-                            onSelect: function(valueObj, model, context) {}
-                                //"readonly": readonly
-                        }, {
-                            "key": "group.jlgGroupMembers[].witnessRelationship",
-                            "title": "RELATION",
-                            "type": "select",
-                            "enumCode": "relation"
-                                //"readonly": readonly
+                            "name": "Quarterly",
+                            "value": "Q"
                         }]
-                    }]
-                },
-
-                {
-                    "type": "actionbox",
-                    "condition": "!model.group.id",
+                }, {
+                    "key": "group.tenure",
+                    "title": "TENURE",
+                }, {
+                    "key": "group.jlgGroupMembers",
+                    "type": "array",
+                    "title": "GROUP_MEMBERS",
                     "items": [{
-                        "type": "submit",
-                        "title": "CREATE_GROUP"
-                    }, {
-                        "type": "save",
-                        "title": "SAVE_OFFLINE"
-                    }]
-                },
+                        "key": "group.jlgGroupMembers[].urnNo",
+                        "title": "URN_NO",
+                        "type": "lov",
+                        "lovonly":true,
+                        initialize: function(model, form, parentModel, context) {
+                            model.branchName = parentModel.group.branchName;
+                        },
+                        "inputMap": {
+                            /*"status": {
+                                "key": "group.status",
+                                "title": "STATUS",
+                                "type": "select",
+                                "titleMap": [{
+                                    "name": "All",
+                                    "value": ""
+                                }, {
+                                    "name": "Processed",
+                                    "value": "PROCESSED"
+                                }, {
+                                    "name": "Pending",
+                                    "value": "PENDING"
+                                }, {
+                                    "name": "Error",
+                                    "value": "ERROR"
+                                }]
+                            },*/
+                            "branchName": {
+                                "key": "group.branchName",
+                                "title": "BRANCH_NAME",
+                                "type": "select",
+                                "readonly":true,
+                                "enumCode": "branch_id"
+                            },
+                            "centreCode": {
+                                "key": "group.centreCode",
+                                "title": "CENTRE",
+                                "enumCode": "centre",
+                                "type": "select",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branchName",
+                            }
+                        },
+                        "outputMap": {
+                            "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
+                            "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
+                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
+                            "id": "group.jlgGroupMembers[arrayIndex].id",
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            /*var today = moment(new Date());
+                            var nDaysBack = moment(new Date()).subtract(nDays, 'days');
+                            var promise = CreditBureau.listCreditBureauStatus({
+                                'branchName': inputModel.branchName,
+                                'status': inputModel.status,
+                                'centreCode': inputModel.centreCode,
+                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
+                                'toDate': today.format('YYYY-MM-DD')
+                            }).$promise;
+                            return promise;*/
 
-                {
-                    "type": "actionbox",
-                    "condition": "model.group.id",
-                    "items": [{
-                        "style": "btn-theme",
-                        "title": "CLOSE_GROUP",
-                        "icon": "fa fa-times",
-                        "onClick": "actions.closeGroup(model,form)"
+                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                            var branches = formHelper.enum('branch_id').data;
+                            var branchId;
+                            $log.info(inputModel.branchName);
+                            for (var i = 0; i < branches.length; i++) {
+                                if (branches[i].code == inputModel.branchName)
+                                    branchId = branches[i].name;
+                            }
+                            var promise = Enrollment.search({
+                                'branchName': branchId || SessionStore.getBranch(),
+                                'centreId': inputModel.centreId,
+                                'customerType': "individual",
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.urnNo,
+                                data.firstName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            $log.info("Hi Selected");
+                            model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
+                        }
                     }, {
-                        "style": "btn-theme",
-                        "title": "UPDATE_GROUP",
-                        "icon": "fa fa-times",
-                        "onClick": "actions.proceedAction(model,form)"
+                        "key": "group.jlgGroupMembers[].firstName",
+                        "readonly":true,
+                        "type": "string",
+                        "title": "GROUP_MEMBER_NAME"
+                    }, {
+                        "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                        "readonly":true,
+                        "title": "FATHER_NAME"
+                    }, {
+                        "key": "group.jlgGroupMembers[].relation",
+                        "readonly":true,
+                        "title": "RELATION",
+                        //"readonly": readonly,
+                        /*"type": "select",
+                        "titleMap": {
+                            "Father": "Father",
+                            "Husband": "Husband"
+                        }*/
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanAmount",
+                        "title": "LOAN_AMOUNT",
+                        "type": "amount",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose1",
+                        "title": "LOAN_PURPOSE_1",
+                        "enumCode": "loan_purpose_1",
+                        "type": "select",
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose2",
+                        "type": "select",
+                        "title": "LOAN_PURPOSE_2",
+                        "enumCode": "loan_purpose_2",
+                        "parentEnumCode": "loan_purpose_1",
+                        "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanPurpose3",
+                        "type": "select",
+                        "title": "LoanPurpose3",
+                        "enumCode": "loan_purpose_2",
+                        "parentEnumCode": "loan_purpose_1",
+                        "parentValueExpr": "model.group.jlgGroupMembers[arrayIndex].loanPurpose1"
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessFirstName",
+                        "title": "WitnessLastName",
+                        "type": "lov",
+                        initialize: function(model, form, parentModel, context) {
+                            model.branchName = parentModel.group.branchName;
+                        },
+                        "outputMap": {
+                            "name": "group.jlgGroupMembers[arrayIndex].witnessFirstName",
+                            "relationShip": "group.jlgGroupMembers[arrayIndex].witnessRelationship",
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form, model, context) {
+                            /*var branches = formHelper.enum('branch_id').data;
+                            var branchId;
+                            $log.info(inputModel.branchName);
+                            for (var i = 0; i < branches.length; i++) {
+                                if (branches[i].code == inputModel.branchName)
+                                    branchId = branches[i].name;
+                            }
+                            var promise = Enrollment.search({
+                                'urnNo': model.group.jlgGroupMembers[context.arrayIndex].urnNo,
+                                'branchName': branchId || SessionStore.getBranch(),
+                                'customerType': "individual",
+                            }).$promise;
+                            return promise;*/
+
+                            var promise = Enrollment.getCustomerById({
+                                id: model.group.jlgGroupMembers[context.arrayIndex].id,
+                            }).$promise.then(function(res) {
+                                var familyMembers = [];
+                                //var obj={};
+                                for (i in res.familyMembers) {
+                                    var obj = {};
+                                    if (res.familyMembers[i].relationShip != 'Self' || res.familyMembers[i].relationShip != 'self') {
+                                        obj.name = res.familyMembers[i].familyMemberFirstName;
+                                        obj.relationShip = res.familyMembers[i].relationShip;
+                                        familyMembers.push(obj);
+                                    }
+                                }
+                                $log.info(familyMembers);
+
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": familyMembers.length
+                                    },
+                                    body: familyMembers
+                                });
+                            });
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.name,
+                                data.relationShip,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {}
+                            //"readonly": readonly
+                    }, {
+                        "key": "group.jlgGroupMembers[].witnessRelationship",
+                        "title": "RELATION",
+                        "type": "select",
+                        "enumCode": "relation"
+                            //"readonly": readonly
                     }]
-                },
-            ],
+                }]
+            }, {
+                "type": "actionbox",
+                "condition": "!model.group.id",
+                "items": [{
+                    "type": "submit",
+                    "title": "CREATE_GROUP"
+                }, {
+                    "type": "save",
+                    "title": "SAVE_OFFLINE"
+                }]
+            }, ],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",

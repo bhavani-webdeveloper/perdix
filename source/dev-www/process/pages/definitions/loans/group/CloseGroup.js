@@ -1,5 +1,5 @@
 define({
-	pageUID: "loans.group.GroupSearch",
+	pageUID: "loans.group.CloseGroup",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -104,11 +104,11 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.CreateGroup",
+									pageName: "loans.group.ViewGroup",
 									pageId: item.id,
 								}, {
 									state: "Page.Engine",
-									pageName: "loans.group.GroupSearch",
+									pageName: "loans.group.CloseGroup",
 								});
 							},
 							isApplicable: function(item, index) {
