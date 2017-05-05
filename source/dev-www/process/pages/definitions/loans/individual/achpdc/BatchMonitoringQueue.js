@@ -104,11 +104,11 @@ define({
 								data: 'triggeredAt',
 								type: 'date',
 							},
-													{
+							{
 								title:'DEMAND_DATE',
 								data: 'demandDate'
 							},
-													{
+							{
 								title:'BRANCH',
 								data: 'branchId'
 							},

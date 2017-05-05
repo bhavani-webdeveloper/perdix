@@ -124,7 +124,7 @@ define({
 						{
 							"title": "REPAYMENT_TYPE",
 							"data": "repaymentType"
-						}
+						},
 						{
 							title:'CREATED_BY',
 							data: 'userName',
