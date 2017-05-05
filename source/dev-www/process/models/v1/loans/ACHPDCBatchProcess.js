@@ -28,6 +28,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 			method: 'GET',
 			url: endpoint + '/fetchDemandStatus'
 		},
+		fetchRepaymentBatchList : searchResource({
+			method: 'GET',
+			url: endpoint + '/fetchRepaymentBatchList'
+		}),
 		fetchLoanrepaybatchlist: searchResource({
 			method: 'GET',
 			url: endpoint + '/loanrepaybatchlist'
@@ -60,7 +64,7 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 
 			response = resource.fetchDemandBatchList(params);
 		} else{
-			response = resource.fetchLoanrepaybatchlist(params);
+			response = resource.fetchRepaymentBatchList(params);
 		}
 
 		response.$promise.then(

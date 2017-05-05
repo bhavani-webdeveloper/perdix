@@ -1,8 +1,8 @@
 define({
 	pageUID: "loans.individual.achpdc.BatchMonitoringQueue",
 	pageType: "Engine",
-	dependencies: ["$log", "formHelper", "ACHPDCBatchProcess", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "PageHelper", "Queries", "$q"],
-	$pageFn: function($log, formHelper, ACHPDCBatchProcess, EntityManager, IndividualLoan, $state, SessionStore, Utils, PageHelper, Queries, $q) {
+	dependencies: ["$log", "formHelper", "ACHPDCBatchProcess", "$state", "SessionStore", "Utils", "PageHelper", "Queries", "$q"],
+	$pageFn: function($log, formHelper, ACHPDCBatchProcess, $state, SessionStore, Utils, PageHelper, Queries, $q) {
 
 		var branchId = SessionStore.getBranchId();
 		var achSearchResult = [];
@@ -113,11 +113,8 @@ define({
 								data: 'branchId'
 							},
 							{
-								title:'NAME',
-								data: 'userId',
-								// render: function(data, type, full, meta) {
-								// 	return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
-								// }
+								title:'CREATED_BY',
+								data: 'userName',
 							},
 							{
 								title:'STATUS',	

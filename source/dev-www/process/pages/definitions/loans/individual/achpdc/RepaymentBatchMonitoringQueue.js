@@ -117,20 +117,17 @@ define({
 							data: 'triggeredAt',
 							type: 'date',
 						},
-												{
+						{
 							title:'DEMAND_DATE',
 							data: 'demandDate'
 						},
-												{
-							title:'BRANCH',
-							data: 'branchId'
-						},
 						{
-							title:'NAME',
-							data: 'userId',
-							// render: function(data, type, full, meta) {
-							// 	return (full.customerType==='Individual'?'<i class="fa fa-user">&nbsp;</i> ':'<i class="fa fa-industry"></i> ') + data;
-							// }
+							"title": "REPAYMENT_TYPE",
+							"data": "repaymentType"
+						}
+						{
+							title:'CREATED_BY',
+							data: 'userName',
 						},
 						{
 							title:'STATUS',	
