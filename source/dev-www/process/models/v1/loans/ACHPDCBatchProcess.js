@@ -54,17 +54,14 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 	resource.getBatchMonitoringTasks = function(options){
 
         var deferred = $q.defer();
-        var params = {
-        				'demandDateFrom' : options.demandDate, 
-        				'demandDateTo' : options.demandDate
-        			};
+
         var response;
 
 		if(options.batchType === 'demand'){
 
-			response = resource.fetchDemandBatchList(params);
+			response = resource.fetchDemandBatchList(options);
 		} else{
-			response = resource.fetchRepaymentBatchList(params);
+			response = resource.fetchRepaymentBatchList(options);
 		}
 
 		response.$promise.then(

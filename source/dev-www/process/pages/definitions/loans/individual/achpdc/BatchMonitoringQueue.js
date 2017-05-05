@@ -26,7 +26,7 @@ define({
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
-						"demandDate": {
+						"triggeredAt": {
 							"title": "BATCH_DATE",
 							"type": "string",
 							"x-schema-form": {
@@ -40,8 +40,8 @@ define({
 							"x-schema-form": {
 								"type": "select",
 								"titleMap": {
-									"InProgress" : "In Progress",
-									"Completed" : "Completed",
+									"IN_PROCESS" : "In Progress",
+									"COMPLETED" : "Completed",
 								},
 								"screenFilter": true
 							}
@@ -110,7 +110,7 @@ define({
 							},
 							{
 								title:'BRANCH',
-								data: 'branchId'
+								data: 'branchName'
 							},
 							{
 								title:'CREATED_BY',

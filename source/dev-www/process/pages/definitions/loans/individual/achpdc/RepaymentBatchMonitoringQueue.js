@@ -26,7 +26,7 @@ define({
 				"type": 'object',
 				"title": 'SearchOptions',
 				"properties": {
-					"demandDate": {
+					"createdAt": {
 						"title": "BATCH_DATE",
 						"type": "string",
 						"x-schema-form": {
@@ -52,8 +52,8 @@ define({
 						"x-schema-form": {
 							"type": "select",
 							"titleMap": {
-								"InProgress" : "In Progress",
-								"Completed" : "Completed",
+								"IN_PROCESS" : "In Progress",
+								"COMPLETED" : "Completed",
 							},
 							"screenFilter": true
 						}
@@ -113,13 +113,13 @@ define({
 				getColumns: function(){
 					return [
 						{
+							title:'BATCH_NUMBER',
+							data: 'id',
+						},
+						{
 							title:'BATCH_DATE',
 							data: 'triggeredAt',
 							type: 'date',
-						},
-						{
-							title:'DEMAND_DATE',
-							data: 'demandDate'
 						},
 						{
 							"title": "REPAYMENT_TYPE",
@@ -129,10 +129,10 @@ define({
 							title:'CREATED_BY',
 							data: 'userName',
 						},
-						{
-							title:'STATUS',	
-							data: 'status'
-						}
+						// {
+						// 	title:'STATUS',	
+						// 	//data: 'status'
+						// }
 					]
 				},
 				getActions: function(){
