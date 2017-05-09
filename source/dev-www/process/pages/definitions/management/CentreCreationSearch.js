@@ -7,14 +7,14 @@ define({
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
-		"title": "ReferenceCode_Search",
+		"title": "CENTRE_SEARCH",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
-			title: "Search ReferenceCode",
+			title: "SEARCH_CENTRE",
 			searchForm: [
 				"*"
 			],

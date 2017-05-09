@@ -38,9 +38,6 @@ define({
                                     },
                                     {
                                         key: "centre.centreCode",
-                                        type: "select",
-                                        enumCode: "centre"
-                                        
                                     },
                                     {
                                         key: "centre.centreAddress",
