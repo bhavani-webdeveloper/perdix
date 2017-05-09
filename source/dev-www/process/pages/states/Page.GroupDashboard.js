@@ -6,18 +6,17 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
     var fullDefinition = {
         "title": "Actions",
         "items": [
-            "Page/Engine/GroupCRUD",
-            "Page/Engine/DscQueue",
-            "Page/Engine/Cgt1Queue",
-            "Page/Engine/Cgt2Queue",
-            "Page/Engine/Cgt3Queue",
-            "Page/Engine/GrtQueue",
+            "Page/Engine/loans.group.CreateGroup",
+            "Page/Engine/loans.group.DscQueue",
+            "Page/Engine/loans.group.Cgt1Queue",
+            "Page/Engine/loans.group.Cgt2Queue",
+            "Page/Engine/loans.group.Cgt3Queue",
+            "Page/Engine/loans.group.GrtQueue",
             "Page/Engine/DscOverrideQueue",
             "Page/Engine/ApplicationPendingQueue",
             "Page/Engine/JLGDisbursementQueue",
-            "Page/Engine/CloseGroup",
+            "Page/Engine/loans.group.CloseGroup",
             "Page/Engine/loans.groups.GroupLoanRepaymentQueue"
-
         ]
     };
 
@@ -53,8 +52,11 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
             'disbursement':{
                 name:'Stage08',
                 count:0
+            },
+            'View':{
+                name:'',
+                count:0
             }
-
         };
         var branchId = ""+SessionStore.getBranchId();
         angular.forEach(partners.data,function(partner){
@@ -72,6 +74,7 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
                         case 'grt': $scope.dashboardDefinition.items[5].data = stage.count; break;
                         case 'ap': $scope.dashboardDefinition.items[7].data = stage.count; break;
                         case 'disbursement': $scope.dashboardDefinition.items[8].data = stage.count; break;
+                        case 'View': $scope.dashboardDefinition.items[9].data = stage.count; break;
                     }
 
                 },function(response){
@@ -83,6 +86,7 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
                         case 'grt': $scope.dashboardDefinition.items[5].data = '-'; break;
                         case 'ap': $scope.dashboardDefinition.items[7].data = '-'; break;
                         case 'disbursement': $scope.dashboardDefinition.items[8].data = '-'; break;
+                        case 'View': $scope.dashboardDefinition.items[9].data = '-'; break;
                     }
                 });
             });

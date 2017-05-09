@@ -606,7 +606,6 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 "icon": "fa fa-check-square",
                                 "title":"ACTIVATE_LOAN_ACCOUNT",
                                 "onClick":"actions.activateLoanAccount(model,form)",
-
                             }
                         ]
                     },

@@ -43,7 +43,6 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
         post:{
             method:'POST',
             url:endpoint+'/:service/:action'
-
         },
         dscQuery:{
             method:'POST',

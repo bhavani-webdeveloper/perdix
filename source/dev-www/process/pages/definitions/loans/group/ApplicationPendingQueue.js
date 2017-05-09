@@ -1,5 +1,5 @@
 define({
-	pageUID: "loans.group.ApplicationPendingQueue2",
+	pageUID: "loans.group.ApplicationPendingQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
@@ -105,11 +105,11 @@ define({
 							fn: function(item, index) {
 								irfNavigator.go({
 									state: "Page.Engine",
-									pageName: "loans.group.GRT",
+									pageName: "loans.group.GroupApplication",
 									pageId:item.id
 								}, {
 									state: "Page.Engine",
-									pageName: "loans.group.GrtQueue",
+									pageName: "loans.group.ApplicationPendingQueue",
 								});
 							},
 							isApplicable: function(item, index) {
