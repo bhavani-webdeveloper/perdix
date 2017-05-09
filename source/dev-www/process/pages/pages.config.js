@@ -132,6 +132,11 @@ irf.pages.config([
 		url: "/DocumentTrackingDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "DocumentTrackingDashboardCtrl"
+	},{
+		name: "Page.CentreCreationDashboard",
+		url: "/CentreCreationDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "CentreCreationDashboardCtrl"
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){

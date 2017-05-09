@@ -83,7 +83,8 @@
                 "Page/Engine/management.SpokeMerger/intrabranch",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
-                "Page/UserDashboard"
+                "Page/CentreCreationDashboard",
+                "Page/UserDashboard"    
             ]
         },
         {

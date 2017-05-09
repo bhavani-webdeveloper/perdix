@@ -1,0 +1,87 @@
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "properties": {
+      "centre": {
+         "type": "object",
+         "required": 
+         [
+            "branchId",
+            "centreAddress",
+            "centreAltitude"
+         ],
+         "properties": 
+         { 
+         "branchId":{
+            "type": ["number", "null"],
+            "title": "BRANCH_ID"
+         },
+         "centreAddress": {
+            "type": ["string", "null"],
+            "title": "ADDRESS"
+         },
+         "centreAltitude": {
+           "type": ["string", "null"],
+           "title": "LOCATION"
+         },          
+         "centreCode": {
+            "type": ["number", "null"],
+            "title": "CODE"
+         },
+         "centreGpsCaptureDate": {
+               "type": ["string", "null"],
+               "title": "GPS_CAPTURE_DATE"
+         },
+         "centreLeaderUrn": {
+            "type": ["string", "null"],
+            "title": "LEADER_URN"
+         },
+         "centreName": {
+            "type": ["string", "null"],
+            "title": "CENTRE_NAME_"
+         },
+         "employee": {
+            "type": ["string", "null"],
+            "title": "EMPLOYEE_CODE"
+         },
+         "monthlyMeeting": {
+            "type": ["string", "null"],
+            "title": "MONTHLY MEETING"
+         },
+         "monthlyMeetingDate": {
+            "type": ["string", "null"],
+            "title": "DATE"
+         },
+         "monthlyMeetingDateNumber": {
+            "type": ["string", "null"],
+            "title": "WEEK"
+         },
+         "monthlyMeetingDay": {
+            "type": ["string", "null"],
+            "title": "DAY"
+         },
+         "monthlyMeetingTime": {
+            "type": ["string", "null"],
+            "title": "TIME"
+         },
+         "status": {
+            "type": ["string", "null"],
+            "title": "STATUS"
+         },
+         "weeklyMeetingDay": {
+            "type": ["string", "null"],
+            "title": "WEEKLY MEETING DAY"
+         },
+         "weeklyMeetingTime": {
+            "type": ["string", "null"],
+            "title": "WEEEKLY MEETING TIME"
+         }
+      }
+   }
+}
+}
+
+
+
+
+
