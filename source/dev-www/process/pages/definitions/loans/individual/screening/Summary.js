@@ -536,7 +536,26 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     {
                         type: "section",
                         colClass: "col-sm-12",
-                        html: '<table class="table"><colgroup><col width="60%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Category</th><th>Score</th></tr></thead><tbody><tr ng-repeat="rowData in model.psychometricScores['+i+'].data"><td>{{ rowData["Category Name"] }}</td><td>{{ rowData["Score"] }}</td></tr></tbody></table>'
+                        html: '\
+                        <table class="table">\
+                            <colgroup>\
+                                <col width="60%">\
+                                <col width="20%">\
+                                <col width="20%">\
+                            </colgroup>\
+                            <thead>\
+                                <tr>\
+                                    <th>Category</th>\
+                                    <th>Score</th>\
+                                </tr>\
+                            </thead>\
+                            <tbody>\
+                                <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
+                                    <td>{{ rowData["Category Name"] }}</td>\
+                                    <td style="background: {{ rowData.color_hexadecimal }}"></td>\
+                                    <td>{{ rowData["Score"] }}</td>\
+                                </tr></tbody>\
+                            </table>'
                     }
                 ]
             })
