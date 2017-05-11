@@ -120,7 +120,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             },
                             {
                                 key: "user.partnerCode",
-                                condition: "model.user.accessType=='partner'",
+                                condition: "model.user.accessType=='PARTNER'",
                                 type: "select",
                                 title: "PARTNER_CODE",
                                 enumCode: "partner"
@@ -207,12 +207,12 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         .then(function(response){
                                             PageHelper.showProgress("user-update", 'Done', 5000);
                                             model.user = response;
+                                            $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
                                         }, function(httpResponse){
                                             PageHelper.showProgress("user-update", 'Failed.', 5000);
                                             PageHelper.showErrors(httpResponse);
                                         })
-                                        .finally(function(){
-                                            $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
+                                        .finally(function(){                                    
                                             PageHelper.hideLoader();
                                         })
 
