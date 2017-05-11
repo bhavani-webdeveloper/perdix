@@ -1,7 +1,7 @@
 /**
  * Created by Sachin.M on 22-07-2016.
  */
-irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$log", "formHelper", "LoanAccount",
+irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$log", "formHelper", "LoanAccount",
     "$state","groupCommons","searchResource",
     function($log, formHelper, LoanAccount,$state,groupCommons,searchResource){
         //isLegacy :: single loan prdt (true) or others (false)
