@@ -46,6 +46,13 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
         return false;// TODO: implement
     };
 
+    var error = function(code, params) {
+        switch(code) {
+            case "NODATA":
+                return {"error": "Data unavailabile on local storage for "+params[0]+":"+params[1]};
+        }
+    }
+
     return {
         /**
          * Add a new item under a name.
@@ -125,10 +132,10 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                     if (returnData) {
                         deferred.resolve(returnData);
                     } else {
-                        deferred.reject();
+                        deferred.reject(error("NODATA", [table, key]));
                     }
                 } else {
-                    deferred.reject();
+                    deferred.reject(error("NODATA", [table, key]));
                 } 
             }
             return deferred.promise;
@@ -147,7 +154,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                     }
                     deferred.resolve(true);
                 } catch(e) {
-                    deferred.reject();
+                    deferred.reject(error("NODATA", [table, key]));
                 }
             }
             return deferred.promise;
@@ -169,7 +176,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                 if (tableData) {
                     deferred.resolve(tableData);
                 } else {
-                    deferred.reject();
+                    deferred.reject(error("NODATA", [table, key]));
                 } 
             }
             return deferred.promise;
