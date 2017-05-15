@@ -49,7 +49,7 @@ define({
                         'partner': searchOptions.partner,
                         'groupStatus': true,
                         'page': pageOpts.pageNo,
-                        'currentStage': "Stage08",
+                        //'currentStage': "Stage08",
                         'per_page': pageOpts.itemsPerPage
                     };
 

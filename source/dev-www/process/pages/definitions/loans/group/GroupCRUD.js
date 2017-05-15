@@ -423,7 +423,6 @@ irf.pageCollection.factory("Pages__GroupCRUD",
                     PageHelper.showErrors(res);
                 });
             }
-
 		},
 		schema: function() {
 			return Groups.getSchema().$promise;
