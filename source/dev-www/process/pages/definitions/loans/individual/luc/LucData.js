@@ -2,7 +2,6 @@ define({
     pageUID: "loans.individual.luc.LucData",
     pageType: "Engine",
     dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
-
     $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
             PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 

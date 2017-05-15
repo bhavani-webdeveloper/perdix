@@ -312,7 +312,6 @@
 <script src="process/pages/definitions/loans/group/groupcommons.js"></script>
 <script src="process/pages/definitions/loans/group/GroupCRUD.js"></script>
 <script src="process/pages/definitions/loans/group/CentrePaymentCollection.js"></script>
-<script src="process/pages/definitions/loans/group/GroupDisbursement.js"></script>
 <script src="process/pages/definitions/loans/group/LUC.js"></script>
 <script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
 <script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
@@ -472,6 +471,11 @@
     },
     waitSeconds: 0
   });
+
+  requirejs.onError = function(err){
+    console.log(err);
+    debugger;
+  }
 </script>
 </body>
 </html>
