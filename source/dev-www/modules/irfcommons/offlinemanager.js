@@ -176,7 +176,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
                 if (tableData) {
                     deferred.resolve(tableData);
                 } else {
-                    deferred.reject(error("NODATA", [table, key]));
+                    deferred.reject(error("NODATA", [table, '']));
                 } 
             }
             return deferred.promise;
