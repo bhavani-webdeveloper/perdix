@@ -134,6 +134,7 @@ irf.pages.provider("irfNavigator", function() {
 			if (!definition) {
 				definition = {};
 			}
+			definition = _.cloneDeep(definition);
 			if (!definition.title) {
 				if (definition.pageName) {
 					definition.title = definition.pageName.replace(/^.*\./, '');
