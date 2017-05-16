@@ -351,10 +351,7 @@ define({
                     deferred.resolve();
                     return deferred.promise;
                 },
-                submit: function(model, formCtrl, formName) {
-                    $log.info("Inside submit");
-                },
-                preSave: function(model, form, formName) {},
+               
                 submit: function(model, form, formName) {
                     model.enrollmentAction = 'PROCEED';
                     if (form.$invalid) {
