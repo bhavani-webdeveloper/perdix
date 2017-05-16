@@ -8,15 +8,15 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
         "items": [
             "Page/Engine/loans.group.CreateGroup",
             "Page/Engine/loans.group.DscQueue",
+            "Page/Engine/loans.group.DscOverrideQueue",
             "Page/Engine/loans.group.Cgt1Queue",
             "Page/Engine/loans.group.Cgt2Queue",
             "Page/Engine/loans.group.Cgt3Queue",
             "Page/Engine/loans.group.GrtQueue",
-            "Page/Engine/DscOverrideQueue",
-            "Page/Engine/ApplicationPendingQueue",
+            "Page/Engine/loans.group.ApplicationPendingQueue",
             "Page/Engine/JLGDisbursementQueue",
             "Page/Engine/loans.group.CloseGroup",
-            "Page/Engine/loans.groups.GroupLoanRepaymentQueue"
+            "Page/Engine/loans.group.GroupLoanRepaymentQueue"
         ]
     };
 
