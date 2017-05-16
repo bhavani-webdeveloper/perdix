@@ -362,9 +362,6 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		return Message.closeMessage({thread_id: conversationData.thread_id, user_id: conversationData.user_id});
 	};*/
 
-	getUnreadMessageCount();
-	getUnreadMessageThreadList();
-
 	$scope.openMessageThreadListMenu = function($event) {
 		if(!$($event.currentTarget).is('.open')) {
 			getUnreadMessageThreadList();
@@ -471,9 +468,13 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		});
 	};
 
-	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams, options){
+	if (typeof(SessionStore.session.offline) != 'undefined' && !SessionStore.session.offline) {
 		getUnreadMessageCount();
-	});
+		getUnreadMessageThreadList();
+		$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams, options){
+			getUnreadMessageCount();
+		});
+	}
 	/* Conversations END */
 
 	$scope.showLogs = function() {
