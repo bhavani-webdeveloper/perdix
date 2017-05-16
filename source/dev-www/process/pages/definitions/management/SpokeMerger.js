@@ -31,7 +31,14 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             key: "branchId1",
                             title: "Hub Name",
                             type: "select",
-                            enumCode: "branch_id"
+                            enumCode: "branch_id",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                console.log("inside");
+                                if(model.branchId1 === model.branchId2){
+                                    Utils.alert("From Hub Name and To Hub Name can not be same. Select a different Hub");
+                                    model.branchId1 = undefined;
+                                }
+                            }
                         }, {
                             key: "customer.fromCentreId",
                             title: "From Spoke Name",
@@ -45,7 +52,14 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
                             title: "Hub Name",
                             condition: "model.interbranchMerge",
                             type: "select",
-                            enumCode: "branch_id"
+                            enumCode: "branch_id",
+                            onChange: function(modelValue, form, model, formCtrl, event) {
+                                console.log("inside");
+                                if(model.branchId1 === model.branchId2){
+                                    Utils.alert("From Hub Name and To Hub Name can not be same. Select a different Hub");
+                                    model.branchId2 = undefined;
+                                }
+                            }
                         }, {
                             key: "customer.toCentreId",
                             title: "To Spoke Name",

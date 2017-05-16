@@ -2154,7 +2154,9 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                             key: "customer.customerBankAccounts[].customerNameAsInBank"
                                         },
                                         {
-                                            key: "customer.customerBankAccounts[].accountNumber"
+                                            key: "customer.customerBankAccounts[].accountNumber",
+                                            inputmode: "number",
+                                            numberType: "tel"
                                         },
                                         {
                                             key: "customer.customerBankAccounts[].accountType",
