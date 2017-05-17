@@ -113,25 +113,25 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						}
 					},
 					{
-							name: "VIEW LOAN",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								irfNavigator.go({
-									state: "Page.Bundle",
-									pageName: "loans.individual.screening.LoanViewList",
-									pageId: item.loanId
-								},
-								{
-									state: "Page.Engine",
-									pageName: "loans.individual.booking.IFMRDOQueue"
-								});
+						name: "VIEW LOAN",
+						desc: "",
+						icon: "fa fa-pencil-square-o",
+						fn: function(item, index) {
+							irfNavigator.go({
+								state: "Page.Bundle",
+								pageName: "loans.individual.screening.LoanViewList",
+								pageId: item.loanId
 							},
-							isApplicable: function(item, index) {
+							{
+								state: "Page.Engine",
+								pageName: "loans.individual.booking.IFMRDOQueue"
+							});
+						},
+						isApplicable: function(item, index) {
 
-								return true;
-							}
-						}];
+							return true;
+						}
+					}];
 				}
 			}
 		}

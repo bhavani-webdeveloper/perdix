@@ -97,17 +97,37 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 				},
 				getActions: function(){
 					return [{
-						name: "LOAN_INPUT",
+						name: "REVIEW",
 						desc: "",
 						icon: "fa fa-book",
 						fn: function(item, index){
-							EntityManager.setModel("loans.individual.booking.LoanInput",{_loan:item});
+							//EntityManager.setModel("loans.individual.booking.IFMRDO",{_loan:item});
 							$state.go("Page.Engine",{
-								pageName:"loans.individual.booking.LoanInput",
+								pageName:"loans.individual.booking.IFMRDO",
 								pageId:item.loanId
 							});
 						},
 						isApplicable: function(item, index){
+							return true;
+						}
+					},
+					{
+						name: "VIEW LOAN",
+						desc: "",
+						icon: "fa fa-pencil-square-o",
+						fn: function(item, index) {
+							irfNavigator.go({
+								state: "Page.Bundle",
+								pageName: "loans.individual.screening.LoanViewList",
+								pageId: item.loanId
+							},
+							{
+								state: "Page.Engine",
+								pageName: "loans.individual.booking.IFMRDOQueue"
+							});
+						},
+						isApplicable: function(item, index) {
+
 							return true;
 						}
 					}];
