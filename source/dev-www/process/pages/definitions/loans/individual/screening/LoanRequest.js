@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper", "Message",
+"BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter",
 function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper, Message){
+    BundleManager, PsychometricTestService, LeadHelper, Message, $filter){
 
     var branch = SessionStore.getBranch();
 
@@ -15,6 +15,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
             return false;
         }
         return true;
+    }
+
+    var isEnrollmentsSubmitPending = function(){
+        var enrollmentsvalidityState = BundleManager.getBundlePagesFormValidity(['applicant', 'guarantor', 'co-applicant', 'business']);
+        var keys = Object.keys(enrollmentsvalidityState);
+        for(var idx = 0; idx < keys.length; idx++) {
+
+            if(enrollmentsvalidityState[keys[idx]].dirty){
+
+                PageHelper.showProgress("LoanRequest","Please submit all the " + $filter('translate')(keys[idx].split("@")[0]) + " information before proceeding with current action." , 5000);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     var getRelationFromClass = function(relation){
@@ -2268,6 +2283,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                 if(!validateAndPopulateMitigants(model)){
                     return;
                 }
+                if(isEnrollmentsSubmitPending()){
+                    return;
+                }
                 if (!preLoanSaveOrProceed(model)){
                     return;
                 }
@@ -2320,7 +2338,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                 $log.info("Inside save()");
                 PageHelper.clearErrors();
                 /* TODO Call save service for the loan */
-
+                if(isEnrollmentsSubmitPending()){
+                    return;
+                }
                 if (!preLoanSaveOrProceed(model)){
                     return;
                 }
@@ -2427,6 +2447,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
                 /* TODO Call proceed servcie for the loan account */
+                if(isEnrollmentsSubmitPending()){
+                    return;
+                }
 
                 if (!validateForm(formCtrl)){
                     return;

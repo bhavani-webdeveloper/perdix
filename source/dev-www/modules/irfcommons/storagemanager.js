@@ -328,7 +328,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 				deferred.reject(err);
 			});
 	        return deferred.promise;
-	    }
+	    },
+	    
+        resetFormValidityState: function(formCtrl){
+
+            formCtrl.$setPristine();
+        }
 
 	};
 }]);

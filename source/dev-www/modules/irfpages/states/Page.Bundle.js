@@ -7,7 +7,7 @@
  *
  *
  */
-irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', function(BundleLog, $injector, $q, formHelper){
+irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', '$filter', function(BundleLog, $injector, $q, formHelper, $filter){
 
     var currentInstance = null;
     var pages = [];
@@ -148,6 +148,46 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                 deferredUI.reject();
             }
             deferredUI.promise;
+        },
+
+        getBundlePagesFormValidity: function(pageClass) {
+
+            var _pageClass = [], formValidity = {}, reqPages, info;
+
+            if(angular.isUndefined(pageClass)){
+                return formValidity;
+            }
+
+            _pageClass = _pageClass.concat(pageClass);
+
+            if(_pageClass.length === 0){
+                return formValidity;
+            }
+
+            for(var i=0; i < _pageClass.length; i++){
+
+                reqPages = $filter('filter')(pages, {definition:{'pageClass' : _pageClass[i]}});
+
+                if(!reqPages || reqPages.length === 0)
+                    continue;
+
+                info = {};
+
+                angular.forEach(reqPages, function(value, key){
+                    //if the tab is not clicked, formctrl won't be thr
+                    if (value.formCtrl) {
+                        info['pristine'] = value.formCtrl.$pristine;
+                        info['dirty'] = value.formCtrl.$dirty;
+                        info['invalid'] = value.formCtrl.$invalid;
+                        info['valid'] = value.formCtrl.$valid;
+                        info['submitted'] = value.formCtrl.$submitted;
+                        formValidity[value.title + "@" + value.formName] = info;
+                    }
+
+                });
+
+            }
+            return formValidity;
         }
     }
 }]);
