@@ -381,6 +381,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         'urn':params.customer.urnNo
                     });
                     model.loanAccount.applicant = params.customer.urnNo;
+                    model.ApplicantId = params.customer.id;
                 }
             },
             "lead-loaded": function(bundleModel, model, obj) {
@@ -2504,9 +2505,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                         commercialCheckFailed = true;
                     if(commercialCheckFailed && model.enterprise.customerBankAccounts && model.enterprise.customerBankAccounts.length>0){
                         for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
-                            if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC'){
+                            if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC' ){
                                 PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
                                 return false;
+                            }
+                        }
+
+                        if(model.loanAccount.loanAmountRequested > 500000 || model.enterprise.enterprise.businessConstitution == 'Private'){
+                            PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                            return false;
+                        }
+
+                        if(model.enterprise.enterpriseCustomerRelations && model.enterprise.enterpriseCustomerRelations.length > 0){
+                            for (var i = model.enterprise.enterpriseCustomerRelations.length - 1; i >= 0; i--) {
+                                if(((model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany !=null && model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany != undefined)
+                                    &&model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany == 'YES') 
+                                    && model.enterprise.enterpriseCustomerRelations[i].linkedToCustomerId ==model.ApplicantId){
+                                    PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                    return false;
+                                }
                             }
                         }
                     }
