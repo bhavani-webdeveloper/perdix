@@ -1442,6 +1442,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                             {
                                 key:"loanAccount.nominees[].nomineeFirstName",
                                 "title":"NAME",
+                                required: true,
                                 "type":"lov",
                                 "lovonly": false,
                                 "inputMap": {
@@ -1449,12 +1450,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 "outputMap": {
                                     "nomineeFirstName": "loanAccount.nominees[arrayIndex].nomineeFirstName",
                                     "nomineeGender":"loanAccount.nominees[arrayIndex].nomineeGender",
-                                    "nomineeDOB":"loanAccount.nominees[arrayIndex].nomineeDOB"
+                                    "nomineeDOB":"loanAccount.nominees[arrayIndex].nomineeDOB",
+                                    "nomineeRelationship": "loanAccount.nominees[arrayIndex].nomineeRelationship"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form, model, context) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = Queries.getFamilyRelations({'loanId':model.loanAccount.id}).$promise;
+                                    var promise = Queries.getFamilyRelations(model.loanAccount.id);
                                     return promise;
                                 },
                                 getListDisplayItem: function(data, index) {
@@ -1468,15 +1470,18 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                             {
                                 key:"loanAccount.nominees[].nomineeGender",
                                 type:"select",
+                                required: true,
                                 "title":"GENDER"
                             },
                             {
                                 key:"loanAccount.nominees[].nomineeDOB",
                                 type:"date",
+                                required: true,
                                 "title":"DATE_OF_BIRTH"
                             },
                             {
                                 key:"loanAccount.nominees[].nomineeDoorNo",
+                                required: true,
                                 "title":"DOOR_NO"
                             },
                             {
@@ -1492,6 +1497,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 type: "lov",
                                 "title":"PIN_CODE",
                                 fieldType: "number",
+                                required: true,
                                 autolov: true,
                                 inputMap: {
                                     "pincode": {
@@ -1541,6 +1547,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                             {
                                 key:"loanAccount.nominees[].nomineeRelationship",
                                 type:"select",
+                                required: true,
                                 "title":"RELATIONSHIP"
                             }
                         ]
@@ -1576,7 +1583,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment, AuthTokenHelper
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form, model, context) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = Queries.getFamilyRelations({'loanId':model.loanAccount.id}).$promise;
+                                    var promise = Queries.getFamilyRelations(model.loanAccount.id);
                                     return promise;
                                 },
                                 getListDisplayItem: function(data, index) {
