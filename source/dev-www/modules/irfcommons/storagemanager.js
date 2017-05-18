@@ -4,8 +4,10 @@ irf.commons.value('RefCodeCache',{
 });
 
 irf.commons.factory("irfStorageService",
-["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter",
-function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
+["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter", "Utils",
+function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
+	var masterUpdateRegistry = {};
+
 	var retrieveItem = function(key) {
 		return localStorage.getItem(key);
 	};
@@ -167,7 +169,15 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 
 							$log.info(masters);
 							$log.info("Time taken to process masters (ms):" + (new Date().getTime() - _start));
-							deferred.resolve("masters download complete");
+							var masterUpdatePromises = [];
+							_.forOwn(masterUpdateRegistry, function(v, k) {
+								masterUpdatePromises.push(v.callback());
+							});
+							$q.all(masterUpdatePromises).then(function() {
+								deferred.resolve("masters download complete");
+							}, function(err) {
+								deferred.reject(err);
+							});
 						});
 					} else {
 						deferred.resolve("It's the same day for Masters/ not downloading");
@@ -186,6 +196,19 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter){
 				masters[classifier] = master;
 				factoryObj.storeJSON('irfMasters', masters);
 			}
+		},
+		onMasterUpdate: function(callback) {
+			var uuid = Utils.generateUUID();
+			masterUpdateRegistry[uuid] = {
+				"uuid": uuid,
+				"callback": callback
+			};
+			return uuid;
+		},
+		removeMasterUpdate: function(uuid) {
+			var a = !!masterUpdateRegistry[uuid];
+			delete masterUpdateRegistry[uuid];
+			return a;
 		}
 	};
 	return factoryObj;
