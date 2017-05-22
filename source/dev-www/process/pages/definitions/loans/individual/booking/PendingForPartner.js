@@ -241,6 +241,57 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartner"
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
 
+                var init = function(model, form, formCtrl) {
+                    model.loanAccount = model.loanAccount || {branchId :branchId};
+                    model.additional = model.additional || {};
+                    model.additional.branchName = branchName;
+                    model.loanAccount.bankId = bankId;
+                    model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
+                    model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
+                    model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                    model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
+
+                    model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
+                    model.loanAccount.coBorrowers = [];
+                    model.loanAccount.guarantors = [];
+                    //model.loanAccount.guarantors = [];
+                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                        if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' || 
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
+                            model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
+                        }
+                        else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' || 
+                            model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
+                            model.loanAccount.coBorrowers.push({
+                                coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                            });
+                        }
+                        else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' || 
+                                model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                            model.loanAccount.guarantors.push({
+                                guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                            });
+                        }
+                    }
+
+                    model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
+                    if (model.loanAccount.nominees.length == 0)
+                        model.loanAccount.nominees = [{nomineeFirstName:"",nomineeDoorNo:""}];
+
+                    model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
+                    // model.loanAccount.commercialCibilCharge = 750; //Hard coded. This value to be changed to pickup from global_settings table
+                    model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
+                    model.loanAccount.isRestructure = false;
+                    getSanctionedAmount(model);
+                    $log.info(model);
+                    if(model.loanAccount.productCode)
+                        getProductDetails(model.loanAccount.productCode,model);
+
+                    LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+                };
+
                 // code for existing loan
                 $log.info("Loan Number:::" + $stateParams.pageId);
                 if ($stateParams.pageId) {
@@ -271,7 +322,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartner"
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
 
-                        //init(model, form, formCtrl); // init call
+                        init(model, form, formCtrl);
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
                     }).finally(function(){
