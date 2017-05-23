@@ -305,22 +305,43 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         }
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
-                        ACHPDCBatchProcess.submitDemandForRepayment(model.achDemand.updateDemand).$promise.then(function(response) {
-                            
-                            ACHPDCBatchProcess.submitDemandForLoanRepay({type : 'ACH', bankAccountNumber : ''}, model.achDemand.updateDemand['achPdcDemandlistDetails']).$promise.then(
-                                function(resp){
-                                    PageHelper.showProgress("page-init", resp + "Check the status in Batch Monitoring screen", 2000);
-                                    $state.reload();
-                                },
-                                function(errResp){
-                                    PageHelper.showErrors(errResp);
-                                }).finally(function() {
-                                    PageHelper.hideLoader();
-                                })
-                        }, function(errorResponse) {
-                            PageHelper.showErrors(errorResponse);
-                            PageHelper.hideLoader();
+                        model.bankAccountNumber = '';
+                        var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+
+                            var records = res.body;
+
+                            if(records && _.isArray(records) && records.length > 0){
+
+                                var defaultBank = $filter('filter')( records, {default_collection_account : true}, true);
+                                
+                                if(defaultBank && _.isArray(defaultBank) && defaultBank.length > 0)
+                                    model.bankAccountNumber = defaultBank[0].account_number;
+                            }
+
                         });
+                        accountDetailPromise.then(function(){
+                            ACHPDCBatchProcess.submitDemandForRepayment(model.achDemand.updateDemand).$promise.then(function(response) {
+                                
+                                ACHPDCBatchProcess.submitDemandForLoanRepay({type : 'ACH', bankAccountNumber : model.bankAccountNumber}, model.achDemand.updateDemand['achPdcDemandlistDetails']).$promise.then(
+                                    function(resp){
+                                        PageHelper.showProgress("page-init", resp.message + "Check the status in Batch Monitoring screen", 2000);
+                                        $state.reload();
+                                    },
+                                    function(errResp){
+                                        PageHelper.showErrors(errResp);
+                                    }).finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                            }, function(errorResponse) {
+                                PageHelper.showErrors(errorResponse);
+                                PageHelper.hideLoader();
+                            });
+                        },
+                         function(errorResponse){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(errorResponse);
+                        });
+
                     } else {
                         PageHelper.showProgress("page-init", "No account seected for repayment", 5000);
                     }

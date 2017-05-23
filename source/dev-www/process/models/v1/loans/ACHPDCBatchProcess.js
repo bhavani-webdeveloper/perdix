@@ -22,7 +22,8 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 		},
 		submitDemandForRepayment: {
 			method: 'POST',
-			url: endpoint + '/submitDemandForRepayment'
+			url: endpoint + '/submitDemandForRepayment',
+			isArray: true
 		},
 		fetchDemandStatus: {
 			method: 'GET',
@@ -38,7 +39,15 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 		}),
 		submitDemandForLoanRepay: {
 			method: 'POST',
-			url: endpoint + '/loanrepay'
+			url: endpoint + '/loanrepay',
+			transformResponse:function(data, headersGetter, status){
+
+				if(status == 200){
+					return {message: data};
+				}
+
+				return data;
+			}
 		},
 		deleteAchPdcBatchRecords: {
 			method: 'DELETE',

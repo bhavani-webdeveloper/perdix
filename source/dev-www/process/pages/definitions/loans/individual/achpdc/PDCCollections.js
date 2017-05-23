@@ -321,7 +321,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCCollections"), [
                             
                             ACHPDCBatchProcess.submitDemandForLoanRepay({type : 'PDC', bankAccountNumber : model.pdc.collectionAccountCode}, model.updateDemand['achPdcDemandlistDetails']).$promise.then(
                                 function(resp){
-                                    PageHelper.showProgress("page-init", resp + "Check the status in Batch Monitoring screen", 2000);
+                                    PageHelper.showProgress("page-init", resp.message + "Check the status in Batch Monitoring screen", 2000);
                                     $state.reload();
                                 },
                                 function(errResp){
