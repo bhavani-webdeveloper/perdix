@@ -16,7 +16,6 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                 model.customer.kgfsName = SessionStore.getBranch();
                 model.customer.customerType = 'Individual';
                 var self = this;
-
                 var formRequest = {
                     "overRides": {
                         "KYC.additionalKYCs.kyc1ProofType": {
@@ -66,6 +65,35 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "BusinessOccupationDetails.agricultureDetails.landArea": {
                             title: "DAIRY_ANIMALS",
                             "type": "select"
+                        },
+                        "HouseVerification.HouseDetails.landLordName":{
+                            title: "DRINKING_WATER",
+                            //condition:true,
+                            "type": "select",
+                            "titleMap": {
+                                "Owned": "Owned",
+                                "Public": "Public",
+                                "Shared": "Shared"
+                            }
+                        },
+                        "HouseVerification.HouseDetails.HouseVerification": {
+                            title: "WATER_FILTER",
+                            "type": "radios",
+                            "titleMap": {
+                                "Yes": "Yes",
+                                "No": "No",
+                            }
+                        },
+                        "HouseVerification.HouseDetails.durationOfStay": {
+                            title: "TYPE_OF_TOILET_FACILITY",
+                            condition: "model.customer.udf.userDefinedFieldValues.udf6==true",
+                            "type": "select",
+                            order: 100,
+                            "titleMap": {
+                                "Own toilet": "Own toilet",
+                                "Shared/public": "Shared/public",
+                                "None/open space": "None/open space",
+                            }
                         },
                     },
                     "includes": [
@@ -143,7 +171,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                         "HouseVerification",
                         "HouseVerification.HouseDetails",
                         "HouseVerification.HouseDetails.HouseOwnership",
+                        "HouseVerification.HouseDetails.landLordName",
+                        "HouseVerification.HouseDetails.HouseVerification",
                         "HouseVerification.HouseDetails.Toilet",
+                        "HouseVerification.HouseDetails.durationOfStay",
                         "Liabilities1",
                         "Liabilities1.liabilities",
                         "Liabilities1.liabilities.loanType",
@@ -209,7 +240,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     ]
                 };
 
-                
+
 
                 this.form = IrfFormRequestProcessor.getFormDefinition('IndividualEnrollment', formRequest);
                 //this.form.push(actionbox);
@@ -270,128 +301,83 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment3"), ["$log", 
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
 
-                    var out = reqData.customer.$fingerprint;
-                    var fpPromisesArr = [];
-                    for (var key in out) {
-                        if (out.hasOwnProperty(key) && out[key].data != null) {
-                            (function(obj) {
-                                var promise = Files.uploadBase64({
-                                    file: obj.data,
-                                    type: 'CustomerEnrollment',
-                                    subType: 'FINGERPRINT',
-                                    extn: 'iso'
-                                }, {}).$promise;
-                                promise.then(function(data) {
-                                    reqData.customer[obj.table_field] = data.fileId;
-                                    delete reqData.customer.$fingerprint[obj.fingerId];
-                                });
-                                fpPromisesArr.push(promise);
-                            })(out[key]);
-                        } else {
-                            if (out[key].data == null) {
-                                delete out[key];
+                    try {
+                        var liabilities = reqData['customer']['liabilities'];
+                        if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
+                            for (var i = 0; i < liabilities.length; i++) {
+                                var l = liabilities[i];
+                                l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
+                                l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
                             }
                         }
+                        var financialAssets = reqData['customer']['financialAssets'];
+                        if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
+                            for (var i = 0; i < financialAssets.length; i++) {
+                                var f = financialAssets[i];
+                                f.amountInPaisa = f.amountInPaisa * 100;
+                            }
+                        }
+                    } catch (e) {
+                        $log.info("Error trying to change amount info.");
                     }
 
-                    // $q.all start
-                    $q.all(fpPromisesArr).then(function() {
-                        try {
-                            var liabilities = reqData['customer']['liabilities'];
-                            if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
-                                for (var i = 0; i < liabilities.length; i++) {
-                                    var l = liabilities[i];
-                                    l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                    l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                }
-                            }
+                    reqData['enrollmentAction'] = 'PROCEED';
 
-                            var financialAssets = reqData['customer']['financialAssets'];
-                            if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
-                                for (var i = 0; i < financialAssets.length; i++) {
-                                    var f = financialAssets[i];
-                                    f.amountInPaisa = f.amountInPaisa * 100;
+                    irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
+                    reqData.customer.verified = true;
+                    try {
+                        for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                            var incomes = reqData.customer.familyMembers[i].incomes;
+                            for (var j = 0; j < incomes.length; j++) {
+                                switch (incomes[i].frequency) {
+                                    case 'M':
+                                        incomes[i].monthsPerYear = 12;
+                                        break;
+                                    case 'Monthly':
+                                        incomes[i].monthsPerYear = 12;
+                                        break;
+                                    case 'D':
+                                        incomes[i].monthsPerYear = 365;
+                                        break;
+                                    case 'Daily':
+                                        incomes[i].monthsPerYear = 365;
+                                        break;
+                                    case 'W':
+                                        incomes[i].monthsPerYear = 52;
+                                        break;
+                                    case 'Weekly':
+                                        incomes[i].monthsPerYear = 52;
+                                        break;
+                                    case 'F':
+                                        incomes[i].monthsPerYear = 26;
+                                        break;
+                                    case 'Fornightly':
+                                        incomes[i].monthsPerYear = 26;
+                                        break;
+                                    case 'Fortnightly':
+                                        incomes[i].monthsPerYear = 26;
+                                        break;
                                 }
                             }
-                        } catch (e) {
-                            $log.info("Error trying to change amount info.");
                         }
-
-                        reqData['enrollmentAction'] = 'PROCEED';
-
-                        irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
-
-                        reqData.customer.verified = true;
-                        if (reqData.customer.hasOwnProperty('verifications')) {
-                            var verifications = reqData.customer['verifications'];
-                            for (var i = 0; i < verifications.length; i++) {
-                                if (verifications[i].houseNoIsVerified) {
-                                    verifications[i].houseNoIsVerified = 1;
-                                } else {
-                                    verifications[i].houseNoIsVerified = 0;
-                                }
-                            }
-                        }
-                        try {
-                            for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
-                                var incomes = reqData.customer.familyMembers[i].incomes;
-
-                                for (var j = 0; j < incomes.length; j++) {
-                                    switch (incomes[i].frequency) {
-                                        case 'M':
-                                            incomes[i].monthsPerYear = 12;
-                                            break;
-                                        case 'Monthly':
-                                            incomes[i].monthsPerYear = 12;
-                                            break;
-                                        case 'D':
-                                            incomes[i].monthsPerYear = 365;
-                                            break;
-                                        case 'Daily':
-                                            incomes[i].monthsPerYear = 365;
-                                            break;
-                                        case 'W':
-                                            incomes[i].monthsPerYear = 52;
-                                            break;
-                                        case 'Weekly':
-                                            incomes[i].monthsPerYear = 52;
-                                            break;
-                                        case 'F':
-                                            incomes[i].monthsPerYear = 26;
-                                            break;
-                                        case 'Fornightly':
-                                            incomes[i].monthsPerYear = 26;
-                                            break;
-                                        case 'Fortnightly':
-                                            incomes[i].monthsPerYear = 26;
-                                            break;
-                                    }
-                                }
-                            }
-                        } catch (err) {
-                            console.error(err);
-                        }
-
-                        EnrollmentHelper.fixData(reqData);
-                        if (reqData.customer.id) {
-                            EnrollmentHelper.proceedData(reqData).then(function(resp) {
-                                // Utils.removeNulls(resp.customer,true);
-                                // model.customer = resp.customer;
+                    } catch (err) {
+                        console.error(err);
+                    }
+                    EnrollmentHelper.fixData(reqData);
+                    if (reqData.customer.id) {
+                        EnrollmentHelper.proceedData(reqData).then(function(resp) {
+                            $state.go('Page.Landing', null);
+                        });
+                    } else {
+                        EnrollmentHelper.saveData(reqData).then(function(res) {
+                            EnrollmentHelper.proceedData(res).then(function(resp) {
                                 $state.go('Page.Landing', null);
+                            }, function(err) {
+                                Utils.removeNulls(res.customer, true);
+                                model.customer = res.customer;
                             });
-                        } else {
-                            EnrollmentHelper.saveData(reqData).then(function(res) {
-                                EnrollmentHelper.proceedData(res).then(function(resp) {
-                                    // Utils.removeNulls(resp.customer,true);
-                                    // model.customer = resp.customer;
-                                    $state.go('Page.Landing', null);
-                                }, function(err) {
-                                    Utils.removeNulls(res.customer, true);
-                                    model.customer = res.customer;
-                                });
-                            });
-                        }
-                    });
+                        });
+                    }
                 }
             }
         };
