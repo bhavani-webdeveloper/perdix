@@ -13,7 +13,6 @@ define({
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
         };
-
         var fillNames = function(model) {
             var deferred = $q.defer();
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
@@ -23,7 +22,6 @@ define({
                     if (resp.firstName > 0) {
                         model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     }
-                    //model.group.jlgGroupMembers[key].firstName = resp.firstName;
                     try {
                         if (resp.middleName.length > 0)
                             model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
@@ -174,12 +172,12 @@ define({
                     "title": "FREQUENCY",
                     "type": "select",
                     "titleMap": [{
-                            "name": "Monthly",
-                            "value": "M"
-                        }, {
-                            "name": "Quarterly",
-                            "value": "Q"
-                        }]
+                        "name": "Monthly",
+                        "value": "M"
+                    }, {
+                        "name": "Quarterly",
+                        "value": "Q"
+                    }]
                 }, {
                     "key": "group.tenure",
                     "title": "TENURE",
@@ -191,7 +189,7 @@ define({
                         "key": "group.jlgGroupMembers[].urnNo",
                         "title": "URN_NO",
                         "type": "lov",
-                        "lovonly":true,
+                        "lovonly": true,
                         initialize: function(model, form, parentModel, context) {
                             model.branchName = parentModel.group.branchName;
                         },
@@ -218,7 +216,7 @@ define({
                                 "key": "group.branchName",
                                 "title": "BRANCH_NAME",
                                 "type": "select",
-                                "readonly":true,
+                                "readonly": true,
                                 "enumCode": "branch_id"
                             },
                             "centreCode": {
@@ -234,7 +232,7 @@ define({
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
-                            "id": "group.jlgGroupMembers[arrayIndex].id",
+                            "id": "group.jlgGroupMembers[arrayIndex].CustomerId",
                         },
                         "searchHelper": formHelper,
                         "search": function(inputModel, form) {
@@ -276,16 +274,16 @@ define({
                         }
                     }, {
                         "key": "group.jlgGroupMembers[].firstName",
-                        "readonly":true,
+                        "readonly": true,
                         "type": "string",
                         "title": "GROUP_MEMBER_NAME"
                     }, {
                         "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                        "readonly":true,
+                        "readonly": true,
                         "title": "FATHER_NAME"
                     }, {
                         "key": "group.jlgGroupMembers[].relation",
-                        "readonly":true,
+                        "readonly": true,
                         "title": "RELATION",
                         //"readonly": readonly,
                         /*"type": "select",
@@ -344,7 +342,7 @@ define({
                             return promise;*/
 
                             var promise = Enrollment.getCustomerById({
-                                id: model.group.jlgGroupMembers[context.arrayIndex].id,
+                                id: model.group.jlgGroupMembers[context.arrayIndex].CustomerId,
                             }).$promise.then(function(res) {
                                 var familyMembers = [];
                                 //var obj={};
@@ -422,61 +420,32 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
+
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     var reqData = _.cloneDeep(model);
-                    saveData(reqData).then(function(res) {
-                        model.group = _.clone(res.group);
-                        reqData = _.cloneDeep(model);
-                        fixData(model);
-                        //model.group.screenMode = screenMode;
+                    if (reqData.group.id) {
                         proceedData(reqData).then(function(res) {
-                            //backToDashboard();
-                        });
-                    }, function(doProceed) {
-                        if (doProceed === true) {
-                            proceedData(reqData).then(function(res) {
-                                backToDashboard();
-                            });
-                        } else {
+                            $state.go('Page.GroupDashboard', null);
+                        }, function(err) {
+                            Utils.removeNulls(res.group, true);
+                            model.group = _.clone(res.group);
                             fixData(model);
-                            //model.group.screenMode = screenMode;
-                        }
-                    });
-                },
-                proceedAction: function(model, form) {
-                    if (window.confirm("Proceed to Next Stage?")) {
-                        var reqData = _.cloneDeep(model);
-                        proceedData(reqData).then(function(res) {
-                            //backToDashboard();
-                        }, function(res) {});
-                    }
-                },
-                closeGroup: function(model, form) {
-                    if (window.confirm("Close Group - Are you sure?")) {
-                        var remarks = window.prompt("Enter Remarks", "Test Remarks");
-                        if (remarks) {
-                            PageHelper.showLoader();
-                            irfProgressMessage.pop('close-group', "Working...");
-                            Groups.update({
-                                service: "close"
-                            }, {
-                                "groupId": model.group.id,
-                                "remarks": remarks
-                            }, function(resp, header) {
-
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop('close-group', "Done", 5000);
-                                //backToDashboard();
-                            }, function(res) {
-                                $log.error(res);
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop('close-group', "Oops. An Error Occurred, Please try Again", 5000);
-                                PageHelper.showErrors(res);
+                            fillNames(model);
+                        });
+                    } else {
+                        saveData(reqData).then(function(res) {
+                            proceedData(res).then(function(res1) {
+                                $state.go('Page.GroupDashboard', null);
+                            }, function(err) {
+                                Utils.removeNulls(res1.group, true);
+                                model.group = _.clone(res1.group);
+                                fixData(model);
+                                fillNames(model);
                             });
-                        }
+                        });
                     }
-                },
+                }
             }
         }
     }

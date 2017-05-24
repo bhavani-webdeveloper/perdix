@@ -58,56 +58,6 @@ define({
             return deferred.promise;
         };
 
-        var saveData = function(reqData) {
-            PageHelper.showLoader();
-            irfProgressMessage.pop('group-save', 'Working...');
-            var deferred = $q.defer();
-            if (reqData.group.id) {
-                deferred.reject(true);
-                $log.info("Group id not null, skipping save");
-            } else {
-                reqData.enrollmentAction = 'SAVE';
-                reqData.group.groupFormationDate = Utils.getCurrentDate();
-                PageHelper.clearErrors();
-                Utils.removeNulls(reqData, true);
-                Groups.post(reqData, function(res) {
-                    irfProgressMessage.pop('group-save', 'Done.', 5000);
-                    deferred.resolve(res);
-                }, function(res) {
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(res);
-                    irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
-                    deferred.reject(false);
-                });
-            }
-            return deferred.promise;
-        };
-
-        var proceedData = function(res) {
-            var deferred = $q.defer();
-            if (res.group.id === undefined || res.group.id === null) {
-                $log.info("Group id null, cannot proceed");
-                deferred.reject(null);
-            } else {
-                PageHelper.showLoader();
-                irfProgressMessage.pop('group-save', 'Working...');
-                res.enrollmentAction = "PROCEED";
-                Utils.removeNulls(res, true);
-                Groups.update(res, function(res, headers) {
-                    $log.info(res);
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop('group-save', 'Done. Group ID: ' + res.group.id, 5000);
-                    deferred.resolve(res);
-                }, function(res, headers) {
-                    PageHelper.hideLoader();
-                    irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
-                    PageHelper.showErrors(res);
-                    deferred.reject(null);
-                });
-            }
-            return deferred.promise;
-        };
-
         return {
             "type": "schema-form",
             "title": "CREATE_GROUP",
@@ -605,7 +555,7 @@ define({
                                         Groups.update(reqData, function(res) {
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop('dsc-proceed', 'Operation Succeeded. Proceeded to CGT 1.', 5000);
-                                            //backToDashboard();
+                                            $state.go('Page.GroupDashboard', null);
                                         }, function(res) {
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop('dsc-proceed', 'Oops. Some error.', 2000);

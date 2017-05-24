@@ -1,13 +1,13 @@
 define({
-    pageUID: "loans.group.CGT1",
+    pageUID: "loans.group.Checker2",
     pageType: "Engine",
     dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
-        "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+     "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
     $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
-        Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+     Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         return {
@@ -66,8 +66,8 @@ define({
                 }, {
                     "key": "group.cgt1Photo",
                     "title": "CGT_1_PHOTO",
-                    "category": "Group",
-                    "subCategory": "CGT1PHOTO",
+                    "category":"Group",
+                    "subCategory":"CGT1PHOTO",
                     "type": "file",
                     "fileType": "image/*",
                     "offline": true
@@ -114,37 +114,6 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
-                /*submit: function(model, form, formName) {
-                    $log.info("Inside submit()");
-                    model.enrollmentAction = 'PROCEED';
-                    PageHelper.showLoader();
-                    irfProgressMessage.pop('CGT1-proceed', 'Working...');
-                    PageHelper.clearErrors();
-                    var reqData = {
-                        "cgtDate": model.group.cgtDate1,
-                        "cgtDoneBy": SessionStore.getLoginname()+'-'+model.group.cgt1DoneBy,
-                        "groupCode": model.group.groupCode,
-                        "latitude": model.group.cgt1Latitude,
-                        "longitude": model.group.cgt1Longitude,
-                        "partnerCode": model.group.partnerCode,
-                        "photoId": model.group.cgt1Photo,
-                        "productCode": model.group.productCode,
-                        "remarks": model.group.cgt1Remarks
-                    };
-                    model.group.cgt1DoneBy = SessionStore.getLoginname() + '-' + model.group.cgt1DoneBy;
-                    var reqData = _.cloneDeep(model);
-                    reqData.stage="Stage05";
-                    Groups.update(reqData, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT1-proceed', 'Operation Succeeded. Proceeded to CGT 2.', 5000);
-                        $state.go('Page.GroupDashboard', null);
-                    }, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT1-proceed', 'Oops. Some error.', 2000);
-                        PageHelper.showErrors(res);
-                    });
-                },*/
-
                 submit: function(model, form, formName) {
                     model.enrollmentAction = 'PROCEED';
                     if (form.$invalid) {
@@ -172,9 +141,9 @@ define({
                         console.debug(res);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('cgt1-submit', 'CGT 1 Updated. Proceed to CGT 2', 5000);
-                        //$state.go('Page.GroupDashboard', {
-                            //pageName: "GroupDashboard"
-                        //});
+                        /*$state.go('Page.GroupDashboard', {
+                            pageName: "GroupDashboard"
+                        });*/
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('cgt1-submit', 'Oops. Some error.', 2000);

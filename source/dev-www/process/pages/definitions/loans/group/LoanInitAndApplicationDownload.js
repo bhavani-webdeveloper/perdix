@@ -23,7 +23,6 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                     if(key>=model.group.jlgGroupMembers.length-1){
                         deferred.resolve(model);
                     }
-
                 },function(res){
                     deferred.reject(model);
                 });
@@ -43,17 +42,14 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                     if (resp.length > 0) {
                         model._loanAccountId = resp[0].accountId;
                         deferred.resolve(true);
-
                     }
                 }catch(err){
 
                 }
                 deferred.resolve(false);
-
             },function(resp){
                 deferred.resolve(false);
             });
-
             return deferred.promise;
         };
     return {
@@ -117,9 +113,7 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                     },
                     {
                         "key":"group.groupCode",
-
                         "readonly":true
-
                     },
                     {
                         "key":"group.jlgGroupMembers",
@@ -132,7 +126,6 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                         "items":[
                             {
                                 "key":"group.jlgGroupMembers[].urnNo"
-
                             },
                             {
                                 "key":"group.jlgGroupMembers[].firstName",
@@ -140,20 +133,14 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                                 "readonly":true,
                                 "title":"GROUP_MEMBER_NAME"
                             },
-
                             {
                                 "key":"group.jlgGroupMembers[].loanAmount"
                             },
                             {
                                 "key":"group.jlgGroupMembers[].loanPurpose1"
                             }
-
-
-
                         ]
                     }
-
-
                 ]
             },{
                 "type":"actionbox",
@@ -164,7 +151,6 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                         "icon": "fa fa-check-square",
                         "title":"ACTIVATE_LOAN_ACCOUNT",
                         "onClick":"actions.activateLoanAccount(model,form)",
-
                     }
                 ]
             },
@@ -177,28 +163,24 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                         "icon": "fa fa-download",
                         "title":"DOWNLOAD_APPLICATION",
                         "onClick":"actions.downloadApplication(model,form)",
-
                     },
                     {
                         "type":"button",
                         "icon": "fa fa-arrow-right",
                         "title":"PROCEED_TO_DISBURSEMENT",
                         "onClick":"actions.proceedAction(model,form)"
-
                     }
                 ]
             }
         ],
         actions: {
             proceedAction:function(model,form){
-
                 if(window.confirm("Proceed to Next Stage?")){
                     PageHelper.showLoader();
                     var reqData={};
                     reqData.group = _.cloneDeep(model.group);
                     reqData.enrollmentAction='PROCEED';
                     irfProgressMessage.pop('ap-proceed',"Working...");
-
                     Groups.update(reqData,function(resp,headers){
                         irfProgressMessage.pop('ap-proceed',"Operation Success. Forwarded to Disbursement",5000);
                         PageHelper.hideLoader();
@@ -211,9 +193,7 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                         $log.error(res);
                         PageHelper.showErrors(res);
                     });
-
                 }
-
             },
             downloadApplication:function(model,form){
                 PageHelper.showLoader();
@@ -231,7 +211,6 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                         }catch(err){
                             irfProgressMessage.pop('ap-download', 'An Error Occur during download. Please Try Again',2000);
                         }
-
                     }
                     else{
                         irfProgressMessage.pop('ap-download', 'An Error Occur during download. Please Try Again',2000);
@@ -239,15 +218,12 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                 },function(res){
                     PageHelper.hideLoader();
                 });
-
-
             },
             activateLoanAccount: function (model, form) {
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
                 irfProgressMessage.pop('ap-activate', 'Activating loan account');
                 LoanProcess.get({action:'groupLoans',groupCode:model.group.groupCode,partner:model.group.partnerCode},function(resp,header){
-
                     checkGroupLoanActivated(model).then(function(isActivated){
                         model.isGroupLoanAccountActivated = isActivated;
                         PageHelper.hideLoader();
@@ -259,9 +235,6 @@ irf.pageCollection.factory("Pages__LoanInitAndApplicationDownload",
                             irfProgressMessage.pop('ap-activate', 'An error occurred while activating loan account',2000);
                         }
                     });
-
-
-
                 },function(res){
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('ap-activate', 'An error occurred while activating loan account',2000);
