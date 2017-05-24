@@ -944,24 +944,32 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         title: "HOUSE_DETAILS",
                         items: {
                             "HouseOwnership": {
+                                order:10,
                                 key: "customer.udf.userDefinedFieldValues.udf3",
                                 type: "select"
 
                             },
                             "landLordName": {
+                                order:20,
                                 key: "customer.udf.userDefinedFieldValues.udf2",
-                                condition: "model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
+                                //condition: "model.customer.udf.userDefinedFieldValues.udf3=='RENTED'"
                             },
                             "HouseVerification": {
+                                order:30,
                                 key: "customer.udf.userDefinedFieldValues.udf4",
 
                             },
+                            "Toilet": {
+                                order:40,
+                                key: "customer.udf.userDefinedFieldValues.udf6"
+                            },
                             "durationOfStay": {
+                                order:50,
                                 key: "customer.udf.userDefinedFieldValues.udf5",
                                 type: "radios"
-
                             },
                             "YearsOfBusinessPresentArea": {
+                                order:60,
                                 key: "customer.udf.userDefinedFieldValues.udf31",
                                 "type": "select",
                                 "titleMap": {
@@ -971,11 +979,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             },
                             "YearsOfBusinessPresentAddress": {
+                                order:70,
                                 key: "customer.udf.userDefinedFieldValues.udf32"
-
-                            },
-                            "Toilet": {
-                                key: "customer.udf.userDefinedFieldValues.udf6"
                             }
                         }
                     },
