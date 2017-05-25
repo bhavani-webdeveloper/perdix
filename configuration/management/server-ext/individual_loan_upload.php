@@ -8,7 +8,7 @@ use App\Models\LoanUploadDetail;
 use App\Models\LoanProcessUploadMaster;
 use App\Models\Customer;
 
-$authHeader= "Bearer 28c0ea89-8bdb-42fe-b3f8-6989dc2f7c04";
+$authHeader= "Bearer 11a2617b-49fd-4533-a0a2-f8c45f17df67";
 $url = $settings['perdix']['v8_url'] . "/api/individualLoan";
 
 // $fi = new FilesystemIterator("C:\Users\anchit.raj\Desktop\TESTExcelLoan", FilesystemIterator::SKIP_DOTS);
@@ -63,7 +63,7 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\WIP") as $file) {
 
    			$customerTb = new Customer();
    			$id = $customerTb::where('old_customer_id',$rowData[0][4])->select('id')->get();
-   			$urn = $customerTb::where('old_customer_id',$rowData[0][4])->select('urn_no')->get();
+   			$urn = $customerTb::where('old_customer_id',$rowData[0][3])->select('urn_no')->get();
 
    			echo $urn[0]["urn_no"]."\n"."\n";
    			echo $id[0]["id"]."\n"."\n";

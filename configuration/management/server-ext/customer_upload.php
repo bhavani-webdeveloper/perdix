@@ -8,7 +8,7 @@ use App\Models\CustomerUploadMaster;
 use App\Models\CustomerUploadDetail;
 	
 
-$authHeader= "Bearer 28c0ea89-8bdb-42fe-b3f8-6989dc2f7c04";
+$authHeader= "Bearer 11a2617b-49fd-4533-a0a2-f8c45f17df67";
 $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 
 $tempDir = "C:\\Users\\anchit.raj\\Desktop\\TESTExcel\\";
@@ -44,7 +44,7 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
         $customerUploadMaster->save();
         $failedCount = 0;		
 		$IdGenerated = $customerUploadMaster->id;
-		var_dump($customerUploadMaster->toArray());
+		//var_dump($customerUploadMaster->toArray());
 
       	echo "File Upload for : " .$inputFileName."\n";
 
@@ -54,7 +54,18 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 	        TRUE,
 	        FALSE);
    			echo $rowData[0][4];
-
+   			 $enterprise = array(
+   			 	'businessConstitution' => $rowData[0][13],
+   			 	'registrationNumber' => $rowData[0][16],
+   			 	'companyOperatingSince'    => $rowData[0][14],
+   			 	'registrationType'    => $rowData[0][15]
+   			 				);
+   			 $enterpriseRegistrations = array(
+   			 	array(
+   			 			'registrationNumber' =>$rowData[0][16],
+   			 			'registrationType' => $rowData[0][15]
+   			 		)
+    			);
 		     $customerData = array(
 				'partnerCode' => $rowData[0][0],
 				'firstName'    =>  $rowData[0][1],
@@ -69,10 +80,8 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 				'identityProofNo'    => $rowData[0][10],
 		        'addressProof'    => $rowData[0][11],
 		        'addressProofNo'    => $rowData[0][12],	
-		        'businessConstitution'    => $rowData[0][13],
-		        'companyOperatingSince'    => $rowData[0][14],
-		        'registrationType'    => $rowData[0][15],
-		        'registrationNumber'    => $rowData[0][16],
+		        'enterprise'    => $enterprise,
+		        'enterpriseRegistrations'=> $enterpriseRegistrations,  
 		        'doorNo'    => $rowData[0][17],
 		        'street'    => $rowData[0][18],
 		        'landmark'    => $rowData[0][19],
@@ -87,6 +96,7 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 				'customer'    =>  $customerData,
 				'enrollmentAction' => "SAVE"
 				);
+			echo json_encode($customerSave);
 
 			try {
 				$client = new GuzzleClient();
@@ -102,6 +112,7 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 				$responseBody = $reqRes->getBody()->getContents();
 				$parsedArr = \GuzzleHttp\json_decode($responseBody, true);
 				
+				echo "success"."\n";
 				$CustomerUploadDetail = new CustomerUploadDetail();
 	        	$CustomerUploadDetail->master_id = $IdGenerated;
 	        	$customerUploadDetail->customer_id = $customerData["oldCustomerId"];
@@ -123,10 +134,11 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 	        	$customerUploadDetail->request_json = json_encode($customerSave);
 	        	$customerUploadDetail->error_response = '';
 	        	$customerUploadDetail->save();	
-	        	var_dump($customerUploadDetail->toArray());
+	        	//var_dump($customerUploadDetail->toArray());
 	        	$failedCount++;
 
 	        	json_encode($customerSave);
+	        	throw $e;
 			}
 		};	
 
