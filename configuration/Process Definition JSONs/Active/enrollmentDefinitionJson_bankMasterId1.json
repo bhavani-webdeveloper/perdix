@@ -624,6 +624,14 @@
               "Completed"
             ]
           },
+          "oldCustomerId": {
+            "title": "Old Customer ID",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "villageName": {
             "title": "Village",
             "type": "string",
