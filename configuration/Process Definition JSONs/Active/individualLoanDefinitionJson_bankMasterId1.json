@@ -155,18 +155,6 @@
          ]
       },
       {
-         "order":13,
-         "code":"IfmrDO",
-         "name":"IFMR DO",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"IFMR DO",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
          "order":14,
          "code":"LoanBooking",
          "name":"Loan Booking",

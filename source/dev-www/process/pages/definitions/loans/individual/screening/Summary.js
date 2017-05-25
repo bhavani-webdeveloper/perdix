@@ -554,8 +554,13 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                     <td>{{ rowData["Category Name"] }}</td>\
                                     <td style="background: {{ rowData.color_hexadecimal }}"></td>\
                                     <td>{{ rowData["Score"] }}</td>\
-                                </tr></tbody>\
-                            </table>'
+                                </tr>\
+                            </tbody>\
+                        </table>\
+                        <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
+                        <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
+                        <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
+                        
                     }
                 ]
             })

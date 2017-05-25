@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartnerQueue"),
-["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
-function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
+["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils","irfNavigator",
+function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils, irfNavigator){
 
 	var branch = SessionStore.getBranch();
 
@@ -103,7 +103,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 						fn: function(item, index){
 							//EntityManager.setModel("loans.individual.booking.IFMRDO",{_loan:item});
 							$state.go("Page.Engine",{
-								pageName:"loans.individual.booking.IFMRDO",
+								pageName:"loans.individual.booking.PendingForPartner",
 								pageId:item.loanId
 							});
 						},
@@ -123,7 +123,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							},
 							{
 								state: "Page.Engine",
-								pageName: "loans.individual.booking.IFMRDOQueue"
+								pageName: "loans.individual.booking.PendingForPartnerQueue"
 							});
 						},
 						isApplicable: function(item, index) {

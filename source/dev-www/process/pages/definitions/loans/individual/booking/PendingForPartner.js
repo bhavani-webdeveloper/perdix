@@ -1195,7 +1195,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartner"
                 "items": [
                     {
                         key: "loanAccount.partnerApprovalStatus",
-                        condition: "model.currentStage == 'IfmrDO'",
                         type: "radios",
                         titleMap: {
                             "DECLINE": "DECLINE",
@@ -1367,7 +1366,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.PendingForPartner"
                             pageId: model.loanAccount.id
                         }, {
                             state: "Page.Engine",
-                            pageName: "loans.individual.booking.IFMRDO",
+                            pageName: "loans.individual.booking.PendingForPartner",
                             pageId: model.loanAccount.id
                         });
                     });
