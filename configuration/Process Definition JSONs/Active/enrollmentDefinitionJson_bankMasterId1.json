@@ -2233,6 +2233,16 @@
               "Completed"
             ]
           },
+		   "oldCustomerId": {
+            "title": "OldCustomerId",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "postOffice": {
             "title": "postOffice",
             "type": "string",
