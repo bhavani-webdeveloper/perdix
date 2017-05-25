@@ -11,30 +11,49 @@ use App\Models\CustomerUploadDetail;
 $authHeader= "Bearer 11a2617b-49fd-4533-a0a2-f8c45f17df67";
 $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 
-$tempDir = "C:\\Users\\anchit.raj\\Desktop\\TESTExcel\\";
-$files = new DirectoryIterator("C:\Users\anchit.raj\Desktop\TESTExcel");
-$tempWipDir = "C:\\Users\\anchit.raj\\Desktop\\CustomerWIP\\";
+$baseUrl = "C:\\Users\\anchit.raj\\Desktop\\CustomerUpload";
+
+$tempToBeProcessed = $baseUrl."\\to_be_processed\\";
+$tempWipDir = $baseUrl."\\wip\\";
+$tempRejectedDir = $baseUrl."\\rejected\\";
+$tempCompletedDir = $baseUrl."\\completed\\";
+
+
+$files = new DirectoryIterator($baseUrl."\\to_be_processed");
 
 foreach ($files as $file) {
-	if ($file->isFile()) {
-		$source = $tempDir.$file->getFilename();
+  if ($file->isFile()) {
+  		$source = $tempToBeProcessed.$file->getFilename();
 		$dest = $tempWipDir.$file->getFilename();	
 	    copy($source, $dest);
 	    unlink( $source );
-	}
-}
-
-foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $file) {
-  if ($file->isFile()) {
-      $inputFileName = $tempWipDir.$file->getFilename() ;	
+      $inputFileName = $tempWipDir.$file->getFilename() ;
+      $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
+      echo $ext."\n";	
+      if($ext != "xlsx"){
+      		$source = $tempWipDir.$file->getFilename();
+			$dest = $tempRejectedDir.$file->getFilename();	
+	    	copy($source, $dest);
+	    	unlink( $source );
+	    	continue;
+      }
       try {
       	$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
     	$objReader = PHPExcel_IOFactory::createReader($inputFileType);
-    	$objPHPExcel = $objReader->load($inputFileName);
 
-    	$sheet = $objPHPExcel->getSheet(0);
+		$objPHPExcel = $objReader->load($inputFileName);
+		$sheet = $objPHPExcel->getSheet(0);
 		$highestRow = $sheet->getHighestRow();
 		$highestColumn = $sheet->getHighestColumn();
+		echo $highestColumn."\n";
+
+		if($highestColumn !="X"){
+			$source = $tempWipDir.$file->getFilename();
+			$dest = $tempRejectedDir.$file->getFilename();	
+	    	copy($source, $dest);
+	    	unlink( $source );
+	    	continue;
+		}
 
 	    $customerUploadMaster = new CustomerUploadMaster();
         $customerUploadMaster->filename = $inputFileName;
@@ -54,19 +73,19 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 	        TRUE,
 	        FALSE);
    			echo $rowData[0][4];
-   			 $enterprise = array(
+   			$enterprise = array(
    			 	'businessConstitution' => $rowData[0][13],
    			 	'registrationNumber' => $rowData[0][16],
    			 	'companyOperatingSince'    => $rowData[0][14],
    			 	'registrationType'    => $rowData[0][15]
    			 				);
-   			 $enterpriseRegistrations = array(
+   			$enterpriseRegistrations = array(
    			 	array(
    			 			'registrationNumber' =>$rowData[0][16],
    			 			'registrationType' => $rowData[0][15]
    			 		)
     			);
-		     $customerData = array(
+		    $customerData = array(
 				'partnerCode' => $rowData[0][0],
 				'firstName'    =>  $rowData[0][1],
 				'customerType'  =>  $rowData[0][2],
@@ -138,7 +157,7 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
 	        	$failedCount++;
 
 	        	json_encode($customerSave);
-	        	throw $e;
+	        	//throw $e;
 			}
 		};	
 
@@ -146,8 +165,18 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\CustomerWIP") as $fi
         $customerUploadMaster->status = 'PROCESSED';
         $customerUploadMaster->save();
 
+        $source = $tempWipDir.$file->getFilename();
+		$dest = $tempCompletedDir.$file->getFilename();	
+	    copy($source, $dest);
+	    unlink( $source );
+
       } catch (Exception $e) {
-      	throw $e;
+      	$source = $tempWipDir.$file->getFilename();
+		$dest = $tempRejectedDir.$file->getFilename();	
+	    copy($source, $dest);
+	    unlink( $source );
+	    continue;
+      	//throw $e;
       }
      
   }
