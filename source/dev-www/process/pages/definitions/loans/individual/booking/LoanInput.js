@@ -1,11 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator",
-    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator){
+["$log","SessionStore","$state", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
+    function($log, SessionStore,$state,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var bankName = SessionStore.getBankName();
         var bankId;
+        var showLoanBookingDetails = false;
+        
         bankId = $filter('filter')(formHelper.enum("bank").data, {name:bankName}, true)[0].code;
 
         var getSanctionedAmount = function(model){
@@ -98,6 +100,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].loanToValue;
             }
         }
+
+        var populateDisbursementDate = function(modelValue,form,model){
+            if (modelValue){
+                modelValue = new Date(modelValue);
+                model._currentDisbursement.scheduledDisbursementDate = new Date(modelValue.setDate(modelValue.getDate()+1));
+            }
+        };
+
 
         try{
             var defaultPartner = formHelper.enum("partner").data[0].value;
@@ -222,6 +232,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
                     model.loanAccount.guarantors = [];
+                    model.showLoanBookingDetails = showLoanBookingDetails;
+
+                    PagesDefinition.getPageDefinition("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
+                        if(data.stateParams.showLoanBookingDetails != undefined && data.stateParams.showLoanBookingDetails !== null && data.stateParams.showLoanBookingDetails !=""){
+                            model.showLoanBookingDetails = data.stateParams.showLoanBookingDetails;
+                        }
+                        console.log(model.showLoanBookingDetails);
+                    });
                     //model.loanAccount.guarantors = [];
                     for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
                         if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' || 
@@ -745,6 +763,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 }
                             },
+                            {
+                                "key": "loanAccount.moratoriumPeriod",
+                                "title":"MORATORIUM_PERIOD",
+                                "type": "text"
+                            },
+                            {
+                                "key": "loanAccount.fixedIntrestRate",
+                                "title":"FIXED_INTREST_RETE",
+                                "type": "number"
+                            }
                             /*{
                                 title: "BUSINESS_INCOME",
                                 //type: "amount",
@@ -768,7 +796,44 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         ]
                     }
                 ]
-            },{
+            },
+            {
+                "type": "box",
+                "title": "UPDATE_ACCOUNT", // sample label code
+                "colClass": "col-sm-6", // col-sm-6 is default, optional
+                "condition": "model.showLoanBookingDetails",
+                //"readonly": false, // default-false, optional, this & everything under items becomes readonly
+                "items": [
+                    {
+                        "key": "_currentDisbursement.customerSignatureDate",
+                        "title": "CUSTOMER_SIGNATURE_DATE",
+                        "type": "date",
+                        "required": true,
+                        "onChange":function(modelValue,form,model){
+                            populateDisbursementDate(modelValue,form,model);
+                        }
+                    },
+                    {
+                        "key": "_currentDisbursement.scheduledDisbursementDate",
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "type": "date",
+                        "required": true
+                    },
+                    {
+                        key: "loanAccount.emiPaymentDateRequested",
+                        type: "string",
+                        title: "EMI_PAYMENT_DATE_REQUESTED",
+                        readonly: true
+                    },
+                    {
+                        "key": "loanAccount.firstRepaymentDate",
+                        "title": "REPAYMENT_DATE",
+                        "type": "date",
+                        "required": true
+                    }
+                ]
+            }, 
+            {
                 "type":"box",
                 "title":"COLLATERAL",
                 "items":[
@@ -1381,7 +1446,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "onClick": "actions.save(model, formCtrl, form, $event)"
                     }
                 ]
-            } /*,
+            },/*,
             {
                 "type": "actionbox",
                 "items": [\*{
