@@ -11,26 +11,32 @@ use App\Models\Customer;
 $authHeader= "Bearer 11a2617b-49fd-4533-a0a2-f8c45f17df67";
 $url = $settings['perdix']['v8_url'] . "/api/individualLoan";
 
-// $fi = new FilesystemIterator("C:\Users\anchit.raj\Desktop\TESTExcelLoan", FilesystemIterator::SKIP_DOTS);
-// printf("There were %d Files", iterator_count($fi));
+$baseUrl = "C:\\Users\\anchit.raj\\Desktop\\LoanUpload";
 
-$tempDir = "C:\\Users\\anchit.raj\\Desktop\\TESTExcelLoan\\";
-$tempWipDir = "C:\\Users\\anchit.raj\\Desktop\\WIP\\";
-$files = new DirectoryIterator("C:\Users\anchit.raj\Desktop\TESTExcelLoan");
+$tempToBeProcessed = $baseUrl."\\to_be_processed\\";
+$tempWipDir = $baseUrl."\\wip\\";
+$tempRejectedDir = $baseUrl."\\rejected\\";
+$tempCompletedDir = $baseUrl."\\completed\\";
+
+$files = new DirectoryIterator($baseUrl."\\to_be_processed");
+
 
 foreach ($files as $file) {
-	if ($file->isFile()) {
-		$source = $tempDir.$file->getFilename();
-		$dest = $tempWipDir.$file->getFilename();
+  if ($file->isFile()) {
+  		$source = $tempToBeProcessed.$file->getFilename();
+		$dest = $tempWipDir.$file->getFilename();	
 	    copy($source, $dest);
 	    unlink( $source );
-
-	}
-}
-
-foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\WIP") as $file) {
-  if ($file->isFile()) {
-      $inputFileName = $tempWipDir.$file->getFilename(); 
+      $inputFileName = $tempWipDir.$file->getFilename();
+      $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
+      echo $ext."\n";	
+      if($ext != "xlsx"){
+      		$source = $tempWipDir.$file->getFilename();
+			$dest = $tempRejectedDir.$file->getFilename();	
+	    	copy($source, $dest);
+	    	unlink( $source );
+	    	continue;
+      } 
       try {
       	$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
     	$objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -39,6 +45,15 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\WIP") as $file) {
     	$sheet = $objPHPExcel->getSheet(0);
 		$highestRow = $sheet->getHighestRow();
 		$highestColumn = $sheet->getHighestColumn();
+		echo $highestColumn."\n";
+
+		if($highestColumn !="AA"){
+			$source = $tempWipDir.$file->getFilename();
+			$dest = $tempRejectedDir.$file->getFilename();	
+	    	copy($source, $dest);
+	    	unlink( $source );
+	    	continue;
+		}
 
 		$loanProcessUploadMaster = new LoanProcessUploadMaster();
         $loanProcessUploadMaster->filename = $inputFileName;
@@ -155,9 +170,18 @@ foreach (new DirectoryIterator("C:\Users\anchit.raj\Desktop\WIP") as $file) {
         $loanProcessUploadMaster->status = 'PROCESSED';
         $loanProcessUploadMaster->save();
         var_dump($loanProcessUploadMaster->toArray());
+        $source = $tempWipDir.$file->getFilename();
+		$dest = $tempCompletedDir.$file->getFilename();	
+	    copy($source, $dest);
+	    unlink( $source );
 
       } catch (Exception $e) {
-      	throw $e;
+      	$source = $tempWipDir.$file->getFilename();
+		$dest = $tempRejectedDir.$file->getFilename();	
+	    copy($source, $dest);
+	    unlink( $source );
+	    continue;
+      	//throw $e;
       }
   }
 }
