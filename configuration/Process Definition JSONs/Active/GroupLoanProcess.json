@@ -1,5 +1,8 @@
 {
-     
+   "customerMinAgeGenericProduct":18,
+   "customerMaxGenericAge":60,
+   "customerMaxAgeBcProduct":58,
+   "customerAgeLimitForSingleFemale":35,   
    "stages":[
       {
          "order":1,
@@ -98,7 +101,7 @@
       "required":[
          "groupDetails"
       ],
-      "properties":{
+      "fields":{
          "groupDetails":{
             "title":"Group Details",
             "type":"object",
@@ -133,37 +136,43 @@
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"groupFormationDate":{
-                  "title":"Group  Formation Date,
+               },
+			   "groupFormationDate":{
+                  "title":"Group  Formation Date",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"groupStatus":{
+               },
+			   "groupStatus":{
                   "title":"Group  Status",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"startTime":{
+               },
+			   "startTime":{
                   "title":"Start Time",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"endTime":{
+               },
+			   "endTime":{
                   "title":"End Time",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"frequency":{
+               },
+			   "frequency":{
                   "title":"Frequency",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"tenure":{
+               },
+			   "tenure":{
                   "title":"Tenure",
                   "type":"string",
                   "minLength":1,
@@ -171,7 +180,8 @@
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"tenureInYear":{
+               },
+			   "tenureInYear":{
                   "title":"Tenure in Year",
                   "type":"string",
                   "minLength":1,
@@ -179,7 +189,8 @@
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"groupName":{
+               },
+			   "groupName":{
                   "title":"Group Name",
                   "type":"string",
                   "minLength":1,
@@ -187,7 +198,8 @@
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"currentStage":{
+               },
+			   "currentStage":{
                   "title":"Current Stage",
                   "type":"string",
                   "minLength":1,
@@ -195,13 +207,15 @@
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"pendingApproval":{
+               },
+			   "pendingApproval":{
                   "title":"GPending Approval",
                   "type":"string",
                   "captureStages":[
                      "GroupCreation"
                   ]
-               },"udf1":{
+               },
+			   "udf1":{
                   "title":"udf 1",
                   "type":"string",
                   "minLength":1,
@@ -807,7 +821,7 @@
                      "title":"GRT Photo",
                      "type":"String",
                      "minimum":1,
-                     "maximum":100
+                     "maximum":100,
                      "captureStages":[
                         "GRT"
                      ]
