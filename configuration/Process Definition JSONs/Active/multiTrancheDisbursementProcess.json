@@ -432,6 +432,15 @@
                         "DisbursementConfirmation"
                      ]
                   },
+                  "moratoriumPeriodInDays":{
+                     "title":"moratorium period in days",
+                     "type":"number",
+                     "minimum":1,
+                     "maximum":10000000,
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
                   "referenceNumber":{
                      "title":"referenceNumber",
                      "type":"string",
