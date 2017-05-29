@@ -772,7 +772,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                "key": "loanAccount.moratoriumPeriod",
+                                "key": "loanAccount.moratoriumPeriodInDays",
                                 "title":"MORATORIUM_PERIOD",
                                 "type": "text"
                             },
