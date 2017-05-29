@@ -13,3 +13,7 @@ function get_response_obj(){
 
     return $response;
 }
+
+function base_path(){
+    return __DIR__;
+}

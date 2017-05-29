@@ -4,6 +4,7 @@ ob_start("ob_gzhandler");
 require_once __DIR__.'/vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as DB;
+use App\Core\Settings;
 
 //header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type, accept, Authorization, X-Requested-With");
@@ -35,9 +36,15 @@ $settings = [
         'prefix'    => '',
     ],
     'perdix' => [
-        'v8_url' => getenv('PERDIX_V8_BASE_URL')
+        'v8_url' => getenv('PERDIX_V8_BASE_URL'),
+        'username' => getenv('PERDIX_USERNAME'),
+        'password' => getenv('PERDIX_PASSWORD'),
+        'customer_upload_path' => getenv('CUSTOMER_UPLOAD_BASE_DIR'),
+        'individual_loan_upload_path' => getenv('LOAN_UPLOAD_BASE_DIR')
     ]
 ];
+
+Settings::getInstance()->setSettings($settings);
 
 header("Access-Control-Request-Method: GET");
 
@@ -47,4 +54,3 @@ $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($settings['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
-
