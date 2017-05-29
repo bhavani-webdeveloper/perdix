@@ -66,6 +66,49 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                         for (var i = 0; i < model.cbsLoan.repaymentSchedule.length; i++) {
                                             model.cbsLoan.repaymentSchedule[i].valueDate = moment.utc(model.cbsLoan.repaymentSchedule[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");
                                         }
+                                        model.cbsLoan.repaymentScheduleTblFormat = {columns:[], data :[]};
+                                        if(model.cbsLoan.repaymentSchedule.length > 0){
+                                            var keys = Object.keys(model.cbsLoan.repaymentSchedule[0]);
+                                            var title, format;
+                                            for(var itr = 0; itr < keys.length; itr++){
+                                                format, title = '';
+                                                switch(keys[itr]){
+                                                    case 'valueDate' : 
+                                                        title = "DEMAND_DATE";
+                                                        break;
+                                                    case 'description':
+                                                        title = "TYPE";
+                                                        model.cbsLoan.repaymentScheduleTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr]});
+                                                        continue;
+                                                    case 'amount1':
+                                                        title = "AMOUNT";
+                                                        format = "currency";
+                                                        break;
+                                                    case 'amount3':
+                                                        title = "DUE";
+                                                        format = "currency";
+                                                        break;
+                                                    case 'part1':
+                                                        title = "NORMAL_INTEREST";
+                                                        format = "currency";
+                                                        break;
+                                                    case 'part2':
+                                                        title = "PRINCIPAL";
+                                                        format = "currency";
+                                                        break;
+                                                    case 'amount2':
+                                                        title = "BALANCE";
+                                                        format = "currency";
+                                                        break;
+                                                    default:
+                                                        continue;
+                                                }
+                                                model.cbsLoan.repaymentScheduleTblFormat.columns.push({"title": title, "data": keys[itr], format: format});
+                                            }
+                                            model.cbsLoan.repaymentScheduleTblFormat.data = model.cbsLoan.repaymentSchedule;
+                                            model.cbsLoan.orgRepaymentScheduleTblFormat = {columns: model.cbsLoan.repaymentScheduleTblFormat.columns};
+                                            model.cbsLoan.orgRepaymentScheduleTblFormat.data = $filter('filter')(model.cbsLoan.repaymentSchedule, {status: 'true'});
+                                        }
                                         var loanDocuments = model.loanAccount.loanDocuments;
                                         var availableDocCodes = [];
                                         LoanBookingCommons.getDocsForProduct(model.cbsLoan.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {
@@ -127,7 +170,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         "type": "amount"
                     },
                     {
-                        "key": "cbsLoan.operationalStatus",
+                            "key": "cbsLoan.operationalStatus",
                         "title": "OPERATIONAL_STATUS",
                         "type": "string"
                     },
@@ -839,190 +882,23 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                     "htmlClass": "text-danger",
                     "items": [{
                             "type": "fieldset",
+                            "title": "ORIGINAL_REPAYMENT_SCHEDULE",
+                            "items": [{
+                                type: "section",
+                                colClass: "col-sm-12",
+                                html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgRepaymentScheduleTblFormat'></irf-simple-summary-table>"
+                            }
+                            ]
+                        },
+                        {
+                            "type": "fieldset",
                             "title": "REPAYMENT_SCHEDULE",
-                            "items": [
-                            {
-                                "type": "section",
-                                "htmlClass": "row",
-                                "items":[
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-2",
-                                        "items": [
-                                            {
-                                                "title": "Demand Date",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-1",
-                                        "items": [
-                                            {
-                                                "title": "TYPE",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-2",
-                                        "items": [
-                                            {
-                                                "title": "AMOUNT",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-2",
-                                        "items": [
-                                            {
-                                                "title": "DUE",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-1",
-                                        "items": [
-                                            {
-                                                "title": "NORMAL_INTEREST",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-2",
-                                        "items": [
-                                            {
-                                                "title": "PRINCIPAL",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-2",
-                                        "items": [
-                                            {
-                                                "title": "BALANCE",
-                                                "readonly": true
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }, {
-                                "type": "array",
-                                "notitle": true,
-                                "view": "fixed",
-                                "key": "cbsLoan.repaymentSchedule",
-                                "add": null,
-                                "remove": null,
-                                "items": [
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "row",
-                                        "items": [
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-2",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].valueDate",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-1",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].description",
-                                                        "type": "text",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-2",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].amount1",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-2",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].amount3",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-1",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].part1",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-2",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].part2",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "type": "section",
-                                                "htmlClass": "col-sm-2",
-                                                "items": [
-                                                    {
-                                                        "key": "cbsLoan.repaymentSchedule[].amount2",
-                                                        "type": "string",
-                                                        "notitle": true,
-                                                        "title": " ",
-                                                        "readonly": true
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ] // END of array items
-                            }]
+                            "items": [{
+                                type: "section",
+                                colClass: "col-sm-12",
+                                html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.repaymentScheduleTblFormat'></irf-simple-summary-table>"
+                            }
+                            ]
                         }] // END of box items
                 },
                 // {
