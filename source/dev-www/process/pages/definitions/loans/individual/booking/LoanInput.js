@@ -227,8 +227,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
-                    model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
-
+                    PageHelper.showLoader();
+                    Queries.getGlobalSettings("mainPartner").then(function(value) {
+                        model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
+                        $log.info("mainPartner:" + model.loanAccount.partnerCode);
+                    }, function(err) {
+                        $log.info("mainPartner is not available");
+                    }).finally(function(){
+                        PageHelper.hideLoader();
+                    });
+                    //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = [];
                     model.loanAccount.guarantors = [];
