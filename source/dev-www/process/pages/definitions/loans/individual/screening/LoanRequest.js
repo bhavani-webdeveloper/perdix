@@ -356,31 +356,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     .$promise
                     .then(function(res){
                         model.customer = res;
-                        $log.info("Printing raj customer");
-                        $log.info(model.customer);
-                        if (model.currentStage =="Rejected") {
-                            model.customer.properAndMatchingSignboard= null;
-                            model.customer.bribeOffered=null;
-                            model.customer.shopOrganized=null;
-                            model.customer.isIndustrialArea=null;
-                            model.customer.customerAttitudeToKinara=null;
-                            model.customer.bookKeepingQuality=null;
-                            model.customer.challengingChequeBounce=null;
-                            model.customer.allMachinesAreOperational=null;
-                            model.customer.employeeSatisfaction=null;
-                            model.customer.politicalOrPoliceConnections=null;
-                            model.customer.multipleProducts=null;
-                            model.customer.multipleBuyers=null;
-                            model.customer.seasonalBusiness=null;
-                            model.customer.incomeStability=null;
-                            model.customer.utilisationOfBusinessPremises=null;
-                            model.customer.approachForTheBusinessPremises=null;
-                            model.customer.safetyMeasuresForEmployees=null;
-                            model.customer.childLabours=null;
-                            model.customer.isBusinessEffectingTheEnvironment=null;
-                            model.customer.stockMaterialManagement=null;
-                            model.customer.customerWalkinToBusiness=null;
-                        }
                     });
             }
 
@@ -2439,8 +2414,31 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
                     PageHelper.showProgress("update-loan", "Working...");
-                    var cusData = {customer: _.cloneDeep(model.customer)};
                     if (model.loanAccount.currentStage == "Rejected") {
+                        model.customer.properAndMatchingSignboard = null;
+                        model.customer.bribeOffered = null;
+                        model.customer.shopOrganized = null;
+                        model.customer.isIndustrialArea = null;
+                        model.customer.customerAttitudeToKinara = null;
+                        model.customer.bookKeepingQuality = null;
+                        model.customer.challengingChequeBounce = null;
+                        model.customer.allMachinesAreOperational = null;
+                        model.customer.employeeSatisfaction = null;
+                        model.customer.politicalOrPoliceConnections = null;
+                        model.customer.multipleProducts = null;
+                        model.customer.multipleBuyers = null;
+                        model.customer.seasonalBusiness = null;
+                        model.customer.incomeStability = null;
+                        model.customer.utilisationOfBusinessPremises = null;
+                        model.customer.approachForTheBusinessPremises = null;
+                        model.customer.safetyMeasuresForEmployees = null;
+                        model.customer.childLabours = null;
+                        model.customer.isBusinessEffectingTheEnvironment = null;
+                        model.customer.stockMaterialManagement = null;
+                        model.customer.customerWalkinToBusiness = null;
+                        var cusData = {
+                            customer: _.cloneDeep(model.customer)
+                        };
                         EnrollmentHelper.proceedData(cusData).then(function(resp) {
                             formHelper.resetFormValidityState(form);
                         }, function(httpRes) {
