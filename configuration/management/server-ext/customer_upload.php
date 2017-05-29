@@ -16,7 +16,10 @@ $settings = Settings::getInstance()->getSettings();
 $authHeader = "Bearer ". $settings['perdix']['token'];
 $url = $settings['perdix']['v8_url'] . "/api/enrollments";
 
+echo $authHeader;
+
 $baseUrl = $settings['perdix']['customer_upload_path'];
+
 
 $tempToBeProcessed = $baseUrl . DIRECTORY_SEPARATOR . "to_be_processed" . DIRECTORY_SEPARATOR;
 $tempWipDir = $baseUrl . DIRECTORY_SEPARATOR . "wip" . DIRECTORY_SEPARATOR;
@@ -24,10 +27,13 @@ $tempRejectedDir = $baseUrl . DIRECTORY_SEPARATOR . "rejected" . DIRECTORY_SEPAR
 $tempCompletedDir = $baseUrl . DIRECTORY_SEPARATOR . "completed" . DIRECTORY_SEPARATOR;
 
 
+
 $files = new DirectoryIterator($tempToBeProcessed);
 
 foreach ($files as $file) {
+    echo $tempToBeProcessed . $file->getFilename();
     if ($file->isFile()) {
+        echo $tempCompletedDir;
         $source = $tempToBeProcessed . $file->getFilename();
         $dest = $tempWipDir . $file->getFilename();
         copy($source, $dest);
@@ -73,46 +79,47 @@ foreach ($files as $file) {
             echo "File Upload for : " . $inputFileName . "\n";
 
             for ($row = 2; $row <= $highestRow; $row++) {
-                $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                $matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                     NULL,
                     TRUE,
                     FALSE);
-                echo $rowData[0][4];
+                $rowData = $matrixData[0];
+                echo $rowData[4];
                 $enterprise = array(
-                    'businessConstitution' => $rowData[0][13],
-                    'registrationNumber' => $rowData[0][16],
-                    'companyOperatingSince' => $rowData[0][14],
-                    'registrationType' => $rowData[0][15]
+                    'businessConstitution' => $rowData[13],
+                    'registrationNumber' => $rowData[16],
+                    'companyOperatingSince' => $rowData[14],
+                    'registrationType' => $rowData[15]
                 );
                 $enterpriseRegistrations = array(
                     array(
-                        'registrationNumber' => $rowData[0][16],
-                        'registrationType' => $rowData[0][15]
+                        'registrationNumber' => $rowData[16],
+                        'registrationType' => $rowData[15]
                     )
                 );
                 $customerData = array(
-                    'partnerCode' => $rowData[0][0],
-                    'firstName' => $rowData[0][1],
-                    'customerType' => $rowData[0][2],
-                    'oldCustomerId' => $rowData[0][3],
-                    'dateOfBirth' => $rowData[0][4],
-                    'gender' => $rowData[0][5],
-                    'maritalStatus' => $rowData[0][6],
-                    'panNo' => $rowData[0][7],
-                    'aadhaarNo' => $rowData[0][8],
-                    'identityProof' => $rowData[0][9],
-                    'identityProofNo' => $rowData[0][10],
-                    'addressProof' => $rowData[0][11],
-                    'addressProofNo' => $rowData[0][12],
+                    'partnerCode' => $rowData[0],
+                    'firstName' => $rowData[1],
+                    'customerType' => $rowData[2],
+                    'oldCustomerId' => $rowData[3],
+                    'dateOfBirth' => $rowData[4],
+                    'gender' => $rowData[5],
+                    'maritalStatus' => $rowData[6],
+                    'panNo' => $rowData[7],
+                    'aadhaarNo' => $rowData[8],
+                    'identityProof' => $rowData[9],
+                    'identityProofNo' => $rowData[10],
+                    'addressProof' => $rowData[11],
+                    'addressProofNo' => $rowData[12],
                     'enterprise' => $enterprise,
                     'enterpriseRegistrations' => $enterpriseRegistrations,
-                    'doorNo' => $rowData[0][17],
-                    'street' => $rowData[0][18],
-                    'landmark' => $rowData[0][19],
-                    'state' => $rowData[0][20],
-                    'district' => $rowData[0][21],
-                    'landLineNo' => $rowData[0][22],
-                    'mobilePhone' => $rowData[0][23]
+                    'doorNo' => $rowData[17],
+                    'street' => $rowData[18],
+                    'landmark' => $rowData[19],
+                    'state' => $rowData[20],
+                    'district' => $rowData[21],
+                    'landLineNo' => $rowData[22],
+                    'mobilePhone' => $rowData[23]
 
                 );
 
