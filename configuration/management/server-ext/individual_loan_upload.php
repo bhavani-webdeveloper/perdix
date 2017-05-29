@@ -15,7 +15,7 @@ $perdixService->login();
 $settings = Settings::getInstance()->getSettings();
 
 $authHeader = "Bearer ". $settings['perdix']['token'];
-$url = $settings['perdix']['v8_url'] . "/api/enrollments";
+$url = $settings['perdix']['v8_url'] . "/api/individualLoan";
 
 $baseUrl = $settings['perdix']['individual_loan_upload_path'];
 
@@ -76,59 +76,101 @@ foreach ($files as $file) {
 
             for ($row = 2; $row <= $highestRow; $row++) {
                 echo "File Upload for : " . $file->getFilename() . "\n";
-                $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                $matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                     NULL,
                     TRUE,
                     FALSE);
-                echo $rowData[0][4];
+
+                $rowData = $matrixData[0];
 
                 $customerTb = new Customer();
-                $id = $customerTb::where('old_customer_id', $rowData[0][4])->select('id')->get();
-                $urn = $customerTb::where('old_customer_id', $rowData[0][3])->select('urn_no')->get();
 
-                echo $urn[0]["urn_no"] . "\n" . "\n";
-                echo $id[0]["id"] . "\n" . "\n";
+                $oldCustomerIds = array(
+                    'applicant' => $rowData[3],
+                    'co-applicant1' => $rowData[5],
+                    'co-applicant2' => $rowData[6],
+                    'guarantor1' => $rowData[7],
+                    'guarantor2' => $rowData[8],
+                    'customer' => $rowData[4]
+                );
+
+                $pCustomers = Customer::select('id', 'urn_no', 'old_customer_id')
+                    ->whereIn('old_customer_id', array_values($oldCustomerIds))
+                    ->whereNotNull('old_customer_id')
+                    ->get();
+
+                $pCustMapping = [];
+                foreach($pCustomers as $c){
+                    $pCustMapping[$c->old_customer_id] = $c->toArray();
+                }
 
                 $loanCustomerRelations = array();
 
-                $oldCustomerIds = array(
-                    'applicant' => $rowData[0][4],
-                    'co-applicant1' => $rowData[0][5],
-                    'co-applicant2' => $rowData[0][6]
-                );
+                if (array_key_exists($oldCustomerIds['applicant'], $pCustMapping)){
+                    $loanCustomerRelations[] = [
+                        'customerId' => $pCustMapping[$oldCustomerIds['applicant']]['id'],
+                        'relation' => 'Applicant'
+                    ];
+                }
+
+                if ($oldCustomerIds['co-applicant1']!=null && array_key_exists($oldCustomerIds['co-applicant1'], $pCustMapping)){
+                    $loanCustomerRelations[] = [
+                        'customerId' => $pCustMapping[$oldCustomerIds['co-applicant1']]['id'],
+                        'relation' => 'Co-Applicant'
+                    ];
+                }
+
+                if ($oldCustomerIds['co-applicant2']!=null && array_key_exists($oldCustomerIds['co-applicant2'], $pCustMapping)){
+                    $loanCustomerRelations[] = [
+                        'customerId' => $pCustMapping[$oldCustomerIds['co-applicant2']]['id'],
+                        'relation' => 'Co-Applicant'
+                    ];
+                }
+
+                if ($oldCustomerIds['guarantor1']!=null && array_key_exists($oldCustomerIds['guarantor1'], $pCustMapping)){
+                    $loanCustomerRelations[] = [
+                        'customerId' => $pCustMapping[$oldCustomerIds['guarantor1']]['id'],
+                        'relation' => 'Guarantor'
+                    ];
+                }
+
+                if ($oldCustomerIds['guarantor2']!=null && array_key_exists($oldCustomerIds['guarantor2'], $pCustMapping)){
+                    $loanCustomerRelations[] = [
+                        'customerId' => $pCustMapping[$oldCustomerIds['guarantor2']]['id'],
+                        'relation' => 'Guarantor'
+                    ];
+                }
+
+                $scheduledStartDate = new DateTime($rowData[15]);
+                $disbursementDate = new DateTime($rowData[13]);
+                $moratoriumPeriodInDays = $scheduledStartDate->diff($disbursementDate)->format("%a");
 
                 $loanData = array(
-                    'productCode' => $rowData[0][0],
-                    'partnerCode' => $rowData[0][1],
-                    'oldAccountNO' => $rowData[0][2],
-                    'applicant' => $urn[0]["urn_no"],
-                    'customerId' => $id[0]["id"],
-                    // 'coApplicant'    => $rowData[0][5],
-                    // 'COAPPLICANT2ID'    => $rowData[0][6],
-                    // 'guarantors'    => $rowData[0][7],
-                    // 'GUARANTOR2ID'    => $rowData[0][8],
-                    'loanApplicationDate' => $rowData[0][9],
-                    'tenure' => $rowData[0][10],
-                    'loanPurpose1' => $rowData[0][11],
-                    'loanPurpose2' => $rowData[0][12],
-                    'loanDisbursementDate' => $rowData[0][13],
-                    'disbursedAmountInPaisa' => $rowData[0][14],
-                    // 'SCHEDULESTARTDATE'    => $rowData[0][15],
-                    'firstRepaymentDate' => $rowData[0][16],
-                    "INTERESTRATE" => $rowData[0][17],
-                    // 'FIXEDINTEREST'    => $rowData[0][18],
-                    // 'RELATIONSHIPTYPEOFAPPLICANT'    => $rowData[0][19],
-                    // 'RELATIONSHIPTYPEOFCOAPPLICANT1'    => $rowData[0][20],
-                    // 'RELATIONSHIPTYPEOFCOAPPLICANT2'    => $rowData[0][21],
-                    'frequency' => $rowData[0][22],
-                    'processingFeePercentage' => $rowData[0][23],
-                    'processingFeeInPaisa' => $rowData[0][24],
-                    // 'FEECOMPONENT1'    => $rowData[0][25],
-                    // 'FEECOMPONENT2'    => $rowData[0][26]
+                    'productCode' => $rowData[0],
+                    'partnerCode' => $rowData[1],
+                    'oldAccountNO' => $rowData[2],
+                    'applicant' => $pCustMapping[$oldCustomerIds['applicant']]['urn_no'],
+                    'customerId' => $pCustMapping[$oldCustomerIds['customer']]['id'],
+                    'loanApplicationDate' => $rowData[9],
+                    'tenure' => $rowData[10],
+                    'loanPurpose1' => $rowData[11],
+                    'loanPurpose2' => $rowData[12],
+                    'loanDisbursementDate' => $rowData[13],
+                    'disbursedAmountInPaisa' => $rowData[14],
+                    'moratoriumPeriodInDays' => $moratoriumPeriodInDays,
+                    'firstRepaymentDate' => $rowData[16],
+                    "INTERESTRATE" => $rowData[17],
+                    // 'FIXEDINTEREST'    => $rowData[18],
+                    'frequency' => $rowData[22],
+                    'processingFeePercentage' => $rowData[23],
+                    'processingFeeInPaisa' => $rowData[24],
+                    // 'FEECOMPONENT1'    => $rowData[25],
+                    // 'FEECOMPONENT2'    => $rowData[26]
                     "documentTracking" => "PENDING",
-                    "loanAmountRequested" => $rowData[0][14],
+                    "loanAmountRequested" => $rowData[14],
                     "isRestructure" => false,
-                    "psychometricCompleted" => "N"
+                    "psychometricCompleted" => "N",
+                    "loanCustomerRelations" => $loanCustomerRelations
                 );
 
                 $loanSave = array(
@@ -163,7 +205,6 @@ foreach ($files as $file) {
                 } catch (Exception $e) {
                     echo "File Exception Captured : " . $inputFileName . "\n";
                     echo json_encode($loanSave);
-                    throw $e;
                     $loanUploadDetail = new LoanUploadDetail();
                     $loanUploadDetail->master_id = $IdGenerated;
                     $loanUploadDetail->customer_id = $loanData["customerId"];
@@ -171,7 +212,7 @@ foreach ($files as $file) {
                     $loanUploadDetail->is_processed = true;
                     $loanUploadDetail->status = 'FAILED';
                     $loanUploadDetail->request_json = json_encode($loanSave);
-                    $loanUploadDetail->error_response = "";
+                    $loanUploadDetail->error_response = $parsedArr;
                     $loanUploadDetail->save();
 
                     $failedCount++;
@@ -190,11 +231,10 @@ foreach ($files as $file) {
             unlink($source);
 
         } catch (Exception $e) {
-            throw $e;
-//            $source = $tempWipDir . $file->getFilename();
-//            $dest = $tempRejectedDir . $file->getFilename();
-//            copy($source, $dest);
-//            unlink($source);
+            $source = $tempWipDir . $file->getFilename();
+            $dest = $tempRejectedDir . $file->getFilename();
+            copy($source, $dest);
+            unlink($source);
             continue;
             //throw $e;
         }
