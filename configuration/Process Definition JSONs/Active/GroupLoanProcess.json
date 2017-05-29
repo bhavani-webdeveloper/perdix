@@ -9,6 +9,7 @@
          "code":"GroupCreation",
          "name":"Group Formation",
          "stageType":"CAPTURE",
+		 "isAccountOpening":false,
          "allowedRoles":[
             "A",
             "ARM",
@@ -20,6 +21,7 @@
          "code":"DSC",
          "name":"DSC",
          "stageType":"DSC",
+		 "isAccountOpening":false,
          "allowedRoles":[
             "A"
          ]
@@ -29,6 +31,7 @@
          "code":"CGT1",
          "name":"CGT 1",
          "requiredIfLoanCycleLessThan":100,
+		 "isAccountOpening":false,
          "stageType":"CGT",
          "allowedRoles":[
             "A",
@@ -41,6 +44,7 @@
          "code":"CGT2",
          "name":"CGT 2",
          "requiredIfLoanCycleLessThan":3,
+		 "isAccountOpening":false,
          "stageType":"CGT",
          "allowedRoles":[
             "A",
@@ -53,6 +57,7 @@
          "code":"CGT3",
          "name":"CGT 3",
          "requiredIfLoanCycleLessThan":3,
+		 "isAccountOpening":false,
          "stageType":"CGT",
          "allowedRoles":[
             "A",
@@ -64,6 +69,7 @@
          "order":6,
          "code":"GRT",
          "name":"GRT Process",
+		 "isAccountOpening":false,
          "stageType":"GRT",
          "allowedRoles":[
             "A",
@@ -75,6 +81,7 @@
          "order":7,
          "code":"ApplicationPending",
          "name":"Applications Pending",
+		 "isAccountOpening":false,
          "stageType":"CAPTURE",
          "allowedRoles":[
             "A",
@@ -86,6 +93,7 @@
          "order":8,
          "code":"LoanDisbursement",
          "name":"Loan Disbursement",
+		 "isAccountOpening":false,
          "stageType":"CAPTURE",
          "allowedRoles":[
             "A",
