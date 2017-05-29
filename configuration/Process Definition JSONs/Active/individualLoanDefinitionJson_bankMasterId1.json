@@ -289,7 +289,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
+                     
                   ]
                },
                "loanPurpose":{
