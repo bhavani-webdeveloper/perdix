@@ -9,6 +9,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             var deferred = $q.defer();
             model.businessPLs = [];
+            model.loanRepaymentHistory = [];
+            var keybasicLoanInfo = ['Loan Account Number', 'Operational Status', 'Product', 'Loan Amount', 'Frequency', 'Tenure', '# Tranche', 'EMI', 'Normal Interest Rate'];
             var p1 = IndividualLoan.search({
                 stage: "Completed",
                 urn: model.customerUrn
@@ -28,6 +30,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             var bpl = resp[8];
                             bpl.title = "Profit & Loss - " + res.body[i].accountNumber;
                             var businessPL = {};
+                            var loanRepaymentHistory = {"basicLoanInfo": {}, loanOverview: {}};
                             businessPL.invoice = bpl.data[0]['Invoice'];
                             businessPL.invoicePCT = bpl.data[0]['Invoice pct'];
                             businessPL.cashRevenue = bpl.data[0]['Cash'];
@@ -50,8 +53,20 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             businessPL.finalKinaraEmi = bpl.data[0]['Final Kinara EMI'];
                             businessPL.finalKinaraEmiPCT = bpl.data[0]['Final Kinara EMI pct'];
                             businessPL.accountNumber = res.body[i].accountNumber;
+
+                            if(resp.length >= 16 && resp[15] ){
+                                var columns = resp[15].columns;
+                                for(var len = 0 ; len < resp[15].columns.length; len++ ){
+                                    if(keybasicLoanInfo.indexOf(columns[len].data) > -1){
+                                        loanRepaymentHistory.basicLoanInfo[columns[len].data] = resp[15].data[0][columns[len].data];
+                                    } else{
+                                        loanRepaymentHistory.loanOverview[columns[len].data] = resp[15].data[0][columns[len].data];
+                                    }                                
+                                }
+                            }
                             
                             model.businessPLs.push(businessPL);
+                            model.loanRepaymentHistory.push(loanRepaymentHistory);
                         }, function(){
                             $log.info("Failed loading financial summary for loan_id::" + res.body[i].loanId);
                         })
@@ -60,17 +75,75 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     
                 }
 
-                $q.all(promiseArr)
-                    .finally(function(){
-                        deferred.resolve();
-                    })
+                var bsLeft = [], bsRight = [];
+                repaymentHistoryForm = {
+                        type: "box",
+                        colClass: "col-sm-12 table-box",
+                        title: "HISTORICAL_LOAN_REPAY_SUMMARY",
+                        items: [ {
+                                type: "array",
+                                key: "loanRepaymentHistory",
+                                //condition: 'model.loanRepaymentHistory.length > 0',
+                                startEmpty: true,
+                                view: "fixed",
+                                add: null,
+                                remove: null,
+                                titleExpr: "'Account #' + model.loanRepaymentHistory[arrayIndex].basicLoanInfo['Loan Account Number']",
+                                items:[
+                                    {
+                                        type: "section",
+                                        htmlClass: 'row',
+                                        items: [
+                                            {
+                                                type: "box",
+                                                title: "Basic Loan Information",
+                                                htmlClass: "col-sm-6",
+                                                items: bsLeft
+                                            },
+                                            {
+                                                type: "box",
+                                                title: "Loan Overview",
+                                                htmlClass: "col-sm-6",
+                                                items: bsRight
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                };
 
+                form.splice(1, 0, repaymentHistoryForm);
 
-            }, function(){
+                $q.all(promiseArr).then(function(){
 
-            })
+                    if(model.loanRepaymentHistory.length > 0){
 
-            
+                        angular.forEach(model.loanRepaymentHistory[0].basicLoanInfo, function(value, key){
+                            var item = {
+                                key: "loanRepaymentHistory[0].basicLoanInfo." + key,
+                                title: key,
+                                type: "string",
+                                readonly: true,
+                            };
+                            bsLeft.push(item);
+                        });
+                        angular.forEach(model.loanRepaymentHistory[0].loanOverview, function(value, key){
+                            var item = {
+                                key: "loanRepaymentHistory[0].loanOverview." + key,
+                                title: key,
+                                type: "string",
+                                readonly: true,
+                            };
+                            bsRight.push(item);
+                        });
+                    }
+
+                }).finally(function(){
+                    deferred.resolve();
+                })
+
+            }, function(){});
 
             return deferred.promise;
             // return $q.resolve();
@@ -121,7 +194,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         ]
                     }       
                 ]
-            }
+            },
+            
+
         ],
         initializeUI: function(model, form, formCtrl, bundlePageObj, bundleModel) {
             return $q.resolve();
