@@ -242,7 +242,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.guarantors = [];
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
-                    PagesDefinition.getPageDefinition("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
+                    PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
                         if(data.stateParams.showLoanBookingDetails != undefined && data.stateParams.showLoanBookingDetails !== null && data.stateParams.showLoanBookingDetails !=""){
                             model.showLoanBookingDetails = data.stateParams.showLoanBookingDetails;
                         }
