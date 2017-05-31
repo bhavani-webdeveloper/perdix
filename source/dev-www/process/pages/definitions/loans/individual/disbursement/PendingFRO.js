@@ -103,7 +103,6 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "title":"PHOTO",
                     "category":"Loan",
                     "subCategory":"IndividualLoanDocuments",
-                    offline: false,
                     type:"file",
                     fileType:"image/*"
                 },
