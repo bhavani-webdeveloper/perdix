@@ -69,7 +69,7 @@
          "order":6,
          "code":"GRT",
          "name":"GRT Process",
-		 "isAccountOpening":false,
+		 "isAccountOpening":true,
          "stageType":"GRT",
          "allowedRoles":[
             "A",
