@@ -869,6 +869,55 @@
                      "IfmrDO"
                   ]
                },
+               "collectionBankName":{
+                  "title":"collectionBankName",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionBankBranchName":{
+                  "title":"collectionBankBranchName",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionIfscCode":{
+                  "title":"collectionIfscCode",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionAccountNumber":{
+                  "title":"collectionAccountNumber",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionAccountType":{
+                  "title":"collectionAccountType",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionCustomerNameAsInBank":{
+                  "title":"collectionCustomerNameAsInBank",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
+               "collectionPaymentType":{
+                  "title":"collectionPaymentType",
+                  "type":"string",
+                  "captureStages":[
+                     "Application", "Screening", "LoanInitiation"
+                  ]
+               },
                "status": {
                   "title": "status",
                   "type": "string",
