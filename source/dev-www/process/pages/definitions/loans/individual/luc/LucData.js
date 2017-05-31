@@ -1078,6 +1078,35 @@ define({
                     {
                         "type": "box",
                         "title": "LUC_DOCUMENTS",
+                        "readonly":true,
+                        "condition": "model.lucCompleted",
+                        "items": [{
+                            "key": "loanMonitoringDetails.loanMonitoringDocuments",
+                            "type": "array",
+                            "title": "LUC_DOCUMENTS",
+                            startEmpty: true,
+                            "items": [
+                                {
+                                    
+                                    key:"loanMonitoringDetails.loanMonitoringDocuments[].documentName",
+                                    title: "DOCUMENT_NAME",
+                                    required:true,
+                                    "type": ["string","null"],
+                                },
+                                {
+                                    key:"loanMonitoringDetails.loanMonitoringDocuments[].documentId",
+                                    title: "UPLOAD",
+                                    type:"file",
+                                    required: true,
+                                    fileType:"application/pdf",
+                                    using: "scanner",
+                                }  
+                            ]
+                        }]
+                    },
+                    {
+                        "type": "box",
+                        "title": "LUC_DOCUMENTS",
                         "condition": "!model.lucCompleted",
                         "items": [{
                             "key": "loanMonitoringDetails.loanMonitoringDocuments",
@@ -1102,7 +1131,6 @@ define({
                                 }  
                             ]
                         }]
-
                     },
                     {
                         "type": "box",
