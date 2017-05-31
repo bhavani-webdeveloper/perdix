@@ -183,18 +183,18 @@
 <script src="process/models/v1/loans/LoanProducts.js"></script>
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
 <script src="process/models/v1/loans/DocumentTracking.js"></script>
+<script src="process/models/v1/loans/Inventory.js"></script>
+<script src="process/models/v1/loans/ACHPDCBatchProcess.js"></script>
 <script src="process/models/v1/management/ReferenceCode.js"></script>
 <script src="process/models/v1/management/Maintenance.js"></script>
 <script src="process/models/v1/management/CentreCreationResource.js"></script>
 <script src="process/models/v1/lead/Lead.js"></script>
 <script src="process/models/v1/Journal/Journal.js"></script>
-<script src="process/models/v1/loans/Inventory.js"></script>
 <script src="process/models/v1/psychometric/Psychometric.js"></script>
 <script src="process/models/v1/user/User.js"></script>
-<script src="process/models/v1/loans/ACHPDCBatchProcess.js"></script>
+<script src="process/models/v1/bi/BIReports.js"></script>
+<script src="process/models/v1/bi/BIAnalytics.js"></script>
 
-
-<script src="process/models/php/BIReports.js"></script>
 <script src="process/models/php/management/Masters.js"></script>
 <script src="process/models/php/management/RolesPages.js"></script>
 <script src="process/models/php/management/UserBranch.js"></script>
@@ -235,6 +235,7 @@
 <script src="process/pages/definitions/demo/Demo2.js"></script>
 <script src="process/pages/definitions/UserProfile.js"></script>
 <script src="process/pages/definitions/bi/BIReports.js"></script>
+<script src="process/pages/definitions/bi/AnalyticsDashboard.js"></script>
 
 <!-- for scoring -->
 <script src="process/pages/states/ScoreDashboard.js"></script>
@@ -316,6 +317,8 @@
 <script src="process/pages/definitions/loans/group/CentrePaymentCollection.js"></script>
 <script src="process/pages/definitions/loans/group/LUC.js"></script>
 <script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
+<script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
+<script src="process/pages/definitions/loans/group/GroupLoanRepay.js"></script>
 
 <script src="process/pages/definitions/loans/individual/LoanBookingQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/Queue.js"></script>
@@ -325,7 +328,6 @@
 <script src="process/pages/definitions/loans/individual/booking/LoanBookingCommons.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/InitiationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/PendingForPartnerQueue.js"></script>
-<script src="process/pages/definitions/loans/individual/booking/PendingForPartner.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/IFMRDOQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/IFMRDO.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/PendingQueue.js"></script>
@@ -468,7 +470,7 @@
   require.config({
     baseUrl: "./",
     paths: {
-        "pages": "process/pages/definitions"
+        "pages": "process/pages/definitions/"
     },
     waitSeconds: 0
   });

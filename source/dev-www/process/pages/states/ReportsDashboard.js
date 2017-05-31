@@ -8,7 +8,8 @@ irf.pages.controller("ReportsDashboardCtrl",
         "title": "Reports Dashboard",
         "items": [
             "Page/Engine/bi.BIReports",
-            "Page/Reports"
+            "Page/Reports",
+            "Page/Adhoc/bi.AnalyticsDashboard"
         ]
     };
 

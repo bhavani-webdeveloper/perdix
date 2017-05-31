@@ -122,6 +122,9 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 				authToken = authToken ? authToken.access_token : authToken;
 				if (!config.headers || !config.headers['$no_auth'])
 					config.headers['Authorization']= 'Bearer '+ authToken;
+				if (config.headers['$no_auth']) {
+					delete config.headers['$no_auth'];
+				}
 				return config;
 			},
 			'responseError': function(rejection) {

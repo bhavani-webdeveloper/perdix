@@ -10,11 +10,12 @@ irf.pages.directive("irfPageAdhoc", ["$stateParams", "$templateRequest", "$compi
 				$compile(element.contents())(scope);
 			});
 		},
-		controller: ["$controller", "$scope", "$stateParams", function($controller, $scope, $stateParams) {
+		controller: ["$controller", "$scope", "$stateParams", "$log", function($controller, $scope, $stateParams, $log) {
 			try {
 				$scope.$parent.error = null;
 				return $controller(irf.controller($stateParams.pageName), {$scope: $scope});
 			} catch (e) {
+				$log.error(e);
 				$scope.$parent.error = $stateParams.pageName;
 			}
 		}]
