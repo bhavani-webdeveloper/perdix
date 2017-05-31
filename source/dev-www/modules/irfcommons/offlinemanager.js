@@ -49,7 +49,7 @@ irf.commons.factory('OfflineManager', ["$log","$q", "irfStorageService", "Utils"
     var error = function(code, params) {
         switch(code) {
             case "NODATA":
-                return {"error": "Data unavailabile on local storage for "+params[0]+":"+params[1]};
+                return {"data": {"error": "Data unavailabile on local storage for "+params[0]+":"+params[1]}};
         }
     }
 
