@@ -1,5 +1,6 @@
-irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
-    function($log, $q, Lead, PageHelper, irfProgressMessage, Utils, SessionStore) {
+irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
+    function($log, Queries, $q, Lead, PageHelper, irfProgressMessage, Utils, SessionStore) {
+
 
         var saveData = function(reqData) {
             var deferred = $q.defer();
@@ -14,12 +15,15 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
             irfProgressMessage.pop('lead-save', 'Working...');
             reqData['leadAction'] = 'SAVE';
             if (reqData.lead.leadStatus == "Screening") {
-                reqData['stage'] = 'ReadyForScreening';
-            } else if(reqData.lead.leadStatus == "Incomplete") {
+                if (reqData.lead.siteCode == 'sambandh') {
+                    reqData['stage'] = 'ReadyForEnrollment';
+                } else {
+                    reqData['stage'] = 'ReadyForScreening';
+                }
+            } else if (reqData.lead.leadStatus == "Incomplete") {
                 reqData['stage'] = 'Incomplete';
-            }else
-            {
-               reqData['stage'] = 'Inprocess'; 
+            } else {
+                reqData['stage'] = 'Inprocess';
             }
             /* TODO fix for KYC not saving **/
             var action = reqData.lead.id ? 'update' : 'save';
@@ -50,13 +54,15 @@ irf.pageCollection.factory("LeadHelper", ["$log", "$q", "Lead", 'PageHelper', 'i
                 irfProgressMessage.pop('lead-update', 'Working...');
                 res.leadAction = "PROCEED";
                 if (res.lead.leadStatus == "Screening") {
-                    res.stage = 'ReadyForScreening';
-                }else if(res.lead.leadStatus == "Reject")
-                {
-                    res.stage = 'Inprocess';  
-                }else if(res.lead.leadStatus == "Incomplete")
-                {
-                    res.stage = 'Incomplete'; 
+                    if (res.lead.siteCode == 'sambandh') {
+                        res.stage = 'ReadyForEnrollment';
+                    } else {
+                        res.stage = 'ReadyForScreening';
+                    }
+                } else if (res.lead.leadStatus == "Reject") {
+                    res.stage = 'Inprocess';
+                } else if (res.lead.leadStatus == "Incomplete") {
+                    res.stage = 'Incomplete';
                 }
                 //res.lead.leadInteractions=[{"id":'',"leadId":''}];
                 Lead.updateLead(res, function(res, headers) {
