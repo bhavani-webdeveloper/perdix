@@ -11,6 +11,12 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
+                Queries.getGlobalSettings("siteCode").then(function(value) {
+                   model.lead.siteCode = value;
+                    $log.info("siteCode:" + model.lead.siteCode);
+                }, function(err) {
+                    $log.info("siteCode is not available");
+                });
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
                     model.lead.leadStatus = "Incomplete";
@@ -54,9 +60,6 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
-
-
-
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -97,7 +100,7 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                             if (centreCode[i].value == centres[j].id) {
                                                 out.push({
                                                     name: centreCode[i].name,
-                                                    id:centreCode[i].value
+                                                    id: centreCode[i].value
                                                 })
                                             }
                                         }
@@ -119,13 +122,14 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     item.name
                                 ];
                             }
-                        }, /*{
-                            key: "lead.centreId",
-                            type: "select",
-                            parentEnumCode: "branch_id",
-                            parentValueExpr: "model.lead.branchId",
-                            screenFilter: true
-                        },*/ 
+                        },
+                        /*{
+                                                   key: "lead.centreId",
+                                                   type: "select",
+                                                   parentEnumCode: "branch_id",
+                                                   parentValueExpr: "model.lead.branchId",
+                                                   screenFilter: true
+                                               },*/
                         {
                             key: "lead.id",
                             condition: "model.lead.id",
@@ -295,66 +299,61 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                                     title: "CONTACT_DETAILS",
                                     condition: "model.lead.customerType === 'Individual'||model.lead.customerType === 'Enterprise'",
                                     items: [{
-                                            key: "lead.mobileNo",
-                                        }, {
-                                            key: "lead.alternateMobileNo",
-                                        }, {
-                                            key: "lead.addressLine1",
-                                            "title": "DOOR_NO"
-                                        }, {
-                                            key: "lead.addressLine2",
-                                            "title": "STREET"
-                                        }, {
-                                            key: "lead.pincode",
-                                            type: "lov",
-                                            fieldType: "number",
-                                            autolov: true,
-                                            inputMap: {
-                                                "pincode": "lead.pincode",
-                                                "district": {
-                                                    key: "lead.district"
-                                                },
-                                                "state": {
-                                                    key: "lead.state"
-                                                }
+                                        key: "lead.mobileNo",
+                                    }, {
+                                        key: "lead.alternateMobileNo",
+                                    }, {
+                                        key: "lead.addressLine1",
+                                        "title": "DOOR_NO"
+                                    }, {
+                                        key: "lead.addressLine2",
+                                        "title": "STREET"
+                                    }, {
+                                        key: "lead.pincode",
+                                        type: "lov",
+                                        fieldType: "number",
+                                        autolov: true,
+                                        inputMap: {
+                                            "pincode": "lead.pincode",
+                                            "district": {
+                                                key: "lead.district"
                                             },
-                                            outputMap: {
-                                                "division": "lead.area",
-                                                "region": "lead.cityTownVillage",
-                                                "pincode": "lead.pincode",
-                                                "district": "lead.district",
-                                                "state": "lead.state"
-
-                                            },
-                                            searchHelper: formHelper,
-                                            search: function(inputModel, form, model) {
-                                                return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                                            },
-                                            getListDisplayItem: function(item, index) {
-                                                return [
-                                                    item.division + ', ' + item.region,
-                                                    item.pincode,
-                                                    item.district + ', ' + item.state
-                                                ];
+                                            "state": {
+                                                key: "lead.state"
                                             }
                                         },
-                                        {
-                                            "key": "lead.area",
-                                            "readonly": true
+                                        outputMap: {
+                                            "division": "lead.area",
+                                            "region": "lead.cityTownVillage",
+                                            "pincode": "lead.pincode",
+                                            "district": "lead.district",
+                                            "state": "lead.state"
+
                                         },
-                                        {
-                                            "key": "lead.cityTownVillage",
-                                            "readonly": true
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model) {
+                                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                                         },
-                                        {
-                                            "key": "lead.district",
-                                            "readonly": true
-                                        },
-                                        {
-                                            "key": "lead.state",
-                                            "readonly": true
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.division + ', ' + item.region,
+                                                item.pincode,
+                                                item.district + ', ' + item.state
+                                            ];
                                         }
-                                    ]
+                                    }, {
+                                        "key": "lead.area",
+                                        "readonly": true
+                                    }, {
+                                        "key": "lead.cityTownVillage",
+                                        "readonly": true
+                                    }, {
+                                        "key": "lead.district",
+                                        "readonly": true
+                                    }, {
+                                        "key": "lead.state",
+                                        "readonly": true
+                                    }]
                                 },
                             ]
                         }
@@ -668,8 +667,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             LeadHelper.proceedData(reqData).then(function(resp) {
                                 $state.go('Page.LeadDashboard', null);
                             }, function(err) {
-                                Utils.removeNulls(res.lead, true);
-                                model.lead = res.lead;
+                                Utils.removeNulls(resp.lead, true);
+                                model.lead = resp.lead;
                             });
                         }
                     } else {
@@ -677,8 +676,8 @@ irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "$state", "
                             LeadHelper.proceedData(res).then(function(resp) {
                                 $state.go('Page.LeadDashboard', null);
                             }, function(err) {
-                                Utils.removeNulls(res.lead, true);
-                                model.lead = res.lead;
+                                Utils.removeNulls(resp.lead, true);
+                                model.lead = resp.lead;
                             });
                         });
                     }
