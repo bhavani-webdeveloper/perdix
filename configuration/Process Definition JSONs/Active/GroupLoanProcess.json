@@ -94,7 +94,7 @@
          "code":"LoanDisbursement",
          "name":"Loan Disbursement",
 		 "isAccountOpening":false,
-         "stageType":"CAPTURE",
+         "stageType":"DISBURSE",
          "allowedRoles":[
             "A",
             "ARM",
