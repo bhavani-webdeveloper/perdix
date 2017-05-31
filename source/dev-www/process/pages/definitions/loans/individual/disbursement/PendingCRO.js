@@ -97,9 +97,8 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                 {
                     key:"loanAccountDisbursementSchedule.photoId",
                     "title":"Photo",
-                    "category":"customer",
-                    "subCategory":"customer",
-                    offline: false,
+                    "category":"Loan",
+                    "subCategory":"IndividualLoanDocuments",
                     type:"file",
                     fileType:"image/*"
                 },
