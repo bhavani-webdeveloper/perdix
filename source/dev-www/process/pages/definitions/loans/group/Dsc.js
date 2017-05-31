@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.Dsc",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -349,7 +349,7 @@ define({
                                 //"readonly": readonly
                         }, {
                             type: "fieldset",
-                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus && model.group.currentStage == 'Stage03'",
+                            "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus && model.group.currentStage == 'DSC'",
                             title: "DSC_STATUS",
                             items: [{
                                 "key": "group.jlgGroupMembers[].dscStatus",
@@ -512,7 +512,7 @@ define({
                     PageHelper.clearErrors();
                     PageHelper.showLoader();
                     irfProgressMessage.pop('group-dsc-check', 'Performing DSC Check');
-                    Groups.dscQuery({
+                    GroupProcess.DSCCheck({
                             groupCode: model.group.groupCode,
                             partnerCode: model.group.partnerCode
                         }, {},
@@ -546,13 +546,13 @@ define({
                                 $log.info("DSC Check Status :" + allOk);
                                 if (allOk === true) {
                                     if (window.confirm("DSC Check Succeeded for the Group. Proceed to next stage?")) {
-                                        model.enrollmentAction = 'PROCEED';
+                                        model.groupAction = "PROCEED";
                                         PageHelper.showLoader();
                                         irfProgressMessage.pop('dsc-proceed', 'Working...');
                                         PageHelper.clearErrors();
                                         var reqData = _.cloneDeep(model);
                                         //reqData.group.frequency = reqData.group.frequency[0];
-                                        Groups.update(reqData, function(res) {
+                                        GroupProcess.updateGroup(reqData, function(res) {
                                             PageHelper.hideLoader();
                                             irfProgressMessage.pop('dsc-proceed', 'Operation Succeeded. Proceeded to CGT 1.', 5000);
                                             $state.go('Page.GroupDashboard', null);

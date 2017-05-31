@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.CGT3",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -115,38 +115,19 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 submit: function(model, form, formName) {
-                    model.enrollmentAction = 'PROCEED';
-                    if (form.$invalid) {
-                        irfProgressMessage.pop('cgt3-submit', 'Please fix your form', 5000);
-                        return;
-                    }
                     PageHelper.showLoader();
-                    irfProgressMessage.pop('cgt3-submit', 'Working...');
+                    irfProgressMessage.pop('CGT3-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    //var reqData = _.cloneDeep(model);
-                    var reqData = {
-                        "cgtDate": model.group.cgtDate3,
-                        "cgtDoneBy": SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy,
-                        "groupCode": model.group.groupCode,
-                        "latitude": model.group.cgt3Latitude,
-                        "longitude": model.group.cgt3Longitude,
-                        "partnerCode": model.group.partnerCode,
-                        "photoId": model.group.cgt3Photo,
-                        "productCode": model.group.productCode,
-                        "remarks": model.group.cgt3Remarks
-                    };
-                    var promise = Groups.post({
-                        service: 'process',
-                        action: 'cgt'
-                    }, reqData, function(res) {
+                    model.groupAction = "PROCEED";
+                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    var reqData = _.cloneDeep(model);
+                    GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt3-submit', 'CGT 3 Updated. Proceed to GRT.', 5000);
-                        $state.go('Page.GroupDashboard', {
-                            pageName: "GroupDashboard"
-                        });
+                        irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to CGT 3.', 5000);
+                        $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt3-submit', 'Oops. Some error.', 2000);
+                        irfProgressMessage.pop('CGT3-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
                 }

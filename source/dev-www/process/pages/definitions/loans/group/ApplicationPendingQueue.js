@@ -47,9 +47,9 @@ define({
 					var params = {
 						'branchId': branchId,
 						'partner': searchOptions.partner,
-						'groupStatus': true,
+						//'groupStatus': true,
 						'page': pageOpts.pageNo,
-						//'currentStage': "StageAP",
+						'currentStage': "ApplicationPending",
 						'per_page': pageOpts.itemsPerPage
 					};
 

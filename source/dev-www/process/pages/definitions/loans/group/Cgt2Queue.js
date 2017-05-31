@@ -47,9 +47,9 @@ define({
 					var params = {
 						'branchId': branchId,
 						'partner': searchOptions.partner,
-						'groupStatus': true,
+						//'groupStatus': true,
 						'page': pageOpts.pageNo,
-						'currentStage': "Stage05",
+						'currentStage': "CGT2",
 						'per_page': pageOpts.itemsPerPage
 					};
 

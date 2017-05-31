@@ -1,12 +1,12 @@
 define({
     pageUID: "loans.group.CGT2",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
@@ -16,6 +16,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info(model);
+
                 if ($stateParams.pageId) {
                     var groupId = $stateParams.pageId;
                     PageHelper.showLoader();
@@ -35,6 +36,14 @@ define({
                 } else {
                     irfNavigator.goBack();
                 }
+
+                Queries.getGlobalSettings("siteCode").then(function(value) {
+                   model.group.siteCode = value;
+                    $log.info("siteCode:" + model.group.siteCode);
+                }, function(err) {
+                    $log.info("siteCode is not available");
+                });
+
             },
             offline: true,
             getOfflineDisplayItem: function(item, index) {
@@ -115,40 +124,39 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 submit: function(model, form, formName) {
-                    model.enrollmentAction = 'PROCEED';
-                    if (form.$invalid) {
-                        irfProgressMessage.pop('cgt2-submit', 'Please fix your form', 5000);
-                        return;
-                    }
                     PageHelper.showLoader();
-                    irfProgressMessage.pop('cgt2-submit', 'Working...');
+                    irfProgressMessage.pop('CGT2-proceed', 'Working...');
                     PageHelper.clearErrors();
-                    //var reqData = _.cloneDeep(model);
-                    var reqData = {
-                        "cgtDate": model.group.cgtDate2,
-                        "cgtDoneBy": SessionStore.getLoginname()+'-'+model.group.cgt2DoneBy,
-                        "groupCode": model.group.groupCode,
-                        "latitude": model.group.cgt2Latitude,
-                        "longitude": model.group.cgt2Longitude,
-                        "partnerCode": model.group.partnerCode,
-                        "photoId": model.group.cgt2Photo,
-                        "productCode": model.group.productCode,
-                        "remarks": model.group.cgt2Remarks
-                    };
-                    var promise = Groups.post({
-                        service: 'process',
-                        action: 'cgt'
-                    }, reqData, function(res) {
+                    model.groupAction = "PROCEED";
+                    model.group.cgt2DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt2DoneBy;
+                    if(model.group.siteCode=='sambandh')
+                    {
+                        var n=model.group.jlgGroupMembers.length;
+                        var c=0;
+                        for(i=0;i<model.group.jlgGroupMembers.length;i++)
+                        {
+                            if(model.group.jlgGroupMembers[i].loanCycle <=1)
+                            {
+                                c++;
+                            }
+                        }
+                        var percentage=Math.round((c/n)*100);
+                        if(percentage <= 50)
+                        {
+                            model.stage='GRT';
+                        }
+                    }
+                
+                    var reqData = _.cloneDeep(model);
+
+                    GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt2-submit', 'CGT 2 Updated. Proceed to CGT 3.', 5000);
-                        /*$state.go('Page.GroupDashboard', {
-                            pageName: "GroupDashboard"
-                        });*/
+                        irfProgressMessage.pop('CGT2-proceed', 'Operation Succeeded. Proceeded to CGT 3.', 5000);
+                        $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('cgt2-submit', 'Oops. Some error.', 2000);
+                        irfProgressMessage.pop('CGT2-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
-
                     });
                 }
             }

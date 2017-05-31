@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.CreateGroup",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -48,11 +48,11 @@ define({
                 deferred.reject(true);
                 $log.info("Group id not null, skipping save");
             } else {
-                reqData.enrollmentAction = 'SAVE';
+                reqData.groupAction = 'SAVE';
                 reqData.group.groupFormationDate = Utils.getCurrentDate();
                 PageHelper.clearErrors();
                 Utils.removeNulls(reqData, true);
-                Groups.post(reqData, function(res) {
+                GroupProcess.save(reqData, function(res) {
                     irfProgressMessage.pop('group-save', 'Done.', 5000);
                     deferred.resolve(res);
                 }, function(res) {
@@ -73,9 +73,9 @@ define({
             } else {
                 PageHelper.showLoader();
                 irfProgressMessage.pop('group-save', 'Working...');
-                res.enrollmentAction = "PROCEED";
+                res.groupAction = "PROCEED";
                 Utils.removeNulls(res, true);
-                Groups.update(res, function(res, headers) {
+                GroupProcess.updateGroup(res, function(res, headers) {
                     $log.info(res);
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('group-save', 'Done. Group ID: ' + res.group.id, 5000);
@@ -435,14 +435,14 @@ define({
                         });
                     } else {
                         saveData(reqData).then(function(res) {
-                            proceedData(res).then(function(res1) {
+                            /*proceedData(res).then(function(res1) {
                                 $state.go('Page.GroupDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res1.group, true);
                                 model.group = _.clone(res1.group);
                                 fixData(model);
                                 fillNames(model);
-                            });
+                            });*/
                         });
                     }
                 }
