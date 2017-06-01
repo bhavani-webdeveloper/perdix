@@ -3361,7 +3361,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
                 PageHelper.showProgress('enrolment','Saving..');
                 EnrollmentHelper.saveData(reqData).then(function(resp){
-                    formHelper.resetFormValidityState(form);
+                    formHelper.resetFormValidityState(formCtrl);
                     PageHelper.showProgress('enrolment', 'Done.', 5000);
                     Utils.removeNulls(resp.customer, true);
                     model.customer = resp.customer;

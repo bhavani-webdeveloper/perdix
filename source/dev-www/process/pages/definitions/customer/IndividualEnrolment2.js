@@ -3229,7 +3229,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                 EnrollmentHelper.fixData(reqData);
                                 PageHelper.showProgress('enrolment', 'Updating Customer');
                                 EnrollmentHelper.proceedData(reqData).then(function(resp){
-                                    formHelper.resetFormValidityState(formCtrl);
+                                    formHelper.resetFormValidityState(form);
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     Utils.removeNulls(resp.customer,true);
                                     model.customer = resp.customer;
