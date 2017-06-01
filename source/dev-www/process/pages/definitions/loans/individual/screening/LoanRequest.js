@@ -1,10 +1,10 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter",
+"BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric",
 function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper, Message, $filter){
+    BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric){
 
     var branch = SessionStore.getBranch();
 
@@ -15,6 +15,107 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             return false;
         }
         return true;
+    }
+
+    var checkPsychometricTestValidity = function(model){
+
+        var deferred = $q.defer();
+
+        Queries.getGlobalSettings('psychometricTestValidDays', true).then(function(resp) {
+            var participantIds = [];
+            var psychometricTestValidDays = angular.isDefined(resp) ? resp : 0;
+            if (_.isArray(model.loanAccount.loanCustomerRelations)) {
+                var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+                for (i in model.loanAccount.loanCustomerRelations) {
+                    if (model.loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                        participantIds.push(model.loanAccount.loanCustomerRelations[i].customerId);
+                    } else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                        if (_.isArray(enterpriseCustomerRelations)) {
+                            for (j in enterpriseCustomerRelations) {
+                                if (enterpriseCustomerRelations[j].linkedToCustomerId == model.loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
+                                    participantIds.push(model.loanAccount.loanCustomerRelations[i].customerId);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var setPsychometricForCustomerRelation = function(customerId, psychometricCompleted){
+                for(var i=0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                    if(model.loanAccount.loanCustomerRelations[i].customerId === customerId) {
+                        model.loanAccount.loanCustomerRelations[i].psychometricRequired = psychometricCompleted ? 'NO' : 'YES';
+                        model.loanAccount.loanCustomerRelations[i].psychometricCompleted = psychometricCompleted ? 'YES' : 'NO';
+                    }
+                }
+            }
+
+            if(participantIds.length > 0){
+                model.loanAccount.psychometricCompleted = 'Completed';
+
+                Psychometric.getTestByParticipants({'participantIds': participantIds}).$promise.then(function(resp){
+                    var tests = resp;
+                    var _testOfTheParticipant, testDate, diff;
+                    if(tests.length === 0){
+                        //if there is no Psychometric tests for Applicant and Co-Applicants, the test completed
+                        //is set to NO.
+                        model.loanAccount.psychometricCompleted = 'N';
+                        for(var idx = 0; idx < participantIds.length; idx++) {
+                            setPsychometricForCustomerRelation(participantIds[idx], false);
+                        }
+                    } else {
+
+                        for(var idx = 0; idx < participantIds.length; idx++){
+
+                            _testOfTheParticipant = $filter('filter')(tests, {participantId: participantIds[idx], cleared: true}, true);
+
+                            if(_testOfTheParticipant.length === 0) {
+                                //if there is no Psychometric tests for either Applicant or any of the CO-Applicant eligible for test, 
+                                //the test completed is set to NO.
+                                model.loanAccount.psychometricCompleted = 'N';
+                                setPsychometricForCustomerRelation(participantIds[idx], false);
+
+                            } else {
+                                var psychometricCompleted = false;
+                                for (var i = 0; i < _testOfTheParticipant.length; i++ ) {
+                                    //Tests of the current Loan participant (ie:- Applicant or CoApplicant) is validated against
+                                    //psychometricTestvalidDays. If any one test is valid, the Psychometric test is marked as COMPLETED.
+                                    if (_testOfTheParticipant[i].submittedAt && moment().diff(moment(_testOfTheParticipant[i].submittedAt, SessionStore.getSystemDateFormat()), 'days') <= psychometricTestValidDays){
+                                        psychometricCompleted = true;
+                                        break;
+                                    }
+                                }
+
+                                //for a participant if there is no valid test, then test completed is set to NO.
+                                model.loanAccount.psychometricCompleted = (psychometricCompleted && model.loanAccount.psychometricCompleted !== 'N') ? 'Completed' :'N';
+                                setPsychometricForCustomerRelation(participantIds[idx], psychometricCompleted);
+                            }
+                        }
+                    }
+
+                    if(model.loanAccount.psychometricCompleted === 'Completed'){
+                        deferred.resolve({psychometricCompleted : 'Completed'});
+                    } else {
+                        deferred.reject({psychometricCompleted : 'N'});
+                    }
+
+                }, function(res){
+                    model.loanAccount.psychometricCompleted = 'N';
+                    if(res.data){
+                        res.data.error = res.data.errorMsg;
+                    }
+                    PageHelper.showErrors(res);
+                    deferred.reject();  
+                });
+            }
+        }, function(res, status){
+
+            PageHelper.showErrors(res);
+            deferred.reject();            
+        });
+
+        return deferred.promise;
+
     }
 
     var isEnrollmentsSubmitPending = function(){
@@ -67,35 +168,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             })
         }
 
-        // Psychometric Required for applicants & co-applicants
-        if (_.isArray(loanAccount.loanCustomerRelations)) {
-            var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
-            for (i in loanAccount.loanCustomerRelations) {
-                if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
-                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
-                    if (_.isArray(enterpriseCustomerRelations)) {
-                        var psychometricRequiredUpdated = false;
-                        for (j in enterpriseCustomerRelations) {
-                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
-                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                                psychometricRequiredUpdated = true;
-                            }
-                        }
-                        if (!psychometricRequiredUpdated) {
-                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                        }
-                    } else {
-                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                    }
-                } else {
-                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                }
-                if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
-                    loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
-                }
-            }
-        }
         
         return true;
     }
@@ -2511,12 +2583,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 }
 
-
-                if (model.loanAccount.currentStage === 'Application' && model.loanAccount.psychometricCompleted != 'Completed') {
-                    PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
-                    return;
-                }
-
                 if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
@@ -2617,7 +2683,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             })
                     }
 
-                    var p1;
+                    var p1, mandatoryPromises = [];
                     if (reqData.loanAccount.currentStage == 'Sanction'){
                         /* Auto population of Loan Collateral */
                         p1 = Enrollment.getCustomerById({id:model.loanAccount.customerId})
@@ -2651,7 +2717,30 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                     }
 
-                    $q.all([p1])
+                    if(model.loanAccount.currentStage === 'Application'){
+                        var psychoPromise = checkPsychometricTestValidity(model);
+
+                        mandatoryPromises.push(psychoPromise);
+
+                        psychoPromise.then(function(){
+
+                            reqData.loanAccount.psychometricCompleted = model.loanAccount.psychometricCompleted;
+                            reqData.loanAccount.loanCustomerRelations = _.cloneDeep(model.loanAccount.loanCustomerRelations);
+
+                        }, function(res){
+
+                            if(res && angular.isDefined(res.psychometricCompleted)){
+                                if(res.psychometricCompleted === 'N'){
+                                    PageHelper.setError({message: "Psychometric Test is not completed. Cannot proceed"});
+                                }
+                            }
+                            PageHelper.hideLoader();
+                        });
+                    }
+
+
+                    $q.all(mandatoryPromises).then(function(){
+                        $q.all([p1])
                         .finally(function(httpRes){
                             IndividualLoan.update(reqData)
                             .$promise
@@ -2666,7 +2755,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 PageHelper.hideLoader();
                             })
                         })
-                    
+                    });
+                   
                 })
             },
             reject: function(model, formCtrl, form, $event){

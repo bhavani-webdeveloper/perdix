@@ -190,7 +190,7 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getGlobalSettings = function(name) {
+        resource.getGlobalSettings = function(name, skipResultCheck) {
             var deferred = $q.defer();
             resource.getResult('globalSettings.list', {
                 name: name
@@ -201,7 +201,11 @@ irf.models.factory('Queries', [
                     if (res && res.results && res.results.length) {
                         deferred.resolve(res.results[0].value);
                     } else {
-                        deferred.reject(res);
+                        if(skipResultCheck){
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(res);
+                        }
                     }
                 },
                 function(err) {
