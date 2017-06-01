@@ -229,7 +229,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf2":{
@@ -238,7 +239,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf3":{
@@ -247,7 +249,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf4":{
@@ -256,7 +259,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf5":{
@@ -265,7 +269,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf6":{
@@ -274,7 +279,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf7":{
@@ -283,7 +289,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf8":{
@@ -292,7 +299,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf9":{
@@ -301,7 +309,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf10":{
@@ -310,7 +319,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf11":{
@@ -319,7 +329,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf12":{
@@ -328,7 +339,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf13":{
@@ -337,7 +349,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf14":{
@@ -346,7 +359,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf15":{
@@ -355,7 +369,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf16":{
@@ -364,7 +379,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf17":{
@@ -373,7 +389,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf18":{
@@ -382,7 +399,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			   "udf19":{
@@ -391,7 +409,8 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udf20":{
@@ -400,42 +419,48 @@
                   "minLength":1,
                   "maxLength":50,
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udfDate1":{
                   "title":"udf Date1",
                   "type":"string",
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udfDate2":{
                   "title":"udf Date2",
                   "type":"string",
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udfDate3":{
                   "title":"udf Date3",
                   "type":"string",
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udfDate4":{
                   "title":"udf Date4",
                   "type":"string",
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                },
 			    "udfDate5":{
                   "title":"udf Date5",
                   "type":"string",
                   "captureStages":[
-                     "GroupCreation"
+                     "GroupCreation",
+                     "GRT"
                   ]
                }
 			   
