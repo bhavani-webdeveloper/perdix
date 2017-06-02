@@ -441,6 +441,60 @@
                         "ReadyForDisbursement"
                      ]
                   },
+                  "principalDuePayment":{
+                        "title":"principal due payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
+                  "normalInterestDuePayment":{
+                        "title":"normal interest due payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
+                  "penalInterestDuePayment":{
+                        "title":"penal interest due payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
+                  "bookedNotDueNormalInterestPaymentPayment":{
+                        "title":"booked not due normal interest payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
+                  "bookedNotDuePenalInterestPayment":{
+                        "title":"booked not due penal interest payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
+                  "feeAmountPayment":{
+                        "title":"fee amount payment",
+                        "type":"number",
+                        "minimum":1,
+                        "maximum":10000000,
+                        "captureStages":[
+                           "ReadyForDisbursement"
+                        ]
+                  },
                   "referenceNumber":{
                      "title":"referenceNumber",
                      "type":"string",
