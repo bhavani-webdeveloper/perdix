@@ -82,6 +82,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'GET',
             url:endpoint+'/repaymentlist'
         }),
+        disbursementList:searchResource({
+            method:'GET',
+            url:endpoint+'/groupdisbursement/:partnerCode/:groupCode'
+        }),
         postArray:{
             method:'POST',
             url:endpoint+'/:action',
