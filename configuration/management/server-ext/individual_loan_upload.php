@@ -82,6 +82,19 @@ foreach ($files as $file) {
                     FALSE);
 
                 $rowData = $matrixData[0];
+                if ($rowData[13] !=null && $rowData[13] ="") {
+                    $rowData[13] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[13],'YYYY-MM-DD' );
+                }
+
+                if ($rowData[9] !=null && $rowData[9] ="") {
+                    $rowData[9] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[9],'YYYY-MM-DD' );
+                }
+                if ($rowData[16] !=null && $rowData[16] ="") {
+                    $rowData[16] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[16],'YYYY-MM-DD' );
+                }
+                if ($rowData[15] !=null && $rowData[15] ="") {
+                    $rowData[15] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[15],'YYYY-MM-DD' );
+                }
 
                 $customerTb = new Customer();
 
@@ -141,9 +154,13 @@ foreach ($files as $file) {
                     ];
                 }
 
+
+
                 $scheduledStartDate = new DateTime($rowData[15]);
                 $disbursementDate = new DateTime($rowData[13]);
                 $moratoriumPeriodInDays = $scheduledStartDate->diff($disbursementDate)->format("%a");
+
+                
 
                 $loanData = array(
                     'productCode' => $rowData[0],

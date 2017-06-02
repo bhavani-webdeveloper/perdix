@@ -85,6 +85,11 @@ foreach ($files as $file) {
                     FALSE);
                 $rowData = $matrixData[0];
                 echo $rowData[4];
+
+                if ($rowData[4] !=null && $rowData[4] ="") {
+                    $rowData[4] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[4],'YYYY-MM-DD' );
+                }
+
                 $enterprise = array(
                     'businessConstitution' => $rowData[13],
                     'registrationNumber' => $rowData[16],
