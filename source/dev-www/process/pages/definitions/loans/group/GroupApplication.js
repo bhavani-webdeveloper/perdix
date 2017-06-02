@@ -1,11 +1,11 @@
 define({
     pageUID: "loans.group.GroupApplication",
     pageType: "Engine",
-    dependencies: ["$log", "$state","LoanProcess", "irfSimpleModal", "Groups","GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "LoanProcess", "irfSimpleModal", "Groups", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state,LoanProcess, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, LoanProcess, irfSimpleModal, Groups, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 
@@ -33,15 +33,14 @@ define({
             var deferred = $q.defer();
             try {
                 model._isGroupLoanAccountActivated = false;
-                LoanProcess.query({
-                    action: 'groupdisbursement',
-                    param1: model.group.partnerCode,
-                    param2: model.group.groupCode
+                LoanProcess.disbursementList({
+                    partnerCode: model.group.partnerCode,
+                    groupCode: model.group.groupCode
                 }, function(resp, headers) {
-                    $log.info("checkGroupLoanActivated", resp.length);
+                    $log.info(resp.body.disbursementDTOs);
                     try {
-                        if (resp.length > 0) {
-                            model._loanAccountId = resp[0].accountId;
+                        if (resp.body.disbursementDTOs.length > 0) {
+                            model._loanAccountId = resp.body.disbursementDTOs[0].accountId;
                             model._isGroupLoanAccountActivated = true;
                             deferred.resolve(true);
                         }
@@ -289,18 +288,6 @@ define({
 
                 {
                     "type": "actionbox",
-                    "condition": "!model._isGroupLoanAccountActivated",
-                    "items": [{
-                        "type": "button",
-                        "icon": "fa fa-check-square",
-                        "title": "ACTIVATE_LOAN_ACCOUNT",
-                        "onClick": "actions.activateLoanAccount(model,form)",
-                    }]
-                },
-
-                {
-                    "type": "actionbox",
-                    "condition": "model._isGroupLoanAccountActivated",
                     "items": [{
                         "type": "button",
                         "icon": "fa fa-download",
@@ -364,30 +351,22 @@ define({
                         PageHelper.hideLoader();
                     });
                 },
-                activateLoanAccount: function(model, form) {
-                    PageHelper.clearErrors();
+                proceedAction: function(model, form) {
                     PageHelper.showLoader();
-                    irfProgressMessage.pop('ap-activate', 'Activating loan account');
-                    LoanProcess.get({
-                        action: 'groupLoans',
-                        groupCode: model.group.groupCode,
-                        partner: model.group.partnerCode
-                    }, function(resp, header) {
-                        groupCommons.checkGroupLoanActivated(model).then(function(isActivated) {
-                            PageHelper.hideLoader();
-                            if (isActivated) {
-
-                                irfProgressMessage.pop('ap-activate', 'Loan Account Activated', 5000);
-                            } else {
-                                irfProgressMessage.pop('ap-activate', 'An error occurred while activating loan account', 2000);
-                            }
-                        });
+                    irfProgressMessage.pop('Application-proceed', 'Working...');
+                    PageHelper.clearErrors();
+                    model.groupAction = "PROCEED";
+                    var reqData = _.cloneDeep(model);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop('Application-proceed', 'Operation Succeeded. Proceeded to Disbursement.', 5000);
+                        $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('ap-activate', 'An error occurred while activating loan account', 2000);
+                        irfProgressMessage.pop('Application-proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
-                }
+                },
             }
         }
     }

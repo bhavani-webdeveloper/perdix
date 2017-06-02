@@ -49,7 +49,7 @@ define({
                 $log.info("Group id not null, skipping save");
             } else {
                 reqData.groupAction = 'SAVE';
-                reqData.group.groupFormationDate = Utils.getCurrentDate();
+                //reqData.group.groupFormationDate = Utils.getCurrentDate();
                 PageHelper.clearErrors();
                 Utils.removeNulls(reqData, true);
                 GroupProcess.save(reqData, function(res) {
@@ -181,6 +181,10 @@ define({
                 }, {
                     "key": "group.tenure",
                     "title": "TENURE",
+                },{
+                    "key": "group.groupFormationDate",
+                    "title": "GROUP_FORMATION_DATE",
+                    "type":"date"
                 }, {
                     "key": "group.jlgGroupMembers",
                     "type": "array",
@@ -435,14 +439,14 @@ define({
                         });
                     } else {
                         saveData(reqData).then(function(res) {
-                            /*proceedData(res).then(function(res1) {
+                            proceedData(res).then(function(res1) {
                                 $state.go('Page.GroupDashboard', null);
                             }, function(err) {
                                 Utils.removeNulls(res1.group, true);
                                 model.group = _.clone(res1.group);
                                 fixData(model);
                                 fillNames(model);
-                            });*/
+                            });
                         });
                     }
                 }
