@@ -711,7 +711,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                 reqData.loanProcessAction = "SAVE";
                                 PageHelper.showLoader();
                                 PageHelper.showProgress("update-loan", "Working...");
-                                IndividualLoan.create(reqData)
+                                IndividualLoan.update(reqData)
                                     .$promise
                                     .then(function(res){
                                         PageHelper.showProgress("update-loan", "ACH Details saved...");
