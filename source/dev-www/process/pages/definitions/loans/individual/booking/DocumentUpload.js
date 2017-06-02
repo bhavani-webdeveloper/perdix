@@ -275,6 +275,75 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         title: "BRANCH_NAME"
                     }]
                 }]
+            },{
+                "type":"box",
+                "title":"ACH_ACCOUNT_DETAILS",
+                "condition":"model.loanAccount.collectionPaymentType=='ACH'",
+                "items":[{
+                        "key": "loanAccount.collectionCustomerNameAsInBank",
+                        "title": "ACCOUNT_HOLDER_NAME",
+                    },{
+                        "key": "loanAccount.collectionAccountNumber",
+                        "title": "CUSTOMER_BANK_ACC_NO",
+                        type: "lov",
+                        autolov: true,
+                        bindMap: {
+                            "customerId": "loanAccount.customerId"
+                        },
+                        outputMap: {
+                            "account_number": "loanAccount.collectionAccountNumber",
+                            "ifsc_code": "loanAccount.collectionIfscCode",
+                            "customer_bank_name": "loanAccount.collectionBankName",
+                            "customer_bank_branch_name": "loanAccount.collectionBankBranchName",
+                            "customer_name_as_in_bank":"loanAccount.collectionCustomerNameAsInBank"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            var urn = [];
+                            var ids = [];
+                            for(var i =0; i <model.loanAccount.loanCustomerRelations.length; i++)
+                            {
+                                if (model.loanAccount.loanCustomerRelations[i].urn)
+                                    urn.push(model.loanAccount.loanCustomerRelations[i].urn);
+                                else if (model.loanAccount.loanCustomerRelations[i].customerId)
+                                    ids.push(model.loanAccount.loanCustomerRelations[i].customerId)
+                            }
+                            if (model.loanAccount.urnNo !=null)
+                                urn.push(model.loanAccount.urnNo);
+                            ids.push(model.loanAccount.customerId);
+                            return Queries.getCustomersBankAccounts({
+                               customer_urns : urn,
+                               customer_ids : ids
+                            });
+                        },
+                        onSelect: function(result, model, context) {
+                           
+                        },
+
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                'Account Number : ' +item.account_number,
+                                'Branch : ' + item.customer_bank_branch_name,
+                                'Bank : ' + item.customer_bank_name,
+                                'IFSC Code : ' + item.ifsc_code
+                            ];
+                        }
+                    },{
+                        "key": "loanAccount.collectionIfscCode",
+                        "title": "IFSC_CODE",
+                    },{
+                        "key": "loanAccount.collectionBankName",
+                        "title": "BANK_NAME",
+                    },{
+                        "key": "loanAccount.collectionBankBranchName",
+                        "title": "HUB_NAME",
+                    },{
+                        "key": "loanAccount.collectionButton",
+                        "title": "SAVE_DETAILS",
+                        "type":"button",
+                        "onClick": "actions.saveACH(model, formCtrl, form, $event)"
+                    }
+                ]
             }, {
                 "type": "box",
                 "colClass": "col-sm-12",
@@ -633,6 +702,28 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             }
                         );
                 },
+                saveACH: function(model, formCtrl, form, $event){
+                    $log.info("Inside save()");
+                    Utils.confirm("Are You Sure?")
+                        .then(
+                            function(){
+                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                                reqData.loanProcessAction = "SAVE";
+                                PageHelper.showLoader();
+                                PageHelper.showProgress("update-loan", "Working...");
+                                IndividualLoan.create(reqData)
+                                    .$promise
+                                    .then(function(res){
+                                        PageHelper.showProgress("update-loan", "ACH Details saved...");
+                                    }, function(httpRes){
+                                        PageHelper.showErrors(httpRes);
+                                    })
+                                    .finally(function(httpRes){
+                                        PageHelper.hideLoader();
+                                    })
+                            }
+                        );
+                },
                 viewLoan: function(model, formCtrl, form, $event){
                     Utils.confirm("Save the data before proceed").then(function(){
                         $log.info("Inside ViewLoan()");
@@ -677,7 +768,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                 PageHelper.hideLoader();
                             })
                     })
-
                 },
                 proceed: function(model, form, formName) {
                     if (PageHelper.isFormInvalid(form)){

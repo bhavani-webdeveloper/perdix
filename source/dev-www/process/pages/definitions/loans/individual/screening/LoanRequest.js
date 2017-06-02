@@ -370,6 +370,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";
+                model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
                 /* END OF TEMP CODE */
             }
             if (bundlePageObj){
@@ -795,6 +796,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "EMI_PAYMENT_DATE_REQUESTED"
                     },
                     {
+                        key: "loanAccount.collectionPaymentType",
+                        required:true,
+                        title: "MODE_OF_REPAYMENT",
+                        type: "select",
+                        titleMap:{
+                            "ACH":"ACH",
+                            "PDC":"PDC",
+                            "Others":"Others"
+                        } 
+                    },
+                    {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
                         title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
                         readonly:true
@@ -944,6 +956,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "string",
                         readonly:true,
                         title: "EMI_PAYMENT_DATE_REQUESTED"
+                    },
+                    {
+                        key: "loanAccount.collectionPaymentType",
+                        readonly:true,
+                        title: "MODE_OF_REPAYMENT",
+                        type: "select",
+                        titleMap:{
+                            "ACH":"ACH",
+                            "PDC":"PDC",
+                            "Others":"Others"
+                        } 
                     },
                     {
                         key: "loanAccount.expectedPortfolioInsurancePremium",
