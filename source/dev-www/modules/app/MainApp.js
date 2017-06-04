@@ -79,4 +79,10 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 	};
 	$(window).resize(menuResize);
 	menuResize();
+
+	$("body").on('collapsed.pushMenu expanded.pushMenu', function() {
+		setTimeout(function() {
+			try { $('.irf-table-view .root-table').dataTable().fnAdjustColumnSizing(); } catch (e) {}
+		}, 301);
+	});
 }]);
