@@ -62,7 +62,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCDemandDownload")
                             }
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
-                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDate: model.pdcCollections.demandDate, batchType: 'demand'}).then(
+                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDateFrom: model.pdcCollections.demandDate, demandDateTo: model.pdcCollections.demandDate, batchType: 'demand'}).then(
                                 function(response) {
                                     var records = $filter('filter')(response.body, {status: 'COMPLETED'}, true);
                                     if(response.body.length > 0 && records.length === response.body.length){

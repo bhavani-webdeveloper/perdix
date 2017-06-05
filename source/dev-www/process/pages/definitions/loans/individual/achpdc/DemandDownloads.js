@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.DemandDownloads"), 
                             }
                             PageHelper.clearErrors();
                             PageHelper.showLoader();
-                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDate: model.achpdcCollections.demandDate, batchType: 'demand'}).then(
+                            ACHPDCBatchProcess.getBatchMonitoringTasks({demandDateFrom: model.achpdcCollections.demandDate, demandDateTo: model.achpdcCollections.demandDate, batchType: 'demand'}).then(
                                 function(response) {
                                     var records = $filter('filter')(response.body, {status: 'COMPLETED'}, true);
                                     if(response.body.length > 0 && records.length === response.body.length){
