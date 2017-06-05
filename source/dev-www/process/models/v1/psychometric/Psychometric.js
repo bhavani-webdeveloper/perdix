@@ -75,9 +75,9 @@ irf.models.factory('Psychometric',
             url: endpoint + '/question/linked',
             isArray: true
         },
-        getTestByParticipants: {
+        findTests: {
              method: 'GET',
-            url: endpoint + '/testbyparticipants',
+            url: endpoint + '/findTests',
             isArray: true
         }
     });

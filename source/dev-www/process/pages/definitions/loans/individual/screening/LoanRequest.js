@@ -53,7 +53,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if(participantIds.length > 0){
                 model.loanAccount.psychometricCompleted = 'Completed';
 
-                Psychometric.getTestByParticipants({'participantIds': participantIds}).$promise.then(function(resp){
+                Psychometric.findTests({'participantIds': participantIds}).$promise.then(function(resp){
                     var tests = resp;
                     var _testOfTheParticipant, testDate, diff;
                     if(tests.length === 0){
