@@ -755,14 +755,28 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     type: "array",
                     startEmpty: true,
                     items: [
-                        {
-                            key:"customer.physicalAssets[].ownedAssetDetails",
-                            type:"select"
-                        },
-                        "customer.physicalAssets[].numberOfOwnedAsset",
-                        {
-                            key:"customer.physicalAssets[].ownedAssetValue",
-                        }
+                               {
+                                   key: "customer.physicalAssets[].assetType",
+                                   "title": "ASSET_TYPE",
+                                   type: "select"
+                               }, {
+                                   key: "customer.physicalAssets[].ownedAssetDetails",
+                                   type:"select",
+                                   screenFilter: true,
+                                   parentEnumCode:"asset_type",
+                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                               }, {
+                                   key: "customer.physicalAssets[].unit",
+                                   "title": "UNIT",
+                                   type: "select",
+                                   screenFilter: true,
+                                   parentEnumCode:"asset_type",
+                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                               },
+                               "customer.physicalAssets[].numberOfOwnedAsset", 
+                               {
+                                   key: "customer.physicalAssets[].ownedAssetValue",
+                               }
                     ]
                 },
                 {

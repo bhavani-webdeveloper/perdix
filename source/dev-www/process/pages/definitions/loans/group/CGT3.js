@@ -1,6 +1,6 @@
 irf.pageCollection.factory("Pages__Cgt3", ["$log","authService","Groups","$state","$stateParams",
-    "PageHelper","irfProgressMessage",'Utils',
-    function($log,authService,Groups,$state,$stateParams,PageHelper,irfProgressMessage,Utils) {
+    "PageHelper","irfProgressMessage",'Utils',"irfStorageService",
+    function($log,authService,Groups,$state,$stateParams,PageHelper,irfProgressMessage,Utils,irfStorageService) {
         return {
             "id": "cgt3",
             "type": "schema-form",
@@ -142,9 +142,10 @@ irf.pageCollection.factory("Pages__Cgt3", ["$log","authService","Groups","$state
                     irfProgressMessage.pop('cgt3-submit', 'Working...');
                     PageHelper.clearErrors();
                     //var reqData = _.cloneDeep(model);
+                     var userData = irfStorageService.retrieveJSON('UserData');
                     var reqData = {
                         "cgtDate": model.group.cgtDate3,
-                        "cgtDoneBy": model.group.cgt3DoneBy,
+                        "cgtDoneBy": model.group.cgt3DoneBy+'-'+userData.userName,
                         "groupCode": model.group.groupCode,
                         "latitude": model.group.cgt3Latitude,
                         "longitude": model.group.cgt3Longitude,

@@ -153,6 +153,22 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 									return false;
 								else return true;
 							}
+						},
+						{
+							name: "EDF",
+							desc: "",
+							icon: "fa fa-pencil",
+							fn: function(item, index){
+								$state.go("Page.Engine",{
+									pageName:"EDF",
+									pageId:item.id,
+								});
+							},
+							isApplicable: function(item, index){
+								if (item.currentStage==='Completed')
+									return true;
+								else return false;
+							}
 						}
 					];
 				}

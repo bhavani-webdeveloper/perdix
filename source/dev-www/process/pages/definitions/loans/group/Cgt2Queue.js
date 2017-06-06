@@ -1,15 +1,37 @@
 irf.pageCollection.factory("Pages__Cgt2Queue", ["$log", "formHelper", "Groups","$state","entityManager",
-    "SessionStore","groupCommons",
-    function($log, formHelper, Groups,$state,entityManager,SessionStore,groupCommons){
+    "SessionStore","groupCommons","Queries","PageHelper",
+    function($log, formHelper, Groups,$state,entityManager,SessionStore,groupCommons,Queries,PageHelper){
 
         var listOptions= {
             itemCallback: function(item, index) {
-                // This will not be called in case of selectable = true in definition
-                $log.info(item);
-                entityManager.setModel('Cgt2', {_request:item});
-                $state.go("Page.Engine",{
-                    pageName:"Cgt2",
-                    pageId:null
+                // This will not be called in case of selectable = true in definitions             
+                Queries.getGlobalSettings("CGTApprovalCoolingDays").then(function(result) 
+                {
+                    PageHelper.showLoader();
+                    PageHelper.clearErrors();
+                    if(moment().format()>=moment(item.cgtDate1, 'YYYY-MM-DD').add('days', result).format())
+                    {
+
+                            $log.info(item);
+                            entityManager.setModel('Cgt2', {_request:item});
+                            $state.go("Page.Engine",
+                            {
+                                 pageName:"Cgt2",
+                                 pageId:null
+                            });
+                            PageHelper.hideLoader();
+                    }
+                    else
+                    {
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress('CgtProgress', 'Cgt2 stage will come only after '+result+' days from Cgt1 Date : ('+item.cgtDate1+')',5000);
+                                  
+                    }
+                },function(data)
+                {
+                     PageHelper.hideLoader();
+                     PageHelper.showProgress('CgtProgress', 'Oops some error happend in getting CGT Cooling Days',5000);
+                     PageHelper.showErrors(data);
                 });
             },
             getItems: function(response, headers){

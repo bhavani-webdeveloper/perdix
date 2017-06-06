@@ -1,12 +1,18 @@
 var MainApp = angular.module("MainApp", ["IRFPages", "IRFLogger"]);
 
 MainApp.controller("MainController",
-["$scope", "$log", "SessionStore",
-function($scope, $log, SessionStore) {
+["$scope", "$log", "SessionStore", "$state", "$timeout",
+function($scope, $log, SessionStore, $state, $timeout) {
 	$scope.appShortName = "Px";
 	$scope.appName = "Perdix";
+	document.mainTitle = "Perdix";
 
-	document.mainTitle = "Perdix Mobility | Alpha";
+	$timeout(function() {
+		if ($state.current.name === irf.REDIRECT_STATE) {
+			$log.debug("Trying redirect assuming token is avilable.");
+			$state.transitionTo(irf.HOME_PAGE.to, irf.HOME_PAGE.params, irf.HOME_PAGE.options);
+		}
+	}, 300);
 
 	$.AdminLTE.options.navbarMenuSlimscroll = false;
 	if ($.AdminLTE.options.navbarMenuSlimscroll && typeof $.fn.slimscroll != 'undefined') {

@@ -14,7 +14,8 @@ irf.pages.controller("PageLandingCtrl",
 			"Page/Engine/CBCheckStatusQueue",
 			"Page/Engine/EnrollmentHouseVerificationQueue",
 			"Page/Engine/CentrePaymentCollection",
-			"Page/GroupDashboard"
+			"Page/GroupDashboard",
+			"Page/Engine/InsurenceUpload"
 		]
 	};
 

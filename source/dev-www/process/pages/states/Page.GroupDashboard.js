@@ -12,9 +12,9 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
             "Page/Engine/Cgt2Queue",
             "Page/Engine/Cgt3Queue",
             "Page/Engine/GrtQueue",
-            "Page/Engine/DscOverrideQueue",
-            "Page/Engine/ApplicationPendingQueue",
-            "Page/Engine/JLGDisbursementQueue",
+            // "Page/Engine/DscOverrideQueue",
+            // "Page/Engine/ApplicationPendingQueue",
+            // "Page/Engine/JLGDisbursementQueue",
             "Page/Engine/CloseGroup",
             "Page/Engine/loans.groups.GroupLoanRepaymentQueue"
 

@@ -270,6 +270,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         "title": "CUSTOMER_ENROLLMENT",
         "subTitle": "STAGE_1",
         initialize: function (model, form, formCtrl) {
+            $stateParams.confirmExit = true;
             model.customer = model.customer || {};
             model.branchId = SessionStore.getBranchId() + '';
             model.customer.kgfsBankName = SessionStore.getBankName();
@@ -291,12 +292,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     window.scrollTo(0, 0);
                 } else {
                     irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" already enrolled", 5000);
+                    $stateParams.confirmExit = false;
                     $state.go("Page.Landing");
                 }
                 PageHelper.hideLoader();
             },function(resp){
                 PageHelper.hideLoader();
                 irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                $stateParams.confirmExit = false;
                 $state.go("Page.Engine",{
                     pageName:"CustomerSearch",
                     pageId:null
@@ -434,18 +437,27 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                 items: [
 
-                        "customer.doorNo",
+                        {
+                            key:"customer.doorNo",
+                            "required": true
+                        },
                         "customer.street",
-                        "customer.locality",
+                        {
+                            key:"customer.locality",
+                            "required": true
+                        },
                         {
                             key:"customer.villageName",
                             type:"select",
                             filter: {
-                                'parentCode': 'model.branchId'
+                            parentCode: 'model.branchId'
                             },
                             screenFilter: true
                         },
-                        "customer.postOffice",
+                        {
+                            key:"customer.postOffice",
+                            required: true
+                        },
                         {
                             key:"customer.district",
                             type:"select",
@@ -464,8 +476,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         "customer.stdCode",
                         "customer.landLineNo",
                         {
-                            "key": "customer.mobilePhone",
-                            "required": true
+                            key: "customer.mobilePhone",
+                            required: true
                         },
                         "customer.mailSameAsResidence"
                     ]
@@ -474,10 +486,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     title: "CUSTOMER_PERMANENT_ADDRESS",
                     condition:"!model.customer.mailSameAsResidence",
                     items: [
-                        "customer.mailingDoorNo",
+                        {
+                            key:"customer.mailingDoorNo",
+                            required: true
+                        },
                         "customer.mailingStreet",
-                        "customer.mailingLocality",
-                        "customer.mailingPostoffice",
+                        {
+                            key:"customer.mailingLocality",
+                            required: true
+                        },
+                        {
+                            key:"customer.mailingPostoffice",
+                            required: true
+                        },
                         {
                             key:"customer.mailingDistrict",
                             type:"select",
@@ -501,7 +522,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             title:"KYC",
             items:[
                 {
-                    "key": "customer.aadhaarNo",
+                    key: "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
                     onCapture: EnrollmentHelper.customerAadhaarOnCapture
@@ -798,6 +819,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     EnrollmentHelper.proceedData(reqData).then(function(res){
                         $state.go("Page.Landing");
                     });*/
+                    $stateParams.confirmExit = false;
                     $state.go("Page.Engine", {
                         pageName: 'ProfileInformation',
                         pageId: model.customer.id
@@ -809,11 +831,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
                     EnrollmentHelper.proceedData(reqData).then(function (res) {
+                        $stateParams.confirmExit = false;
                         $state.go("Page.Landing");
                     });
                 }
             },
             reload: function(model, formCtrl, form, $event) {
+                $stateParams.confirmExit = false;
                 $state.go("Page.Engine", {
                     pageName: 'ProfileInformation',
                     pageId: model.customer.id

@@ -3,190 +3,200 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Perdix Mobility | Alpha</title>
+    <title>Perdix Mobility | 8.7</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=100%, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=100, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="mobile_manifest.json">
     <link rel="icon" sizes="256x256" href="img/logo.ico" type="image/x-icon">
     <link rel="icon" sizes="192x192" href="img/logo.jpg" type="image/jpeg">
 
-    <!-- build:css css/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.css" />
-    <link rel="stylesheet" href="bower_components/admin-lte/dist/css/skins/_all-skins.min.css" />
-    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
-    <link rel="stylesheet" href="bower_components/pikaday/css/pikaday.css" />
-    <link rel="stylesheet" href="bower_components/ladda/dist/ladda.min.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" crossorigin="anonymous"></script>
 
-    <!--CUSTOM BOWER COMPONENT-->
-    <!-- build:css css/main.css -->
-    <link rel="stylesheet" href="css/vendor/AdminLTE.min.css" />
-    <link rel="stylesheet" href="bower_components/irf-elements/dist/irf.elements.css" />
-    <link rel="stylesheet" href="bower_components/irf-elements/dist/irf.elements.theme.css" />
-    <link rel="stylesheet" href="css/irf-app-main.css"/>
-    <link rel="stylesheet" href="css/irf-fonts.css"/>
-    <!-- endbuild -->
+<style type="text/css">
+    html, body {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    #marker {
+        height: 1px;
+        width: 100%;
+    }
+    #i8, #i7 {
+        position: fixed;
+        top:1px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    #i8 > iframe, #i7 > iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<script type="text/javascript">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    function CookieManager(doc) {
+        var _doc = doc;
+        this.createCookie = function(name,value,days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            _doc.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        this.readCookie = function(name) {
+            var nameEQ = name + "=";
+            var ca = _doc.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        this.eraseCookie = function(name) {
+            createCookie(name,"",-1);
+        }
+    }
+
+</script>
 </head>
-<body class="hold-transition skin-light skin-blue-light sidebar-mini" ng-controller="MainController">
-    <script src="js/themeswitch.js"></script>
+<body>
+    <div id="marker">&nbsp;</div>
+    <div id="i8">
+        <iframe id="i8iframe" src="index8.html"></iframe>
+    </div>
+    <div id="i7">
+        <iframe id="i7iframe" src="http://uatperdix.kgfs.co.in/perdix7/"></iframe>
+    </div>
 
-    <ui-view onload="">
-        <div class="cantina-loader-wrapper"><div class="cantina-loader"></div></div>
-    </ui-view>
+<script type="text/html" id="i7Html">
+    <a id="linkOn7" href="#" class="mnu1" onClick="integrationApi.switchApp()">Field</a>
+</script>
 
-<!-- build:js js/vendor.js -->
-<!-- bower:js -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-<script src="bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<script src="bower_components/admin-lte/plugins/fastclick/fastclick.min.js"></script>
-<script src="bower_components/admin-lte/dist/js/app.min.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
-<script src="bower_components/ng-jsonpath/dist/ng-jsonpath.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="bower_components/tv4/tv4.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/objectpath/lib/ObjectPath.js"></script>
-<script src="bower_components/angular-schema-form/dist/schema-form.js"></script>
-<script src="bower_components/angular-schema-form/dist/bootstrap-decorator.js"></script>
-<script src="bower_components/d3/d3.js"></script>
-<script src="bower_components/nvd3/build/nv.d3.js"></script>
-<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
-<script src="bower_components/angular-translate/angular-translate.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-<script src="bower_components/angular-translate-handler-log/angular-translate-handler-log.js"></script>
-<script src="bower_components/lodash/lodash.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/moment/moment.js"></script>
-<script src="bower_components/pikaday/pikaday.js"></script>
-<script src="bower_components/Swipe/swipe.js"></script>
-<script src="bower_components/spin.js/spin.js"></script>
-<script src="bower_components/ladda/dist/ladda.min.js"></script>
-<script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
-<script src="bower_components/accounting/accounting.js"></script>
-<!-- endbower -->
-<!-- endbuild -->
-<script src="js/vendor/renderjson.js"></script>
+<script type="text/javascript">
+    var i7 = document.getElementById('i7');
+    var i8 = document.getElementById('i8');
+    var i7iframe = document.getElementById('i7iframe');
+    var i8iframe = document.getElementById('i8iframe');
+    var marker = document.getElementById('marker');
 
-<!-- build:js js/main.js -->
-<script src="bower_components/irf-elements/dist/irf.elements-tpls.js"></script>
-<script src="modules/models/irfmodels.js"></script>
+    var linkOn8Visible = false;
+    var linkOn7 = null;
+    var showI7 = false;
 
-<script src="modules/irfcommons/irfcommons.js"></script>
-<script src="modules/irfcommons/translate.js"></script>
-<script src="modules/irfcommons/hooks.js"></script>
-<script src="modules/irfcommons/entitymanager.js"></script>
-<script src="modules/irfcommons/irfsessionmanager.js"></script>
-<script src="modules/irfcommons/authmanager.js"></script>
-<script src="modules/irfcommons/querymanager.js"></script>
-<script src="modules/irfcommons/storagemanager.js"></script>
+    var show7 = function() {
+        i7.style.display = 'block';
+        i8.style.display = 'none';
+        showI7 = true;
+        marker.style.backgroundColor = "cyan";
+    };
 
-<script src="modules/irfpages/irfpages.js"></script>
-<script src="modules/irfpages/states/Login.js"></script>
-<script src="modules/irfpages/states/Page.js"></script>
-<script src="modules/irfpages/states/Page.Engine.js"></script>
-<script src="modules/irfpages/states/Page.EngineError.js"></script>
-<script src="modules/irfpages/states/Page.EngineOffline.js"></script>
+    var show8 = function() {
+        i8.style.display = 'block';
+        i7.style.display = 'none';
+        showI7 = false;
+        marker.style.backgroundColor = "tomato";
+    };
 
-<script src="modules/logger/logger.js"></script>
+    var switchApp = function () {
+        if (showI7) {
+            if (!linkOn8Visible) {
+                injectTokenStorage();
+                if (typeof (integrationApi) != 'undefined') {
+                    integrationApi.switchApp();
+                    return;
+                }
+            }
 
-<script src="modules/app/MainApp.js"></script>
-<script src="modules/app/MainApp.header.js"></script>
-<script src="modules/app/MainApp.menu.js"></script>
-<script src="modules/app/MainApp.bootstrap.js"></script>
+            i8.style.display = 'block';
+            i7.style.display = 'none';
+            showI7 = false;
+            marker.style.backgroundColor = "tomato";
+        } else {
+            if (!linkOn7) {
+                injectTokenCookie();
+            }
 
-<script src="process/models/models.config.js"></script>
-<script src="process/models/v1/common/Auth.js"></script>
-<script src="process/models/v1/common/PagesDefinition.js"></script>
-<script src="process/models/v1/common/Files.js"></script>
-<script src="process/models/v1/common/Queries.js"></script>
-<script src="process/models/v1/common/ReferenceCodeResource.js"></script>
-<script src="process/models/v1/customer/Enrollment.js"></script>
-<script src="process/models/v1/customer/Account.js"></script>
-<script src="process/models/v1/customer/CreditBureau.js"></script>
-<script src="process/models/v1/loans/LoanProcess.js"></script>
-<script src="process/models/v1/loans/LoanAccount.js"></script>
-<script src="process/models/v1/loans/Groups.js"></script>
-<script src="process/models/v1/loans/LoanProducts.js"></script>
-<script src="process/models/php/management/Masters.js"></script>
+            i7.style.display = 'block';
+            i8.style.display = 'none';
+            showI7 = true;
+            marker.style.backgroundColor = "cyan";
+        }
+    };
 
-<script src="process/pages/pages.config.js"></script>
-<script src="process/pages/states/Page.Landing.js"></script>
-<script src="process/pages/states/Page.Customer360.js"></script>
-<script src="process/pages/states/Page.CustomerHistory.js"></script>
-<script src="process/pages/states/Page.Dashboard.js"></script>
-<script src="process/pages/states/Page.GroupDashboard.js"></script>
-<script src="process/pages/states/Page.ManagementDashboard.js"></script>
+    var parentApi = {
+        switchApp: switchApp
+    };
 
-<script src="process/pages/definitions/UserProfile.js"></script>
+    var showButtonI8 = function() {
+        linkOn8Visible = $(i8iframe.contentDocument).find('#connect_perdix7').is(':visible');
+        if (!linkOn8Visible) {
+            // console.warn('linkOn8Visible not avilable on perdix8');
+            $(i8iframe.contentDocument).find('#connect_perdix7').show();
+            setTimeout(showButtonI8, 1000);
+        } else {
+            // console.warn('linkOn8Visible avilable on perdix8');
+            setTimeout(showButtonI8, 60000);
+        }
 
-<script src="process/pages/definitions/demo/Demo.js"></script>
+        if (!i8iframe.contentWindow.integrationApi) {
+            i8iframe.contentWindow.integrationApi = parentApi;
+        }
+    };
 
-<script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
-<script src="process/pages/definitions/customer/CustomerSearch.js"></script>
-<script src="process/pages/definitions/customer/EnrollmentStage1.js"></script>
-<script src="process/pages/definitions/customer/AssetsAndLiabilities.js"></script>
-<script src="process/pages/definitions/customer/CBCheck.js"></script>
-<script src="process/pages/definitions/customer/CBCheckCapture.js"></script>
-<script src="process/pages/definitions/customer/CBCheckStatusQueue.js"></script>
-<script src="process/pages/definitions/customer/CustomerRUD.js"></script>
+    var injectButtonI7 = function() {
+        linkOn7 = i7iframe.contentDocument.getElementById('linkOn7');
+        if (!linkOn7) {
+            // console.warn('linkOn7 not avilable on perdix7');
+            $($('#i7Html').html()).prependTo($(i7iframe.contentDocument).find('.top-sec td[align="right"]'));
+            setTimeout(injectButtonI7, 1000);
+        } else {
+            // console.warn('linkOn7 avilable on perdix7');
+            setTimeout(injectButtonI7, 60000);
+        }
 
-<script src="process/pages/definitions/customer360/CustomerProfile.js"></script>
-<script src="process/pages/definitions/customer360/RequestRecapture.js"></script>
-<script src="process/pages/definitions/customer360/RecaptureQueue.js"></script>
-<script src="process/pages/definitions/customer360/Recapture.js"></script>
+        if (!i7iframe.contentWindow.integrationApi) {
+            i7iframe.contentWindow.integrationApi = parentApi;
+        }
+    };
 
-<script src="process/pages/definitions/loans/group/groupcommons.js"></script>
-<script src="process/pages/definitions/loans/group/GroupCRUD.js"></script>
-<script src="process/pages/definitions/loans/group/Cgt1Queue.js"></script>
-<script src="process/pages/definitions/loans/group/Cgt2Queue.js"></script>
-<script src="process/pages/definitions/loans/group/Cgt3Queue.js"></script>
-<script src="process/pages/definitions/loans/group/GrtQueue.js"></script>
-<script src="process/pages/definitions/loans/group/DscQueue.js"></script>
-<script src="process/pages/definitions/loans/group/DscOverrideQueue.js"></script>
-<script src="process/pages/definitions/loans/group/CGT1.js"></script>
-<script src="process/pages/definitions/loans/group/CGT2.js"></script>
-<script src="process/pages/definitions/loans/group/CGT3.js"></script>
-<script src="process/pages/definitions/loans/group/GRT.js"></script>
-<script src="process/pages/definitions/loans/group/ApplicationPendingQueue.js"></script>
-<script src="process/pages/definitions/loans/group/JLGDisbursementQueue.js"></script>
-<script src="process/pages/definitions/loans/group/CentrePaymentCollection.js"></script>
-<script src="process/pages/definitions/loans/group/GroupDisbursement.js"></script>
-<script src="process/pages/definitions/loans/group/LUC.js"></script>
-<script src="process/pages/definitions/loans/group/CloseGroup.js"></script>
-<script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
-<script src="process/pages/definitions/customer360/loans/View.js"></script>
-<script src="process/pages/definitions/loans/LoanRepay.js"></script>
-    <script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
-<script src="process/pages/definitions/loans/group/GroupLoanRepay.js"></script>
+    var injectTokenCookie = function() {
+        var authData = null;
+        try { authData = JSON.parse(localStorage.getItem('AuthData')); } catch (e) {}
+        new CookieManager(i7iframe.contentDocument).createCookie('oauth_token', authData.access_token);
+        i7iframe.contentWindow.location.reload();
+    };
 
-<script src="process/pages/definitions/management/ManagementHelper.js"></script>
-<script src="process/pages/definitions/management/VillageCRU.js"></script>
-<script src="process/pages/definitions/management/CentreCRU.js"></script>
-<script src="process/pages/definitions/management/VillageSearch.js"></script>
-<script src="process/pages/definitions/management/CentreSearch.js"></script>
+    var injectTokenStorage = function() {
+        var access_token = new CookieManager(i7iframe.contentDocument).readCookie('oauth_token');
+        var authData = null;
+        try { authData = JSON.parse(localStorage.getItem('AuthData')); } catch (e) {}
+        if (!authData) {
+            authData = {};
+        }
+        authData.access_token = access_token;
+        localStorage.setItem('AuthData', JSON.stringify(authData));
+        i8iframe.contentWindow.location.hash = '#/' + i8iframe.contentWindow.irf.HOME_PAGE.url;
+    };
 
-<!-- endbuild -->
-<!--Cordova-->
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+    show7(); // STARTING POINT
+    showButtonI8();
+    injectButtonI7();
+</script>
 </body>
 </html>

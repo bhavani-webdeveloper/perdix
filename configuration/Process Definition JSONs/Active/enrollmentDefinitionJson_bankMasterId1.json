@@ -27,17 +27,13 @@
       "customerMaxAge":60,
       "isMinimumFingerPrintRequired":1,
       "required":[  
-         "family",
          "familyHouseholdExpense",
-         "familyHouseholdIncome",
-         "physicalAssets",
          "bankdetails",
          "physicalVerification",
          "fingerPrint",
          "personalProfile",
          "customerPhoto",
-         "user_defined_fields",
-         "kyc"
+         "kyc"		 	 
       ],
       "properties":{  
          "customerHealth":{  
@@ -104,7 +100,9 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "familyMemberMiddleName":{  
@@ -113,7 +111,9 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "familyMemberLastName":{  
@@ -122,7 +122,9 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "contributionToExpenditure":{  
@@ -130,14 +132,18 @@
                      "title":"CONTRIBUTION_TO_EXPENDITURE",
                      "minimum":0,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "healthStatus":{  
                      "title":"HEALTH_STATUS",
                      "type":"string",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "maritalStatus":{  
@@ -145,7 +151,9 @@
                      "title":"MARITAL_STATUS",
                      "refCodeCategory":"marital_status",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "relationShip":{  
@@ -153,7 +161,9 @@
                      "type":"string",
                      "refCodeCategory":"relation",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "gender":{  
@@ -166,7 +176,9 @@
                      ],
                      "refCodeCategory":"gender",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "dateOfBirth":{  
@@ -174,7 +186,9 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "educationStatus":{  
@@ -182,7 +196,9 @@
                      "type":"string",
                      "refCodeCategory":"education",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "mobilePhone":{  
@@ -191,7 +207,9 @@
                      "minLength":10,
                      "maxLength":10,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage01",
+                        "Stage02",
+                        "Completed"
                      ]
                   }
                }
@@ -211,9 +229,9 @@
                   "expenditureSource":{  
                      "title":"Expenditure Source",
                      "type":"string",
-                     "refCodeCategory":"expenditure",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "annualExpenses":{  
@@ -222,7 +240,8 @@
                      "minimum":0,
                      "maximum":10000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "frequency":{  
@@ -230,7 +249,8 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   }
                }
@@ -251,7 +271,8 @@
                      "type":"string",
                      "refCodeCategory":"occupation",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "incomeEarned":{  
@@ -260,7 +281,8 @@
                      "minimum":0,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "frequency":{  
@@ -268,14 +290,16 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "monthsPerYear":{  
                      "title":"Per Year",
                      "type":"integer",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   }
                }
@@ -299,7 +323,8 @@
                      "type":"string",
                      "refCodeCategory":"financialAssetInstrumentType",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "nameOfInstitution":{  
@@ -308,7 +333,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "instituteType":{  
@@ -316,7 +342,8 @@
                      "type":"string",
                      "refCodeCategory":"finanical_asset",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "amountInPaisa":{  
@@ -325,7 +352,8 @@
                      "minimum":0,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "frequencyOfDeposite":{  
@@ -333,7 +361,8 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "startDate":{  
@@ -341,7 +370,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "maturityDate":{  
@@ -349,7 +379,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   }
                }
@@ -372,7 +403,8 @@
                      "type":"string",
                      "refCodeCategory":"liability_loan_type",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "loanSource":{  
@@ -380,7 +412,8 @@
                      "type":"string",
                      "refCodeCategory":"loan_source",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "instituteName":{  
@@ -389,7 +422,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "liabilityLoanPurpose":{  
@@ -397,7 +431,8 @@
                      "type":"string",
                      "refCodeCategory":"liability_loan_purpose",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "frequencyOfInstallment":{  
@@ -405,7 +440,8 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "loanAmountInPaisa":{  
@@ -414,7 +450,8 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "installmentAmountInPaisa":{  
@@ -423,7 +460,8 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "startDate":{  
@@ -431,7 +469,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   },
                   "maturityDate":{  
@@ -439,7 +478,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						      "Completed"
                      ]
                   }
                }
@@ -479,7 +519,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "street":{  
@@ -488,7 +529,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "villageName":{  
@@ -497,7 +539,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "locality":{  
@@ -506,7 +549,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "postOffice":{  
@@ -515,7 +559,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "district":{  
@@ -524,7 +569,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "pincode":{  
@@ -533,7 +579,8 @@
                   "minimum":100000,
                   "maximum":999999,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "stdCode":{  
@@ -541,9 +588,8 @@
                   "type":"string",
                   "minLength":1,
                   "maxLength":100,
-                  "captureStages":[  
-
-                  ]
+                  "captureStages":[
+                     "Completed"]
                },
                "state":{  
                   "title":"State",
@@ -551,7 +597,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "landLineNo":{  
@@ -560,7 +607,8 @@
                   "minLength":5,
                   "maxLength":15,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "mobilePhone":{  
@@ -576,21 +624,24 @@
                   "title":"Mail Same as Residence",
                   "type":"boolean",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "nameInLocalLanguage":{  
                   "type":"string",
                   "title":"NAME_IN_LOCAL_LANGUAGE",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "addressInLocalLanguage":{  
                   "type":"string",
                   "title":"ADDRESS_IN_LOCAL_LANGUAGE",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "firstName":{  
@@ -668,7 +719,8 @@
                   "type":"string",
                   "refCodeCategory":"religion",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "caste":{  
@@ -676,7 +728,8 @@
                   "type":"string",
                   "refCodeCategory":"caste",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "language":{  
@@ -684,7 +737,8 @@
                   "type":"string",
                   "refCodeCategory":"language",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "maritalStatus":{  
@@ -692,7 +746,8 @@
                   "type":"string",
                   "refCodeCategory":"marital_status",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "spouseFirstName":{  
@@ -776,28 +831,23 @@
          "kyc":{  
             "title":"KYC Details",
             "type":"object",
-            "required":[  
-               "addressProof",
-               "addressProofImageId",
-               "addressProofNo",
-               "identityProof",
-               "identityProofImageId",
-               "identityProofNo"
-            ],
+            "required":[],
             "properties":{  
                "kyc1ProofType":{  
                   "title":"Kyc1 Proof Type",
                   "type":"string",
                   "refCodeCategory":"kyc",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc1ImagePath":{  
                   "title":"Kyc1 Proof Document",
                   "type":"string",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc1ProofNumber":{  
@@ -806,7 +856,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc1IssueDate":{  
@@ -814,7 +865,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc1ValidUptoDate":{  
@@ -822,7 +874,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc2ProofType":{  
@@ -830,14 +883,16 @@
                   "type":"string",
                   "refCodeCategory":"kyc",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc2ImagePath":{  
                   "title":"Kyc2 Proof Document",
                   "type":"string",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc2ProofNumber":{  
@@ -846,7 +901,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc2IssueDate":{  
@@ -854,7 +910,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "kyc2ValidUptoDate":{  
@@ -862,7 +919,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "panNo":{  
@@ -880,7 +938,8 @@
                   "minLength":12,
                   "maxLength":12,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "referenceFirstName":{  
@@ -923,14 +982,24 @@
                   "type":"string",
                   "refCodeCategory":"address_proof",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "addressProofImageId":{  
                   "title":"Address Proof Image Id",
                   "type":"string",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
+                  ]
+               },
+               "addressProofReverseImageId":{  
+                  "title":"addressProofReverseImageId",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "addressProofNo":{  
@@ -939,7 +1008,8 @@
                   "minLength":1,
                   "maxLength":45,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "addressProofIssueDate":{  
@@ -947,7 +1017,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "addressProofValidUptoDate":{  
@@ -955,7 +1026,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "identityProof":{  
@@ -963,14 +1035,24 @@
                   "type":"string",
                   "refCodeCategory":"identity_proof",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "identityProofImageId":{  
                   "title":"Identity Proof Image",
                   "type":"string",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
+                  ]
+               },
+               "identityProofReverseImageId":{  
+                  "title":"identityProofReverseImageId",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "identityProofNo":{  
@@ -979,7 +1061,8 @@
                   "minLength":1,
                   "maxLength":45,
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "idProofValidUptoDate":{  
@@ -987,7 +1070,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "idProofIssueDate":{  
@@ -995,7 +1079,8 @@
                   "type":"string",
                   "format":"date",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "panCardImageId":{  
@@ -1032,7 +1117,8 @@
                   "minLength":0,
                   "maxLength":1,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                }
             }
@@ -1043,15 +1129,31 @@
             "items":{  
                "type":"object",
                "required":[  
-                  "ownedAssetDetails"
+                  "assetType"
                ],
                "properties":{  
                   "nameOfOwnedAsset":{  
                      "title":"Name Of Owned Asset",
                      "type":"string",
-                     "refCodeCategory":"asset",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
+                     ]
+                  },
+                   "assetType":{  
+                     "title":"Asset Type",
+                     "type":"string",
+                     "captureStages":[  
+                        "Stage02",
+                        "Completed"
+                     ]
+                  },
+                   "unit":{  
+                     "title":"Unit",
+                     "type":"string",
+                     "captureStages":[  
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "numberOfOwnedAsset":{  
@@ -1060,7 +1162,8 @@
                      "minimum":1,
                      "maximum":10000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "ownedAssetValue":{  
@@ -1069,22 +1172,24 @@
                      "minimum":1,
                      "maximum":1000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "ownedAssetDetails":{  
                      "title":"Owned Asset Details",
                      "type":"string",
-                     "refCodeCategory":"asset",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "address":{  
                      "title":"Address",
                      "type":"string",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   }
                }
@@ -1143,7 +1248,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "longitude":{  
@@ -1152,7 +1258,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "altitude":{  
@@ -1293,15 +1400,14 @@
          "user_defined_fields":{  
             "title":"User Defined Details",
             "type":"object",
-            "required":[  
-
-            ],
+            "required":[],
             "properties":{  
                "udf1":{  
                   "title":"SPOUSE_LOAN_CONSENT",
                   "type":"boolean",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "udf2":{  
@@ -1310,7 +1416,8 @@
                   "minLength":1,
                   "maxLength":500,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf3":{  
@@ -1319,7 +1426,8 @@
                   "minLength":1,
                   "maxLength":500,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf4":{  
@@ -1327,7 +1435,8 @@
                   "type":"number",
                   "minimum":0,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf5":{  
@@ -1336,14 +1445,16 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf6":{  
                   "title":"TOILET",
                   "type":"boolean",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf7":{  
@@ -1352,7 +1463,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf8":{  
@@ -1361,7 +1473,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf9":{  
@@ -1370,7 +1483,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf10":{  
@@ -1379,7 +1493,8 @@
                   "minimum":100000,
                   "maximum":999999,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf11":{  
@@ -1388,7 +1503,8 @@
                   "minLength":1,
                   "maxLength":10,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf12":{  
@@ -1397,7 +1513,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf13":{  
@@ -1406,7 +1523,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf14":{  
@@ -1415,7 +1533,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf15":{  
@@ -1424,7 +1543,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf16":{  
@@ -1433,7 +1553,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf17":{  
@@ -1442,7 +1563,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf18":{  
@@ -1451,7 +1573,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf19":{  
@@ -1460,7 +1583,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf20":{  
@@ -1469,7 +1593,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf21":{  
@@ -1478,7 +1603,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf22":{  
@@ -1487,7 +1613,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf23":{  
@@ -1496,7 +1623,8 @@
                   "minLength":1,
                   "maxLength":500,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf24":{  
@@ -1505,7 +1633,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf25":{  
@@ -1514,14 +1643,16 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf26":{  
                   "title":"IRRIGATED",
                   "type":"boolean",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf27":{  
@@ -1530,7 +1661,8 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf28":{  
@@ -1538,7 +1670,8 @@
                   "type":"number",
                   "minimum":0,
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf29":{  
@@ -1559,38 +1692,44 @@
                   "title":"HOUSE_BUILD_TYPE",
                   "type":"string",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf32":{  
                   "title":"NUMBER_OF_ROOMS_IN_HOUSE",
                   "type":"number",
                   "captureStages":[  
-                     "Stage02"
+                     "Stage02",
+                     "Completed"
                   ]
                },
                "udf33":{  
                   "title":"SPOUSE_ID_PROOF_TYPE",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "udf34":{  
                   "title":"SPOUSE_ID_PROOF_IMAGE_FRONT",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "udf35":{  
                   "title":"SPOUSE_ID_PROOF_IMAGE_BACK",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                },
                "udf36":{  
                   "title":"SPOUSE_ID_PROOF_NUMBER",
                   "captureStages":[  
-                     "Stage01"
+                     "Stage01",
+                     "Completed"
                   ]
                }
             }
@@ -1598,9 +1737,7 @@
          "user_defined_date_fields":{  
             "title":"User Defined Date Details",
             "type":"object",
-            "required":[  
-
-            ],
+            "required":[],
             "properties":{  
                "udfDate1":{  
                   "title":"SPOUSE_ID_PROOF_ISSUE_DATE",

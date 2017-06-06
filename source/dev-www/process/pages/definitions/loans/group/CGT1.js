@@ -2,8 +2,8 @@
 * @TODO : 1 CGT page for all CGTs, with CGT# as param
 * */
 irf.pageCollection.factory("Pages__Cgt1", ["$log","authService","entityManager","Groups","$state","$stateParams",
-    "PageHelper","irfProgressMessage",'Utils',
-    function($log,authService,entityManager,Groups,$state,$stateParams,PageHelper,irfProgressMessage,Utils) {
+    "PageHelper","irfProgressMessage",'Utils',"irfStorageService",
+    function($log,authService,entityManager,Groups,$state,$stateParams,PageHelper,irfProgressMessage,Utils,irfStorageService) {
     return {
         "id": "cgt1",
         "type": "schema-form",
@@ -141,9 +141,10 @@ irf.pageCollection.factory("Pages__Cgt1", ["$log","authService","entityManager",
                 irfProgressMessage.pop('cgt1-submit', 'Working...');
                 PageHelper.clearErrors();
                 //var reqData = _.cloneDeep(model);
+                var userData = irfStorageService.retrieveJSON('UserData');
                 var reqData = {
                     "cgtDate": model.group.cgtDate1,
-                    "cgtDoneBy": model.group.cgt1DoneBy,
+                    "cgtDoneBy": model.group.cgt1DoneBy+'-'+userData.userName,
                     "groupCode": model.group.groupCode,
                     "latitude": model.group.cgt1Latitude,
                     "longitude": model.group.cgt1Longitude,

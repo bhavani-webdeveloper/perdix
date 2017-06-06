@@ -30,7 +30,6 @@ irf.models.factory('LoanAccount',function($resource,$httpParamSerializer,BASE_UR
         getGroupRepaymentDetails:{
             method:'GET',
             url:endpoint+'/grouprepayment/:partnerCode/:groupCode/:isLegacy'
-
         },
         groupRepayment:{
             method:'POST',

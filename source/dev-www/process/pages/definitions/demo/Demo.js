@@ -1,6 +1,5 @@
-irf.pageCollection.factory("Pages__Demo",
-["$log", "Enrollment", "SessionStore","Files",
-    function($log, Enrollment, SessionStore,Files){
+irf.pageCollection.factory("Pages__Demo", ["$log", "Enrollment", "SessionStore", "Files",
+    function($log, Enrollment, SessionStore, Files) {
 
         var branch = SessionStore.getBranch();
 
@@ -8,7 +7,7 @@ irf.pageCollection.factory("Pages__Demo",
             "type": "schema-form",
             "title": "Demo Page",
             "subTitle": "Demo Page secondary title",
-            initialize: function (model, form, formCtrl) {
+            initialize: function(model, form, formCtrl) {
                 $log.info("Demo Customer Page got initialized");
 
 
@@ -16,27 +15,25 @@ irf.pageCollection.factory("Pages__Demo",
                 Files.getBase64DataFromFileId(
                     '482acbaf-0090-4168-adca-76aaba818d5a',
                     true
-                ).then(function(base64String){
+                ).then(function(base64String) {
                     console.log(base64String);
-                },function(err){
+                }, function(err) {
 
                 });
 
 
 
             },
-            form: [
-                {
-                    "type":"box",
-                    "title":"Details",
-                    "items":[
-                        "address.streetAddress",
-                        {
-                            key:"address.city",
-                            type:"select",
-                            titleMap:{
-                                "city_A":"City A",
-                                "city_B":"City B"
+            form: [{
+                    "type": "box",
+                    "title": "Details",
+                    "items": [
+                        "address.streetAddress", {
+                            key: "address.city",
+                            type: "select",
+                            titleMap: {
+                                "city_A": "City A",
+                                "city_B": "City B"
                             }
 
                         },
@@ -51,15 +48,15 @@ irf.pageCollection.factory("Pages__Demo",
                 "properties": {
                     "address": {
                         "type": "object",
-                        "title":"Address",
+                        "title": "Address",
                         "properties": {
                             "streetAddress": {
                                 "type": "string",
-                                "title":"Street Address"
+                                "title": "Street Address"
                             },
                             "city": {
                                 "type": "string",
-                                "title":"City"
+                                "title": "City"
                             }
                         },
                         "required": [
@@ -69,22 +66,22 @@ irf.pageCollection.factory("Pages__Demo",
                     },
                     "phoneNumber": {
                         "type": "array",
-                        "title":"Phone Numbers",
+                        "title": "Phone Numbers",
                         "items": {
                             "type": "object",
-                            "title":"Phone#",
+                            "title": "Phone#",
                             "properties": {
                                 "location": {
                                     "type": "string",
-                                    "title":"Location"
+                                    "title": "Location"
                                 },
                                 "code": {
                                     "type": "integer",
-                                    "title":"Code"
+                                    "title": "Code"
                                 },
-                                "number":{
-                                    "type":"integer",
-                                    "title":"Number"
+                                "number": {
+                                    "type": "integer",
+                                    "title": "Number"
                                 }
                             },
                             "required": [
@@ -100,8 +97,7 @@ irf.pageCollection.factory("Pages__Demo",
                 ]
             },
             actions: {
-                submit: function(model, form, formName){
-                }
+                submit: function(model, form, formName) {}
             }
         };
     }

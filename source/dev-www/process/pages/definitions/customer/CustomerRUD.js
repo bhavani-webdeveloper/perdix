@@ -9,6 +9,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                 Utils.removeNulls(model, true);
                 if (_.has(model.customer, 'udf.userDefinedFieldValues')){
                     var fields = model.customer.udf.userDefinedFieldValues;
+                    $log.info(fields);
                     fields['udf17'] = Number(fields['udf17']);
                     fields['udf10'] = Number(fields['udf10']);
                     fields['udf11'] = Number(fields['udf11']);
@@ -364,27 +365,41 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     remove: null,
                                     view: "fixed",
                                     titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate",
-                                    items: [{
-                                        type: 'section',
-                                        htmlClass: 'row',
-                                        items: [{
+                                    items: [
+                                        {
+                                            key: "customer.expenditures[].expenditureSource",
+                                            type: "select"
+                                        },
+                                        {
+                                            key: "customer.expenditures[].customExpenditureSource",
+                                            title:"CUSTOM_EXPENDITURE_SOURCE",
+                                            condition: "model.customer.expenditures[arrayIndex].expenditureSource=='Others'"
+                                        },
+                                        {
                                             type: 'section',
-                                            htmlClass: 'col-xs-6',
-                                            items: [{
-                                                key: "customer.expenditures[].frequency",
-                                                type: "select",
-                                                notitle: true
-                                            }]
-                                        }, {
-                                            type: 'section',
-                                            htmlClass: 'col-xs-6',
-                                            items: [{
-                                                key: "customer.expenditures[].annualExpenses",
-                                                type: "amount",
-                                                notitle: true
-                                            }]
-                                        }]
-                                    }]
+                                            htmlClass: 'row',
+                                            items: [
+                                                {
+                                                    type: 'section',
+                                                    htmlClass: 'col-xs-6',
+                                                    items: [{
+                                                        key: "customer.expenditures[].frequency",
+                                                        type: "select",
+                                                        notitle: true
+                                                    }]
+                                                }, 
+                                                {
+                                                    type: 'section',
+                                                    htmlClass: 'col-xs-6',
+                                                    items: [{
+                                                        key: "customer.expenditures[].annualExpenses",
+                                                        type: "amount",
+                                                        notitle: true
+                                                    }]
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 }]
                             }]
                     },
@@ -500,26 +515,44 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             key: "customer.physicalAssets",
                             type: "array",
                             items: [
-                                {
-                                    key:"customer.physicalAssets[].ownedAssetDetails"
-
-                                },
-                                "customer.physicalAssets[].numberOfOwnedAsset",
-                                {
-                                    key:"customer.physicalAssets[].ownedAssetValue",
-                                }
+                               {
+                                   key: "customer.physicalAssets[].assetType",
+                                   "title": "ASSET_TYPE",
+                                   type: "select"
+                               }, {
+                                   key: "customer.physicalAssets[].ownedAssetDetails",
+                                   type:"select",
+                                   screenFilter: true,
+                                   parentEnumCode:"asset_type",
+                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                               }, {
+                                   key: "customer.physicalAssets[].unit",
+                                   "title": "UNIT",
+                                   type: "select",
+                                   screenFilter: true,
+                                   parentEnumCode:"asset_type",
+                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                               },
+                               "customer.physicalAssets[].numberOfOwnedAsset", 
+                               {
+                                   key: "customer.physicalAssets[].ownedAssetValue",
+                               }
                             ]
                         },
                             {
                                 key: "customer.financialAssets",
                                 title:"Financial Assets",
+                                type: "array",
+                                startEmpty: true,
                                 items: [
                                     {
                                         key:"customer.financialAssets[].instrumentType",
+                                         type:"select"
                                     },
                                     "customer.financialAssets[].nameOfInstitution",
                                     {
                                         key:"customer.financialAssets[].instituteType",
+                                        type:"select"
                                     },
                                     {
                                         key: "customer.financialAssets[].amountInPaisa",
@@ -527,6 +560,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     },
                                     {
                                         key:"customer.financialAssets[].frequencyOfDeposite",
+                                        type:"select"
                                     },
                                     {
                                         key:"customer.financialAssets[].startDate",
@@ -547,13 +581,16 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             {
                                 key:"customer.liabilities",
                                 type:"array",
+                                startEmpty: true,
                                 title:"Financial Liabilities",
                                 items:[
                                     {
-                                        key:"customer.liabilities[].loanType"
+                                        key:"customer.liabilities[].loanType",
+                                        type:"select"
                                     },
                                     {
-                                        key:"customer.liabilities[].loanSource"
+                                        key:"customer.liabilities[].loanSource",
+                                        type:"select"
                                     },
                                     "customer.liabilities[].instituteName",
                                     {
@@ -573,10 +610,12 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                         type:"date"
                                     },
                                     {
-                                        key:"customer.liabilities[].frequencyOfInstallment"
+                                        key:"customer.liabilities[].frequencyOfInstallment",
+                                        type:"select"
                                     },
                                     {
-                                        key:"customer.liabilities[].liabilityLoanPurpose"
+                                        key:"customer.liabilities[].liabilityLoanPurpose",
+                                        type:"select"
                                     }
                                 ]
                             }
@@ -626,8 +665,13 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                     },
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf31",
-                                        "type":"select"
-
+                                        "type":"select",
+                                        //"enumCode":"house_build_type",
+                                        "titleMap":{
+                                            "CONCRETE":"CONCRETE",
+                                            "MUD":"MUD",
+                                            "BRICK":"BRICK"
+                                        }
                                     },
                                     {
                                         key:"customer.udf.userDefinedFieldValues.udf32"
@@ -723,6 +767,7 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                             model.enrollmentAction = "SAVE";
                             $log.info(model);
                             var reqData = _.cloneDeep(model);
+
                             Enrollment.updateEnrollment(reqData, function (res, headers) {
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);

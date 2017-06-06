@@ -242,7 +242,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].loanPurpose2",
                                     "type":"select",
-                                    "parentEnumCode": "loan_purpose_1",
+                                    "parentEnumCode": (readonly ? undefined :  "loan_purpose_1"),
                                     /*"filter": {
                                         "parentCode as loan_purpose_1": "model.jlgGroupMembers[arrayIndex].loanPurpose1"
                                     },*/
@@ -251,7 +251,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                 {
                                     "key":"group.jlgGroupMembers[].loanPurpose3",
                                     "type":"select",
-                                    "parentEnumCode": "loan_purpose_2",
+                                    "parentEnumCode": (readonly ? undefined :  "loan_purpose_2"),
                                     /*"filter": {
                                         "parentCode as loan_purpose_2": "model.jlgGroupMembers[arrayIndex].loanPurpose2"
                                     },*/
@@ -265,7 +265,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                     "key":"group.jlgGroupMembers[].witnessRelationship",
                                     "type":"select",
                                     "readonly":readonly
-                                },
+                                }/*,
                                 {
                                     "key":"group.jlgGroupMembers[].getDSCData",
                                     "type":"button",
@@ -281,7 +281,7 @@ irf.commons.factory('groupCommons', ["SessionStore","formHelper","Groups","Pages
                                         var dscId = model.group.jlgGroupMembers[i].dscId;
                                         showDscData(dscId);
                                     }
-                                }
+                                }*/
 
                             ]
                         }

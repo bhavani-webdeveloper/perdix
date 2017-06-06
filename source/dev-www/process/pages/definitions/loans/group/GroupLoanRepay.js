@@ -50,7 +50,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         model.total += model.loanDemandScheduleDto[i].amount;
                     }
                 }
-
             } catch (err) {
                 console.error(err);
             }
@@ -96,6 +95,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         model._partnerCode = groupParams[0];
                         var axisRepayment = (groupParams[0] == "AXIS");
                         model.total = 0;
+
                         model.groupCode = groupParams[1];
                         model.ui = {
                             submissionDone: false
@@ -113,6 +113,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 var txName = (totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
 
                                 var aRepayment = {
+
                                     accountId: repData.accountId,
                                     demandAmount: parseInt(Number(repData.totalDemandDue)),
                                     payOffAmount: repData.payOffAmount,
@@ -127,12 +128,21 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                     urnNo: repData.urnNo,
                                     transactionName: txName,
                                     repaymentDate: Utils.getCurrentDate(),
-                                    equatedInstallment: repData.equatedInstallment,
+                                    equatedInstallment: Number(repData.equatedInstallment),
+                                    amount:repData.equatedInstallment,
                                     additional: {
-
                                         accountBalance: Number(repData.accountBalance)
                                     }
                                 };
+
+
+                                    if(txName == "Scheduled Demand"){
+                                       aRepayment.amount = Number(repData.totalDemandDue);
+                                    }
+                                    if(txName=="Advance Repayment"){
+                                        aRepayment.amount = Number(repData.equatedInstallment);
+                                    }
+
                                 if (typeof repData.customerName !== "undefined" && repData.customerName.length > 0) {
                                     aRepayment.additional.name = repData.customerName;
                                 } else {
@@ -150,11 +160,33 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                             }
                         } else {
                             model.loanDemandScheduleDto = _.cloneDeep(resp.loanDemandScheduleDto);
+                            model.total =0;
                             for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
-                                model.loanDemandScheduleDto[i].isAdvanceDemand = false;
-                                model.loanDemandScheduleDto[i].amount = 0;
-                            }
 
+                                var accountNumber=model.loanDemandScheduleDto[i].accountNumber;
+                                $log.info(accountNumber);
+
+                                /*LoanProcess.getAxisdemand( {
+                                  accountNumber: accountNumber
+                                }).$promise.then(function(data){
+                                    $log.info(data);
+                                    r=model.loanDemandScheduleDto[i];
+
+                                    $log.info(data.installmentAmountInPaisa/100);
+                                    $log.info(data.pendingAmountInPaisa/100);
+
+                                    r.installmentAmount=(data.installmentAmountInPaisa/100);;
+                                    r.pendingAmount=(data.pendingAmountInPaisa/100);
+                                });*/
+
+                                model.loanDemandScheduleDto[i].isAdvanceDemand = false;
+                                
+                                model.loanDemandScheduleDto[i].installmentAmountInPaisa =model.loanDemandScheduleDto[i].installmentAmountInPaisa/100;
+                                model.loanDemandScheduleDto[i].pendingAmountInPaisa =model.loanDemandScheduleDto[i].pendingAmountInPaisa/100;
+                                model.loanDemandScheduleDto[i].amount = model.loanDemandScheduleDto[i].pendingAmountInPaisa;
+                                model.total += model.loanDemandScheduleDto[i].amount;
+
+                            }
                         }
 
 
@@ -181,13 +213,18 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         "condition": "model._partnerCode=='AXIS'",
                         onChange: function(value, form, model) {
                             if (value) {
+                                model.total =0;
                                 for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
                                     model.loanDemandScheduleDto[i].isAdvanceDemand = true;
+                                    model.loanDemandScheduleDto[i].amount =model.loanDemandScheduleDto[i].installmentAmountInPaisa;
+                                    model.total += model.loanDemandScheduleDto[i].amount;
                                 }
                             } else {
-
+                                model.total = 0;
                                 for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
                                     model.loanDemandScheduleDto[i].isAdvanceDemand = false;
+                                    model.loanDemandScheduleDto[i].amount =model.loanDemandScheduleDto[i].pendingAmountInPaisa;
+                                    model.total += model.loanDemandScheduleDto[i].amount;
                                 }
                             }
                         }
@@ -219,12 +256,10 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         key: "repayments",
                         condition: "model._partnerCode!='AXIS'",
                         add: null,
-                        remove: null,
                         titleExpr: "model.repayments[arrayIndex].urnNo + ' : ' + model.repayments[arrayIndex].additional.name",
                         items: [{
                                 key: "repayments[].accountId",
                                 readonly: true
-
                             }, {
                                 key: "repayments[].customerName",
                                 readonly: true
@@ -237,7 +272,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                             }, {
                                 key: "repayments[].urnNo",
                                 readonly: true
-
                             }, {
                                 key: "repayments[].additional.accountBalance",
                                 title: "ACCOUNT_BALANCE",
@@ -256,6 +290,13 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 onChange: function(value, form, model) {
                                     var ai = form.arrayIndex;
                                     model.repayments[ai].amount = deriveAmount(value, model.repayments[ai]);
+                                    if(model.repayments[ai].transactionName== "Scheduled Demand"){
+                                       model.repayments[ai].amount = 0;
+                                    }
+                                    if(model.repayments[ai].transactionName=="Advance Repayment"){
+                                       model.repayments[ai].amount = model.repayments[ai].equatedInstallment;
+                                    }
+                                    
                                     updateTotal(model);
                                 }
                             }, {
@@ -271,9 +312,15 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 key: "repayments[].cashCollectionRemark",
                                 "type": "select",
                                 "titleMap": cashCollectionRemarks
-
                             },
-                            "repayments[].remarks", {
+                            {
+                            key: "repayments[].receiptNumber",
+                            "title":"Receipt Number",
+                            condition:"model.repayments[arrayIndex].cashCollectionRemark=='Receipt Number'",
+                           },
+
+                            "repayments[].remarks", 
+                            {
                                 key: "repayments[].repaymentDate",
                                 type: "date"
                             }
@@ -282,7 +329,6 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         "key": "loanDemandScheduleDto",
                         "condition": "model._partnerCode=='AXIS'",
                         "add": null,
-                        "remove": null,
                         "titleExpr": "model.loanDemandScheduleDto[arrayIndex].urnNo + ' : ' + model.loanDemandScheduleDto[arrayIndex].firstName",
                         "items": [{
                                 "key": "loanDemandScheduleDto[].accountNumber",
@@ -294,7 +340,21 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 "key": "loanDemandScheduleDto[].firstName",
                                 readonly: true
                             },
-
+                            {
+                                "key": "loanDemandScheduleDto[].scheduleDate",
+                                "title":"Schedule Date",
+                                readonly: true
+                            },
+                            {
+                                "key": "loanDemandScheduleDto[].installmentAmountInPaisa",
+                                "title":"Installment Amount",
+                                readonly: true
+                            },
+                            {
+                                "key": "loanDemandScheduleDto[].pendingAmountInPaisa",
+                                "title":"Pending Amount",
+                                readonly: true
+                            },
                             {
                                 "key": "loanDemandScheduleDto[].amount",
                                 "type": "amount",
@@ -303,7 +363,24 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                 }
 
                             }, {
-                                "key": "loanDemandScheduleDto[].isAdvanceDemand"
+                                "key": "loanDemandScheduleDto[].isAdvanceDemand",
+                                onChange: function(value, form, model) {
+                                    model.total = 0;
+                                for (var i = 0; i < model.loanDemandScheduleDto.length; i++) {
+
+                                    if(model.loanDemandScheduleDto[i].isAdvanceDemand){
+                                            model.loanDemandScheduleDto[i].amount =model.loanDemandScheduleDto[i].installmentAmountInPaisa;
+                                            model.total += model.loanDemandScheduleDto[i].amount;
+                                    }
+                                    else{
+                                        model.loanDemandScheduleDto[i].amount =model.loanDemandScheduleDto[i].pendingAmountInPaisa;
+                                        model.total += model.loanDemandScheduleDto[i].amount;
+                                    }
+                                   
+                                }
+                            
+                        }
+
                             }
 
 
@@ -548,61 +625,64 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                         };
 
                         if (model._partnerCode != "AXIS") {
-
                             var promise = [];
                             for (var i = 0; i < model.repayments.length; i++) {
-                                (function(i) {
-                                    var r = model.repayments[i];
-                                    var totalSatisfiedDemands = 0;
-                                    var pendingInstallment = 0;
-                                    promise[i] = LoanAccount.get({
-                                        accountId: r.accountId
-                                    }).$promise.then(function(resp) {
-                                        $log.info(resp);
-                                        if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
-                                            for (i = 0; i < resp.repaymentSchedule.length; i++) {
-                                                if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
-                                                    totalSatisfiedDemands++;
-                                                    $log.info("inc s");
-                                                } else if (resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') {
-                                                    pendingInstallment++;
-                                                    $log.info("inc p");
+                                if (model.repayments[i].amount != 0) {
+                                    (function(i) {
+                                        var r = model.repayments[i];
+                                        var totalSatisfiedDemands = 0;
+                                        var pendingInstallment = 0;
+                                        promise[i] = LoanAccount.get({
+                                            accountId: r.accountId
+                                        }).$promise.then(function(resp) {
+                                            $log.info(resp);
+                                            if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
+                                                for (i = 0; i < resp.repaymentSchedule.length; i++) {
+                                                    if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
+                                                        totalSatisfiedDemands++;
+                                                        $log.info("inc s");
+                                                    } else if (resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') {
+                                                        pendingInstallment++;
+                                                        $log.info("inc p");
+                                                    }
                                                 }
                                             }
-                                        }
-                                        $log.info(totalSatisfiedDemands);
-                                        $log.info(pendingInstallment);
-                                        r.totalSatisfiedDemands = totalSatisfiedDemands;
-                                        r.pendingInstallment = pendingInstallment;
-
-                                    });
-                                })(i);
+                                            $log.info(totalSatisfiedDemands);
+                                            $log.info(pendingInstallment);
+                                            r.totalSatisfiedDemands = totalSatisfiedDemands;
+                                            r.pendingInstallment = pendingInstallment;
+                                        });
+                                    })(i);
+                                }
                             }
 
                             $q.all(promise).finally(function() {
 
                                 for (var i = 0; i < model.repayments.length; i++) {
-                                    var r = model.repayments[i];
-                                    var repaymentInfo = {
-                                        'repaymentDate': r.repaymentDate,
-                                        'customerURN': r.urnNo,
-                                        'accountNumber': r.accountId,
-                                        'transactionType': r.transactionName,
-                                        'customerName': r.customerName,
-                                        'transactionID': r.paymentResponse.transactionId,
-                                        'demandAmount': r.demandAmount,
-                                        'amountPaid': r.amount,
-                                        'payOffAmount': r.payOffAmount,
-                                        'accountName': r.accountName,
-                                        'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
-                                        'productCode': r.productCode,
-                                    };
-
-                                    var pData = getPrintReceipt(repaymentInfo, opts);
-                                    pData.addLine("", {});
-                                    pData.addLine("", {});
-                                    fullPrintData.addLines(pData.getLines());
-                                    //'demandsPaidAndPending': (1 + r.numSatisifiedDemands) + " / " + parseInt(r.numDemands - r.numSatisifiedDemands)
+                                    if (model.repayments[i].amount != 0) {
+                                        var r = model.repayments[i];
+                                        var repaymentInfo = {
+                                            'repaymentDate': r.repaymentDate,
+                                            'customerURN': r.urnNo,
+                                            'accountNumber': r.accountId,
+                                            'transactionType': r.transactionName,
+                                            'customerName': r.customerName,
+                                            'transactionID': r.paymentResponse.transactionId,
+                                            'demandAmount': r.demandAmount,
+                                            'amountPaid': r.amount,
+                                            'payOffAmount': r.payOffAmount,
+                                            'accountName': r.accountName,
+                                            'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
+                                            'productCode': r.productCode,
+                                        };
+                                        $log.info(repaymentInfo);
+                                        var pData = getPrintReceipt(repaymentInfo, opts);
+                                        $log.info(pData);
+                                        pData.addLine("", {});
+                                        pData.addLine("", {});
+                                        fullPrintData.addLines(pData.getLines());
+                                        $log.info(fullPrintData);
+                                    }
                                 }
                                 cordova.plugins.irfBluetooth.print(function() {
                                     console.log("succc callback");
@@ -611,7 +691,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                                     console.log("errr collback");
                                 }, fullPrintData.getLines());
                             });
-                        } else 
+                        } else
                         {
                             var promise = [];
                             for (var i = 0; i < model.repaymentResponse.loanDemandScheduleDto.length; i++) {
@@ -900,10 +980,32 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                     $log.info("Inside submit");
                     console.log(formCtrl);
                     var reqData = _.cloneDeep(model);
+                    
+                    var repaymentsData = [];
+                    var loanDemandScheduleDtoData = [];
+                    if (reqData.repayments && reqData.repayments.length) {
+                        for (var i = 0; i < reqData.repayments.length; i++) {
+                            if (reqData.repayments[i].amount != 0) {
+                                repaymentsData.push(reqData.repayments[i]);
+                            }
+                        }
+                        reqData.repayments = repaymentsData;
+                    }
+                    if (reqData.loanDemandScheduleDto && reqData.loanDemandScheduleDto.length) {
+                        for (var i = 0; i < reqData.loanDemandScheduleDto.length; i++) {
+                            if (reqData.loanDemandScheduleDto[i].amount != 0) {
+                                loanDemandScheduleDtoData.push(reqData.loanDemandScheduleDto[i]);
+                            }
+                        }
+                        reqData.loanDemandScheduleDto = loanDemandScheduleDtoData;
+                    }
+                    
                     var msg = "";
                     if (model._partnerCode != "AXIS") {
+
                         reqData.advanceRepayment = false;
                         for (var i = 0; i < reqData.repayments.length; i++) {
+                            reqData.repayments[i].cashCollectionRemark= reqData.repayments[i].cashCollectionRemark + reqData.repayments[i].receiptNumber;
                             if (reqData.repayments[i].transactionName == "Advance Repayment" || reqData.repayments[i].transactionName == "Scheduled Demand") {
                                 //Check for advance repayments, if any
                                 if (reqData.repayments[i].transactionName == "Advance Repayment") {
@@ -937,6 +1039,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepay'), ["$log", "$q
                             console.log(resp);
                             try {
                                 alert(resp.response);
+
                                 model.repaymentResponse = resp;
                                 model.ui.submissionDone = true;
 

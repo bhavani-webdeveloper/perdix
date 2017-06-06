@@ -29,8 +29,6 @@
       "required":[  
          "family",
          "familyHouseholdExpense",
-         "familyHouseholdIncome",
-         "physicalAssets",
          "bankdetails",
          "physicalVerification",
          "fingerPrint",
@@ -104,7 +102,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "familyMemberMiddleName":{  
@@ -113,7 +112,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "familyMemberLastName":{  
@@ -122,7 +122,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "contributionToExpenditure":{  
@@ -130,14 +131,16 @@
                      "title":"CONTRIBUTION_TO_EXPENDITURE",
                      "minimum":0,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "healthStatus":{  
                      "title":"HEALTH_STATUS",
                      "type":"string",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "maritalStatus":{  
@@ -145,7 +148,8 @@
                      "title":"MARITAL_STATUS",
                      "refCodeCategory":"marital_status",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "relationShip":{  
@@ -153,7 +157,8 @@
                      "type":"string",
                      "refCodeCategory":"relation",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "gender":{  
@@ -166,7 +171,8 @@
                      ],
                      "refCodeCategory":"gender",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "dateOfBirth":{  
@@ -174,7 +180,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "educationStatus":{  
@@ -182,7 +189,8 @@
                      "type":"string",
                      "refCodeCategory":"education",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "mobilePhone":{  
@@ -191,7 +199,8 @@
                      "minLength":10,
                      "maxLength":10,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   }
                }
@@ -211,9 +220,9 @@
                   "expenditureSource":{  
                      "title":"Expenditure Source",
                      "type":"string",
-                     "refCodeCategory":"expenditure",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "annualExpenses":{  
@@ -222,7 +231,8 @@
                      "minimum":0,
                      "maximum":10000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "frequency":{  
@@ -230,7 +240,8 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   }
                }
@@ -251,7 +262,8 @@
                      "type":"string",
                      "refCodeCategory":"occupation",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "incomeEarned":{  
@@ -260,7 +272,8 @@
                      "minimum":0,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "frequency":{  
@@ -268,14 +281,16 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "monthsPerYear":{  
                      "title":"Per Year",
                      "type":"integer",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   }
                }
@@ -372,7 +387,8 @@
                      "type":"string",
                      "refCodeCategory":"liability_loan_type",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "loanSource":{  
@@ -380,7 +396,8 @@
                      "type":"string",
                      "refCodeCategory":"loan_source",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "instituteName":{  
@@ -389,7 +406,8 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "liabilityLoanPurpose":{  
@@ -397,7 +415,8 @@
                      "type":"string",
                      "refCodeCategory":"liability_loan_purpose",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "frequencyOfInstallment":{  
@@ -405,7 +424,8 @@
                      "type":"string",
                      "refCodeCategory":"frequency",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "loanAmountInPaisa":{  
@@ -414,7 +434,8 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "installmentAmountInPaisa":{  
@@ -423,7 +444,8 @@
                      "minimum":1,
                      "maximum":100000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "startDate":{  
@@ -431,7 +453,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   },
                   "maturityDate":{  
@@ -439,7 +462,8 @@
                      "type":"string",
                      "format":"date",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+						"Completed"
                      ]
                   }
                }
@@ -933,6 +957,13 @@
                      "Stage01"
                   ]
                },
+               "addressProofReverseImageId":{  
+                  "title":"addressProofReverseImageId",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01"
+                  ]
+               },
                "addressProofNo":{  
                   "title":"Address Proof Number",
                   "type":"string",
@@ -968,6 +999,13 @@
                },
                "identityProofImageId":{  
                   "title":"Identity Proof Image",
+                  "type":"string",
+                  "captureStages":[  
+                     "Stage01"
+                  ]
+               },
+               "identityProofReverseImageId":{  
+                  "title":"identityProofReverseImageId",
                   "type":"string",
                   "captureStages":[  
                      "Stage01"
@@ -1043,15 +1081,31 @@
             "items":{  
                "type":"object",
                "required":[  
-                  "ownedAssetDetails"
+                  "assetType"
                ],
                "properties":{  
                   "nameOfOwnedAsset":{  
                      "title":"Name Of Owned Asset",
                      "type":"string",
-                     "refCodeCategory":"asset",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
+                     ]
+                  },
+                   "assetType":{  
+                     "title":"Asset Type",
+                     "type":"string",
+                     "captureStages":[  
+                        "Stage02",
+                        "Completed"
+                     ]
+                  },
+                   "unit":{  
+                     "title":"Unit",
+                     "type":"string",
+                     "captureStages":[  
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "numberOfOwnedAsset":{  
@@ -1060,7 +1114,8 @@
                      "minimum":1,
                      "maximum":10000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "ownedAssetValue":{  
@@ -1069,22 +1124,24 @@
                      "minimum":1,
                      "maximum":1000000,
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "ownedAssetDetails":{  
                      "title":"Owned Asset Details",
                      "type":"string",
-                     "refCodeCategory":"asset",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   },
                   "address":{  
                      "title":"Address",
                      "type":"string",
                      "captureStages":[  
-                        "Stage02"
+                        "Stage02",
+                        "Completed"
                      ]
                   }
                }

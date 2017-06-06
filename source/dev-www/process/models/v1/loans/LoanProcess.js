@@ -18,6 +18,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             url:endpoint+'/:action/:param1/:param2',
             isArray:true
         },
+        getAxisdemand:{
+            method:'GET',
+            url:endpoint+'/axisdemands/{accountNumber}'
+        },
         post:{
             method:'POST',
             url:endpoint+'/:action',
