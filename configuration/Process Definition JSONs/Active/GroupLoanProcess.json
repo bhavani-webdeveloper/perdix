@@ -759,7 +759,16 @@
                      "captureStages":[
                         "CGT1"
                      ]
-                  }, "cgt1Remarks":{
+                  }, "cgt1EndPhoto":{
+                     "title":"CGT1 End Photo",
+                     "type":"String",
+                     "minimum":1,
+                     "maximum":100,
+                     "captureStages":[
+                        "CGT1"
+                     ]
+                  },
+				  "cgt1Remarks":{
                      "title":"CGT1 remarks",
                      "type":"String",
                      "minimum":1,
@@ -769,6 +778,12 @@
                      ]
                   }, "cgtDate1":{
                      "title":"CGT1 Date",
+                     "type":"String",
+                     "captureStages":[
+                        "CGT1"
+                     ]
+                  }, "cgtEndDate1":{
+                     "title":"CGT1 End Date",
                      "type":"String",
                      "captureStages":[
                         "CGT1"
@@ -808,7 +823,15 @@
                      "captureStages":[
                         "CGT2"
                      ]
-                  }, "cgt2Remarks":{
+                  },  "cgt2EndPhoto":{
+                     "title":"CGT2 End Photo",
+                     "type":"String",
+                     "minimum":1,
+                     "maximum":100,
+                     "captureStages":[
+                        "CGT1"
+                     ]
+                  },"cgt2Remarks":{
                      "title":"CGT2 remarks",
                      "type":"String",
                      "minimum":1,
@@ -821,6 +844,12 @@
                      "type":"String",
                      "captureStages":[
                         "CGT2"
+                     ]
+                  },"cgtEndDate2":{
+                     "title":"CGT2 End Date",
+                     "type":"String",
+                     "captureStages":[
+                        "CGT1"
                      ]
                   },
 				  "cgt3DoneBy":{
@@ -857,6 +886,14 @@
                      "captureStages":[
                         "CGT3"
                      ]
+                  }, "cgt3EndPhoto":{
+                     "title":"CGT3 End Photo",
+                     "type":"String",
+                     "minimum":1,
+                     "maximum":100,
+                     "captureStages":[
+                        "CGT1"
+                     ]
                   }, "cgt3Remarks":{
                      "title":"CGT3 remarks",
                      "type":"String",
@@ -870,6 +907,13 @@
                      "type":"String",
                      "captureStages":[
                         "CGT3"
+                     ]
+                  },
+				  "cgtEndDate3":{
+                     "title":"CGT3 End Date",
+                     "type":"String",
+                     "captureStages":[
+                        "CGT1"
                      ]
                   }
                }
@@ -920,6 +964,15 @@
                         "GRT"
                      ]
                   },
+				  "grtEndPhoto":{
+                     "title":"GRT End Photo",
+                     "type":"String",
+                     "minimum":1,
+                     "maximum":100,
+                     "captureStages":[
+                        "GRT"
+                     ]
+                  },
 				    "grtRemarks":{
                      "title":"GRT Remarks",
                      "type":"String",
@@ -931,6 +984,13 @@
                   },
 				    "grtDate":{
                      "title":"GRT Date",
+                     "type":"String",
+                     "captureStages":[
+                        "GRT"
+                     ]
+                  },
+				    "grtEndDate":{
+                     "title":"GRT End Date",
                      "type":"String",
                      "captureStages":[
                         "GRT"
