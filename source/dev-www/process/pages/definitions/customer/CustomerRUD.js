@@ -518,18 +518,19 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                {
                                    key: "customer.physicalAssets[].assetType",
                                    "title": "ASSET_TYPE",
+                                   "enumCode": "asset_type",
                                    type: "select"
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
                                    type:"select",
-                                   screenFilter: true,
+                                   "enumCode": "asset_Details",
                                    parentEnumCode:"asset_type",
                                    parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
                                    type: "select",
-                                   screenFilter: true,
+                                   "enumCode": "asset_unit",
                                    parentEnumCode:"asset_type",
                                    parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
                                },

@@ -165,7 +165,7 @@ function($log, formHelper, Enrollment,$state, SessionStore){
 								});
 							},
 							isApplicable: function(item, index){
-								if (item.currentStage==='Completed')
+								if (item.urnNo)
 									return true;
 								else return false;
 							}

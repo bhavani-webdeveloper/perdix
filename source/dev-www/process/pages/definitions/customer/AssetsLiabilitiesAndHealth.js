@@ -481,22 +481,23 @@ function($log,formHelper,Enrollment,$state, $stateParams, $q, irfProgressMessage
                                {
                                    key: "customer.physicalAssets[].assetType",
                                    "title": "ASSET_TYPE",
+                                   "enumCode": "asset_type",
                                    type: "select"
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
                                    type:"select",
-                                   screenFilter: true,
+                                   "enumCode": "asset_Details",
                                    parentEnumCode:"asset_type",
                                    parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
+                                   "enumCode": "asset_unit",
                                    type: "select",
-                                   screenFilter: true,
                                    parentEnumCode:"asset_type",
                                    parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
                                },
-                               "customer.physicalAssets[].numberOfOwnedAsset", 
+                               "customer.physicalAssets[].numberOfOwnedAsset",
                                {
                                    key: "customer.physicalAssets[].ownedAssetValue",
                                }
