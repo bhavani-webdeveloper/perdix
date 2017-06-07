@@ -97,7 +97,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
 
                         if(model.repayment.transactionName=='Scheduled Demand')
                         {
-                            model.repayment.amount= data.totalDemandDue + data.totalFeeDue;
+                            model.repayment.amount= parseFloat(data.totalDemandDue + data.totalFeeDue);
 
                         }
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
@@ -491,7 +491,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                             "amount": {
                                 "type": "string",
                                 "title": "AMOUNT"
-
                             },
                             "authorizationRemark": {
                                 "type": "string",
