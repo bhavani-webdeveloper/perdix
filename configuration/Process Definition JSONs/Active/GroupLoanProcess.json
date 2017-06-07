@@ -708,7 +708,21 @@
 					},
 					"isHouseVerificationDone": {
 						"title": "isHouseVerificationDone",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation"
+						]
+					},
+					"firstRepaymentDate": {
+						"title": "firstRepaymentDate",
 						"type": "boolean",
+						 "captureStages": [
+							"GroupCreation"
+						]
+					},
+					"scheduledDisbursementDate": {
+						"title": "scheduledDisbursementDate",
+						"type": "string",
 						 "captureStages": [
 							"GroupCreation"
 						]
