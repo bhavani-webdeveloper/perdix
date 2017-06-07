@@ -651,7 +651,68 @@
 					  "captureStages":[
 						"GroupCreation"
 					  ]
-				  }
+				  },
+				    "latitude": {
+					"title": "Latitude",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 100,
+					"captureStages": [
+					"GroupCreation"
+					]
+				 },
+					"longitude": {
+					"title": "Longitude",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 100,
+					"captureStages": [
+					"GroupCreation"
+					]
+				},
+				  "photoImageId1": {
+                            "title": "photoImageId1",
+                            "type": "string",
+                             "captureStages": [
+                               "GroupCreation"
+                            ]
+                        },
+					"photoImageId2": {
+						"title": "photoImageId2",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation"
+						]
+					},
+					"photoImageId3": {
+						"title": "photoImageId3",
+						"type": "string",
+						 "captureStages": [
+						   "GroupCreation"
+						]
+					},
+					
+					"photoImageId4": {
+						"title": "photoImageId4",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation"
+						]
+					},
+					"photoImageId5": {
+						"title": "photoImageId5",
+						"type": "string",
+						 "captureStages": [
+						   "GroupCreation"
+						]
+					},
+					"isHouseVerificationDone": {
+						"title": "isHouseVerificationDone",
+						"type": "boolean",
+						 "captureStages": [
+							"GroupCreation"
+						]
+					}
                }
             }
          },
