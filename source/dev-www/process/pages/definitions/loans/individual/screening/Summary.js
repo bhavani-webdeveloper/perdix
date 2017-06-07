@@ -526,45 +526,73 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        for (i in model.psychometricScores) {
+        // for (i in model.psychometricScores) {
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "Psychometric Score (Total: " + model.psychometricScores[i].totalScore + ") - " + model.psychometricScores[i].relation_detail,
+                title: "Psychometric Scores",
                 condition: "model.currentStage != 'ScreeningReview'",
                 items: [
                     {
                         type: "section",
                         colClass: "col-sm-12",
-                        html: '\
-                        <table class="table">\
-                            <colgroup>\
-                                <col width="60%">\
-                                <col width="20%">\
-                                <col width="20%">\
-                            </colgroup>\
-                            <thead>\
-                                <tr>\
-                                    <th>Category</th>\
-                                    <th>Score</th>\
-                                </tr>\
-                            </thead>\
-                            <tbody>\
-                                <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
-                                    <td>{{ rowData["Category Name"] }}</td>\
-                                    <td style="background: {{ rowData.color_hexadecimal }}"></td>\
-                                    <td>{{ rowData["Score"] }}</td>\
-                                </tr>\
-                            </tbody>\
-                        </table>\
-                        <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
-                        <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
-                        <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
-                        
+                        html: 
+                        // '\
+                        // <table class="table">\
+                        //     <colgroup>\
+                        //         <col width="60%">\
+                        //         <col width="20%">\
+                        //         <col width="20%">\
+                        //     </colgroup>\
+                        //     <thead>\
+                        //         <tr>\
+                        //             <th>Category</th>\
+                        //             <th>Score</th>\
+                        //         </tr>\
+                        //     </thead>\
+                        //     <tbody>\
+                        //         <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
+                        //             <td>{{ rowData["Category Name"] }}</td>\
+                        //             <td style="background: {{ rowData.color_hexadecimal }}"></td>\
+                        //             <td>{{ rowData["Score"] }}</td>\
+                        //         </tr>\
+                        //     </tbody>\
+                        // </table>\
+                        // <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
+                        // <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
+                        // <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
+                        '<div ng-init="_scores=model.psychometricScores">'+
+    //'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+    '<table class="table table-responsive">'+
+        // '<colgroup>'+
+        //     '<col width="25%">'+
+        //     '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
+        //     '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
+        // '</colgroup>'+
+        '<tbody>'+
+            '<tr>'+
+                '<th>Parameter Name</th>'+
+                '<th>Cut Off Score</th>'+
+                '<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>'+
+            '</tr>'+
+            '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
+                '<td >{{key}}</td>'+
+                '<td >{{value["Cut Off Score"]}}</td>' + 
+                '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
+               '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
+
+            '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
+                '<td >{{key}}</td>'+
+                '<td ></td>' + 
+                '<td ng-repeat-start="_score in _scores"></td>' + 
+                '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
+        '</tbody>'+
+    '</table>'+
+'</div>'
                     }
                 ]
             })
-        }
+       // }
 
         // form.push({
         //     type: "box",
