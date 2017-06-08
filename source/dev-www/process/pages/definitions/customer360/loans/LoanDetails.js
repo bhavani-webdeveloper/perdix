@@ -890,16 +890,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             }
                             ]
                         },
-                        {
-                            "type": "fieldset",
-                            "title": "REPAYMENT_SCHEDULE",
-                            "items": [{
-                                type: "section",
-                                colClass: "col-sm-12",
-                                html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.repaymentScheduleTblFormat'></irf-simple-summary-table>"
-                            }
-                            ]
-                        }] // END of box items
+                        ] // END of box items
                 },
                 // {
                 //     "type": "box",
