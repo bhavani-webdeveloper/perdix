@@ -28,7 +28,7 @@
          "order":3,
          "code":"Stage04",
          "name":"CGT 1",
-         "requiredIfLoanCycleLessThan":1,
+         "requiredIfLoanCycleLessThan":2,
          "stageType":"CGT",
          "allowedRoles":[
             "A",
@@ -40,7 +40,7 @@
          "order":4,
          "code":"Stage05",
          "name":"CGT 2",
-         "requiredIfLoanCycleLessThan":1,
+         "requiredIfLoanCycleLessThan":2,
          "stageType":"CGT",
          "allowedRoles":[
             "A",
