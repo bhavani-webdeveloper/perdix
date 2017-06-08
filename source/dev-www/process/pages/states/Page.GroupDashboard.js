@@ -45,16 +45,7 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
             'grt':{
                 name:'Stage07',
                 count:0
-            },
-            'ap':{
-                name:'StageAP',
-                count:0
-            },
-            'disbursement':{
-                name:'Stage08',
-                count:0
             }
-
         };
         var branchId = ""+SessionStore.getBranchId();
         angular.forEach(partners.data,function(partner){
@@ -70,8 +61,6 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
                         case 'cgt2': $scope.dashboardDefinition.items[3].data = stage.count; break;
                         case 'cgt3': $scope.dashboardDefinition.items[4].data = stage.count; break;
                         case 'grt': $scope.dashboardDefinition.items[5].data = stage.count; break;
-                        case 'ap': $scope.dashboardDefinition.items[7].data = stage.count; break;
-                        case 'disbursement': $scope.dashboardDefinition.items[8].data = stage.count; break;
                     }
 
                 },function(response){
@@ -81,24 +70,9 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope','PageHelper', '
                         case 'cgt2': $scope.dashboardDefinition.items[3].data = '-'; break;
                         case 'cgt3': $scope.dashboardDefinition.items[4].data = '-'; break;
                         case 'grt': $scope.dashboardDefinition.items[5].data = '-'; break;
-                        case 'ap': $scope.dashboardDefinition.items[7].data = '-'; break;
-                        case 'disbursement': $scope.dashboardDefinition.items[8].data = '-'; break;
                     }
                 });
             });
-
-        });
-
-        //dsc override list
-        Groups.getDscOverrideListHead({
-
-            
-        },function (resp,headerGetter) {
-            var headers = headerGetter();
-            $scope.dashboardDefinition.items[6].data = Number(headers['x-total-count']);
-
-        },function(resp){
-            $scope.dashboardDefinition.items[6].data = '-';
         });
     };
 
