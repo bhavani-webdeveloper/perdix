@@ -123,6 +123,17 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return true;
                                     }
+                                }, {
+                                    name: "FREEZE_ACCOUNT",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.UnmarkNPA',
+                                            pageId: [item.accountNumber,item.partner].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        return true;
+                                    }
                                 },
                             ];
                         }
