@@ -38,6 +38,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "JournalPostingDashboardCtrl"
 	},{
+		name: "Page.ReferenceCodeDashboard",
+		url: "/ReferenceCodeDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "ReferenceCodeDashboardCtrl"
+	},{
 		name: "Page.BIDashboard", // BI Dashboard
 		url: "/BIDashboard",
 		templateUrl: "process/pages/templates/Page.BIDashboard.html",
