@@ -125,7 +125,7 @@
                 "type": "boolean"
                 },
                 "linkedAccountNumber": {
-                    "type": "string"
+                    "type": ["null", "string"]
                 },
                 "applicationStatusUpdatedOn": {
                     "type": "string"
