@@ -2588,6 +2588,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             proceed: function(model, formCtrl, form, $event){
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
+                var nextStage = null;
                 /* TODO Call proceed servcie for the loan account */
                 if(isEnrollmentsSubmitPending()){
                     return;
@@ -2610,6 +2611,22 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
                         return;
+                    }
+
+                    /**
+                     * Move to Rejected if some proxy indicators are set as YES
+                     */
+                    if (_.hasIn(model.enterprise, "bribeOffered") && 
+                        _.hasIn(model.enterprise, "challengingChequeBounce") && 
+                        _.hasIn(model.enterprise, "politicalOrPoliceConnections") &&
+                        _.isString(model.enterprise.bribeOffered) &&
+                        _.isString(model.enterprise.challengingChequeBounce) &&
+                        _.isString(model.enterprise.politicalOrPoliceConnections) &&
+                        _.upperCase(model.enterprise.bribeOffered) === 'YES' && 
+                        _.upperCase(model.enterprise.challengingChequeBounce) === 'YES' && 
+                        _.upperCase(model.enterprise.politicalOrPoliceConnections) === 'YES'
+                        ){
+                        nextStage = 'Rejected';
                     }
                 }
 
@@ -2666,6 +2683,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
                     //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                    if (nextStage!=null){
+                        reqData.stage = nextStage;
+                    }
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     PageHelper.showLoader();
