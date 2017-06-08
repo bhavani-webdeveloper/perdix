@@ -658,7 +658,8 @@
 					"minLength": 1,
 					"maxLength": 100,
 					"captureStages": [
-					"GroupCreation"
+					"GroupCreation",
+                     "GRT"
 					]
 				 },
 					"longitude": {
@@ -667,28 +668,32 @@
 					"minLength": 1,
 					"maxLength": 100,
 					"captureStages": [
-					"GroupCreation"
+					"GroupCreation",
+                     "GRT"
 					]
 				},
 				  "photoImageId1": {
                             "title": "photoImageId1",
                             "type": "string",
                              "captureStages": [
-                               "GroupCreation"
+                               "GroupCreation",
+                     "GRT"
                             ]
                         },
 					"photoImageId2": {
 						"title": "photoImageId2",
 						"type": "string",
 						 "captureStages": [
-							"GroupCreation"
+							"GroupCreation",
+                     "GRT"
 						]
 					},
 					"photoImageId3": {
 						"title": "photoImageId3",
 						"type": "string",
 						 "captureStages": [
-						   "GroupCreation"
+						   "GroupCreation",
+                     "GRT"
 						]
 					},
 					
@@ -696,35 +701,40 @@
 						"title": "photoImageId4",
 						"type": "string",
 						 "captureStages": [
-							"GroupCreation"
+							"GroupCreation",
+                     "GRT"
 						]
 					},
 					"photoImageId5": {
 						"title": "photoImageId5",
 						"type": "string",
 						 "captureStages": [
-						   "GroupCreation"
+						   "GroupCreation",
+                     "GRT"
 						]
 					},
 					"isHouseVerificationDone": {
 						"title": "isHouseVerificationDone",
 						"type": "string",
 						 "captureStages": [
-							"GroupCreation"
+							"GroupCreation",
+                     "GRT"
 						]
 					},
 					"firstRepaymentDate": {
 						"title": "firstRepaymentDate",
-						"type": "boolean",
+						"type": "string",
 						 "captureStages": [
-							"GroupCreation"
+							"GroupCreation",
+                     "GRT"
 						]
 					},
 					"scheduledDisbursementDate": {
 						"title": "scheduledDisbursementDate",
 						"type": "string",
 						 "captureStages": [
-							"GroupCreation"
+							"GroupCreation",
+                     "GRT"
 						]
 					}
                }
