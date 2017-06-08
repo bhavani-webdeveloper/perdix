@@ -915,7 +915,7 @@
                   "title":"collectionPaymentType",
                   "type":"string",
                   "captureStages":[
-                     "Application", "Screening", "LoanInitiation","DocumentUpload"
+                     "Application", "Screening", "FieldAppraisal", "LoanInitiation","DocumentUpload"
                   ]
                },
                "status": {
