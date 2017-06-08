@@ -167,7 +167,35 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 }
             })
         }
-
+        // Psychometric Required for applicants & co-applicants
+        if (_.isArray(loanAccount.loanCustomerRelations)) {
+            var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+            for (i in loanAccount.loanCustomerRelations) {
+                if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                    if (_.isArray(enterpriseCustomerRelations)) {
+                        var psychometricRequiredUpdated = false;
+                        for (j in enterpriseCustomerRelations) {
+                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
+                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                                psychometricRequiredUpdated = true;
+                            }
+                        }
+                        if (!psychometricRequiredUpdated) {
+                            loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                        }
+                    } else {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                    }
+                } else {
+                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                }
+                if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
+                    loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
+                }
+            }
+        }
         
         return true;
     }
