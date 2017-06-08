@@ -145,7 +145,7 @@ irf.pageCollection.factory("Pages__Cgt2", ["$log","authService","Groups","$state
                     var userData = irfStorageService.retrieveJSON('UserData');
                     var reqData = {
                         "cgtDate": model.group.cgtDate2,
-                        "cgtDoneBy": model.group.cgtDate2+'-'+userData.userName,
+                        "cgtDoneBy": model.group.cgt2DoneBy+'-'+userData.userName,
                         "groupCode": model.group.groupCode,
                         "latitude": model.group.cgt2Latitude,
                         "longitude": model.group.cgt2Longitude,
