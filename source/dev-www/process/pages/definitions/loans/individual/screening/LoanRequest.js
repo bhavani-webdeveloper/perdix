@@ -2622,10 +2622,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         _.isString(model.enterprise.bribeOffered) &&
                         _.isString(model.enterprise.challengingChequeBounce) &&
                         _.isString(model.enterprise.politicalOrPoliceConnections) &&
-                        _.upperCase(model.enterprise.bribeOffered) === 'YES' && 
-                        _.upperCase(model.enterprise.challengingChequeBounce) === 'YES' && 
-                        _.upperCase(model.enterprise.politicalOrPoliceConnections) === 'YES'
-                        ){
+                        (
+                            _.upperCase(model.enterprise.bribeOffered) === 'YES' ||
+                            _.upperCase(model.enterprise.challengingChequeBounce) === 'YES' ||
+                            _.upperCase(model.enterprise.politicalOrPoliceConnections) === 'YES'
+                        )){
                         nextStage = 'Rejected';
                     }
                 }
