@@ -37,7 +37,6 @@
 						"Page/Offline/Grt"
 					]
 				},
-				"Page/Engine/DscOverrideQueue",
 				"Page/Engine/ApplicationPendingQueue",
 				"Page/Engine/JLGDisbursementQueue",
 				"Page/Engine/CloseGroup",
