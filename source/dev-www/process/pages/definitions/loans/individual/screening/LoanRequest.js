@@ -1628,7 +1628,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 key: "loanAccount.nominees[].nomineePincode",
                                 type: "lov",
                                 "title":"PIN_CODE",
-                                fieldType: "number",
+                                fieldType: "text",
+                                "inputmode": "number",                               
                                 required: true,
                                 autolov: true,
                                 inputMap: {

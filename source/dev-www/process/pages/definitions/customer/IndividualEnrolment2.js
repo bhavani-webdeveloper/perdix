@@ -1223,7 +1223,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                         {
                                             key: "customer.mailingPincode",
                                             type: "lov",
-                                            fieldType: "string",
+                                            "inputmode": "number",
                                             autolov: true,
                                             inputMap: {
                                                 "mailingPincode": "customer.mailingPincode",
@@ -2206,6 +2206,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                                     type: "amount",
                                                     calculator: true,
+                                                    creditDebitBook: true,
                                                     required:true,
                                                     title: "TOTAL_DEPOSITS"
                                                 },

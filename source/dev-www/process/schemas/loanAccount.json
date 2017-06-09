@@ -903,7 +903,7 @@
                                 "type": ["boolean", "null"]
                             },
                             "nomineePincode": {
-                                "type": ["number", "null"]
+                                "type": ["integer", "string", "null"]
                             },
                             "nomineeRelationship": {
                                 "type": ["string", "null"],
