@@ -230,22 +230,42 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
         			"on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
         			},
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        console.log("custome rloaded :: " + params.customer.firstName);
+                        if (pageObj.pageClass =='applicant'){
+                            BundleManager.broadcastEvent("applicant-updated", params.customer);
+                        }
+                    },
                     "new-enrolment": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
                             case 'applicant':
                                 $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
                                 break;
                             case 'co-applicant':
                                 $log.info("New co-applicant");
+                                if (!_.hasIn(bundleModel, 'coApplicants')) {
+                                    bundleModel.coApplicants = [];
+                                }
+                                BundleManager.broadcastEvent("new-co-applicant", params);
+                                bundleModel.coApplicants.push(params.customer);
                                 break;
                             case 'guarantor':
                                 $log.info("New guarantor");
+                                if (!_.hasIn(bundleModel, 'guarantors')){
+                                    bundleModel.guarantors = [];
+                                }
+                                bundleModel.guarantors.push(params.guarantor);
                                 break;
                             case 'business':
-                                $log.info("New Business");
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
                                 break;
                             default:
                                 $log.info("Unknown page class");
+                                break;
 
                         }
                     },
