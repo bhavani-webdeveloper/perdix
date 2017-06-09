@@ -67,7 +67,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                         for(var idx = 0; idx < participantIds.length; idx++){
 
-                            _testOfTheParticipant = $filter('filter')(tests, {participantId: participantIds[idx], cleared: true}, true);
+                            _testOfTheParticipant = $filter('filter')(tests, {participantId: participantIds[idx]}, true);
 
                             if(_testOfTheParticipant.length === 0) {
                                 //if there is no Psychometric tests for either Applicant or any of the CO-Applicant eligible for test, 
