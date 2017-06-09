@@ -76,7 +76,7 @@ irf.models.factory('Psychometric',
             isArray: true
         },
         findTests: {
-             method: 'GET',
+            method: 'GET',
             url: endpoint + '/findTests',
             isArray: true
         }

@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("psychometric.Queue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	"Psychometric", "PsychometricTestService", "PageHelper", "irfSimpleModal", "Queries",
+	"Psychometric", "PsychometricTestService", "PageHelper", "irfSimpleModal", "Queries", "$filter",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons,
-		Psychometric, PsychometricTestService, PageHelper, irfSimpleModal, Queries) {
+		Psychometric, PsychometricTestService, PageHelper, irfSimpleModal, Queries, $filter) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
@@ -267,6 +267,9 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 									$showLoader: true
 								};
 
+								var participantWithValidTest = [], participantIds;
+								var psychometricTestValidDays = null;
+
 								IndividualLoan.get({id: item.loanId}).$promise.then(function(loanAccount) {
 									participantModel.loanCustomerRelations = loanAccount.loanCustomerRelations;
 									if (_.isArray(participantModel.loanCustomerRelations)) {
@@ -275,19 +278,61 @@ irf.pageCollection.factory(irf.page("psychometric.Queue"),
 											ids.push(participantModel.loanCustomerRelations[i].customerId);
 										}
 									}
+									participantIds = ids;
 									return Queries.getCustomerBasicDetails({ids:ids});
 								}).then(function(basicDetails) {
 									for (i in participantModel.loanCustomerRelations) {
 										participantModel.loanCustomerRelations[i].customerName = basicDetails.ids[participantModel.loanCustomerRelations[i].customerId].first_name;
 									}
 								}).finally(function() {
-									participantModel.$showLoader = false;
+
+									Queries.getGlobalSettings('psychometricTestValidDays', true).then(function(resp) {
+							            psychometricTestValidDays = angular.isDefined(resp) ? _.clone(resp) : 0;
+							            if(angular.isDefined(psychometricTestValidDays) &&  psychometricTestValidDays != 0 &&  participantIds && participantIds.length > 0){
+							            	Psychometric.findTests({'participantIds': participantIds}).$promise.then(function(resp){
+							            		var tests = resp;
+							                    var _testOfTheParticipant, testDate, diff;
+							                    if(tests.length > 0) {
+
+							                        for(var idx = 0; idx < participantIds.length; idx++){
+
+							                            _testOfTheParticipant = $filter('filter')(tests, {participantId: participantIds[idx]}, true);
+
+							                            if(_testOfTheParticipant.length !== 0) {
+							                                for (var i = 0; i < _testOfTheParticipant.length; i++ ) {
+							                                    //Tests of the current Loan participant (ie:- Applicant or CoApplicant) is validated against
+							                                    //psychometricTestvalidDays. If any one test is valid, the Psychometric test is marked as COMPLETED.
+							                                    if (_testOfTheParticipant[i].submittedAt && moment().diff(moment(_testOfTheParticipant[i].submittedAt, SessionStore.getSystemDateFormat()), 'days') <= psychometricTestValidDays){
+							                                        participantWithValidTest.push(participantIds[idx]);
+							                                        break;
+							                                    }
+							                                }
+							                            }
+							                        }
+							                    }
+							            	}).finally(function(){
+							            		participantModel.$showLoader = false;
+							            	});
+							            } else {
+							            	participantModel.$showLoader = false;
+							            }
+							        }, function(){
+							        	participantModel.$showLoader = false;
+							        });
+									
 								});
 
 								var modalInstance = irfSimpleModal('Choose a participant', participantBodyHtml, participantModel);
 								modalInstance.result.then(function(result) {
 									if (_.isArray(result) && result.length == 2) {
-										startPsychometricTest(result[0], result[1]);
+										if(participantWithValidTest.indexOf(result[0]) > -1 && psychometricTestValidDays){
+											Utils.confirm("You have already taken a test within last " + psychometricTestValidDays + " days. Are You Sure want to continue?")
+											.then(function(){
+												startPsychometricTest(result[0], result[1]);
+											})
+										} else {
+											startPsychometricTest(result[0], result[1]);
+										}
 									}
 								});
 							},
