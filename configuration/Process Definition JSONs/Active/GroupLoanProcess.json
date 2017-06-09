@@ -853,7 +853,7 @@
                      "minimum":1,
                      "maximum":100,
                      "captureStages":[
-                        "CGT1"
+                        "CGT2"
                      ]
                   },"cgt2Remarks":{
                      "title":"CGT2 remarks",
@@ -873,7 +873,7 @@
                      "title":"CGT2 End Date",
                      "type":"String",
                      "captureStages":[
-                        "CGT1"
+                        "CGT2"
                      ]
                   },
 				  "cgt3DoneBy":{
@@ -916,7 +916,7 @@
                      "minimum":1,
                      "maximum":100,
                      "captureStages":[
-                        "CGT1"
+                        "CGT3"
                      ]
                   }, "cgt3Remarks":{
                      "title":"CGT3 remarks",
@@ -937,7 +937,7 @@
                      "title":"CGT3 End Date",
                      "type":"String",
                      "captureStages":[
-                        "CGT1"
+                        "CGT3"
                      ]
                   }
                }
