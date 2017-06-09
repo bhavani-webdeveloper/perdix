@@ -116,6 +116,7 @@
             "maxItems":null,
             "items":null,
             "required":[
+		"centreCode"
             ],
             "properties":{
                "partnerCode":{
