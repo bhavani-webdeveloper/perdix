@@ -225,7 +225,7 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucDone": {
+                        "cmDone": {
                             "title": "Luc Done",
                             "type": "string",
                             "minLength": 1,
@@ -237,8 +237,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucRescheduled": {
-                            "title": "lucRescheduled",
+                        "cmRescheduled": {
+                            "title": "cmRescheduled",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -247,8 +247,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucRescheduleReason": {
-                            "title": "lucRescheduleReason",
+                        "cmRescheduleReason": {
+                            "title": "cmRescheduleReason",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -257,8 +257,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucRescheduledDate": {
-                            "title": "lucRescheduledDate",
+                        "cmRescheduledDate": {
+                            "title": "cmRescheduledDate",
                             "type": "date",
                             "captureStages": [
                                 "CMSchedule",
@@ -267,8 +267,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucEscalated": {
-                            "title": "lucEscalated",
+                        "cmEscalated": {
+                            "title": "cmEscalated",
                             "type": "string",
                             "captureStages": [
                                 "CMSchedule",
@@ -277,8 +277,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucEscalatedReason": {
-                            "title": "lucEscalatedReason",
+                        "cmEscalatedReason": {
+                            "title": "cmEscalatedReason",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
@@ -391,8 +391,8 @@
                                 "CMLegalRecovery"
                             ]
                         },
-                        "lucDate": {
-                            "title": "lucDate",
+                        "cmDate": {
+                            "title": "cmDate",
                             "type": "date",
                              "captureStages": [
                                 "CMSchedule",

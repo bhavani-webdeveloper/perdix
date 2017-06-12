@@ -1,11 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"), 
-	["$log", "formHelper", "CreditMonitoring", "$state", "SessionStore", "Utils",
+irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringRiskQueue"), ["$log", "formHelper", "CreditMonitoring", "$state", "SessionStore", "Utils",
 	function($log, formHelper, CreditMonitoring, $state, SessionStore, Utils) {
-		var branch = SessionStore.getCurrentBranch();
-		$log.info(branch.branchName);
+
 		return {
 			"type": "search-list",
-			"title": "CREDIT_MONITORING_LEGAL_AND_RECOVERY_QUEUE",
+			"title": "CREDIT_MONITORING_RISK_QUEUE",
 			initialize: function(model, form, formCtrl) {
 				$log.info("luc Schedule Queue got initialized");
 			},
@@ -43,19 +41,21 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				getResultsPromise: function(searchOptions, pageOpts) { 
 				var branch = SessionStore.getCurrentBranch();
 		        var centres = SessionStore.getCentres();
 		        var centreId=[];
-		        if (centres && centres.length) {
-						for (var i = 0; i < centres.length; i++) {
-							centreId.push(centres[i].centreId);
-						}
-				}
+		         if(centres && centres.length)
+		        {
+		        	for (var i = 0; i < centres.length; i++) {
+			        centreId.push(centres[i].centreId);
+		        }
+
+		        }
 
 					var promise = CreditMonitoring.search({
 						'accountNumber': searchOptions.accountNumber,
-						'currentStage':"lucLegalRecovery",
+						'currentStage':"LUCEscalate",
 						'centreId': centreId[0],
 						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
@@ -116,7 +116,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 							title: 'Loan Id',
 							data: 'loanId'
 						},{
-							title: 'CreditMonitoring Date',
+							title: 'LUC Date',
 							data: 'lucDate'
 						},{
 							title: 'Escalated Reason',
@@ -125,7 +125,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 					},
 					getActions: function() {
 						return [{
-							name: "Capture CreditMonitoring Data",
+							name: "Capture Credit Monitoring Data",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

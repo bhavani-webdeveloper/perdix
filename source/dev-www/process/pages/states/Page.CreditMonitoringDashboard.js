@@ -9,6 +9,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringScheduleQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue",
+                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue",
             ]
         };
 
@@ -61,6 +62,23 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 creditMonitoring.search({
                     'accountNumber': '',
                     'currentStage': "CreditMonitoringLegalRecoveryQueue",
+                    'centreId': centreId[0],
+                    'branchName': branch.branchName,
+                    'page': 1,
+                    'per_page': 1,
+                    'applicantName': '',
+                    'businessName': '',
+                }).$promise.then(function(response, headerGetter) {
+                    lsqMenu.data = response.headers['x-total-count'];
+                }, function() {
+                    lsqMenu.data = '-';
+                });
+            },
+            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue"];
+            if (lsqMenu) {
+                creditMonitoring.search({
+                    'accountNumber': '',
+                    'currentStage': "CreditMonitoringRiskQueue",
                     'centreId': centreId[0],
                     'branchName': branch.branchName,
                     'page': 1,
