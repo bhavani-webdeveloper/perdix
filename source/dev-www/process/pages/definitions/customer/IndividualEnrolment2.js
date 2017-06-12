@@ -2207,13 +2207,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),
                                                     type: "amount",
                                                     calculator: true,
                                                     creditDebitBook: true,
+                                                    onDone: function(result, model, context){
+                                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
+                                                            model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
+                                                    },
                                                     required:true,
                                                     title: "TOTAL_DEPOSITS"
                                                 },
                                                 {
                                                     key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                                     type: "amount",
-                                                    calculator: true,
                                                     title: "TOTAL_WITHDRAWALS"
                                                 },
                                                 {
