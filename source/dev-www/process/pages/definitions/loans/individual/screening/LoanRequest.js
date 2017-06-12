@@ -2636,6 +2636,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 }
 
+                var confirmationMsg = "Are You Sure?";
+
                 if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
@@ -2657,6 +2659,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             _.upperCase(model.enterprise.politicalOrPoliceConnections) === 'YES'
                         )){
                         nextStage = 'Rejected';
+                        confirmationMsg = "Loan Application will be Auto-Rejected due to negative Proxy Indicators. Are you sure to proceed?"
                     }
                 }
 
@@ -2707,7 +2710,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     return;
                 }
 
-                Utils.confirm("Are You Sure?").then(function(){
+                Utils.confirm(confirmationMsg).then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
