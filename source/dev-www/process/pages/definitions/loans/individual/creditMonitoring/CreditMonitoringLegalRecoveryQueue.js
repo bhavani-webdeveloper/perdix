@@ -1,14 +1,17 @@
-irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringScheduleQueue"), ["$log", "formHelper", "CreditMonitoring", "$state", "SessionStore", "Utils",
+irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue"), 
+	["$log", "formHelper", "CreditMonitoring", "$state", "SessionStore", "Utils",
 	function($log, formHelper, CreditMonitoring, $state, SessionStore, Utils) {
-
+		var branch = SessionStore.getCurrentBranch();
+		$log.info(branch.branchName);
 		return {
 			"type": "search-list",
-			"title": "CREDIT_MONITORING_SCHEDULED_QUEUE",
+			"title": "CREDIT_MONITORING_LEGAL_AND_RECOVERY_QUEUE",
+			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("creditMonitoring Schedule Queue got initialized");
+				$log.info("luc Schedule Queue got initialized");
 			},
 			definition: {
-				title: "SEARCH_CREDIT_MONITORING",
+				title: "SEARCH CUSTOMER",
 				searchForm: [
 					"*"
 				],
@@ -17,68 +20,48 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
-						"branchName": {
-							"title": "HUB_NAME",
-							"type": "string",
-							"enumCode": "branch",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true
-							}
-						},
-						"centreId": {
-							"title": "SPOKE_NAME",
-							"type": "number",
-							"enumCode": "centre",
-							"x-schema-form": {
-								"type": "select",
-								"parentEnumCode": "branch",
-								"screenFilter": true
-							}
-						},
 						"applicantName": {
 							"title": "APPLICANT_NAME",
 							"type": "string"
 						},
 						"businessName": {
 							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
-						"lucScheduledDate": {
-							"title": "CREDIT_MONITORING_SCHEDULED_DATE",
-							"type": "string",
-							"x-schema-form": {
-								"type": "date"
-							}
+							"type": "number"
 						},
 						"accountNumber": {
 							"title": "LOAN_ACCOUNT_NUMBER",
-							"type": "string"
+							"type": "number"
 						},
+						"lucScheduledDate": {
+							"title": "CREDIT_MONITORING_SCHEDULED_DATE",
+							"type": "number"
+						},
+
 					},
 					"required": ["LoanAccountNumber"]
 				},
+				
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
-				getResultsPromise: function(searchOptions, pageOpts) {
-					var branch = SessionStore.getCurrentBranch();
-					var centres = SessionStore.getCentres();
-					var centreId = [];
-					if (centres && centres.length) {
+				getResultsPromise: function(searchOptions, pageOpts) { /* Should return the Promise */
+				var branch = SessionStore.getCurrentBranch();
+		        var centres = SessionStore.getCentres();
+		        var centreId=[];
+		        if (centres && centres.length) {
 						for (var i = 0; i < centres.length; i++) {
 							centreId.push(centres[i].centreId);
 						}
-					}
+				}
+
 					var promise = CreditMonitoring.search({
 						'accountNumber': searchOptions.accountNumber,
-						'currentStage': "creditMonitoringSchedule",
-						'lucScheduledDate': searchOptions.lucScheduledDate,
+						'currentStage':"lucLegalRecovery",
 						'centreId': centreId[0],
 						'branchName': branch.branchName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
-						'applicantName': searchOptions.applicationName,
+						'applicantName': searchOptions.applicantName,
 						'businessName': searchOptions.businessName,
 					}).$promise;
 
@@ -133,17 +116,18 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 						}, {
 							title: 'Loan Id',
 							data: 'loanId'
-						}, {
-							title: 'Disbursement Date',
-							data: 'disbursementDate'
-						}, {
-							title: 'creditMonitoring Date',
+						},{
+							title: 'CreditMonitoring Date',
 							data: 'lucDate'
+						},{
+							title: 'Escalated Reason',
+							data: 'lucEscalatedReason'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "Capture Credit Monitoring Data",
+							name: "Capture CreditMonitoring Data",
+							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								$state.go("Page.Engine", {

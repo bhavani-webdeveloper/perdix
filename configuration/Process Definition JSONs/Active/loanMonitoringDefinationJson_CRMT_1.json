@@ -89,10 +89,10 @@
                             "minLength": 1,
                             "maxLength": 100,
                             "captureStages": [
+                                "CMLegalRecovery"
                                 "CMSchedule",
                                 "CMEscalate",
                                 "CMReschedule",
-                                "CMLegalRecovery"
                             ]
                         },
                         "loanProductName": {
@@ -342,17 +342,7 @@
                                 "CMReschedule",
                                 "CMLegalRecovery"
                             ]
-                        },
-                        "socialImpactDetailsId": {
-                            "title": "socialImpactDetailsId",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
+                        },                       
                         "proprietoryName": {
                             "title": "proprietoryName",
                             "type": "string",
@@ -851,223 +841,7 @@
                         }
                     }
                 }
-            },
-            "socialImpactDetails": {
-                "title": "Social Impact Details",
-                "type": "object",
-                "items": {
-                    "type": "object",
-                    "required": [
-                  
-                    ],
-                    "properties": {
-                        "totalNumberOfMen": {
-                            "title": "totalNumberOfMen",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "averageSalaryOfMen": {
-                            "title": "averageSalaryOfMen",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "menPartTimeEmployee": {
-                            "title": "menPartTimeEmployee",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "menFullTimeEmployee": {
-                            "title": "menFullTimeEmployee",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "avgSkillLevelOfMen": {
-                            "title": "avgSkillLevelOfMen",
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 100,
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "noOfFirstJobsMen": {
-                            "title": "noOfFirstJobsMen",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "totalNumberOfWomen": {
-                            "title": "totalNumberOfWomen",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "averageSalaryOfWomen": {
-                            "title": "averageSalaryOfWomen",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "womenPartTimeEmployee": {
-                            "title": "womenPartTimeEmployee",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "womenFullTimeEmployee": {
-                            "title": "womenFullTimeEmployee",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "avgSkillLevelOfWomen": {
-                            "title": "avgSkillLevelOfWomens",
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 100,
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "noOfFirstJobsWomen": {
-                            "title": "noOfFirstJobsWomen",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "preLoanMonthlyRevenue": {
-                            "title": "preLoanMonthlyRevenue",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "preLoanMonthlyNetIncome": {
-                            "title": "preLoanMonthlyNetIncome",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "preLoanProprietorSalary": {
-                            "title": "preLoanProprietorSalary",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "preLoanNumberOfCustomersOrBuyers": {
-                            "title": "preLoanNumberOfCustomersOrBuyers",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "postLoanMonthlyRevenue": {
-                            "title": "postLoanMonthlyRevenue",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "postLoanMonthlyNetIncome": {
-                            "title": "postLoanMonthlyNetIncome",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "postLoanProprietorSalary": {
-                            "title": "postLoanProprietorSalary",
-                            "type": "number",
-                            "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        },
-                        "postLoanNumberOfCustomersOrBuyers": {
-                            "title": "postLoanNumberOfCustomersOrBuyers",
-                            "type": "number",
-                             "captureStages": [
-                                "CMSchedule",
-                                "CMEscalate",
-                                "CMReschedule",
-                                "CMLegalRecovery"
-                            ]
-                        }
-                    }
-                }
-            },
+            },           
             "machineDetails": {
                 "title": "Machine Details",
                 "type": "array",
