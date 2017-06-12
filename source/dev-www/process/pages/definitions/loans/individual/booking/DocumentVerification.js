@@ -86,6 +86,78 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         title: "BRANCH_NAME"
                     }]
                 }]
+            },{
+                "type":"box",
+                "title":"ACH_ACCOUNT_DETAILS",
+                readonly: true,
+                "condition":"model.loanAccount.collectionPaymentType=='ACH'",
+                "items":[{
+                        "key": "loanAccount.collectionCustomerNameAsInBank",
+                        "title": "ACCOUNT_HOLDER_NAME",
+                    },{
+                        "key": "loanAccount.collectionAccountNumber",
+                        "title": "CUSTOMER_BANK_ACC_NO",
+                        type: "lov",
+                        autolov: true,
+                        bindMap: {
+                            "customerId": "loanAccount.customerId"
+                        },
+                        outputMap: {
+                            "account_number": "loanAccount.collectionAccountNumber",
+                            "ifsc_code": "loanAccount.collectionIfscCode",
+                            "customer_bank_name": "loanAccount.collectionBankName",
+                            "customer_bank_branch_name": "loanAccount.collectionBankBranchName",
+                            "customer_name_as_in_bank":"loanAccount.collectionCustomerNameAsInBank",
+                            "account_type": "loanAccount.collectionAccountType"
+                        },
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model) {
+                            var urn = [];
+                            var ids = [];
+                            for(var i =0; i <model.loanAccount.loanCustomerRelations.length; i++)
+                            {
+                                if (model.loanAccount.loanCustomerRelations[i].urn)
+                                    urn.push(model.loanAccount.loanCustomerRelations[i].urn);
+                                else if (model.loanAccount.loanCustomerRelations[i].customerId)
+                                    ids.push(model.loanAccount.loanCustomerRelations[i].customerId)
+                            }
+                            if (model.loanAccount.urnNo !=null)
+                                urn.push(model.loanAccount.urnNo);
+                            ids.push(model.loanAccount.customerId);
+                            return Queries.getCustomersBankAccounts({
+                               customer_urns : urn,
+                               customer_ids : ids
+                            });
+                        },
+                        onSelect: function(result, model, context) {
+                           
+                        },
+
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                'Account Number : ' +item.account_number,
+                                'Branch : ' + item.customer_bank_branch_name,
+                                'Bank : ' + item.customer_bank_name,
+                                'IFSC Code : ' + item.ifsc_code
+                            ];
+                        }
+                    },{
+                            "key": "loanAccount.collectionAccountType",
+                            "title": "ACCOUNT_TYPE",
+                            "type": "select",
+                            "enumCode": "ach_account_type"
+
+                    },{
+                        "key": "loanAccount.collectionIfscCode",
+                        "title": "IFSC_CODE",
+                    },{
+                        "key": "loanAccount.collectionBankName",
+                        "title": "BANK_NAME",
+                    },{
+                        "key": "loanAccount.collectionBankBranchName",
+                        "title": "HUB_NAME",
+                    }
+                ]
             },
             {
                 "type": "box",
