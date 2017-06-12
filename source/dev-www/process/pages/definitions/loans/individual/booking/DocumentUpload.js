@@ -295,7 +295,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             "ifsc_code": "loanAccount.collectionIfscCode",
                             "customer_bank_name": "loanAccount.collectionBankName",
                             "customer_bank_branch_name": "loanAccount.collectionBankBranchName",
-                            "customer_name_as_in_bank":"loanAccount.collectionCustomerNameAsInBank"
+                            "customer_name_as_in_bank":"loanAccount.collectionCustomerNameAsInBank",
+                            "account_type": "loanAccount.collectionAccountType"
                         },
                         searchHelper: formHelper,
                         search: function(inputModel, form, model) {
@@ -328,6 +329,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                 'IFSC Code : ' + item.ifsc_code
                             ];
                         }
+                    },{
+                            "key": "loanAccount.collectionAccountType",
+                            "title": "ACCOUNT_TYPE",
+                            "type": "select",
+                            "enumCode": "ach_account_type"
+
                     },{
                         "key": "loanAccount.collectionIfscCode",
                         "title": "IFSC_CODE",

@@ -67,15 +67,17 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 
 							model.ach.maximumAmount = parseInt(model.achIndividualLoanSearch.maxEmi);
 							model.ach.maximumAmount = model.ach.maximumAmount.toString();
-							//model.ach.ifscCode = model.achIndividualLoanSearch.customerBankIfscCode;
+							model.ach.ifscCode = model.achIndividualLoanSearch.collectionIfscCode;
 							//model.ach.sponsorBankCode = "HDFC0999999";
 							model.ach.sponsorAccountCode = null;
 							model.ach.mandateStatus = "PENDING";
 							//model.ach.branch = model.achIndividualLoanSearch.branch;
 							model.ach.id = model.ach.loanId;
 							//model.ach.customerName = model.achIndividualLoanSearch.customerId;
-							//model.ach.accountHolderName = model.achIndividualLoanSearch.accountHolderName;
-							//model.ach.accountType = model.achIndividualLoanSearch.loanType;
+							model.ach.accountHolderName = model.achIndividualLoanSearch.collectionCustomerNameAsInBank;
+							model.ach.accountType = model.achIndividualLoanSearch.collectionAccountType;
+							model.ach.branchName = model.achIndividualLoanSearch.collectionBankBranchName;
+							model.ach.bankName = model.achIndividualLoanSearch.collectionBankName;
 							model.ach.accountNumber = model.achIndividualLoanSearch.accountNumber;
 							model.ach.centreId = model.achIndividualLoanSearch.loanCentre.centreId;
 							model.ach.achStartDate = model.achIndividualLoanSearch.loanDisbursementDate;
@@ -95,8 +97,19 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 								}
 							}
 
+							var micrpromise = CustomerBankBranch.search({
+								'ifscCode': model.ach.ifscCode
+							}).$promise.then(function(response) {
+								console.log(response);
+								if (response.body) {
+									model.ach.micr = response.body[0].micrCode;
+								}
+							}, function(error) {
 
-							Queries.getCustomerBasicDetails({
+							});
+
+
+							var custPromise = Queries.getCustomerBasicDetails({
 								urns: [model.achIndividualLoanSearch.applicant, model.achIndividualLoanSearch.coBorrowerUrnNo, model.achIndividualLoanSearch.urnNo]
 							}).then(
 								function(resQuery) {
@@ -160,7 +173,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 								function(httpRes) {}
 
 							);
-                            $q.all([loanAccountPromise, achSearchPromise])
+                            $q.all([loanAccountPromise, achSearchPromise, custPromise, micrpromise])
                                 .then(function(){
                                     PageHelper.hideLoader();
                                 })
