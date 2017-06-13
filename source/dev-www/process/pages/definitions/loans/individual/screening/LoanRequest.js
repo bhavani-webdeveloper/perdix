@@ -118,19 +118,51 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
     }
 
-    var isEnrollmentsSubmitPending = function(){
-        var enrollmentsvalidityState = BundleManager.getBundlePagesFormValidity(['applicant', 'guarantor', 'co-applicant', 'business']);
+    var isEnrollmentsSubmitPending = function(model){
+
+        if(model.currentStage !=='Screening' && model.currentStage !== 'Application' && model.currentStage !== 'FieldAppraisal'){
+            return false;
+        }
+
+        var pageClassList = ['applicant', 'guarantor', 'co-applicant', 'business'];
+
+        var failed = false;
+
+        var enrollmentsvalidityState = BundleManager.getBundlePagesFormValidity(pageClassList);
         var keys = Object.keys(enrollmentsvalidityState);
         for(var idx = 0; idx < keys.length; idx++) {
+            if(_.isEmpty(enrollmentsvalidityState[keys[idx]])){
+                PageHelper.showProgress("LoanRequest","Please visit all the " + pageClassList.join(", ") + " tabs atleast once before proceeding with current action.", 5000);
+                failed =  true;
+                break;
+            }
 
             if(enrollmentsvalidityState[keys[idx]].dirty){
 
                 PageHelper.showProgress("LoanRequest","Please submit all the " + $filter('translate')(keys[idx].split("@")[0]) + " information before proceeding with current action." , 5000);
-                return true;
+                failed = true;
+                break;
             }
         }
 
-        return false;
+        if(failed) {
+            return failed;
+        }
+
+        BundleManager.broadcastSchemaFormValidate(pageClassList);
+        enrollmentsvalidityState = BundleManager.getBundlePagesFormValidity(pageClassList);
+        keys = Object.keys(enrollmentsvalidityState);
+        for(var idx = 0; idx < keys.length; idx++) {
+
+            if(enrollmentsvalidityState[keys[idx]].invalid){
+
+                PageHelper.showProgress("LoanRequest","Some of the mandatory information of " + $filter('translate')(keys[idx].split("@")[0]) + " is not filled and submitted." , 5000);
+                failed = true;
+                break;
+            }
+        }
+        BundleManager.resetBundlePagesFormState(pageClassList);
+        return failed;
     }
 
     var getRelationFromClass = function(relation){
@@ -2423,7 +2455,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 if(!validateAndPopulateMitigants(model)){
                     return;
                 }
-                if(isEnrollmentsSubmitPending()){
+                if(isEnrollmentsSubmitPending(model)){
                     return;
                 }
                 if (!preLoanSaveOrProceed(model)){
@@ -2478,7 +2510,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside save()");
                 PageHelper.clearErrors();
                 /* TODO Call save service for the loan */
-                if(isEnrollmentsSubmitPending()){
+                if(isEnrollmentsSubmitPending(model)){
                     return;
                 }
                 if (!preLoanSaveOrProceed(model)){
@@ -2619,7 +2651,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 PageHelper.clearErrors();
                 var nextStage = null;
                 /* TODO Call proceed servcie for the loan account */
-                if(isEnrollmentsSubmitPending()){
+                if(isEnrollmentsSubmitPending(model)){
                     return;
                 }
 

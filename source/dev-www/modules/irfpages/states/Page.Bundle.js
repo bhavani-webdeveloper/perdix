@@ -171,9 +171,8 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                 if(!reqPages || reqPages.length === 0)
                     continue;
 
-                info = {};
-
                 angular.forEach(reqPages, function(value, key){
+                    info = {};
                     //if the tab is not clicked, formctrl won't be thr
                     if (value.formCtrl) {
                         info['pristine'] = value.formCtrl.$pristine;
@@ -181,13 +180,46 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                         info['invalid'] = value.formCtrl.$invalid;
                         info['valid'] = value.formCtrl.$valid;
                         info['submitted'] = value.formCtrl.$submitted;
-                        formValidity[value.title + "@" + value.formName] = info;
                     }
-
+                    formValidity[value.title + "@" + value.formName] = info;
                 });
 
             }
             return formValidity;
+        },
+
+        broadcastSchemaFormValidate: function(pageClass) {
+            var _pageClass = [];
+            if(angular.isUndefined(pageClass)){
+                return;
+            }
+            _pageClass = _pageClass.concat(pageClass);
+
+            if(_pageClass.length === 0){
+                return;
+            }
+            for(var idx = 0; idx < pages.length; idx++ ){
+                if(_pageClass.indexOf(pages[idx].definition.pageClass) > -1  && pages[idx].formCtrl){
+                    pages[idx].formCtrl.scope.$broadcast('schemaFormValidate');
+                }
+            }
+        },
+
+        resetBundlePagesFormState: function(pageClass) {
+            var _pageClass = [];
+            if(angular.isUndefined(pageClass)){
+                return;
+            }
+            _pageClass = _pageClass.concat(pageClass);
+
+            if(_pageClass.length === 0){
+                return;
+            }
+            for (var idx = 0; idx < pages.length; idx++) {
+                if (_pageClass.indexOf(pages[idx].definition.pageClass) > -1 && pages[idx].formCtrl) {
+                    formHelper.resetFormValidityState(pages[idx].formCtrl);
+                }
+            }
         }
     }
 }]);
