@@ -2636,7 +2636,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 }
 
-                var confirmationMsg = "Are You Sure?";
+                var autoRejected = false;
 
                 if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
@@ -2659,7 +2659,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             _.upperCase(model.enterprise.politicalOrPoliceConnections) === 'YES'
                         )){
                         nextStage = 'Rejected';
-                        confirmationMsg = "Loan Application will be Auto-Rejected due to negative Proxy Indicators. Are you sure to proceed?"
+                        autoRejected = true;
+                        
                     }
                 }
 
@@ -2713,7 +2714,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     return;
                 }
 
-                Utils.confirm(confirmationMsg).then(function(){
+                Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = '';
@@ -2820,9 +2821,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     $q.all(mandatoryPromises).then(function(){
                         $q.all([p1])
                         .finally(function(httpRes){
+                            if(autoRejected) {
+                               reqData.loanAccount.rejectReason = reqData.remarks = "Loan Application Auto-Rejected due to Negative Proxy Indicators";
+                            }
                             IndividualLoan.update(reqData)
                             .$promise
                             .then(function(res){
+
+                                if(res.stage = "Rejected" && autoRejected){
+                                    Utils.alert("Loan Application Auto-Rejected due to Negative Proxy Indicators");
+                                }
+
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
                                 return navigateToQueue(model);
                             }, function(httpRes){
