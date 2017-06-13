@@ -44,76 +44,109 @@ define({
             },
 
             form: [{
-                "type": "box",
-                "title": "JOURNAL_MAINTENANCE",
-                "items": [{
-                    key: "journal.id",
+                    "type": "box",
+                    "title": "JOURNAL_MAINTENANCE",
+                    "items": [{
+                        key: "journal.id",
+                        "condition": "model.journal.id",
+                        readonly: true,
+                        type: "number",
+                        "title": "JOURNAL_ID"
+                    }, {
+                        key: "journal.creditGLNo",
+                        type: "string",
+                        "title": "CREDIT_GL_NO"
+                    }, {
+                        key: "journal.debitGLNo",
+                        type: "string",
+                        "title": "DEBIT_GL_NO"
+                    }, {
+                        key: "journal.transactionName",
+                        type: "string",
+                        "title": "TRANSACTION_NAME"
+                    }, {
+                        key: "journal.transactionDescription",
+                        type: "textarea",
+                        "title": "TRANSACTION_DESCRIPTION"
+                    }, {
+                        key: "journal.userBranches",
+                        type: "array",
+                        view: "fixed",
+                        title: "Branches",
+                        items: [{
+                            key: "journal.userBranches[].branchId",
+                            title: "BRANCH_NAME",
+                            // condition: "model.journal.userBranches == active",
+                            type: "lov",
+                            enumCode: "branch_id",
+                            required: true,
+                            inputMap: {
+                                "branch_id": {
+                                    "key": "branch_id"
+                                },
+
+                            },
+                            outputMap: {
+                                "branch_id": "branch_id"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                var promise = User.query({
+                                    'branchName': inputModel.branch_id
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.branchName
+                                ];
+                            }
+                        }]
+                    }]
+                }, {
+                    "type": "actionbox",
+                    "condition": "!model.journal.id",
+                    "items": [{
+                        "type": "submit",
+                        "title": "CREATE_JOURNAL"
+                    }, {
+                        "type": "save",
+                        "title": "SAVE_OFFLINE"
+                    }]
+                },
+
+                {
+                    "type": "actionbox",
                     "condition": "model.journal.id",
-                    readonly: true,
-                    type: "number",
-                    "title": "JOURNAL_ID"
-                }, {
-                    key: "journal.creditGLNo",
-                    type: "string",
-                    "title": "CREDIT_GL_NO"
-                }, {
-                    key: "journal.debitGLNo",
-                    type: "string",
-                    "title": "DEBIT_GL_NO"
-                }, {
-                    key: "journal.transactionName",
-                    type: "string",
-                    "title": "TRANSACTION_NAME"
-                }, {
-                    key: "journal.transactionDescription",
-                    type: "textarea",
-                    "title": "TRANSACTION_DESCRIPTION"
-                }]
-            }, 
-
-            {
-                "type": "actionbox",
-                "condition": "!model.journal.id",
-                "items": [{
-                    "type": "submit",
-                    "title": "CREATE_JOURNAL"
-                }, {
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
-                }]
-            },
-
-            {
-                "type": "actionbox",
-                "condition": "model.journal.id",
-                "items": [{
-                    "type": "save",
-                    "title": "SAVE_OFFLINE"
-                }, {
-                    "type": "button",
-                    "title": "UPDATE_JOURNAL",
-                    onClick: function(model, formCtrl) {
-                        $log.info("Inside submit()");
-                        PageHelper.showLoader();
-                        PageHelper.showProgress("Journal Save", "Working...");
-                        if (model.journal.id) {
-                            Journal.updateJournal(model.journal)
-                                .$promise
-                                .then(function(res) {
-                                    PageHelper.showProgress("Journal Save", "Journal Updated with id" + '  ' + res.id, 3000);
-                                    $log.info(res);
-                                    model.journal = res;
-                                    $state.go('Page.JournalMaintenanceDashboard', null);
-                                }, function(httpRes) {
-                                    PageHelper.showProgress("Journal Save", "Oops. Some error occured.", 3000);
-                                    PageHelper.showErrors(httpRes);
-                                }).finally(function() {
-                                    PageHelper.hideLoader();
-                                })
+                    "items": [{
+                        "type": "save",
+                        "title": "SAVE_OFFLINE"
+                    }, {
+                        "type": "button",
+                        "title": "UPDATE_JOURNAL",
+                        onClick: function(model, formCtrl) {
+                            $log.info("Inside submit()");
+                            PageHelper.showLoader();
+                            PageHelper.showProgress("Journal Save", "Working...");
+                            if (model.journal.id) {
+                                Journal.updateJournal(model.journal)
+                                    .$promise
+                                    .then(function(res) {
+                                        PageHelper.showProgress("Journal Save", "Journal Updated with id" + '  ' + res.id, 3000);
+                                        $log.info(res);
+                                        model.journal = res;
+                                        $state.go('Page.JournalMaintenanceDashboard', null);
+                                    }, function(httpRes) {
+                                        PageHelper.showProgress("Journal Save", "Oops. Some error occured.", 3000);
+                                        PageHelper.showErrors(httpRes);
+                                    }).finally(function() {
+                                        PageHelper.hideLoader();
+                                    })
+                            }
                         }
-                    }
-                }]
-            }],
+                    }]
+                }
+            ],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",

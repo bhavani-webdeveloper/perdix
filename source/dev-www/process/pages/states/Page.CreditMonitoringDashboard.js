@@ -10,6 +10,7 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringLegalRecoveryQueue",
                 "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringRiskQueue",
+                "Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue",
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
@@ -72,7 +73,24 @@ irf.pages.controller("CreditMonitoringDashboardCtrl", ['$log', '$scope', 'PagesD
                 }, function() {
                     lsqMenu.data = '-';
                 });
-            },           
+            },
+            var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.creditMonitoring.CreditMonitoringCompletedQueue"];
+            if (lsqMenu) {
+                creditMonitoring.search({
+                    'accountNumber': '',
+                    'currentStage': "CreditMonitoringCompletedQueue",
+                    'centreId': centreId[0],
+                    'branchName': branch.branchName,
+                    'page': 1,
+                    'per_page': 1,
+                    'applicantName': '',
+                    'businessName': '',
+                }).$promise.then(function(response, headerGetter) {
+                    lsqMenu.data = response.headers['x-total-count'];
+                }, function() {
+                    lsqMenu.data = '-';
+                });
+            },
 
         });
 
