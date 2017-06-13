@@ -72,7 +72,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
 					}
 					var promise = CreditMonitoring.search({
 						'accountNumber': searchOptions.accountNumber,
-						'currentStage': "creditMonitoringSchedule",
+						'currentStage': "LUCSchedule",
 						'lucScheduledDate': searchOptions.lucScheduledDate,
 						'centreId': centreId[0],
 						'branchName': branch.branchName,

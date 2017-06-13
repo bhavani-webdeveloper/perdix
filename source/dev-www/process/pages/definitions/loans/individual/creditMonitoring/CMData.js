@@ -43,7 +43,6 @@ define({
                 model = Utils.removeNulls(model, true);
                 $log.info("luc page got initiated");
 
-
                 if (!(model && model.loanMonitoringDetails && model.loanMonitoringDetails.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
