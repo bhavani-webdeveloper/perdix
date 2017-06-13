@@ -10,35 +10,52 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
             "subTitle": "Lead",
             initialize: function(model, form, formCtrl) {
                 model.lead = model.lead || {};
+                model.customer = model.customer || {};
                 model = Utils.removeNulls(model, true);
                 $log.info("create new lead assign page ");
 
-                if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
-                    PageHelper.showLoader();
-                    PageHelper.showProgress("page-init", "Loading...");
-                    var leadId = $stateParams.pageId;
-                    if (!leadId) {
-                        PageHelper.hideLoader();
+                if ($stateParams.pageData) {
+                    var leadarray = $stateParams.pageData;
+                    $log.info(leadarray);
+                    model.lead.leads=leadarray;
+                    model.customer.branchName=leadarray[0].branchName;
+                    var branches = formHelper.enum('branch_id').data;
+                    $log.info(branches);
+                    for (var i = 0; i < branches.length; i++) {
+                        if ((branches[i].name) == model.customer.branchName) {
+                            model.customer.branchId = branches[i].value;
+                        }
                     }
-                    Lead.get({
-                            id: leadId
-                        },
-                        function(res) {
-                            _.assign(model.lead, res);
+                }
 
-                            model.lead.branchId = res.branchId;
-                            model = Utils.removeNulls(model, true);
+                /*if ($stateParams.pageId) {
+                    if (!(model && model.lead && model.lead.id && model.$$STORAGE_KEY$$)) {
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("page-init", "Loading...");
+                        var leadId = $stateParams.pageId;
+                        if (!leadId) {
                             PageHelper.hideLoader();
                         }
-                    );
-                }
+                        Lead.get({
+                                id: leadId
+                            },
+                            function(res) {
+                                _.assign(model.lead, res);
+                                model.lead.branchId = res.branchId;
+                                model = Utils.removeNulls(model, true);
+                                PageHelper.hideLoader();
+                            }
+                        );
+                    }
+                }*/
             },
             offline: false,
             getOfflineDisplayItem: function(item, index) {
                 return []
             },
 
-            form: [{
+            form: [
+              /* {
                     "type": "box",
                     readonly: true,
                     "title": "LEAD_PROFILE",
@@ -64,13 +81,56 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         key: "lead.mobileNo",
                         readonly: true
                     }]
+                },*/
+                {
+                    type: "box",
+                    title: "LEAD_PROFILE",
+                    items: [{
+                        key: "lead.leads",
+                        type: "array",
+                        add: null,
+                        remove: null,
+                        startEmpty: true,
+                        titleMap:"model.lead.leads[arrayIndex].id",
+                        title: "LEADS",
+                        items: [{
+                            key: "lead.leads[].id",
+                            "title": "LEAD_ID",
+
+                            readonly: true,
+                        }, {
+                            key: "lead.leads[].leadName",
+                            "title": "LEAD_NAME",
+                            readonly: true,
+                        },{
+                            key: "lead.leads[].businessName",
+                            "title": "BUSINESS_NAME",
+                            readonly: true,
+                        },{
+                            key: "lead.leads[].addressLine1",
+                            "title": "ADDRESS_LINE1",
+                            readonly: true,
+                        },{
+                            key: "lead.leads[].area",
+                            "title": "AREA",
+                            readonly: true,
+                        },{
+                            key: "lead.leads[].cityTownVillage",
+                            "title": "CITY/_TOWN_VILLAGE",
+                            readonly: true,
+                        },{
+                            key: "lead.leads[].mobileNo",
+                            "title": "MOBILE_NUMBER1",
+                            readonly: true,
+                        }]
+                    }]
                 },
 
                 {
                     type: "box",
                     title: "ASSIGN_SPOKE",
                     items: [{
-                        "key": "lead.branchName",
+                        "key": "customer.branchName",
                         "title": "HUB_NAME",
                         "type": "select",
                         "enumCode": "branch",
@@ -80,7 +140,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                         "enumCode": "centre",
                         type: "select",
                         "parentEnumCode": "branch_id",
-                        "parentValueExpr": "model.lead.branchId",
+                        "parentValueExpr": "model.customer.branchId",
                         required: true
                     }]
                 },
@@ -203,7 +263,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 }
             },
             actions: {
-                submit: function(model, form, formName) {
+/*                submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     $log.warn(model);
                     var sortFn = function(unordered) {
@@ -235,6 +295,35 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                             });
                         });
                     }
+                }*/
+                submit: function(model, form, formName) {
+                    $log.info("Inside submit()");
+                    $log.warn(model.lead);
+                    Utils.removeNulls(model.lead, true);
+                    var sortFn = function(unordered) {
+                        var out = {};
+                        Object.keys(unordered).sort().forEach(function(key) {
+                            out[key] = unordered[key];
+                        });
+                        return out;
+                    };
+                    var reqData = _.cloneDeep(model.lead);
+
+                    /*var centres = formHelper.enum('centre').data;
+                    for (var i = 0; i < centres.length; i++) {
+                        if ((centres[i].code) == reqData.centreId) {
+                            reqData.centreName = centres[i].name;
+                        }
+                    }*/
+                    for(i=0;i<reqData.leads.length;i++)
+                    {
+                       reqData.leads[i].branchId=model.customer.branchId;
+                       $log.info(model.customer.branchId);
+                    }
+
+                    LeadHelper.AssignLead(reqData).then(function(resp) {
+                        $state.go('Page.LeadDashboard', null);
+                    });   
                 }
             }
 

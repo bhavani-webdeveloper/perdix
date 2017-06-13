@@ -3,7 +3,7 @@
       "order": 1,
       "code": "Assignment Pending",
       "name": "Assignment Pending",
-      "stageType": "CAPTURE",
+      "stageType": "ASSIGNCENTRE",
       "allowedRoles": [
          "WM"
       ]

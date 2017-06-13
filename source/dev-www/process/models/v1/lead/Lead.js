@@ -11,6 +11,10 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 				method: 'POST',
 				url: endpoint
 			},
+			assignLead: {
+				method: 'POST',
+				url: endpoint + '/assignCentre'
+			},
 			updateLead: {
 				method: 'PUT',
 				url: endpoint

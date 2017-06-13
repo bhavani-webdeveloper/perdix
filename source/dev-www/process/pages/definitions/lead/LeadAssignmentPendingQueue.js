@@ -1,5 +1,6 @@
-irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
-	function($log, formHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
+irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
+ ["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
+	function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
 		var branch = SessionStore.getBranch();
 
 		
@@ -80,7 +81,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 					}
 				},
 				listOptions: {
-					selectable: false,
+					selectable: true,
 					expandable: true,
 					listStyle: "table",
 					itemCallback: function(item, index) {},
@@ -137,7 +138,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 						}]
 					},
 					getActions: function() {
-						return [{
+						return [/*{
 							name: "Assign Lead",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
@@ -151,6 +152,26 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"), ["$log",
 								});
 							},
 							isApplicable: function(item, index) {
+								return true;
+							}
+						}*/];
+					},
+					getBulkActions: function() {
+						return [{
+							name: "Assign Lead",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(items) {
+								if (items.length == 0) {
+									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
+									return false;
+								}
+								$state.go("Page.Engine", {
+									pageName: "lead.LeadReassign",
+									pageData: items
+								});
+							},
+							isApplicable: function(items) {
 								return true;
 							}
 						}];

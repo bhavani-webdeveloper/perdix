@@ -79,6 +79,27 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             return deferred.promise;
         };
 
+        var AssignLead = function(res) {
+            var deferred = $q.defer();
+            $log.info("Attempting Proceed");
+            $log.info(res);
+                PageHelper.clearErrors();
+                PageHelper.showLoader();
+                irfProgressMessage.pop('lead-update', 'Working...');
+                Lead.assignLead(res, function(res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('lead-update', 'Done. lead updated ', 5000);
+                    deferred.resolve(res);
+                }, function(res, headers) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop('lead-update', 'Oops. Some error.', 2000);
+                    PageHelper.showErrors(res);
+                    deferred.reject(res);
+                });
+        
+            return deferred.promise;
+        };
+
         var followData = function(res) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
@@ -109,6 +130,7 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             saveData: saveData,
             proceedData: proceedData,
             followData: followData,
+            AssignLead:AssignLead,
         };
     }
 ]);
