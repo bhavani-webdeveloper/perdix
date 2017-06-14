@@ -126,15 +126,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
                     key: "collectionDemandData",
                     type: "array",
                     title: "COLLECTION DEMAND DOWNLOADED",
+                    titleExpr: "moment(model.collectionDemandData[arrayIndex].collectionDate).format('YYYY-MM-DD')",
+                    titleExprLocals: {moment: window.moment},
                     startEmpty: true,
                     add: null,
                     remove: null,
                     items: [
-                        {
-							"key":"collectionDemandData[].collectionDate",
-							"type": "date",
-							"readonly": true
-						},
 						{	"key":"collectionDemandData[].button",
 							"type": "button",
 							"notitle": true,
@@ -144,7 +141,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								console.log(model.collectionDemandData[context.arrayIndex]);
 								$state.go("Page.Engine", {
 	                    			pageName: 'CentrePaymentCollection',
-	                    			pageId : context.arrayIndex
+	                    			pageData: model.collectionDemandData[context.arrayIndex]
 	               					 });
 								$log.info("Downloading branch Collection data..");
 							}

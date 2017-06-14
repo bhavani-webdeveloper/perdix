@@ -61,7 +61,7 @@
                 "Page/Engine/loans.groups.GroupLoanRepaymentQueue"
             ]
         },
-        "Page/Engine/CentrePaymentCollection",
+        "Page/Engine/CentrePaymentCollectionDownload",
         {
             "title": "JOURNAL_ENTRY",
             "iconClass": "fa fa-exchange",
