@@ -475,8 +475,8 @@
             "maxItems":null,
             "items":{
                "type":"object",
-               "required":[
-
+               "required":[	
+					modeOfDisbursement
                ],
                "properties":{
                   "loanPurpose":{
@@ -732,6 +732,54 @@
 					},
 					"scheduledDisbursementDate": {
 						"title": "scheduledDisbursementDate",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"modeOfDisbursement": {
+						"title": "modeOfDisbursement",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"ifscCode": {
+						"title": "ifscCode",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"customerAccountNumber": {
+						"title": "customerAccountNumber",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"customerBankName": {
+						"title": "customerBankName",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"customerbankBranchName": {
+						"title": "customerbankBranchName",
+						"type": "string",
+						 "captureStages": [
+							"GroupCreation",
+                     "GRT"
+						]
+					},
+					"customerNameInBank": {
+						"title": "customerNameInBank",
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
