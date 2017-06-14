@@ -54,7 +54,7 @@ irf.pageCollection.factory(irf.page('loans.groups.GroupLoanRepaymentQueue'), ["$
                 "properties": {
                     "isLegacy":{
                         "title":"PRODUCT_TYPE",
-                        "type":"boolean",
+                        "type":"string",
                         "default":"false"
 
                     },
