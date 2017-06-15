@@ -848,6 +848,36 @@
                                 "LUCReschedule",
                                 "LUCLegalRecovery"
                             ]
+                        },
+                        "presentOutStandingLoanAmount": {
+                            "title": "presentOutStandingLoanAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "numberOfInstallmentsDue": {
+                            "title": "numberOfInstallmentsDue",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
+                        },
+                        "statusOfLoanAccount": {
+                            "title": "statusOfLoanAccount",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule",
+                                "LUCLegalRecovery"
+                            ]
                         }
                     }
                 }
