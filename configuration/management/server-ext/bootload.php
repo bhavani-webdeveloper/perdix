@@ -35,7 +35,7 @@ $settings = [
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
     ],
-    'db' => [
+    'bi_db' => [
         'driver' => 'mysql',
         'host' => getenv('DB_HOST'),
         'database' => getenv('BI_DB_NAME'),
