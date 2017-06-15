@@ -35,6 +35,16 @@ $settings = [
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
     ],
+    'db' => [
+        'driver' => 'mysql',
+        'host' => getenv('DB_HOST'),
+        'database' => getenv('BI_DB_NAME'),
+        'username' => getenv('DB_USER'),
+        'password' => getenv('DB_PASSWORD'),
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+    ],
     'perdix' => [
         'v8_url' => getenv('PERDIX_V8_BASE_URL'),
         'username' => getenv('PERDIX_USERNAME'),
@@ -51,6 +61,7 @@ header("Access-Control-Request-Method: GET");
 include_once(__DIR__.'/global_functions.php');
 
 $capsule = new \Illuminate\Database\Capsule\Manager;
-$capsule->addConnection($settings['db']);
+$capsule->addConnection($settings['db'], 'default');
+$capsule->addConnection($settings['bi_db'], 'bi_db');
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
