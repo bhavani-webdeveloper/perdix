@@ -94,7 +94,7 @@
          "code":"LoanDisbursement",
          "name":"Loan Disbursement",
 		 "isAccountOpening":false,
-         "stageType":"DISBURSE",
+         "stageType":"GROUPDISBURSE",
          "allowedRoles":[
             "A",
             "ARM",
@@ -476,7 +476,7 @@
             "items":{
                "type":"object",
                "required":[	
-					modeOfDisbursement
+					"modeOfDisbursement"
                ],
                "properties":{
                   "loanPurpose":{
@@ -743,7 +743,9 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
+
 						]
 					},
 					"ifscCode": {
@@ -751,7 +753,8 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
 						]
 					},
 					"customerAccountNumber": {
@@ -759,7 +762,8 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
 						]
 					},
 					"customerBankName": {
@@ -767,7 +771,8 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
 						]
 					},
 					"customerbankBranchName": {
@@ -775,7 +780,8 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
 						]
 					},
 					"customerNameInBank": {
@@ -783,7 +789,8 @@
 						"type": "string",
 						 "captureStages": [
 							"GroupCreation",
-                     "GRT"
+                     "GRT",
+                     "LoanDisbursement"
 						]
 					}
                }
