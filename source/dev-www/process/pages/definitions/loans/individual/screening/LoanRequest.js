@@ -92,13 +92,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             }
                         }
                     }
-
                     if(model.loanAccount.psychometricCompleted === 'Completed'){
                         deferred.resolve({psychometricCompleted : 'Completed'});
                     } else {
                         deferred.reject({psychometricCompleted : 'N'});
                     }
-
                 }, function(res){
                     model.loanAccount.psychometricCompleted = 'N';
                     if(res.data){
@@ -307,14 +305,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 (monthly != Number.POSITIVE_INFINITY) &&
                 (monthly != Number.NEGATIVE_INFINITY)) {
 
-                model.loanAccount.estimatedEmi = round(monthly);
+                model.loanAccount.expectedEmi = round(monthly);
                 //document.loandata.total.value = round(monthly * payments);
                 //document.loandata.totalinterest.value = round((monthly * payments) - principal);
             }
             // Otherwise, the user's input was probably invalid, so don't
             // display anything.
             else {
-                model.loanAccount.estimatedEmi  = "";
+                model.loanAccount.expectedEmi  = "";
                 //document.loandata.total.value = "";
                 //document.loandata.totalinterest.value = "";
             }
@@ -834,7 +832,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     },
                     {
-                        key: "loanAccount.estimatedEmi",
+                        key: "loanAccount.expectedEmi",
                         type: "amount",
                         title: "ESTIMATED_KINARA_EMI",
                         readonly:true

@@ -1,33 +1,108 @@
 define({
     pageUID: "loans.group.GroupDisbursement",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+    dependencies: ["$log", "$state", "irfSimpleModal", "Groups","GroupProcess", "AccountingUtils", "LoanProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+    $pageFn: function($log, $state, irfSimpleModal, Groups,GroupProcess, AccountingUtils, LoanProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+
+        var nDays = 15;
+        var fixData = function(model) {
+            model.group.tenure = parseInt(model.group.tenure);
+        };
+
+        var fillNames = function(model) {
+            var deferred = $q.defer();
+            angular.forEach(model.group.jlgGroupMembers, function(member, key) {
+                Enrollment.get({
+                    id: member.customerId
+                }, function(resp, headers) {
+                    model.group.jlgGroupMembers[key].firstName = resp.firstName;
+                    try {
+                        if (resp.middleName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
+                        if (resp.lastName.length > 0)
+                            model.group.jlgGroupMembers[key].firstName += " " + resp.lastName;
+                    } catch (err) {
+
+                    }
+                    if (key >= model.group.jlgGroupMembers.length - 1) {
+                        deferred.resolve(model);
+                    }
+                }, function(res) {
+                    deferred.reject(res);
+                });
+            });
+            return deferred.promise;
+        };
+
 
         return {
             "type": "schema-form",
             "title": "GROUP_LOAN_DISBURSEMENT",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                model.group = model.group || {};
+                model.group.branchName = SessionStore.getCurrentBranch().branchId;
+                $log.info(model.group.branchName);
+
                 if ($stateParams.pageId) {
+                    var groupId = $stateParams.pageId;
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop("group-init", "Loading, Please Wait...");
+                    Groups.getGroup({
+                        groupId: groupId
+                    }, function(response, headersGetter) {
+                        model.group = _.cloneDeep(response);
+                        var centreCode = formHelper.enum('centre').data;
+                        for (var i = 0; i < centreCode.length; i++) {
+                            if (centreCode[i].code == model.group.centreCode) {
+                                model.group.centreCode = centreCode[i].value;
+                            }
+                        }
+                        fixData(model);
+                        if (model.group.jlgGroupMembers.length > 0) {
+                            fillNames(model).then(function(m) {
+                                model = m;
+                                PageHelper.hideLoader();
+                            }, function(m) {
+                                PageHelper.showErrors(m);
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                            });
+                        } else {
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop("group-init", "Load Complete. No Group Members Found", 2000);
+                            backToDashboard();
+                        }
+                    }, function(resp) {
+                        PageHelper.hideLoader();
+                        irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
+                        backToDashboard();
+                    });
+                }
+
+
+                /*if ($stateParams.pageId) {
                     var groupInfo = $stateParams.pageId.split('.');
                     var partnerCode = groupInfo[0];
                     var groupCode = groupInfo[1];
                     $log.info("Group Code ::" + groupCode + "\nPartner Code::" + partnerCode);
                     PageHelper.showLoader();
                     irfProgressMessage.pop('group-disbursement', 'Loading Disbursement Details');
-                    Groups.getDisbursementDetails({
+                    LoanProcess.disbursementList({
                         partnerCode: partnerCode,
                         groupCode: groupCode
                     }, function(data) {
-                        for (var i = 0; i < data.length; i++) {
-                            var account = data[i];
+                        var disbursementDTOs = [];
+                        disbursementDTOs = data.body.disbursementDTOs;
+                        $log.info(disbursementDTOs);
+                        for (var i = 0; i < disbursementDTOs.length; i++) {
+                            var account = disbursementDTOs[i];
                             var totalFeeAmount = 0;
                             if (account && account['fees']) {
                                 for (var j = 0; j < account['fees'].length; j++) {
@@ -39,7 +114,7 @@ define({
                             account['totalFeeAmount'] = AccountingUtils.formatMoney(totalFeeAmount);
                             account['finalDisbursementAmount'] = AccountingUtils.formatMoney(disburseAmount - totalFeeAmount);
                         }
-                        model.disbursements = data;
+                        model.disbursements = disbursementDTOs[i];
                         irfProgressMessage.pop('group-disbursement', 'Loading Group Details');
                         Groups.search({
                                 groupCode: groupCode,
@@ -62,180 +137,98 @@ define({
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('group-disbursement', 'Error loading disbursement details.', 2000);
                     });
-                }
+                }*/
             },
             offline: false,
             form: [{
                     "type": "box",
-                    "title": "ACCOUNTS",
+                    "readonly": true,
+                    "title": "GROUP_DETAILS",
                     "items": [{
-                        "type": "fieldset",
-                        "title": "ACCOUNTS",
+                        "key": "group.groupName",
+                        "title": "GROUP_NAME",
+                    }, {
+                        "key": "group.partnerCode",
+                        "title": "PARTNER",
+                        "type": "select",
+                        "enumCode": "partner"
+                    }, {
+                        "key": "group.centreCode",
+                        "title": "CENTRE_CODE",
+                        "type": "select",
+                        "enumCode": "centre"
+                    }, {
+                        "key": "group.productCode",
+                        "title": "PRODUCT",
+                        "type": "select",
+                        "enumCode": "loan_product",
+                        "parentEnumCode": "partner",
+                        "parentValueExpr": "model.group.partnerCode"
+                    }, {
+                        "key": "group.frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "titleMap": {
+                            "M": "Monthly",
+                            "Q": "Quarterly"
+                        }
+                    }, {
+                        "key": "group.tenure",
+                        "title": "TENURE",
+                    }]
+                }, {
+                    "type": "box",
+                    "readonly": true,
+                    "title": "GROUP_MEMBERS",
+                    "items": [{
+                        "key": "group.jlgGroupMembers",
+                        "type": "array",
+                        "title": "GROUP_MEMBERS",
+                        "add": null,
+                        "remove": null,
                         "items": [{
-                            key: "disbursements",
-                            type: "array",
-                            titleExpr: "'URN: ' + model.disbursements[arrayIndex].urnNo",
-                            remove: null,
-                            add: null,
-                            items: [{
-                                condition: "model.disbursements[arrayIndex].disbursementDate!=null",
-                                type: "text",
-                                title: "DISBURSED_AT",
-                                key: "disbursements[].disbursementDate"
-                            }, {
-                                type: "fieldset",
-                                title: "DISBURSEMENT_DETAILS",
-                                condition: "model.disbursements[arrayIndex].disbursementDate==null",
-                                items: [{
-                                    "key": "disbursements[].accountId",
-                                    "readonly": true
-                                }, {
-                                    "key": "disbursements[].amount",
-                                    "readonly": true
-                                }, {
-                                    "type": "fieldset",
-                                    "title": "FEES",
-                                    "items": [{
-                                        "key": "disbursements[].fees",
-                                        "type": "array",
-                                        "title": "FEE",
-                                        "add": null,
-                                        "remove": null,
-                                        "items": [{
-                                            key: "disbursements[].fees[].description",
-                                            "readonly": true,
-                                        }, {
-                                            key: "disbursements[].fees[].amount1"
-                                        }]
-                                    }]
-                                }, {
-                                    "key": "disbursements[].totalFeeAmount",
-                                    "readonly": true
-                                }, {
-                                    "key": "disbursements[].finalDisbursementAmount",
-                                    "readonly": true
-                                }, {
-                                    "key": "disbursements[].modeOfDisbursement",
-                                    "type": "select",
-                                    "titleMap": [{
-                                        value: "CASH",
-                                        name: "Cash"
-                                    }]
-                                }, {
-                                    type: "fieldset",
-                                    title: "ACTIONS",
-                                    items: [{
-                                        "key": "disbursements[].validate_fp",
-                                        "type": "button",
-                                        "style": "btn-default",
-                                        "notitle": true,
-                                        "title": "VALIDATE_FINGERPRINT",
-                                        "onClick": function(model, formCtrl, form, event) {
-                                            $log.info(model);
-                                            $log.info(form);
-                                            $log.info(event);
-                                            var ds = model.disbursements;
-                                            var i = event['arrayIndex'];
-                                            var d = ds[i];
-                                            PageHelper.showLoader();
-
-                                            Enrollment.getCustomerById({
-                                                    id: d.customerId
-                                                },
-                                                function(res) {
-                                                    if (res.leftHandThumpImageId) {
-                                                        Files.stream({
-                                                                fileId: res.leftHandThumpImageId
-                                                            },
-                                                            function(res) {
-                                                                $log.info(res);
-                                                                cordova.plugins.irfBluetooth.validate(
-                                                                    function(data) {
-                                                                        console.log(data);
-
-                                                                    },
-                                                                    function() {}, res.data);
-                                                            },
-                                                            function() {}).$promise.finally(
-                                                            function() {
-                                                                PageHelper.hideLoader();
-                                                            })
-                                                    } else {
-                                                        PageHelper.showProgress('disbursement', "Fingerprint data not available", 2000);
-                                                        PageHelper.hideLoader();
-                                                    }
-
-                                                },
-                                                function() {
-                                                    PageHelper.hideLoader();
-                                                }
-                                            ).$promise.finally(function() {
-
-                                            })
-                                        }
-                                    }, {
-                                        "key": "disbursements[].override_fp",
-                                        title: "OVERRIDE_FINGERPRINT",
-                                        "onChange": function(modelValue, form, model) {
-                                            console.log(modelValue);
-                                            console.log(form);
-                                            console.log(model);
-                                        }
-                                    }, {
-                                        "key": "disbursements[].disburse",
-                                        "type": "button",
-                                        "notitle": true,
-                                        "style": "btn-primary btn-block",
-                                        "title": "DISBURSE",
-                                        "onClick": function(model, formCtrl, form, event) {
-                                            $log.info("Inside disburse()");
-                                            $log.info(model);
-                                            $log.info(form);
-                                            $log.info(event);
-                                            PageHelper.clearErrors();
-                                            var d = model.disbursements;
-                                            var i = event['arrayIndex'];
-                                            var accountId = d[i].accountId;
-                                            if (!_.has(d[i], 'fp_verified') || d[i].fp_verified != true) {
-                                                if (!_.has(d[i], 'override_fp') || d[i].override_fp != true) {
-                                                    elementsUtils.alert('Fingerprint not verified.');
-                                                    return;
-                                                }
-                                            }
-                                            PageHelper.showLoader();
-                                            PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.')
-                                            LoanAccount.activateLoan({
-                                                    "accountId": accountId
-                                                },
-                                                function(data) {
-                                                    $log.info("Inside success of activateLoan");
-                                                    var currDate = moment(new Date()).format("YYYY-MM-DD");
-                                                    var toSendData = _.cloneDeep(d[i]);
-                                                    toSendData.disbursementDate = currDate;
-                                                    LoanAccount.disburse(toSendData,
-                                                        function(data) {
-                                                            PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
-                                                            d[i] = toSendData;
-                                                        },
-                                                        function(res) {
-                                                            PageHelper.showErrors(res);
-                                                            PageHelper.showProgress('disbursement', 'Disbursement failed', 2000);
-                                                        }).$promise.finally(function() {
-                                                        PageHelper.hideLoader();
-                                                    });
-                                                },
-                                                function(res) {
-                                                    PageHelper.hideLoader();
-                                                    PageHelper.showErrors(res);
-                                                    PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
-                                                })
-                                        }
-                                    }]
-                                }]
-                            }]
+                            "key": "group.jlgGroupMembers[].urnNo",
+                            "title": "URN_NO",
+                        }, {
+                            "key": "group.jlgGroupMembers[].firstName",
+                            "type": "string",
+                            "title": "GROUP_MEMBER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+                            "title": "FATHER_NAME"
+                        }, {
+                            "key": "group.jlgGroupMembers[].relation",
+                            "title": "RELATION",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAmount",
+                            "title": "LOAN_AMOUNT",
+                            "type": "amount",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose1",
+                            "title": "LOAN_PURPOSE_1",
+                            "enumCode": "loan_purpose_1",
+                            "type": "select",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose2",
+                            "type": "string",
+                            "title": "LOAN_PURPOSE_2",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanPurpose3",
+                            "type": "string",
+                            "title": "LOAN_PURPOSE3",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessFirstName",
+                            "title": "WitnessLastName",
+                        }, {
+                            "key": "group.jlgGroupMembers[].witnessRelationship",
+                            "title": "RELATION",
+                            "type": "select",
+                            "enumCode": "relation"
                         }]
                     }]
                 },
+
+
                 {
                     "type": "actionbox",
                     "items": [{
@@ -243,40 +236,25 @@ define({
                         "style": "btn-theme",
                         "title": "PROCEED",
                         "onClick": function(model, formCtrl, form) {
-                            $log.info("inside proceed");
-                            PageHelper.clearErrors();
                             PageHelper.showLoader();
-                            PageHelper.showProgress("disbursement-proceed", "Proceeding..");
-                            $log.info(model.group);
-                            Groups.getGroup({
-                                    groupId: model.group.id
-                                },
-                                function(res) {
-                                    $log.info(res);
-                                    var data = {
-                                        "enrollmentAction": "PROCEED",
-                                        "group": res
-                                    }
-                                    Groups.update({}, data,
-                                        function(res) {
-                                            PageHelper.showProgress("disbursement-proceed", "Done", 2000);
-                                            PageHelper.hideLoader();
-                                            $state.go('Page.GroupDashboard', {
-                                                pageName: "GroupDashboard"
-                                            });
-                                        },
-                                        function(res) {
-                                            PageHelper.hideLoader();
-                                            PageHelper.showProgress("disbursement-proceed", "Error", 2000);
-                                            PageHelper.showErrors(res);
-                                        }
-                                    )
-                                },
-                                function(res) {
-                                    PageHelper.hideLoader();
-                                }
-                            ).$promise.finally(function() {
-                            })
+                            irfProgressMessage.pop('Disbursement-proceed', 'Working...');
+                            PageHelper.clearErrors();
+                            model.groupAction = "PROCEED";
+                            for(i=0;i<model.group.jlgGroupMembers.length;i++)
+                            {
+                               model.group.jlgGroupMembers[i].modeOfDisbursement='CASH';
+                            }
+                            var reqData = _.cloneDeep(model);
+
+                            GroupProcess.updateGroup(reqData, function(res) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('Disbursement-proceed', 'Operation Succeeded.  Disbursement Complete.', 5000);
+                                $state.go('Page.GroupDashboard', null);
+                            }, function(res) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('Disbursement-proceed', 'Oops. Some error.', 2000);
+                                PageHelper.showErrors(res);
+                            });
                         }
                     }]
                 }
@@ -351,7 +329,7 @@ define({
                     deferred.resolve();
                     return deferred.promise;
                 },
-               
+
                 submit: function(model, form, formName) {
                     model.enrollmentAction = 'PROCEED';
                     if (form.$invalid) {

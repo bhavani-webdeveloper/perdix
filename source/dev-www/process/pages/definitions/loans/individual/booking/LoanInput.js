@@ -426,24 +426,44 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "readonly":true
                             },
                             {
+                                "key": "loanAccount.productCategory",
+                                "type":"select",
+                                "title":"PRODUCT_CATEGORY",
+                                "enumCode":"loan_product_category"
+                            },
+                            {
+                                "key": "loanAccount.frequency",
+                                "type":"select",
+                                "enumCode":"frequency"
+                            },
+                            {
                                 "key": "loanAccount.productCode",
                                 "title": "PRODUCT",
-                                "type": "select",
-                                onChange:function(value,form,model){
-                                    getProductDetails(value,model);
+                                "type": "lov",
+                                autolov: true,
+                                required: true,
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency);
                                 },
-                                "parentEnumCode": "partner",
-                                "parentValueExpr":"model.loanAccount.partnerCode"
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.productCode = valueObj.productCode;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                },
+                                onChange: function(value, form, model) {
+                                getProductDetails(value, model);
+                                },
+                                //"parentEnumCode": "partner",
+                                //"parentValueExpr":"model.loanAccount.partnerCode"
                             },
                             {
                                 "key": "loanAccount.tenure",
                                 "title":"DURATION_IN_MONTHS"
                             },
-                            {
-                                "key": "loanAccount.frequency",
-                                "type":"string",
-                                "readonly":true
-                            }
                         ]
                     },
                     {

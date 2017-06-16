@@ -57,11 +57,9 @@ irf.models.factory('Groups',function($resource,$httpParamSerializer,BASE_URL,sea
             method:'POST',
             url:endpoint+'/:service/:action'
         },
-        getDisbursementDetails: {
+        getDisbursementDetails:searchResource( {
             method: 'GET',
             url: BASE_URL + '/api/loanaccounts/groupdisbursement/:partnerCode/:groupCode',
-            isArray: true
-
-        }
+        }),
     });
 });

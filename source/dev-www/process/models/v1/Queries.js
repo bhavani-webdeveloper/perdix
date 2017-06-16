@@ -251,6 +251,26 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getLoanProductCode = function(productCategory,frequency) {
+            var deferred = $q.defer();
+            var request = {};
+            //request.partnerCode=partnerCode;
+            request.productCategory=productCategory;
+            request.frequency=frequency;
+            resource.getResult("loanProductCode.list", request, 50).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
         resource.getBankAccountsByPartner = function(partnerCode) {
             var deferred = $q.defer();
             request = {};

@@ -54,7 +54,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        model.group.grtDate = model.group.grtDate || Utils.getCurrentDate();
                         for (var i = 1; i < 18; i++) {
                             model.group["udf" + i] = model.group["udf" + i] || false;
                         }
@@ -96,40 +95,47 @@ define({
             },
 
             form: [{
+                "type":"box",
+                "title":"START_GRT",
+                "items":[{
+                    "key": "group.grtPhoto",
+                    "title": "GRT_PHOTO",
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "type": "file",
+                    "fileType": "image/*",
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "START_GRT",
+                    "type":"button",
+                    "onClick":"actions.startGRT(model,form)"   
+                }]
+
+            },{
                 "type": "box",
-                "title": "GRT",
+                "title": "END_CGT2",
                 "items": [{
                     "key": "group.grtDoneBy",
                     "title": "GRT_DONE_BY",
                     "readonly": true
-                }, {
-                    "key": "group.grtDate",
-                    "title": "GRT_DATE",
-                    "type": "text",
-                    "readonly": true
-                }, {
+                },{
                     "key": "group.grtLatitude",
                     "title": "GRT_LOCATION",
                     "type": "geotag",
                     "latitude": "group.grtLatitude",
                     "longitude": "group.grtLongitude"
                 }, {
-                    "key": "group.grtPhoto",
+                    "key": "group.grtEndPhoto",
                     "type": "file",
                     "title": "GRT_PHOTO",
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
                     "fileType": "image/*",
-                    "offline": true
                 }, {
                     "key": "group.grtRemarks",
                     "title": "GRT_REMARKS",
                     "type": "textarea"
-                }, {
-                    "key": "group.udfDate1",
-                    "title": "DISBURSEMENT_DATE",
-                    "type": "date"
-                }, {
+                },{
                     "key": "group.udf1",
                     "title": "QUESTION_1"
                 }, {
@@ -206,29 +212,39 @@ define({
                         "type": "select",
                         "enumCode": "relation"
                     }, {
-                        "key": "group.jlgGroupMembers[].isHouseVerified",
+                        "key": "group.jlgGroupMembers[].isHouseVerificationDone",
                         "title": "IS_HOUSE_VERIFIED",
-                        "type": "radios",
-                        "titleMap":{
-                            "Yes":"Yes",
-                            "No":"No"
-                        }
+                        "type": "checkbox",
+                         schema: { default:true }
                     }, {
-                        "key": "group.jlgGroupMembers[].houseLocation",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerified=='Yes'",
+                        "key": "group.jlgGroupMembers[].latitude",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_LOCATION",
                         "type": "geotag",
-                        "latitude": "group.grtLatitude",
-                        "longitude": "group.grtLongitude"
+                        "latitude": "group.jlgGroupMembers.latitude",
+                        "longitude":"group.jlgGroupMembers.longitude"
                     }, {
-                        "key": "group.jlgGroupMembers[].housePhoto",
-                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerified=='Yes'",
+                        "key": "group.jlgGroupMembers[].photoImageId1",
+                        "condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
                         "title": "HOUSE_PHOTO",
                         "type": "file",
                         "category": "Group",
                         "subCategory": "GRTPHOTO",
                         "fileType": "image/*",
+                    },{
+                        "key": "group.jlgGroupMembers[].scheduledDisbursementDate",
+                        "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "type": "date",
+                    },{
+                        "key": "group.jlgGroupMembers[].firstRepaymentDate",
+                        "title": "FIRST_REPAYMENT_DATE",
+                        "type": "date",
                     }]
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "END_GRT",
+                    "type":"button",
+                    "onClick":"actions.endGRT(model,form)"   
                 }]
             }, {
                 "type": "box",
@@ -289,7 +305,7 @@ define({
                     "title": "SAVE_OFFLINE",
                 }, {
                     "type": "submit",
-                    "title": "SUBMIT_GRT"
+                    "title": "PROCEED"
                 }]
             }],
 
@@ -299,6 +315,41 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
+                startGRT: function(model, form) {
+                    model.group.grtDate = new Date();
+                    model.group.grtDoneBy=SessionStore.getLoginname()+'-'+model.group.grtDoneBy;
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    PageHelper.clearErrors();
+                    Utils.removeNulls(reqData, true);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000); 
+                    });
+                },
+                endGRT: function(model, form) {
+                    model.group.grtEndDate = new Date();
+                    model.group.grtDoneBy=SessionStore.getLoginname()+'-'+model.group.grtDoneBy;
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        Utils.removeNulls(res.group, true);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    });
+                },
                 submit: function(model, form, formName) {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('GRT-proceed', 'Working...');

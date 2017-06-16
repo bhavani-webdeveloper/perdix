@@ -2,7 +2,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
     function($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries) {
         var formRepository = {}
-        formRepository['IndividualEnrollment'] = {
+        formRepository['IndividualEnrollment'] = { 
             "CustomerInformation": {
                 "type": "box",
                 "title": "CUSTOMER_INFORMATION",
@@ -385,13 +385,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.identityProofImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
                             },
-                            "udf30": {
-                                key: "customer.udf.userDefinedFieldValues.udf30",
+                            "identityProofReverseImageId": {
+                                key: "customer.identityProofReverseImageId",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
                             },
                             "identityProofNo": {
                                 key: "customer.identityProofNo",
@@ -429,8 +427,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 fileType: "image/*",
                                 "offline": true
                             },
-                            "udf29": {
-                                key: "customer.udf.userDefinedFieldValues.udf29",
+                            "addressProofReverseImageId": {
+                                key: "customer.addressProofReverseImageId",
                                 type: "file",
                                 fileType: "image/*",
                                 "offline": true
@@ -469,13 +467,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "customer.udf.userDefinedFieldValues.udf34",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
                             },
                             "udf35": {
                                 key: "customer.udf.userDefinedFieldValues.udf35",
                                 type: "file",
                                 fileType: "image/*",
-                                "offline": true
                             },
                             "udf36": {
                                 key: "customer.udf.userDefinedFieldValues.udf36",
@@ -784,7 +780,27 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 }
                             }
                         }
-                    }
+                    },
+                    "netIncome": {
+                        key: "customer.udf.userDefinedFieldValues.udf31",
+                        title:"TOTAL_CASH_INFLOW"
+                    },
+                    "totalMonthlySurplus": {
+                        key: "customer.udf.userDefinedFieldValues.udf32",
+                        title:"TOTAL_MONTHLY_SURPLUS"
+                    },
+                    "totalAnnualSurplus": {
+                        key: "customer.udf.userDefinedFieldValues.udf33",
+                        title:"TOTAL_ANNUAL_SURPLUS"
+                    },
+                    "inflowOutflowDifferenceMonthly": {
+                        key: "customer.udf.userDefinedFieldValues.udf34",
+                        title:"INFLOW_MINUS_OUTFLOW_MONTHLY"
+                    },
+                    "inflowOutflowDifferenceYearly": {
+                        key: "customer.udf.userDefinedFieldValues.udf35",
+                        title:"INFLOW_MINUS_OUTFLOW_YEARLY"
+                    },
                 }
             },
             "BusinessOccupationDetails": {
@@ -956,7 +972,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "HouseVerification": {
                                 order:30,
-                                key: "customer.udf.userDefinedFieldValues.udf4",
+                                key: "customer.udf.userDefinedFieldValues.udf5",
 
                             },
                             "Toilet": {
@@ -965,7 +981,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "durationOfStay": {
                                 order:50,
-                                key: "customer.udf.userDefinedFieldValues.udf5",
+                                key: "customer.udf.userDefinedFieldValues.udf4",
                                 type: "radios"
                             },
                             "YearsOfBusinessPresentArea": {
@@ -1157,47 +1173,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     }
                 }
             },
-            "PpiIndicators": {
-                type: "box",
-                title: "PPI_INDICATORS",
-                items: {
-                    "loanType": {
-                        key: "customer.liabilities[].loanType",
-                        type: "select"
-                    },
-                    "loanSource": {
-                        key: "customer.liabilities[].loanSource",
-                        type: "select"
-                    },
-                    "instituteName": {
-                        key: "customer.liabilities[].instituteName",
-                    },
-                    "loanAmountInPaisa": {
-                        key: "customer.liabilities[].loanAmountInPaisa",
-                        type: "amount"
-                    },
-                    "installmentAmountInPaisa": {
-                        key: "customer.liabilities[].installmentAmountInPaisa",
-                        type: "amount"
-                    },
-                    "startDate": {
-                        key: "customer.liabilities[].startDate",
-                        type: "date"
-                    },
-                    "maturityDate": {
-                        key: "customer.liabilities[].maturityDate",
-                        type: "date"
-                    },
-                    "frequencyOfInstallment": {
-                        key: "customer.liabilities[].frequencyOfInstallment",
-                        type: "select"
-                    },
-                    "liabilityLoanPurpose": {
-                        key: "customer.liabilities[].liabilityLoanPurpose",
-                        type: "select"
-                    }
-                }
-            },
+            
             "actionbox": {
                 "type": "actionbox",
                 //"condition": "model.customer.id",

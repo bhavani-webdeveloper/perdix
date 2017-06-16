@@ -24,7 +24,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        model.group.cgtDate3 = model.group.cgtDate3 || Utils.getCurrentDate();
                         model.group.cgt3DoneBy = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
@@ -46,35 +45,50 @@ define({
             },
 
             form: [{
+                "type":"box",
+                "title":"START_CGT3",
+                "items":[{
+                    "key": "group.cgt3Photo",
+                    "title": "CGT_3_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT3PHOTO",
+                    "type": "file",
+                    "fileType": "image/*",
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "START_CGT3",
+                    "type":"button",
+                    "onClick":"actions.startCGT3(model,form)"   
+                }]
+            },{
                 "type": "box",
-                "title": "CGT_3",
+                "title": "END_CGT3",
                 "items": [{
                     "key": "group.cgt3DoneBy",
                     "title": "CGT_3_DONE_BY",
                     "readonly": true
                 }, {
-                    "key": "group.cgtDate3",
-                    "type": "text",
-                    "title": "CGT_3_DATE",
-                    "readonly": true
-                }, {
-                    "key": "group.cgt1Latitude",
+                    "key": "group.cgt3Latitude",
                     "title": "CGT_3_LOCATION",
                     "type": "geotag",
                     "latitude": "group.cgt3Latitude",
                     "longitude": "group.cgt3Longitude"
                 }, {
-                    "key": "group.cgt3Photo",
+                    "key": "group.cgt3EndPhoto",
                     "title": "CGT_3_PHOTO",
                     "category": "Group",
-                    "subCategory": "CGT1PHOTO",
+                    "subCategory": "CGT3PHOTO",
                     "type": "file",
                     "fileType": "image/*",
-                    "offline": true
                 }, {
                     "key": "group.cgt3Remarks",
                     "title": "CGT_3_REMARKS",
                     "type": "textarea"
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "END_CGT3",
+                    "type":"button",
+                    "onClick":"actions.endCGT3(model,form)"   
                 }]
             }, {
                 "type": "actionbox",
@@ -83,7 +97,7 @@ define({
                     "title": "SAVE_OFFLINE",
                 }, {
                     "type": "submit",
-                    "title": "SUBMIT_CGT_3"
+                    "title": "PROCEED"
                 }]
             }],
 
@@ -114,6 +128,41 @@ define({
 
             actions: {
                 preSave: function(model, form, formName) {},
+                startCGT3: function(model, form) {
+                    model.group.cgtDate3 = new Date();
+                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    PageHelper.clearErrors();
+                    Utils.removeNulls(reqData, true);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000); 
+                    });
+                },
+                endCGT3: function(model, form) {
+                    model.group.cgtEndDate3 = new Date();
+                    model.group.cgt3DoneBy=SessionStore.getLoginname()+'-'+model.group.cgt3DoneBy;
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        Utils.removeNulls(res.group, true);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    });
+                },
                 submit: function(model, form, formName) {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('CGT3-proceed', 'Working...');

@@ -1,10 +1,10 @@
 define({
     pageUID: "loans.group.JLGDisbursementQueue",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Groups", "entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state", "Groups","LoanProcess", "entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
-    $pageFn: function($log, $state, Groups, entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state, Groups,LoanProcess, entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         var branchId = SessionStore.getBranchId();
@@ -47,9 +47,9 @@ define({
                     var params = {
                         'branchId': branchId,
                         'partner': searchOptions.partner,
-                        'groupStatus': true,
+                        //'groupStatus': true,
                         'page': pageOpts.pageNo,
-                        //'currentStage': "Stage08",
+                        'currentStage': "LoanDisbursement",
                         'per_page': pageOpts.itemsPerPage
                     };
 
@@ -106,7 +106,7 @@ define({
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "loans.group.GroupDisbursement",
-                                    pageId: item.partnerCode+"."+item.groupCode
+                                    pageId: item.id
                                 }, {
                                     state: "Page.Engine",
                                     pageName: "loans.group.JLGDisbursementQueue",

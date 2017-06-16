@@ -10,6 +10,7 @@
                 "Page/Engine/ProfileInformation",
                 "Page/Engine/customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
+                "Page/Engine/customer.IndividualEnrollment3",
                 "Page/Engine/CBCheck",
                 "Page/Engine/CBCheckStatusQueue",
                 "Page/Engine/EnrollmentHouseVerificationQueue",

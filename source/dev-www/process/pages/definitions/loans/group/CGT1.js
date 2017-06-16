@@ -10,6 +10,31 @@ define({
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
+        var saveData = function(reqData) {
+            PageHelper.showLoader();
+            irfProgressMessage.pop('group-save', 'Working...');
+            var deferred = $q.defer();
+            if (reqData.group.id) {
+                deferred.reject(true);
+                $log.info("Group id not null, skipping save");
+            } else {
+                reqData.groupAction = 'SAVE';
+                //reqData.group.groupFormationDate = Utils.getCurrentDate();
+                PageHelper.clearErrors();
+                Utils.removeNulls(reqData, true);
+                GroupProcess.save(reqData, function(res) {
+                    irfProgressMessage.pop('group-save', 'Done.', 5000);
+                    deferred.resolve(res);
+                }, function(res) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(res);
+                    irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    deferred.reject(false);
+                });
+            }
+            return deferred.promise;
+        };
+
         return {
             "type": "schema-form",
             "title": "CGT_1",
@@ -24,7 +49,6 @@ define({
                         groupId: groupId
                     }, function(response, headersGetter) {
                         model.group = _.cloneDeep(response);
-                        model.group.cgtDate1 = model.group.cgtDate1 || Utils.getCurrentDate();
                         model.group.cgt1DoneBy = SessionStore.getUsername();
                         PageHelper.hideLoader();
                     }, function(resp) {
@@ -46,35 +70,52 @@ define({
             },
 
             form: [{
-                "type": "box",
-                "title": "CGT_1",
-                "items": [{
-                    "key": "group.cgt1DoneBy",
-                    "title": "CGT_1_DONE_BY",
-                    "readonly": true
-                }, {
-                    "key": "group.cgtDate1",
-                    "type": "text",
-                    "title": "CGT_1_DATE",
-                    "readonly": true
-                }, {
-                    "key": "group.cgt1Latitude",
-                    "title": "CGT_1_LOCATION",
-                    "type": "geotag",
-                    "latitude": "group.cgt1Latitude",
-                    "longitude": "group.cgt1Longitude"
-                }, {
+                "type":"box",
+                "title":"START_CGT1",
+                "items":[{
                     "key": "group.cgt1Photo",
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
                     "type": "file",
                     "fileType": "image/*",
-                    "offline": true
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "START_CGT1",
+                    "type":"button",
+                    "onClick":"actions.startCGT1(model,form)"   
+                }]
+
+            },
+                {
+                "type": "box",
+                "title": "END_CGT1",
+                "items": [{
+                    "key": "group.cgt1DoneBy",
+                    "title": "CGT_1_DONE_BY",
+                    "readonly": true
+                },{
+                    "key": "group.cgt1Latitude",
+                    "title": "CGT_1_LOCATION",
+                    "type": "geotag",
+                    "latitude": "group.cgt1Latitude",
+                    "longitude": "group.cgt1Longitude"
+                }, {
+                    "key": "group.cgt1EndPhoto",
+                    "title": "CGT_1_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "fileType": "image/*",
                 }, {
                     "key": "group.cgt1Remarks",
                     "title": "CGT_1_REMARKS",
                     "type": "textarea"
+                },{
+                    "key": "group.Cgtbutton",
+                    "title": "END_CGT1",
+                    "type":"button",
+                    "onClick":"actions.endCGT1(model,form)"   
                 }]
             }, {
                 "type": "actionbox",
@@ -83,7 +124,7 @@ define({
                     "title": "SAVE_OFFLINE",
                 }, {
                     "type": "submit",
-                    "title": "SUBMIT_CGT_1"
+                    "title": "PROCEED"
                 }]
             }],
 
@@ -113,7 +154,39 @@ define({
             },
 
             actions: {
-                preSave: function(model, form, formName) {},
+               preSave: function(model, form, formName) {},
+                startCGT1: function(model, form) {
+                    model.group.cgtDate1 = new Date();
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    PageHelper.clearErrors();
+                    Utils.removeNulls(reqData, true);
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    });
+                },
+                endCGT1: function(model, form) {
+                    model.group.cgtEndDate1 = new Date();
+                    $log.info("Inside submit()");
+                    var reqData = _.cloneDeep(model);
+                    reqData.groupAction = 'SAVE';
+                    GroupProcess.updateGroup(reqData, function(res) {
+                        irfProgressMessage.pop('group-save', 'Done.', 5000);
+                        model.group = _.clone(res.group);
+                        PageHelper.hideLoader();
+                    }, function(res) {
+                        PageHelper.hideLoader();
+                        PageHelper.showErrors(res);
+                        irfProgressMessage.pop('group-save', 'Oops. Some error.', 2000);
+                    });
+                },
                 submit: function(model, form, formName) {
                     PageHelper.showLoader();
                     irfProgressMessage.pop('CGT1-proceed', 'Working...');
