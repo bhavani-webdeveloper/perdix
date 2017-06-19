@@ -46,4 +46,29 @@ class PerdixService
         $settings['perdix']['token'] = $parsedArr['access_token'];
         Settings::getInstance()->setSettings($settings);
     }
+
+    public function accountInfo($authToken = ""){
+        $settings = Settings::getInstance()->getSettings();
+        if ($authToken ==""){
+            $authToken = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : '';
+        }
+        if ($authToken == '') {
+            $url_user_id = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+            $authToken = isset($_GET['auth_token']) ? 'Bearer ' . $_GET['auth_token'] : '';
+        }
+
+        $url = $settings['perdix']['v8_url'] . "/api/account";
+        $client = new GuzzleClient();
+        $reqResAch = $client->request('GET', $url , [
+            'headers' => [
+                'Authorization' => $authToken
+            ],
+            'connect_timeout' => 3600,
+            'timeout' => 3600
+        ]);
+        $responseBody = $reqResAch->getBody()->getContents();
+        $parsedArr = \GuzzleHttp\json_decode($responseBody, true);
+
+        return $parsedArr;
+    }
 }
