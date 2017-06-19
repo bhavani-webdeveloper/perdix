@@ -231,6 +231,9 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 					case "branch_code":
 						var r= irfStorageService.getMaster('branch');
 						break;
+					case "loan_product_frequency":
+						var r= irfStorageService.getMaster('frequency');
+						break;	
 				}
 			}
 
@@ -275,6 +278,12 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 							ret.data[i].value = ret.data[i].field1;
 						}
 						break;
+					case 'loan_product_frequency':
+						ret.data = _.clone(r.data);
+						for (var i=0; i<ret.data.length; i++){
+							ret.data[i].value = ret.data[i].field1;
+						}
+						break;	
 					case 'partner':
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {

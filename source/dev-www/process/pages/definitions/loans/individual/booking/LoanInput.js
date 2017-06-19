@@ -16,7 +16,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                     fee+=model.loanAccount.commercialCibilCharge;
             $log.info(model.loanAccount.commercialCibilCharge);
-
         };
 
         var validateForm = function(formCtrl){
@@ -52,7 +51,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                 })
             }
-            
             return true;
         }
 
@@ -434,7 +432,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
-                                "enumCode":"frequency"
+                                "enumCode":"loan_product_frequency"
                             },
                             {
                                 "key": "loanAccount.productCode",
@@ -444,7 +442,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 required: true,
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency);
+                                   return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode);
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.productCode = valueObj.productCode;
