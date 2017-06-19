@@ -19,15 +19,7 @@ foreach ($files as $file) {
         $inputFileName = $tempToBeProcessed . $file->getFilename();
         $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
         echo $ext . "\n";
-        if ($ext != "xlsx") {
-        	//echo $inputFileName;
-        	continue;
-        }
 
-        if (strpos($inputFileName, 'PAR Upload Report') == false){
-            //echo $inputFileName;
-            continue;
-        }
         $baseName = basename($inputFileName,".xlsx");
         $fileNameSplit = explode("_", $baseName);
                     echo "date: ".$fileNameSplit[1]."\n";
@@ -50,7 +42,6 @@ foreach ($files as $file) {
 
             if ($highestColumn != "B") {
             	throw new Exception( $inputFileName." is not in proper format");
-                die();
             }
 
             $cbsTableName;

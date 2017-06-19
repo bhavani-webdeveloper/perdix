@@ -33,8 +33,6 @@ if (0 < $_FILES['file']['error']) {
 
 $upload_name = isset($_GET['upload_name']) ? $_GET['upload_name'] : '';
 
-$upload_name = "securitization";
-
 $inputFileName = __DIR__ . '/uploads/' . $_FILES['file']['name'];
 try {
     $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
@@ -49,6 +47,22 @@ $highestColumn = $sheet->getHighestColumn();
 echo $highestColumn . "\n";
 
 $UploadTagMaster = new UploadTagMaster();
+$date; 
+$dateForDB;
+if($upload_name == "par"){
+
+        $baseName = basename($inputFileName,".xlsx");
+        $fileNameSplit = explode("_", $baseName);
+        echo "date: ".$fileNameSplit[1]."\n";
+        echo DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('dMY')."\n";
+        if(sizeof($fileNameSplit) == 2 && DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('dmY') === $fileNameSplit[1]){
+
+            $date = DateTime::createFromFormat('dmY', $fileNameSplit[1]);
+            $dateForDB = DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('Y-m-d');
+        } else {
+            throw new Exception("There is no date in file Name: ".$inputFileName);
+        }
+}
 
 for ($row = 2; $row <= $highestRow; $row++) {
 	$matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
@@ -63,7 +77,7 @@ for ($row = 2; $row <= $highestRow; $row++) {
 			UploadService::handleSecuritazation($rowData);
 			break;
 		case 'par':
-
+			UploadService::handleParUpload($rowData, $row, $date, $dateForDB);
 			break;
 		default:
 			# code...

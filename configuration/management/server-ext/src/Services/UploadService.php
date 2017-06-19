@@ -5,6 +5,9 @@ use App\Core\Settings;
 use App\Models\UploadTagMaster;
 use App\Models\UploadTagAccountsHistory;
 use App\Models\UploadTagAccounts;
+use App\Models\AdjustedPar;
+use App\Models\CbsTableModel;
+
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Capsule\Manager as DB;
 use PHPExcel_Style_NumberFormat;
@@ -66,5 +69,36 @@ class UploadService {
 		     var_dump($UploadTagMasterdata->id);
 		     var_dump($update);
 	  	}
+	}
+
+	public static function handleParUpload($rowData, $row, $date ,$dateForDB){
+		try {
+
+                if($rowData[0] == NULL) {
+                	throw new Exception("The cell value of account_number or date column is empty in row No.".$row);
+                }
+
+                $CbsTableModel = new CbsTableModel($date);
+
+                $cbsTableName = $CbsTableModel->getTable();
+                echo $cbsTableName."\n";
+                if($row == 2) {
+                    $delRows = AdjustedPar::where('date' , '=', $dateForDB)->delete();
+                    echo "deleted ".$delRows." rows in adjusted_par"."\n";
+                    $r = $CbsTableModel->update(['AdjustedDelinquentDays' => NULL]);
+                    echo "affected rows: ".$r."\n";
+                }
+
+                $createAdjustedPar = new AdjustedPar();
+                $createAdjustedPar->account_number = $rowData[0];
+                $createAdjustedPar->date = $dateForDB;
+                $createAdjustedPar->AdjustedDelinquentDays = $rowData[1];
+                $createAdjustedPar->save();
+                $r1 = $CbsTableModel->where('AccountNumber', '=', $rowData[0])->update(['AdjustedDelinquentDays' => $rowData[1]]);
+                //echo "row: ".$r1."\n";
+        }
+        catch (Exception $e) {
+            echo "fileName: ".$inputFileName.". Exception message: ".$e->getMessage();            
+        }
 	}
 }
