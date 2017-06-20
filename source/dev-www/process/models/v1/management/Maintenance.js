@@ -47,6 +47,27 @@ irf.models.factory('Maintenance', ["$resource", "$httpParamSerializer", "BASE_UR
             }, progress);
             return deferred.promise;
         };
+        res.taggingMasterDataUpload = function(file, progress, opts) {
+            var deferred = $q.defer();
+            reqData = {
+                "file": file
+            };
+            Upload.upload({
+                url: irf.MANAGEMENT_BASE_URL+"/server-ext" + "/generic_upload.php?upload_name=" + opts.fileType,
+                data: reqData
+            }).then(function(resp){
+                // TODO handle success
+                console.log(resp);
+                PageHelper.showProgress("page-init", "Done", 2000);
+                deferred.resolve(resp);
+
+            }, function(errResp){
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
 
         return res;
     }

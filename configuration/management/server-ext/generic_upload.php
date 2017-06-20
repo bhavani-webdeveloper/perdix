@@ -49,7 +49,7 @@ echo $highestColumn . "\n";
 $UploadTagMaster = new UploadTagMaster();
 $date; 
 $dateForDB;
-if($upload_name == "par"){
+if($upload_name == "PAR"){
 
         $baseName = basename($inputFileName,".xlsx");
         $fileNameSplit = explode("_", $baseName);
@@ -73,10 +73,10 @@ for ($row = 2; $row <= $highestRow; $row++) {
 	$rowData = $matrixData[0];
 
 	switch ($upload_name) {
-		case 'securitization':
+		case 'SECURITIZATION':
 			UploadService::handleSecuritazation($rowData);
 			break;
-		case 'par':
+		case 'PAR':
 			UploadService::handleParUpload($rowData, $row, $date, $dateForDB);
 			break;
 		default:
