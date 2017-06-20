@@ -447,7 +447,7 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     type: "amount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
@@ -458,12 +458,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "amount",
 
                                     /* "onChange": function(modelValue, form, model) {
@@ -473,12 +473,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
@@ -563,7 +563,7 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     type: "amount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
@@ -574,12 +574,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "amount",
                                     "readonly": true,
                                     /*"onChange": function(modelValue, form, model) {
@@ -589,12 +589,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
@@ -866,7 +866,7 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     type: "amount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.loanAmountUsed)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
@@ -877,12 +877,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "amount",
 
                                     /* "onChange": function(modelValue, form, model) {
@@ -892,12 +892,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
@@ -982,7 +982,7 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposeAmount",
                                     type: "amount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     "onChange": function(modelValue, form, model) {
                                         var a = ((parseFloat(model.loanMonitoringDetails.intendedPurposeAmount) / parseFloat(model.loanMonitoringDetails.repayedDebitAmount)) * 100);
                                         model.loanMonitoringDetails.intendedPurposePercentage = parseInt(a.toFixed());
@@ -993,12 +993,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.intendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true,
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmount",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "amount",
                                     "readonly": true,
                                     /*"onChange": function(modelValue, form, model) {
@@ -1008,12 +1008,12 @@ define({
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposePercentage",
                                     title: "%OF_AMOUNT_UTILISED_FOR_UNINTENDED_PURPOSE",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                     type: "integer",
                                     "readonly": true
                                 }, {
                                     key: "loanMonitoringDetails.nonIntendedPurposeAmountSpentOn",
-                                    condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
+                                    //condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 }, {
                                     key: "loanMonitoringDetails.lucDone",
                                     type: "radios",
