@@ -37,7 +37,7 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
                                     
                                    var fileId = "";
                                    if(model.master.uploadName == "PAR"){
-                                     fileId = irf.MANAGEMENT_BASE_URL + '/server-ext/uploads/'+ "revised_PAR_tagging.xlsx";
+                                     fileId = irf.MANAGEMENT_BASE_URL + '/server-ext/uploads/'+ "PAR_ddmmyyyy.xlsx";
                                      model.master.uploadNameValue = "PAR";
                                    }
                                    if(model.master.uploadName == "SECURITIZATION"){
