@@ -367,8 +367,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {
-                            var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
-                            Utils.downloadFile(fileUrl);
+                            Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
                         }
                     }, {
                         "type": "fieldset",
@@ -774,6 +773,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                 PageHelper.hideLoader();
                             })
                     })
+
                 },
                 proceed: function(model, form, formName) {
                     if (PageHelper.isFormInvalid(form)){
