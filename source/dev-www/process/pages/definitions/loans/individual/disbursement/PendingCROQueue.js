@@ -61,8 +61,7 @@ function($log, formHelper, IndividualLoan, $state, SessionStore,$q,entityManager
                     'scheduledDisbursementDate': null,
                     'page': 1,
                     'per_page': 100,
-                    'sortBy':null,
-                    'branchId': SessionStore.getCurrentBranch().branchId
+                    'sortBy':null
                 }).$promise;
 
                 return promise;
