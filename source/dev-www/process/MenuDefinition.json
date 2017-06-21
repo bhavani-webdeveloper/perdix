@@ -84,6 +84,7 @@
                 "Page/Engine/management.SpokeMerger/intrabranch",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
+                "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard"    
