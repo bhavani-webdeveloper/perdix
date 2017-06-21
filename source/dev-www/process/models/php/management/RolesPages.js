@@ -42,3 +42,23 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
 
     return res;
 });
+
+irf.pageCollection.run(["irfStorageService", "$q", "RolesPages",
+function(irfStorageService, $q, RolesPages) {
+    irfStorageService.onMasterUpdate(function() {
+        var deferred = $q.defer();
+        RolesPages.allRolesOnline().$promise.then(function(res) {
+            var rolesTitleMap = [];
+            for (i in res.body) {
+                rolesTitleMap.push({
+                    "name": res.body[i].name,
+                    "value": res.body[i].id,
+                    "accessLevel": res.body[i].accessLevel
+                });
+            }
+            irfStorageService.setMaster("roles", {"data":rolesTitleMap});
+            deferred.resolve();
+        }, deferred.reject);
+        return deferred.promise;
+    });
+}]);
