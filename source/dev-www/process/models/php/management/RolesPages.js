@@ -47,7 +47,7 @@ irf.pageCollection.run(["irfStorageService", "$q", "RolesPages",
 function(irfStorageService, $q, RolesPages) {
     irfStorageService.onMasterUpdate(function() {
         var deferred = $q.defer();
-        RolesPages.allRolesOnline().$promise.then(function(res) {
+        RolesPages.allRoles().$promise.then(function(res) {
             var rolesTitleMap = [];
             for (i in res.body) {
                 rolesTitleMap.push({
