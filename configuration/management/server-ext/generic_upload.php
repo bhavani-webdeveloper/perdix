@@ -16,18 +16,16 @@ use App\Core\Settings;
 $perdixService = new PerdixService();
 $loggedInUser = $perdixService->accountInfo();
 
-var_dump($_FILES);
+//var_dump($_FILES);
 # GET FILE
 if (0 < $_FILES['file']['error']) {
-    echo 'Error: ' . $_FILES['file']['error'] . '<br>';
+   // echo 'Error: ' . $_FILES['file']['error'] . '<br>';
 } else {
     if (move_uploaded_file($_FILES['file']['tmp_name'], __DIR__ . '/uploads/' . $_FILES['file']['name'])) {
         $outjson = array(
             "POST_PARAMS" => $_POST,
             "filename" => $_FILES['file']['name']
         );
-        // echo json_encode($outjson);
-        // print_r($outjson);
     }
 }
 
@@ -44,7 +42,7 @@ try {
 $sheet = $objPHPExcel->getSheet(0);
 $highestRow = $sheet->getHighestRow();
 $highestColumn = $sheet->getHighestColumn();
-echo $highestColumn . "\n";
+//echo $highestColumn . "\n";
 
 $UploadTagMaster = new UploadTagMaster();
 $date; 
@@ -53,8 +51,8 @@ if($upload_name == "PAR"){
 
         $baseName = basename($inputFileName,".xlsx");
         $fileNameSplit = explode("_", $baseName);
-        echo "date: ".$fileNameSplit[1]."\n";
-        echo DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('dMY')."\n";
+        //echo "date: ".$fileNameSplit[1]."\n";
+       // echo DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('dMY')."\n";
         if(sizeof($fileNameSplit) == 2 && DateTime::createFromFormat('dmY', $fileNameSplit[1])->format('dmY') === $fileNameSplit[1]){
 
             $date = DateTime::createFromFormat('dmY', $fileNameSplit[1]);
@@ -86,4 +84,6 @@ for ($row = 2; $row <= $highestRow; $row++) {
 
 }
 
-echo "Done";
+$response = get_response_obj();
+
+$response->setStatusCode(200)->json([]);

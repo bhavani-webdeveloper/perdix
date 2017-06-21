@@ -29,6 +29,7 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
                                 "type": "button",
                                 "title": "DOWNLOAD",
                                 "icon": "fa fa-download",
+                                "condition": "model.master.uploadName",
                                 "notitle": true,
                                 "readonly": false,
 
@@ -60,6 +61,7 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
                             "notitle": true,
                             "type": "file",
                             "category": "ACH",
+                            "condition": "model.master.uploadName",
                             "subCategory": "cat2",
                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             customHandle: function(file, progress, modelValue, form, model) {

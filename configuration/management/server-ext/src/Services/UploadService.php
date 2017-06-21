@@ -19,12 +19,12 @@ class UploadService {
 
 	public static function handleSecuritazation($rowData){
 
-		echo "date".$rowData[3];
+		//echo "date".$rowData[3];
 		if ($rowData[3] !=null && $rowData[3] !=="") {
             $rowData[3] = PHPExcel_Style_NumberFormat::toFormattedString($rowData[3],'YYYY-MM-DD' );
 	    }
 
-	    echo $rowData[1]." ".$rowData[2]." ". $rowData[3]."\n";
+	    //echo $rowData[1]." ".$rowData[2]." ". $rowData[3]."\n";
 
 	    $UploadTagMaster = new UploadTagMaster();
 	    $UploadTagAccountsHistory = new UploadTagAccountsHistory();
@@ -42,7 +42,7 @@ class UploadService {
 	    	$UploadTagMaster->remarks = $rowData[2];
 	    	$UploadTagMaster->effective_date = $rowData[3];
 	    	$UploadTagMaster->save();
-	    	echo "New Data inserted"."\n";
+	    	//echo "New Data inserted"."\n";
 	    }
 
 	    $tag_id = $UploadTagAccounts::select('tag_id')
@@ -50,7 +50,7 @@ class UploadService {
 	  			  ->get();
 	  	
 	  	if(sizeof($tag_id)>0){
-	      	echo $tag_id[0]['tag_id'];
+	      	//echo $tag_id[0]['tag_id'];
 	      	$UploadTagAccountsHistory->tag_id = $tag_id[0]['tag_id'];
 	    	$UploadTagAccountsHistory->account_number = $rowData[0];
 	    	$UploadTagAccountsHistory->save();
@@ -66,8 +66,8 @@ class UploadService {
 		    
 
 		    // echo "\n".$UploadTagMasterdata[0]['id']." Final Update : "."\n";
-		     var_dump($UploadTagMasterdata->id);
-		     var_dump($update);
+		     //var_dump($UploadTagMasterdata->id);
+		     //var_dump($update);
 	  	}
 	}
 
@@ -81,12 +81,12 @@ class UploadService {
                 $CbsTableModel = new CbsTableModel($date);
 
                 $cbsTableName = $CbsTableModel->getTable();
-                echo $cbsTableName."\n";
+                //echo $cbsTableName."\n";
                 if($row == 2) {
                     $delRows = AdjustedPar::where('date' , '=', $dateForDB)->delete();
-                    echo "deleted ".$delRows." rows in adjusted_par"."\n";
+                    //echo "deleted ".$delRows." rows in adjusted_par"."\n";
                     $r = $CbsTableModel->update(['AdjustedDelinquentDays' => NULL]);
-                    echo "affected rows: ".$r."\n";
+                    //echo "affected rows: ".$r."\n";
                 }
 
                 $createAdjustedPar = new AdjustedPar();
@@ -98,7 +98,7 @@ class UploadService {
                 //echo "row: ".$r1."\n";
         }
         catch (Exception $e) {
-            echo "fileName: ".$inputFileName.". Exception message: ".$e->getMessage();            
+           // echo "fileName: ".$inputFileName.". Exception message: ".$e->getMessage();            
         }
 	}
 }
