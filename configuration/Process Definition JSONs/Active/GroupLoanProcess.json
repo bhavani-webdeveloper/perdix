@@ -116,11 +116,19 @@
             "maxItems":null,
             "items":null,
             "required":[
-		"centreCode"
             ],
             "properties":{
                "partnerCode":{
                   "title":"Partner Code",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":15,
+                  "captureStages":[
+                     "GroupCreation"
+                  ]
+               },
+               "centreCode":{
+                  "title":"Centre Code",
                   "type":"string",
                   "minLength":1,
                   "maxLength":15,
@@ -476,7 +484,6 @@
             "items":{
                "type":"object",
                "required":[	
-					"modeOfDisbursement"
                ],
                "properties":{
                   "loanPurpose":{

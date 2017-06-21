@@ -319,7 +319,15 @@
                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                   ]
                },
-
+               "fixedIntrestRate": {
+                  "title": "moratorium period in days",
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 10000000,
+                  "captureStages": [
+                     "LoanInitiation", "PendingForPartner"
+                  ]
+               },
                "loanApplicationDate":{
                   "title":"Loan Application Date",
                   "type":"string",
@@ -1977,6 +1985,15 @@
                         "Screening", "Sanction", "LoanBooking", "LoanInitiation"
                      ]
                   },
+                  "moratoriumPeriodInDays": {
+                     "title": "moratorium period in days",
+                     "type": "number",
+                     "minimum": 1,
+                     "maximum": 10000000,
+                     "captureStages": [
+                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                     ]
+                  },
                   "disbursementAmount":{
                      "title":"disbursementAmount",
                      "type":"integer",
@@ -2058,15 +2075,6 @@
                      "type":"string",
                      "captureStages":[
                         "Screening", "DocumentUpload", "LoanInitiation"
-                     ]
-                  },
-                 "moratoriumPeriodInDays":{
-                     "title":"moratorium period in days",
-                     "type":"number",
-                     "minimum":1,
-                     "maximum":10000000,
-                     "captureStages":[
-                        "LoanInput"
                      ]
                   }
                }

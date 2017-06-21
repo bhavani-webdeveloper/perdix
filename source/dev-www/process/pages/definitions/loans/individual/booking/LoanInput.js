@@ -790,11 +790,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                "key": "loanAccount.moratoriumPeriodInDays",
-                                "title":"MORATORIUM_PERIOD",
-                                "type": "text"
-                            },
-                            {
                                 "key": "loanAccount.fixedIntrestRate",
                                 "title":"FIXED_INTREST_RETE",
                                 "type": "number"
@@ -1188,6 +1183,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         key:"loanAccount.disbursementSchedules[].disbursementAmount",
                                         title:"DISBURSEMENT_AMOUNT",
                                         type:"amount"
+                                    },
+                                    {
+                                        "key": "loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                                        "title": "MORATORIUM_PERIOD",
+                                        "type": "string"
                                     },
                                     {
                                         key: "loanAccount.disbursementSchedules[].tranchCondition",
