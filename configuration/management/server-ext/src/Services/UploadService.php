@@ -75,7 +75,7 @@ class UploadService {
 		try {
 
                 if($rowData[0] == NULL) {
-                	throw new Exception("The cell value of account_number or date column is empty in row No.".$row);
+                	throw new Exception("The cell value of account_number column is empty in row No.".$row);
                 }
 
                 $CbsTableModel = new CbsTableModel($date);
@@ -98,6 +98,7 @@ class UploadService {
                 //echo "row: ".$r1."\n";
         }
         catch (Exception $e) {
+        	throw $e;
            // echo "fileName: ".$inputFileName.". Exception message: ".$e->getMessage();            
         }
 	}

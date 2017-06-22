@@ -3,7 +3,7 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
         var branchIDArray = [];
         return {
             "type": "schema-form",
-            "title": "TAGGING_MASTER_MAINTENANCE",
+            "title": "TAGGING MAINTENANCE",
             //"subTitle": Utils.getCurrentDate(),
 
             initialize: function(model, form, formCtrl) {
@@ -14,17 +14,18 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
             },
             form: [{
                     "type": "box",
-                    "title": "MASTER_DATA_TEMPLATE_DOWNLOAD",
+                    "title": "TAGGING MAINTENANCE",
                     "items": [{
-                        "type": "fieldset",
-                        "title": "DOWNLOAD_MASTER_DATA_TEMPLATE",
-                        "items": [{
                                 
                                 key:"master.uploadName",
                                 type:"select",
+                                required: true,
                                 title: "Tagging Type",
                                 "enumCode": "taggingType"
-                            },
+                            },{
+                        "type": "fieldset",
+                        "title": "DOWNLOAD_MASTER_DATA_TEMPLATE",
+                        "items": [
                             {
                                 "type": "button",
                                 "title": "Download Template",
@@ -46,32 +47,36 @@ irf.pageCollection.factory(irf.page("management.TaggingMaintenance"), ["$log", "
                                    }
                                    Utils.downloadFile(fileId);
                                 },
-                            },
-                            {
-                                "type": "fieldset",
-                                "title": "UPLOAD_STATUS",
-                                "items": [{
-                                    "key": "master.achDemandListFileId",
-                                    "notitle": true,
-                                    "type": "file",
-                                    "category": "ACH",
-                                    "condition": "model.master.uploadName",
-                                    "subCategory": "cat2",
-                                    "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                    customHandle: function(file, progress, modelValue, form, model) {
-                                        Maintenance.taggingMasterDataUpload(file, progress, {
-                                            fileType: model.master.uploadName
-                                        }).then(function(resp) {
-                                            $log.info(resp.data.stats);
-                                            model.master.value = true;
-                                            model.uploadres = resp.data.stats;
-                                        });
-                                    }
-                                }]
                             }
                         ]
                     }]
-                },{
+                }, {
+                    "type": "box",
+                    "title": "UPLOAD_MASTER_DATA",
+                    "items": [{
+                        "type": "fieldset",
+                        "title": "UPLOAD_STATUS",
+                        "condition": "model.master.uploadName",
+                        "items": [{
+                            "key": "master.achDemandListFileId",
+                            "notitle": true,
+                            "type": "file",
+                            "category": "ACH",
+                            "subCategory": "cat2",
+                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            customHandle: function(file, progress, modelValue, form, model) {
+                                Maintenance.taggingMasterDataUpload(file, progress, {
+                                    fileType: model.master.uploadName
+                                }).then(function(resp) {
+                                    $log.info(resp.data.stats);
+                                    model.master.value = true;
+                                    model.uploadres = resp.data.stats;
+                                    model.master.achDemandListFileId = undefined;
+                                });
+                            }
+                        }]
+                    }]
+                }, {
                     type: "box",
                     colClass: "col-sm-12",
                     condition: "model.master.value",

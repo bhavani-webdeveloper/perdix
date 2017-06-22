@@ -58,7 +58,7 @@ irf.models.factory('Maintenance', ["$resource", "$httpParamSerializer", "BASE_UR
             }).then(function(resp){
                 // TODO handle success
                 console.log(resp);
-                PageHelper.showProgress("page-init", "Done", 2000);
+                PageHelper.showProgress("page-init", "Upload Successfull.", 5000);
                 deferred.resolve(resp);
 
             }, function(errResp){
