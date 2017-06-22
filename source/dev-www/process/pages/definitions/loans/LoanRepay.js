@@ -55,6 +55,11 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                 //PageHelper
                 var loanAccountNo = ($stateParams.pageId.split("."))[0];
                 var customerId = ($stateParams.pageId.split("."))[2];
+                var bcaccountnumber = ($stateParams.pageId.split("."))[3];
+                var partner = ($stateParams.pageId.split("."))[4];
+
+                $log.info(bcaccountnumber);
+
                 $log.info(customerId);
                 model.customer = {};
                 model.loanAccount = {};
@@ -90,6 +95,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                             'urnNo': data.customerId1,
                             'productCode': data.productCode,
                         };
+                        if(partner=="AXIS")
+                        {
+                          model.repayment.accountId =bcaccountnumber;
+                        }
 
                         var txName = (data.totalDemandDue == 0) ? "Advance Repayment" : "Scheduled Demand";
 
@@ -100,6 +109,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                             model.repayment.amount= parseFloat(data.totalDemandDue + data.totalFeeDue);
 
                         }
+                        model.repayment.accountNumber =loanAccountNo;
+
                         var currDate = moment(new Date()).format("YYYY-MM-DD");
                         model.repayment.repaymentDate = currDate;
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
@@ -413,11 +424,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                             };
 
                             var r = model.repay;
+                            var s=model.loanAccount;
                             var totalSatisfiedDemands = 0;
                             var pendingInstallment= 0;
+                            //r.accountId
 
                             LoanAccount.get({
-                                accountId: r.accountId
+                                accountId: r.accountNumber
                             }).$promise.then(function(resp) {
                                 $log.info(resp);
                                 if (resp.repaymentSchedule && resp.repaymentSchedule.length) {
@@ -585,6 +598,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'), ["$log", "$q", "$timeout
                                 $log.info(resp);
                                 model.repay = resp;
                                 model.repay.submissionDone = "yes";
+                                model.repay.accountNumber=model.repayment.accountNumber;
                             } catch (err) {
 
                             }
