@@ -18,6 +18,10 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
             url: BASE_URL + '/api/loanaccounts/groupdisbursement/:partnerCode/:groupCode',
             isArray: true
         },
+        transactionDetails: {
+            method: "GET",
+            url: irf.BI_BASE_URL + "/transaction_details.php"
+        },
         get: {
             method: 'GET',
             url: endpoint + '/show/:accountId',

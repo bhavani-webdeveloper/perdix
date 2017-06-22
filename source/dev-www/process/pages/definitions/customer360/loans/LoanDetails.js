@@ -1,5 +1,9 @@
-irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons",
-    function($log, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons) {
+irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal",
+    function($log, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal) {
+
+        var transactionDetailHtml = "\
+        <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
+        "
 
         return {
             "type": "schema-form",
@@ -108,6 +112,61 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                                             model.cbsLoan.repaymentScheduleTblFormat.data = model.cbsLoan.repaymentSchedule;
                                             model.cbsLoan.orgRepaymentScheduleTblFormat = {columns: model.cbsLoan.repaymentScheduleTblFormat.columns};
                                             model.cbsLoan.orgRepaymentScheduleTblFormat.data = $filter('filter')(model.cbsLoan.repaymentSchedule, {status: 'true'});
+                                        }
+
+                                        model.cbsLoan.orgTransactions = {};
+
+                                        if (model.cbsLoan.transactions.length > 0) {
+                                            model.cbsLoan.orgTransactions.columns =  [
+                                                {
+                                                    "title": "Transaction ID",
+                                                    "data": "transactionId",
+                                                    "onClick": function(data){
+                                                        PageHelper.showLoader();
+                                                        LoanAccount.transactionDetails({'transaction_id':data.transactionId})
+                                                        .$promise
+                                                        .then(function(data){
+                                                            var modalInstance = irfSimpleModal('Details', transactionDetailHtml, {orgTransactionDetails: data}, {size:"lg"});
+                                                        })
+                                                        .finally(function(){
+                                                            PageHelper.hideLoader();
+                                                        })
+                                                    }
+                                                },
+                                                {
+                                                    "title": "Description",
+                                                    "data": "transactionName"
+                                                },
+                                                {
+                                                    "title": "Amount",
+                                                    "data": "amount1"
+                                                },
+                                                {
+                                                    "title": "Balance",
+                                                    "data": "amount2"
+                                                },
+                                                {
+                                                    "title": "Principal",
+                                                    "data": "part1"
+                                                },
+                                                {
+                                                    "title": "Interest",
+                                                    "data": "part2"
+                                                },
+                                                {
+                                                    "title": "Penal",
+                                                    "data": "part3"
+                                                },
+                                                {
+                                                    "title": "Value Date",
+                                                    "data": "valueDateStr"
+                                                },
+                                                {
+                                                    "title": "Transaction Date",
+                                                    "data": "transactionDateStr"
+                                                }
+                                            ];
+                                            model.cbsLoan.orgTransactions.data = $filter('filter')(model.cbsLoan.transactions, {transactionName: '!Demand'});
                                         }
                                         var loanDocuments = model.loanAccount.loanDocuments;
                                         var availableDocCodes = [];
@@ -891,6 +950,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                             ]
                         },
                         ] // END of box items
+                },
+                {
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "title": "TRANSACTION_ACCOUNTING_DETAILS",
+                    "htmlClass": "text-danger",
+                    "items": [
+                        {
+                            type: "section",
+                            colClass: "col-sm-12",
+                            html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgTransactions'></irf-simple-summary-table>"
+                        }
+                    ] // END of box items
                 },
                 // {
                 //     "type": "box",
