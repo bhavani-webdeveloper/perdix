@@ -108,6 +108,65 @@
                      "journalEntry",
                      "journalPosting"
                   ]
+               },
+               "instrumentType": {
+                  "title": "InstrumentType",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentNumber": {
+                  "title": "InstrumentNumber",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentDate": {
+                  "title": "InstrumentDate",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "ifscCode": {
+                  "title": "IfscCode",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentBankName": {
+                  "title": "instrumentBankName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentBranchName": {
+                  "title": "instrumentBranchName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
                }
             }
          }
