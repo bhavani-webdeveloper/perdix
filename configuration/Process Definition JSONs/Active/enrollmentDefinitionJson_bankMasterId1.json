@@ -223,46 +223,46 @@
                 "Completed"
               ]
             },
-			"udfId1": {
-				"title": "udf1",
-				"type": "string",
-				 "captureStages": [
-					"BasicEnrolment",
-					"Completed"
-							]
-						},
-			"udfId2": {
-				"title": "udf2",
-				"type": "string",
-				 "captureStages": [
-					"BasicEnrolment",
-					"Completed"
-				]
-			},
-			"udfId3": {
-				"title": "udf3",
-				"type": "string",
-				 "captureStages": [
-					"BasicEnrolment",
-					"Completed"
-				]
-			},
-			"udfId4": {
-				"title": "udf4",
-				"type": "string",
-				 "captureStages": [
-					"BasicEnrolment",
-					"Completed"
-				]
-			},
-			"udfId5": {
-				"title": "udf5",
-				"type": "string",
-				 "captureStages": [
-					"BasicEnrolment",
-					"Completed"
-				]
-			}
+            "udfId1": {
+              "title": "udf1",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+                    ]
+                  },
+            "udfId2": {
+              "title": "udf2",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfId3": {
+              "title": "udf3",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfId4": {
+              "title": "udf4",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfId5": {
+              "title": "udf5",
+              "type": "string",
+               "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
           }
         }
       },
@@ -1005,6 +1005,16 @@
             "type": "number",
             "minimum": 0,
             "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "partnerCode": {
+            "title": "partnerCode",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
               "Completed"
@@ -2281,7 +2291,7 @@
               "Completed"
             ]
           },
-		   "oldCustomerId": {
+		      "oldCustomerId": {
             "title": "OldCustomerId",
             "type": "string",
             "minLength": 1,
@@ -2573,6 +2583,16 @@
             "title": "customerWalkinToBusiness",
             "type": "string",
             "minLength": 1,
+            "maxLength": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "partnerCode": {
+            "title": "partnerCode",
+            "type": "string",
+            "minLength": 0,
             "maxLength": 45,
             "captureStages": [
               "BasicEnrolment",
