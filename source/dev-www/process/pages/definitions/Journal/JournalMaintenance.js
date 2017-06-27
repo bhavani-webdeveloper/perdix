@@ -1,11 +1,11 @@
 define({
     pageUID: "Journal.JournalMaintenance",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    dependencies: ["$log", "$state","User", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
     ],
 
-    $pageFn: function($log, $state, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    $pageFn: function($log, $state,User, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
@@ -69,37 +69,49 @@ define({
                         type: "textarea",
                         "title": "TRANSACTION_DESCRIPTION"
                     }, {
-                        key: "journal.userBranches",
+                        key: "journal.journalBranches",
                         type: "array",
                         view: "fixed",
                         title: "Branches",
                         items: [{
-                            key: "journal.userBranches[].branchId",
+                            key: "journal.journalBranches[].branchName",
                             title: "BRANCH_NAME",
                             // condition: "model.journal.userBranches == active",
                             type: "lov",
-                            enumCode: "branch_id",
+                            //enumCode: "branch_id",
                             required: true,
-                            inputMap: {
-                                "branch_id": {
-                                    "key": "branch_id"
-                                },
-
-                            },
-                            outputMap: {
-                                "branch_id": "branch_id"
-                            },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
-                                var promise = User.query({
-                                    'branchName': inputModel.branch_id
+                                var out = [];
+                                var branches = formHelper.enum('branch_id').data;
+                                $log.info(branches);
+                                if (branches && branches.length) {
+                                        for (var j = 0; j < branches.length; j++) {
+                                                out.push({
+                                                    name: branches[j].name,
+                                                    id: branches[j].value
+                                                })
+                                        }
+                                }
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
+                                /*var promise = User.query({
+                                    'branchName': model.journal.journalBranches[].branchId
                                 }).$promise;
-                                return promise;
+                                return promise;*/
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
-                                    item.branchName
+                                    item.name
                                 ];
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                model.journal.journalBranches[context.arrayIndex].branchId=valueObj.id;
+                                model.journal.journalBranches[context.arrayIndex].branchName=valueObj.name;
                             }
                         }]
                     }]
@@ -163,7 +175,28 @@ define({
                             "batchNumber": {
                                 "title": "BATCH_NAME",
                                 "type": "string"
-                            }
+                            },
+                            "journalBranches": {
+                                "type": "array",
+                                "title": "USER_BRANCHES",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "branchId": {
+                                            "type": ["string", "null"],
+                                            "title": "BRANCH_ID"
+                                        },
+                                        "transactionId": {
+                                            "type": ["number", "null"],
+                                            "title": "TRANSACTION_ID"
+                                        },
+                                        "id": {
+                                            "type": ["number", "null"],
+                                            "title": "ID"
+                                        }
+                                    }
+                                }
+                            },
                         }
                     }
                 }
