@@ -24,7 +24,7 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
         },
         get: {
             method: 'GET',
-            url: endpoint + '/show/:accountId',
+            url: endpoint + '/show/accountId',
             transformResponse: function(data, headersGetter, status) {
                 if (status === 200 && data) {
                     data = JSON.parse(data);
