@@ -27,7 +27,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         loanIds.push(res.body[i].loanId);
                         var promise = Scoring.financialSummarySnapshot({loan_id: res.body[i].loanId, score_name: "ConsolidatedScore"}).$promise;
                         promise.then(function(resp){
-                            var bpl = resp[8];
+                            var bpl = resp[1];
                             bpl.title = "Profit & Loss - " + res.body[i].accountNumber;
                             var businessPL = {};
                             var loanRepaymentHistory = {"basicLoanInfo": {}, loanOverview: {}};
@@ -54,13 +54,13 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             businessPL.finalKinaraEmiPCT = bpl.data[0]['Final Kinara EMI pct'];
                             businessPL.accountNumber = res.body[i].accountNumber;
 
-                            if(resp.length >= 16 && resp[15] ){
-                                var columns = resp[15].columns;
-                                for(var len = 0 ; len < resp[15].columns.length; len++ ){
+                            if(resp.length >= 3 && resp[2] ){
+                                var columns = resp[2].columns;
+                                for(var len = 0 ; len < resp[2].columns.length; len++ ){
                                     if(keybasicLoanInfo.indexOf(columns[len].data) > -1){
-                                        loanRepaymentHistory.basicLoanInfo[columns[len].data] = resp[15].data[0][columns[len].data];
+                                        loanRepaymentHistory.basicLoanInfo[columns[len].data] = resp[2].data[0][columns[len].data];
                                     } else{
-                                        loanRepaymentHistory.loanOverview[columns[len].data] = resp[15].data[0][columns[len].data];
+                                        loanRepaymentHistory.loanOverview[columns[len].data] = resp[2].data[0][columns[len].data];
                                     }                                
                                 }
                             }
