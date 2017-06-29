@@ -1,4 +1,4 @@
-irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource) {
+    irf.models.factory('BIReports', function($resource, $httpParamSerializer, searchResource) {
     var endpoint = irf.BI_BASE_URL;
 	var endpoint2 = irf.MANAGEMENT_BASE_URL;
 
@@ -99,6 +99,11 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
 		UpdateParamValue: {
             method: 'POST',
             url: endpoint2 + '/scoring/Api/UpdateParameterValues.php'
+        },
+        allReportParameters: {
+            method: 'GET',
+            url: endpoint + '/report_parameters.php',
+            isArray: true
         }
 		
     });
