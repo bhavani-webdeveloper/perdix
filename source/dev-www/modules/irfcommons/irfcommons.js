@@ -56,10 +56,12 @@ irf.commons.filter("age", function() {
 	}
 });
 
+irf.initCap = function(input) {
+	return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+};
+
 irf.commons.filter("initcap", function() {
-	return function(input) {
-		return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-	}
+	return irf.initCap;
 });
 
 irf.commons.filter("userDate", ["SessionStore", function(SessionStore) {

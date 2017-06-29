@@ -75,7 +75,7 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             pageObj.singlePageDefinition = _.cloneDeep(definition);
             pageObj.definition = definition;
             pageObj.pageName = definition.pageName;
-            pageObj.pageNameHtml = pageObj.pageName.split('.').join('<br/>');
+            pageObj.pageNameHtml = irf.pageNameHtml(pageObj.pageName);
             pageObj.formName = irf.form(definition.pageName) + (pageCounter++);
             pageObj.title = definition.title;
             pageObj.model = model || {};

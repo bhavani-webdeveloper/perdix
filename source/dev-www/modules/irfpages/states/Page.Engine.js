@@ -74,7 +74,7 @@ function($log, $scope, $state, $stateParams, $injector, $q, entityManager, formH
 
 	$scope.pageName = $stateParams.pageName;
 	$scope.formName = irf.form($scope.pageName);
-	$scope.pageNameHtml = $stateParams.pageName.split('.').join('<br/>');
+	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
 	$scope.pageId = $stateParams.pageId;
 	$scope.error = false;
 	try {

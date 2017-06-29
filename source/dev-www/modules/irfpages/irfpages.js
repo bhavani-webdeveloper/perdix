@@ -27,6 +27,14 @@ irf.templateUrl = function(path) {
 	return "process/pages/templates/" + path.replace(/\./g, '/') + ".html";
 };
 
+irf.pageNameHtml = function(pageName) {
+	var pns = pageName.split('.');
+	for (i in pns) {
+		pns[i] = irf.initCap(pns[i]);
+	}
+	return pns.join('&nbsp;<i class="text-darkgray fa fa-angle-right"></i> ');
+};
+
 var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
 
 irf.pageCollection.config(["$provide", function($provide){

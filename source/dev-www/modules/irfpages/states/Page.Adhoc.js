@@ -1,5 +1,5 @@
 irf.pages.controller("PageAdhocCtrl", ["$scope", "$stateParams", function($scope, $stateParams) {
-	$scope.pageNameHtml = $stateParams.pageName.split('.').join('<br/>');
+	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
 }]);
 irf.pages.directive("irfPageAdhoc", ["$stateParams", "$templateRequest", "$compile", function($stateParams, $templateRequest, $compile) {
 	return {
