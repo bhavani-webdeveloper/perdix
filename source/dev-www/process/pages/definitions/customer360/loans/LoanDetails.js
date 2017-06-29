@@ -964,6 +964,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"), ["$log", "
                         }
                     ] // END of box items
                 },
+                {
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "title": "TRANSACTION_ACCOUNTING_DETAILS",
+                    "htmlClass": "text-danger",
+                    "items": [
+                        {
+                            type: "section",
+                            colClass: "col-sm-12",
+                            html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgTransactions'></irf-simple-summary-table>"
+                        }
+                    ] // END of box items
+                },
                 // {
                 //     "type": "box",
                 //     "title": "REPAYMENT_SCHEDULE",
