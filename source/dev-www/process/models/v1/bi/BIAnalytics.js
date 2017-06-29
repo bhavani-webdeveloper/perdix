@@ -29,7 +29,8 @@ function($resource, $log, SessionStore, $httpParamSerializer, irfStorageService,
 					return "Bearer " + token;
 				},
 				"$no_auth": true
-			}
+			},
+			"withCredentials": true
 		}
 	});
 	return ret;
