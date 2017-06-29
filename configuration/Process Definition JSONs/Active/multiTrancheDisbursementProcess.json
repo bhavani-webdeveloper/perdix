@@ -495,6 +495,42 @@
                            "ReadyForDisbursement"
                         ]
                   },
+				  "fpVerified":{
+                     "title":"fpVerified",
+                     "type":"boolean",
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
+				   "overrideRequested":{
+                     "title":"overrideRequested",
+                     "type":"boolean",
+                     "captureStages":[
+                         "ReadyForDisbursement"
+                     ]
+                  },
+				   "overrideStatus":{
+                     "title":"overrideStatus",
+                     "type":"string",
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
+				   "overrideRequestRemarks":{
+                     "title":"overrideRequestRemarks",
+                     "type":"string",
+                     "captureStages":[
+                         "ReadyForDisbursement"
+                     ]
+                  },
+				   "overrideCheckerRemarks":{
+                     "title":"overrideCheckerRemarks",
+                     "type":"string",
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
+				   
                   "referenceNumber":{
                      "title":"referenceNumber",
                      "type":"string",
