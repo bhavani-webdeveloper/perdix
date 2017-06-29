@@ -1,480 +1,62 @@
 define({
-    pageUID: "loans.group.Checker1",
-    pageType: "Engine",
-    dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
-        "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
-    ],
+pageUID: "loans.group.Checker1",
+pageType: "Engine",
+dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
+    "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+    "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+],
+$pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
+    Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+    PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-    $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
-        Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+var fixData = function(model) {
+    model.group.tenure = parseInt(model.group.tenure);
+};
 
-        var nDays = 15;
-        var fixData = function(model) {
-            model.group.tenure = parseInt(model.group.tenure);
-        };
+var enrichCustomer = function(customer) {
+    customer.fullName = Utils.getFullName(customer.firstName, customer.middleName, customer.lastName);
+    customer.fatherFullName = Utils.getFullName(customer.fatherFirstName, customer.fatherMiddleName, customer.fatherLastName);
+    customer.spouseFullName = Utils.getFullName(customer.spouseFirstName, customer.spouseMiddleName, customer.spouseLastName);
+    var addr = [];
+    if (customer.street) addr.push(customer.street);
+    if (customer.postOffice) addr.push(customer.postOffice);
+    if (customer.locality) addr.push(customer.locality);
+    if (customer.villageName) addr.push(customer.villageName);
+    if (customer.district) addr.push(customer.district);
+    if (customer.pincode) addr.push('Pincode: ' + String(customer.pincode).substr(0, 3) + ' ' + String(customer.pincode).substr(3));
+    customer.addressHtml = addr.join(',<br>');
+    if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
+    customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
+    // customer.mobilePhone = customer.mobilePhone;
+    // customer.landLineNo = customer.landLineNo;
+    // customer.latitude = customer.latitude;
+    // customer.aadhaarNo = customer.aadhaarNo;
+    // customer.identityProof = customer.identityProof;
+    // customer.identityProofImageId1 = customer.identityProofImageId;
+    // customer.identityProofImageId2 = customer.udf.userDefinedFieldValues.udf30;
+    // customer.identityProofNo = customer.identityProofNo;
+    // customer.addressProof = customer.addressProof;
+    // customer.addressProofImageId1 = customer.addressProofImageId;
+    // customer.addressProofImageId2 = customer.udf.userDefinedFieldValues.udf29;
+    // customer.addressProofNo = customer.addressProofNo;
+    return customer;
+};
 
-        var fillNames = function(model) {
-            var deferred = $q.defer();
-            angular.forEach(model.group.jlgGroupMembers, function(member, key) {
-                Enrollment.get({
-                    id: member.customerId
-                }, function(resp, headers) {
-                    model.group.jlgGroupMembers[key].firstName = resp.firstName;
-                    try {
-                        if (resp.middleName.length > 0)
-                            model.group.jlgGroupMembers[key].firstName += " " + resp.middleName;
-                        if (resp.lastName.length > 0)
-                            model.group.jlgGroupMembers[key].firstName += " " + resp.lastName;
-                    } catch (err) {
-
-                    }
-                    model.group.jlgGroupMembers[key].address = [resp.doorNo, resp.street, resp.postOffice, resp.locality, resp.villageName, resp.district, resp.state].filter(function(val) {
-                        return val;
-                    }).join(" ");
-                    model.group.jlgGroupMembers[key].dateOfBirth = resp.dateOfBirth;
-                    model.group.jlgGroupMembers[key].spouseFirstName = resp.spouseFirstName;
-                    model.group.jlgGroupMembers[key].mobilePhone = resp.mobilePhone;
-                    model.group.jlgGroupMembers[key].landLineNo = resp.landLineNo;
-                    model.group.jlgGroupMembers[key].latitude = resp.latitude;
-                    model.group.jlgGroupMembers[key].aadhaarNo = resp.aadhaarNo;
-                    model.group.jlgGroupMembers[key].identityProof = resp.identityProof;
-                    model.group.jlgGroupMembers[key].identityProofImageId1 = resp.identityProofImageId;
-                    model.group.jlgGroupMembers[key].identityProofImageId2 = resp.udf.userDefinedFieldValues.udf30;
-                    model.group.jlgGroupMembers[key].identityProofNo = resp.identityProofNo;
-                    model.group.jlgGroupMembers[key].addressProof = resp.addressProof;
-                    model.group.jlgGroupMembers[key].addressProofImageId1 = resp.addressProofImageId;
-                    model.group.jlgGroupMembers[key].addressProofImageId2 = resp.udf.userDefinedFieldValues.udf29;
-                    model.group.jlgGroupMembers[key].addressProofNo = resp.addressProofNo;
-
-                    if (key >= model.group.jlgGroupMembers.length - 1) {
-                        deferred.resolve(model);
-                    }
-                }, function(res) {
-                    deferred.reject(res);
-                });
-            });
-            return deferred.promise;
-        };
-
-        return {
-            "type": "schema-form",
-            "title": "Checker1",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                $log.info(model);
-                var self = this;
-                self.form = [];
-                var init = function(model) {
-                    var groupDetails = [];
-
-                    for (i in model.group.jlgGroupMembers) {
-                        groupDetails.push(
-                            {
-                                "type": "section",
-                                "htmlClass": "row col-md-12",
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        key: "group.jlgGroupMembers[" + i + "].urnNo",
-                                        "title":"URN",
-                                        readonly: true,
-                                        type: "string",
-                                        notitle: true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].firstName",
-                                        "type": "text",
-                                        "notitle": true,
-                                        "readonly": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].dateOfBirth",
-                                        type: "date"
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].husbandOrFatherFirstName",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].spouseFirstName",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].address",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].mobilePhone",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].landLineNo",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].latitude",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }]
-                            });
-
-                            /*{
-                                "type": "section",
-                                "htmlClass": "row col-md-12",
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].aadhaarNo",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].addressProof",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].addressProofImageId1",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].addressProofImageId2",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].addressProofNo",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }]
-                            },
-
-                            {
-                                "type": "section",
-                                "htmlClass": "row col-md-12",
-                                "items": [{
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].identityProof",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].identityProofImageId1",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].identityProofImageId2",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }, {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-6 col-xs-6",
-                                    "items": [{
-                                        "key": "group.jlgGroupMembers[" + i + "].identityProofNo",
-                                        "type": "text",
-                                        "notitle": true
-                                    }]
-                                }]
-                            },*/
-
-                            /*{
-                                "type": "section",
-                                "htmlClass": "row col-md-12",
-                                "items": [{
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3 col-xs-3",
-                                        "items": [{
-                                            "key": "group.jlgGroupMembers[" + i + "].loanAmount",
-                                            "type": "text",
-                                            "notitle": true
-                                        }]
-                                    }, {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3 col-xs-3",
-                                        "items": [{
-                                            "key": "group.jlgGroupMembers[" + i + "].loanPurpose1",
-                                            "type": "text",
-                                            "notitle": true
-                                        }]
-                                    }, {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3 col-xs-3",
-                                        "items": [{
-                                            "key": "group.jlgGroupMembers[" + i + "].loanPurpose2",
-                                            "type": "text",
-                                            "notitle": true
-                                        }]
-                                    }, {
-                                        "type": "section",
-                                        "htmlClass": "col-sm-3 col-xs-3",
-                                        "items": [{
-                                            "key": "group.jlgGroupMembers[" + i + "].loanPurpose3",
-                                            "type": "text",
-                                            "notitle": true
-                                        }]
-                                    }
-                                ]
-                            },*/
-                        
-                    
-            };
-
-
-            self.form = [{
-                "type": "box",
-                "title": "GROUP_MEMBERS",
-                "colClass": "col-md-12",
-                "items": [
-                {
-                    "type": "section",
-                    "htmlClass": "row",
-                    "items": [
-                    /*{
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'URN_NO'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'GROUP_MEMBER_NAME'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'DATE_OF_BIRTH'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'FATHER_NAME'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'SPOUSE_NAME'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'ADDRESS'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'MOBILE_NUMBER'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'LANDLINE_NO'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-6 col-xs-6",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'HOUSEVERIFICATION_GPS'|translate}}"
-                        }]
-                    },*/ /*{
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'AADHAAR_NO'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'ADDRESS_PROOF'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'ADDRESS_PROOF_IMAGE_ID'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'ADDRESS_PROOF_REVERSE_IMAGE_ID'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'ADDRESS_PROOF_NO'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'IDENTITY_PROOF'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'IDENTITY_PROOF_DOCUMENT'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'IDENTITY_PROOF_REVERSE_DOCUMENT'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'IDENTITY_PROOFNO'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'LOAN_AMOUNT'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'LOAN_PURPOSE_1'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'LOAN_PURPOSE_2'|translate}}"
-                        }]
-                    }, {
-                        "type": "section",
-                        "htmlClass": "col-sm-3 col-xs-3",
-                        "items": [{
-                            "type": "section",
-                            "html": "{{'LOAN_PURPOSE3'|translate}}"
-                        }]
-                    },*/ {
-                        "type": "section",
-                        "htmlClass": "row",
-                        "items": [{
-                            "type": "section",
-                            "htmlClass": "col-md-12",
-                            "items": groupDetails
-                        }]
-                    }]
-                }]
-            }, {
-                "type": "actionbox",
-                "items": [{
-                    "type": "button",
-                    "title": "APPROVE",
-                    "onClick": "actions.approve(model,form)"
-                }, {
-                    "type": "button",
-                    "title": "REJECT",
-                    "onClick": "actions.reject(model,form)"
-                }]
-            }]
-        };
-
-        form: [];
+return {
+    "type": "schema-form",
+    "title": "Checker1",
+    "subTitle": "",
+    initialize: function(model, form, formCtrl) {
+        var self = this;
 
         if ($stateParams.pageId) {
             var groupId = $stateParams.pageId;
             PageHelper.showLoader();
-            irfProgressMessage.pop("cgt1-init", "Loading, Please Wait...");
+            irfProgressMessage.pop("checker1", "Loading, Please Wait...");
             Groups.getGroup({
                 groupId: groupId
-            }, function(response, headersGetter) {
-                model.group = _.cloneDeep(response);
+            }, function(response) {
+                model.group = response;
                 var centreCode = formHelper.enum('centre').data;
                 for (var i = 0; i < centreCode.length; i++) {
                     if (centreCode[i].code == model.group.centreCode) {
@@ -482,141 +64,109 @@ define({
                     }
                 }
                 fixData(model);
-                if (model.group.jlgGroupMembers.length > 0) {
-                    fillNames(model).then(function(m) {
-                        model = m;
-                    }, function(m) {
-                        PageHelper.showErrors(m);
-                        irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-                    });
+                var promises = [];
+                for (i in model.group.jlgGroupMembers) {
+                    var member = model.group.jlgGroupMembers[i];
+                    promises.push(Enrollment.get({"id": member.customerId}).$promise);
                 }
-                init(model);
+                $q.all(promises).then(function(data) {
+                    for (i in data) {
+                        model.group.jlgGroupMembers[i].customer = enrichCustomer(data[i]);
+                    }
+                }, function(errors) {
+                    for (i in errors) {
+                        PageHelper.showErrors(errors[i]);
+                    }
+                }).finally(PageHelper.hideLoader);
+            }, function(error) {
+                PageHelper.showErrors(error);
                 PageHelper.hideLoader();
-            }, function(resp) {
-                PageHelper.hideLoader();
-                irfProgressMessage.pop("group-init", "Oops. An error occurred", 2000);
-                //backToDashboard();
+                irfProgressMessage.pop("checker1", "Oops. An error occurred", 2000);
             });
         } else {
             irfNavigator.goBack();
         }
-
     },
-    offline: true,
-    getOfflineDisplayItem: function(item, index) {
-        return [
-            "Group ID : " + item.group.id,
-            "Group Code : " + item.group.groupCode,
-            "CGT Date : " + item.group.cgtDate1
-        ]
-    },
-
-
-
-    /*form: [ {
+    form: [{
         "type": "box",
         "title": "GROUP_MEMBERS",
+        "colClass": "col-sm-12",
+        "readonly": true,
         "items": [{
-            "key": "group.jlgGroupMembers",
             "type": "array",
-            "title": "GROUP_MEMBERS",
+            "key": "group.jlgGroupMembers",
+            "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
             "add": null,
             "remove": null,
             "items": [{
-                "key": "group.jlgGroupMembers[].urnNo",
-                "readonly": true,
-                "title": "URN_NO",
-            }, {
-                "key": "group.jlgGroupMembers[].firstName",
-                "type": "string",
-                "readonly": true,
-                "title": "GROUP_MEMBER_NAME"
-            },{
-                "key": "group.jlgGroupMembers[].dateOfBirth",
-                "type": "date",
-                "readonly": true,
-                "title": "DATE_OF_BIRTH"
-            }, {
-                "key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
-                "readonly": true,
-                "title": "FATHER_NAME"
-            },{
-                "key": "group.jlgGroupMembers[].spouseFirstName",
-                "readonly": true,
-                "title": "SPOUSE_NAME"
-            }, {
-                "key": "group.jlgGroupMembers[].address",
-                "readonly": true,
-                "title": "ADDRESS",
-            },{
-                "key": "group.jlgGroupMembers[].mobilePhone",
-                "readonly": true,
-                "title": "MOBILE_NUMBER",
-            },{
-                "key": "group.jlgGroupMembers[].landLineNo",
-                "readonly": true,
-                "title": "LANDLINE_NO",
-            },{
-                "key": "group.jlgGroupMembers[].latitude",
-                "readonly": true,
-                "title": "HOUSEVERIFICATION_GPS",
-            },{
-                "key": "group.jlgGroupMembers[].aadhaarNo",
-                "readonly": true,
-                "title": "AADHAAR_NO",
-            },{
-                "key": "group.jlgGroupMembers[].addressProof",
-                "readonly": true,
-                "title": "ADDRESS_PROOF",
-            },{
-                "key": "group.jlgGroupMembers[].addressProofImageId1",
-                "readonly": true,
-                "title": "ADDRESS_PROOF_IMAGE_ID",
-            },{
-                "key": "group.jlgGroupMembers[].addressProofImageId2",
-                "readonly": true,
-                "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
-            },{
-                "key": "group.jlgGroupMembers[].addressProofNo",
-                "readonly": true,
-                "title": "ADDRESS_PROOF_NO",
-            },{
-                "key": "group.jlgGroupMembers[].identityProof",
-                "readonly": true,
-                "title": "IDENTITY_PROOF",
-            },{
-                "key": "group.jlgGroupMembers[].identityProofImageId1",
-                "readonly": true,
-                "title": "IDENTITY_PROOF_DOCUMENT",
-            },{
-                "key": "group.jlgGroupMembers[].identityProofImageId2",
-                "readonly": true,
-                "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-            },{
-                "key": "group.jlgGroupMembers[].identityProofNo",
-                "readonly": true,
-                "title": "IDENTITY_PROOFNO",
-            }, {
-                "key": "group.jlgGroupMembers[].loanAmount",
-                "readonly": true,
-                "title": "LOAN_AMOUNT",
-                "type": "amount",
-            }, {
-                "key": "group.jlgGroupMembers[].loanPurpose1",
-                "readonly": true,
-                "title": "LOAN_PURPOSE_1",
-                "enumCode": "loan_purpose_1",
-                "type": "select",
-            }, {
-                "key": "group.jlgGroupMembers[].loanPurpose2",
-                "readonly": true,
-                "type": "string",
-                "title": "LOAN_PURPOSE_2",
-            }, {
-                "key": "group.jlgGroupMembers[].loanPurpose3",
-                "readonly": true,
-                "type": "string",
-                "title": "LOAN_PURPOSE3",
+                "type": "section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "URN",
+                        "key": "group.jlgGroupMembers[].urnNo"
+                    }, {
+                        "title": "FULL_NAME",
+                        "key": "group.jlgGroupMembers[].customer.fullName"
+                    }, {
+                        "title": "DATE_OF_BIRTH",
+                        "key": "group.jlgGroupMembers[].customer.dateOfBirth",
+                        "type": "date"
+                    }, {
+                        "title": "FATHER_FULL_NAME",
+                        "key": "group.jlgGroupMembers[].customer.fatherFullName"
+                    }, {
+                        "title": "SPOUSE_FULL_NAME",
+                        "key": "group.jlgGroupMembers[].customer.spouseFullName"
+                    }, {
+                        "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
+                        "key": "group.jlgGroupMembers[].customer.addressHtml",
+                        "type": "html"
+                    }, {
+                        "title": "MOBILE_PHONE",
+                        "key": "group.jlgGroupMembers[].customer.mobilePhone"
+                    }, {
+                        "title": "LANDLINE_NO",
+                        "key": "group.jlgGroupMembers[].customer.landLineNo"
+                    }, {
+                        "title": "HOUSE_LOCATION",
+                        "key": "group.jlgGroupMembers[].customer.latitude",
+                        "type": "geotag",
+                        "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
+                        "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
+                    }, {
+                        "title": "AADHAAR_NO",
+                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                    }, {
+                        "title": "ADDRESS_PROOF",
+                        "key": "group.jlgGroupMembers[].customer.addressProof",
+                        "type": "select",
+                        "enumCode": "address_proof"
+                    }, {
+                        "title": "ADDRESS_PROOF_NO",
+                        "key": "group.jlgGroupMembers[].customer.addressProofNo"
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "ADDRESSPROOF"
+                    }, {
+                        "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                        "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "ADDRESSPROOF"
+                    }]
+                }]
             }]
         }]
     }, {
@@ -624,14 +174,13 @@ define({
         "items": [{
             "type": "button",
             "title": "APPROVE",
-            "onClick":"actions.approve(model,form)"  
+            "onClick": "actions.approve(model,form)"
         }, {
             "type": "button",
             "title": "REJECT",
-            "onClick":"actions.reject(model,form)"  
+            "onClick": "actions.reject(model,form)"
         }]
-    }],*/
-
+    }],
     schema: {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -656,7 +205,6 @@ define({
             }
         }
     },
-
     actions: {
         preSave: function(model, form, formName) {},
         reject: function(model, form) {
@@ -693,6 +241,4 @@ define({
             });
         }
     }
-}
-}
-})
+}}});
