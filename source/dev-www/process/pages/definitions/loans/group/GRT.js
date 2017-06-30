@@ -239,6 +239,21 @@ define({
                         "key": "group.jlgGroupMembers[].firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
                         "type": "date",
+                    }, {
+                        "type": "button",
+                        "key": "group.jlgGroupMembers[]",
+                        "title": "DOWNLOAD_APPLICATION_FORM",
+                        "onClick": function(model, form, schemaForm, event) {
+                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanId);
+                        }
+                    }, {
+                        "type": "button",
+                        "key": "group.jlgGroupMembers[]",
+                        condition: "model.group.partnerCode === 'AXIS'",
+                        "title": "DOWNLOAD_AGREEMENT_FORM",
+                        "onClick": function(model, form, schemaForm, event) {
+                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=app_Loan&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanId);
+                        }
                     }]
                 },{
                     "key": "group.Cgtbutton",
