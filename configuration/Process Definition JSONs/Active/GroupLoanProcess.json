@@ -1,1089 +1,1133 @@
 {
-   "customerMinAgeGenericProduct":18,
-   "customerMaxGenericAge":60,
-   "customerMaxAgeBcProduct":58,
-   "customerAgeLimitForSingleFemale":35,   
-   "stages":[
-      {
-         "order":1,
-         "code":"GroupCreation",
-         "name":"Group Formation",
-         "stageType":"CAPTURE",
-		 "isAccountOpening":false,
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":2,
-         "code":"DSC",
-         "name":"DSC",
-         "stageType":"DSC",
-		 "isAccountOpening":false,
-         "allowedRoles":[
-            "A"
-         ]
-      },
-      {
-         "order":3,
-         "code":"CGT1",
-         "name":"CGT 1",
-         "requiredIfLoanCycleLessThan":100,
-		 "isAccountOpening":false,
-         "stageType":"CGT",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":4,
-         "code":"CGT2",
-         "name":"CGT 2",
-         "requiredIfLoanCycleLessThan":3,
-		 "isAccountOpening":false,
-         "stageType":"CGT",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":5,
-         "code":"CGT3",
-         "name":"CGT 3",
-         "requiredIfLoanCycleLessThan":3,
-		 "isAccountOpening":false,
-         "stageType":"CGT",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":6,
-         "code":"GRT",
-         "name":"GRT Process",
-		 "isAccountOpening":true,
-         "stageType":"GRT",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":7,
-         "code":"ApplicationPending",
-         "name":"Applications Pending",
-		 "isAccountOpening":false,
-         "stageType":"CAPTURE",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      },
-      {
-         "order":8,
-         "code":"LoanDisbursement",
-         "name":"Loan Disbursement",
-		 "isAccountOpening":false,
-         "stageType":"GROUPDISBURSE",
-         "allowedRoles":[
-            "A",
-            "ARM",
-            "RM"
-         ]
-      }
-   ],
-   "schema":{
-      "$schema":"http://json-schema.org/draft-04/schema#",
-      "type":"object",
-      "title":"Comment",
-      "required":[
+   "customerMinAgeGenericProduct": 18,
+   "customerMaxGenericAge": 60,
+   "customerMaxAgeBcProduct": 58,
+   "customerAgeLimitForSingleFemale": 35,
+   "stages": [{
+      "order": 1,
+      "code": "GroupCreation",
+      "name": "Group Formation",
+      "stageType": "CAPTURE",
+      "isAccountOpening": false,
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 2,
+      "code": "DSC",
+      "name": "DSC",
+      "stageType": "DSC",
+      "isAccountOpening": false,
+      "allowedRoles": [
+         "A"
+      ]
+   }, {
+      "order": 3,
+      "code": "CGT1",
+      "name": "CGT 1",
+      "requiredIfLoanCycleLessThan": 100,
+      "isAccountOpening": false,
+      "stageType": "CGT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 4,
+      "code": "CGT2",
+      "name": "CGT 2",
+      "requiredIfLoanCycleLessThan": 3,
+      "isAccountOpening": false,
+      "stageType": "CGT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 5,
+      "code": "CGT3",
+      "name": "CGT 3",
+      "requiredIfLoanCycleLessThan": 3,
+      "isAccountOpening": false,
+      "stageType": "CGT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 6,
+      "code": "GRT",
+      "name": "GRT Process",
+      "isAccountOpening": true,
+      "stageType": "GRT",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 7,
+      "code": "ApplicationPending",
+      "name": "Applications Pending",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 8,
+      "code": "Checker1",
+      "name": "Checker 1",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 9,
+      "code": "Checker2",
+      "name": "Checker 2",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 10,
+      "code": "AgreementUploadPending",
+      "name": "Agreement Upload Pending",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 11,
+      "code": "Checker3",
+      "name": "Checker 3",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 12,
+      "code": "Checker4",
+      "name": "Checker 4",
+      "isAccountOpening": false,
+      "stageType": "CAPTURE",
+      "allowedRoles": []
+   }, {
+      "order": 13,
+      "code": "LoanDisbursement",
+      "name": "Loan Disbursement",
+      "isAccountOpening": false,
+      "stageType": "DISBURSE",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }],
+   "schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "title": "Comment",
+      "required": [
          "groupDetails"
       ],
-      "fields":{
-         "groupDetails":{
-            "title":"Group Details",
-            "type":"object",
-            "maxItems":null,
-            "items":null,
-            "required":[
-            ],
-            "properties":{
-               "partnerCode":{
-                  "title":"Partner Code",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":15,
-                  "captureStages":[
+      "fields": {
+         "groupDetails": {
+            "title": "Group Details",
+            "type": "object",
+            "maxItems": null,
+            "items": null,
+            "required": [],
+            "properties": {
+               "partnerCode": {
+                  "title": "Partner Code",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 15,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-               "centreCode":{
-                  "title":"Centre Code",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":15,
-                  "captureStages":[
+               "centreCode": {
+                  "title": "Centre Code",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 15,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-               "groupCode":{
-                  "title":"Group Code",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":[
+               "groupCode": {
+                  "title": "Group Code",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "productCode":{
-                  "title":"Product Code",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":[
+               "productCode": {
+                  "title": "Product Code",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "groupFormationDate":{
-                  "title":"Group  Formation Date",
-                  "type":"string",
-                  "captureStages":[
+               "groupFormationDate": {
+                  "title": "Group  Formation Date",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "groupStatus":{
-                  "title":"Group  Status",
-                  "type":"string",
-                  "captureStages":[
+               "groupStatus": {
+                  "title": "Group  Status",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "startTime":{
-                  "title":"Start Time",
-                  "type":"string",
-                  "captureStages":[
+               "startTime": {
+                  "title": "Start Time",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "endTime":{
-                  "title":"End Time",
-                  "type":"string",
-                  "captureStages":[
+               "endTime": {
+                  "title": "End Time",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "frequency":{
-                  "title":"Frequency",
-                  "type":"string",
-                  "captureStages":[
+               "frequency": {
+                  "title": "Frequency",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "tenure":{
-                  "title":"Tenure",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":45,
-                  "captureStages":[
+               "tenure": {
+                  "title": "Tenure",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "tenureInYear":{
-                  "title":"Tenure in Year",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":[
+               "tenureInYear": {
+                  "title": "Tenure in Year",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "groupName":{
-                  "title":"Group Name",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":45,
-                  "captureStages":[
+               "groupName": {
+                  "title": "Group Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "currentStage":{
-                  "title":"Current Stage",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":100,
-                  "captureStages":[
+               "currentStage": {
+                  "title": "Current Stage",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "pendingApproval":{
-                  "title":"GPending Approval",
-                  "type":"string",
-                  "captureStages":[
+               "pendingApproval": {
+                  "title": "GPending Approval",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation"
                   ]
                },
-			   "udf1":{
-                  "title":"udf 1",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf1": {
+                  "title": "udf 1",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf2":{
-                  "title":"udf 2",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf2": {
+                  "title": "udf 2",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf3":{
-                  "title":"udf 3",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf3": {
+                  "title": "udf 3",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf4":{
-                  "title":"udf 4",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf4": {
+                  "title": "udf 4",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf5":{
-                  "title":"udf 5",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf5": {
+                  "title": "udf 5",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf6":{
-                  "title":"udf 6",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf6": {
+                  "title": "udf 6",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf7":{
-                  "title":"udf 7",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf7": {
+                  "title": "udf 7",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf8":{
-                  "title":"udf 8",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf8": {
+                  "title": "udf 8",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf9":{
-                  "title":"udf 9",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf9": {
+                  "title": "udf 9",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf10":{
-                  "title":"udf 10",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf10": {
+                  "title": "udf 10",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf11":{
-                  "title":"udf 11",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf11": {
+                  "title": "udf 11",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf12":{
-                  "title":"udf 12",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf12": {
+                  "title": "udf 12",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf13":{
-                  "title":"udf 13",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf13": {
+                  "title": "udf 13",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf14":{
-                  "title":"udf 14",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf14": {
+                  "title": "udf 14",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf15":{
-                  "title":"udf 15",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf15": {
+                  "title": "udf 15",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf16":{
-                  "title":"udf 16",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf16": {
+                  "title": "udf 16",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf17":{
-                  "title":"udf 17",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf17": {
+                  "title": "udf 17",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf18":{
-                  "title":"udf 18",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf18": {
+                  "title": "udf 18",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			   "udf19":{
-                  "title":"udf 19",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf19": {
+                  "title": "udf 19",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udf20":{
-                  "title":"udf 20",
-                  "type":"string",
-                  "minLength":1,
-                  "maxLength":50,
-                  "captureStages":[
+               "udf20": {
+                  "title": "udf 20",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udfDate1":{
-                  "title":"udf Date1",
-                  "type":"string",
-                  "captureStages":[
+               "udfDate1": {
+                  "title": "udf Date1",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udfDate2":{
-                  "title":"udf Date2",
-                  "type":"string",
-                  "captureStages":[
+               "udfDate2": {
+                  "title": "udf Date2",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udfDate3":{
-                  "title":"udf Date3",
-                  "type":"string",
-                  "captureStages":[
+               "udfDate3": {
+                  "title": "udf Date3",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udfDate4":{
-                  "title":"udf Date4",
-                  "type":"string",
-                  "captureStages":[
+               "udfDate4": {
+                  "title": "udf Date4",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                },
-			    "udfDate5":{
-                  "title":"udf Date5",
-                  "type":"string",
-                  "captureStages":[
+               "udfDate5": {
+                  "title": "udf Date5",
+                  "type": "string",
+                  "captureStages": [
                      "GroupCreation",
                      "GRT"
                   ]
                }
-			   
-			   
-			   
-            }
-         },
-         "groupMemberDetails":{
-            "title":"Group Member Details",
-            "type":"array",
-            "maxItems":null,
-            "items":{
-               "type":"object",
-               "required":[	
-               ],
-               "properties":{
-                  "loanPurpose":{
-                     "title":"Loan Purpose",
-                     "type":"string",
-                     "minLength":1,
-                     "maxLength":100,
-                     "captureStages":[
-                        "GroupCreation"
-                     ]
-                  },
-				   "loanAmount":{
-                     "title":"Loan Amount",
-                     "type":"number",
-                     "minLength":1,
-                     "maxLength":100,
-                     "captureStages":[
-                        "GroupCreation"
-                     ]
-                  },
-				  "literateWitnessFirstName":{
-					  "title":"Literate Witness First Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						 "GroupCreation"
-					  ]
-				  },
-				  "literateWitnessMiddleName":{
-					  "title":"Literate Witness Middle Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						 "GroupCreation"
-					  ]
-				  },
-				  "literateWitnessLastName":{
-					  "title":"Literate Witness Last Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						 "GroupCreation"
-					  ]
-				  },
-				  "witnessRelationship":{
-					  "title":"Witness Relationship",
-					  "type":"string",
-					  "captureStages":[
-						 "GroupCreation"
-					  ]
-				  },
-                  "witnessFirstName":{
-					  "title":"Witness First Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-                  "witnessMiddleName":{
-					  "title":"Witness Middle Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-				  "witnessLastName":{
-					  "title":"Witness Last Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-				  "spouseFirstName":{
-					  "title":"Spouse First Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"spouseMiddleName":{
-					  "title":"Spouse Middle Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"spouseLastName":{
-					  "title":"Spouse Last Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"spouseDob":{
-					  "title":"Spouse Date of birth",
-					  "type":"string",
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"maritalStatus":{
-					  "title":"Marital Status",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"outstandingLoanAmount":{
-					  "title":"Outstanding Loan Amount",
-					  "type":"number",
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"husbandOrFatherFirstName":{
-					  "title":"Husband or Father First Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-				  "husbandOrFatherMiddleName":{
-					  "title":"Husband or Father Middle Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"husbandOrFatherLastName":{
-					  "title":"Husband or Father Last Name",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"relation":{
-					  "title":"Relation",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },"centreCode":{
-					  "title":"Centre Code",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-				  "urnNo":{
-					  "title":"URN No",
-					  "type":"string",
-					  "minLength":1,
-					  "maxLength":100,
-					  "captureStages":[
-						"GroupCreation"
-					  ]
-				  },
-				    "latitude": {
-					"title": "Latitude",
-					"type": "string",
-					"minLength": 1,
-					"maxLength": 100,
-					"captureStages": [
-					"GroupCreation",
-                     "GRT"
-					]
-				 },
-					"longitude": {
-					"title": "Longitude",
-					"type": "string",
-					"minLength": 1,
-					"maxLength": 100,
-					"captureStages": [
-					"GroupCreation",
-                     "GRT"
-					]
-				},
-				  "photoImageId1": {
-                            "title": "photoImageId1",
-                            "type": "string",
-                             "captureStages": [
-                               "GroupCreation",
-                     "GRT"
-                            ]
-                        },
-					"photoImageId2": {
-						"title": "photoImageId2",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT"
-						]
-					},
-					"photoImageId3": {
-						"title": "photoImageId3",
-						"type": "string",
-						 "captureStages": [
-						   "GroupCreation",
-                     "GRT"
-						]
-					},
-					
-					"photoImageId4": {
-						"title": "photoImageId4",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT"
-						]
-					},
-					"photoImageId5": {
-						"title": "photoImageId5",
-						"type": "string",
-						 "captureStages": [
-						   "GroupCreation",
-                     "GRT"
-						]
-					},
-					"isHouseVerificationDone": {
-						"title": "isHouseVerificationDone",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT"
-						]
-					},
-					"firstRepaymentDate": {
-						"title": "firstRepaymentDate",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT"
-						]
-					},
-					"scheduledDisbursementDate": {
-						"title": "scheduledDisbursementDate",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT"
-						]
-					},
-					"modeOfDisbursement": {
-						"title": "modeOfDisbursement",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
 
-						]
-					},
-					"ifscCode": {
-						"title": "ifscCode",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
-						]
-					},
-					"customerAccountNumber": {
-						"title": "customerAccountNumber",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
-						]
-					},
-					"customerBankName": {
-						"title": "customerBankName",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
-						]
-					},
-					"customerbankBranchName": {
-						"title": "customerbankBranchName",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
-						]
-					},
-					"customerNameInBank": {
-						"title": "customerNameInBank",
-						"type": "string",
-						 "captureStages": [
-							"GroupCreation",
-                     "GRT",
-                     "LoanDisbursement"
-						]
-					}
+
+
+            }
+         },
+         "groupMemberDetails": {
+            "title": "Group Member Details",
+            "type": "array",
+            "maxItems": null,
+            "items": {
+               "type": "object",
+               "required": [],
+               "properties": {
+                  "loanPurpose": {
+                     "title": "Loan Purpose",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "loanAmount": {
+                     "title": "Loan Amount",
+                     "type": "number",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "literateWitnessFirstName": {
+                     "title": "Literate Witness First Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "literateWitnessMiddleName": {
+                     "title": "Literate Witness Middle Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "literateWitnessLastName": {
+                     "title": "Literate Witness Last Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "witnessRelationship": {
+                     "title": "Witness Relationship",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "witnessFirstName": {
+                     "title": "Witness First Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "witnessMiddleName": {
+                     "title": "Witness Middle Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "witnessLastName": {
+                     "title": "Witness Last Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "spouseFirstName": {
+                     "title": "Spouse First Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "spouseMiddleName": {
+                     "title": "Spouse Middle Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "spouseLastName": {
+                     "title": "Spouse Last Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "spouseDob": {
+                     "title": "Spouse Date of birth",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "maritalStatus": {
+                     "title": "Marital Status",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "outstandingLoanAmount": {
+                     "title": "Outstanding Loan Amount",
+                     "type": "number",
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "husbandOrFatherFirstName": {
+                     "title": "Husband or Father First Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "husbandOrFatherMiddleName": {
+                     "title": "Husband or Father Middle Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "husbandOrFatherLastName": {
+                     "title": "Husband or Father Last Name",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "relation": {
+                     "title": "Relation",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "centreCode": {
+                     "title": "Centre Code",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "urnNo": {
+                     "title": "URN No",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "latitude": {
+                     "title": "Latitude",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "longitude": {
+                     "title": "Longitude",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "photoImageId1": {
+                     "title": "photoImageId1",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "photoImageId2": {
+                     "title": "photoImageId2",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "photoImageId3": {
+                     "title": "photoImageId3",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+
+                  "photoImageId4": {
+                     "title": "photoImageId4",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "photoImageId5": {
+                     "title": "photoImageId5",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "isHouseVerificationDone": {
+                     "title": "isHouseVerificationDone",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "firstRepaymentDate": {
+                     "title": "firstRepaymentDate",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "scheduledDisbursementDate": {
+                     "title": "scheduledDisbursementDate",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT"
+                     ]
+                  },
+                  "modeOfDisbursement": {
+                     "title": "modeOfDisbursement",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+
+                     ]
+                  },
+                  "ifscCode": {
+                     "title": "ifscCode",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+                     ]
+                  },
+                  "customerAccountNumber": {
+                     "title": "customerAccountNumber",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+                     ]
+                  },
+                  "customerBankName": {
+                     "title": "customerBankName",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+                     ]
+                  },
+                  "customerbankBranchName": {
+                     "title": "customerbankBranchName",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+                     ]
+                  },
+                  "customerNameInBank": {
+                     "title": "customerNameInBank",
+                     "type": "string",
+                     "captureStages": [
+                        "GroupCreation",
+                        "GRT",
+                        "LoanDisbursement"
+                     ]
+                  }
                }
             }
          },
-         "cgt":{
-            "title":"CGT Details",
-            "type":"object",
-            "maxItems":null,
-            "items":{
-               "type":"object",
-               "required":[
-               ],
-               "properties":{
-                  "cgt1DoneBy":{
-                     "title":"CGT1 Done By",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":250,
-                     "captureStages":[
+         "cgt": {
+            "title": "CGT Details",
+            "type": "object",
+            "maxItems": null,
+            "items": {
+               "type": "object",
+               "required": [],
+               "properties": {
+                  "cgt1DoneBy": {
+                     "title": "CGT1 Done By",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 250,
+                     "captureStages": [
                         "CGT1"
                      ]
                   },
-				   "cgt1Latitude":{
-                     "title":"CGT1 Latitude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "cgt1Latitude": {
+                     "title": "CGT1 Latitude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT1"
                      ]
                   },
-				   "cgt1Longitude":{
-                     "title":"CGT1 Longtiude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT1"
-                     ]
-                  }, "cgt1Photo":{
-                     "title":"CGT1 Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT1"
-                     ]
-                  }, "cgt1EndPhoto":{
-                     "title":"CGT1 End Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "cgt1Longitude": {
+                     "title": "CGT1 Longtiude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT1"
                      ]
                   },
-				  "cgt1Remarks":{
-                     "title":"CGT1 remarks",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT1"
-                     ]
-                  }, "cgtDate1":{
-                     "title":"CGT1 Date",
-                     "type":"String",
-                     "captureStages":[
-                        "CGT1"
-                     ]
-                  }, "cgtEndDate1":{
-                     "title":"CGT1 End Date",
-                     "type":"String",
-                     "captureStages":[
+                  "cgt1Photo": {
+                     "title": "CGT1 Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT1"
                      ]
                   },
-				  "cgt2DoneBy":{
-                     "title":"CGT2 Done By",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":250,
-                     "captureStages":[
+                  "cgt1EndPhoto": {
+                     "title": "CGT1 End Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT1"
+                     ]
+                  },
+                  "cgt1Remarks": {
+                     "title": "CGT1 remarks",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT1"
+                     ]
+                  },
+                  "cgtDate1": {
+                     "title": "CGT1 Date",
+                     "type": "String",
+                     "captureStages": [
+                        "CGT1"
+                     ]
+                  },
+                  "cgtEndDate1": {
+                     "title": "CGT1 End Date",
+                     "type": "String",
+                     "captureStages": [
+                        "CGT1"
+                     ]
+                  },
+                  "cgt2DoneBy": {
+                     "title": "CGT2 Done By",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 250,
+                     "captureStages": [
                         "CGT2"
                      ]
                   },
-				   "cgt2Latitude":{
-                     "title":"CGT2 Latitude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "cgt2Latitude": {
+                     "title": "CGT2 Latitude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT2"
                      ]
                   },
-				   "cgt2Longitude":{
-                     "title":"CGT2 Longtiude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT2"
-                     ]
-                  }, "cgt2Photo":{
-                     "title":"CGT2 Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT2"
-                     ]
-                  },  "cgt2EndPhoto":{
-                     "title":"CGT2 End Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT2"
-                     ]
-                  },"cgt2Remarks":{
-                     "title":"CGT2 remarks",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT2"
-                     ]
-                  }, "cgtDate2":{
-                     "title":"CGT2 Date",
-                     "type":"String",
-                     "captureStages":[
-                        "CGT2"
-                     ]
-                  },"cgtEndDate2":{
-                     "title":"CGT2 End Date",
-                     "type":"String",
-                     "captureStages":[
+                  "cgt2Longitude": {
+                     "title": "CGT2 Longtiude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT2"
                      ]
                   },
-				  "cgt3DoneBy":{
-                     "title":"CGT3 Done By",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":250,
-                     "captureStages":[
+                  "cgt2Photo": {
+                     "title": "CGT2 Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT2"
+                     ]
+                  },
+                  "cgt2EndPhoto": {
+                     "title": "CGT2 End Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT2"
+                     ]
+                  },
+                  "cgt2Remarks": {
+                     "title": "CGT2 remarks",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT2"
+                     ]
+                  },
+                  "cgtDate2": {
+                     "title": "CGT2 Date",
+                     "type": "String",
+                     "captureStages": [
+                        "CGT2"
+                     ]
+                  },
+                  "cgtEndDate2": {
+                     "title": "CGT2 End Date",
+                     "type": "String",
+                     "captureStages": [
+                        "CGT2"
+                     ]
+                  },
+                  "cgt3DoneBy": {
+                     "title": "CGT3 Done By",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 250,
+                     "captureStages": [
                         "CGT3"
                      ]
                   },
-				   "cgt3Latitude":{
-                     "title":"CGT3 Latitude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "cgt3Latitude": {
+                     "title": "CGT3 Latitude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT3"
                      ]
                   },
-				   "cgt3Longitude":{
-                     "title":"CGT3 Longtiude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT3"
-                     ]
-                  }, "cgt3Photo":{
-                     "title":"CGT3 Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT3"
-                     ]
-                  }, "cgt3EndPhoto":{
-                     "title":"CGT3 End Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT3"
-                     ]
-                  }, "cgt3Remarks":{
-                     "title":"CGT3 remarks",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
-                        "CGT3"
-                     ]
-                  }, "cgtDate3":{
-                     "title":"CGT3 Date",
-                     "type":"String",
-                     "captureStages":[
+                  "cgt3Longitude": {
+                     "title": "CGT3 Longtiude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "CGT3"
                      ]
                   },
-				  "cgtEndDate3":{
-                     "title":"CGT3 End Date",
-                     "type":"String",
-                     "captureStages":[
+                  "cgt3Photo": {
+                     "title": "CGT3 Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT3"
+                     ]
+                  },
+                  "cgt3EndPhoto": {
+                     "title": "CGT3 End Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT3"
+                     ]
+                  },
+                  "cgt3Remarks": {
+                     "title": "CGT3 remarks",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
+                        "CGT3"
+                     ]
+                  },
+                  "cgtDate3": {
+                     "title": "CGT3 Date",
+                     "type": "String",
+                     "captureStages": [
+                        "CGT3"
+                     ]
+                  },
+                  "cgtEndDate3": {
+                     "title": "CGT3 End Date",
+                     "type": "String",
+                     "captureStages": [
                         "CGT3"
                      ]
                   }
                }
             }
          },
-         "grt":{
-            "title":"GRT Details",
-            "type":"object",
-            "maxItems":null,
-            "items":{
-               "type":"object",
-               "required":[
-               ],
-               "properties":{
-                  "grtDoneBy":{
-                     "title":"GRT Done By",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+         "grt": {
+            "title": "GRT Details",
+            "type": "object",
+            "maxItems": null,
+            "items": {
+               "type": "object",
+               "required": [],
+               "properties": {
+                  "grtDoneBy": {
+                     "title": "GRT Done By",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtLatitude":{
-                     "title":"GRT Latitude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "grtLatitude": {
+                     "title": "GRT Latitude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtLongitude":{
-                     "title":"GRT Longitude",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "grtLongitude": {
+                     "title": "GRT Longitude",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtPhoto":{
-                     "title":"GRT Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "grtPhoto": {
+                     "title": "GRT Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				  "grtEndPhoto":{
-                     "title":"GRT End Photo",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "grtEndPhoto": {
+                     "title": "GRT End Photo",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtRemarks":{
-                     "title":"GRT Remarks",
-                     "type":"String",
-                     "minimum":1,
-                     "maximum":100,
-                     "captureStages":[
+                  "grtRemarks": {
+                     "title": "GRT Remarks",
+                     "type": "String",
+                     "minimum": 1,
+                     "maximum": 100,
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtDate":{
-                     "title":"GRT Date",
-                     "type":"String",
-                     "captureStages":[
+                  "grtDate": {
+                     "title": "GRT Date",
+                     "type": "String",
+                     "captureStages": [
                         "GRT"
                      ]
                   },
-				    "grtEndDate":{
-                     "title":"GRT End Date",
-                     "type":"String",
-                     "captureStages":[
+                  "grtEndDate": {
+                     "title": "GRT End Date",
+                     "type": "String",
+                     "captureStages": [
                         "GRT"
                      ]
                   }
-				  
+
                }
             }
          }
