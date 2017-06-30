@@ -295,6 +295,15 @@ define({
                             "Father": "Father",
                             "Husband": "Husband"
                         }*/
+                    },{
+                        "key": "group.jlgGroupMembers[].maritalStatus",
+                        "title": "MARITAL_STATUS",
+                        "type":"select",
+                        "enumCode":"marital_status"
+                    },{
+                        "key": "group.jlgGroupMembers[].outStandingLoanAmount",
+                        "type": "amount",
+                        "title": "OUTSTANDING_LOAN_AMOUNT"
                     }, {
                         "key": "group.jlgGroupMembers[].loanAmount",
                         "title": "LOAN_AMOUNT",
@@ -395,7 +404,7 @@ define({
                     "type": "save",
                     "title": "SAVE_OFFLINE"
                 }]
-            }, ],
+            }],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
