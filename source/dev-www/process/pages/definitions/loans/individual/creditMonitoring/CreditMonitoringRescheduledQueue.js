@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"), ["$log", "formHelper", "CreditMonitoring", "$state", "SessionStore", "Utils",
-    function($log, formHelper, CreditMonitoring, $state, SessionStore, Utils) {
+irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMonitoringRescheduledQueue"), ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils",
+    function($log, formHelper, LUC, $state, SessionStore, Utils) {
 
         return {
             "type": "search-list",
@@ -18,22 +18,23 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        "branchName": {
-                            "title": "HUB_NAME",
-                            "type": "string",
-                            "enumCode": "branch",
+                        "branch": {
+                            "title": "BRANCH_NAME",
+                            "type": "integer",
+                            "enumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
                                 "screenFilter": true
                             }
                         },
-                        "centreId": {
-                            "title": "SPOKE_NAME",
-                            "type": "number",
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": "integer",
                             "enumCode": "centre",
                             "x-schema-form": {
                                 "type": "select",
-                                "parentEnumCode": "branch",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branch",
                                 "screenFilter": true
                             }
                         },
@@ -45,8 +46,8 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                             "title": "BUSINESS_NAME",
                             "type": "number"
                         },
-                        "lucRescheduledDate": {
-                            "title": "CREDIT_MONITORING_RESCHEDULED_DATE",
+                        "cmRescheduledDate": {
+                            "title": "CM_RESCHEDULED_DATE",
                             "type": "string",
                             "x-schema-form": {
                                 "type": "date"
@@ -63,21 +64,20 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var branch = SessionStore.getCurrentBranch();
-                    var centres = SessionStore.getCentres();
-                    var centreId = [];
-                    if (centres && centres.length) {
-                        for (var i = 0; i < centres.length; i++) {
-                            centreId.push(centres[i].centreId);
+                    var branches = formHelper.enum('branch').data;
+                    var branchName = null;
+                    for (var i = 0; i < branches.length; i++) {
+                        var branch = branches[i];
+                        if (branch.code == searchOptions.branch) {
+                            branchName = branch.name;
                         }
                     }
-
-                    var promise = CreditMonitoring.search({
+                    var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
-                        'currentStage': "LUCReschedule",
-                        'centreId': centreId[0],
-                        'branchName': branch.branchName,
-                        'lucRescheduledDate': searchOptions.lucRescheduledDate,
+                        'currentStage': "CMReschedule",
+                        'centreId': searchOptions.centre,
+                        'branchName': branchName,
+                        'lucRescheduledDate': searchOptions.cmRescheduledDate,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,

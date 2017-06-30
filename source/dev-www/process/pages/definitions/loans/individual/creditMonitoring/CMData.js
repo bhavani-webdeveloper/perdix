@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.creditMonitoring.CMData",
     pageType: "Engine",
-    dependencies: ["$log", "$state", "$stateParams", "CreditMonitoring", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
-    $pageFn: function($log, $state, $stateParams, CreditMonitoring, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
+    dependencies: ["$log", "$state", "$stateParams", "LUC", "Enrollment", "IndividualLoan", "LucHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"],
+    $pageFn: function($log, $state, $stateParams, LUC, Enrollment, IndividualLoan, LucHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
@@ -50,7 +50,7 @@ define({
                     if (!lucId) {
                         PageHelper.hideLoader();
                     }
-                    CreditMonitoring.get({
+                    LUC.get({
                             id: lucId
                         },
                         function(res) {
@@ -870,7 +870,7 @@ define({
                                 }
                             }, {
                                 key: "loanMonitoringDetails.intendedPurposePercentage",
-                                title: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
+                                HYPOTHECATED_TO_KINARA: "%OF_AMOUNT_UTILISED_FOR_INTENDED_PURPOSE",
                                 condition: "model.loanMonitoringDetails.amountUsedPercentage<100",
                                 type: "integer",
                                 "readonly": true,
@@ -1070,13 +1070,13 @@ define({
                     ]
                 }, {
                     "type": "box",
-                    "title": "LUC_DOCUMENTS",
+                    "title": "CREDIT_MONITORING_DOCUMENTS",
                     "readonly": true,
                     "condition": "model.lucCompleted",
                     "items": [{
                         "key": "loanMonitoringDetails.loanMonitoringDocuments",
                         "type": "array",
-                        "title": "LUC_DOCUMENTS",
+                        "title": "CREDIT_MONITORING_DOCUMENTS",
                         startEmpty: true,
                         "items": [{
 
@@ -1244,7 +1244,7 @@ define({
                 },
             ],
             schema: function() {
-                return CreditMonitoring.getSchema().$promise;
+                return LUC.getSchema().$promise;
             },
 
             actions: {

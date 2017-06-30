@@ -18,7 +18,7 @@
     },{
         "order": 3,
         "code": "CMEscalate",
-        "name": "CM Escalate",
+        "name": "CM Risk",
         "stageType": "CAPTURE",
         "allowedRoles": [
             "WM"
@@ -579,7 +579,7 @@
                             ]
                         },
                         "udf2": {
-                            "title": "udf1",
+                            "title": "udf2",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
@@ -589,7 +589,7 @@
                             ]
                         },
                         "udf3": {
-                            "title": "udf1",
+                            "title": "udf3",
                             "type": "string",
                              "captureStages": [
                                 "CMSchedule",
