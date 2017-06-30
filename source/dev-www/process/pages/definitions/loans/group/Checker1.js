@@ -3,11 +3,11 @@ pageUID: "loans.group.Checker1",
 pageType: "Engine",
 dependencies: ["$log", "$state", "irfSimpleModal", "Groups", "Enrollment", "CreditBureau",
     "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+    "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "GroupProcess"
 ],
 $pageFn: function($log, $state, irfSimpleModal, Groups, Enrollment, CreditBureau,
     Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+    PageHelper, Utils, PagesDefinition, Queries, irfNavigator, GroupProcess) {
 
 var fixData = function(model) {
     model.group.tenure = parseInt(model.group.tenure);
@@ -27,24 +27,12 @@ var enrichCustomer = function(customer) {
     customer.addressHtml = addr.join(',<br>');
     if (customer.doorNo) customer.addressHtml = customer.doorNo + ', ' + customer.addressHtml;
     customer.addressHtml = '<span><span style="font-size:14px;font-weight:bold">' + customer.addressHtml + '</span></span>';
-    // customer.mobilePhone = customer.mobilePhone;
-    // customer.landLineNo = customer.landLineNo;
-    // customer.latitude = customer.latitude;
-    // customer.aadhaarNo = customer.aadhaarNo;
-    // customer.identityProof = customer.identityProof;
-    // customer.identityProofImageId1 = customer.identityProofImageId;
-    // customer.identityProofImageId2 = customer.udf.userDefinedFieldValues.udf30;
-    // customer.identityProofNo = customer.identityProofNo;
-    // customer.addressProof = customer.addressProof;
-    // customer.addressProofImageId1 = customer.addressProofImageId;
-    // customer.addressProofImageId2 = customer.udf.userDefinedFieldValues.udf29;
-    // customer.addressProofNo = customer.addressProofNo;
     return customer;
 };
 
 return {
     "type": "schema-form",
-    "title": "Checker1",
+    "title": "Checker 1",
     "subTitle": "",
     initialize: function(model, form, formCtrl) {
         var self = this;
@@ -115,6 +103,9 @@ return {
                         "key": "group.jlgGroupMembers[].customer.dateOfBirth",
                         "type": "date"
                     }, {
+                        "title": "AADHAAR_NO",
+                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
+                    }, {
                         "title": "FATHER_FULL_NAME",
                         "key": "group.jlgGroupMembers[].customer.fatherFullName"
                     }, {
@@ -137,9 +128,6 @@ return {
                         "latitude": "group.jlgGroupMembers[arrayIndex].customer.latitude",
                         "longitude": "group.jlgGroupMembers[arrayIndex].customer.longitude"
                     }, {
-                        "title": "AADHAAR_NO",
-                        "key": "group.jlgGroupMembers[].customer.aadhaarNo"
-                    }, {
                         "title": "ADDRESS_PROOF",
                         "key": "group.jlgGroupMembers[].customer.addressProof",
                         "type": "select",
@@ -147,6 +135,22 @@ return {
                     }, {
                         "title": "ADDRESS_PROOF_NO",
                         "key": "group.jlgGroupMembers[].customer.addressProofNo"
+                    }, {
+                        "title": "IDENTITY_PROOF",
+                        "key": "group.jlgGroupMembers[].customer.identityProof",
+                        "type": "select",
+                        "enumCode": "identity_proof"
+                    }, {
+                        "title": "IDENTITY_PROOFNO",
+                        "key": "group.jlgGroupMembers[].customer.identityProofNo"
+                    }, {
+                        "title": "KYC1_PROOF_TYPE",
+                        "key": "group.jlgGroupMembers[].customer.kyc1ProofType",
+                        "type": "select",
+                        "enumCode": "kyc"
+                    }, {
+                        "title": "KYC1_PROOF_NUMBER",
+                        "key": "group.jlgGroupMembers[].customer.kyc1ProofNumber"
                     }]
                 }, {
                     "type": "section",
@@ -161,6 +165,62 @@ return {
                     }, {
                         "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
                         "key": "group.jlgGroupMembers[].customer.addressProofReverseImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "ADDRESSPROOF"
+                    }, {
+                        "title": "IDENTITY_PROOF_DOCUMENT",
+                        "key": "group.jlgGroupMembers[].customer.identityProofImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF"
+                    }, {
+                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF"
+                    }, {
+                        "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
+                        "key": "group.jlgGroupMembers[].customer.kyc1ImagePath",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "KYC1"
+                    }]
+                }]
+            }, {
+                "type": "section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "PRODUCT_CODE",
+                        "key": "group.productCode" // TODO: this should be product name
+                    }, {
+                        "title": "LOAN_AMOUNT",
+                        "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        "type": "amount"
+                    }, {
+                        "title": "LOAN_PURPOSE1",
+                        "key": "group.jlgGroupMembers[].loanPurpose1"
+                    }, {
+                        "title": "LOAN_PURPOSE2",
+                        "key": "group.jlgGroupMembers[].loanPurpose2"
+                    }, {
+                        "title": "LOAN_PURPOSE3",
+                        "key": "group.jlgGroupMembers[].loanPurpose3"
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
                         "type": "file",
                         "fileType": "image/*",
                         "category": "CustomerEnrollment",
