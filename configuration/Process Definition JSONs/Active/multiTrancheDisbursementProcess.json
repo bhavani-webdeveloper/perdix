@@ -539,6 +539,33 @@
                      "captureStages":[
                         "DisbursementConfirmation"
                      ]
+                  }, 
+                  "overrideRequested":{
+                     "title":"overrideRequested",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
+                  "overrideRequestRemarks":{
+                     "title":"overrideRequestRemarks",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+                  },
+                  "fpVerified":{
+                     "title":"fpVerified",
+                     "type":"string",
+                     "minLength":1,
+                     "maxLength":100,
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
                   }
                },
                "type":"object"

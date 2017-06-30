@@ -15,6 +15,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Disbursement Page got initialized");
+                model.customer=model.customer||{};
 
                 model.additional = {"branchName":branch};
                 try {
@@ -52,6 +53,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
 
+                        Enrollment.getCustomerById({
+                                id: model.additional.customerId
+                            },
+                            function(res) {
+                                model.customer = res;
+
+                            });
+                        $log.info(model.customer);      
                     },
                     function (resp) {
                         PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
@@ -158,6 +167,52 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         readonly:true
                     },
                     {
+                        "key": "loanAccountDisbursementSchedule.overrideRequested",
+                        "type": "checkbox",
+                        "title": "OVERRIDE_FINGERPRINT",
+                        "schema":{
+                            "default": false
+                        }
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.overrideRequestRemarks",
+                        "type":"textarea",
+                        required:true,
+                        "title": "OVERRIDE_REMARKS",
+                        "condition": "model.loanAccountDisbursementSchedule.overrideRequested"
+                    },
+                    {
+                        type: "fieldset",
+                        condition: "!model.loanAccountDisbursementSchedule.overrideRequested",
+                        title: "VALIDATE_BIOMETRIC",
+                        items: [{
+                            key: "loanAccountDisbursementSchedule.fpVerified",
+                            required:true,
+                            "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                            type: "validatebiometric",
+                            category: 'CustomerEnrollment',
+                            subCategory: 'FINGERPRINT',
+                            helper: formHelper,
+                            biometricMap: {
+                                leftThumb: "model.customer.leftHandThumpImageId",
+                                leftIndex: "model.customer.leftHandIndexImageId",
+                                leftMiddle: "model.customer.leftHandMiddleImageId",
+                                leftRing: "model.customer.leftHandRingImageId",
+                                leftLittle: "model.customer.leftHandSmallImageId",
+                                rightThumb: "model.customer.rightHandThumpImageId",
+                                rightIndex: "model.customer.rightHandIndexImageId",
+                                rightMiddle: "model.customer.rightHandMiddleImageId",
+                                rightRing: "model.customer.rightHandRingImageId",
+                                rightLittle: "model.customer.rightHandSmallImageId"
+                            },
+                            viewParams: function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                        }]
+                    },
+                    {
                         "type":"actions",
                         "items":[
                             {
@@ -167,6 +222,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             },
                             {
                                 "type":"button",
+                                "condition":"model.loanAccountDisbursementSchedule.overrideRequested",
                                 "title":"DISBURSE",
                                 "icon":"fa fa-money",
                                 "onClick":"actions.disburseLoan(model,formCtrl,form)"
