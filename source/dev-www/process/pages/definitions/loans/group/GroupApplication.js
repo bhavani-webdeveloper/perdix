@@ -285,7 +285,24 @@ define({
                         }]
                     }]
                 },
-
+                {
+                    "type": "box",
+                    "title": "APPLICATION_UPLOAD",
+                    "items": [{
+                        "key": "group.Uploadfile",
+                        "notitle": true,
+                        "title": "APPLICATION_UPLOAD",
+                        "category": "ACH",
+                        "subCategory": "cat2",
+                        "type": "file",
+                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        customHandle: function(file, progress, modelValue, form, model) {
+                            GroupProcess.leadBulkUpload(file, progress).then(function(resp) {
+                                //$state.go('Page.LeadDashboard', null);
+                            });
+                        }
+                    }]
+                },
                 {
                     "type": "actionbox",
                     "items": [{
