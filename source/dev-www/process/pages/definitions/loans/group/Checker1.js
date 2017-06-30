@@ -79,9 +79,9 @@ return {
         "type": "box",
         "title": "GROUP_MEMBERS",
         "colClass": "col-sm-12",
-        "readonly": true,
         "items": [{
             "type": "array",
+            "readonly": true,
             "key": "group.jlgGroupMembers",
             "titleExpr": "model.group.jlgGroupMembers[arrayIndex].customer.fullName",
             "add": null,
@@ -106,12 +106,49 @@ return {
                         "title": "AADHAAR_NO",
                         "key": "group.jlgGroupMembers[].customer.aadhaarNo"
                     }, {
+                        "title": "IDENTITY_PROOF",
+                        "key": "group.jlgGroupMembers[].customer.identityProof",
+                        "type": "select",
+                        "enumCode": "identity_proof"
+                    }, {
+                        "title": "IDENTITY_PROOFNO",
+                        "key": "group.jlgGroupMembers[].customer.identityProofNo"
+                    }, {
                         "title": "FATHER_FULL_NAME",
                         "key": "group.jlgGroupMembers[].customer.fatherFullName"
                     }, {
                         "title": "SPOUSE_FULL_NAME",
                         "key": "group.jlgGroupMembers[].customer.spouseFullName"
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "IDENTITY_PROOF_DOCUMENT",
+                        "key": "group.jlgGroupMembers[].customer.identityProofImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF"
                     }, {
+                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
+                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
+                        "type": "file",
+                        "fileType": "image/*",
+                        "category": "CustomerEnrollment",
+                        "subCategory": "IDENTITYPROOF"
+                    }]
+                }]
+            }, {
+                "type": "section",
+                "html": '<hr>'
+            }, {
+                "type": "section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
                         "title": "CUSTOMER_RESIDENTIAL_ADDRESS",
                         "key": "group.jlgGroupMembers[].customer.addressHtml",
                         "type": "html"
@@ -135,22 +172,6 @@ return {
                     }, {
                         "title": "ADDRESS_PROOF_NO",
                         "key": "group.jlgGroupMembers[].customer.addressProofNo"
-                    }, {
-                        "title": "IDENTITY_PROOF",
-                        "key": "group.jlgGroupMembers[].customer.identityProof",
-                        "type": "select",
-                        "enumCode": "identity_proof"
-                    }, {
-                        "title": "IDENTITY_PROOFNO",
-                        "key": "group.jlgGroupMembers[].customer.identityProofNo"
-                    }, {
-                        "title": "KYC1_PROOF_TYPE",
-                        "key": "group.jlgGroupMembers[].customer.kyc1ProofType",
-                        "type": "select",
-                        "enumCode": "kyc"
-                    }, {
-                        "title": "KYC1_PROOF_NUMBER",
-                        "key": "group.jlgGroupMembers[].customer.kyc1ProofNumber"
                     }]
                 }, {
                     "type": "section",
@@ -169,21 +190,30 @@ return {
                         "fileType": "image/*",
                         "category": "CustomerEnrollment",
                         "subCategory": "ADDRESSPROOF"
+                    }]
+                }]
+            }, {
+                "type": "section",
+                "html": '<hr>'
+            }, {
+                "type": "section",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "KYC1_PROOF_TYPE",
+                        "key": "group.jlgGroupMembers[].customer.kyc1ProofType",
+                        "type": "select",
+                        "enumCode": "kyc"
                     }, {
-                        "title": "IDENTITY_PROOF_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }, {
-                        "title": "IDENTITY_PROOF_REVERSE_DOCUMENT",
-                        "key": "group.jlgGroupMembers[].customer.identityProofReverseImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "IDENTITYPROOF"
-                    }, {
+                        "title": "KYC1_PROOF_NUMBER",
+                        "key": "group.jlgGroupMembers[].customer.kyc1ProofNumber"
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
                         "title": "KYC1_PROOF_DOCUMENT_FRONT_SIDE",
                         "key": "group.jlgGroupMembers[].customer.kyc1ImagePath",
                         "type": "file",
@@ -192,6 +222,9 @@ return {
                         "subCategory": "KYC1"
                     }]
                 }]
+            }, {
+                "type": "section",
+                "html": '<hr>'
             }, {
                 "type": "section",
                 "htmlClass": "row",
@@ -218,15 +251,27 @@ return {
                 }, {
                     "type": "section",
                     "htmlClass": "col-sm-6",
-                    "items": [{
-                        "title": "ADDRESS_PROOF_IMAGE_ID",
-                        "key": "group.jlgGroupMembers[].customer.addressProofImageId",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "ADDRESSPROOF"
-                    }]
+                    "items": []
                 }]
+            }]
+        }, {
+            "type": "section",
+            "htmlClass": "row",
+            "items": [{
+                "type": "section",
+                "htmlClass": "col-sm-6",
+                "items": [{
+                    "title": "CHECKER_FILE_UPLOAD",
+                    "key": "group.checker1FileId",
+                    "type": "file",
+                    "fileType": "*/*",
+                    "category": "Group",
+                    "subCategory": "DOC1"
+                }]
+            }, {
+                "type": "section",
+                "htmlClass": "col-sm-6",
+                "items": []
             }]
         }]
     }, {
