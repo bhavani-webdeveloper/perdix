@@ -19,22 +19,22 @@ define({
                 }
                 model.journal.journalEntryDto.valueDate = moment(new Date()).format("YYYY-MM-DD");
                 $log.info("Inside submit()");
-                if (!(model && model.journal && model.journal.journalEntryDto&&model.journal.journalEntryDto.id&& model.$$STORAGE_KEY$$)) {
+                if (!(model && model.journal && model.journal.journalEntryDto && model.journal.journalEntryDto.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
                     var journalId = $stateParams.pageId;
                     if (!journalId) {
                         PageHelper.hideLoader();
-                    }else{
+                    } else {
                         Journal.getJournalEntry({
-                            id: journalId
-                        },
-                        function(res) {
-                            _.assign(model.journal.journalEntryDto, res);
-                            $log.info(model.journal.journalEntryDto);
-                            PageHelper.hideLoader();
-                        }
-                    );
+                                id: journalId
+                            },
+                            function(res) {
+                                _.assign(model.journal.journalEntryDto, res);
+                                $log.info(model.journal.journalEntryDto);
+                                PageHelper.hideLoader();
+                            }
+                        );
                     }
                     $log.info("Journal page  is initiated ");
                 }
@@ -63,6 +63,19 @@ define({
                 }, {
                     key: "journal.journalEntryDto.transactionAmount",
                     type: "amount"
+                }, {
+                    key: "journal.journalEntryDto.instrumentBankName"
+                }, {
+                    key: "journal.journalEntryDto.instrumentBranchName"
+                }, {
+                    key: "journal.journalEntryDto.instrumentType"
+                }, {
+                    key: "journal.journalEntryDto.instrumentNumber"
+                }, {
+                    key: "journal.journalEntryDto.instrumentDate",
+                    type: "date"
+                }, {
+                    key: "journal.journalEntryDto.ifscCode"
                 }, {
                     key: "journal.journalEntryDto.valueDate",
                     type: "date"
@@ -154,7 +167,31 @@ define({
                                     "valueDate": {
                                         "title": "VALUE_DATE",
                                         "type": "string"
-                                    }
+                                    },
+                                    "instrumentBankName": {
+                                        "title": "INSTRUMENT_BANK_NAME",
+                                        "type": "string"
+                                    },
+                                    "instrumentBranchName": {
+                                        "title": "INSTRUMENT_BRANCH_NAME",
+                                        "type": "string"
+                                    },
+                                    "instrumentType": {
+                                        "title": "INSTRUMENT_TYPE",
+                                        "type": "string"
+                                    },
+                                    "instrumentNumber": {
+                                        "title": "INSTRUMENT_NUMBER",
+                                        "type": "string"
+                                    },
+                                    "instrumentDate": {
+                                        "title": "INSTRUMENT_DATE",
+                                        "type": "string"
+                                    },
+                                    "ifscCode": {
+                                        "title": "IFSC_CODE",
+                                        "type": "string"
+                                    },
                                 }
                             }
                         }

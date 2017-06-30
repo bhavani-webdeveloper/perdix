@@ -14,27 +14,27 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.journal = model.journal || {};
-                if (!_.hasIn(model.journal, 'journalEntryDto') || model.journal.journalEntryDto==null){
-                     model.journal.journalEntryDto = {};
-                 }
+                if (!_.hasIn(model.journal, 'journalEntryDto') || model.journal.journalEntryDto == null) {
+                    model.journal.journalEntryDto = {};
+                }
                 model.journal.journalEntryDto.valueDate = moment(new Date()).format("YYYY-MM-DD");
 
-                if (!(model && model.journal && model.journal.journalEntryDto&&model.journal.journalEntryDto.id&& model.$$STORAGE_KEY$$)) {
+                if (!(model && model.journal && model.journal.journalEntryDto && model.journal.journalEntryDto.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
                     PageHelper.showProgress("page-init", "Loading...");
                     var journalId = $stateParams.pageId;
                     if (!journalId) {
                         PageHelper.hideLoader();
-                    }else{
+                    } else {
                         Journal.getJournalEntry({
-                            id: journalId
-                        },
-                        function(res) {
-                            _.assign(model.journal.journalEntryDto, res);
-                            $log.info(model.journal.journalEntryDto);
-                            PageHelper.hideLoader();
-                        }
-                    );
+                                id: journalId
+                            },
+                            function(res) {
+                                _.assign(model.journal.journalEntryDto, res);
+                                $log.info(model.journal.journalEntryDto);
+                                PageHelper.hideLoader();
+                            }
+                        );
                     }
                     $log.info("Journal page  is initiated ");
                 }
@@ -49,83 +49,112 @@ define({
                 "type": "box",
                 "title": "JOURNAL_POSTING",
                 "items": [{
-                        key: "journal.journalEntryDto.id",
-                        readonly:true,
-                        condition: "model.journal.journalEntryDto.id"
-                    }, {
-                        key: "journal.journalEntryDto.transactionName",
-                        "type": "lov",
-                        lovonly: true,
-                        "inputMap": {
-                            "transactionName": {
-                                "key": "journal.journalEntryDto.transactionName",
-                                "title": "TRANSACTION_NAME",
-                                "type": "string"
-                            },
-                            "transactionDescription": {
-                                "key": "journal.journalEntryDto.transactionDescription",
-                                "title": "TRANSACTION_DESCRIPTION",
-                                "type": "string"
-                            },
-                            "debitGLNo": {
-                                "key": "journal.journalEntryDto.debitGLNo",
-                                "title": "DEBIT_GL_NO",
-                                "type": "string",
-                            },
-                            "creditGLNo": {
-                                "key": "journal.journalEntryDto.creditGLNo",
-                                "title": "CREDIT_GL_NO",
-                                "type": "string",
-                            }
+                    key: "journal.journalEntryDto.id",
+                    readonly: true,
+                    condition: "model.journal.journalEntryDto.id"
+                }, {
+                    key: "journal.journalEntryDto.transactionName",
+                    "type": "lov",
+                    lovonly: true,
+                    "inputMap": {
+                        "transactionName": {
+                            "key": "journal.journalEntryDto.transactionName",
+                            "title": "TRANSACTION_NAME",
+                            "type": "string"
                         },
-                        "outputMap": {
-                            "id": "journal.journalEntryDto.journalMasterId",
-                            "transactionName": "journal.journalEntryDto.transactionName",
-                            "transactionDescription": "journal.journalEntryDto.transactionDescription",
-                            "debitGLNo": "journal.journalEntryDto.debitGLNo",
-                            "creditGLNo": "journal.journalEntryDto.creditGLNo",
+                        "transactionDescription": {
+                            "key": "journal.journalEntryDto.transactionDescription",
+                            "title": "TRANSACTION_DESCRIPTION",
+                            "type": "string"
                         },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            var promise = Journal.journalSearch({
-                                'transactionName': inputModel.transactionName,
-                                'transactionDescription': inputModel.transactionDescription,
-                                'debitGLNo': inputModel.debitGLNo,
-                                'creditGLNo': inputModel.creditGLNo,
-                                'isApplicable': 0,
-                            }).$promise;
-                            return promise;
+                        "debitGLNo": {
+                            "key": "journal.journalEntryDto.debitGLNo",
+                            "title": "DEBIT_GL_NO",
+                            "type": "string",
                         },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                data.id,
-                                data.transactionName,
-                                data.transactionDescription
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {}
+                        "creditGLNo": {
+                            "key": "journal.journalEntryDto.creditGLNo",
+                            "title": "CREDIT_GL_NO",
+                            "type": "string",
+                        }
+                    },
+                    "outputMap": {
+                        "id": "journal.journalEntryDto.journalMasterId",
+                        "transactionName": "journal.journalEntryDto.transactionName",
+                        "transactionDescription": "journal.journalEntryDto.transactionDescription",
+                        "debitGLNo": "journal.journalEntryDto.debitGLNo",
+                        "creditGLNo": "journal.journalEntryDto.creditGLNo",
+                    },
+                    "searchHelper": formHelper,
+                    "search": function(inputModel, form) {
+                        var promise = Journal.journalSearch({
+                            'transactionName': inputModel.transactionName,
+                            'transactionDescription': inputModel.transactionDescription,
+                            'debitGLNo': inputModel.debitGLNo,
+                            'creditGLNo': inputModel.creditGLNo,
+                            'isApplicable': 0,
+                        }).$promise;
+                        return promise;
+                    },
+                    getListDisplayItem: function(data, index) {
+                        return [
+                            data.id,
+                            data.transactionName,
+                            data.transactionDescription
+                        ];
+                    },
+                    onSelect: function(valueObj, model, context) {}
+                }, {
+                    key: "journal.journalEntryDto.transactionDescription",
+                    readonly: true,
+                }, {
+                    key: "journal.journalEntryDto.creditGLNo",
+                    readonly: true,
+                }, {
+                    key: "journal.journalEntryDto.debitGLNo",
+                    readonly: true,
+                }, {
+                    key: "journal.journalEntryDto.transactionAmount",
+                    type: "amount"
+                }, {
+                    key: "journal.journalEntryDto.instrumentBankName",
+                    type: "string"
+                }, {
+                    key: "journal.journalEntryDto.instrumentBranchName",
+                    type: "string"
+                }, {
+                    key: "journal.journalEntryDto.instrumentType",
+                    "type": "select",
+                    "titleMap": [{
+                        "name": "CASH",
+                        "value": "CASH"
                     }, {
-                        key: "journal.journalEntryDto.transactionDescription",
-                        readonly: true,
+                        "name": "CHEQUE",
+                        "value": "CHEQUE"
                     }, {
-                        key: "journal.journalEntryDto.creditGLNo",
-                        readonly: true,
+                        "name": "NEFT",
+                        "value": "NEFT"
                     }, {
-                        key: "journal.journalEntryDto.debitGLNo",
-                        readonly: true,
-                    }, {
-                        key: "journal.journalEntryDto.transactionAmount",
-                        type: "amount"
-                    }, {
-                        key: "journal.journalEntryDto.valueDate",
-                        type: "date"
-                    }, {
-                        key: "journal.journalEntryDto.relatedAccountNo",
-                        title: "RELATED_ACCOUNT_NO"
-                    }, {
-                        key: "journal.journalEntryDto.remarks",
-                    }
-                ]
+                        "name": "RTGS",
+                        "value": "RTGS"
+                    }]
+                }, {
+                    key: "journal.journalEntryDto.instrumentNumber"
+                }, {
+                    key: "journal.journalEntryDto.instrumentDate",
+                    type: "date"
+                }, {
+                    key: "journal.journalEntryDto.ifscCode",
+                    type: "string"
+                }, {
+                    key: "journal.journalEntryDto.valueDate",
+                    type: "date"
+                }, {
+                    key: "journal.journalEntryDto.relatedAccountNo",
+                    title: "RELATED_ACCOUNT_NO"
+                }, {
+                    key: "journal.journalEntryDto.remarks",
+                }]
             }, {
                 "type": "actionbox",
                 "items": [{
@@ -208,7 +237,31 @@ define({
                                     "valueDate": {
                                         "title": "VALUE_DATE",
                                         "type": "string"
-                                    }
+                                    },
+                                    "instrumentBankName": {
+                                        "title": "INSTRUMENT_BANK_NAME",
+                                        "type": "string"
+                                    },
+                                    "instrumentBranchName": {
+                                        "title": "INSTRUMENT_BRANCH_NAME",
+                                        "type": "string"
+                                    },
+                                    "instrumentType": {
+                                        "title": "INSTRUMENT_TYPE",
+                                        "type": "string"
+                                    },
+                                    "instrumentNumber": {
+                                        "title": "INSTRUMENT_NUMBER",
+                                        "type": "string"
+                                    },
+                                    "instrumentDate": {
+                                        "title": "INSTRUMENT_DATE",
+                                        "type": "string"
+                                    },
+                                    "ifscCode": {
+                                        "title": "IFSC_CODE",
+                                        "type": "string"
+                                    },
                                 }
                             }
                         }
@@ -233,7 +286,7 @@ define({
                     PageHelper.showProgress("Journal Save", "Working...");
                     if (model.journal.journalEntryDto.id) {
                         model.journal.journalEntryProcessAction = "PROCEED",
-                        Journal.updateJournalEntry(model.journal)
+                            Journal.updateJournalEntry(model.journal)
                             .$promise
                             .then(function(res) {
                                 PageHelper.showProgress("Journal Save", "Journal Updated with id", 3000);
@@ -248,7 +301,7 @@ define({
                             })
                     } else {
                         model.journal.journalEntryProcessAction = "SAVE",
-                        model.journal.journalEntryDto.transactionDate = Utils.getCurrentDate();
+                            model.journal.journalEntryDto.transactionDate = Utils.getCurrentDate();
                         model.journal.journalEntryDto.transactionType = "Entry";
                         Journal.createJournalEntry(model.journal)
                             .$promise
