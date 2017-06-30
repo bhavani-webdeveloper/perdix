@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils",
-function($log, formHelper, Enrollment,$state, SessionStore, Utils){
+["$log", "formHelper", "Enrollment","$state", "SessionStore", "Utils", "PagesDefinition",
+function($log, formHelper, Enrollment,$state, SessionStore, Utils, PagesDefinition){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -8,13 +8,59 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
-			$log.info("search-list sample got initialized");
-			formCtrl.submit();
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					model.bankId = banks[i].value;
+					model.bankName = banks[i].name;
+				}
+			}
+			var userRole = SessionStore.getUserRole();
+			if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+				model.fullAccess = true;
+			}
+			PagesDefinition.getPageConfig('Page/Engine/CustomerSearch').then(function(data){
+				model.showBankFilter = data.showBankFilter ? data.showBankFilter : false;
+				setTimeout(function(){formCtrl.submit();}, 0);	
+				$log.info("search-list sample got initialized");
+			});
 		},
 		definition: {
 			title: "Search Customers",
 			searchForm: [
-				"*"
+				{
+                	"type": "section",
+                	items: [
+                	{
+                		key: "first_name", 
+                	},
+                	{
+                		key: "lastName",
+                	},
+                	{
+                		key: "kyc_no", 
+                	},
+                	{
+                		key: "urnNo"
+                	},
+                	{
+                		key: "bankId",
+                		readonly: true, 
+                		condition: "model.showBankFilter && !model.fullAccess"
+                	},
+                	{
+                		key: "bankId",
+                		condition: "model.showBankFilter && model.fullAccess"
+                	},
+                	{
+                		key: "branch", 
+                	},
+                	{
+                		key: "centre", 
+                	}
+                	]
+                }
 			],
 			searchSchema: {
 				"type": 'object',
@@ -36,13 +82,25 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 						"title": "URN_NO",
 						"type": "number"
 					},
+					"bankId": {
+						"title": "BANK_NAME",
+						"type": ["integer", "null"],
+						enumCode: "bank",	
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true,
+
+						}
+					},
 					"branch": {
 						"title": "BRANCH_NAME",
-						"type": "integer",
+						"type": ["integer", "null"],
 						"enumCode": "branch_id",
 						"x-schema-form": {
 							"type": "select",
-							"screenFilter": true
+							"screenFilter": true,
+							"parentEnumCode": "bank",
+							"parentValueExpr": "model.bankId",
 						}
 					},
 					"centre": {
@@ -58,7 +116,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 					}
 
 				},
-				"required":["branch"]
+				"required":["branch", 'bankId']
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
@@ -76,6 +134,7 @@ function($log, formHelper, Enrollment,$state, SessionStore, Utils){
 				}
 
 				var promise = Enrollment.search({
+					'bankId': searchOptions.bankId,
 					'branchName': branchName,
 					'firstName': searchOptions.first_name,
 					'centreId': searchOptions.centre,

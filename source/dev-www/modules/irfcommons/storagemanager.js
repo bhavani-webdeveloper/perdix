@@ -244,7 +244,7 @@ function($log, $state, irfStorageService, SessionStore, entityManager, irfProgre
 					case 'bank':
 						ret.data = _.clone(r.data);
 						for(var i = 0; i < ret.data.length; i++) {
-							ret.data[i].value = ret.data[i].code;
+							ret.data[i].value = Number(ret.data[i].code);
 						}
 						break;
 					case 'loan_product':

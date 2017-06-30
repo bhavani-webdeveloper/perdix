@@ -16,6 +16,11 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope', 'PageHelper', 
                 "Page/Engine/loans.group.Cgt3Queue",
                 "Page/Engine/loans.group.GrtQueue",
                 "Page/Engine/loans.group.ApplicationPendingQueue",
+                "Page/Engine/loans.group.Checker1Queue",
+                "Page/Engine/loans.group.Checker2Queue",
+                "Page/Engine/loans.group.AgreementUploadPendingQueue",
+                "Page/Engine/loans.group.Checker3Queue",
+                "Page/Engine/loans.group.Checker4Queue",
                 "Page/Engine/loans.group.JLGDisbursementQueue",
                 "Page/Engine/loans.group.CloseGroup",
                 "Page/Engine/loans.group.GroupLoanRepaymentQueue"
@@ -23,7 +28,7 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope', 'PageHelper', 
         };
 
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
-            $scope.dashboardDefinition = resp;
+            $scope.dashboardDefinition = _.cloneDeep(resp);
             var partners = irfStorageService.getMaster('partner');
             var branch = SessionStore.getCurrentBranch();
             var branchId = "" + SessionStore.getBranchId();
@@ -45,7 +50,13 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope', 'PageHelper', 
             var cgtthree = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Cgt3Queue"];
             var grt = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.GrtQueue"];
             var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
-            var disbursement = $scope.dashboardDefinition.$menuMap["Page/Engine/JLGDisbursementQueue"];
+            var checker1 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker1Queue"];
+            var checker2 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker2Queue"];
+            var checker3 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker3Queue"];
+            var checker4 = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.Checker4Queue"];
+            var agmtUpldPendingq = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.AgreementUploadPendingQueue"];
+            var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
+            var disbursement = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.JLGDisbursementQueue"];
             var close = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.CloseGroup"];
             var dscoverrideMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.DscOverrideQueue"];
 
@@ -165,6 +176,95 @@ irf.pages.controller("PageGroupDashboardCtrl", ['$log', '$scope', 'PageHelper', 
                     });
                 }
 
+                if (checker1) {
+                    Groups.search({
+                        'branchId': branchId,
+                        'partner': partners.name,
+                        //'groupStatus': true,
+                        'page': 1,
+                        'currentStage': "Checker1",
+                        'per_page': 1
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(checker1.data)) {
+                            checker1.data = 0;
+                        }
+                        checker1.data = checker1.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        checker1.data = '-';
+                    });
+                }
+
+                if (checker2) {
+                    Groups.search({
+                        'branchId': branchId,
+                        'partner': partners.name,
+                        //'groupStatus': true,
+                        'page': 1,
+                        'currentStage': "Checker2",
+                        'per_page': 1
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(checker2.data)) {
+                            checker2.data = 0;
+                        }
+                        checker2.data = checker2.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        checker2.data = '-';
+                    });
+                }
+
+                if (agmtUpldPendingq) {
+                    Groups.search({
+                        'branchId': branchId,
+                        'partner': partners.name,
+                        //'groupStatus': true,
+                        'page': 1,
+                        'currentStage': "AgreementUploadPending",
+                        'per_page': 1
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(agmtUpldPendingq.data)) {
+                            agmtUpldPendingq.data = 0;
+                        }
+                        agmtUpldPendingq.data = agmtUpldPendingq.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        agmtUpldPendingq.data = '-';
+                    });
+                }
+
+                if (checker3) {
+                    Groups.search({
+                        'branchId': branchId,
+                        'partner': partners.name,
+                        //'groupStatus': true,
+                        'page': 1,
+                        'currentStage': "Checker3",
+                        'per_page': 1
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(checker3.data)) {
+                            checker3.data = 0;
+                        }
+                        checker3.data = checker3.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        checker3.data = '-';
+                    });
+                }
+
+                if (checker4) {
+                    Groups.search({
+                        'branchId': branchId,
+                        'partner': partners.name,
+                        //'groupStatus': true,
+                        'page': 1,
+                        'currentStage': "Checker4",
+                        'per_page': 1
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(checker4.data)) {
+                            checker4.data = 0;
+                        }
+                        checker4.data = checker4.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        checker4.data = '-';
+                    });
+                }
 
                 if (disbursement) {
                     Groups.search({

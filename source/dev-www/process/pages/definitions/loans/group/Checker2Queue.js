@@ -12,15 +12,47 @@ define({
 
 		return {
 			"type": "search-list",
-			"title": "Checker2 QUEUE",
+			"title": "CHECKER2_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
+				model.branchId = SessionStore.getCurrentBranch().branchId;
+				var bankName = SessionStore.getBankName();
+				var banks = formHelper.enum('bank').data;
+				for (var i = 0; i < banks.length; i++){
+					if(banks[i].name == bankName){
+						model.bankId = banks[i].value;
+						model.bankName = banks[i].name;
+					}
+				}
+				var userRole = SessionStore.getUserRole();
+				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+					model.fullAccess = true;
+				}
 				$log.info("Checker2 Queue got initialized");
 			},
 			definition: {
-				title: "Checker2 QUEUE",
+				title: "CHECKER2_QUEUE",
 				searchForm: [
-					"*"
+					{
+	                	"type": "section",
+	                	items: [
+	                	{
+	                		key: "bankId",
+	                		readonly: true, 
+	                		condition: "!model.fullAccess"
+	                	},
+	                	{
+	                		key: "bankId",
+	                		condition: "model.fullAccess"
+	                	},
+	                	{
+	                		key: "branchId", 
+	                	},
+	                	{
+	                		key: "partner", 
+	                	},
+	                	]
+	                }
 				],
 				//autoSearch: true,
 				searchSchema: {
@@ -28,19 +60,24 @@ define({
 					"title": 'SearchOptions',
 					"properties": {
 						"bankId": {
-							"type": "string",
 							"title": "BANK_NAME",
+							"type": ["integer", "null"],
+							enumCode: "bank",	
 							"x-schema-form": {
 								"type": "select",
-								"enumCode": "partner"
+								"screenFilter": true,
+
 							}
 						},
 						"branchId": {
-							"type": "string",
 							"title": "BRANCH_NAME",
+							"type": ["integer", "null"],
+							"enumCode": "branch_id",
 							"x-schema-form": {
 								"type": "select",
-								"enumCode": "partner"
+								"screenFilter": true,
+								"parentEnumCode": "bank",
+								"parentValueExpr": "model.bankId",
 							}
 						},
 						"partner": {
@@ -50,17 +87,9 @@ define({
 								"type": "select",
 								"enumCode": "partner"
 							}
-						},
-						"product": {
-							"type": "string",
-							"title": "PRODUCT",
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "partner"
-							}
-						},
+						}
 					},
-					"required": []
+					"required": ['partner']
 				},
 
 				getSearchFormHelper: function() {
@@ -69,11 +98,12 @@ define({
 				getResultsPromise: function(searchOptions, pageOpts) {
 
 					var params = {
-						'branchId': branchId,
+						'bankId': searchOptions.bankId,
+						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
 						'page': pageOpts.pageNo,
-						//'currentStage': "CGT3",
+						'currentStage': "Checker2",
 						'per_page': pageOpts.itemsPerPage
 					};
 
@@ -112,18 +142,18 @@ define({
 					getColumns: function() {
 						return [{
 							title: 'GROUP_ID',
-							data: 'id'
-						}, {
-							title: 'PARTNER_CODE',
-							data: 'partnerCode'
+							data: 'groupCode'
 						}, {
 							title: 'GROUP_NAME',
 							data: 'groupName'
+						}, {
+							title: 'PARTNER',
+							data: 'partnerCode'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "CHECKER",
+							name: "VIEW_GROUP",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
