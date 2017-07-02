@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.Cgt3Queue",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		var branchId = SessionStore.getBranchId();
@@ -15,14 +15,19 @@ define({
 			"title": "CGT3 Queue",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("CGT3 Queue got initialized");
+				model.partner = SessionStore.session.partnerCode;
 			},
 			definition: {
 				title: "CGT3 QUEUE",
-				searchForm: [
-					"*"
-				],
-				//autoSearch: true,
+				searchForm: [{
+					"key": "partner",
+					"readonly": true,
+					"condition": "model.partner"
+				}, {
+					"key": "partner",
+					"condition": "!model.partner"
+				}],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -43,18 +48,14 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-					var params = {
+					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
-						'page': pageOpts.pageNo,
 						'currentStage': "CGT3",
+						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
-					};
-
-					var promise = Groups.search(params).$promise;
-					return promise;
+					}).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {

@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.DscQueue",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		var branchId = SessionStore.getBranchId();
@@ -15,14 +15,19 @@ define({
 			"title": "DSC Queue",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				$log.info("DSC Queue got initialized");
+				model.partner = SessionStore.session.partnerCode;
 			},
 			definition: {
 				title: "DSC QUEUE",
-				searchForm: [
-					"*"
-				],
-				//autoSearch: true,
+				searchForm: [{
+					"key": "partner",
+					"readonly": true,
+					"condition": "model.partner"
+				}, {
+					"key": "partner",
+					"condition": "!model.partner"
+				}],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -43,18 +48,14 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-					var params = {
+					return GroupProcess.search({
 						'branchId': branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
-						'page': pageOpts.pageNo,
 						'currentStage': "DSC",
+						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
-					};
-
-					var promise = Groups.search(params).$promise;
-					return promise;
+					}).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -113,9 +114,6 @@ define({
 									pageData: {
 										intent: "DSC_CHECK"
 									}
-								}, {
-									state: "Page.Engine",
-									pageName: "loans.group.GroupSearch",
 								});
 							},
 							isApplicable: function(item, index) {

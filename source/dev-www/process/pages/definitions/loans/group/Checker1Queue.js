@@ -1,10 +1,10 @@
 define({
 	pageUID: "loans.group.Checker1Queue",
 	pageType: "Engine",
-	dependencies: ["$log", "$state", "Groups","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+	dependencies: ["$log", "$state", "GroupProcess","entityManager", "Enrollment", "CreditBureau", "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
 		"PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
 	],
-	$pageFn: function($log, $state, Groups,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
+	$pageFn: function($log, $state, GroupProcess,entityManager, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
 		var branchId = SessionStore.getBranchId();
@@ -28,33 +28,39 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
+				model.partner = SessionStore.session.partnerCode;
 				$log.info("Checker1 Queue got initialized");
 			},
 			definition: {
 				title: "CHECKER1_QUEUE",
-				searchForm: [
-					{
-	                	"type": "section",
-	                	items: [
-	                	{
-	                		key: "bankId",
-	                		readonly: true, 
-	                		condition: "!model.fullAccess"
-	                	},
-	                	{
-	                		key: "bankId",
-	                		condition: "model.fullAccess"
-	                	},
-	                	{
-	                		key: "branchId", 
-	                	},
-	                	{
-	                		key: "partner", 
-	                	},
-	                	]
-	                }
-				],
-				//autoSearch: true,
+				searchForm: [{
+					"type": "section",
+					"items": [{
+						"key": "bankId",
+						"readonly": true,
+						"type": "select",
+						"condition": "!model.fullAccess"
+					}, {
+						"key": "bankId",
+						"type": "select",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
+						"condition": "model.fullAccess"
+					}, {
+						"key": "branchId",
+						"type": "select"
+					}, {
+						"key": "partner",
+						"type": "select",
+						"readonly": true,
+						"condition": "model.partner"
+					}, {
+						"key": "partner",
+						"type": "select",
+						"condition": "!model.partner"
+					}]
+				}],
+				autoSearch: true,
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
@@ -62,53 +68,35 @@ define({
 						"bankId": {
 							"title": "BANK_NAME",
 							"type": ["integer", "null"],
-							enumCode: "bank",	
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true,
-
-							}
+							enumCode: "bank"
 						},
 						"branchId": {
 							"title": "BRANCH_NAME",
 							"type": ["integer", "null"],
-							"enumCode": "branch_id",
-							"x-schema-form": {
-								"type": "select",
-								"screenFilter": true,
-								"parentEnumCode": "bank",
-								"parentValueExpr": "model.bankId",
-							}
+							"enumCode": "branch_id"
 						},
 						"partner": {
 							"type": "string",
 							"title": "PARTNER",
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "partner"
-							}
+							"enumCode": "partner"
 						}
 					},
-					"required": ['partner']
+					"required": []
 				},
 
 				getSearchFormHelper: function() {
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-					var params = {
+					return GroupProcess.search({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branchId,
 						'partner': searchOptions.partner,
 						//'groupStatus': true,
-						'page': pageOpts.pageNo,
 						'currentStage': "Checker1",
+						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage
-					};
-
-					var promise = Groups.search(params).$promise;
-					return promise;
+					}).$promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {

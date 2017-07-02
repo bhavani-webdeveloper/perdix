@@ -41,7 +41,7 @@ return {
             var groupId = $stateParams.pageId;
             PageHelper.showLoader();
             irfProgressMessage.pop("checker1", "Loading, Please Wait...");
-            Groups.getGroup({
+            GroupProcess.getGroup({
                 groupId: groupId
             }, function(response) {
                 model.group = response;
@@ -52,20 +52,34 @@ return {
                     }
                 }
                 fixData(model);
-                var promises = [];
+                var customerPromises = [], dscPromises = [];
                 for (i in model.group.jlgGroupMembers) {
                     var member = model.group.jlgGroupMembers[i];
-                    promises.push(Enrollment.get({"id": member.customerId}).$promise);
+                    customerPromises.push(Enrollment.get({"id": member.customerId}).$promise);
+                    dscPromises.push(Groups.getDSCData({"dscId": member.dscId}).$promise);
                 }
-                $q.all(promises).then(function(data) {
-                    for (i in data) {
-                        model.group.jlgGroupMembers[i].customer = enrichCustomer(data[i]);
-                    }
-                }, function(errors) {
-                    for (i in errors) {
-                        PageHelper.showErrors(errors[i]);
-                    }
-                }).finally(PageHelper.hideLoader);
+                $q.all([
+                    $q.all(customerPromises).then(function(data) {
+                        for (i in data) {
+                            model.group.jlgGroupMembers[i].customer = enrichCustomer(data[i]);
+                        }
+                    }, function(errors) {
+                        for (i in errors) {
+                            PageHelper.showErrors(errors[i]);
+                        }
+                    }),
+                    $q.all(dscPromises).then(function(data) {
+                        for (i in data) {
+                            var r = data[i].responseMessage;
+                            data[i].responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
+                            model.group.jlgGroupMembers[i].dscData = data[i];
+                        }
+                    }, function(errors) {
+                        for (i in errors) {
+                            PageHelper.showErrors(errors[i]);
+                        }
+                    })
+                ]).finally(PageHelper.hideLoader);
             }, function(error) {
                 PageHelper.showErrors(error);
                 PageHelper.hideLoader();
@@ -238,7 +252,11 @@ return {
                         "title": "LOAN_AMOUNT",
                         "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
                         "type": "amount"
-                    }, {
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
                         "title": "LOAN_PURPOSE1",
                         "key": "group.jlgGroupMembers[].loanPurpose1"
                     }, {
@@ -248,11 +266,11 @@ return {
                         "title": "LOAN_PURPOSE3",
                         "key": "group.jlgGroupMembers[].loanPurpose3"
                     }]
-                }, {
-                    "type": "section",
-                    "htmlClass": "col-sm-6",
-                    "items": []
                 }]
+            }, {
+                "notitle": true,
+                "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                "type": "html"
             }]
         }, {
             "type": "section",
@@ -262,7 +280,7 @@ return {
                 "htmlClass": "col-sm-6",
                 "items": [{
                     "title": "CHECKER_FILE_UPLOAD",
-                    "key": "group.checker1FileId",
+                    "key": "group.chk1UploadFilePath",
                     "type": "file",
                     "fileType": "*/*",
                     "category": "Group",

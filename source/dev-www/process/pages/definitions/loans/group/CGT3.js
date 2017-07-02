@@ -172,7 +172,7 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         PageHelper.hideLoader();
-                        irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to CGT 3.', 5000);
+                        irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to GRT.', 5000);
                         $state.go('Page.GroupDashboard', null);
                     }, function(res) {
                         PageHelper.hideLoader();

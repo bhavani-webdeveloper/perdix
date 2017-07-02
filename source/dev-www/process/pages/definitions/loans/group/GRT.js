@@ -137,21 +137,27 @@ define({
                     "type": "textarea"
                 },{
                     "key": "group.udf1",
+                    "fullwidth": true,
                     "title": "QUESTION_1"
                 }, {
                     "key": "group.udf2",
+                    "fullwidth": true,
                     "title": "QUESTION_2"
                 }, {
                     "key": "group.udf3",
+                    "fullwidth": true,
                     "title": "QUESTION_3"
                 }, {
                     "key": "group.udf4",
+                    "fullwidth": true,
                     "title": "QUESTION_4"
                 }, {
                     "key": "group.udf5",
+                    "fullwidth": true,
                     "title": "QUESTION_5"
                 }, {
                     "key": "group.udf6",
+                    "fullwidth": true,
                     "title": "QUESTION_6"
                 }]
             }, {

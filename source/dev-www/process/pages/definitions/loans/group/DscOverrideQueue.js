@@ -1,32 +1,11 @@
 define({
     pageUID: "loans.group.DscOverrideQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper","irfSimpleModal", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage",
-        "groupCommons", "irfNavigator"
-    ],
-    $pageFn: function($log, formHelper,irfSimpleModal, SessionStore, PageHelper, Groups, $state, irfProgressMessage,
-        groupCommons, irfNavigator) {
+    dependencies: ["$log", "formHelper", "SessionStore", "PageHelper", "Groups", "$state", "irfProgressMessage", "irfNavigator"],
+    $pageFn: function($log, formHelper, SessionStore, PageHelper, Groups, $state, irfProgressMessage, irfNavigator) {
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
-
-        function showDscData(dscId) {
-            PageHelper.showLoader();
-            Groups.getDSCData({
-                dscId: dscId
-            }, function(resp, headers) {
-                PageHelper.hideLoader();
-                var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
-                dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
-                dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
-                dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
-                dataHtml += "</table>"
-                irfSimpleModal('DSC Check Details', dataHtml);
-            }, function(res) {
-                PageHelper.showErrors(res);
-                PageHelper.hideLoader();
-            });
-        };
 
         return {
             "type": "search-list",
@@ -42,11 +21,10 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var promise = Groups.getDscOverrideList({
+                    return Groups.getDscOverrideList({
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
-                    return promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -130,7 +108,7 @@ define({
                             name: "View DSC Response",
                             desc: "",
                             fn: function(item, index) {
-                                groupCommons.showDSCData(item.jlgGroupMember.dscId);
+                                Groups.showDscDataPopup(item.jlgGroupMember.dscId);
                             },
                             isApplicable: function(item, index) {
                                 return true;
