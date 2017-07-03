@@ -814,7 +814,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     });
                     return out;
                 };
+                model.customer.customerType="individual";
                 var reqData = _.cloneDeep(model);
+
                 EnrollmentHelper.fixData(reqData);
                 $log.info(JSON.stringify(sortFn(reqData)));
                 EnrollmentHelper.saveData(reqData).then(function(res){
