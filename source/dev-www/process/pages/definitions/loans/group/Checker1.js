@@ -62,6 +62,7 @@ return {
                     $q.all(customerPromises).then(function(data) {
                         for (i in data) {
                             model.group.jlgGroupMembers[i].customer = enrichCustomer(data[i]);
+                            model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
                         }
                     }, function(errors) {
                         for (i in errors) {
@@ -249,7 +250,7 @@ return {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
-                        "title": "PRODUCT_CODE",
+                        "title": "PRODUCT",
                         "key": "group.productCode" // TODO: this should be product name
                     }, {
                         "title": "LOAN_AMOUNT",
@@ -260,53 +261,54 @@ return {
                     "type": "section",
                     "htmlClass": "col-sm-6",
                     "items": [{
-                        "title": "LOAN_PURPOSE1",
+                        "title": "LOAN_PURPOSE_1",
                         "key": "group.jlgGroupMembers[].loanPurpose1"
                     }, {
-                        "title": "LOAN_PURPOSE2",
+                        "title": "LOAN_PURPOSE_2",
                         "key": "group.jlgGroupMembers[].loanPurpose2"
                     }, {
-                        "title": "LOAN_PURPOSE3",
+                        "title": "LOAN_PURPOSE_3",
                         "key": "group.jlgGroupMembers[].loanPurpose3"
                     }]
+                }]
+            }, {
+                "type": "section",
+                "html": '<hr>'
+            }, {
+                "type": "section",
+                //"condition":"model.group.partnerCode=='AXIS'",
+                "htmlClass": "row",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                            "title": "IS_CUSTOMER_CALLED",
+                            "key": "group.jlgGroupMembers[].customerCalled",
+                            "type":"checkbox",
+                            "schema":{
+                                "default":true
+                            }
+                        },{
+                            "title": "CUSTOMER_CALLED_DATE",
+                            "key": "group.jlgGroupMembers[].customerCalledDate",
+                            "readonly": true,
+                            "type":"date"
+                        },{
+                            "title": "CUSTOMER_CALLED_REMARKS",
+                            "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
+                            "type":"string"
+                        }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": []
                 }]
             }, {
                 "notitle": true,
                 "readonly":true,
                 "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
                 "type": "html"
-            },{
-                "type": "section",
-                "html": '<hr>'
-            },{
-            "type": "section",
-            "condition":"model.group.partnerCode=='AXIS'",
-            "htmlClass": "row",
-            "items": [{
-                "type": "section",
-                "htmlClass": "col-sm-6",
-                "items": [{
-                        "title": "IS_CUSTOMER_CALLED",
-                        "key": "group.jlgGroupMembers[].customerCalled",
-                        "type":"checkbox",
-                        "schema":{
-                            "default":true
-                        }
-                    },{
-                        "title": "CUSTOMER_CALLED_DATE",
-                        "key": "group.jlgGroupMembers[].customerCalledDate",
-                        "type":"date"
-                    },{
-                        "title": "CUSTOMER_CALLED_REMARKS",
-                        "key": "group.jlgGroupMembers[].customerNotCalledRemarks",
-                        "type":"string"
-                    }]
-            }, {
-                "type": "section",
-                "htmlClass": "col-sm-6",
-                "items": []
             }]
-        }]
         }, {
             "type": "section",
             "htmlClass": "row",
@@ -330,6 +332,10 @@ return {
     }, {
         "type": "actionbox",
         "items": [{
+            "type": "button",
+            "title": "SAVE",
+            "onClick": "actions.saveGroup(model,form)"
+        }, {
             "type": "button",
             "title": "APPROVE",
             "onClick": "actions.approve(model,form)"
@@ -365,10 +371,27 @@ return {
     },
     actions: {
         preSave: function(model, form, formName) {},
-        reject: function(model, form) {
+        saveGroup: function(model, form) {
             $log.info("Inside submit()");
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'SAVE';
+            PageHelper.clearErrors();
+            Utils.removeNulls(reqData, true);
+            GroupProcess.updateGroup(reqData, function(res) {
+                irfProgressMessage.pop('CHECKER-save', 'Done.', 5000);
+                model.group = _.clone(res.group);
+                PageHelper.hideLoader();
+            }, function(res) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                irfProgressMessage.pop('CHECKER-save', 'Oops. Some error.', 2000);
+            });
+        },
+        reject: function(model, form) {
+            $log.info("Inside submit()");
+            var reqData = _.cloneDeep(model);
+            reqData.groupAction = 'PROCEED';
+            reqData.stage = 'ApplicationPending';
             PageHelper.clearErrors();
             Utils.removeNulls(reqData, true);
             GroupProcess.updateGroup(reqData, function(res) {
