@@ -3050,6 +3050,24 @@
               "Completed"
             ]
           },
+		   "isGSTAvailable": {
+            "title": "isGSTAvailable",
+            "type": "boolean",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+		   "companyEmailId": {
+            "title": "companyEmailId",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 100,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "finishedGoods": {
             "title": "finishedGoods",
             "type": "number",
