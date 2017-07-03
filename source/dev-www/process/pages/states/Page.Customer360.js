@@ -27,7 +27,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 						]
 					},
 					"Page/Engine/customer360.loans.View",
-					"Page/Engine/Loans.Service"
+					"Page/Engine/customer360.loans.Service"	
 				]
 			},
 			{
@@ -55,7 +55,7 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 				"items": [
 					"Page/Engine/loans.individual.booking.LoanInput",
 					"Page/Engine/customer360.loans.View",
-					"Page/Engine/Loans.Service"
+					"Page/Engine/customer360.loans.Service"
 				]
 			},
 			{
@@ -315,6 +315,12 @@ function($log, $scope, $stateParams, $q, formHelper, SessionStore, PagesDefiniti
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.model.customer.urnNo;
+			return $q.resolve(menu);
+		};
+
+        if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
