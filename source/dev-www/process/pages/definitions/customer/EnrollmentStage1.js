@@ -2,15 +2,6 @@ irf.pageCollection.factory("EnrollmentHelper",
 ["$log", "$q","Enrollment", 'PageHelper', 'irfProgressMessage', 'Utils', 'SessionStore',
 function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionStore){
 
-    var validatePanCard = function(str, form){
-        const panRegex = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/g;
-        if (panRegex.test(panRegex)){
-
-        }else {
-            console.log(form);
-        }
-    }
-
     var fixData = function(model){
         /* TODO Validations */
 
@@ -37,6 +28,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProofNo=_.clone(model.customer.identityProofNo);
             model.customer.addressProofIssueDate=_.clone(model.customer.idProofIssueDate);
             model.customer.addressProofValidUptoDate=_.clone(model.customer.idProofValidUptoDate);
+            //model.customer.udf.userDefinedFieldValues.udf29 = _.clone(model.customer.udf.userDefinedFieldValues.udf30);
             model.customer.addressProofReverseImageId = _.clone(model.customer.identityProofReverseImageId);
         }
         if (model.customer.udf && model.customer.udf.userDefinedFieldValues
@@ -52,7 +44,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
 
     var validateData = function(model) {
         PageHelper.clearErrors();
-        if (_.hasIn(model.customer, 'udf') && model.customer.udf && model.customer.udf.userDefinedFieldValues) {
+        if (model.customer.udf && model.customer.udf.userDefinedFieldValues) {
             if (model.customer.udf.userDefinedFieldValues.udf36
                 || model.customer.udf.userDefinedFieldValues.udf35
                 || model.customer.udf.userDefinedFieldValues.udf34) {
@@ -62,10 +54,53 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
                 }
             }
         }
-        
-        if (model.customer.spouseDateOfBirth && !model.customer.spouseFirstName) {
-            PageHelper.setError({message:'Spouse Name is required when Spouse Date of birth is entered'});
-            return false;
+        if (model.customer.additionalKYCs[0]
+            && (model.customer.additionalKYCs[0].kyc1ProofNumber
+            || model.customer.additionalKYCs[0].kyc1ProofType
+            || model.customer.additionalKYCs[0].kyc1ImagePath
+            || model.customer.additionalKYCs[0].kyc1IssueDate
+            || model.customer.additionalKYCs[0].kyc1ValidUptoDate)) {
+            if (model.customer.additionalKYCs[0].kyc1ProofNumber
+                && model.customer.additionalKYCs[0].kyc1ProofType
+                && model.customer.additionalKYCs[0].kyc1ImagePath
+                && model.customer.additionalKYCs[0].kyc1IssueDate
+                && model.customer.additionalKYCs[0].kyc1ValidUptoDate) {
+                if (moment(model.customer.additionalKYCs[0].kyc1IssueDate).isAfter(moment())) {
+                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 1'});
+                    return false;
+                }
+                if (moment(model.customer.additionalKYCs[0].kyc1ValidUptoDate).isBefore(moment())) {
+                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 1'});
+                    return false;
+                }
+            } else {
+                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 1'});
+                return false;
+            }
+        }
+        if (model.customer.additionalKYCs[1]
+            && (model.customer.additionalKYCs[1].kyc1ProofNumber
+            || model.customer.additionalKYCs[1].kyc1ProofType
+            || model.customer.additionalKYCs[1].kyc1ImagePath
+            || model.customer.additionalKYCs[1].kyc1IssueDate
+            || model.customer.additionalKYCs[1].kyc1ValidUptoDate)) {
+            if (model.customer.additionalKYCs[1].kyc1ProofNumber
+                && model.customer.additionalKYCs[1].kyc1ProofType
+                && model.customer.additionalKYCs[1].kyc1ImagePath
+                && model.customer.additionalKYCs[1].kyc1IssueDate
+                && model.customer.additionalKYCs[1].kyc1ValidUptoDate) {
+                if (moment(model.customer.additionalKYCs[1].kyc1IssueDate).isAfter(moment())) {
+                    PageHelper.setError({message:'Issue date should be a past date in Additional KYC 2'});
+                    return false;
+                }
+                if (moment(model.customer.additionalKYCs[1].kyc1ValidUptoDate).isBefore(moment())) {
+                    PageHelper.setError({message:'Valid upto date should be a future date in Additional KYC 2'});
+                    return false;
+                }
+            } else {
+                PageHelper.setError({message:'All fields are mandatory while submitting Additional KYC 2'});
+                return false;
+            }
         }
         return true;
     };
@@ -83,25 +118,19 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         $log.info(reqData);
         PageHelper.clearErrors();
         PageHelper.showLoader();
-        if (reqData.customer.currentStage == 'Completed'){ 
-            reqData['enrollmentAction'] = 'PROCEED';
-        } else {
-            reqData['enrollmentAction'] = 'SAVE';    
-        }
-        /* TODO fix for KYC not saving **/
-       /* if (!_.hasIn(reqData.customer, 'additionalKYCs') || _.isNull(reqData.customer.additionalKYCs)){
-            reqData.customer.additionalKYCs = [];
-            reqData.customer.additionalKYCs.push({});
-        }*/
+        irfProgressMessage.pop('enrollment-save', 'Working...');
+        reqData['enrollmentAction'] = 'SAVE';
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
+            irfProgressMessage.pop('enrollment-save', 'Data Saved', 2000);
             $log.info(res);
             PageHelper.hideLoader();
             deferred.resolve(res);
         }, function (res) {
             PageHelper.hideLoader();
+            irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
             PageHelper.showErrors(res);
-            deferred.reject(res);
+            deferred.reject(false);
         });
         return deferred.promise;
 
@@ -125,14 +154,17 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         else {
             PageHelper.clearErrors();
             PageHelper.showLoader();
+            irfProgressMessage.pop('enrollment-save', 'Working...');
             res.enrollmentAction = "PROCEED";
             Enrollment.updateEnrollment(res, function (res, headers) {
                 PageHelper.hideLoader();
+                irfProgressMessage.pop('enrollment-save', 'Done. Customer created with ID: ' + res.customer.id, 5000);
                 deferred.resolve(res);
             }, function (res, headers) {
                 PageHelper.hideLoader();
+                irfProgressMessage.pop('enrollment-save', 'Oops. Some error.', 2000);
                 PageHelper.showErrors(res);
-                deferred.reject(res);
+                deferred.reject(null);
             });
         }
         return deferred.promise;
@@ -154,8 +186,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             "vtc":null,
             "dist":null,
             "state":null,
-            "pc":null,
-            "po": null
+            "pc":null
         };
         var aadhaarDoc = $.parseXML(aadhaarXml);
         aadhaarXmlData = $(aadhaarDoc).find('PrintLetterBarcodeData');
@@ -176,7 +207,7 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         // "lm":"" landmark
         var aadhaarData = parseAadhaar(result.text);
         $log.info(aadhaarData);
-        // model.customer.aadhaarNo = aadhaarData.uid;
+        model.customer.aadhaarNo = aadhaarData.uid;
         model.customer.firstName = aadhaarData.name;
         model.customer.gender = aadhaarData.gender;
         model.customer.doorNo = aadhaarData.house;
@@ -186,7 +217,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         model.customer.district = aadhaarData.dist;
         model.customer.state = aadhaarData.state;
         model.customer.pincode = aadhaarData.pc;
-        model.customer.postOffice = aadhaarData.po;
         if (aadhaarData.dob) {
             $log.debug('aadhaarData dob: ' + aadhaarData.dob);
             if (!isNaN(aadhaarData.dob.substring(2, 3))) {
@@ -213,7 +243,6 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
             model.customer.addressProof = 'Aadhar card';
             model.customer.addressProofNo = aadhaarData.uid;
         }
-        return aadhaarData;
     };
 
     return {
@@ -222,12 +251,11 @@ function($log, $q, Enrollment, PageHelper, irfProgressMessage, Utils, SessionSto
         proceedData: proceedData,
         validateData: validateData,
         parseAadhaar: parseAadhaar,
-        customerAadhaarOnCapture: customerAadhaarOnCapture,
-        validatePanCard: validatePanCard
+        customerAadhaarOnCapture: customerAadhaarOnCapture
     };
 }]);
 
-irf.pageCollection.factory(irf.page("ProfileInformation"),
+irf.pageCollection.factory("Pages__ProfileInformation",
 ["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams",
 function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
@@ -236,12 +264,21 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
     var branch = SessionStore.getBranch();
 
     return {
+        "id": "ProfileInformation",
         "type": "schema-form",
+        "name": "Stage1",
         "title": "CUSTOMER_ENROLLMENT",
         "subTitle": "STAGE_1",
         initialize: function (model, form, formCtrl) {
+            $stateParams.confirmExit = true;
             model.customer = model.customer || {};
+            if($stateParams.pageData)
+            {
+                model.customer.familyEnrollmentId=$stateParams.pageData.enrollmentId;
+                model.customer.parentCustomerId=$stateParams.pageData.customerId;
+            }
             model.branchId = SessionStore.getBranchId() + '';
+            model.customer.kgfsBankName = SessionStore.getBankName();
             $log.info(formHelper.enum('bank'));
             $log.info("ProfileInformation page got initialized:"+model.branchId);
         },
@@ -260,12 +297,14 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     window.scrollTo(0, 0);
                 } else {
                     irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" already enrolled", 5000);
+                    $stateParams.confirmExit = false;
                     $state.go("Page.Landing");
                 }
                 PageHelper.hideLoader();
             },function(resp){
                 PageHelper.hideLoader();
                 irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                $stateParams.confirmExit = false;
                 $state.go("Page.Engine",{
                     pageName:"CustomerSearch",
                     pageId:null
@@ -276,9 +315,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         offline: true,
         getOfflineDisplayItem: function(item, index){
             return [
-                item.customer.urnNo,
-                Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                item.customer.villageName
+                item["customer"]["urnNo"],
+                item["customer"]["firstName"],
+                item["customer"]["villageName"]
             ]
         },
         form: [{
@@ -395,8 +434,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
 
             ]
-        },
-        {
+        },{
             "type": "box",
             "title": "CONTACT_INFORMATION",
             "items":[{
@@ -404,32 +442,48 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 title: "CUSTOMER_RESIDENTIAL_ADDRESS",
                 items: [
 
-                        "customer.doorNo",
+                        {
+                            key:"customer.doorNo",
+                            "required": true
+                        },
                         "customer.street",
-                        "customer.locality",
+                        {
+                            key:"customer.locality",
+                            "required": true
+                        },
                         {
                             key:"customer.villageName",
                             type:"select",
                             filter: {
-                                'parentCode': 'model.branchId'
+                            parentCode: 'model.branchId'
                             },
                             screenFilter: true
                         },
-                        "customer.postOffice",
+                        {
+                            key:"customer.postOffice",
+                            required: true
+                        },
                         {
                             key:"customer.district",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.pincode",
                         {
                             key:"customer.state",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.stdCode",
                         "customer.landLineNo",
-                        "customer.mobilePhone",
+                        {
+                            key: "customer.mobilePhone",
+                            required: true
+                        },
                         "customer.mailSameAsResidence"
                     ]
                 },{
@@ -437,31 +491,43 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     title: "CUSTOMER_PERMANENT_ADDRESS",
                     condition:"!model.customer.mailSameAsResidence",
                     items: [
-                        "customer.mailingDoorNo",
+                        {
+                            key:"customer.mailingDoorNo",
+                            required: true
+                        },
                         "customer.mailingStreet",
-                        "customer.mailingLocality",
-                        "customer.mailingPostoffice",
+                        {
+                            key:"customer.mailingLocality",
+                            required: true
+                        },
+                        {
+                            key:"customer.mailingPostoffice",
+                            required: true
+                        },
                         {
                             key:"customer.mailingDistrict",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         },
                         "customer.mailingPincode",
                         {
                             key:"customer.mailingState",
                             type:"select",
-                            screenFilter: true
+                            screenFilter: true,
+                            parentEnumCode: "bankname",
+                            parentValueExpr: "model.customer.kgfsBankName"
                         }
                     ]
                 }
             ]
-        },
-        {
+        },{
             type:"box",
             title:"KYC",
             items:[
                 {
-                    "key": "customer.aadhaarNo",
+                    key: "customer.aadhaarNo",
                     type:"qrcode",
                     onChange:"actions.setProofs(model)",
                     onCapture: EnrollmentHelper.customerAadhaarOnCapture
@@ -481,7 +547,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf30",
+                            key:"customer.identityProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -523,7 +589,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
-                            key:"customer.udf.userDefinedFieldValues.udf29",
+                            key:"customer.addressProofReverseImageId",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -630,6 +696,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             "offline": true
                         },
                         {
+                            key:"customer.additionalKYCs[].kyc1ReverseImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
                             key:"customer.additionalKYCs[].kyc1IssueDate",
                             type:"date"
                         },
@@ -651,6 +723,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         },
                         {
                             key:"customer.additionalKYCs[].kyc2ImagePath",
+                            type:"file",
+                            fileType:"image/*",
+                            "offline": true
+                        },
+                        {
+                            key:"customer.additionalKYCs[].kyc2ReverseImagePath",
                             type:"file",
                             fileType:"image/*",
                             "offline": true
@@ -701,6 +779,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             return Enrollment.getSchema().$promise;
         },
         actions: {
+
             setProofs:function(model){
                 model.customer.addressProofNo=model.customer.aadhaarNo;
                 model.customer.identityProofNo=model.customer.aadhaarNo;
@@ -745,6 +824,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     EnrollmentHelper.proceedData(reqData).then(function(res){
                         $state.go("Page.Landing");
                     });*/
+                    $stateParams.confirmExit = false;
                     $state.go("Page.Engine", {
                         pageName: 'ProfileInformation',
                         pageId: model.customer.id
@@ -756,11 +836,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 if(reqData.customer.id && reqData.customer.currentStage === 'Stage01'){
                     $log.info("Customer id not null, skipping save");
                     EnrollmentHelper.proceedData(reqData).then(function (res) {
+                        $stateParams.confirmExit = false;
                         $state.go("Page.Landing");
                     });
                 }
             },
             reload: function(model, formCtrl, form, $event) {
+                $stateParams.confirmExit = false;
                 $state.go("Page.Engine", {
                     pageName: 'ProfileInformation',
                     pageId: model.customer.id

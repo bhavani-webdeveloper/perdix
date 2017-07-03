@@ -518,22 +518,106 @@ irf.pageCollection.factory("Pages__CustomerRUD",
                                {
                                    key: "customer.physicalAssets[].assetType",
                                    "title": "ASSET_TYPE",
+                                   "enumCode": "asset_type",
                                    type: "select"
                                }, {
                                    key: "customer.physicalAssets[].ownedAssetDetails",
-                                   type:"select",
-                                   screenFilter: true,
-                                   parentEnumCode:"asset_type",
-                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                                   type: "lov",
+                                   autolov: true,
+                                   lovonly:true,
+                                   bindMap: {},
+                                   searchHelper: formHelper,
+                                   search: function(inputModel, form, model, context) {
+                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
+                                       var ownedAssetDetails = formHelper.enum('asset_Details').data;
+                                       var out = [];
+                                       if (ownedAssetDetails && ownedAssetDetails.length) {
+                                           for (var i = 0; i < ownedAssetDetails.length; i++) {
+                                               
+                                                   if ((ownedAssetDetails[i].parentCode).toUpperCase() == (assetType).toUpperCase()) {
+                                                       out.push({
+                                                           name: ownedAssetDetails[i].name,
+                                                           id: ownedAssetDetails[i].value
+                                                       })
+                                                   }
+                                           }
+                                       }
+                                       if(!out.length)
+                                       {
+                                            out.push({
+                                                name: "No Records",
+                                            })
+                                       }
+                                       return $q.resolve({
+                                           headers: {
+                                               "x-total-count": out.length
+                                           },
+                                           body: out
+                                       });
+                                   },
+                                   onSelect: function(valueObj, model, context) {
+                                    if(valueObj.name=="No Records")
+                                    {
+                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = ''; 
+                                    }else{
+                                        model.customer.physicalAssets[context.arrayIndex].ownedAssetDetails = valueObj.name;
+                                    }
+                                   },
+                                   getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                   }
                                }, {
                                    key: "customer.physicalAssets[].unit",
                                    "title": "UNIT",
-                                   type: "select",
-                                   screenFilter: true,
-                                   parentEnumCode:"asset_type",
-                                   parentValueExpr:"model.customer.physicalAssets[arrayIndex].assetType",
+                                   type: "lov",
+                                   autolov: true,
+                                   lovonly:true,
+                                   bindMap: {},
+                                   searchHelper: formHelper,
+                                   search: function(inputModel, form, model, context) {
+                                       var assetType = model.customer.physicalAssets[context.arrayIndex].assetType;
+                                       var assetunit = formHelper.enum('asset_unit').data;
+                                       var out = [];
+                                       if (assetunit && assetunit.length) {
+                                           for (var i = 0; i < assetunit.length; i++) {
+                                               
+                                                   if ((assetunit[i].parentCode).toUpperCase() == (assetType).toUpperCase() ){
+                                                       out.push({
+                                                           name: assetunit[i].name,
+                                                       })
+                                                   }
+                                           }
+                                       }
+                                       if(!out.length)
+                                       {
+                                            out.push({
+                                                name: "No Records",
+                                            })
+                                       }
+                                       return $q.resolve({
+                                           headers: {
+                                               "x-total-count": out.length
+                                           },
+                                           body: out
+                                       });
+                                   },
+                                   onSelect: function(valueObj, model, context) {
+                                    if(valueObj.name=="No Records")
+                                    {
+                                        model.customer.physicalAssets[context.arrayIndex].unit = ''; 
+                                    }else{
+                                        model.customer.physicalAssets[context.arrayIndex].unit = valueObj.name;
+                                    }
+                                   },
+                                   getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                   }
                                },
-                               "customer.physicalAssets[].numberOfOwnedAsset", 
+                               "customer.physicalAssets[].numberOfOwnedAsset",
                                {
                                    key: "customer.physicalAssets[].ownedAssetValue",
                                }
